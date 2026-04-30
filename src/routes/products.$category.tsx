@@ -18,10 +18,10 @@ export const Route = createFileRoute("/products/$category")({
       ],
     };
   },
-  loader: ({ params }) => {
+  loader: ({ params }): { category: { slug: string; label: string } } => {
     const cat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
     if (!cat) throw notFound();
-    return { category: cat satisfies { slug: string; label: string } };
+    return { category: cat };
   },
   component: ProductCategoryPage,
   errorComponent: ({ error }) => (

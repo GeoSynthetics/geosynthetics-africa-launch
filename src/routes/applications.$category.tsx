@@ -17,7 +17,7 @@ export const Route = createFileRoute("/applications/$category")({
       ],
     };
   },
-  loader: ({ params }) => {
+  loader: ({ params }): { category: { slug: string; label: string } } => {
     const cat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
     if (!cat) throw notFound();
     return { category: cat };
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/applications/$category")({
 });
 
 function ApplicationCategoryPage() {
-  const { category } = Route.useLoaderData();
+  const { category } = Route.useLoaderData()!;
   return (
     <>
       <section
