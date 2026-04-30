@@ -9,38 +9,206 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
+import { Route as ProductsRouteImport } from './routes/products'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CatalogueRouteImport } from './routes/catalogue'
+import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
+import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QualityAssuranceRoute = QualityAssuranceRouteImport.update({
+  id: '/quality-assurance',
+  path: '/quality-assurance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogueRoute = CatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => ApplicationsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRoute
+  '/contacts': typeof ContactsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality-assurance': typeof QualityAssuranceRoute
+  '/resources': typeof ResourcesRoute
+  '/services': typeof ServicesRoute
+  '/applications/$category': typeof ApplicationsCategoryRoute
+  '/products/$category': typeof ProductsCategoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRoute
+  '/contacts': typeof ContactsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality-assurance': typeof QualityAssuranceRoute
+  '/resources': typeof ResourcesRoute
+  '/services': typeof ServicesRoute
+  '/applications/$category': typeof ApplicationsCategoryRoute
+  '/products/$category': typeof ProductsCategoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRoute
+  '/contacts': typeof ContactsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality-assurance': typeof QualityAssuranceRoute
+  '/resources': typeof ResourcesRoute
+  '/services': typeof ServicesRoute
+  '/applications/$category': typeof ApplicationsCategoryRoute
+  '/products/$category': typeof ProductsCategoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/applications'
+    | '/catalogue'
+    | '/contacts'
+    | '/products'
+    | '/quality-assurance'
+    | '/resources'
+    | '/services'
+    | '/applications/$category'
+    | '/products/$category'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/applications'
+    | '/catalogue'
+    | '/contacts'
+    | '/products'
+    | '/quality-assurance'
+    | '/resources'
+    | '/services'
+    | '/applications/$category'
+    | '/products/$category'
+  id:
+    | '__root__'
+    | '/'
+    | '/applications'
+    | '/catalogue'
+    | '/contacts'
+    | '/products'
+    | '/quality-assurance'
+    | '/resources'
+    | '/services'
+    | '/applications/$category'
+    | '/products/$category'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApplicationsRoute: typeof ApplicationsRouteWithChildren
+  CatalogueRoute: typeof CatalogueRoute
+  ContactsRoute: typeof ContactsRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
+  QualityAssuranceRoute: typeof QualityAssuranceRoute
+  ResourcesRoute: typeof ResourcesRoute
+  ServicesRoute: typeof ServicesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quality-assurance': {
+      id: '/quality-assurance'
+      path: '/quality-assurance'
+      fullPath: '/quality-assurance'
+      preLoaderRoute: typeof QualityAssuranceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogue': {
+      id: '/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof CatalogueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +216,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/$category': {
+      id: '/products/$category'
+      path: '/$category'
+      fullPath: '/products/$category'
+      preLoaderRoute: typeof ProductsCategoryRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/applications/$category': {
+      id: '/applications/$category'
+      path: '/$category'
+      fullPath: '/applications/$category'
+      preLoaderRoute: typeof ApplicationsCategoryRouteImport
+      parentRoute: typeof ApplicationsRoute
+    }
   }
 }
 
+interface ApplicationsRouteChildren {
+  ApplicationsCategoryRoute: typeof ApplicationsCategoryRoute
+}
+
+const ApplicationsRouteChildren: ApplicationsRouteChildren = {
+  ApplicationsCategoryRoute: ApplicationsCategoryRoute,
+}
+
+const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
+  ApplicationsRouteChildren,
+)
+
+interface ProductsRouteChildren {
+  ProductsCategoryRoute: typeof ProductsCategoryRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  ProductsCategoryRoute: ProductsCategoryRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApplicationsRoute: ApplicationsRouteWithChildren,
+  CatalogueRoute: CatalogueRoute,
+  ContactsRoute: ContactsRoute,
+  ProductsRoute: ProductsRouteWithChildren,
+  QualityAssuranceRoute: QualityAssuranceRoute,
+  ResourcesRoute: ResourcesRoute,
+  ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -29,18 +29,15 @@ export const Route = createFileRoute("/applications/$category")({
       <p className="mt-2 text-muted-foreground">{error.message}</p>
     </div>
   ),
-  notFoundComponent: () => {
-    const { category } = Route.useParams();
-    return (
-      <div className="container-page py-20 text-center">
-        <h1 className="font-display text-3xl font-bold uppercase">Application not found</h1>
-        <p className="mt-2 text-muted-foreground">"{category}" isn't in our catalogue.</p>
-        <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
-          <Link to="/applications">Back to Applications</Link>
-        </Button>
-      </div>
-    );
-  },
+  notFoundComponent: () => (
+    <div className="container-page py-20 text-center">
+      <h1 className="font-display text-3xl font-bold uppercase">Application not found</h1>
+      <p className="mt-2 text-muted-foreground">That application isn't in our catalogue.</p>
+      <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
+        <Link to="/applications">Back to Applications</Link>
+      </Button>
+    </div>
+  ),
 });
 
 function ApplicationCategoryPage() {
