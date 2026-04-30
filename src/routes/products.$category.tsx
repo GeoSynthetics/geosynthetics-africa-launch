@@ -42,7 +42,8 @@ export const Route = createFileRoute("/products/$category")({
 });
 
 function ProductCategoryPage() {
-  const { category } = Route.useLoaderData();
+  const data = Route.useLoaderData();
+  const category = data!.category;
   return (
     <>
       <section
