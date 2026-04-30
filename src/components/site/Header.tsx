@@ -19,7 +19,7 @@ import {
 
 function DesktopNav() {
   return (
-    <NavigationMenu className="hidden lg:flex" viewport={false}>
+    <NavigationMenu className="hidden lg:flex">
       <NavigationMenuList className="gap-1">
         {megaMenus.map((m) => (
           <NavigationMenuItem key={m.key}>
