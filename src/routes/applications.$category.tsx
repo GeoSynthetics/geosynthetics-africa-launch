@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useParams } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight, MessageCircle, FileText, PencilRuler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -41,7 +41,8 @@ export const Route = createFileRoute("/applications/$category")({
 });
 
 function ApplicationCategoryPage() {
-  const { category } = Route.useLoaderData()!;
+  const params = useParams({ strict: false }) as { category: string };
+  const category = APPLICATION_CATEGORIES.find((c) => c.slug === params.category) ?? APPLICATION_CATEGORIES[0];
   return (
     <>
       <section

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useParams } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight, FileText, MessageCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -42,7 +42,8 @@ export const Route = createFileRoute("/products/$category")({
 });
 
 function ProductCategoryPage() {
-  const { category } = Route.useLoaderData()!;
+  const params = useParams({ strict: false }) as { category: string };
+  const category = PRODUCT_CATEGORIES.find((c) => c.slug === params.category) ?? PRODUCT_CATEGORIES[0];
   return (
     <>
       <section
