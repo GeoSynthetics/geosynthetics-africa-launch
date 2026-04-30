@@ -21,7 +21,7 @@ export const Route = createFileRoute("/products/$category")({
   loader: ({ params }) => {
     const cat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
     if (!cat) throw notFound();
-    return { category: cat };
+    return { category: cat satisfies { slug: string; label: string } };
   },
   component: ProductCategoryPage,
   errorComponent: ({ error }) => (
@@ -42,8 +42,7 @@ export const Route = createFileRoute("/products/$category")({
 });
 
 function ProductCategoryPage() {
-  const data = Route.useLoaderData();
-  const category = data!.category;
+  const { category } = Route.useLoaderData()!;
   return (
     <>
       <section
