@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import africaLogo from "@/assets/africa.svg";
 
 export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
   const textColor = variant === "dark" ? "text-foreground" : "text-surface-dark-foreground";
