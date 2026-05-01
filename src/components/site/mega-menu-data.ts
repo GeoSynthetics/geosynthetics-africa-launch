@@ -1,4 +1,4 @@
-export type MegaLink = { label: string; to: string };
+export type MegaLink = { label: string; to: string; icon?: string };
 export type MegaProductItem = { label: string; spec: string; to: string };
 export type MegaFeatureItem = { title: string; description: string; to: string; image: string };
 export type MegaQuickAction = { title: string; description: string; to: string; icon: string };
@@ -32,33 +32,33 @@ export const PARTNERS = [
 ];
 
 export const PRODUCT_CATEGORIES = [
-  { slug: "geomembranes", label: "Geomembranes" },
-  { slug: "geotextiles", label: "Geotextiles" },
-  { slug: "geogrids", label: "Geogrids" },
-  { slug: "geocells", label: "Geocells" },
-  { slug: "gcls", label: "GCLs" },
-  { slug: "drainage-composites", label: "Drainage Composites" },
-  { slug: "erosion-control", label: "Erosion Control" },
-  { slug: "accessories", label: "Accessories" },
+  { slug: "geomembranes", label: "Geomembranes", icon: "Layers" },
+  { slug: "geotextiles", label: "Geotextiles", icon: "Grid3x3" },
+  { slug: "geogrids", label: "Geogrids", icon: "Grid2x2" },
+  { slug: "geocells", label: "Geocells", icon: "Hexagon" },
+  { slug: "gcls", label: "GCLs", icon: "Sheet" },
+  { slug: "drainage-composites", label: "Drainage Composites", icon: "Waves" },
+  { slug: "erosion-control", label: "Erosion Control", icon: "Mountain" },
+  { slug: "accessories", label: "Accessories", icon: "Wrench" },
 ];
 
 export const APPLICATION_CATEGORIES = [
-  { slug: "mining-systems", label: "Mining Systems" },
-  { slug: "water-containment", label: "Water Containment" },
-  { slug: "waste-landfills", label: "Waste & Landfills" },
-  { slug: "roads-infrastructure", label: "Roads & Infrastructure" },
-  { slug: "erosion-control", label: "Erosion Control" },
-  { slug: "drainage-systems", label: "Drainage Systems" },
-  { slug: "agriculture-aquaculture", label: "Agriculture & Aquaculture" },
+  { slug: "mining-systems", label: "Mining Systems", icon: "Pickaxe" },
+  { slug: "water-containment", label: "Water Containment", icon: "Droplets" },
+  { slug: "waste-landfills", label: "Waste & Landfills", icon: "Trash2" },
+  { slug: "roads-infrastructure", label: "Roads & Infrastructure", icon: "Construction" },
+  { slug: "erosion-control", label: "Erosion Control", icon: "Mountain" },
+  { slug: "drainage-systems", label: "Drainage Systems", icon: "Waves" },
+  { slug: "agriculture-aquaculture", label: "Agriculture & Aquaculture", icon: "Sprout" },
 ];
 
 export const SERVICES = [
-  { slug: "supply", label: "Supply" },
-  { slug: "installation", label: "Installation" },
-  { slug: "qa-qc", label: "QA / QC & Testing" },
-  { slug: "design-support", label: "Design Support" },
-  { slug: "logistics", label: "Logistics & Customs" },
-  { slug: "after-sales", label: "After Sales Support" },
+  { slug: "supply", label: "Supply", icon: "Truck" },
+  { slug: "installation", label: "Installation", icon: "HardHat" },
+  { slug: "qa-qc", label: "QA / QC & Testing", icon: "ClipboardCheck" },
+  { slug: "design-support", label: "Design Support", icon: "PencilRuler" },
+  { slug: "logistics", label: "Logistics & Customs", icon: "Ship" },
+  { slug: "after-sales", label: "After Sales Support", icon: "LifeBuoy" },
 ];
 
 export const megaMenus: MegaMenuConfig[] = [
@@ -68,7 +68,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/products",
     columns: {
       primaryTitle: "Browse Products",
-      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, to: `/products/${c.slug}` })),
+      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, to: `/products/${c.slug}`, icon: c.icon })),
       secondaryTitle: "Geomembranes",
       secondary: [
         { label: "HDPE Geomembranes", to: "/products/geomembranes" },
@@ -104,7 +104,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/applications",
     columns: {
       primaryTitle: "Application Categories",
-      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, to: `/applications/${c.slug}` })),
+      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, to: `/applications/${c.slug}`, icon: c.icon })),
       secondaryTitle: "Mining Systems",
       secondary: [
         { label: "Tailings Storage Facilities (TSF)", to: "/applications/mining-systems" },
@@ -151,7 +151,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/services",
     columns: {
       primaryTitle: "Our Services",
-      primary: SERVICES.map((s) => ({ label: s.label, to: `/services` })),
+      primary: SERVICES.map((s) => ({ label: s.label, to: `/services`, icon: s.icon })),
       secondaryTitle: "Supply Services",
       secondary: [
         { label: "Global Sourcing", to: "/services" },
