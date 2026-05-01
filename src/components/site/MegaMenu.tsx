@@ -25,17 +25,21 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             {columns.primaryTitle}
           </h4>
           <ul className="space-y-1">
-            {columns.primary.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.to}
-                  className="group flex items-center justify-between rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-primary transition"
-                >
-                  <span className="font-medium">{item.label}</span>
-                  <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition" />
-                </Link>
-              </li>
-            ))}
+            {columns.primary.map((item) => {
+              const Icon = item.icon ? ICONS[item.icon] : undefined;
+              return (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
+                    className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-primary transition"
+                  >
+                    {Icon && <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition" />}
+                    <span className="font-medium flex-1">{item.label}</span>
+                    <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition" />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
