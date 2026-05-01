@@ -26,7 +26,7 @@ function DesktopNav() {
       <NavigationMenuList className="gap-2 xl:gap-4">
         {megaMenus.map((m) => (
           <NavigationMenuItem key={m.key}>
-            <NavigationMenuTrigger className="bg-transparent text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
+            <NavigationMenuTrigger className="bg-transparent px-3 xl:px-4 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
               {m.label}
             </NavigationMenuTrigger>
             <NavigationMenuContent className="left-1/2 -translate-x-1/2 !w-screen !max-w-[1280px] p-0 border-0 bg-transparent shadow-none">
@@ -138,7 +138,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
       <TopBar />
-      <div className="container-page flex items-center justify-between gap-4 py-4">
+      <div className="container-page flex items-center gap-6 xl:gap-10 py-4">
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-2">
