@@ -23,7 +23,7 @@ const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 function DesktopNav() {
   return (
     <NavigationMenu className="hidden lg:flex flex-1 justify-center !max-w-none">
-      <NavigationMenuList className="gap-2 xl:gap-4">
+      <NavigationMenuList className="gap-2 xl:gap-1">
         {megaMenus.map((m) => (
           <NavigationMenuItem key={m.key}>
             <NavigationMenuTrigger className="bg-transparent px-3 xl:px-4 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
@@ -75,9 +75,7 @@ function MobileNav() {
           <Accordion type="single" collapsible>
             {megaMenus.map((m) => (
               <AccordionItem value={m.key} key={m.key}>
-                <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">
-                  {m.label}
-                </AccordionTrigger>
+                <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">{m.label}</AccordionTrigger>
                 <AccordionContent>
                   <ul className="space-y-1 pl-2">
                     <li>
@@ -138,11 +136,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
       <TopBar />
-      <div className="container-page flex items-center gap-6 xl:gap-10 py-4">
+      <div className="flex items-center gap-6 xl:gap-10 py-4">
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden md:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs">
+          <Button
+            asChild
+            className="hidden md:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
+          >
             <Link to="/contacts">
               Upload Project BOQ
               <Upload className="ml-2 h-4 w-4" />
