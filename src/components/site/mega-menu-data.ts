@@ -151,7 +151,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/services",
     columns: {
       primaryTitle: "Our Services",
-      primary: SERVICES.map((s) => ({ label: s.label, to: `/services` })),
+      primary: SERVICES.map((s) => ({ label: s.label, to: `/services`, icon: s.icon })),
       secondaryTitle: "Supply Services",
       secondary: [
         { label: "Global Sourcing", to: "/services" },
