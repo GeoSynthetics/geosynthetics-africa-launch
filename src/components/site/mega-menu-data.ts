@@ -1,4 +1,4 @@
-export type MegaLink = { label: string; to: string };
+export type MegaLink = { label: string; to: string; icon?: string };
 export type MegaProductItem = { label: string; spec: string; to: string };
 export type MegaFeatureItem = { title: string; description: string; to: string; image: string };
 export type MegaQuickAction = { title: string; description: string; to: string; icon: string };
