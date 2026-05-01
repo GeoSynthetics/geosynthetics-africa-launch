@@ -104,7 +104,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/applications",
     columns: {
       primaryTitle: "Application Categories",
-      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, to: `/applications/${c.slug}` })),
+      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, to: `/applications/${c.slug}`, icon: c.icon })),
       secondaryTitle: "Mining Systems",
       secondary: [
         { label: "Tailings Storage Facilities (TSF)", to: "/applications/mining-systems" },
