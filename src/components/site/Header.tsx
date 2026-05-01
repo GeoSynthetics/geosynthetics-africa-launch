@@ -136,7 +136,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
       <TopBar />
-      <div className="flex items-center gap-4 2xl:gap-6 py-4">
+      <div className="flex items-center gap-4 2xl:gap-6 py-4 px-6">
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-2 ml-auto xl:ml-0">
