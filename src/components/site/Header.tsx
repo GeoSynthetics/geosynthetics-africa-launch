@@ -117,7 +117,6 @@ function MobileNav() {
                 >
                   {item.label}
                 </RLink>
-                </Link>
               </li>
             ))}
           </ul>
