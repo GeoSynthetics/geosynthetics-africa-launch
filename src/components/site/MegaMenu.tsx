@@ -1,4 +1,13 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkComponentProps } from "@tanstack/react-router";
+
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
+
+function closeMenus() {
+  if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+}
 import {
   ChevronRight, BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
