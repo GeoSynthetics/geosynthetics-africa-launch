@@ -1,4 +1,13 @@
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkComponentProps } from "@tanstack/react-router";
+
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
+
+function closeMenus() {
+  if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+}
 import {
   ChevronRight, BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
@@ -29,14 +38,16 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
               const Icon = item.icon ? ICONS[item.icon] : undefined;
               return (
                 <li key={item.label}>
-                  <Link
+                  <RLink
                     to={item.to}
+                    params={item.params}
+                    onClick={closeMenus}
                     className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-primary transition"
                   >
                     {Icon && <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition" />}
                     <span className="font-medium flex-1">{item.label}</span>
                     <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition" />
-                  </Link>
+                  </RLink>
                 </li>
               );
             })}
@@ -51,12 +62,14 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           <ul className="space-y-1">
             {columns.secondary.map((item) => (
               <li key={item.label}>
-                <Link
+                <RLink
                   to={item.to}
+                  params={item.params}
+                  onClick={closeMenus}
                   className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition"
                 >
                   {item.label}
-                </Link>
+                </RLink>
               </li>
             ))}
           </ul>
@@ -71,8 +84,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             <ul className="space-y-2">
               {(columns.featured as MegaProductItem[]).map((p) => (
                 <li key={p.label}>
-                  <Link
+                  <RLink
                     to={p.to}
+                    params={p.params}
+                    onClick={closeMenus}
                     className="flex items-center gap-3 rounded-md p-2 hover:bg-accent transition group"
                   >
                     <div className="h-12 w-12 flex-shrink-0 rounded bg-surface-dark" />
@@ -81,7 +96,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                       <div className="text-xs text-muted-foreground">{p.spec}</div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  </Link>
+                  </RLink>
                 </li>
               ))}
             </ul>
@@ -89,7 +104,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             <ul className="space-y-3">
               {(columns.featured as MegaFeatureItem[]).map((f) => (
                 <li key={f.title}>
-                  <Link to={f.to} className="flex gap-3 group">
+                  <RLink to={f.to} params={f.params} onClick={closeMenus} className="flex gap-3 group">
                     <img
                       src={f.image}
                       alt=""
@@ -102,7 +117,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                       </div>
                       <div className="text-xs text-muted-foreground line-clamp-2">{f.description}</div>
                     </div>
-                  </Link>
+                  </RLink>
                 </li>
               ))}
             </ul>
@@ -119,8 +134,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
               const Icon = ICONS[qa.icon] ?? BookOpen;
               return (
                 <li key={qa.title}>
-                  <Link
+                  <RLink
                     to={qa.to}
+                    params={qa.params}
+                    onClick={closeMenus}
                     className="flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent transition group"
                   >
                     <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition">
@@ -130,7 +147,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                       <div className="text-sm font-semibold text-foreground">{qa.title}</div>
                       <div className="text-xs text-muted-foreground truncate">{qa.description}</div>
                     </div>
-                  </Link>
+                  </RLink>
                 </li>
               );
             })}

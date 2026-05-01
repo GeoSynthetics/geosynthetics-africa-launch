@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Menu, Upload, X, ChevronDown } from "lucide-react";
+import { Link, type LinkComponentProps } from "@tanstack/react-router";
+import { Menu, Upload, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,9 @@ import {
   NavigationMenuTrigger,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function DesktopNav() {
   return (
@@ -34,13 +37,14 @@ function DesktopNav() {
         {SIMPLE_NAV.map((item) => (
           <NavigationMenuItem key={item.to}>
             <NavigationMenuLink asChild>
-              <Link
+              <RLink
                 to={item.to}
+                params={item.params}
                 className="inline-flex items-center px-4 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
                 activeProps={{ className: "text-primary" }}
               >
                 {item.label}
-              </Link>
+              </RLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}
@@ -77,23 +81,24 @@ function MobileNav() {
                 <AccordionContent>
                   <ul className="space-y-1 pl-2">
                     <li>
-                      <Link
+                      <RLink
                         to={m.to}
                         onClick={() => setOpen(false)}
                         className="block py-2 text-sm font-semibold text-primary"
                       >
                         All {m.label} →
-                      </Link>
+                      </RLink>
                     </li>
                     {m.columns.primary.map((item) => (
                       <li key={item.label}>
-                        <Link
+                        <RLink
                           to={item.to}
+                          params={item.params}
                           onClick={() => setOpen(false)}
                           className="block py-2 text-sm text-foreground hover:text-primary"
                         >
                           {item.label}
-                        </Link>
+                        </RLink>
                       </li>
                     ))}
                   </ul>
@@ -104,13 +109,14 @@ function MobileNav() {
           <ul className="mt-2 border-t border-border pt-2">
             {SIMPLE_NAV.map((item) => (
               <li key={item.to}>
-                <Link
+                <RLink
                   to={item.to}
+                  params={item.params}
                   onClick={() => setOpen(false)}
                   className="block py-3 text-sm font-bold uppercase tracking-wide text-foreground hover:text-primary"
                 >
                   {item.label}
-                </Link>
+                </RLink>
               </li>
             ))}
           </ul>

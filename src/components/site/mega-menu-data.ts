@@ -1,7 +1,12 @@
-export type MegaLink = { label: string; to: string; icon?: string };
-export type MegaProductItem = { label: string; spec: string; to: string };
-export type MegaFeatureItem = { title: string; description: string; to: string; image: string };
-export type MegaQuickAction = { title: string; description: string; to: string; icon: string };
+export type NavTarget = {
+  to: string;
+  params?: Record<string, string>;
+};
+
+export type MegaLink = NavTarget & { label: string; icon?: string };
+export type MegaProductItem = NavTarget & { label: string; spec: string };
+export type MegaFeatureItem = NavTarget & { title: string; description: string; image: string };
+export type MegaQuickAction = NavTarget & { title: string; description: string; icon: string };
 
 export type MegaMenuConfig = {
   key: "products" | "applications" | "services";
@@ -61,6 +66,16 @@ export const SERVICES = [
   { slug: "after-sales", label: "After Sales Support", icon: "LifeBuoy" },
 ];
 
+const productLink = (slug: string): NavTarget => ({
+  to: "/products/$category",
+  params: { category: slug },
+});
+
+const applicationLink = (slug: string): NavTarget => ({
+  to: "/applications/$category",
+  params: { category: slug },
+});
+
 export const megaMenus: MegaMenuConfig[] = [
   {
     key: "products",
@@ -68,26 +83,26 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/products",
     columns: {
       primaryTitle: "Browse Products",
-      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, to: `/products/${c.slug}`, icon: c.icon })),
+      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, icon: c.icon, ...productLink(c.slug) })),
       secondaryTitle: "Geomembranes",
       secondary: [
-        { label: "HDPE Geomembranes", to: "/products/geomembranes" },
-        { label: "LLDPE Geomembranes", to: "/products/geomembranes" },
-        { label: "PVC Geomembranes", to: "/products/geomembranes" },
-        { label: "EPDM Geomembranes", to: "/products/geomembranes" },
-        { label: "PP Geomembranes", to: "/products/geomembranes" },
-        { label: "Textured Geomembranes", to: "/products/geomembranes" },
-        { label: "Speciality Geomembranes", to: "/products/geomembranes" },
-        { label: "Floating Cover Geomembranes", to: "/products/geomembranes" },
-        { label: "All Geomembranes", to: "/products/geomembranes" },
+        { label: "HDPE Geomembranes", ...productLink("geomembranes") },
+        { label: "LLDPE Geomembranes", ...productLink("geomembranes") },
+        { label: "PVC Geomembranes", ...productLink("geomembranes") },
+        { label: "EPDM Geomembranes", ...productLink("geomembranes") },
+        { label: "PP Geomembranes", ...productLink("geomembranes") },
+        { label: "Textured Geomembranes", ...productLink("geomembranes") },
+        { label: "Speciality Geomembranes", ...productLink("geomembranes") },
+        { label: "Floating Cover Geomembranes", ...productLink("geomembranes") },
+        { label: "All Geomembranes", ...productLink("geomembranes") },
       ],
       featuredTitle: "Popular Products",
       featuredKind: "product",
       featured: [
-        { label: "HDPE Smooth Geomembrane", spec: "0.5mm – 3.0mm", to: "/products/geomembranes" },
-        { label: "HDPE Textured Geomembrane", spec: "0.5mm – 3.0mm", to: "/products/geomembranes" },
-        { label: "LLDPE Geomembrane", spec: "0.5mm – 2.0mm", to: "/products/geomembranes" },
-        { label: "PVC Geomembrane", spec: "0.5mm – 2.0mm", to: "/products/geomembranes" },
+        { label: "HDPE Smooth Geomembrane", spec: "0.5mm – 3.0mm", ...productLink("geomembranes") },
+        { label: "HDPE Textured Geomembrane", spec: "0.5mm – 3.0mm", ...productLink("geomembranes") },
+        { label: "LLDPE Geomembrane", spec: "0.5mm – 2.0mm", ...productLink("geomembranes") },
+        { label: "PVC Geomembrane", spec: "0.5mm – 2.0mm", ...productLink("geomembranes") },
       ] as MegaProductItem[],
       quickActionsTitle: "Quick Actions",
       quickActions: [
@@ -104,15 +119,15 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/applications",
     columns: {
       primaryTitle: "Application Categories",
-      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, to: `/applications/${c.slug}`, icon: c.icon })),
+      primary: APPLICATION_CATEGORIES.map((c) => ({ label: c.label, icon: c.icon, ...applicationLink(c.slug) })),
       secondaryTitle: "Mining Systems",
       secondary: [
-        { label: "Tailings Storage Facilities (TSF)", to: "/applications/mining-systems" },
-        { label: "Heap Leach Pads", to: "/applications/mining-systems" },
-        { label: "Process Ponds & Tanks", to: "/applications/mining-systems" },
-        { label: "Water Management", to: "/applications/mining-systems" },
-        { label: "ROM Pads", to: "/applications/mining-systems" },
-        { label: "Heap Leach Pads (Lining)", to: "/applications/mining-systems" },
+        { label: "Tailings Storage Facilities (TSF)", ...applicationLink("mining-systems") },
+        { label: "Heap Leach Pads", ...applicationLink("mining-systems") },
+        { label: "Process Ponds & Tanks", ...applicationLink("mining-systems") },
+        { label: "Water Management", ...applicationLink("water-containment") },
+        { label: "ROM Pads", ...applicationLink("mining-systems") },
+        { label: "Heap Leach Pads (Lining)", ...applicationLink("mining-systems") },
       ],
       featuredTitle: "Featured Applications",
       featuredKind: "image",
@@ -120,19 +135,19 @@ export const megaMenus: MegaMenuConfig[] = [
         {
           title: "TSF Lining System",
           description: "Complete containment with HDPE geomembranes, GCLs & leak detection.",
-          to: "/applications/mining-systems",
+          ...applicationLink("mining-systems"),
           image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
         },
         {
           title: "Heap Leach Pad",
           description: "Engineered lining for chemical containment and leak protection.",
-          to: "/applications/mining-systems",
+          ...applicationLink("mining-systems"),
           image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80",
         },
         {
           title: "Process Ponds",
           description: "Reliable, cost-effective lining systems for process water.",
-          to: "/applications/water-containment",
+          ...applicationLink("water-containment"),
           image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80",
         },
       ] as MegaFeatureItem[],
@@ -151,7 +166,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/services",
     columns: {
       primaryTitle: "Our Services",
-      primary: SERVICES.map((s) => ({ label: s.label, to: `/services`, icon: s.icon })),
+      primary: SERVICES.map((s) => ({ label: s.label, to: "/services", icon: s.icon })),
       secondaryTitle: "Supply Services",
       secondary: [
         { label: "Global Sourcing", to: "/services" },
