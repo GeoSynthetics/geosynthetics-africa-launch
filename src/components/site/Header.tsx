@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Menu, Upload, X, ChevronDown } from "lucide-react";
+import { Link, type LinkComponentProps } from "@tanstack/react-router";
+import { Menu, Upload, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,9 @@ import {
   NavigationMenuTrigger,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function DesktopNav() {
   return (
