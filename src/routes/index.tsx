@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES, SERVICES } from "@/components/site/mega-menu-data";
+import heroInstallation from "@/assets/hero-installation.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,7 +64,7 @@ function HomePage() {
       <section
         className="relative bg-surface-dark text-surface-dark-foreground"
         style={{
-          backgroundImage: "linear-gradient(to right, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.55) 50%, rgba(8,8,10,0.2) 100%), url(https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80)",
+          backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.55) 50%, rgba(8,8,10,0.2) 100%), url(${heroInstallation})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
