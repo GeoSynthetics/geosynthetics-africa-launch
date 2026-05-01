@@ -68,7 +68,7 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/products",
     columns: {
       primaryTitle: "Browse Products",
-      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, to: `/products/${c.slug}` })),
+      primary: PRODUCT_CATEGORIES.map((c) => ({ label: c.label, to: `/products/${c.slug}`, icon: c.icon })),
       secondaryTitle: "Geomembranes",
       secondary: [
         { label: "HDPE Geomembranes", to: "/products/geomembranes" },
