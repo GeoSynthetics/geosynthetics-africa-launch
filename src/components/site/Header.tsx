@@ -22,11 +22,11 @@ const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function DesktopNav() {
   return (
-    <NavigationMenu className="hidden lg:flex flex-1 justify-center !max-w-none">
-      <NavigationMenuList className="gap-2 xl:gap-1">
+    <NavigationMenu className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0">
+      <NavigationMenuList className="gap-0">
         {megaMenus.map((m) => (
           <NavigationMenuItem key={m.key}>
-            <NavigationMenuTrigger className="bg-transparent px-3 xl:px-4 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
+            <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
               {m.label}
             </NavigationMenuTrigger>
             <NavigationMenuContent className="left-1/2 -translate-x-1/2 !w-screen !max-w-[1280px] p-0 border-0 bg-transparent shadow-none">
@@ -40,7 +40,7 @@ function DesktopNav() {
               <RLink
                 to={item.to}
                 params={item.params}
-                className="inline-flex items-center whitespace-nowrap px-3 xl:px-4 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
+                className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
                 activeProps={{ className: "text-primary" }}
               >
                 {item.label}
@@ -58,7 +58,7 @@ function MobileNav() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="xl:hidden" aria-label="Open menu">
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
@@ -136,13 +136,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
       <TopBar />
-      <div className="flex items-center gap-6 xl:gap-10 py-4">
+      <div className="flex items-center gap-4 2xl:gap-6 py-4">
         <Logo />
         <DesktopNav />
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ml-auto xl:ml-0">
           <Button
             asChild
-            className="hidden md:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
+            className="hidden xl:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
           >
             <Link to="/contacts">
               Upload Project BOQ
