@@ -141,6 +141,59 @@ function MobileNav() {
   );
 }
 
+function UserMenu() {
+  const { isAuthenticated, user, isStaff, signOut } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <Button
+        asChild
+        variant="ghost"
+        size="sm"
+        className="hidden xl:inline-flex font-semibold uppercase tracking-wide text-xs"
+      >
+        <Link to="/login">
+          <UserIcon className="h-4 w-4 mr-1.5" />
+          Sign In
+        </Link>
+      </Button>
+    );
+  }
+
+  const label = user?.email?.split("@")[0] ?? "Account";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hidden xl:inline-flex font-semibold uppercase tracking-wide text-xs"
+        >
+          <UserIcon className="h-4 w-4 mr-1.5" />
+          {label}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="truncate">{user?.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {isStaff && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin">
+              <ShieldCheck className="h-4 w-4 mr-2" />
+              Admin
+            </Link>
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem onClick={() => void signOut()}>
+          <LogOut className="h-4 w-4 mr-2" />
+          Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -149,6 +202,7 @@ export function Header() {
         <Logo />
         <DesktopNav />
         <div className="flex items-center gap-2 ml-auto xl:ml-0">
+          <UserMenu />
           <Button
             asChild
             className="hidden xl:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
