@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
+import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 
@@ -96,6 +97,11 @@ const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
   path: '/$category',
   getParentRoute: () => ApplicationsRoute,
 } as any)
+const AdminResourcesRoute = AdminResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminQuotesRoute = AdminQuotesRouteImport.update({
   id: '/quotes',
   path: '/quotes',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/resources': typeof AdminResourcesRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/resources': typeof AdminResourcesRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin': typeof AdminIndexRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/resources': typeof AdminResourcesRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin/products'
     | '/admin/quotes'
+    | '/admin/resources'
     | '/applications/$category'
     | '/products/$category'
     | '/admin/'
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin/products'
     | '/admin/quotes'
+    | '/admin/resources'
     | '/applications/$category'
     | '/products/$category'
     | '/admin'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin/products'
     | '/admin/quotes'
+    | '/admin/resources'
     | '/applications/$category'
     | '/products/$category'
     | '/admin/'
@@ -331,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsCategoryRouteImport
       parentRoute: typeof ApplicationsRoute
     }
+    '/admin/resources': {
+      id: '/admin/resources'
+      path: '/resources'
+      fullPath: '/admin/resources'
+      preLoaderRoute: typeof AdminResourcesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/quotes': {
       id: '/admin/quotes'
       path: '/quotes'
@@ -351,12 +370,14 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminProductsRoute: typeof AdminProductsRoute
   AdminQuotesRoute: typeof AdminQuotesRoute
+  AdminResourcesRoute: typeof AdminResourcesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminProductsRoute: AdminProductsRoute,
   AdminQuotesRoute: AdminQuotesRoute,
+  AdminResourcesRoute: AdminResourcesRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
