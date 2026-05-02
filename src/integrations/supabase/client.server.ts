@@ -4,7 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 // Service role key bypasses RLS — only use in trusted server functions or
 // verified webhook handlers.
 const supabaseUrl = process.env.SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const serviceRoleKey =
+  process.env.SB_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !serviceRoleKey) {
   throw new Error(
