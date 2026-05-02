@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
