@@ -285,8 +285,32 @@ function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="lg:col-span-3 flex items-center justify-center">
-            <img src={africaMap} alt="" aria-hidden="true" className="w-56 h-auto opacity-90" />
+          <div className="lg:col-span-3 flex flex-col items-center justify-center gap-4">
+            <div className="relative w-56">
+              <img src={africaMap} alt="" aria-hidden="true" className="w-full h-auto opacity-90" />
+              <svg
+                viewBox="0 0 512 512"
+                className="absolute inset-0 w-full h-full"
+                aria-hidden="true"
+              >
+                {/* Active country markers (approx. centroids on the 512x512 silhouette) */}
+                {[
+                  { name: "Ghana", cx: 175, cy: 235 },
+                  { name: "Tanzania", cx: 330, cy: 320 },
+                  { name: "Zimbabwe", cx: 305, cy: 385 },
+                  { name: "South Africa", cx: 285, cy: 445 },
+                ].map((m) => (
+                  <g key={m.name}>
+                    <circle cx={m.cx} cy={m.cy} r="14" fill="var(--primary)" opacity="0.25" />
+                    <circle cx={m.cx} cy={m.cy} r="7" fill="var(--primary)" />
+                  </g>
+                ))}
+              </svg>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-surface-dark-foreground/70">
+              <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+              Active Regions
+            </div>
           </div>
         </div>
       </section>
