@@ -1,9 +1,18 @@
 import { useState } from "react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
-import { Menu, Upload, X } from "lucide-react";
+import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/use-auth";
 import { Logo } from "./Logo";
 import { TopBar } from "./TopBar";
 import { MegaPanel, megaMenus } from "./MegaMenu";
