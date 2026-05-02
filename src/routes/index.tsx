@@ -295,10 +295,10 @@ function HomePage() {
               >
                 {/* Active country markers (approx. centroids on the 512x512 silhouette) */}
                 {[
-                  { name: "Ghana", cx: 175, cy: 235 },
-                  { name: "Tanzania", cx: 330, cy: 320 },
-                  { name: "Zimbabwe", cx: 305, cy: 385 },
-                  { name: "South Africa", cx: 285, cy: 445 },
+                  { name: "Ghana", cx: 190, cy: 228 },
+                  { name: "Tanzania", cx: 345, cy: 315 },
+                  { name: "Zimbabwe", cx: 310, cy: 388 },
+                  { name: "South Africa", cx: 285, cy: 448 },
                 ].map((m) => (
                   <g key={m.name}>
                     <circle cx={m.cx} cy={m.cy} r="14" fill="var(--primary)" opacity="0.25" />
