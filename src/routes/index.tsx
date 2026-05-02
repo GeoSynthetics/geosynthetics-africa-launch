@@ -302,14 +302,14 @@ function HomePage() {
                 ].map((m) => (
                   <g key={m.name}>
                     {/* Outer pulse ring */}
-                    <circle cx={m.cx} cy={m.cy} r="8" fill="var(--primary)" opacity="0.35">
-                      <animate attributeName="r" values="8;20;8" dur="2.4s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.45;0;0.45" dur="2.4s" repeatCount="indefinite" />
+                    <circle cx={m.cx} cy={m.cy} r="14" fill="var(--primary)" opacity="0.4">
+                      <animate attributeName="r" values="14;34;14" dur="2.4s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.5;0;0.5" dur="2.4s" repeatCount="indefinite" />
                     </circle>
                     {/* Static halo */}
-                    <circle cx={m.cx} cy={m.cy} r="10" fill="var(--primary)" opacity="0.18" />
+                    <circle cx={m.cx} cy={m.cy} r="18" fill="var(--primary)" opacity="0.2" />
                     {/* Solid center dot with white stroke for contrast */}
-                    <circle cx={m.cx} cy={m.cy} r="5" fill="var(--primary)" stroke="white" strokeWidth="1.5" />
+                    <circle cx={m.cx} cy={m.cy} r="9" fill="var(--primary)" stroke="white" strokeWidth="2.5" />
                   </g>
                 ))}
               </svg>
