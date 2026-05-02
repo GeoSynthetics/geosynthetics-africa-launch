@@ -54,10 +54,11 @@ function AdminLayout() {
   return (
     <section className="bg-surface min-h-[70vh]">
       <div className="container-page py-10">
-        <header className="mb-8">
+        <header className="mb-6">
           <div className="text-xs font-bold uppercase tracking-wider text-primary">Admin</div>
           <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight">Control Panel</h1>
         </header>
+        <AdminNav />
         <Outlet />
       </div>
     </section>
