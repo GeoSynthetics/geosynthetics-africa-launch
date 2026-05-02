@@ -301,8 +301,15 @@ function HomePage() {
                   { name: "South Africa", cx: 285, cy: 448 },
                 ].map((m) => (
                   <g key={m.name}>
-                    <circle cx={m.cx} cy={m.cy} r="14" fill="var(--primary)" opacity="0.25" />
-                    <circle cx={m.cx} cy={m.cy} r="7" fill="var(--primary)" />
+                    {/* Outer pulse ring */}
+                    <circle cx={m.cx} cy={m.cy} r="8" fill="var(--primary)" opacity="0.35">
+                      <animate attributeName="r" values="8;20;8" dur="2.4s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.45;0;0.45" dur="2.4s" repeatCount="indefinite" />
+                    </circle>
+                    {/* Static halo */}
+                    <circle cx={m.cx} cy={m.cy} r="10" fill="var(--primary)" opacity="0.18" />
+                    {/* Solid center dot with white stroke for contrast */}
+                    <circle cx={m.cx} cy={m.cy} r="5" fill="var(--primary)" stroke="white" strokeWidth="1.5" />
                   </g>
                 ))}
               </svg>
