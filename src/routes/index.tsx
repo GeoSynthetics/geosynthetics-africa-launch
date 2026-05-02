@@ -5,6 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES, SERVICES } from "@/components/site/mega-menu-data";
 import heroInstallation from "@/assets/hero-installation.png";
+import africaMap from "@/assets/africa.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -285,22 +286,7 @@ function HomePage() {
             </ul>
           </div>
           <div className="lg:col-span-3 flex items-center justify-center">
-            <svg viewBox="0 0 200 240" className="w-44 h-auto opacity-90" aria-hidden="true">
-              <path
-                d="M100 10c-12 8-22 6-30 18-8 10 0 22-6 32-6 10-18 12-16 26 2 12 14 16 22 24 4 4 4 14 10 18 6 4 14-2 22 0 8 2 14 14 22 12 12-2 18-14 22-26 4-12-4-20 2-30 4-8 12-14 8-26-4-12-16-12-22-22-6-10-12-22-22-26-4-2-8 0-12 0z"
-                fill="rgba(255,255,255,0.08)"
-                stroke="rgba(255,255,255,0.3)"
-                strokeWidth="1"
-              />
-              {[
-                { cx: 80, cy: 200 },
-                { cx: 60, cy: 110 },
-                { cx: 130, cy: 130 },
-                { cx: 110, cy: 175 },
-              ].map((p, i) => (
-                <circle key={i} cx={p.cx} cy={p.cy} r="4" fill="var(--primary)" />
-              ))}
-            </svg>
+            <img src={africaMap} alt="" aria-hidden="true" className="w-56 h-auto opacity-90" />
           </div>
         </div>
       </section>
