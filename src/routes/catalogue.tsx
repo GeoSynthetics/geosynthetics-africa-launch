@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const SORT_OPTIONS = [
+  { value: "relevant", label: "Relevant" },
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
   { value: "name_asc", label: "Name: A → Z" },
@@ -45,7 +46,7 @@ function parseList(v: unknown): string[] {
 
 export const Route = createFileRoute("/catalogue")({
   validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
-    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "newest";
+    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "relevant";
     return {
       q: typeof raw.q === "string" ? raw.q : "",
       cats: parseList(raw.cats),
@@ -150,7 +151,7 @@ function CataloguePage() {
           if (!next.q) delete next.q;
           if (Array.isArray(next.cats) && next.cats.length === 0) delete next.cats;
           if (Array.isArray(next.mans) && next.mans.length === 0) delete next.mans;
-          if (next.sort === "newest") delete next.sort;
+          if (next.sort === "relevant") delete next.sort;
           return next as never;
         },
       });
@@ -190,8 +191,15 @@ function CataloguePage() {
           query = query.order("price", { ascending: false, nullsFirst: false });
           break;
         case "newest":
-        default:
           query = query.order("created_at", { ascending: false });
+          break;
+        case "relevant":
+        default:
+          // Relevance: in-stock first, then products with imagery, then newest
+          query = query
+            .order("stock_quantity", { ascending: false, nullsFirst: false })
+            .order("image_url", { ascending: false, nullsFirst: false })
+            .order("created_at", { ascending: false });
           break;
       }
       // Stable tiebreaker for consistent pagination
