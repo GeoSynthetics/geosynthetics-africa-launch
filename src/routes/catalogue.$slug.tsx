@@ -233,6 +233,13 @@ function ProductDetailPage() {
         }
       }
       setActiveTab(current);
+
+      // Hide tabs when scrolled past the bottom of the last section
+      const lastEl = document.getElementById(TABS[TABS.length - 1].id);
+      if (lastEl) {
+        const bottom = lastEl.getBoundingClientRect().bottom;
+        setTabsVisible(bottom > threshold);
+      }
     };
     handler();
     window.addEventListener("scroll", handler, { passive: true });
