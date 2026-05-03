@@ -154,6 +154,11 @@ function ProductsAdmin() {
       toast.error("Name is required");
       return;
     }
+    const toNum = (v: unknown) => {
+      if (v === null || v === undefined || v === "") return null;
+      const n = typeof v === "number" ? v : parseFloat(String(v));
+      return isNaN(n) ? null : n;
+    };
     const payload = {
       name: editing.name.trim(),
       slug: (editing.slug?.trim() || slugify(editing.name)).slice(0, 160),
@@ -162,6 +167,14 @@ function ProductsAdmin() {
       manufacturer_id: editing.manufacturer_id || null,
       category_id: editing.category_id || null,
       is_active: editing.is_active ?? true,
+      price: toNum(editing.price),
+      sale_price: toNum(editing.sale_price),
+      stock_quantity: toNum(editing.stock_quantity),
+      weight_kg: toNum(editing.weight_kg),
+      length_cm: toNum(editing.length_cm),
+      width_cm: toNum(editing.width_cm),
+      height_cm: toNum(editing.height_cm),
+      image_url: editing.image_url?.trim() || null,
     };
     setSaving(true);
     const res = editing.id
