@@ -183,6 +183,17 @@ function ProductDetailPage() {
   const { product, related } = Route.useLoaderData();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
+  const [headerH, setHeaderH] = useState(96);
+
+  useEffect(() => {
+    const measure = () => {
+      const h = document.querySelector("header")?.getBoundingClientRect().height;
+      if (h) setHeaderH(Math.round(h));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const heroImg = product.image_url || product.images?.[0] || null;
   const features = (product.key_features && product.key_features.length > 0)
@@ -223,24 +234,36 @@ function ProductDetailPage() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 100;
+      const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
   return (
     <>
-      {/* Breadcrumb + Hero */}
+      {/* Breadcrumb + Hero with product image as background (landscape, left-dark fade) */}
       <section
-        className="bg-surface-dark text-surface-dark-foreground"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.55)), url(https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
       >
-        <div className="container-page pt-8 pb-14 md:pt-10 md:pb-20">
+        {/* Background image */}
+        {heroImg && (
+          <img
+            src={heroImg}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        )}
+        {/* Left-to-right dark fade */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(10,10,12,0.95) 0%, rgba(10,10,12,0.85) 35%, rgba(10,10,12,0.4) 65%, rgba(10,10,12,0.05) 100%)",
+          }}
+        />
+
+        <div className="relative container-page pt-6 pb-12 md:pt-8 md:pb-16">
           <nav className="text-xs uppercase tracking-wider text-surface-dark-foreground/70 flex flex-wrap items-center gap-2">
             <Link to="/" className="hover:text-primary">Home</Link>
             <ChevronRight className="h-3 w-3" />
@@ -261,96 +284,85 @@ function ProductDetailPage() {
             <span className="text-primary">{product.name}</span>
           </nav>
 
-          <div className="grid lg:grid-cols-2 gap-10 items-center mt-8">
-            <div>
-              {product.product_categories?.name && (
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
-                  {product.product_categories.name}
-                </p>
-              )}
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight leading-[1.05]">
-                {product.name}
-              </h1>
-              {product.short_description && (
-                <p className="mt-5 text-base md:text-lg text-surface-dark-foreground/85 max-w-xl">
-                  {product.short_description}
-                </p>
-              )}
+          <div className="mt-8 max-w-2xl">
+            {product.product_categories?.name && (
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
+                {product.product_categories.name}
+              </p>
+            )}
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight leading-[1.05]">
+              {product.name}
+            </h1>
+            {product.short_description && (
+              <p className="mt-5 text-base md:text-lg text-surface-dark-foreground/85 max-w-xl">
+                {product.short_description}
+              </p>
+            )}
 
-              {/* Key features */}
-              <div className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-2xl">
-                {features.slice(0, 5).map((f, i) => {
-                  const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
-                  return (
-                    <div key={i} className="text-center">
-                      <div className="mx-auto h-12 w-12 rounded-full border border-surface-dark-foreground/20 flex items-center justify-center text-primary">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="mt-2 text-[11px] uppercase tracking-wide text-surface-dark-foreground/85 leading-tight">
-                        {f.label}
-                      </div>
+            {/* Key features */}
+            <div className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-2xl">
+              {features.slice(0, 5).map((f, i) => {
+                const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
+                return (
+                  <div key={i} className="text-center">
+                    <div className="mx-auto h-12 w-12 rounded-full border border-surface-dark-foreground/20 bg-surface-dark/40 backdrop-blur-sm flex items-center justify-center text-primary">
+                      <Icon className="h-5 w-5" />
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* CTAs */}
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-                  onClick={() => scrollTo("quote")}
-                >
-                  Request Material Supply
-                  <Download className="ml-2 h-4 w-4" />
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  <Link to="/contacts">
-                    Upload Project BOQ
-                    <Upload className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild={!!product.datasheet_url}
-                  disabled={!product.datasheet_url}
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  {product.datasheet_url ? (
-                    <a href={product.datasheet_url} target="_blank" rel="noopener noreferrer">
-                      Download Datasheet
-                      <Download className="ml-2 h-4 w-4" />
-                    </a>
-                  ) : (
-                    <span>Download Datasheet</span>
-                  )}
-                </Button>
-              </div>
+                    <div className="mt-2 text-[11px] uppercase tracking-wide text-surface-dark-foreground/85 leading-tight">
+                      {f.label}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className="relative">
-              <div className="aspect-[4/3] rounded bg-surface-dark-foreground/5 border border-surface-dark-foreground/10 overflow-hidden">
-                {heroImg ? (
-                  <img src={heroImg} alt={product.name} className="h-full w-full object-cover" />
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
+                onClick={() => scrollTo("quote")}
+              >
+                Request Material Supply
+                <Download className="ml-2 h-4 w-4" />
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+              >
+                <Link to="/contacts">
+                  Upload Project BOQ
+                  <Upload className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild={!!product.datasheet_url}
+                disabled={!product.datasheet_url}
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+              >
+                {product.datasheet_url ? (
+                  <a href={product.datasheet_url} target="_blank" rel="noopener noreferrer">
+                    Download Datasheet
+                    <Download className="ml-2 h-4 w-4" />
+                  </a>
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-surface-dark-foreground/40">
-                    <Package className="h-20 w-20" />
-                  </div>
+                  <span>Download Datasheet</span>
                 )}
-              </div>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sticky tabs */}
-      <div className="sticky top-0 z-30 bg-background border-b border-border">
+      {/* Sticky tabs — stick beneath the site header */}
+      <div
+        className="sticky z-30 bg-background border-b border-border shadow-sm"
+        style={{ top: headerH }}
+      >
         <div className="container-page">
           <div className="flex gap-1 overflow-x-auto no-scrollbar">
             {TABS.map((t) => (
