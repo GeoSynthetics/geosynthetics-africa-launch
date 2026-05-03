@@ -16,10 +16,10 @@ import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
@@ -64,6 +64,11 @@ const ContactsRoute = ContactsRouteImport.update({
   path: '/contacts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogueRoute = CatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApplicationsRoute = ApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
@@ -79,11 +84,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
-  id: '/catalogue/',
-  path: '/catalogue/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -95,9 +95,9 @@ const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
   getParentRoute: () => ProductsRoute,
 } as any)
 const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
-  id: '/catalogue/$slug',
-  path: '/catalogue/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CatalogueRoute,
 } as any)
 const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
   id: '/$category',
@@ -129,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -144,11 +145,11 @@ export interface FileRoutesByFullPath {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
-  '/catalogue/': typeof CatalogueIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -164,13 +165,13 @@ export interface FileRoutesByTo {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin': typeof AdminIndexRoute
-  '/catalogue': typeof CatalogueIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -186,7 +187,6 @@ export interface FileRoutesById {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
-  '/catalogue/': typeof CatalogueIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -194,6 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/applications'
+    | '/catalogue'
     | '/contacts'
     | '/login'
     | '/products'
@@ -209,11 +210,11 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/products/$category'
     | '/admin/'
-    | '/catalogue/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/applications'
+    | '/catalogue'
     | '/contacts'
     | '/login'
     | '/products'
@@ -229,12 +230,12 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/products/$category'
     | '/admin'
-    | '/catalogue'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/applications'
+    | '/catalogue'
     | '/contacts'
     | '/login'
     | '/products'
@@ -250,13 +251,13 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/products/$category'
     | '/admin/'
-    | '/catalogue/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
+  CatalogueRoute: typeof CatalogueRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRouteWithChildren
@@ -264,8 +265,6 @@ export interface RootRouteChildren {
   ResourcesRoute: typeof ResourcesRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
-  CatalogueSlugRoute: typeof CatalogueSlugRoute
-  CatalogueIndexRoute: typeof CatalogueIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -319,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogue': {
+      id: '/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof CatalogueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/applications': {
       id: '/applications'
       path: '/applications'
@@ -340,13 +346,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catalogue/': {
-      id: '/catalogue/'
-      path: '/catalogue'
-      fullPath: '/catalogue/'
-      preLoaderRoute: typeof CatalogueIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -363,10 +362,10 @@ declare module '@tanstack/react-router' {
     }
     '/catalogue/$slug': {
       id: '/catalogue/$slug'
-      path: '/catalogue/$slug'
+      path: '/$slug'
       fullPath: '/catalogue/$slug'
       preLoaderRoute: typeof CatalogueSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof CatalogueRoute
     }
     '/applications/$category': {
       id: '/applications/$category'
@@ -436,6 +435,18 @@ const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
 )
 
+interface CatalogueRouteChildren {
+  CatalogueSlugRoute: typeof CatalogueSlugRoute
+}
+
+const CatalogueRouteChildren: CatalogueRouteChildren = {
+  CatalogueSlugRoute: CatalogueSlugRoute,
+}
+
+const CatalogueRouteWithChildren = CatalogueRoute._addFileChildren(
+  CatalogueRouteChildren,
+)
+
 interface ProductsRouteChildren {
   ProductsCategoryRoute: typeof ProductsCategoryRoute
 }
@@ -452,6 +463,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
+  CatalogueRoute: CatalogueRouteWithChildren,
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRouteWithChildren,
@@ -459,8 +471,6 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesRoute: ResourcesRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
-  CatalogueSlugRoute: CatalogueSlugRoute,
-  CatalogueIndexRoute: CatalogueIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
