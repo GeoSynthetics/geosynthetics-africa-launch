@@ -295,17 +295,31 @@ function ProductDetailPage() {
   return (
     <>
       {/* Breadcrumb + Hero with product image as background (landscape, left-dark fade) */}
-      <section
-        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
-      >
-        {/* Background image */}
+      <section className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden min-h-[420px] md:min-h-[520px]">
+        {/* Responsive background image — eager + high priority for LCP, with low-res blur placeholder */}
         {heroImg && (
-          <img
-            src={heroImg}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+          <div className="absolute inset-0" aria-hidden="true">
+            <div
+              className="absolute inset-0 bg-surface-dark"
+              style={{
+                backgroundImage: `url(${heroImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(24px)",
+                transform: "scale(1.1)",
+                opacity: 0.5,
+              }}
+            />
+            <img
+              src={heroImg}
+              alt=""
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              sizes="100vw"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+          </div>
         )}
         {/* Left-to-right dark fade */}
         <div
@@ -324,7 +338,13 @@ function ProductDetailPage() {
             {product.product_categories?.name && (
               <>
                 <ChevronRight className="h-3 w-3" />
-                <span className="hover:text-primary">{product.product_categories.name}</span>
+                <Link
+                  to="/catalogue"
+                  search={{ q: "", cats: [product.product_categories.id], mans: [], sort: "newest" }}
+                  className="hover:text-primary"
+                >
+                  {product.product_categories.name}
+                </Link>
               </>
             )}
             {product.manufacturers?.name && (
