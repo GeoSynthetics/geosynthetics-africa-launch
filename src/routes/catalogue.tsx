@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const SORT_OPTIONS = [
+  { value: "relevant", label: "Relevant" },
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
   { value: "name_asc", label: "Name: A → Z" },
