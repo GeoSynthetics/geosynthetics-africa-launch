@@ -191,8 +191,15 @@ function CataloguePage() {
           query = query.order("price", { ascending: false, nullsFirst: false });
           break;
         case "newest":
-        default:
           query = query.order("created_at", { ascending: false });
+          break;
+        case "relevant":
+        default:
+          // Relevance: in-stock first, then products with imagery, then newest
+          query = query
+            .order("stock_quantity", { ascending: false, nullsFirst: false })
+            .order("image_url", { ascending: false, nullsFirst: false })
+            .order("created_at", { ascending: false });
           break;
       }
       // Stable tiebreaker for consistent pagination
