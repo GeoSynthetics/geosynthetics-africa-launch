@@ -184,9 +184,6 @@ function ProductDetailPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
-  const [tabsVisible, setTabsVisible] = useState(true);
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const tabBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   useEffect(() => {
     const measure = () => {
@@ -219,7 +216,7 @@ function ProductDetailPage() {
     { icon: Scroll, label: "Roll Length", value: product.roll_length },
   ].filter((r) => r.value);
 
-  // Active section tracking + hide tabs after passing the last section
+  // Active section tracking
   useEffect(() => {
     const handler = () => {
       const offsets = TABS.map((t) => {
@@ -229,29 +226,10 @@ function ProductDetailPage() {
       });
       offsets.sort((a, b) => a.top - b.top);
       setActiveTab(offsets[0].id);
-
-      // Hide tabs once the bottom of the last section has scrolled past the header
-      const last = document.getElementById(TABS[TABS.length - 1].id);
-      if (last) {
-        const bottom = last.getBoundingClientRect().bottom;
-        setTabsVisible(bottom > headerH + 80);
-      }
     };
-    handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
-  }, [headerH]);
-
-  // Auto-scroll the active tab into view (mobile sliding tabs)
-  useEffect(() => {
-    const btn = tabBtnRefs.current[activeTab];
-    const container = tabsRef.current;
-    if (!btn || !container) return;
-    const cRect = container.getBoundingClientRect();
-    const bRect = btn.getBoundingClientRect();
-    const target = container.scrollLeft + (bRect.left - cRect.left) - (cRect.width / 2 - bRect.width / 2);
-    container.scrollTo({ left: target, behavior: "smooth" });
-  }, [activeTab]);
+  }, []);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -380,27 +358,20 @@ function ProductDetailPage() {
         </div>
       </section>
 
-      {/* Sticky tabs — stick beneath header; hide after last section */}
+      {/* Sticky tabs — stick beneath the site header */}
       <div
-        className={cn(
-          "sticky z-30 bg-background border-b border-border shadow-sm transition-all duration-300",
-          tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
-        )}
+        className="sticky z-30 bg-background border-b border-border shadow-sm"
         style={{ top: headerH }}
       >
         <div className="container-page">
-          <div
-            ref={tabsRef}
-            className="flex overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory md:snap-none"
-          >
+          <div className="flex gap-1 overflow-x-auto no-scrollbar">
             {TABS.map((t) => (
               <button
                 key={t.id}
-                ref={(el) => { tabBtnRefs.current[t.id] = el; }}
                 type="button"
                 onClick={() => scrollTo(t.id)}
                 className={cn(
-                  "shrink-0 basis-1/3 md:basis-auto snap-center md:snap-align-none px-4 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors text-center",
+                  "px-4 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors",
                   activeTab === t.id
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground",
