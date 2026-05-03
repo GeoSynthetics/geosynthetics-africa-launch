@@ -219,7 +219,7 @@ function ProductDetailPage() {
     { icon: Scroll, label: "Roll Length", value: product.roll_length },
   ].filter((r) => r.value);
 
-  // Active section tracking
+  // Active section tracking + hide tabs after passing the last section
   useEffect(() => {
     const handler = () => {
       const offsets = TABS.map((t) => {
@@ -229,10 +229,29 @@ function ProductDetailPage() {
       });
       offsets.sort((a, b) => a.top - b.top);
       setActiveTab(offsets[0].id);
+
+      // Hide tabs once the bottom of the last section has scrolled past the header
+      const last = document.getElementById(TABS[TABS.length - 1].id);
+      if (last) {
+        const bottom = last.getBoundingClientRect().bottom;
+        setTabsVisible(bottom > headerH + 80);
+      }
     };
+    handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
-  }, []);
+  }, [headerH]);
+
+  // Auto-scroll the active tab into view (mobile sliding tabs)
+  useEffect(() => {
+    const btn = tabBtnRefs.current[activeTab];
+    const container = tabsRef.current;
+    if (!btn || !container) return;
+    const cRect = container.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    const target = container.scrollLeft + (bRect.left - cRect.left) - (cRect.width / 2 - bRect.width / 2);
+    container.scrollTo({ left: target, behavior: "smooth" });
+  }, [activeTab]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
