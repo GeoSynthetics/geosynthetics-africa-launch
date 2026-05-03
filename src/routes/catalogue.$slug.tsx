@@ -216,20 +216,31 @@ function ProductDetailPage() {
     { icon: Scroll, label: "Roll Length", value: product.roll_length },
   ].filter((r) => r.value);
 
-  // Active section tracking
+  // Active section tracking — pick the last section whose top has crossed the threshold.
   useEffect(() => {
     const handler = () => {
-      const offsets = TABS.map((t) => {
+      const threshold = headerH + 80;
+      let current = TABS[0].id;
+      for (const t of TABS) {
         const el = document.getElementById(t.id);
-        if (!el) return { id: t.id, top: Number.POSITIVE_INFINITY };
-        return { id: t.id, top: Math.abs(el.getBoundingClientRect().top - 120) };
-      });
-      offsets.sort((a, b) => a.top - b.top);
-      setActiveTab(offsets[0].id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top - threshold <= 0) {
+          current = t.id;
+        } else {
+          break;
+        }
+      }
+      setActiveTab(current);
     };
+    handler();
     window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
+    window.addEventListener("resize", handler);
+    return () => {
+      window.removeEventListener("scroll", handler);
+      window.removeEventListener("resize", handler);
+    };
+  }, [headerH]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
