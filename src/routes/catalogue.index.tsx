@@ -44,7 +44,7 @@ function parseList(v: unknown): string[] {
   return [];
 }
 
-export const Route = createFileRoute("/catalogue")({
+export const Route = createFileRoute("/catalogue/")({
   validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
     const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "relevant";
     return {
@@ -135,7 +135,10 @@ function CataloguePage() {
       const trimmed = searchInput.trim();
       if (trimmed === q) return;
       void navigate({
-        search: (prev) => ({ ...prev, q: trimmed || undefined }) as never,
+        search: (prev) => (({
+          ...prev,
+          q: trimmed || undefined
+        }) as never),
         replace: true,
       });
     }, 300);
