@@ -99,7 +99,7 @@ function ProductCategoryPage() {
                 <Link to="/resources"><Download className="h-4 w-4 mr-2" />Datasheets</Link>
               </Button>
               <Button asChild variant="outline" className="mt-3 w-full bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
-                <Link to="/catalogue"><FileText className="h-4 w-4 mr-2" />Full Catalogue</Link>
+                <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}><FileText className="h-4 w-4 mr-2" />Full Catalogue</Link>
               </Button>
             </div>
           </aside>
