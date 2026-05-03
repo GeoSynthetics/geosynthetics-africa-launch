@@ -184,6 +184,7 @@ function ProductDetailPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
+  const [tabsVisible, setTabsVisible] = useState(true);
 
   useEffect(() => {
     const measure = () => {
