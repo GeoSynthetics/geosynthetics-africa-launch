@@ -31,10 +31,10 @@ type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 const VALID_SORTS = new Set<string>(SORT_OPTIONS.map((s) => s.value));
 
 interface CatalogueSearch {
-  q?: string;
-  cats?: string[];
-  mans?: string[];
-  sort?: SortValue;
+  q: string;
+  cats: string[];
+  mans: string[];
+  sort: SortValue;
 }
 
 function parseList(v: unknown): string[] {
