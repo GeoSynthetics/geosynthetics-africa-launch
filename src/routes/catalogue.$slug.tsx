@@ -386,14 +386,24 @@ function ProductDetailPage() {
         style={{ top: headerH }}
       >
         <div className="container-page">
-          <div className="flex gap-1 overflow-x-auto no-scrollbar">
+          <div
+            className={cn(
+              "flex overflow-x-auto no-scrollbar",
+              // Mobile: snap 3 tabs per page (each tab = 1/3 viewport width)
+              "snap-x snap-mandatory md:snap-none",
+              "md:gap-1",
+            )}
+          >
             {TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => scrollTo(t.id)}
                 className={cn(
-                  "px-4 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors",
+                  "py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors snap-start",
+                  // Mobile: each tab takes 1/3 of the container so swiping reveals 3 at a time
+                  "basis-1/3 shrink-0 grow-0 text-center px-2",
+                  "md:basis-auto md:shrink md:grow-0 md:px-4",
                   activeTab === t.id
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground",
