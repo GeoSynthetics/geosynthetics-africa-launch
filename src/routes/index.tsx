@@ -357,7 +357,7 @@ function HomePage() {
                 <span className="opacity-60">Search products, applications, standards…</span>
               </div>
               <Button asChild className="mt-auto pt-4 bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide">
-                <Link to="/catalogue">View Full Catalogue <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>View Full Catalogue <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
           </div>
