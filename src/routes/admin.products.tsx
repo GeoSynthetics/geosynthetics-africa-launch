@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Upload, Copy, X, Star, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/products")({
@@ -69,6 +69,7 @@ interface Product {
   width_cm: number | null;
   height_cm: number | null;
   image_url: string | null;
+  images: string[] | null;
 }
 
 const empty: Partial<Product> = {
@@ -87,6 +88,7 @@ const empty: Partial<Product> = {
   width_cm: null,
   height_cm: null,
   image_url: "",
+  images: [],
 };
 
 function slugify(s: string) {
@@ -106,13 +108,72 @@ function ProductsAdmin() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const uploaded: string[] = [];
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) {
+        toast.error(`${file.name} is not an image`);
+        continue;
+      }
+      if (file.size > 8 * 1024 * 1024) {
+        toast.error(`${file.name} is over 8MB`);
+        continue;
+      }
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("product-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type,
+      });
+      if (error) {
+        toast.error(`Upload failed: ${error.message}`);
+        continue;
+      }
+      const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+      uploaded.push(data.publicUrl);
+    }
+    if (uploaded.length) {
+      setEditing((s) => {
+        const existing = s.images ?? [];
+        const next = [...existing, ...uploaded];
+        return { ...s, images: next, image_url: s.image_url || next[0] };
+      });
+      toast.success(`${uploaded.length} image(s) uploaded`);
+    }
+    setUploading(false);
+  };
+
+  const removeImage = (url: string) => {
+    setEditing((s) => {
+      const next = (s.images ?? []).filter((u) => u !== url);
+      return { ...s, images: next, image_url: s.image_url === url ? (next[0] ?? "") : s.image_url };
+    });
+  };
+
+  const setPrimaryImage = (url: string) => {
+    setEditing((s) => ({ ...s, image_url: url }));
+  };
+
+  const copyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied");
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   const load = async () => {
     setLoading(true);
     const [products, manufacturers, categories] = await Promise.all([
       supabase
         .from("products")
-        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url")
+        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images")
         .order("created_at", { ascending: false })
         .limit(500),
       supabase.from("manufacturers").select("id, name").order("name"),
@@ -174,7 +235,8 @@ function ProductsAdmin() {
       length_cm: toNum(editing.length_cm),
       width_cm: toNum(editing.width_cm),
       height_cm: toNum(editing.height_cm),
-      image_url: editing.image_url?.trim() || null,
+      image_url: editing.image_url?.trim() || (editing.images?.[0] ?? null),
+      images: editing.images ?? [],
     };
     setSaving(true);
     const res = editing.id
@@ -368,13 +430,63 @@ function ProductsAdmin() {
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="p-img">Image URL</Label>
-                  <Input id="p-img" type="url" placeholder="https://…" value={editing.image_url ?? ""} onChange={(e) => setEditing((s) => ({ ...s, image_url: e.target.value }))} className="mt-1.5" />
-                  {editing.image_url && (
-                    <img src={editing.image_url} alt="preview" className="mt-2 h-20 w-20 rounded border border-border object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                <div className="border-t border-border pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">Images</h4>
+                    <label className="inline-flex items-center gap-2 text-sm cursor-pointer rounded border border-border px-3 py-1.5 hover:bg-muted">
+                      {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      {uploading ? "Uploading…" : "Upload images"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        disabled={uploading}
+                        onChange={(e) => { void handleUpload(e.target.files); e.currentTarget.value = ""; }}
+                      />
+                    </label>
+                  </div>
+
+                  {(editing.images?.length ?? 0) > 0 && (
+                    <div className="grid grid-cols-4 gap-3 mb-3">
+                      {editing.images!.map((url) => {
+                        const isPrimary = editing.image_url === url;
+                        return (
+                          <div key={url} className={`relative group rounded border-2 overflow-hidden ${isPrimary ? "border-primary" : "border-border"}`}>
+                            <img src={url} alt="" className="h-24 w-full object-cover" />
+                            {isPrimary && (
+                              <span className="absolute top-1 left-1 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded font-semibold">PRIMARY</span>
+                            )}
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                              {!isPrimary && (
+                                <Button type="button" size="icon" variant="secondary" className="h-7 w-7" onClick={() => setPrimaryImage(url)} title="Set as primary">
+                                  <Star className="h-3.5 w-3.5" />
+                                </Button>
+                              )}
+                              <Button type="button" size="icon" variant="secondary" className="h-7 w-7" onClick={() => void copyUrl(url)} title="Copy URL">
+                                <Copy className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button type="button" size="icon" variant="destructive" className="h-7 w-7" onClick={() => removeImage(url)} title="Remove">
+                                <X className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   )}
+
+                  <Label htmlFor="p-img" className="text-xs text-muted-foreground">Or paste an external image URL</Label>
+                  <div className="flex gap-2 mt-1.5">
+                    <Input id="p-img" type="url" placeholder="https://…" value={editing.image_url ?? ""} onChange={(e) => setEditing((s) => ({ ...s, image_url: e.target.value }))} />
+                    {editing.image_url && (
+                      <Button type="button" variant="outline" size="icon" onClick={() => void copyUrl(editing.image_url!)} title="Copy URL">
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
+
 
                 <div className="flex items-center gap-3 border-t border-border pt-4">
                   <Switch
