@@ -69,6 +69,7 @@ interface Product {
   width_cm: number | null;
   height_cm: number | null;
   image_url: string | null;
+  images: string[] | null;
 }
 
 const empty: Partial<Product> = {
