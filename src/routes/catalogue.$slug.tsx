@@ -379,7 +379,10 @@ function ProductDetailPage() {
 
       {/* Sticky tabs — stick beneath the site header */}
       <div
-        className="sticky z-30 bg-background border-b border-border shadow-sm"
+        className={cn(
+          "sticky z-30 bg-background border-b border-border shadow-sm transition-all duration-300",
+          tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none",
+        )}
         style={{ top: headerH }}
       >
         <div className="container-page">
