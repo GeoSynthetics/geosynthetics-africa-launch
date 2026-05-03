@@ -1,39 +1,63 @@
+## Goal
 
-# Connect existing Supabase project (manual, no Lovable Cloud)
+Add a fully designed single product page at `/catalogue/$slug` that matches the uploaded Figma reference (everything except header/footer). Wire it to Supabase using the existing `products` schema, plus a small migration to support the richer content the design shows (typical properties table, key features, applications, datasheet link, long description).
 
-Wire your blank Supabase project into the app using the URL + publishable key you provided, with a server-side admin client and an auth middleware that the upcoming schema work will rely on.
+## 1. Database additions (migration)
 
-## What I'll do
+The current `products` table has: name, slug, sku, short_description, price, sale_price, stock_quantity, weight/dim fields, image_url, images, category_id, manufacturer_id, is_active. The Figma needs more. Add nullable columns so existing rows stay valid:
 
-1. **Install SDK** (already verified): `bun add @supabase/supabase-js @supabase/ssr`. Note: the shadcn `@supabase/supabase-client-react-router` registry component is for plain React Router and is incompatible with TanStack Start, so I'll skip it and create equivalent TanStack-native files instead.
+- `long_description text` — Overview body copy
+- `key_features jsonb` — array of `{ label, icon }` (e.g. "High Filtration Efficiency")
+- `specifications jsonb` — array of `{ property, test_method, unit, typical_value }` for the Typical Properties table
+- `applications jsonb` — array of `{ title, subtitle, image_url }` for Typical Applications strip
+- `compatible_systems jsonb` — array of `{ title, subtitle, image_url }` for Compatible Systems strip
+- `datasheet_url text`, `installation_guide_url text`, `qa_checklist_url text`, `chemical_resistance_url text` — Quick Downloads
+- `material text`, `structure text`, `colour text`, `standard text`, `roll_width text`, `roll_length text` — the small "at a glance" panel beside the hero image
 
-2. **Create `.env`** with the values you supplied:
-   ```
-   VITE_SUPABASE_URL=https://fsfwjwyzrtgayujmguvd.supabase.co
-   VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_Vjm9iFsH36nX7LsoRSRAgA_sgBYzVf1
-   SUPABASE_URL=https://fsfwjwyzrtgayujmguvd.supabase.co
-   SUPABASE_PUBLISHABLE_KEY=sb_publishable_Vjm9iFsH36nX7LsoRSRAgA_sgBYzVf1
-   ```
-   `SUPABASE_SERVICE_ROLE_KEY` is intentionally NOT in this file — see step 5.
+All optional. The page renders sections only when data exists.
 
-3. **`src/integrations/supabase/client.ts`** — browser client using the publishable key, SSR-safe (only persists session in the browser).
+## 2. New route: `src/routes/catalogue.$slug.tsx`
 
-4. **`src/integrations/supabase/client.server.ts`** — admin client using the service role key, server-only (never imported from components). Throws clearly if the env var is missing.
+File-based dynamic route using `createFileRoute("/catalogue/$slug")`.
 
-5. **`src/integrations/supabase/auth-middleware.ts`** — `requireSupabaseAuth` middleware for `createServerFn`:
-   - Client phase: reads the access token from the browser Supabase session and forwards it via `sendContext`.
-   - Server phase: verifies the token with `supabase.auth.getUser(bearer)`, builds a Supabase client scoped to that user (so RLS applies as them), and exposes `{ supabase, userId, claims }` in handler context.
-   - Falls back to the `Authorization` header if the client middleware didn't run.
+- `loader` fetches the product by `slug` (with category + manufacturer joined). Throws `notFound()` if missing or `is_active=false`.
+- Also fetches up to 4 related products (same `category_id`, exclude current).
+- `head()` derives `<title>`, `description`, `og:title`, `og:description`, `og:image` from the product (uses `image_url`/first image as og:image).
+- `errorComponent` and `notFoundComponent` provided.
 
-6. **No route changes yet** — auth UI, admin UI, and the database schema land in the next loops once this plumbing is in.
+### Page layout (top to bottom, matching Figma)
 
-## What you need to do
+1. **Breadcrumb bar** (full width on hero background): Home › Catalogue › {Category} › {Manufacturer} › {Product name}.
+2. **Hero section** (dark background, two-column on lg):
+   - Left: eyebrow (category, uppercase red), big product name, short_description, row of 5 **key feature icons** (rendered from `key_features` with lucide icons; sensible fallback set if empty), then 3 CTA buttons: **Request Material Supply** (primary red), **Upload Project BOQ** (outline → /contacts), **Download Datasheet** (outline, disabled if no `datasheet_url`).
+   - Right: large product image (uses `image_url` or first of `images`).
+3. **Tabs strip** (sticky under hero): Overview · Specifications · Applications · Systems · Installation · QA & Testing · Documents · Case Studies. Smooth-scroll to in-page anchors. Built with shadcn `Tabs` + `useState` for active styling, anchors via `id` attributes on each section.
+4. **Overview section** (3-column grid):
+   - Col 1–2: heading "Overview", paragraphs from `long_description` (or `short_description` fallback).
+   - Col 3: "At a glance" panel — `material / structure / colour / standard / roll_width / roll_length` rows with small icons (lucide).
+   - Right rail (sidebar, sticky): **Need Help?** card with phone + email, **Quick Downloads** list (datasheet, installation guide, qa checklist, chemical resistance — each row with a download icon, only shown if URL exists), **Request a Quote** card with drag-and-drop file upload zone (PDF/DWG/DOC/XLS, max 20MB), name/email/message fields, "Submit & Get Proposal" button. Submission inserts into existing `quotes` table (verified to exist) plus uploads file to a `quote-attachments` Supabase Storage bucket (created in the migration).
+5. **Typical Properties** table — renders `specifications` jsonb with columns Property / Test Method / Unit / Typical Value. Hidden if empty.
+6. **Typical Applications** strip — 5 cards from `applications` jsonb, each `{ image, title, subtitle }`. "View all applications →" link to `/applications`.
+7. **Compatible Systems** strip — same shape as applications, links to `/services`.
+8. **Projects Using {Product}** — pulls latest 3 case studies (placeholder cards if no case-studies table; we'll render static stubs filtered by category).
+9. **Related Products** sidebar/strip — uses fetched related-products list, links to their `/catalogue/$slug` pages, shows thumbnail + name + category + "View Product →".
+10. **BoqCtaBand** at the bottom (existing component) followed by site footer (already in root).
 
-- **Add the service role key as a secret.** After you approve and I write the files, you'll see a prompt to paste `SUPABASE_SERVICE_ROLE_KEY` (Supabase Dashboard → Project Settings → API → `service_role`). I'll request it via the secrets tool so it lives only in the server runtime, never in `.env` or the bundle.
-- **In the Supabase dashboard** (you can do this any time before launch):
-  - Authentication → Providers → Email: enable, and turn on **Leaked Password Protection (HIBP)**.
-  - Authentication → URL Configuration → Site URL: set to your preview URL (`https://id-preview--5b18cafe-9c07-42be-8f12-72e4683fbeac.lovable.app`) and add it to Redirect URLs.
+### Quote form behavior
 
-## After this lands
+- Drag-drop zone using a hidden `<input type="file">` and `onDrop` handlers on a styled div ("Drag & drop files here or click to browse"). Validates type and 20MB size.
+- On submit: upload file (if any) to `quote-attachments/{uuid}-{filename}`, then `supabase.from("quotes").insert({ product_id, name, email, message, attachment_url })`. Toasts success/error.
 
-Next loop I'll execute the full PRD schema plan from the previous message — roles + profiles trigger, catalogue, applications, services, manufacturers, case studies, resources, quote/BOQ pipeline, FTS search, and storage buckets — all as Supabase migrations against your project.
+### Catalogue card link fix
+
+Update `ProductCard` in `src/routes/catalogue.tsx` so cards link to `/catalogue/$slug` (currently they link back to `/catalogue` — bug). Also update `src/routes/products.$category.tsx` and any other place that should deep-link.
+
+## 3. Files
+
+- **new** `src/routes/catalogue.$slug.tsx`
+- **edit** `src/routes/catalogue.tsx` — fix `ProductCard` link
+- **migration** add the columns above + create `quote-attachments` storage bucket (public read) with policy allowing anon insert. Confirm `quotes` table shape; add `product_id uuid` and `attachment_url text` columns if missing.
+
+## 4. Out of scope (follow-up)
+
+- Extending the admin **New Product** form to edit the new jsonb/spec fields. After this page is approved, the next step is to expand `admin.products.tsx` with editors for `long_description`, `specifications` rows, `key_features`, `applications`, datasheet uploads, and the at-a-glance fields. Page will gracefully render whatever subset is filled in.
