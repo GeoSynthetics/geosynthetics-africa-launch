@@ -1,16 +1,58 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Search, SlidersHorizontal, Loader2, Package, X } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+const SORT_OPTIONS = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "name_asc", label: "Name: A → Z" },
+  { value: "name_desc", label: "Name: Z → A" },
+  { value: "price_asc", label: "Price: Low → High" },
+  { value: "price_desc", label: "Price: High → Low" },
+] as const;
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
+
+const VALID_SORTS = new Set<string>(SORT_OPTIONS.map((s) => s.value));
+
+interface CatalogueSearch {
+  q: string;
+  cats: string[];
+  mans: string[];
+  sort: SortValue;
+}
+
+function parseList(v: unknown): string[] {
+  if (Array.isArray(v)) return v.filter((x): x is string => typeof x === "string" && x.length > 0);
+  if (typeof v === "string" && v.length > 0) return v.split(",").filter(Boolean);
+  return [];
+}
+
 export const Route = createFileRoute("/catalogue")({
+  validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
+    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "newest";
+    return {
+      q: typeof raw.q === "string" ? raw.q : "",
+      cats: parseList(raw.cats),
+      mans: parseList(raw.mans),
+      sort,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Catalogue — Geosynthetics Africa" },
@@ -50,19 +92,29 @@ function formatZAR(n: number) {
 }
 
 function CataloguePage() {
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
+  const selectedCats = search.cats;
+  const selectedMans = search.mans;
+  const sort = search.sort;
+  const q = search.q;
+
   const [products, setProducts] = useState<CatalogueProduct[]>([]);
   const [categories, setCategories] = useState<FilterOption[]>([]);
   const [manufacturers, setManufacturers] = useState<FilterOption[]>([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
-  const [selectedCats, setSelectedCats] = useState<Set<string>>(new Set());
-  const [selectedMans, setSelectedMans] = useState<Set<string>>(new Set());
+  const [searchInput, setSearchInput] = useState(q);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
+
+  // Keep the input in sync if URL changes externally (back/forward)
+  useEffect(() => {
+    setSearchInput(q);
+  }, [q]);
 
   // Load filter options once
   useEffect(() => {
@@ -76,11 +128,35 @@ function CataloguePage() {
     })();
   }, []);
 
-  // Debounce search input
+  // Debounce search input -> URL
   useEffect(() => {
-    const t = setTimeout(() => setSearch(searchInput.trim()), 300);
+    const t = setTimeout(() => {
+      const trimmed = searchInput.trim();
+      if (trimmed === q) return;
+      void navigate({
+        search: (prev) => ({ ...prev, q: trimmed || undefined }) as never,
+        replace: true,
+      });
+    }, 300);
     return () => clearTimeout(t);
-  }, [searchInput]);
+  }, [searchInput, q, navigate]);
+
+  const updateSearch = useCallback(
+    (patch: Partial<CatalogueSearch>) => {
+      void navigate({
+        search: (prev) => {
+          const next: Record<string, unknown> = { ...prev, ...patch };
+          // Strip empties so URL stays clean
+          if (!next.q) delete next.q;
+          if (Array.isArray(next.cats) && next.cats.length === 0) delete next.cats;
+          if (Array.isArray(next.mans) && next.mans.length === 0) delete next.mans;
+          if (next.sort === "newest") delete next.sort;
+          return next as never;
+        },
+      });
+    },
+    [navigate],
+  );
 
   const fetchPage = useCallback(
     async (pageIdx: number, reset: boolean) => {
@@ -95,25 +171,43 @@ function CataloguePage() {
           "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories(id, name, slug), manufacturers(id, name)",
           { count: "exact" },
         )
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .range(from, to);
+        .eq("is_active", true);
 
-      if (search) {
-        const escaped = search.replace(/[%,]/g, " ");
+      switch (sort) {
+        case "oldest":
+          query = query.order("created_at", { ascending: true });
+          break;
+        case "name_asc":
+          query = query.order("name", { ascending: true });
+          break;
+        case "name_desc":
+          query = query.order("name", { ascending: false });
+          break;
+        case "price_asc":
+          query = query.order("price", { ascending: true, nullsFirst: false });
+          break;
+        case "price_desc":
+          query = query.order("price", { ascending: false, nullsFirst: false });
+          break;
+        case "newest":
+        default:
+          query = query.order("created_at", { ascending: false });
+          break;
+      }
+      // Stable tiebreaker for consistent pagination
+      query = query.order("id", { ascending: true }).range(from, to);
+
+      if (q) {
+        const escaped = q.replace(/[%,]/g, " ");
         query = query.or(
           `name.ilike.%${escaped}%,short_description.ilike.%${escaped}%,sku.ilike.%${escaped}%`,
         );
       }
-      if (selectedCats.size > 0) {
-        query = query.in("category_id", Array.from(selectedCats));
-      }
-      if (selectedMans.size > 0) {
-        query = query.in("manufacturer_id", Array.from(selectedMans));
-      }
+      if (selectedCats.length > 0) query = query.in("category_id", selectedCats);
+      if (selectedMans.length > 0) query = query.in("manufacturer_id", selectedMans);
 
       const { data, error, count } = await query;
-      if (reqId !== requestIdRef.current) return; // stale
+      if (reqId !== requestIdRef.current) return;
       if (error) {
         toast.error(error.message);
         setLoading(false);
@@ -129,16 +223,16 @@ function CataloguePage() {
       setLoading(false);
       setInitialLoad(false);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search, selectedCats, selectedMans],
+    [q, selectedCats, selectedMans, sort],
   );
 
-  // Reset and reload when filters change
+  // Reset and reload when filters/sort change
   useEffect(() => {
     setPage(0);
     setHasMore(true);
     void fetchPage(0, true);
-  }, [search, selectedCats, selectedMans, fetchPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, sort, selectedCats.join(","), selectedMans.join(",")]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -159,21 +253,25 @@ function CataloguePage() {
     return () => observer.disconnect();
   }, [loading, hasMore, page, fetchPage]);
 
-  const toggle = (set: Set<string>, setter: (s: Set<string>) => void, id: string) => {
-    const next = new Set(set);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    setter(next);
+  const toggleCat = (id: string) => {
+    const next = selectedCats.includes(id)
+      ? selectedCats.filter((x) => x !== id)
+      : [...selectedCats, id];
+    updateSearch({ cats: next });
+  };
+  const toggleMan = (id: string) => {
+    const next = selectedMans.includes(id)
+      ? selectedMans.filter((x) => x !== id)
+      : [...selectedMans, id];
+    updateSearch({ mans: next });
   };
 
   const clearAll = () => {
-    setSelectedCats(new Set());
-    setSelectedMans(new Set());
     setSearchInput("");
-    setSearch("");
+    updateSearch({ q: "", cats: [], mans: [] });
   };
 
-  const activeFilterCount = selectedCats.size + selectedMans.size + (search ? 1 : 0);
+  const activeFilterCount = selectedCats.length + selectedMans.length + (q ? 1 : 0);
 
   return (
     <>
@@ -187,7 +285,7 @@ function CataloguePage() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setSearch(searchInput.trim());
+              updateSearch({ q: searchInput.trim() });
             }}
             className="flex gap-2 max-w-3xl"
           >
@@ -226,8 +324,8 @@ function CataloguePage() {
               <FilterGroup
                 title="Category"
                 options={categories}
-                selected={selectedCats}
-                onToggle={(id) => toggle(selectedCats, setSelectedCats, id)}
+                selected={new Set(selectedCats)}
+                onToggle={toggleCat}
               />
 
               <div className="my-5 border-t border-border" />
@@ -235,13 +333,39 @@ function CataloguePage() {
               <FilterGroup
                 title="Manufacturer"
                 options={manufacturers}
-                selected={selectedMans}
-                onToggle={(id) => toggle(selectedMans, setSelectedMans, id)}
+                selected={new Set(selectedMans)}
+                onToggle={toggleMan}
               />
             </div>
           </aside>
 
           <div className="lg:col-span-9">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div className="text-xs text-muted-foreground">
+                {initialLoad ? "Loading…" : `Showing ${products.length} product${products.length === 1 ? "" : "s"}`}
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Sort by
+                </label>
+                <Select
+                  value={sort}
+                  onValueChange={(v) => updateSearch({ sort: v as SortValue })}
+                >
+                  <SelectTrigger className="h-9 w-[200px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SORT_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             {initialLoad ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Array.from({ length: 6 }).map((_, i) => (
@@ -263,9 +387,6 @@ function CataloguePage() {
               </div>
             ) : (
               <>
-                <div className="text-xs text-muted-foreground mb-4">
-                  Showing {products.length} product{products.length === 1 ? "" : "s"}
-                </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.map((p) => (
                     <ProductCard key={p.id} p={p} />
@@ -350,6 +471,7 @@ function ProductCard({ p }: { p: CatalogueProduct }) {
   return (
     <Link
       to="/catalogue"
+      search={{ q: "", cats: [], mans: [], sort: "newest" }}
       className="group rounded border border-border bg-card overflow-hidden hover:border-primary transition flex flex-col"
       aria-label={p.name}
     >
