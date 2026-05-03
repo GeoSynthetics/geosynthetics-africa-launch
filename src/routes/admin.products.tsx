@@ -327,18 +327,6 @@ function ProductsAdmin() {
                     className="mt-1.5"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="p-desc">Short description</Label>
-                  <Textarea
-                    id="p-desc"
-                    rows={3}
-                    value={editing.short_description ?? ""}
-                    onChange={(e) =>
-                      setEditing((s) => ({ ...s, short_description: e.target.value }))
-                    }
-                    className="mt-1.5"
-                  />
-                </div>
 
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-3 text-muted-foreground">Pricing & Stock</h4>
