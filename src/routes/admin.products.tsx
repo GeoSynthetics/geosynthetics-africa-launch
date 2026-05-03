@@ -114,7 +114,7 @@ function ProductsAdmin() {
     const [products, manufacturers, categories] = await Promise.all([
       supabase
         .from("products")
-        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url")
+        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images")
         .order("created_at", { ascending: false })
         .limit(500),
       supabase.from("manufacturers").select("id, name").order("name"),
