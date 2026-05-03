@@ -61,6 +61,14 @@ interface Product {
   category_id: string | null;
   is_active: boolean;
   created_at: string;
+  price: number | null;
+  sale_price: number | null;
+  stock_quantity: number | null;
+  weight_kg: number | null;
+  length_cm: number | null;
+  width_cm: number | null;
+  height_cm: number | null;
+  image_url: string | null;
 }
 
 const empty: Partial<Product> = {
@@ -71,6 +79,14 @@ const empty: Partial<Product> = {
   manufacturer_id: null,
   category_id: null,
   is_active: true,
+  price: null,
+  sale_price: null,
+  stock_quantity: null,
+  weight_kg: null,
+  length_cm: null,
+  width_cm: null,
+  height_cm: null,
+  image_url: "",
 };
 
 function slugify(s: string) {
