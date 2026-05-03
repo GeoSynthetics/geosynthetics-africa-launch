@@ -22,6 +22,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
+import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
@@ -93,6 +94,11 @@ const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
   path: '/$category',
   getParentRoute: () => ProductsRoute,
 } as any)
+const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CatalogueRoute,
+} as any)
 const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
   id: '/$category',
   path: '/$category',
@@ -123,7 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
-  '/catalogue': typeof CatalogueRoute
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -136,13 +142,14 @@ export interface FileRoutesByFullPath {
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/applications': typeof ApplicationsRouteWithChildren
-  '/catalogue': typeof CatalogueRoute
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -163,7 +171,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
-  '/catalogue': typeof CatalogueRoute
+  '/catalogue': typeof CatalogueRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/admin/resources'
     | '/admin/users'
     | '/applications/$category'
+    | '/catalogue/$slug'
     | '/products/$category'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/admin/resources'
     | '/admin/users'
     | '/applications/$category'
+    | '/catalogue/$slug'
     | '/products/$category'
     | '/admin'
   id:
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin/resources'
     | '/admin/users'
     | '/applications/$category'
+    | '/catalogue/$slug'
     | '/products/$category'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -245,7 +257,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
-  CatalogueRoute: typeof CatalogueRoute
+  CatalogueRoute: typeof CatalogueRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRouteWithChildren
@@ -348,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsCategoryRouteImport
       parentRoute: typeof ProductsRoute
     }
+    '/catalogue/$slug': {
+      id: '/catalogue/$slug'
+      path: '/$slug'
+      fullPath: '/catalogue/$slug'
+      preLoaderRoute: typeof CatalogueSlugRouteImport
+      parentRoute: typeof CatalogueRoute
+    }
     '/applications/$category': {
       id: '/applications/$category'
       path: '/$category'
@@ -416,6 +435,18 @@ const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
 )
 
+interface CatalogueRouteChildren {
+  CatalogueSlugRoute: typeof CatalogueSlugRoute
+}
+
+const CatalogueRouteChildren: CatalogueRouteChildren = {
+  CatalogueSlugRoute: CatalogueSlugRoute,
+}
+
+const CatalogueRouteWithChildren = CatalogueRoute._addFileChildren(
+  CatalogueRouteChildren,
+)
+
 interface ProductsRouteChildren {
   ProductsCategoryRoute: typeof ProductsCategoryRoute
 }
@@ -432,7 +463,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
-  CatalogueRoute: CatalogueRoute,
+  CatalogueRoute: CatalogueRouteWithChildren,
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRouteWithChildren,
