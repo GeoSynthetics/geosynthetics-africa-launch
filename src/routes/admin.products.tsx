@@ -88,7 +88,7 @@ const empty: Partial<Product> = {
   width_cm: null,
   height_cm: null,
   image_url: "",
-};
+  images: [],
 
 function slugify(s: string) {
   return s
