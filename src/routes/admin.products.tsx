@@ -176,7 +176,8 @@ function ProductsAdmin() {
       length_cm: toNum(editing.length_cm),
       width_cm: toNum(editing.width_cm),
       height_cm: toNum(editing.height_cm),
-      image_url: editing.image_url?.trim() || null,
+      image_url: editing.image_url?.trim() || (editing.images?.[0] ?? null),
+      images: editing.images ?? [],
     };
     setSaving(true);
     const res = editing.id
