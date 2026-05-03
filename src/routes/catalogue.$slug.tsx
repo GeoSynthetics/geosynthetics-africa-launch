@@ -184,6 +184,7 @@ function ProductDetailPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
+  const [tabsVisible, setTabsVisible] = useState(true);
 
   useEffect(() => {
     const measure = () => {
@@ -232,6 +233,13 @@ function ProductDetailPage() {
         }
       }
       setActiveTab(current);
+
+      // Hide tabs when scrolled past the bottom of the last section
+      const lastEl = document.getElementById(TABS[TABS.length - 1].id);
+      if (lastEl) {
+        const bottom = lastEl.getBoundingClientRect().bottom;
+        setTabsVisible(bottom > threshold);
+      }
     };
     handler();
     window.addEventListener("scroll", handler, { passive: true });
@@ -371,7 +379,10 @@ function ProductDetailPage() {
 
       {/* Sticky tabs — stick beneath the site header */}
       <div
-        className="sticky z-30 bg-background border-b border-border shadow-sm"
+        className={cn(
+          "sticky z-30 bg-background border-b border-border shadow-sm transition-all duration-300",
+          tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none",
+        )}
         style={{ top: headerH }}
       >
         <div className="container-page">
