@@ -121,9 +121,11 @@ function CataloguePage() {
         return;
       }
       const rows = (data ?? []) as unknown as CatalogueProduct[];
-      setProducts((prev) => (reset ? rows : [...prev, ...rows]));
-      const loadedCount = (reset ? 0 : products.length) + rows.length;
-      setHasMore(count !== null ? loadedCount < count : rows.length === PAGE_SIZE);
+      setProducts((prev) => {
+        const merged = reset ? rows : [...prev, ...rows];
+        setHasMore(count !== null ? merged.length < count : rows.length === PAGE_SIZE);
+        return merged;
+      });
       setLoading(false);
       setInitialLoad(false);
     },
