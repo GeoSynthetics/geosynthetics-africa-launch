@@ -231,7 +231,7 @@ function ProductsAdmin() {
                 <Plus className="h-4 w-4" /> New product
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-xl">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editing.id ? "Edit product" : "New product"}</DialogTitle>
               </DialogHeader>
