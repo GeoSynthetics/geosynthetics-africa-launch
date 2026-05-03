@@ -151,7 +151,7 @@ function CataloguePage() {
           if (!next.q) delete next.q;
           if (Array.isArray(next.cats) && next.cats.length === 0) delete next.cats;
           if (Array.isArray(next.mans) && next.mans.length === 0) delete next.mans;
-          if (next.sort === "newest") delete next.sort;
+          if (next.sort === "relevant") delete next.sort;
           return next as never;
         },
       });
