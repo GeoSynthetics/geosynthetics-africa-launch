@@ -590,6 +590,7 @@ function ProductDetailPage() {
                           <Link
                             to="/catalogue/$slug"
                             params={{ slug: r.slug }}
+                            search={{ q: "", cats: [], mans: [], sort: "newest" }}
                             className="flex gap-3 group"
                           >
                             <div className="h-14 w-14 shrink-0 rounded bg-surface overflow-hidden border border-border">
