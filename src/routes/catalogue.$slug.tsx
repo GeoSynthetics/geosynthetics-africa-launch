@@ -380,20 +380,27 @@ function ProductDetailPage() {
         </div>
       </section>
 
-      {/* Sticky tabs — stick beneath the site header */}
+      {/* Sticky tabs — stick beneath header; hide after last section */}
       <div
-        className="sticky z-30 bg-background border-b border-border shadow-sm"
+        className={cn(
+          "sticky z-30 bg-background border-b border-border shadow-sm transition-all duration-300",
+          tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
+        )}
         style={{ top: headerH }}
       >
         <div className="container-page">
-          <div className="flex gap-1 overflow-x-auto no-scrollbar">
+          <div
+            ref={tabsRef}
+            className="flex overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory md:snap-none"
+          >
             {TABS.map((t) => (
               <button
                 key={t.id}
+                ref={(el) => { tabBtnRefs.current[t.id] = el; }}
                 type="button"
                 onClick={() => scrollTo(t.id)}
                 className={cn(
-                  "px-4 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors",
+                  "shrink-0 basis-1/3 md:basis-auto snap-center md:snap-align-none px-4 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-colors text-center",
                   activeTab === t.id
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground",
