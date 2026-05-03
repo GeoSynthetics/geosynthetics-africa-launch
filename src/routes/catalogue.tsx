@@ -46,7 +46,7 @@ function parseList(v: unknown): string[] {
 
 export const Route = createFileRoute("/catalogue")({
   validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
-    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "newest";
+    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "relevant";
     return {
       q: typeof raw.q === "string" ? raw.q : "",
       cats: parseList(raw.cats),
