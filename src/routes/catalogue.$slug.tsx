@@ -183,6 +183,17 @@ function ProductDetailPage() {
   const { product, related } = Route.useLoaderData();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
+  const [headerH, setHeaderH] = useState(96);
+
+  useEffect(() => {
+    const measure = () => {
+      const h = document.querySelector("header")?.getBoundingClientRect().height;
+      if (h) setHeaderH(Math.round(h));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   const heroImg = product.image_url || product.images?.[0] || null;
   const features = (product.key_features && product.key_features.length > 0)
