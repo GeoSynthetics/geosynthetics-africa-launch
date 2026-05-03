@@ -402,10 +402,12 @@ function ProductsAdmin() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-14"></TableHead>
               <TableHead>Name</TableHead>
               <TableHead>SKU</TableHead>
-              <TableHead>Manufacturer</TableHead>
               <TableHead>Category</TableHead>
+              <TableHead className="text-right">Price</TableHead>
+              <TableHead className="text-right">Stock</TableHead>
               <TableHead>Active</TableHead>
               <TableHead className="w-32 text-right">Actions</TableHead>
             </TableRow>
@@ -414,14 +416,14 @@ function ProductsAdmin() {
             {loading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={8}>
                     <Skeleton className="h-6 w-full" />
                   </TableCell>
                 </TableRow>
               ))}
             {!loading && filtered.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-10">
+                <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-10">
                   No products yet.
                 </TableCell>
               </TableRow>
@@ -430,16 +432,28 @@ function ProductsAdmin() {
               filtered.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell>
+                    {p.image_url ? (
+                      <img src={p.image_url} alt="" className="h-10 w-10 rounded border border-border object-cover" loading="lazy" />
+                    ) : (
+                      <div className="h-10 w-10 rounded border border-border bg-muted" />
+                    )}
+                  </TableCell>
+                  <TableCell>
                     <div className="font-semibold">{p.name}</div>
-                    <div className="text-xs text-muted-foreground">{p.slug}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {mans.find((m) => m.id === p.manufacturer_id)?.name ?? p.slug}
+                    </div>
                   </TableCell>
                   <TableCell className="text-sm">{p.sku ?? "—"}</TableCell>
                   <TableCell className="text-sm">
-                    {mans.find((m) => m.id === p.manufacturer_id)?.name ?? "—"}
-                  </TableCell>
-                  <TableCell className="text-sm">
                     {cats.find((c) => c.id === p.category_id)?.name ?? "—"}
                   </TableCell>
+                  <TableCell className="text-right text-sm tabular-nums">
+                    {p.sale_price != null ? (
+                      <span><span className="text-muted-foreground line-through mr-1">R{p.price?.toFixed(2)}</span>R{p.sale_price.toFixed(2)}</span>
+                    ) : p.price != null ? `R${p.price.toFixed(2)}` : "—"}
+                  </TableCell>
+                  <TableCell className="text-right text-sm tabular-nums">{p.stock_quantity ?? "—"}</TableCell>
                   <TableCell>
                     <Switch checked={p.is_active} onCheckedChange={() => void toggleActive(p)} />
                   </TableCell>
