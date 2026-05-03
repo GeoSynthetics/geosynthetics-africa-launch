@@ -472,6 +472,7 @@ function ProductCard({ p }: { p: CatalogueProduct }) {
     <Link
       to="/catalogue/$slug"
       params={{ slug: p.slug }}
+      search={{ q: "", cats: [], mans: [], sort: "newest" }}
       className="group rounded border border-border bg-card overflow-hidden hover:border-primary transition flex flex-col"
       aria-label={p.name}
     >
