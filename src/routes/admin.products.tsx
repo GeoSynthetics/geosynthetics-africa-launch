@@ -108,6 +108,65 @@ function ProductsAdmin() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const uploaded: string[] = [];
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) {
+        toast.error(`${file.name} is not an image`);
+        continue;
+      }
+      if (file.size > 8 * 1024 * 1024) {
+        toast.error(`${file.name} is over 8MB`);
+        continue;
+      }
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("product-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type,
+      });
+      if (error) {
+        toast.error(`Upload failed: ${error.message}`);
+        continue;
+      }
+      const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+      uploaded.push(data.publicUrl);
+    }
+    if (uploaded.length) {
+      setEditing((s) => {
+        const existing = s.images ?? [];
+        const next = [...existing, ...uploaded];
+        return { ...s, images: next, image_url: s.image_url || next[0] };
+      });
+      toast.success(`${uploaded.length} image(s) uploaded`);
+    }
+    setUploading(false);
+  };
+
+  const removeImage = (url: string) => {
+    setEditing((s) => {
+      const next = (s.images ?? []).filter((u) => u !== url);
+      return { ...s, images: next, image_url: s.image_url === url ? (next[0] ?? "") : s.image_url };
+    });
+  };
+
+  const setPrimaryImage = (url: string) => {
+    setEditing((s) => ({ ...s, image_url: url }));
+  };
+
+  const copyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied");
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   const load = async () => {
     setLoading(true);
