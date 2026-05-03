@@ -234,7 +234,7 @@ function ProductDetailPage() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 100;
+      const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
