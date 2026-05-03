@@ -228,7 +228,16 @@ function ProductDetailPage() {
         return { id: t.id, top: Math.abs(el.getBoundingClientRect().top - 120) };
       });
       offsets.sort((a, b) => a.top - b.top);
-      setActiveTab(offsets[0].id);
+      const nextId = offsets[0].id;
+      setActiveTab((prev) => {
+        if (prev !== nextId) {
+          // Sync URL hash without adding history entries
+          if (typeof window !== "undefined") {
+            history.replaceState(null, "", `#${nextId}`);
+          }
+        }
+        return nextId;
+      });
 
       // Hide tabs once the bottom of the last section has scrolled past the header
       const last = document.getElementById(TABS[TABS.length - 1].id);
@@ -258,8 +267,30 @@ function ProductDetailPage() {
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
       window.scrollTo({ top, behavior: "smooth" });
+      if (typeof window !== "undefined") history.replaceState(null, "", `#${id}`);
+      setActiveTab(id);
     }
   };
+
+  // Deep-link: scroll to hash section on mount / hash change
+  useEffect(() => {
+    const goToHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      if (!TABS.some((t) => t.id === hash)) return;
+      // Wait for layout/images to settle a tick
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
+        window.scrollTo({ top, behavior: "auto" });
+        setActiveTab(hash);
+      });
+    };
+    goToHash();
+    window.addEventListener("hashchange", goToHash);
+    return () => window.removeEventListener("hashchange", goToHash);
+  }, [headerH]);
 
   return (
     <>
