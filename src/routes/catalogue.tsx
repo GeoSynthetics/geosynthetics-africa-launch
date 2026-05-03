@@ -470,8 +470,8 @@ function ProductCard({ p }: { p: CatalogueProduct }) {
   const inStock = (p.stock_quantity ?? 0) > 0;
   return (
     <Link
-      to="/catalogue"
-      search={{ q: "", cats: [], mans: [], sort: "newest" }}
+      to="/catalogue/$slug"
+      params={{ slug: p.slug }}
       className="group rounded border border-border bg-card overflow-hidden hover:border-primary transition flex flex-col"
       aria-label={p.name}
     >
