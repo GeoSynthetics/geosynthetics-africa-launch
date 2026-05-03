@@ -471,6 +471,7 @@ function ProductCard({ p }: { p: CatalogueProduct }) {
   return (
     <Link
       to="/catalogue"
+      search={{ q: "", cats: [], mans: [], sort: "newest" }}
       className="group rounded border border-border bg-card overflow-hidden hover:border-primary transition flex flex-col"
       aria-label={p.name}
     >
