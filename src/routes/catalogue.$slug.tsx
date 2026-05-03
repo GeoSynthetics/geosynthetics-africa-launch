@@ -228,7 +228,16 @@ function ProductDetailPage() {
         return { id: t.id, top: Math.abs(el.getBoundingClientRect().top - 120) };
       });
       offsets.sort((a, b) => a.top - b.top);
-      setActiveTab(offsets[0].id);
+      const nextId = offsets[0].id;
+      setActiveTab((prev) => {
+        if (prev !== nextId) {
+          // Sync URL hash without adding history entries
+          if (typeof window !== "undefined") {
+            history.replaceState(null, "", `#${nextId}`);
+          }
+        }
+        return nextId;
+      });
 
       // Hide tabs once the bottom of the last section has scrolled past the header
       const last = document.getElementById(TABS[TABS.length - 1].id);
@@ -258,23 +267,59 @@ function ProductDetailPage() {
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
       window.scrollTo({ top, behavior: "smooth" });
+      if (typeof window !== "undefined") history.replaceState(null, "", `#${id}`);
+      setActiveTab(id);
     }
   };
+
+  // Deep-link: scroll to hash section on mount / hash change
+  useEffect(() => {
+    const goToHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      if (!TABS.some((t) => t.id === hash)) return;
+      // Wait for layout/images to settle a tick
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - (headerH + 60);
+        window.scrollTo({ top, behavior: "auto" });
+        setActiveTab(hash);
+      });
+    };
+    goToHash();
+    window.addEventListener("hashchange", goToHash);
+    return () => window.removeEventListener("hashchange", goToHash);
+  }, [headerH]);
 
   return (
     <>
       {/* Breadcrumb + Hero with product image as background (landscape, left-dark fade) */}
-      <section
-        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
-      >
-        {/* Background image */}
+      <section className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden min-h-[420px] md:min-h-[520px]">
+        {/* Responsive background image — eager + high priority for LCP, with low-res blur placeholder */}
         {heroImg && (
-          <img
-            src={heroImg}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+          <div className="absolute inset-0" aria-hidden="true">
+            <div
+              className="absolute inset-0 bg-surface-dark"
+              style={{
+                backgroundImage: `url(${heroImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(24px)",
+                transform: "scale(1.1)",
+                opacity: 0.5,
+              }}
+            />
+            <img
+              src={heroImg}
+              alt=""
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              sizes="100vw"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+          </div>
         )}
         {/* Left-to-right dark fade */}
         <div
@@ -293,7 +338,13 @@ function ProductDetailPage() {
             {product.product_categories?.name && (
               <>
                 <ChevronRight className="h-3 w-3" />
-                <span className="hover:text-primary">{product.product_categories.name}</span>
+                <Link
+                  to="/catalogue"
+                  search={{ q: "", cats: [product.product_categories.id], mans: [], sort: "newest" }}
+                  className="hover:text-primary"
+                >
+                  {product.product_categories.name}
+                </Link>
               </>
             )}
             {product.manufacturers?.name && (
