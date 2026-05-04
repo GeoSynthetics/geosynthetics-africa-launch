@@ -251,7 +251,8 @@ function QuotesAdmin() {
                     </Select>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
           </TableBody>
         </Table>
       </div>
