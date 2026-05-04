@@ -19,8 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, Mail, Phone, RefreshCw } from "lucide-react";
+import { Download, Eye, Mail, Phone, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/admin/quotes")({
   head: () => ({
@@ -61,10 +68,25 @@ const STATUS_STYLE: Record<Status, string> = {
   archived: "bg-muted text-muted-foreground border-border",
 };
 
+function getAttachments(r: QuoteRequest): { paths: string[]; messageText: string } {
+  const rawMessage = r.project_description ?? r.message ?? "";
+  const embedMatch = rawMessage.match(/\n\n\[attachments\]\n([\s\S]+)$/);
+  const embeddedPaths = embedMatch
+    ? embedMatch[1].split("\n").map((s) => s.trim()).filter(Boolean)
+    : [];
+  const messageText = embedMatch ? rawMessage.slice(0, embedMatch.index).trim() : rawMessage;
+  const fromColumn = (r.attachment_paths && r.attachment_paths.length > 0)
+    ? r.attachment_paths
+    : (r.boq_file_path ? [r.boq_file_path] : []);
+  return { paths: Array.from(new Set([...fromColumn, ...embeddedPaths])), messageText };
+}
+
 function QuotesAdmin() {
   const [rows, setRows] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | "all">("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selected = rows.find((r) => r.id === selectedId) ?? null;
 
   const load = async () => {
     setLoading(true);
