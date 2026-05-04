@@ -177,6 +177,12 @@ function UserMenu() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="truncate">{user?.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/profile">
+            <UserIcon className="h-4 w-4 mr-2" />
+            Profile
+          </Link>
+        </DropdownMenuItem>
         {isStaff && (
           <DropdownMenuItem asChild>
             <Link to="/admin">
