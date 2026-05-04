@@ -41,8 +41,12 @@ interface QuoteRequest {
   contact_email: string;
   contact_phone: string | null;
   company: string | null;
-  message: string;
+  message: string | null;
+  project_description: string | null;
+  product_name: string | null;
+  product_id: string | null;
   boq_file_path: string | null;
+  attachment_paths: string[] | null;
   status: Status;
 }
 
@@ -64,15 +68,29 @@ function QuotesAdmin() {
 
   const load = async () => {
     setLoading(true);
+    // Try the rich select first, fall back to the legacy minimal one
+    // when the optional product/attachments columns aren't yet present.
+    const richSelect = "id, created_at, contact_name, contact_email, contact_phone, company, message, project_description, product_name, product_id, boq_file_path, attachment_paths, status";
     let q = supabase
       .from("quote_requests")
-      .select("id, created_at, contact_name, contact_email, contact_phone, company, message, boq_file_path, status")
+      .select(richSelect)
       .order("created_at", { ascending: false })
       .limit(200);
     if (filter !== "all") q = q.eq("status", filter);
-    const { data, error } = await q;
-    if (error) toast.error(error.message);
-    setRows((data ?? []) as QuoteRequest[]);
+    let { data, error } = await q;
+    if (error) {
+      // Retry with only the columns guaranteed to exist
+      let q2 = supabase
+        .from("quote_requests")
+        .select("id, created_at, contact_name, contact_email, contact_phone, company, project_description, boq_file_path, status")
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (filter !== "all") q2 = q2.eq("status", filter);
+      const fallback = await q2;
+      if (fallback.error) toast.error(fallback.error.message);
+      data = fallback.data ?? [];
+    }
+    setRows(((data ?? []) as QuoteRequest[]));
     setLoading(false);
   };
 
