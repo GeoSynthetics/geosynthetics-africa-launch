@@ -402,6 +402,7 @@ function ProductDetailPage() {
       >
         <div className="container-page">
           <div
+            ref={tabsScrollRef}
             className={cn(
               "flex overflow-x-auto no-scrollbar",
               // Mobile: snap 3 tabs per page (each tab = 1/3 viewport width)
