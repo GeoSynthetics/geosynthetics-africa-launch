@@ -851,6 +851,7 @@ function FormsBlock() {
             </ul>
           </div>
         </aside>
+        </div>
       </div>
     </section>
   );
