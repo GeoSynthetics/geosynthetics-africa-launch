@@ -185,6 +185,7 @@ function ProductDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
   const [tabsVisible, setTabsVisible] = useState(true);
+  const tabsScrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const measure = () => {
