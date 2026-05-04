@@ -464,46 +464,6 @@ function ServicesAndCoverage() {
   );
 }
 
-/* -------------------- Project Experience -------------------- */
-function ProjectExperience() {
-  return (
-    <section className="bg-background">
-      <div className="container-page py-14">
-        <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-6">
-          Project Experience In The Region
-        </h2>
-        <div className="grid md:grid-cols-3 gap-5">
-          {CASE_STUDIES.map((c) => (
-            <article
-              key={c.name}
-              className="rounded border border-border bg-card overflow-hidden flex flex-col group"
-            >
-              <div
-                className="h-44 bg-cover bg-center"
-                style={{ backgroundImage: `url(${c.image})` }}
-                role="img"
-                aria-label={c.name}
-              />
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="font-display text-base font-bold uppercase">{c.name}</div>
-                <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <MapPin className="h-3 w-3 text-primary" /> {c.location}
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground flex-1">{c.description}</p>
-                <Link
-                  to="/resources"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-primary hover:underline"
-                >
-                  View Case Study <ChevronRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* -------------------- Forms (BOQ + Quick contact) -------------------- */
 function FormsBlock() {
