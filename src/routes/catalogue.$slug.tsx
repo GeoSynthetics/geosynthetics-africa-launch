@@ -117,6 +117,11 @@ async function loadProduct(slug: string) {
 }
 
 export const Route = createFileRoute("/catalogue/$slug")({
+  // Run the loader on the client only — the browser Supabase client carries
+  // the auth session, so RLS-protected queries succeed. On the server there
+  // is no session and the query returns empty, which previously caused a
+  // false "Product not found" on navigation back to the page.
+  ssr: false,
   loader: ({ params }) => loadProduct(params.slug),
   head: ({ loaderData }) => {
     const p = loaderData?.product;
