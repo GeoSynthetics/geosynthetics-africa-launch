@@ -13,6 +13,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactsRouteImport } from './routes/contacts'
@@ -47,6 +48,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
 const QualityAssuranceRoute = QualityAssuranceRouteImport.update({
   id: '/quality-assurance',
   path: '/quality-assurance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
+  '/profile': typeof ProfileRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRoute
   '/services': typeof ServicesRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/login'
     | '/products'
+    | '/profile'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/login'
     | '/products'
+    | '/profile'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/login'
     | '/products'
+    | '/profile'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -260,6 +272,7 @@ export interface RootRouteChildren {
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRouteWithChildren
+  ProfileRoute: typeof ProfileRoute
   QualityAssuranceRoute: typeof QualityAssuranceRoute
   ResourcesRoute: typeof ResourcesRoute
   ServicesRoute: typeof ServicesRoute
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/quality-assurance'
       fullPath: '/quality-assurance'
       preLoaderRoute: typeof QualityAssuranceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products': {
@@ -455,6 +475,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRouteWithChildren,
+  ProfileRoute: ProfileRoute,
   QualityAssuranceRoute: QualityAssuranceRoute,
   ResourcesRoute: ResourcesRoute,
   ServicesRoute: ServicesRoute,
