@@ -630,8 +630,45 @@ function FormsBlock() {
   return (
     <section className="bg-surface">
       <div className="container-page py-14 grid lg:grid-cols-12 gap-8">
+        {/* Project Experience — left column on desktop */}
+        <div className="lg:col-span-5 order-2 lg:order-1">
+          <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-6">
+            Project Experience In The Region
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-5">
+            {CASE_STUDIES.map((c) => (
+              <article
+                key={c.name}
+                className="rounded border border-border bg-card overflow-hidden flex flex-col group"
+              >
+                <div
+                  className="h-44 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${c.image})` }}
+                  role="img"
+                  aria-label={c.name}
+                />
+                <div className="p-4 flex-1 flex flex-col">
+                  <div className="font-display text-base font-bold uppercase">{c.name}</div>
+                  <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="h-3 w-3 text-primary" /> {c.location}
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground flex-1">{c.description}</p>
+                  <Link
+                    to="/resources"
+                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-primary hover:underline"
+                  >
+                    View Case Study <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        {/* Forms — right column on desktop */}
+        <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
         {/* BOQ */}
-        <div id="boq-form" className="lg:col-span-8">
+        <div id="boq-form">
           <div className="rounded border border-border bg-card p-6 md:p-8">
             <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
               Upload Your BOQ / Drawings
