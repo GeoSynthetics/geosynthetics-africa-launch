@@ -38,6 +38,10 @@ export const Route = createRootRoute({
       { property: "og:description", content: "Africa's Integrated Geosynthetics Execution Platform." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Geosynthetics Africa" },
+      { name: "twitter:description", content: "Africa's Integrated Geosynthetics Execution Platform." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4a931b85-67d6-4d84-8611-c5fe69e8ab12" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4a931b85-67d6-4d84-8611-c5fe69e8ab12" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
