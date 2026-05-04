@@ -175,10 +175,18 @@ function QuotesAdmin() {
             )}
             {!loading &&
               rows.map((r) => {
-                const attachments = (r.attachment_paths && r.attachment_paths.length > 0)
+                const rawMessage = r.project_description ?? r.message ?? "";
+                // Parse trailing "[attachments]" block from description as a fallback
+                // for projects whose schema doesn't yet have attachment_paths.
+                const embedMatch = rawMessage.match(/\n\n\[attachments\]\n([\s\S]+)$/);
+                const embeddedPaths = embedMatch
+                  ? embedMatch[1].split("\n").map((s) => s.trim()).filter(Boolean)
+                  : [];
+                const messageText = embedMatch ? rawMessage.slice(0, embedMatch.index).trim() : rawMessage;
+                const fromColumn = (r.attachment_paths && r.attachment_paths.length > 0)
                   ? r.attachment_paths
                   : (r.boq_file_path ? [r.boq_file_path] : []);
-                const messageText = r.project_description ?? r.message ?? "";
+                const attachments = Array.from(new Set([...fromColumn, ...embeddedPaths]));
                 return (
                 <TableRow key={r.id}>
                   <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
