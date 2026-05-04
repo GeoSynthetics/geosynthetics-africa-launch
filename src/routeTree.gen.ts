@@ -95,9 +95,9 @@ const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
   getParentRoute: () => ProductsRoute,
 } as any)
 const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => CatalogueRoute,
+  id: '/catalogue/$slug',
+  path: '/catalogue/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
   id: '/$category',
@@ -264,6 +264,7 @@ export interface RootRouteChildren {
   ResourcesRoute: typeof ResourcesRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
+  CatalogueSlugRoute: typeof CatalogueSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
 }
 
@@ -362,10 +363,10 @@ declare module '@tanstack/react-router' {
     }
     '/catalogue/$slug': {
       id: '/catalogue/$slug'
-      path: '/$slug'
+      path: '/catalogue/$slug'
       fullPath: '/catalogue/$slug'
       preLoaderRoute: typeof CatalogueSlugRouteImport
-      parentRoute: typeof CatalogueRoute
+      parentRoute: typeof rootRouteImport
     }
     '/applications/$category': {
       id: '/applications/$category'
@@ -458,6 +459,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesRoute: ResourcesRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
+  CatalogueSlugRoute: CatalogueSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
 }
 export const routeTree = rootRouteImport

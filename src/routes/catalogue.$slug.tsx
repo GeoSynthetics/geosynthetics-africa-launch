@@ -185,6 +185,7 @@ function ProductDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
   const [tabsVisible, setTabsVisible] = useState(true);
+  const tabsScrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const measure = () => {
@@ -249,6 +250,20 @@ function ProductDetailPage() {
       window.removeEventListener("resize", handler);
     };
   }, [headerH]);
+
+  // Mobile: keep the active tab's "page of 3" in view as the user scrolls
+  useEffect(() => {
+    const container = tabsScrollRef.current;
+    if (!container) return;
+    if (window.matchMedia("(min-width: 768px)").matches) return;
+    const idx = TABS.findIndex((t) => t.id === activeTab);
+    if (idx < 0) return;
+    const page = Math.floor(idx / 3);
+    const left = page * container.clientWidth;
+    if (Math.abs(container.scrollLeft - left) > 4) {
+      container.scrollTo({ left, behavior: "smooth" });
+    }
+  }, [activeTab]);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -387,6 +402,7 @@ function ProductDetailPage() {
       >
         <div className="container-page">
           <div
+            ref={tabsScrollRef}
             className={cn(
               "flex overflow-x-auto no-scrollbar",
               // Mobile: snap 3 tabs per page (each tab = 1/3 viewport width)
