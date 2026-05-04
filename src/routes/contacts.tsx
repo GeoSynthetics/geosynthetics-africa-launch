@@ -769,7 +769,7 @@ function FormsBlock() {
         </div>
 
         {/* Quick contact + assistance */}
-        <aside id="quick-contact" className="lg:col-span-4 space-y-6">
+        <aside id="quick-contact" className="space-y-6">
           <div className="rounded border border-border bg-card p-6">
             <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
               Quick Contact
