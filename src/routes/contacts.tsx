@@ -147,7 +147,6 @@ function ContactsPage() {
       <ContactsHero />
       <OfficeAndMap />
       <ServicesAndCoverage />
-      <ProjectExperience />
       <FormsBlock />
       <ResourceStrip />
     </>
