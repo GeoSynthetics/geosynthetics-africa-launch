@@ -340,7 +340,7 @@ function ProductDetailPage() {
 
             {/* Key features */}
             <div className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-2xl">
-              {features.slice(0, 5).map((f, i) => {
+              {features.slice(0, 5).map((f: KeyFeature, i: number) => {
                 const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
                 return (
                   <div key={i} className="text-center">
@@ -446,7 +446,7 @@ function ProductDetailPage() {
               <h2 className="font-display text-2xl font-bold uppercase mb-5">Overview</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-4 text-sm leading-relaxed text-foreground/85">
-                  {(product.long_description ?? product.short_description ?? "").split(/\n\n+/).map((para, i) => (
+                  {(product.long_description ?? product.short_description ?? "").split(/\n\n+/).map((para: string, i: number) => (
                     <p key={i}>{para}</p>
                   ))}
                   {!product.long_description && !product.short_description && (
@@ -485,7 +485,7 @@ function ProductDetailPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
-                        {product.specifications.map((s, i) => (
+                        {product.specifications.map((s: SpecRow, i: number) => (
                           <tr key={i} className="hover:bg-surface/60">
                             <td className="px-4 py-3 font-medium">{s.property}</td>
                             <td className="px-4 py-3 text-muted-foreground">{s.test_method ?? "—"}</td>
@@ -648,7 +648,7 @@ function ProductDetailPage() {
                 <div className="rounded border border-border bg-card p-5">
                   <h3 className="font-display text-base font-bold uppercase mb-3">Related Products</h3>
                   <ul className="divide-y divide-border">
-                    {related.map((r) => {
+                    {related.map((r: RelatedProduct) => {
                       const img = r.image_url || r.images?.[0] || null;
                       return (
                         <li key={r.id} className="py-3 first:pt-0 last:pb-0">

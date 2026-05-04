@@ -135,7 +135,7 @@ function CataloguePage() {
       const trimmed = searchInput.trim();
       if (trimmed === q) return;
       void navigate({
-        search: (prev) => (({
+        search: (prev: Record<string, unknown>) => (({
           ...prev,
           q: trimmed || undefined
         }) as never),
@@ -148,7 +148,7 @@ function CataloguePage() {
   const updateSearch = useCallback(
     (patch: Partial<CatalogueSearch>) => {
       void navigate({
-        search: (prev) => {
+        search: (prev: Record<string, unknown>) => {
           const next: Record<string, unknown> = { ...prev, ...patch };
           // Strip empties so URL stays clean
           if (!next.q) delete next.q;
@@ -266,13 +266,13 @@ function CataloguePage() {
 
   const toggleCat = (id: string) => {
     const next = selectedCats.includes(id)
-      ? selectedCats.filter((x) => x !== id)
+      ? selectedCats.filter((x: string) => x !== id)
       : [...selectedCats, id];
     updateSearch({ cats: next });
   };
   const toggleMan = (id: string) => {
     const next = selectedMans.includes(id)
-      ? selectedMans.filter((x) => x !== id)
+      ? selectedMans.filter((x: string) => x !== id)
       : [...selectedMans, id];
     updateSearch({ mans: next });
   };
