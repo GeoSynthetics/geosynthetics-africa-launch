@@ -803,10 +803,18 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id ?? null;
 
+      const baseDescription = message.trim() || `Quote request for ${productName}`;
+      // Always embed all attachment paths into the description as a resilient
+      // fallback so the admin panel can recover them even if the
+      // `attachment_paths` column doesn't exist on this Supabase project yet.
+      const descriptionWithPaths = attachment_paths.length > 1
+        ? `${baseDescription}\n\n[attachments]\n${attachment_paths.join("\n")}`
+        : baseDescription;
+
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
         contact_email: email.trim(),
-        project_description: message.trim() || `Quote request for ${productName}`,
+        project_description: descriptionWithPaths,
         product_id: productId,
         product_name: productName,
         attachment_paths,
