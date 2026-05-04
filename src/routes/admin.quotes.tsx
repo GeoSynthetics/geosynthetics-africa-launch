@@ -41,8 +41,12 @@ interface QuoteRequest {
   contact_email: string;
   contact_phone: string | null;
   company: string | null;
-  message: string;
+  message: string | null;
+  project_description: string | null;
+  product_name: string | null;
+  product_id: string | null;
   boq_file_path: string | null;
+  attachment_paths: string[] | null;
   status: Status;
 }
 
@@ -64,15 +68,29 @@ function QuotesAdmin() {
 
   const load = async () => {
     setLoading(true);
+    // Try the rich select first, fall back to the legacy minimal one
+    // when the optional product/attachments columns aren't yet present.
+    const richSelect = "id, created_at, contact_name, contact_email, contact_phone, company, message, project_description, product_name, product_id, boq_file_path, attachment_paths, status";
     let q = supabase
       .from("quote_requests")
-      .select("id, created_at, contact_name, contact_email, contact_phone, company, message, boq_file_path, status")
+      .select(richSelect)
       .order("created_at", { ascending: false })
       .limit(200);
     if (filter !== "all") q = q.eq("status", filter);
-    const { data, error } = await q;
-    if (error) toast.error(error.message);
-    setRows((data ?? []) as QuoteRequest[]);
+    let { data, error } = await q;
+    if (error) {
+      // Retry with only the columns guaranteed to exist
+      let q2 = supabase
+        .from("quote_requests")
+        .select("id, created_at, contact_name, contact_email, contact_phone, company, project_description, boq_file_path, status")
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (filter !== "all") q2 = q2.eq("status", filter);
+      const fallback = await q2;
+      if (fallback.error) toast.error(fallback.error.message);
+      data = (fallback.data ?? []) as never;
+    }
+    setRows(((data ?? []) as QuoteRequest[]));
     setLoading(false);
   };
 
@@ -133,8 +151,9 @@ function QuotesAdmin() {
               <TableHead>Received</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Company</TableHead>
+              <TableHead>Product</TableHead>
               <TableHead>Message</TableHead>
-              <TableHead>BOQ</TableHead>
+              <TableHead>Attachments</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -142,20 +161,25 @@ function QuotesAdmin() {
             {loading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={7}>
                     <Skeleton className="h-6 w-full" />
                   </TableCell>
                 </TableRow>
               ))}
             {!loading && rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-sm text-muted-foreground py-10">
+                <TableCell colSpan={7} className="text-center text-sm text-muted-foreground py-10">
                   No quote requests yet.
                 </TableCell>
               </TableRow>
             )}
             {!loading &&
-              rows.map((r) => (
+              rows.map((r) => {
+                const attachments = (r.attachment_paths && r.attachment_paths.length > 0)
+                  ? r.attachment_paths
+                  : (r.boq_file_path ? [r.boq_file_path] : []);
+                const messageText = r.project_description ?? r.message ?? "";
+                return (
                 <TableRow key={r.id}>
                   <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
                     {new Date(r.created_at).toLocaleDateString()}
@@ -176,16 +200,38 @@ function QuotesAdmin() {
                     )}
                   </TableCell>
                   <TableCell className="text-sm">{r.company ?? "—"}</TableCell>
+                  <TableCell className="text-xs max-w-[180px]">
+                    {r.product_name ? (
+                      <span className="font-medium line-clamp-2">{r.product_name}</span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
                   <TableCell className="max-w-md">
-                    <p className="text-xs text-muted-foreground line-clamp-3">{r.message}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-3">{messageText}</p>
                   </TableCell>
                   <TableCell>
-                    {r.boq_file_path ? (
-                      <Button size="sm" variant="outline" onClick={() => void downloadBoq(r.boq_file_path!)}>
-                        <Download className="h-3.5 w-3.5" /> BOQ
-                      </Button>
-                    ) : (
+                    {attachments.length === 0 ? (
                       <span className="text-xs text-muted-foreground">—</span>
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        {attachments.map((p, idx) => {
+                          const fileName = p.split("/").pop() ?? `File ${idx + 1}`;
+                          return (
+                            <Button
+                              key={p}
+                              size="sm"
+                              variant="outline"
+                              className="h-7 justify-start text-[11px] font-normal"
+                              onClick={() => void downloadBoq(p)}
+                              title={fileName}
+                            >
+                              <Download className="h-3 w-3 mr-1.5 shrink-0" />
+                              <span className="truncate max-w-[160px]">{fileName}</span>
+                            </Button>
+                          );
+                        })}
+                      </div>
                     )}
                   </TableCell>
                   <TableCell>
@@ -205,7 +251,8 @@ function QuotesAdmin() {
                     </Select>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
           </TableBody>
         </Table>
       </div>

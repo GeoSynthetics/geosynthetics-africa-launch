@@ -340,7 +340,7 @@ function ProductDetailPage() {
 
             {/* Key features */}
             <div className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-2xl">
-              {features.slice(0, 5).map((f, i) => {
+              {features.slice(0, 5).map((f: KeyFeature, i: number) => {
                 const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
                 return (
                   <div key={i} className="text-center">
@@ -446,7 +446,7 @@ function ProductDetailPage() {
               <h2 className="font-display text-2xl font-bold uppercase mb-5">Overview</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-4 text-sm leading-relaxed text-foreground/85">
-                  {(product.long_description ?? product.short_description ?? "").split(/\n\n+/).map((para, i) => (
+                  {(product.long_description ?? product.short_description ?? "").split(/\n\n+/).map((para: string, i: number) => (
                     <p key={i}>{para}</p>
                   ))}
                   {!product.long_description && !product.short_description && (
@@ -485,7 +485,7 @@ function ProductDetailPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
-                        {product.specifications.map((s, i) => (
+                        {product.specifications.map((s: SpecRow, i: number) => (
                           <tr key={i} className="hover:bg-surface/60">
                             <td className="px-4 py-3 font-medium">{s.property}</td>
                             <td className="px-4 py-3 text-muted-foreground">{s.test_method ?? "—"}</td>
@@ -648,7 +648,7 @@ function ProductDetailPage() {
                 <div className="rounded border border-border bg-card p-5">
                   <h3 className="font-display text-base font-bold uppercase mb-3">Related Products</h3>
                   <ul className="divide-y divide-border">
-                    {related.map((r) => {
+                    {related.map((r: RelatedProduct) => {
                       const img = r.image_url || r.images?.[0] || null;
                       return (
                         <li key={r.id} className="py-3 first:pt-0 last:pb-0">
@@ -729,37 +729,53 @@ function Strip({ id, title, cta, items }: { id: string; title: string; cta: { la
   );
 }
 
-const ALLOWED_TYPES = [".pdf", ".dwg", ".doc", ".docx", ".xls", ".xlsx"];
+const ALLOWED_TYPES = [".pdf", ".dwg", ".dxf", ".doc", ".docx", ".xls", ".xlsx", ".csv", ".zip", ".png", ".jpg", ".jpeg"];
 const MAX_BYTES = 20 * 1024 * 1024;
+const MAX_FILES = 8;
 
 function QuoteCard({ productId, productName }: { productId: string; productName: string }) {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFile = (f: File | null) => {
-    if (!f) return setFile(null);
-    const ext = "." + (f.name.split(".").pop() ?? "").toLowerCase();
-    if (!ALLOWED_TYPES.includes(ext)) {
-      toast.error(`Unsupported file type. Allowed: ${ALLOWED_TYPES.join(", ")}`);
-      return;
+  const addFiles = (incoming: FileList | File[] | null) => {
+    if (!incoming) return;
+    const list = Array.from(incoming);
+    const accepted: File[] = [];
+    for (const f of list) {
+      const ext = "." + (f.name.split(".").pop() ?? "").toLowerCase();
+      if (!ALLOWED_TYPES.includes(ext)) {
+        toast.error(`${f.name}: unsupported file type.`);
+        continue;
+      }
+      if (f.size > MAX_BYTES) {
+        toast.error(`${f.name}: exceeds 20MB limit.`);
+        continue;
+      }
+      accepted.push(f);
     }
-    if (f.size > MAX_BYTES) {
-      toast.error("File exceeds 20MB limit.");
-      return;
-    }
-    setFile(f);
+    setFiles((prev) => {
+      const merged = [...prev, ...accepted];
+      if (merged.length > MAX_FILES) {
+        toast.error(`Maximum ${MAX_FILES} files per request.`);
+        return merged.slice(0, MAX_FILES);
+      }
+      return merged;
+    });
+  };
+
+  const removeFile = (idx: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const onDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragging(false);
-    handleFile(e.dataTransfer.files?.[0] ?? null);
+    addFiles(e.dataTransfer.files);
   };
 
   const onSubmit = async () => {
@@ -769,39 +785,60 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
     }
     setSubmitting(true);
     try {
-      let attachment_url: string | null = null;
-      if (file) {
-        const path = `${crypto.randomUUID()}-${file.name}`;
-        const { error: upErr } = await supabase.storage.from("quote-attachments").upload(path, file);
+      const attachment_paths: string[] = [];
+      for (const file of files) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const path = `quotes/${productId}/${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+        const { error: upErr } = await supabase.storage
+          .from("boq-uploads")
+          .upload(path, file, { contentType: file.type || undefined });
         if (upErr) {
-          // Bucket may not exist yet; warn but don't block submission.
           console.warn("Attachment upload failed:", upErr.message);
-          toast.warning("Could not attach file — submitting your request anyway.");
+          toast.warning(`Could not upload ${file.name} — continuing.`);
         } else {
-          const { data } = supabase.storage.from("quote-attachments").getPublicUrl(path);
-          attachment_url = data.publicUrl;
+          attachment_paths.push(path);
         }
       }
 
-      const payload: Record<string, unknown> = {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user.id ?? null;
+
+      const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
         contact_email: email.trim(),
-        message: message.trim() || `Quote request for ${productName}`,
+        project_description: message.trim() || `Quote request for ${productName}`,
         product_id: productId,
-        attachment_url,
+        product_name: productName,
+        attachment_paths,
+        boq_file_path: attachment_paths[0] ?? null,
+        user_id: userId,
         status: "new",
       };
-      let { error } = await supabase.from("quotes").insert(payload);
-      if (error && /column .* does not exist/i.test(error.message)) {
-        // Retry without optional columns.
-        delete payload.product_id;
-        delete payload.attachment_url;
-        ({ error } = await supabase.from("quotes").insert(payload));
+
+      // Strip optional columns the table may not have, retrying on schema errors.
+      const optionalKeys = ["product_id", "product_name", "attachment_paths", "boq_file_path", "user_id"];
+      let payload = { ...basePayload };
+      let lastError: { message: string } | null = null;
+      for (let attempt = 0; attempt < optionalKeys.length + 1; attempt += 1) {
+        const { error } = await supabase.from("quote_requests").insert(payload);
+        if (!error) {
+          lastError = null;
+          break;
+        }
+        lastError = error;
+        const match = /column ['"]?(\w+)['"]? .* (does not exist|not found)/i.exec(error.message)
+          ?? /Could not find the ['"]?(\w+)['"]? column/i.exec(error.message);
+        const missing = match?.[1];
+        if (missing && missing in payload) {
+          delete (payload as Record<string, unknown>)[missing];
+          continue;
+        }
+        break;
       }
-      if (error) throw error;
+      if (lastError) throw new Error(lastError.message);
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
-      setName(""); setEmail(""); setMessage(""); setFile(null);
+      setName(""); setEmail(""); setMessage(""); setFiles([]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unable to submit quote request.";
       toast.error(msg);
@@ -837,47 +874,51 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
             dragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/60",
           )}
         >
-          {file ? (
-            <div className="flex items-center justify-between gap-2 text-left">
-              <div className="flex items-center gap-2 min-w-0">
-                <FileText className="h-5 w-5 text-primary shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-sm font-medium truncate">{file.name}</div>
-                  <div className="text-[11px] text-muted-foreground">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                className="text-muted-foreground hover:text-destructive"
-                aria-label="Remove file"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          ) : (
-            <>
-              <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
-              <div className="mt-2 text-sm">
-                <span className="font-medium">Drag & drop files here</span>
-                <span className="text-muted-foreground"> or </span>
-                <span className="text-primary font-medium underline">click to browse</span>
-              </div>
-              <div className="text-[11px] text-muted-foreground mt-1">
-                PDF, DWG, DOC, XLS (Max 20MB)
-              </div>
-            </>
-          )}
+          <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
+          <div className="mt-2 text-sm">
+            <span className="font-medium">Drag & drop files here</span>
+            <span className="text-muted-foreground"> or </span>
+            <span className="text-primary font-medium underline">click to browse</span>
+          </div>
+          <div className="text-[11px] text-muted-foreground mt-1">
+            PDF, DWG, DOC, XLS, images (Max 20MB each, up to {MAX_FILES} files)
+          </div>
           <input
             ref={inputRef}
             type="file"
+            multiple
             className="hidden"
             accept={ALLOWED_TYPES.join(",")}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => handleFile(e.target.files?.[0] ?? null)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              addFiles(e.target.files);
+              e.target.value = "";
+            }}
           />
         </div>
+
+        {files.length > 0 && (
+          <ul className="space-y-2">
+            {files.map((f, i) => (
+              <li key={`${f.name}-${i}`} className="flex items-center justify-between gap-2 rounded border border-border bg-surface p-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <FileText className="h-4 w-4 text-primary shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-medium truncate">{f.name}</div>
+                    <div className="text-[10px] text-muted-foreground">{(f.size / 1024 / 1024).toFixed(2)} MB</div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeFile(i)}
+                  className="text-muted-foreground hover:text-destructive"
+                  aria-label={`Remove ${f.name}`}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <Button
           onClick={onSubmit}
@@ -891,3 +932,4 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
     </div>
   );
 }
+
