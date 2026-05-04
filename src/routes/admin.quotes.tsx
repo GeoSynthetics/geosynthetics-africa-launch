@@ -88,7 +88,7 @@ function QuotesAdmin() {
       if (filter !== "all") q2 = q2.eq("status", filter);
       const fallback = await q2;
       if (fallback.error) toast.error(fallback.error.message);
-      data = fallback.data ?? [];
+      data = (fallback.data ?? []) as never;
     }
     setRows(((data ?? []) as QuoteRequest[]));
     setLoading(false);
