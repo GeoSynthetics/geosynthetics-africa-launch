@@ -333,7 +333,7 @@ function QuotesAdmin() {
       </div>
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelectedId(null)}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selected && (() => {
             const { paths, messageText } = getAttachments(selected);
             return (
