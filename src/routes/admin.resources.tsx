@@ -319,7 +319,7 @@ function ResourcesAdmin() {
                 <TableRow key={r.id}>
                   <TableCell className="font-semibold">{r.title}</TableCell>
                   <TableCell className="text-xs uppercase tracking-wide text-muted-foreground">
-                    {r.resource_type}
+                    {r.type}
                   </TableCell>
                   <TableCell className="text-sm">
                     {r.file_path ? (
@@ -339,8 +339,8 @@ function ResourcesAdmin() {
                       "—"
                     )}
                   </TableCell>
-                  <TableCell>{r.is_gated ? "Yes" : "No"}</TableCell>
-                  <TableCell>{r.is_published ? "Yes" : "No"}</TableCell>
+                  <TableCell>{r.is_public ? "Public" : "Gated"}</TableCell>
+                  <TableCell>{r.status === "published" ? "Yes" : "No"}</TableCell>
                   <TableCell className="text-right">
                     <Button size="icon" variant="ghost" onClick={() => openEdit(r)}>
                       <Pencil className="h-4 w-4" />
