@@ -184,14 +184,14 @@ function QuotesAdmin() {
             {loading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell colSpan={7}>
+                  <TableCell colSpan={8}>
                     <Skeleton className="h-6 w-full" />
                   </TableCell>
                 </TableRow>
               ))}
             {!loading && rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-sm text-muted-foreground py-10">
+                <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-10">
                   No quote requests yet.
                 </TableCell>
               </TableRow>
