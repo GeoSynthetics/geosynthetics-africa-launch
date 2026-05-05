@@ -50,6 +50,7 @@ interface Resource {
   slug: string;
   title: string;
   type: ResourceType;
+  description: string | null;
   file_path: string | null;
   external_url: string | null;
   is_public: boolean;
@@ -57,7 +58,15 @@ interface Resource {
   created_at: string;
 }
 
-const TYPES: ResourceType[] = ["tds", "sds", "brochure", "case_study", "manual", "other"];
+const TYPE_LABELS: Record<ResourceType, string> = {
+  tds: "TDS — Datasheet",
+  sds: "SDS — Safety Datasheet",
+  manual: "Installation Guide / Manual",
+  case_study: "Case Study",
+  brochure: "Brochure",
+  other: "Video / Other (use External URL)",
+};
+const TYPES: ResourceType[] = ["tds", "sds", "manual", "case_study", "brochure", "other"];
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || `r-${Date.now()}`;
