@@ -20,6 +20,7 @@ import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
@@ -86,6 +87,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ResourcesRoute,
 } as any)
 const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
   id: '/catalogue/',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/resources/': typeof ResourcesIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
@@ -175,7 +182,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/quality-assurance': typeof QualityAssuranceRoute
-  '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
@@ -187,6 +193,7 @@ export interface FileRoutesByTo {
   '/products/$category': typeof ProductsCategoryRoute
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/resources': typeof ResourcesIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/resources/$category': typeof ResourcesCategoryIndexRoute
 }
@@ -212,6 +219,7 @@ export interface FileRoutesById {
   '/products/$category': typeof ProductsCategoryRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/resources/': typeof ResourcesIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
@@ -238,6 +246,7 @@ export interface FileRouteTypes {
     | '/products/$category'
     | '/admin/'
     | '/catalogue/'
+    | '/resources/'
     | '/resources/$category/$slug'
     | '/resources/$category/'
   fileRoutesByTo: FileRoutesByTo
@@ -249,7 +258,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/profile'
     | '/quality-assurance'
-    | '/resources'
     | '/services'
     | '/signup'
     | '/admin/products'
@@ -261,6 +269,7 @@ export interface FileRouteTypes {
     | '/products/$category'
     | '/admin'
     | '/catalogue'
+    | '/resources'
     | '/resources/$category/$slug'
     | '/resources/$category'
   id:
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/products/$category'
     | '/admin/'
     | '/catalogue/'
+    | '/resources/'
     | '/resources/$category/$slug'
     | '/resources/$category/'
   fileRoutesById: FileRoutesById
@@ -383,6 +393,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resources/': {
+      id: '/resources/'
+      path: '/'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof ResourcesIndexRouteImport
+      parentRoute: typeof ResourcesRoute
     }
     '/catalogue/': {
       id: '/catalogue/'
@@ -507,11 +524,13 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
 )
 
 interface ResourcesRouteChildren {
+  ResourcesIndexRoute: typeof ResourcesIndexRoute
   ResourcesCategorySlugRoute: typeof ResourcesCategorySlugRoute
   ResourcesCategoryIndexRoute: typeof ResourcesCategoryIndexRoute
 }
 
 const ResourcesRouteChildren: ResourcesRouteChildren = {
+  ResourcesIndexRoute: ResourcesIndexRoute,
   ResourcesCategorySlugRoute: ResourcesCategorySlugRoute,
   ResourcesCategoryIndexRoute: ResourcesCategoryIndexRoute,
 }

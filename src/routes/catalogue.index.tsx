@@ -64,7 +64,7 @@ export const Route = createFileRoute("/catalogue/")({
   component: CataloguePage,
 });
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 6;
 
 interface CatalogueProduct {
   id: string;
