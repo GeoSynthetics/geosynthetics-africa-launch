@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight, Download, Eye, FileText, Mail, Phone, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Eye, FileDown, Mail, Phone, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -83,11 +83,11 @@ function getAttachments(r: QuoteRequest): { paths: string[]; messageText: string
 
 const PAGE_SIZES = [10, 25, 50, 100];
 
-function getFileKind(path: string): "image" | "pdf" | "other" {
-  const ext = path.split(".").pop()?.toLowerCase() ?? "";
-  if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(ext)) return "image";
-  if (ext === "pdf") return "pdf";
-  return "other";
+function csvEscape(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  const s = String(v);
+  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
 }
 
 function QuotesAdmin() {
@@ -97,7 +97,7 @@ function QuotesAdmin() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
-  const [previews, setPreviews] = useState<Record<string, string>>({});
+  
   const selected = rows.find((r) => r.id === selectedId) ?? null;
 
   const load = async () => {
@@ -161,19 +161,6 @@ function QuotesAdmin() {
     if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // Load signed URLs for previewable attachments when modal opens
-  useEffect(() => {
-    if (!selected) return;
-    const { paths } = getAttachments(selected);
-    const previewable = paths.filter((p) => getFileKind(p) !== "other");
-    previewable.forEach(async (p) => {
-      if (previews[p]) return;
-      const url = await getSignedUrl(p);
-      if (url) setPreviews((prev) => ({ ...prev, [p]: url }));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
-
   // Reset to first page when filter or page size changes
   useEffect(() => {
     setPage(1);
@@ -182,6 +169,42 @@ function QuotesAdmin() {
   const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
   const currentPage = Math.min(page, totalPages);
   const pagedRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const exportCsv = () => {
+    if (pagedRows.length === 0) {
+      toast.info("Nothing to export");
+      return;
+    }
+    const headers = [
+      "Received", "Name", "Email", "Phone", "Company",
+      "Product", "Message", "Attachments", "Status",
+    ];
+    const lines = [headers.map(csvEscape).join(",")];
+    for (const r of pagedRows) {
+      const { paths, messageText } = getAttachments(r);
+      lines.push([
+        new Date(r.created_at).toISOString(),
+        r.contact_name,
+        r.contact_email,
+        r.contact_phone ?? "",
+        r.company ?? "",
+        r.product_name ?? "",
+        messageText,
+        paths.join(" | "),
+        r.status,
+      ].map(csvEscape).join(","));
+    }
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `quote-requests-${filter}-p${currentPage}-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div>
@@ -201,6 +224,9 @@ function QuotesAdmin() {
         </Select>
         <Button variant="outline" size="sm" onClick={() => void load()}>
           <RefreshCw className="h-4 w-4" /> Refresh
+        </Button>
+        <Button variant="outline" size="sm" onClick={exportCsv} disabled={loading || rows.length === 0}>
+          <FileDown className="h-4 w-4" /> Export CSV
         </Button>
         <div className="ml-auto text-xs text-muted-foreground">{rows.length} result(s)</div>
       </div>
@@ -426,48 +452,21 @@ function QuotesAdmin() {
                     {paths.length === 0 ? (
                       <span className="text-xs text-muted-foreground">No attachments</span>
                     ) : (
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         {paths.map((p, idx) => {
                           const fileName = p.split("/").pop() ?? `File ${idx + 1}`;
-                          const kind = getFileKind(p);
-                          const url = previews[p];
                           return (
-                            <div key={p} className="rounded border border-border overflow-hidden bg-muted/30">
-                              <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border bg-card">
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                  <span className="truncate text-xs font-medium" title={fileName}>{fileName}</span>
-                                </div>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-7"
-                                  onClick={() => void downloadBoq(p)}
-                                >
-                                  <Download className="h-3.5 w-3.5 mr-1" /> Download
-                                </Button>
-                              </div>
-                              {kind === "image" && (
-                                url ? (
-                                  <a href={url} target="_blank" rel="noopener noreferrer" className="block bg-background">
-                                    <img src={url} alt={fileName} className="max-h-[400px] w-full object-contain" />
-                                  </a>
-                                ) : (
-                                  <Skeleton className="h-48 w-full" />
-                                )
-                              )}
-                              {kind === "pdf" && (
-                                url ? (
-                                  <iframe
-                                    src={url}
-                                    title={fileName}
-                                    className="w-full h-[500px] bg-background"
-                                  />
-                                ) : (
-                                  <Skeleton className="h-72 w-full" />
-                                )
-                              )}
-                            </div>
+                            <Button
+                              key={p}
+                              size="sm"
+                              variant="outline"
+                              className="h-9 justify-start"
+                              onClick={() => void downloadBoq(p)}
+                              title={fileName}
+                            >
+                              <Download className="h-4 w-4 mr-2 shrink-0" />
+                              <span className="truncate">{fileName}</span>
+                            </Button>
                           );
                         })}
                       </div>
