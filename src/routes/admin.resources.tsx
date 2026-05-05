@@ -94,7 +94,7 @@ function ResourcesAdmin() {
     setLoading(true);
     const { data, error } = await supabase
       .from("resources")
-      .select("id, slug, title, type, file_path, external_url, is_public, status, created_at")
+      .select("id, slug, title, type, description, file_path, external_url, is_public, status, created_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) toast.error(error.message);
