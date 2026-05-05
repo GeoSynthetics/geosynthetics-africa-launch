@@ -27,7 +27,7 @@ export const Route = createFileRoute("/admin/users")({
   component: UsersAdmin,
 });
 
-const ALL_ROLES: AppRole[] = ["admin", "staff", "contractor", "customer", "viewer"];
+const ALL_ROLES: AppRole[] = ["admin", "staff", "contractor", "viewer"];
 
 interface Profile {
   id: string;
