@@ -97,7 +97,7 @@ function QuotesAdmin() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
-  const [previews, setPreviews] = useState<Record<string, string>>({});
+  
   const selected = rows.find((r) => r.id === selectedId) ?? null;
 
   const load = async () => {
