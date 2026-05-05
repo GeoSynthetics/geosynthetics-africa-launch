@@ -332,6 +332,50 @@ function QuotesAdmin() {
         </Table>
       </div>
 
+      {!loading && rows.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground">Rows per page</span>
+            <Select value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
+              <SelectTrigger className="h-8 w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAGE_SIZES.map((s) => (
+                  <SelectItem key={s} value={String(s)}>{s}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-muted-foreground">
+              {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, rows.length)} of {rows.length}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8"
+              disabled={currentPage <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              <ChevronLeft className="h-4 w-4" /> Prev
+            </Button>
+            <span className="text-muted-foreground">
+              Page {currentPage} / {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8"
+              disabled={currentPage >= totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Next <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelectedId(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selected && (() => {
