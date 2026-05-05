@@ -81,11 +81,23 @@ function getAttachments(r: QuoteRequest): { paths: string[]; messageText: string
   return { paths: Array.from(new Set([...fromColumn, ...embeddedPaths])), messageText };
 }
 
+const PAGE_SIZES = [10, 25, 50, 100];
+
+function getFileKind(path: string): "image" | "pdf" | "other" {
+  const ext = path.split(".").pop()?.toLowerCase() ?? "";
+  if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(ext)) return "image";
+  if (ext === "pdf") return "pdf";
+  return "other";
+}
+
 function QuotesAdmin() {
   const [rows, setRows] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | "all">("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
   const selected = rows.find((r) => r.id === selectedId) ?? null;
 
   const load = async () => {
