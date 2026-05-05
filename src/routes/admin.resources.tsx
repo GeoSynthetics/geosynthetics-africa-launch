@@ -74,6 +74,7 @@ const slugify = (s: string) =>
 const empty: Partial<Resource> = {
   title: "",
   type: "tds",
+  description: "",
   file_path: null,
   external_url: null,
   is_public: true,
