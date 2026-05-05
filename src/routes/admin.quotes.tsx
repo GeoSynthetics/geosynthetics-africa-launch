@@ -281,12 +281,114 @@ function QuotesAdmin() {
                       </SelectContent>
                     </Select>
                   </TableCell>
+                  <TableCell className="text-right">
+                    <Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>
+                      <Eye className="h-3.5 w-3.5 mr-1" /> View
+                    </Button>
+                  </TableCell>
                 </TableRow>
                 );
               })}
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelectedId(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          {selected && (() => {
+            const { paths, messageText } = getAttachments(selected);
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle>Quote Request Details</DialogTitle>
+                  <DialogDescription>
+                    Received {new Date(selected.created_at).toLocaleString()}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-5 text-sm">
+                  <section className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Contact</div>
+                      <div className="font-semibold">{selected.contact_name}</div>
+                      <a href={`mailto:${selected.contact_email}`} className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 mt-0.5">
+                        <Mail className="h-3 w-3" /> {selected.contact_email}
+                      </a>
+                      {selected.contact_phone && (
+                        <a href={`tel:${selected.contact_phone}`} className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 mt-0.5">
+                          <Phone className="h-3 w-3" /> {selected.contact_phone}
+                        </a>
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Company</div>
+                      <div>{selected.company ?? "—"}</div>
+                    </div>
+                  </section>
+
+                  {selected.product_name && (
+                    <section>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Product</div>
+                      <div className="font-medium">{selected.product_name}</div>
+                    </section>
+                  )}
+
+                  <section>
+                    <div className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Message</div>
+                    <p className="whitespace-pre-wrap text-muted-foreground">{messageText || "—"}</p>
+                  </section>
+
+                  <section>
+                    <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Attachments</div>
+                    {paths.length === 0 ? (
+                      <span className="text-xs text-muted-foreground">No attachments</span>
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        {paths.map((p, idx) => {
+                          const fileName = p.split("/").pop() ?? `File ${idx + 1}`;
+                          return (
+                            <Button
+                              key={p}
+                              size="sm"
+                              variant="outline"
+                              className="justify-start"
+                              onClick={() => void downloadBoq(p)}
+                            >
+                              <Download className="h-4 w-4 mr-2 shrink-0" />
+                              <span className="truncate">{fileName}</span>
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </section>
+
+                  <section>
+                    <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Status</div>
+                    <Select
+                      value={selected.status}
+                      onValueChange={(v) => void updateStatus(selected.id, v as Status)}
+                    >
+                      <SelectTrigger className={`w-48 border ${STATUS_STYLE[selected.status]}`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUSES.map((s) => (
+                          <SelectItem key={s} value={s}>
+                            <Badge variant="outline" className={STATUS_STYLE[s]}>
+                              {s.replace("_", " ")}
+                            </Badge>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </section>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
