@@ -126,7 +126,7 @@ function ResourcesAdmin() {
       if (file) {
         const ts = Date.now();
         const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const path = `${editing.resource_type}/${ts}-${safe}`;
+        const path = `${editing.type}/${ts}-${safe}`;
         const { error: upErr } = await supabase.storage
           .from("technical-docs")
           .upload(path, file, { upsert: false, contentType: file.type || undefined });
@@ -135,11 +135,12 @@ function ResourcesAdmin() {
       }
       const payload = {
         title: editing.title.trim(),
-        resource_type: editing.resource_type ?? "other",
+        slug: editing.slug?.trim() || slugify(editing.title),
+        type: editing.type ?? "other",
         file_path: filePath,
         external_url: editing.external_url?.trim() || null,
-        is_gated: editing.is_gated ?? false,
-        is_published: editing.is_published ?? true,
+        is_public: editing.is_public ?? true,
+        status: editing.status ?? "published",
       };
       const res = editing.id
         ? await supabase.from("resources").update(payload).eq("id", editing.id)
