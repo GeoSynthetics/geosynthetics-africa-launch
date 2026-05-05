@@ -15,6 +15,15 @@ This file records **major** changes made to the Geosynthetics Africa platform by
 
 ---
 
+## 2026-05-05 — Fix Vercel deployment (Cloudflare Workers → Nitro)
+
+**Scope:** Deployment / Build
+**Summary:** Vercel deployment failed because `@lovable.dev/vite-tanstack-config` always includes `@cloudflare/vite-plugin` during builds, producing a Cloudflare Workers bundle that Vercel can't run. Fixed by creating a separate `vite.config.vercel.ts` that uses `nitro/vite` (which auto-detects the Vercel preset) instead of the Cloudflare plugin. Added a `build:vercel` script and configured `vercel.json` to use it. The Lovable/Cloudflare build pipeline is untouched.
+**Files touched:** `vite.config.vercel.ts` (new), `vercel.json`, `package.json`, `.gitignore`
+**Notes / follow-ups:** Consider moving hardcoded Supabase env vars to Vercel's environment variable dashboard.
+
+---
+
 <!--
 Entry template — copy when adding a new entry:
 
