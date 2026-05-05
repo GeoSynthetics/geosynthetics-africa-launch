@@ -43,27 +43,32 @@ export const Route = createFileRoute("/admin/resources")({
 });
 
 type ResourceType = "tds" | "sds" | "brochure" | "case_study" | "manual" | "other";
+type ResourceStatus = "draft" | "published" | "archived";
 
 interface Resource {
   id: string;
+  slug: string;
   title: string;
-  resource_type: ResourceType;
+  type: ResourceType;
   file_path: string | null;
   external_url: string | null;
-  is_gated: boolean;
-  is_published: boolean;
+  is_public: boolean;
+  status: ResourceStatus;
   created_at: string;
 }
 
 const TYPES: ResourceType[] = ["tds", "sds", "brochure", "case_study", "manual", "other"];
 
+const slugify = (s: string) =>
+  s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || `r-${Date.now()}`;
+
 const empty: Partial<Resource> = {
   title: "",
-  resource_type: "tds",
+  type: "tds",
   file_path: null,
   external_url: null,
-  is_gated: false,
-  is_published: true,
+  is_public: true,
+  status: "published",
 };
 
 function ResourcesAdmin() {
@@ -79,11 +84,11 @@ function ResourcesAdmin() {
     setLoading(true);
     const { data, error } = await supabase
       .from("resources")
-      .select("id, title, resource_type, file_path, external_url, is_gated, is_published, created_at")
+      .select("id, slug, title, type, file_path, external_url, is_public, status, created_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) toast.error(error.message);
-    setRows((data ?? []) as Resource[]);
+    setRows((data ?? []) as unknown as Resource[]);
     setLoading(false);
   };
 
@@ -121,7 +126,7 @@ function ResourcesAdmin() {
       if (file) {
         const ts = Date.now();
         const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const path = `${editing.resource_type}/${ts}-${safe}`;
+        const path = `${editing.type}/${ts}-${safe}`;
         const { error: upErr } = await supabase.storage
           .from("technical-docs")
           .upload(path, file, { upsert: false, contentType: file.type || undefined });
@@ -130,11 +135,12 @@ function ResourcesAdmin() {
       }
       const payload = {
         title: editing.title.trim(),
-        resource_type: editing.resource_type ?? "other",
+        slug: editing.slug?.trim() || slugify(editing.title),
+        type: editing.type ?? "other",
         file_path: filePath,
         external_url: editing.external_url?.trim() || null,
-        is_gated: editing.is_gated ?? false,
-        is_published: editing.is_published ?? true,
+        is_public: editing.is_public ?? true,
+        status: editing.status ?? "published",
       };
       const res = editing.id
         ? await supabase.from("resources").update(payload).eq("id", editing.id)
@@ -206,8 +212,8 @@ function ResourcesAdmin() {
                 <div>
                   <Label>Type</Label>
                   <Select
-                    value={editing.resource_type ?? "other"}
-                    onValueChange={(v) => setEditing((s) => ({ ...s, resource_type: v as ResourceType }))}
+                    value={editing.type ?? "other"}
+                    onValueChange={(v) => setEditing((s) => ({ ...s, type: v as ResourceType }))}
                   >
                     <SelectTrigger className="mt-1.5">
                       <SelectValue />
@@ -247,17 +253,17 @@ function ResourcesAdmin() {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Switch
-                      id="r-gated"
-                      checked={editing.is_gated ?? false}
-                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_gated: v }))}
+                      id="r-public"
+                      checked={editing.is_public ?? true}
+                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_public: v }))}
                     />
-                    <Label htmlFor="r-gated">Gated (signed-in only)</Label>
+                    <Label htmlFor="r-public">Public (no login required)</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Switch
                       id="r-pub"
-                      checked={editing.is_published ?? true}
-                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_published: v }))}
+                      checked={(editing.status ?? "published") === "published"}
+                      onCheckedChange={(v) => setEditing((s) => ({ ...s, status: v ? "published" : "draft" }))}
                     />
                     <Label htmlFor="r-pub">Published</Label>
                   </div>
@@ -313,7 +319,7 @@ function ResourcesAdmin() {
                 <TableRow key={r.id}>
                   <TableCell className="font-semibold">{r.title}</TableCell>
                   <TableCell className="text-xs uppercase tracking-wide text-muted-foreground">
-                    {r.resource_type}
+                    {r.type}
                   </TableCell>
                   <TableCell className="text-sm">
                     {r.file_path ? (
@@ -333,8 +339,8 @@ function ResourcesAdmin() {
                       "—"
                     )}
                   </TableCell>
-                  <TableCell>{r.is_gated ? "Yes" : "No"}</TableCell>
-                  <TableCell>{r.is_published ? "Yes" : "No"}</TableCell>
+                  <TableCell>{r.is_public ? "Public" : "Gated"}</TableCell>
+                  <TableCell>{r.status === "published" ? "Yes" : "No"}</TableCell>
                   <TableCell className="text-right">
                     <Button size="icon" variant="ghost" onClick={() => openEdit(r)}>
                       <Pencil className="h-4 w-4" />
