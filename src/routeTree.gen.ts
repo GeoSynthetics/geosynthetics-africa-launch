@@ -30,6 +30,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -136,6 +137,11 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ResourcesCategoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -156,9 +162,10 @@ export interface FileRoutesByFullPath {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRoute
+  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -178,9 +185,10 @@ export interface FileRoutesByTo {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRoute
+  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -202,9 +210,10 @@ export interface FileRoutesById {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRoute
+  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/resources/$category'
     | '/admin/'
     | '/catalogue/'
+    | '/resources/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/resources/$category'
     | '/admin'
     | '/catalogue'
+    | '/resources/$category/$slug'
   id:
     | '__root__'
     | '/'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/resources/$category'
     | '/admin/'
     | '/catalogue/'
+    | '/resources/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -442,6 +454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/resources/$category/$slug': {
+      id: '/resources/$category/$slug'
+      path: '/$slug'
+      fullPath: '/resources/$category/$slug'
+      preLoaderRoute: typeof ResourcesCategorySlugRouteImport
+      parentRoute: typeof ResourcesCategoryRoute
+    }
   }
 }
 
@@ -487,12 +506,23 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
   ProductsRouteChildren,
 )
 
+interface ResourcesCategoryRouteChildren {
+  ResourcesCategorySlugRoute: typeof ResourcesCategorySlugRoute
+}
+
+const ResourcesCategoryRouteChildren: ResourcesCategoryRouteChildren = {
+  ResourcesCategorySlugRoute: ResourcesCategorySlugRoute,
+}
+
+const ResourcesCategoryRouteWithChildren =
+  ResourcesCategoryRoute._addFileChildren(ResourcesCategoryRouteChildren)
+
 interface ResourcesRouteChildren {
-  ResourcesCategoryRoute: typeof ResourcesCategoryRoute
+  ResourcesCategoryRoute: typeof ResourcesCategoryRouteWithChildren
 }
 
 const ResourcesRouteChildren: ResourcesRouteChildren = {
-  ResourcesCategoryRoute: ResourcesCategoryRoute,
+  ResourcesCategoryRoute: ResourcesCategoryRouteWithChildren,
 }
 
 const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
