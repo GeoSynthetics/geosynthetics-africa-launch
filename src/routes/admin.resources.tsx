@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Search, Upload, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Upload, ExternalLink, Eye } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/resources")({
@@ -342,6 +342,18 @@ function ResourcesAdmin() {
                   <TableCell>{r.is_public ? "Public" : "Gated"}</TableCell>
                   <TableCell>{r.status === "published" ? "Yes" : "No"}</TableCell>
                   <TableCell className="text-right">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      title="Open in new tab"
+                      disabled={!r.file_path && !r.external_url}
+                      onClick={() => {
+                        if (r.file_path) void preview(r.file_path);
+                        else if (r.external_url) window.open(r.external_url, "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
                     <Button size="icon" variant="ghost" onClick={() => openEdit(r)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
