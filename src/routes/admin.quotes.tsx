@@ -236,7 +236,7 @@ function QuotesAdmin() {
               </TableRow>
             )}
             {!loading &&
-              rows.map((r) => {
+              pagedRows.map((r) => {
                 const rawMessage = r.project_description ?? r.message ?? "";
                 // Parse trailing "[attachments]" block from description as a fallback
                 // for projects whose schema doesn't yet have attachment_paths.
