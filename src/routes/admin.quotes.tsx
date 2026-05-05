@@ -161,19 +161,6 @@ function QuotesAdmin() {
     if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // Load signed URLs for previewable attachments when modal opens
-  useEffect(() => {
-    if (!selected) return;
-    const { paths } = getAttachments(selected);
-    const previewable = paths.filter((p) => getFileKind(p) !== "other");
-    previewable.forEach(async (p) => {
-      if (previews[p]) return;
-      const url = await getSignedUrl(p);
-      if (url) setPreviews((prev) => ({ ...prev, [p]: url }));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
-
   // Reset to first page when filter or page size changes
   useEffect(() => {
     setPage(1);
