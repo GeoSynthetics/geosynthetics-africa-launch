@@ -170,6 +170,42 @@ function QuotesAdmin() {
   const currentPage = Math.min(page, totalPages);
   const pagedRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+  const exportCsv = () => {
+    if (pagedRows.length === 0) {
+      toast.info("Nothing to export");
+      return;
+    }
+    const headers = [
+      "Received", "Name", "Email", "Phone", "Company",
+      "Product", "Message", "Attachments", "Status",
+    ];
+    const lines = [headers.map(csvEscape).join(",")];
+    for (const r of pagedRows) {
+      const { paths, messageText } = getAttachments(r);
+      lines.push([
+        new Date(r.created_at).toISOString(),
+        r.contact_name,
+        r.contact_email,
+        r.contact_phone ?? "",
+        r.company ?? "",
+        r.product_name ?? "",
+        messageText,
+        paths.join(" | "),
+        r.status,
+      ].map(csvEscape).join(","));
+    }
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `quote-requests-${filter}-p${currentPage}-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <div className="mb-4 flex items-center gap-3">
@@ -188,6 +224,9 @@ function QuotesAdmin() {
         </Select>
         <Button variant="outline" size="sm" onClick={() => void load()}>
           <RefreshCw className="h-4 w-4" /> Refresh
+        </Button>
+        <Button variant="outline" size="sm" onClick={exportCsv} disabled={loading || rows.length === 0}>
+          <FileDown className="h-4 w-4" /> Export CSV
         </Button>
         <div className="ml-auto text-xs text-muted-foreground">{rows.length} result(s)</div>
       </div>
