@@ -83,11 +83,11 @@ function getAttachments(r: QuoteRequest): { paths: string[]; messageText: string
 
 const PAGE_SIZES = [10, 25, 50, 100];
 
-function getFileKind(path: string): "image" | "pdf" | "other" {
-  const ext = path.split(".").pop()?.toLowerCase() ?? "";
-  if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(ext)) return "image";
-  if (ext === "pdf") return "pdf";
-  return "other";
+function csvEscape(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  const s = String(v);
+  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
 }
 
 function QuotesAdmin() {
