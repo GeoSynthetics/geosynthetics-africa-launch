@@ -253,17 +253,17 @@ function ResourcesAdmin() {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Switch
-                      id="r-gated"
-                      checked={editing.is_gated ?? false}
-                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_gated: v }))}
+                      id="r-public"
+                      checked={editing.is_public ?? true}
+                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_public: v }))}
                     />
-                    <Label htmlFor="r-gated">Gated (signed-in only)</Label>
+                    <Label htmlFor="r-public">Public (no login required)</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Switch
                       id="r-pub"
-                      checked={editing.is_published ?? true}
-                      onCheckedChange={(v) => setEditing((s) => ({ ...s, is_published: v }))}
+                      checked={(editing.status ?? "published") === "published"}
+                      onCheckedChange={(v) => setEditing((s) => ({ ...s, status: v ? "published" : "draft" }))}
                     />
                     <Label htmlFor="r-pub">Published</Label>
                   </div>
