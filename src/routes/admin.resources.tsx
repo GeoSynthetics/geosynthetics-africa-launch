@@ -232,7 +232,7 @@ function ResourcesAdmin() {
                     <SelectContent>
                       {TYPES.map((t) => (
                         <SelectItem key={t} value={t}>
-                          {t.toUpperCase()}
+                          {TYPE_LABELS[t]}
                         </SelectItem>
                       ))}
                     </SelectContent>
