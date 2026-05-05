@@ -84,11 +84,11 @@ function ResourcesAdmin() {
     setLoading(true);
     const { data, error } = await supabase
       .from("resources")
-      .select("id, title, resource_type, file_path, external_url, is_gated, is_published, created_at")
+      .select("id, slug, title, type, file_path, external_url, is_public, status, created_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) toast.error(error.message);
-    setRows((data ?? []) as Resource[]);
+    setRows((data ?? []) as unknown as Resource[]);
     setLoading(false);
   };
 
