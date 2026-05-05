@@ -145,16 +145,43 @@ function QuotesAdmin() {
     }
   };
 
-  const downloadBoq = async (path: string) => {
+  const getSignedUrl = async (path: string) => {
     const { data, error } = await supabase.storage
       .from("boq-uploads")
       .createSignedUrl(path, 60 * 5);
     if (error || !data) {
       toast.error(error?.message ?? "Could not generate link");
-      return;
+      return null;
     }
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    return data.signedUrl;
   };
+
+  const downloadBoq = async (path: string) => {
+    const url = await getSignedUrl(path);
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  // Load signed URLs for previewable attachments when modal opens
+  useEffect(() => {
+    if (!selected) return;
+    const { paths } = getAttachments(selected);
+    const previewable = paths.filter((p) => getFileKind(p) !== "other");
+    previewable.forEach(async (p) => {
+      if (previews[p]) return;
+      const url = await getSignedUrl(p);
+      if (url) setPreviews((prev) => ({ ...prev, [p]: url }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  // Reset to first page when filter or page size changes
+  useEffect(() => {
+    setPage(1);
+  }, [filter, pageSize]);
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pagedRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div>
