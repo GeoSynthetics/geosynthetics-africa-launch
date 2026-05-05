@@ -212,8 +212,8 @@ function ResourcesAdmin() {
                 <div>
                   <Label>Type</Label>
                   <Select
-                    value={editing.resource_type ?? "other"}
-                    onValueChange={(v) => setEditing((s) => ({ ...s, resource_type: v as ResourceType }))}
+                    value={editing.type ?? "other"}
+                    onValueChange={(v) => setEditing((s) => ({ ...s, type: v as ResourceType }))}
                   >
                     <SelectTrigger className="mt-1.5">
                       <SelectValue />
