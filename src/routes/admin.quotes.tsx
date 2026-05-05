@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, Eye, Mail, Phone, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Eye, FileText, Mail, Phone, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
