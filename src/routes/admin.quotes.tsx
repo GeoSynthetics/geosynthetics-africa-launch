@@ -413,48 +413,21 @@ function QuotesAdmin() {
                     {paths.length === 0 ? (
                       <span className="text-xs text-muted-foreground">No attachments</span>
                     ) : (
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         {paths.map((p, idx) => {
                           const fileName = p.split("/").pop() ?? `File ${idx + 1}`;
-                          const kind = getFileKind(p);
-                          const url = previews[p];
                           return (
-                            <div key={p} className="rounded border border-border overflow-hidden bg-muted/30">
-                              <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border bg-card">
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                                  <span className="truncate text-xs font-medium" title={fileName}>{fileName}</span>
-                                </div>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-7"
-                                  onClick={() => void downloadBoq(p)}
-                                >
-                                  <Download className="h-3.5 w-3.5 mr-1" /> Download
-                                </Button>
-                              </div>
-                              {kind === "image" && (
-                                url ? (
-                                  <a href={url} target="_blank" rel="noopener noreferrer" className="block bg-background">
-                                    <img src={url} alt={fileName} className="max-h-[400px] w-full object-contain" />
-                                  </a>
-                                ) : (
-                                  <Skeleton className="h-48 w-full" />
-                                )
-                              )}
-                              {kind === "pdf" && (
-                                url ? (
-                                  <iframe
-                                    src={url}
-                                    title={fileName}
-                                    className="w-full h-[500px] bg-background"
-                                  />
-                                ) : (
-                                  <Skeleton className="h-72 w-full" />
-                                )
-                              )}
-                            </div>
+                            <Button
+                              key={p}
+                              size="sm"
+                              variant="outline"
+                              className="h-9 justify-start"
+                              onClick={() => void downloadBoq(p)}
+                              title={fileName}
+                            >
+                              <Download className="h-4 w-4 mr-2 shrink-0" />
+                              <span className="truncate">{fileName}</span>
+                            </Button>
                           );
                         })}
                       </div>
