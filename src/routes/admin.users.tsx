@@ -46,7 +46,6 @@ const ROLE_STYLE: Record<AppRole, string> = {
   admin: "bg-destructive/15 text-destructive border-destructive/30",
   staff: "bg-primary/15 text-primary border-primary/30",
   contractor: "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
-  customer: "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
   viewer: "bg-muted text-muted-foreground border-border",
 };
 

@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download, Eye, Mail, Phone, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Eye, FileText, Mail, Phone, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -81,11 +81,23 @@ function getAttachments(r: QuoteRequest): { paths: string[]; messageText: string
   return { paths: Array.from(new Set([...fromColumn, ...embeddedPaths])), messageText };
 }
 
+const PAGE_SIZES = [10, 25, 50, 100];
+
+function getFileKind(path: string): "image" | "pdf" | "other" {
+  const ext = path.split(".").pop()?.toLowerCase() ?? "";
+  if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(ext)) return "image";
+  if (ext === "pdf") return "pdf";
+  return "other";
+}
+
 function QuotesAdmin() {
   const [rows, setRows] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Status | "all">("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
   const selected = rows.find((r) => r.id === selectedId) ?? null;
 
   const load = async () => {
@@ -133,16 +145,43 @@ function QuotesAdmin() {
     }
   };
 
-  const downloadBoq = async (path: string) => {
+  const getSignedUrl = async (path: string) => {
     const { data, error } = await supabase.storage
       .from("boq-uploads")
       .createSignedUrl(path, 60 * 5);
     if (error || !data) {
       toast.error(error?.message ?? "Could not generate link");
-      return;
+      return null;
     }
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    return data.signedUrl;
   };
+
+  const downloadBoq = async (path: string) => {
+    const url = await getSignedUrl(path);
+    if (url) window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  // Load signed URLs for previewable attachments when modal opens
+  useEffect(() => {
+    if (!selected) return;
+    const { paths } = getAttachments(selected);
+    const previewable = paths.filter((p) => getFileKind(p) !== "other");
+    previewable.forEach(async (p) => {
+      if (previews[p]) return;
+      const url = await getSignedUrl(p);
+      if (url) setPreviews((prev) => ({ ...prev, [p]: url }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+
+  // Reset to first page when filter or page size changes
+  useEffect(() => {
+    setPage(1);
+  }, [filter, pageSize]);
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pagedRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div>
@@ -197,7 +236,7 @@ function QuotesAdmin() {
               </TableRow>
             )}
             {!loading &&
-              rows.map((r) => {
+              pagedRows.map((r) => {
                 const rawMessage = r.project_description ?? r.message ?? "";
                 // Parse trailing "[attachments]" block from description as a fallback
                 // for projects whose schema doesn't yet have attachment_paths.
@@ -293,8 +332,52 @@ function QuotesAdmin() {
         </Table>
       </div>
 
+      {!loading && rows.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground">Rows per page</span>
+            <Select value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
+              <SelectTrigger className="h-8 w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAGE_SIZES.map((s) => (
+                  <SelectItem key={s} value={String(s)}>{s}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-muted-foreground">
+              {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, rows.length)} of {rows.length}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8"
+              disabled={currentPage <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              <ChevronLeft className="h-4 w-4" /> Prev
+            </Button>
+            <span className="text-muted-foreground">
+              Page {currentPage} / {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8"
+              disabled={currentPage >= totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Next <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelectedId(null)}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selected && (() => {
             const { paths, messageText } = getAttachments(selected);
             return (
@@ -343,20 +426,48 @@ function QuotesAdmin() {
                     {paths.length === 0 ? (
                       <span className="text-xs text-muted-foreground">No attachments</span>
                     ) : (
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-4">
                         {paths.map((p, idx) => {
                           const fileName = p.split("/").pop() ?? `File ${idx + 1}`;
+                          const kind = getFileKind(p);
+                          const url = previews[p];
                           return (
-                            <Button
-                              key={p}
-                              size="sm"
-                              variant="outline"
-                              className="justify-start"
-                              onClick={() => void downloadBoq(p)}
-                            >
-                              <Download className="h-4 w-4 mr-2 shrink-0" />
-                              <span className="truncate">{fileName}</span>
-                            </Button>
+                            <div key={p} className="rounded border border-border overflow-hidden bg-muted/30">
+                              <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border bg-card">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                                  <span className="truncate text-xs font-medium" title={fileName}>{fileName}</span>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-7"
+                                  onClick={() => void downloadBoq(p)}
+                                >
+                                  <Download className="h-3.5 w-3.5 mr-1" /> Download
+                                </Button>
+                              </div>
+                              {kind === "image" && (
+                                url ? (
+                                  <a href={url} target="_blank" rel="noopener noreferrer" className="block bg-background">
+                                    <img src={url} alt={fileName} className="max-h-[400px] w-full object-contain" />
+                                  </a>
+                                ) : (
+                                  <Skeleton className="h-48 w-full" />
+                                )
+                              )}
+                              {kind === "pdf" && (
+                                url ? (
+                                  <iframe
+                                    src={url}
+                                    title={fileName}
+                                    className="w-full h-[500px] bg-background"
+                                  />
+                                ) : (
+                                  <Skeleton className="h-72 w-full" />
+                                )
+                              )}
+                            </div>
                           );
                         })}
                       </div>
