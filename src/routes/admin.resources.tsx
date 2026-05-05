@@ -147,6 +147,7 @@ function ResourcesAdmin() {
         title: editing.title.trim(),
         slug: editing.slug?.trim() || slugify(editing.title),
         type: editing.type ?? "other",
+        description: editing.description?.trim() || null,
         file_path: filePath,
         external_url: editing.external_url?.trim() || null,
         is_public: editing.is_public ?? true,
