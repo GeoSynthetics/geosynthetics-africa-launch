@@ -177,6 +177,7 @@ function QuotesAdmin() {
               <TableHead>Message</TableHead>
               <TableHead>Attachments</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
