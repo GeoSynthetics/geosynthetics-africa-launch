@@ -22,7 +22,6 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as ResourcesCategoryRouteImport } from './routes/resources.$category'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
@@ -30,6 +29,7 @@ import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 
 const SignupRoute = SignupRouteImport.update({
@@ -97,11 +97,6 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-const ResourcesCategoryRoute = ResourcesCategoryRouteImport.update({
-  id: '/$category',
-  path: '/$category',
-  getParentRoute: () => ResourcesRoute,
-} as any)
 const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
   id: '/$category',
   path: '/$category',
@@ -137,10 +132,15 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
+  id: '/$category/',
+  path: '/$category/',
+  getParentRoute: () => ResourcesRoute,
+} as any)
 const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ResourcesCategoryRoute,
+  id: '/$category/$slug',
+  path: '/$category/$slug',
+  getParentRoute: () => ResourcesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -162,10 +162,10 @@ export interface FileRoutesByFullPath {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -185,10 +185,10 @@ export interface FileRoutesByTo {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/resources/$category': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -210,10 +210,10 @@ export interface FileRoutesById {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
-  '/resources/$category': typeof ResourcesCategoryRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -236,10 +236,10 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
-    | '/resources/$category'
     | '/admin/'
     | '/catalogue/'
     | '/resources/$category/$slug'
+    | '/resources/$category/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -259,10 +259,10 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
-    | '/resources/$category'
     | '/admin'
     | '/catalogue'
     | '/resources/$category/$slug'
+    | '/resources/$category'
   id:
     | '__root__'
     | '/'
@@ -283,10 +283,10 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
-    | '/resources/$category'
     | '/admin/'
     | '/catalogue/'
     | '/resources/$category/$slug'
+    | '/resources/$category/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -398,13 +398,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/resources/$category': {
-      id: '/resources/$category'
-      path: '/$category'
-      fullPath: '/resources/$category'
-      preLoaderRoute: typeof ResourcesCategoryRouteImport
-      parentRoute: typeof ResourcesRoute
-    }
     '/products/$category': {
       id: '/products/$category'
       path: '/$category'
@@ -454,12 +447,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/resources/$category/': {
+      id: '/resources/$category/'
+      path: '/$category'
+      fullPath: '/resources/$category/'
+      preLoaderRoute: typeof ResourcesCategoryIndexRouteImport
+      parentRoute: typeof ResourcesRoute
+    }
     '/resources/$category/$slug': {
       id: '/resources/$category/$slug'
-      path: '/$slug'
+      path: '/$category/$slug'
       fullPath: '/resources/$category/$slug'
       preLoaderRoute: typeof ResourcesCategorySlugRouteImport
-      parentRoute: typeof ResourcesCategoryRoute
+      parentRoute: typeof ResourcesRoute
     }
   }
 }
@@ -506,23 +506,14 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
   ProductsRouteChildren,
 )
 
-interface ResourcesCategoryRouteChildren {
-  ResourcesCategorySlugRoute: typeof ResourcesCategorySlugRoute
-}
-
-const ResourcesCategoryRouteChildren: ResourcesCategoryRouteChildren = {
-  ResourcesCategorySlugRoute: ResourcesCategorySlugRoute,
-}
-
-const ResourcesCategoryRouteWithChildren =
-  ResourcesCategoryRoute._addFileChildren(ResourcesCategoryRouteChildren)
-
 interface ResourcesRouteChildren {
-  ResourcesCategoryRoute: typeof ResourcesCategoryRouteWithChildren
+  ResourcesCategorySlugRoute: typeof ResourcesCategorySlugRoute
+  ResourcesCategoryIndexRoute: typeof ResourcesCategoryIndexRoute
 }
 
 const ResourcesRouteChildren: ResourcesRouteChildren = {
-  ResourcesCategoryRoute: ResourcesCategoryRouteWithChildren,
+  ResourcesCategorySlugRoute: ResourcesCategorySlugRoute,
+  ResourcesCategoryIndexRoute: ResourcesCategoryIndexRoute,
 }
 
 const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
@@ -547,3 +538,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

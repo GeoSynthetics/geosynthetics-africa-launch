@@ -9,7 +9,7 @@ import { Download, ExternalLink, Search, ArrowRight, PlayCircle } from "lucide-r
 import { toast } from "sonner";
 import { RESOURCE_CATEGORIES, VIDEO_HOST_RE, getCategory } from "@/lib/resource-categories";
 
-export const Route = createFileRoute("/resources/$category")({
+export const Route = createFileRoute("/resources/$category/")({
   beforeLoad: ({ params }) => {
     if (!getCategory(params.category)) throw notFound();
   },
