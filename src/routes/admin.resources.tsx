@@ -50,6 +50,7 @@ interface Resource {
   slug: string;
   title: string;
   type: ResourceType;
+  description: string | null;
   file_path: string | null;
   external_url: string | null;
   is_public: boolean;
@@ -57,7 +58,15 @@ interface Resource {
   created_at: string;
 }
 
-const TYPES: ResourceType[] = ["tds", "sds", "brochure", "case_study", "manual", "other"];
+const TYPE_LABELS: Record<ResourceType, string> = {
+  tds: "TDS — Datasheet",
+  sds: "SDS — Safety Datasheet",
+  manual: "Installation Guide / Manual",
+  case_study: "Case Study",
+  brochure: "Brochure",
+  other: "Video / Other (use External URL)",
+};
+const TYPES: ResourceType[] = ["tds", "sds", "manual", "case_study", "brochure", "other"];
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || `r-${Date.now()}`;
@@ -65,6 +74,7 @@ const slugify = (s: string) =>
 const empty: Partial<Resource> = {
   title: "",
   type: "tds",
+  description: "",
   file_path: null,
   external_url: null,
   is_public: true,
@@ -84,7 +94,7 @@ function ResourcesAdmin() {
     setLoading(true);
     const { data, error } = await supabase
       .from("resources")
-      .select("id, slug, title, type, file_path, external_url, is_public, status, created_at")
+      .select("id, slug, title, type, description, file_path, external_url, is_public, status, created_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) toast.error(error.message);
@@ -137,6 +147,7 @@ function ResourcesAdmin() {
         title: editing.title.trim(),
         slug: editing.slug?.trim() || slugify(editing.title),
         type: editing.type ?? "other",
+        description: editing.description?.trim() || null,
         file_path: filePath,
         external_url: editing.external_url?.trim() || null,
         is_public: editing.is_public ?? true,
@@ -221,14 +232,25 @@ function ResourcesAdmin() {
                     <SelectContent>
                       {TYPES.map((t) => (
                         <SelectItem key={t} value={t}>
-                          {t.toUpperCase()}
+                          {TYPE_LABELS[t]}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="r-file">File (PDF, etc.)</Label>
+                  <Label htmlFor="r-desc">Short description</Label>
+                  <textarea
+                    id="r-desc"
+                    rows={3}
+                    value={editing.description ?? ""}
+                    onChange={(e) => setEditing((s) => ({ ...s, description: e.target.value }))}
+                    className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="A brief summary shown on the category and detail pages."
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="r-file">File (PDF, DOC, etc.)</Label>
                   <Input
                     id="r-file"
                     type="file"
@@ -239,12 +261,15 @@ function ResourcesAdmin() {
                   {editing.file_path && !file && (
                     <p className="mt-1 text-xs text-muted-foreground">Current: {editing.file_path}</p>
                   )}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    For datasheets, guides, case studies and brochures upload a file. For videos, leave file empty and paste a YouTube/Vimeo URL below.
+                  </p>
                 </div>
                 <div>
-                  <Label htmlFor="r-url">External URL (optional)</Label>
+                  <Label htmlFor="r-url">External URL / Video link (optional)</Label>
                   <Input
                     id="r-url"
-                    placeholder="https://…"
+                    placeholder="https://youtube.com/watch?v=… or https://…"
                     value={editing.external_url ?? ""}
                     onChange={(e) => setEditing((s) => ({ ...s, external_url: e.target.value }))}
                     className="mt-1.5"
