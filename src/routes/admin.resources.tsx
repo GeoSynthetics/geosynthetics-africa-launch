@@ -43,27 +43,32 @@ export const Route = createFileRoute("/admin/resources")({
 });
 
 type ResourceType = "tds" | "sds" | "brochure" | "case_study" | "manual" | "other";
+type ResourceStatus = "draft" | "published" | "archived";
 
 interface Resource {
   id: string;
+  slug: string;
   title: string;
-  resource_type: ResourceType;
+  type: ResourceType;
   file_path: string | null;
   external_url: string | null;
-  is_gated: boolean;
-  is_published: boolean;
+  is_public: boolean;
+  status: ResourceStatus;
   created_at: string;
 }
 
 const TYPES: ResourceType[] = ["tds", "sds", "brochure", "case_study", "manual", "other"];
 
+const slugify = (s: string) =>
+  s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || `r-${Date.now()}`;
+
 const empty: Partial<Resource> = {
   title: "",
-  resource_type: "tds",
+  type: "tds",
   file_path: null,
   external_url: null,
-  is_gated: false,
-  is_published: true,
+  is_public: true,
+  status: "published",
 };
 
 function ResourcesAdmin() {
