@@ -1,8 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { FileText, BookOpen, Video, FileCheck, HelpCircle, Download } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/site/PageHero";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { HelpCircle } from "lucide-react";
+import { RESOURCE_CATEGORIES, VIDEO_HOST_RE } from "@/lib/resource-categories";
 
 export const Route = createFileRoute("/resources")({
   head: () => ({
@@ -15,15 +18,6 @@ export const Route = createFileRoute("/resources")({
   component: ResourcesPage,
 });
 
-const CATEGORIES = [
-  { icon: FileText, title: "Datasheets", desc: "Technical specifications for every product." },
-  { icon: BookOpen, title: "Installation Guides", desc: "Step-by-step installation procedures." },
-  { icon: FileCheck, title: "Case Studies", desc: "Project success stories from across Africa." },
-  { icon: Download, title: "Brochures", desc: "Service overviews and capability statements." },
-  { icon: Video, title: "Videos", desc: "Installation methods and on-site footage." },
-  { icon: HelpCircle, title: "FAQ", desc: "Common questions, answered by our experts." },
-];
-
 const FAQ = [
   { q: "How long do HDPE geomembranes last?", a: "Properly installed HDPE liners deliver 50+ year service life under typical containment conditions." },
   { q: "Do you supply outside South Africa?", a: "Yes — Pan-African logistics with regional offices in Ghana, Tanzania and Zimbabwe." },
@@ -32,6 +26,30 @@ const FAQ = [
 ];
 
 function ResourcesPage() {
+  const [counts, setCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    void (async () => {
+      const { data } = await supabase
+        .from("resources")
+        .select("type, external_url, status, is_public")
+        .eq("status", "published")
+        .limit(1000);
+      const next: Record<string, number> = {};
+      for (const cat of RESOURCE_CATEGORIES) next[cat.slug] = 0;
+      for (const r of (data ?? []) as Array<{ type: string; external_url: string | null }>) {
+        for (const cat of RESOURCE_CATEGORIES) {
+          if (cat.videoOnly) {
+            if (r.external_url && VIDEO_HOST_RE.test(r.external_url)) next[cat.slug]++;
+          } else if (cat.types.includes(r.type)) {
+            next[cat.slug]++;
+          }
+        }
+      }
+      setCounts(next);
+    })();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -41,13 +59,28 @@ function ResourcesPage() {
       />
       <section className="bg-background">
         <div className="container-page py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {CATEGORIES.map((c) => (
-            <div key={c.title} className="rounded border border-border bg-card p-6 hover:border-primary transition">
-              <c.icon className="h-7 w-7 text-primary" />
-              <h3 className="mt-4 font-display text-lg font-bold uppercase">{c.title}</h3>
+          {RESOURCE_CATEGORIES.map((c) => (
+            <Link
+              key={c.slug}
+              to="/resources/$category"
+              params={{ category: c.slug }}
+              className="group rounded border border-border bg-card p-6 hover:border-primary transition flex flex-col"
+            >
+              <div className="flex items-start justify-between">
+                <c.icon className="h-7 w-7 text-primary" />
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground bg-muted px-2 py-1 rounded">
+                  {counts[c.slug] ?? 0} {counts[c.slug] === 1 ? "item" : "items"}
+                </span>
+              </div>
+              <h3 className="mt-4 font-display text-lg font-bold uppercase group-hover:text-primary transition">{c.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-            </div>
+            </Link>
           ))}
+          <div className="rounded border border-border bg-card p-6">
+            <HelpCircle className="h-7 w-7 text-primary" />
+            <h3 className="mt-4 font-display text-lg font-bold uppercase">FAQ</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Common questions, answered by our experts.</p>
+          </div>
         </div>
       </section>
       <section className="bg-surface">
