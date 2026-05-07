@@ -70,6 +70,9 @@ interface Product {
   height_cm: number | null;
   image_url: string | null;
   images: string[] | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  seo_keywords: string | null;
 }
 
 const empty: Partial<Product> = {
