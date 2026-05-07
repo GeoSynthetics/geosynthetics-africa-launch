@@ -292,6 +292,9 @@ function ProductsAdmin() {
       height_cm: toNum(editing.height_cm),
       image_url: editing.image_url?.trim() || (editing.images?.[0] ?? null),
       images: editing.images ?? [],
+      meta_title: editing.meta_title?.trim() || null,
+      meta_description: editing.meta_description?.trim() || null,
+      seo_keywords: editing.seo_keywords?.trim() || null,
     };
     setSaving(true);
     const res = editing.id
