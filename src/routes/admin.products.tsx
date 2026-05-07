@@ -546,6 +546,49 @@ function ProductsAdmin() {
                 </div>
 
 
+                <div className="border-t border-border pt-4">
+                  <h4 className="text-sm font-bold uppercase tracking-wide mb-1 text-muted-foreground">SEO</h4>
+                  <p className="text-xs text-muted-foreground mb-3">Optimised for search — separate from the technical product title.</p>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="p-meta-title">Meta title</Label>
+                      <Input
+                        id="p-meta-title"
+                        value={editing.meta_title ?? ""}
+                        maxLength={70}
+                        placeholder="e.g. Biaxial Reinforcement Geogrids for Roads | Tensar NX Series"
+                        onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_title ?? "").length}/70 — recommended ≤ 60</div>
+                    </div>
+                    <div>
+                      <Label htmlFor="p-seo-kw">SEO keywords / phrase</Label>
+                      <Input
+                        id="p-seo-kw"
+                        value={editing.seo_keywords ?? ""}
+                        placeholder="e.g. Tensar Geogrids Africa, biaxial geogrid, road stabilization"
+                        onChange={(e) => setEditing((s) => ({ ...s, seo_keywords: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">Comma-separated phrases.</div>
+                    </div>
+                    <div>
+                      <Label htmlFor="p-meta-desc">Meta description</Label>
+                      <Textarea
+                        id="p-meta-desc"
+                        rows={3}
+                        maxLength={200}
+                        value={editing.meta_description ?? ""}
+                        placeholder="Short, compelling summary shown in search results."
+                        onChange={(e) => setEditing((s) => ({ ...s, meta_description: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_description ?? "").length}/200 — recommended ≤ 160</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-3 border-t border-border pt-4">
                   <Switch
                     id="p-active"
