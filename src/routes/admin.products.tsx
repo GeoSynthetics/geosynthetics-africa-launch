@@ -70,6 +70,9 @@ interface Product {
   height_cm: number | null;
   image_url: string | null;
   images: string[] | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  seo_keywords: string | null;
 }
 
 const empty: Partial<Product> = {
@@ -89,6 +92,9 @@ const empty: Partial<Product> = {
   height_cm: null,
   image_url: "",
   images: [],
+  meta_title: "",
+  meta_description: "",
+  seo_keywords: "",
 };
 
 function slugify(s: string) {
@@ -222,7 +228,7 @@ function ProductsAdmin() {
     const [products, manufacturers, categories] = await Promise.all([
       supabase
         .from("products")
-        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images")
+        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords")
         .order("created_at", { ascending: false })
         .limit(500),
       supabase.from("manufacturers").select("id, name").order("name"),
@@ -286,6 +292,9 @@ function ProductsAdmin() {
       height_cm: toNum(editing.height_cm),
       image_url: editing.image_url?.trim() || (editing.images?.[0] ?? null),
       images: editing.images ?? [],
+      meta_title: editing.meta_title?.trim() || null,
+      meta_description: editing.meta_description?.trim() || null,
+      seo_keywords: editing.seo_keywords?.trim() || null,
     };
     setSaving(true);
     const res = editing.id
@@ -536,6 +545,49 @@ function ProductsAdmin() {
                   </div>
                 </div>
 
+
+                <div className="border-t border-border pt-4">
+                  <h4 className="text-sm font-bold uppercase tracking-wide mb-1 text-muted-foreground">SEO</h4>
+                  <p className="text-xs text-muted-foreground mb-3">Optimised for search — separate from the technical product title.</p>
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="p-meta-title">Meta title</Label>
+                      <Input
+                        id="p-meta-title"
+                        value={editing.meta_title ?? ""}
+                        maxLength={70}
+                        placeholder="e.g. Biaxial Reinforcement Geogrids for Roads | Tensar NX Series"
+                        onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_title ?? "").length}/70 — recommended ≤ 60</div>
+                    </div>
+                    <div>
+                      <Label htmlFor="p-seo-kw">SEO keywords / phrase</Label>
+                      <Input
+                        id="p-seo-kw"
+                        value={editing.seo_keywords ?? ""}
+                        placeholder="e.g. Tensar Geogrids Africa, biaxial geogrid, road stabilization"
+                        onChange={(e) => setEditing((s) => ({ ...s, seo_keywords: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">Comma-separated phrases.</div>
+                    </div>
+                    <div>
+                      <Label htmlFor="p-meta-desc">Meta description</Label>
+                      <Textarea
+                        id="p-meta-desc"
+                        rows={3}
+                        maxLength={200}
+                        value={editing.meta_description ?? ""}
+                        placeholder="Short, compelling summary shown in search results."
+                        onChange={(e) => setEditing((s) => ({ ...s, meta_description: e.target.value }))}
+                        className="mt-1.5"
+                      />
+                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_description ?? "").length}/200 — recommended ≤ 160</div>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="flex items-center gap-3 border-t border-border pt-4">
                   <Switch
