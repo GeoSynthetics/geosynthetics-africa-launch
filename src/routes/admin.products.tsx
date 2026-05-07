@@ -92,6 +92,9 @@ const empty: Partial<Product> = {
   height_cm: null,
   image_url: "",
   images: [],
+  meta_title: "",
+  meta_description: "",
+  seo_keywords: "",
 };
 
 function slugify(s: string) {
