@@ -169,10 +169,13 @@ function CataloguePage() {
       const from = pageIdx * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
+      // Use the products_public view: price/sale_price are NULL for anon
+      // users at the database layer, so prices never reach the browser,
+      // Google, or scrapers when no one is logged in.
       let query = supabase
-        .from("products")
+        .from("products_public")
         .select(
-          "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories(id, name, slug), manufacturers(id, name)",
+          "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories:product_categories!inner(id, name, slug), manufacturers:manufacturers(id, name)",
           { count: "exact" },
         )
         .eq("is_active", true);
