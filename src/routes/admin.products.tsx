@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Pencil, Trash2, Search, Upload, Copy, X, Star, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 
 export const Route = createFileRoute("/admin/products")({
   head: () => ({
@@ -560,7 +561,11 @@ function ProductsAdmin() {
                         onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
                         className="mt-1.5"
                       />
-                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_title ?? "").length}/70 — recommended ≤ 60</div>
+                      <div className="flex items-center justify-between text-[11px] mt-1">
+                        <span className={(editing.meta_title ?? "").length > 60 ? "text-amber-600" : "text-muted-foreground"}>
+                          {(editing.meta_title ?? "").length}/70 — recommended ≤ 60
+                        </span>
+                      </div>
                     </div>
                     <div>
                       <Label htmlFor="p-seo-kw">SEO keywords / phrase</Label>
@@ -584,8 +589,26 @@ function ProductsAdmin() {
                         onChange={(e) => setEditing((s) => ({ ...s, meta_description: e.target.value }))}
                         className="mt-1.5"
                       />
-                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_description ?? "").length}/200 — recommended ≤ 160</div>
+                      <div className="flex items-center justify-between text-[11px] mt-1">
+                        <span className={(editing.meta_description ?? "").length > 160 ? "text-amber-600" : "text-muted-foreground"}>
+                          {(editing.meta_description ?? "").length}/200 — recommended ≤ 160
+                        </span>
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <SeoAnalyzer
+                      input={{
+                        name: editing.name,
+                        slug: editing.slug,
+                        metaTitle: editing.meta_title,
+                        metaDescription: editing.meta_description,
+                        keywords: editing.seo_keywords,
+                        shortDescription: editing.short_description,
+                        imageUrl: editing.image_url || editing.images?.[0],
+                      }}
+                    />
                   </div>
                 </div>
 
