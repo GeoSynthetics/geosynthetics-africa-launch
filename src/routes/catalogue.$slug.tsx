@@ -80,7 +80,7 @@ interface RelatedProduct {
 }
 
 const PRODUCT_SELECT =
-  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, product_categories(id, name, slug), manufacturers(id, name)";
+  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, product_categories(id, name, slug), manufacturers(id, name)";
 
 async function loadProduct(slug: string) {
   // Try the rich select first; if columns don't exist yet, fall back to a minimal select.
