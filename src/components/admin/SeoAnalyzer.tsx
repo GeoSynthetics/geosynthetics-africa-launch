@@ -261,12 +261,12 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
         <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-2 flex items-center gap-1.5">
           <Globe className="h-3.5 w-3.5" /> Google search preview
         </div>
-        <div className="rounded border border-border bg-background p-3">
-          <div className="text-xs text-muted-foreground truncate">{url}</div>
-          <div className="text-[18px] leading-snug text-blue-700 dark:text-blue-400 font-medium truncate mt-0.5">
+        <div className="rounded border border-border bg-background p-3 min-w-0">
+          <div className="text-xs text-muted-foreground break-all">{url}</div>
+          <div className="text-[18px] leading-snug text-blue-700 dark:text-blue-400 font-medium break-words mt-0.5">
             {previewTitle}
           </div>
-          <div className="text-sm text-muted-foreground mt-1 line-clamp-2">{previewDesc}</div>
+          <div className="text-sm text-muted-foreground mt-1 break-words">{previewDesc}</div>
         </div>
       </div>
 
