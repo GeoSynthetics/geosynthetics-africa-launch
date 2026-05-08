@@ -372,7 +372,9 @@ function CataloguePage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {SORT_OPTIONS.map((o) => (
+                    {SORT_OPTIONS.filter(
+                      (o) => isAuthenticated || (o.value !== "price_asc" && o.value !== "price_desc"),
+                    ).map((o) => (
                       <SelectItem key={o.value} value={o.value}>
                         {o.label}
                       </SelectItem>
