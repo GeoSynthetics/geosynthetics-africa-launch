@@ -589,8 +589,26 @@ function ProductsAdmin() {
                         onChange={(e) => setEditing((s) => ({ ...s, meta_description: e.target.value }))}
                         className="mt-1.5"
                       />
-                      <div className="text-[11px] text-muted-foreground mt-1">{(editing.meta_description ?? "").length}/200 — recommended ≤ 160</div>
+                      <div className="flex items-center justify-between text-[11px] mt-1">
+                        <span className={(editing.meta_description ?? "").length > 160 ? "text-amber-600" : "text-muted-foreground"}>
+                          {(editing.meta_description ?? "").length}/200 — recommended ≤ 160
+                        </span>
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <SeoAnalyzer
+                      input={{
+                        name: editing.name,
+                        slug: editing.slug,
+                        metaTitle: editing.meta_title,
+                        metaDescription: editing.meta_description,
+                        keywords: editing.seo_keywords,
+                        shortDescription: editing.short_description,
+                        imageUrl: editing.image_url || editing.images?.[0],
+                      }}
+                    />
                   </div>
                 </div>
 
