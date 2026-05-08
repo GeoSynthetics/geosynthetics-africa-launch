@@ -398,7 +398,7 @@ function ProductsAdmin() {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <Label>Manufacturer</Label>
                     <Select
                       value={editing.manufacturer_id ?? "none"}
@@ -406,7 +406,7 @@ function ProductsAdmin() {
                         setEditing((s) => ({ ...s, manufacturer_id: v === "none" ? null : v }))
                       }
                     >
-                      <SelectTrigger className="mt-1.5">
+                      <SelectTrigger className="mt-1.5 w-full">
                         <SelectValue placeholder="Select…" />
                       </SelectTrigger>
                       <SelectContent>
@@ -419,7 +419,7 @@ function ProductsAdmin() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>Category</Label>
                     <Select
                       value={editing.category_id ?? "none"}
@@ -427,7 +427,7 @@ function ProductsAdmin() {
                         setEditing((s) => ({ ...s, category_id: v === "none" ? null : v }))
                       }
                     >
-                      <SelectTrigger className="mt-1.5">
+                      <SelectTrigger className="mt-1.5 w-full">
                         <SelectValue placeholder="Select…" />
                       </SelectTrigger>
                       <SelectContent>
