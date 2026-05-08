@@ -533,20 +533,26 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
           <p className="text-xs text-muted-foreground line-clamp-2">{p.short_description}</p>
         )}
         {p.sku && <div className="text-[10px] text-muted-foreground mt-auto">SKU: {p.sku}</div>}
-        {(p.price !== null || p.sale_price !== null) && (
-          <div className="flex items-baseline gap-2 mt-1">
-            {onSale ? (
-              <>
-                <span className="font-bold text-primary">{formatZAR(p.sale_price!)}</span>
-                <span className="text-xs text-muted-foreground line-through">
-                  {formatZAR(p.price!)}
-                </span>
-              </>
-            ) : (
-              p.price !== null && (
-                <span className="font-bold text-foreground">{formatZAR(p.price)}</span>
-              )
-            )}
+        {isAuthenticated ? (
+          (p.price !== null || p.sale_price !== null) && (
+            <div className="flex items-baseline gap-2 mt-1">
+              {onSale ? (
+                <>
+                  <span className="font-bold text-primary">{formatZAR(p.sale_price!)}</span>
+                  <span className="text-xs text-muted-foreground line-through">
+                    {formatZAR(p.price!)}
+                  </span>
+                </>
+              ) : (
+                p.price !== null && (
+                  <span className="font-bold text-foreground">{formatZAR(p.price)}</span>
+                )
+              )}
+            </div>
+          )
+        ) : (
+          <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+            <Link to="/login" className="text-primary font-bold hover:underline">Sign in</Link> to view pricing
           </div>
         )}
       </div>
