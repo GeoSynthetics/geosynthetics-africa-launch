@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 
 const SORT_OPTIONS = [
@@ -95,6 +96,7 @@ function formatZAR(n: number) {
 function CataloguePage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const { isAuthenticated } = useAuth();
 
   const selectedCats = search.cats;
   const selectedMans = search.mans;
@@ -169,8 +171,11 @@ function CataloguePage() {
       const from = pageIdx * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
+      // Use the products_public view: price/sale_price are NULL for anon
+      // users at the database layer, so prices never reach the browser,
+      // Google, or scrapers when no one is logged in.
       let query = supabase
-        .from("products")
+        .from("products_public")
         .select(
           "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories(id, name, slug), manufacturers(id, name)",
           { count: "exact" },
@@ -367,7 +372,9 @@ function CataloguePage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {SORT_OPTIONS.map((o) => (
+                    {SORT_OPTIONS.filter(
+                      (o) => isAuthenticated || (o.value !== "price_asc" && o.value !== "price_desc"),
+                    ).map((o) => (
                       <SelectItem key={o.value} value={o.value}>
                         {o.label}
                       </SelectItem>
@@ -400,7 +407,7 @@ function CataloguePage() {
               <>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.map((p) => (
-                    <ProductCard key={p.id} p={p} />
+                    <ProductCard key={p.id} p={p} isAuthenticated={isAuthenticated} />
                   ))}
                 </div>
 
@@ -475,7 +482,7 @@ function FilterGroup({
   );
 }
 
-function ProductCard({ p }: { p: CatalogueProduct }) {
+function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthenticated: boolean }) {
   const img = p.image_url || p.images?.[0] || null;
   const onSale = p.sale_price !== null && p.price !== null && p.sale_price < p.price;
   const inStock = (p.stock_quantity ?? 0) > 0;
@@ -526,20 +533,26 @@ function ProductCard({ p }: { p: CatalogueProduct }) {
           <p className="text-xs text-muted-foreground line-clamp-2">{p.short_description}</p>
         )}
         {p.sku && <div className="text-[10px] text-muted-foreground mt-auto">SKU: {p.sku}</div>}
-        {(p.price !== null || p.sale_price !== null) && (
-          <div className="flex items-baseline gap-2 mt-1">
-            {onSale ? (
-              <>
-                <span className="font-bold text-primary">{formatZAR(p.sale_price!)}</span>
-                <span className="text-xs text-muted-foreground line-through">
-                  {formatZAR(p.price!)}
-                </span>
-              </>
-            ) : (
-              p.price !== null && (
-                <span className="font-bold text-foreground">{formatZAR(p.price)}</span>
-              )
-            )}
+        {isAuthenticated ? (
+          (p.price !== null || p.sale_price !== null) && (
+            <div className="flex items-baseline gap-2 mt-1">
+              {onSale ? (
+                <>
+                  <span className="font-bold text-primary">{formatZAR(p.sale_price!)}</span>
+                  <span className="text-xs text-muted-foreground line-through">
+                    {formatZAR(p.price!)}
+                  </span>
+                </>
+              ) : (
+                p.price !== null && (
+                  <span className="font-bold text-foreground">{formatZAR(p.price)}</span>
+                )
+              )}
+            </div>
+          )
+        ) : (
+          <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+            <Link to="/login" className="text-primary font-bold hover:underline">Sign in</Link> to view pricing
           </div>
         )}
       </div>
