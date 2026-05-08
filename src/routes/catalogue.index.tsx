@@ -96,6 +96,7 @@ function formatZAR(n: number) {
 function CataloguePage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const { isAuthenticated } = useAuth();
 
   const selectedCats = search.cats;
   const selectedMans = search.mans;
