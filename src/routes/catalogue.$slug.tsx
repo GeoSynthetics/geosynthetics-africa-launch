@@ -128,15 +128,21 @@ export const Route = createFileRoute("/catalogue/$slug")({
   loader: ({ params }) => loadProduct(params.slug),
   head: ({ loaderData }) => {
     const p = loaderData?.product;
-    const title = p ? `${p.name} — Geosynthetics Africa` : "Product — Geosynthetics Africa";
-    const desc = p?.short_description ?? "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
+    const title = p ? (p.meta_title?.trim() || `${p.name} — Geosynthetics Africa`) : "Product — Geosynthetics Africa";
+    const desc = p?.meta_description?.trim() || p?.short_description || "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
+    const keywords = p?.seo_keywords?.trim();
     const img = p?.image_url || p?.images?.[0] || undefined;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
         ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
       ],
     };
