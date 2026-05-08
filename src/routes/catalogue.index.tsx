@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 
 const SORT_OPTIONS = [
