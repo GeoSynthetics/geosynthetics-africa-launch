@@ -109,7 +109,7 @@ async function loadProduct(slug: string) {
 
   const product = data as unknown as ProductRow;
   const related = await supabase
-    .from("products")
+    .from("products_public")
     .select("id, name, slug, image_url, images, product_categories(name)")
     .eq("is_active", true)
     .neq("id", product.id)
