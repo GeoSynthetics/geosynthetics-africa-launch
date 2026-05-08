@@ -407,7 +407,7 @@ function CataloguePage() {
               <>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.map((p) => (
-                    <ProductCard key={p.id} p={p} />
+                    <ProductCard key={p.id} p={p} isAuthenticated={isAuthenticated} />
                   ))}
                 </div>
 
