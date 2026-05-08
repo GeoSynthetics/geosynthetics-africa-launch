@@ -59,6 +59,9 @@ interface ProductRow {
   standard: string | null;
   roll_width: string | null;
   roll_length: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  seo_keywords: string | null;
   product_categories: { id: string; name: string; slug: string | null } | null;
   manufacturers: { id: string; name: string } | null;
 }
