@@ -352,15 +352,18 @@ function ProductsAdmin() {
                 <Plus className="h-4 w-4" /> New product
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto overflow-x-hidden">
               <DialogHeader>
                 <DialogTitle>{editing.id ? "Edit product" : "New product"}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="p-name">Name</Label>
-                  <Input
+                  <Textarea
                     id="p-name"
+                    rows={2}
+                    cols={70}
+                    wrap="soft"
                     value={editing.name ?? ""}
                     onChange={(e) =>
                       setEditing((s) => ({
@@ -369,31 +372,33 @@ function ProductsAdmin() {
                         slug: s.id ? s.slug : slugify(e.target.value),
                       }))
                     }
-                    className="mt-1.5"
+                    className="mt-1.5 w-full break-all"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <Label htmlFor="p-slug">Slug</Label>
-                    <Input
+                    <Textarea
                       id="p-slug"
+                      rows={2}
+                      wrap="soft"
                       value={editing.slug ?? ""}
                       onChange={(e) => setEditing((s) => ({ ...s, slug: e.target.value }))}
-                      className="mt-1.5"
+                      className="mt-1.5 w-full break-all"
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label htmlFor="p-sku">SKU</Label>
                     <Input
                       id="p-sku"
                       value={editing.sku ?? ""}
                       onChange={(e) => setEditing((s) => ({ ...s, sku: e.target.value }))}
-                      className="mt-1.5"
+                      className="mt-1.5 w-full"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <Label>Manufacturer</Label>
                     <Select
                       value={editing.manufacturer_id ?? "none"}
@@ -401,7 +406,7 @@ function ProductsAdmin() {
                         setEditing((s) => ({ ...s, manufacturer_id: v === "none" ? null : v }))
                       }
                     >
-                      <SelectTrigger className="mt-1.5">
+                      <SelectTrigger className="mt-1.5 w-full">
                         <SelectValue placeholder="Select…" />
                       </SelectTrigger>
                       <SelectContent>
@@ -414,7 +419,7 @@ function ProductsAdmin() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label>Category</Label>
                     <Select
                       value={editing.category_id ?? "none"}
@@ -422,7 +427,7 @@ function ProductsAdmin() {
                         setEditing((s) => ({ ...s, category_id: v === "none" ? null : v }))
                       }
                     >
-                      <SelectTrigger className="mt-1.5">
+                      <SelectTrigger className="mt-1.5 w-full">
                         <SelectValue placeholder="Select…" />
                       </SelectTrigger>
                       <SelectContent>
@@ -452,15 +457,15 @@ function ProductsAdmin() {
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-3 text-muted-foreground">Pricing & Stock</h4>
                   <div className="grid grid-cols-3 gap-4">
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-price">Price (ZAR)</Label>
                       <Input id="p-price" type="number" step="0.01" min="0" value={editing.price ?? ""} onChange={(e) => setEditing((s) => ({ ...s, price: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-sale">Sale price</Label>
                       <Input id="p-sale" type="number" step="0.01" min="0" value={editing.sale_price ?? ""} onChange={(e) => setEditing((s) => ({ ...s, sale_price: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-stock">Stock qty</Label>
                       <Input id="p-stock" type="number" step="1" min="0" value={editing.stock_quantity ?? ""} onChange={(e) => setEditing((s) => ({ ...s, stock_quantity: e.target.value === "" ? null : parseInt(e.target.value) }))} className="mt-1.5" />
                     </div>
@@ -470,19 +475,19 @@ function ProductsAdmin() {
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-3 text-muted-foreground">Logistics</h4>
                   <div className="grid grid-cols-4 gap-4">
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-weight">Weight (kg)</Label>
                       <Input id="p-weight" type="number" step="0.01" min="0" value={editing.weight_kg ?? ""} onChange={(e) => setEditing((s) => ({ ...s, weight_kg: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-len">Length (cm)</Label>
                       <Input id="p-len" type="number" step="0.01" min="0" value={editing.length_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, length_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-wid">Width (cm)</Label>
                       <Input id="p-wid" type="number" step="0.01" min="0" value={editing.width_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, width_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-hei">Height (cm)</Label>
                       <Input id="p-hei" type="number" step="0.01" min="0" value={editing.height_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, height_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
@@ -553,13 +558,15 @@ function ProductsAdmin() {
                   <div className="space-y-3">
                     <div>
                       <Label htmlFor="p-meta-title">Meta title</Label>
-                      <Input
+                      <Textarea
                         id="p-meta-title"
+                        rows={2}
+                        wrap="soft"
                         value={editing.meta_title ?? ""}
                         maxLength={70}
                         placeholder="e.g. Biaxial Reinforcement Geogrids for Roads | Tensar NX Series"
                         onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
-                        className="mt-1.5"
+                        className="mt-1.5 w-full break-words"
                       />
                       <div className="flex items-center justify-between text-[11px] mt-1">
                         <span className={(editing.meta_title ?? "").length > 60 ? "text-amber-600" : "text-muted-foreground"}>
@@ -569,12 +576,14 @@ function ProductsAdmin() {
                     </div>
                     <div>
                       <Label htmlFor="p-seo-kw">SEO keywords / phrase</Label>
-                      <Input
+                      <Textarea
                         id="p-seo-kw"
+                        rows={2}
+                        wrap="soft"
                         value={editing.seo_keywords ?? ""}
                         placeholder="e.g. Tensar Geogrids Africa, biaxial geogrid, road stabilization"
                         onChange={(e) => setEditing((s) => ({ ...s, seo_keywords: e.target.value }))}
-                        className="mt-1.5"
+                        className="mt-1.5 w-full break-words"
                       />
                       <div className="text-[11px] text-muted-foreground mt-1">Comma-separated phrases.</div>
                     </div>
