@@ -482,7 +482,7 @@ function FilterGroup({
   );
 }
 
-function ProductCard({ p }: { p: CatalogueProduct }) {
+function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthenticated: boolean }) {
   const img = p.image_url || p.images?.[0] || null;
   const onSale = p.sale_price !== null && p.price !== null && p.sale_price < p.price;
   const inStock = (p.stock_quantity ?? 0) > 0;
