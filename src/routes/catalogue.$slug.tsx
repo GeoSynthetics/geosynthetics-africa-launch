@@ -59,6 +59,9 @@ interface ProductRow {
   standard: string | null;
   roll_width: string | null;
   roll_length: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  seo_keywords: string | null;
   product_categories: { id: string; name: string; slug: string | null } | null;
   manufacturers: { id: string; name: string } | null;
 }
@@ -77,7 +80,7 @@ interface RelatedProduct {
 }
 
 const PRODUCT_SELECT =
-  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, product_categories(id, name, slug), manufacturers(id, name)";
+  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, product_categories(id, name, slug), manufacturers(id, name)";
 
 async function loadProduct(slug: string) {
   // Try the rich select first; if columns don't exist yet, fall back to a minimal select.
@@ -125,15 +128,21 @@ export const Route = createFileRoute("/catalogue/$slug")({
   loader: ({ params }) => loadProduct(params.slug),
   head: ({ loaderData }) => {
     const p = loaderData?.product;
-    const title = p ? `${p.name} — Geosynthetics Africa` : "Product — Geosynthetics Africa";
-    const desc = p?.short_description ?? "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
+    const title = p ? (p.meta_title?.trim() || `${p.name} — Geosynthetics Africa`) : "Product — Geosynthetics Africa";
+    const desc = p?.meta_description?.trim() || p?.short_description || "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
+    const keywords = p?.seo_keywords?.trim();
     const img = p?.image_url || p?.images?.[0] || undefined;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
         ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
       ],
     };
