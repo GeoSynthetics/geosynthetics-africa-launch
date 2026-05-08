@@ -359,8 +359,11 @@ function ProductsAdmin() {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="p-name">Name</Label>
-                  <Input
+                  <Textarea
                     id="p-name"
+                    rows={2}
+                    cols={70}
+                    wrap="soft"
                     value={editing.name ?? ""}
                     onChange={(e) =>
                       setEditing((s) => ({
@@ -369,26 +372,28 @@ function ProductsAdmin() {
                         slug: s.id ? s.slug : slugify(e.target.value),
                       }))
                     }
-                    className="mt-1.5"
+                    className="mt-1.5 w-full break-all"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <Label htmlFor="p-slug">Slug</Label>
-                    <Input
+                    <Textarea
                       id="p-slug"
+                      rows={2}
+                      wrap="soft"
                       value={editing.slug ?? ""}
                       onChange={(e) => setEditing((s) => ({ ...s, slug: e.target.value }))}
-                      className="mt-1.5"
+                      className="mt-1.5 w-full break-all"
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Label htmlFor="p-sku">SKU</Label>
                     <Input
                       id="p-sku"
                       value={editing.sku ?? ""}
                       onChange={(e) => setEditing((s) => ({ ...s, sku: e.target.value }))}
-                      className="mt-1.5"
+                      className="mt-1.5 w-full"
                     />
                   </div>
                 </div>
