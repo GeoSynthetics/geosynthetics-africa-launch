@@ -558,13 +558,15 @@ function ProductsAdmin() {
                   <div className="space-y-3">
                     <div>
                       <Label htmlFor="p-meta-title">Meta title</Label>
-                      <Input
+                      <Textarea
                         id="p-meta-title"
+                        rows={2}
+                        wrap="soft"
                         value={editing.meta_title ?? ""}
                         maxLength={70}
                         placeholder="e.g. Biaxial Reinforcement Geogrids for Roads | Tensar NX Series"
                         onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
-                        className="mt-1.5"
+                        className="mt-1.5 w-full break-words"
                       />
                       <div className="flex items-center justify-between text-[11px] mt-1">
                         <span className={(editing.meta_title ?? "").length > 60 ? "text-amber-600" : "text-muted-foreground"}>
@@ -574,12 +576,14 @@ function ProductsAdmin() {
                     </div>
                     <div>
                       <Label htmlFor="p-seo-kw">SEO keywords / phrase</Label>
-                      <Input
+                      <Textarea
                         id="p-seo-kw"
+                        rows={2}
+                        wrap="soft"
                         value={editing.seo_keywords ?? ""}
                         placeholder="e.g. Tensar Geogrids Africa, biaxial geogrid, road stabilization"
                         onChange={(e) => setEditing((s) => ({ ...s, seo_keywords: e.target.value }))}
-                        className="mt-1.5"
+                        className="mt-1.5 w-full break-words"
                       />
                       <div className="text-[11px] text-muted-foreground mt-1">Comma-separated phrases.</div>
                     </div>
