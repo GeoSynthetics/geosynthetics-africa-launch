@@ -457,15 +457,15 @@ function ProductsAdmin() {
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-3 text-muted-foreground">Pricing & Stock</h4>
                   <div className="grid grid-cols-3 gap-4">
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-price">Price (ZAR)</Label>
                       <Input id="p-price" type="number" step="0.01" min="0" value={editing.price ?? ""} onChange={(e) => setEditing((s) => ({ ...s, price: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-sale">Sale price</Label>
                       <Input id="p-sale" type="number" step="0.01" min="0" value={editing.sale_price ?? ""} onChange={(e) => setEditing((s) => ({ ...s, sale_price: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-stock">Stock qty</Label>
                       <Input id="p-stock" type="number" step="1" min="0" value={editing.stock_quantity ?? ""} onChange={(e) => setEditing((s) => ({ ...s, stock_quantity: e.target.value === "" ? null : parseInt(e.target.value) }))} className="mt-1.5" />
                     </div>
@@ -475,19 +475,19 @@ function ProductsAdmin() {
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-3 text-muted-foreground">Logistics</h4>
                   <div className="grid grid-cols-4 gap-4">
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-weight">Weight (kg)</Label>
                       <Input id="p-weight" type="number" step="0.01" min="0" value={editing.weight_kg ?? ""} onChange={(e) => setEditing((s) => ({ ...s, weight_kg: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-len">Length (cm)</Label>
                       <Input id="p-len" type="number" step="0.01" min="0" value={editing.length_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, length_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-wid">Width (cm)</Label>
                       <Input id="p-wid" type="number" step="0.01" min="0" value={editing.width_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, width_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <Label htmlFor="p-hei">Height (cm)</Label>
                       <Input id="p-hei" type="number" step="0.01" min="0" value={editing.height_cm ?? ""} onChange={(e) => setEditing((s) => ({ ...s, height_cm: e.target.value === "" ? null : parseFloat(e.target.value) }))} className="mt-1.5" />
                     </div>
