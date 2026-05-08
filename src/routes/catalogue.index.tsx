@@ -175,7 +175,7 @@ function CataloguePage() {
       let query = supabase
         .from("products_public")
         .select(
-          "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories:product_categories!inner(id, name, slug), manufacturers:manufacturers(id, name)",
+          "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories(id, name, slug), manufacturers(id, name)",
           { count: "exact" },
         )
         .eq("is_active", true);
