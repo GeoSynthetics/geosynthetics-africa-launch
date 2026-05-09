@@ -4,7 +4,7 @@ export function PageHero({
   eyebrow,
   title,
   description,
-  image = "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
+  image = "https://images.unsplash.com/photo-1563391017873-6e6beab67fed?w=1920&q=80",
   children,
 }: {
   eyebrow?: string;

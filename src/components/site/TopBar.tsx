@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const items = [
-  { icon: Award, label: "IAGI Member", sub: "One of only 5 in Africa" },
-  { icon: ShieldCheck, label: "B-BBEE Level 2", sub: "Proudly South African" },
-  { icon: ShieldCheck, label: "QA/QC Certified", sub: "Tested. Assured. Certified." },
-  { icon: Truck, label: "Pan-African Logistics", sub: "Supply to all African countries" },
+  { icon: Award, label: "IAGI Member - One of only 5 in Africa" },
+  { icon: ShieldCheck, label: "B-BBEE Level 2" },
+  { icon: ShieldCheck, label: "QA/QC Certified" },
+  { icon: Truck, label: "Pan-African Logistics" },
 ];
 
 function PartnerPortalLink() {
