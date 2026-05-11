@@ -1,4 +1,4 @@
-import { PARTNERS } from "./mega-menu-data";
+import { PARTNER_LOGOS } from "./mega-menu-data";
 
 export function PartnerStrip({ variant = "light" }: { variant?: "light" | "dark" }) {
   const dark = variant === "dark";
@@ -15,14 +15,16 @@ export function PartnerStrip({ variant = "light" }: { variant?: "light" | "dark"
             </p>
           </div>
           <div className="lg:w-3/4 grid grid-cols-4 md:grid-cols-8 gap-x-6 gap-y-4">
-            {PARTNERS.map((p) => (
+            {PARTNER_LOGOS.map((p) => (
               <div
-                key={p}
-                className={`flex h-12 items-center justify-center rounded border ${
-                  dark ? "border-surface-dark-foreground/15 bg-surface-dark-foreground/5" : "border-border bg-surface"
-                }`}
+                key={p.name}
+                className={`flex h-12 items-center justify-center border border-muted rounded`}
               >
-                <span className="font-display text-sm font-bold tracking-wider">{p}</span>
+                <img
+                  src={p.logo}
+                  alt={`${p.name} logo`}
+                  className="max-h-full max-w-full object-contain"
+                />
               </div>
             ))}
           </div>

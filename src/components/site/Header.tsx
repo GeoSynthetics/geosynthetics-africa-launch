@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -29,11 +30,40 @@ import {
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
-function DesktopNav() {
+function useDynamicMegaMenus() {
+  const [config, setConfig] = useState<Record<string, any>>({});
+
+  useEffect(() => {
+    supabase.from("site_config").select("value").eq("key", "mega_menu").maybeSingle().then(({ data }) => {
+      if (data && data.value) {
+        setConfig(data.value);
+      }
+    });
+  }, []);
+
+  const menus = useMemo(() => {
+    return megaMenus.map(m => {
+      if (config[m.key]) {
+        return {
+          ...m,
+          columns: {
+            ...m.columns,
+            ...config[m.key]
+          }
+        };
+      }
+      return m;
+    });
+  }, [config]);
+
+  return menus;
+}
+
+function DesktopNav({ menus }: { menus: typeof megaMenus }) {
   return (
     <NavigationMenu className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0">
       <NavigationMenuList className="gap-0">
-        {megaMenus.map((m) => (
+        {menus.map((m) => (
           <NavigationMenuItem key={m.key}>
             <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
               {m.label}
@@ -62,7 +92,7 @@ function DesktopNav() {
   );
 }
 
-function MobileNav() {
+function MobileNav({ menus }: { menus: typeof megaMenus }) {
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -82,7 +112,7 @@ function MobileNav() {
         </SheetHeader>
         <div className="flex-1 overflow-y-auto p-4">
           <Accordion type="single" collapsible>
-            {megaMenus.map((m) => (
+            {menus.map((m) => (
               <AccordionItem value={m.key} key={m.key}>
                 <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">{m.label}</AccordionTrigger>
                 <AccordionContent>
@@ -201,12 +231,14 @@ function UserMenu() {
 }
 
 export function Header() {
+  const menus = useDynamicMegaMenus();
+
   return (
     <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
       <TopBar />
       <div className="flex items-center gap-4 2xl:gap-6 py-4 px-5">
         <Logo />
-        <DesktopNav />
+        <DesktopNav menus={menus} />
         <div className="flex items-center gap-2 ml-auto xl:ml-0">
           <Button
             asChild
@@ -217,7 +249,7 @@ export function Header() {
               <Upload className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <MobileNav />
+          <MobileNav menus={menus} />
         </div>
       </div>
     </header>

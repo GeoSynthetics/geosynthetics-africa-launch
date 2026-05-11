@@ -25,15 +25,24 @@ export type MegaMenuConfig = {
   };
 };
 
-export const PARTNERS = [
-  "GSE",
-  "Tensar",
-  "Eurobent",
-  "Tiltex",
-  "Bera",
-  "Flowtex",
-  "Polytape",
-  "SoilLock",
+import logo1 from "@/assets/brand-logos/Logo Brand 1.png";
+import logo2 from "@/assets/brand-logos/Logo Brand 2.png";
+import logo3 from "@/assets/brand-logos/Logo Brand 3.png";
+import logo4 from "@/assets/brand-logos/Logo Brand 4.png";
+import logo5 from "@/assets/brand-logos/Logo Brand 5.png";
+import logo6 from "@/assets/brand-logos/Logo Brand 6.png";
+import logo7 from "@/assets/brand-logos/Logo Brand 7.png";
+import logo8 from "@/assets/brand-logos/Logo Brand 8.png";
+
+export const PARTNER_LOGOS = [
+  { name: "GSE", logo: logo1 },
+  { name: "Tensar", logo: logo2 },
+  { name: "Eurobent", logo: logo3 },
+  { name: "Tiltex", logo: logo4 },
+  { name: "Bera", logo: logo5 },
+  { name: "Flowtex", logo: logo6 },
+  { name: "Polytape", logo: logo7 },
+  { name: "SoilLock", logo: logo8 },
 ];
 
 export const PRODUCT_CATEGORIES = [
@@ -74,6 +83,11 @@ const productLink = (slug: string): NavTarget => ({
 const applicationLink = (slug: string): NavTarget => ({
   to: "/applications/$category",
   params: { category: slug },
+});
+
+const serviceLink = (slug: string): NavTarget => ({
+  to: "/services/$slug",
+  params: { slug },
 });
 
 export const megaMenus: MegaMenuConfig[] = [
@@ -166,15 +180,15 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/services",
     columns: {
       primaryTitle: "Our Services",
-      primary: SERVICES.map((s) => ({ label: s.label, to: "/services", icon: s.icon })),
+      primary: SERVICES.map((s) => ({ label: s.label, icon: s.icon, ...serviceLink(s.slug) })),
       secondaryTitle: "Supply Services",
       secondary: [
-        { label: "Global Sourcing", to: "/services" },
-        { label: "Local Expertise", to: "/services" },
-        { label: "Best-in-Class Brands", to: "/services" },
+        { label: "Global Sourcing", ...serviceLink("supply") },
+        { label: "Local Expertise", ...serviceLink("supply") },
+        { label: "Best-in-Class Brands", ...serviceLink("supply") },
         { label: "Quality Assurance", to: "/quality-assurance" },
-        { label: "Material Availability", to: "/services" },
-        { label: "Project Consultation", to: "/services" },
+        { label: "Material Availability", ...serviceLink("supply") },
+        { label: "Project Consultation", ...serviceLink("design-support") },
         { label: "Technical Documentation", to: "/resources" },
       ],
       featuredTitle: "Service Highlights",
@@ -183,13 +197,13 @@ export const megaMenus: MegaMenuConfig[] = [
         {
           title: "Global Sourcing",
           description: "Access to global manufacturers and best-in-class materials.",
-          to: "/services",
+          ...serviceLink("supply"),
           image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80",
         },
         {
           title: "Expert Installation",
           description: "Certified installation teams with proven methodologies.",
-          to: "/services",
+          ...serviceLink("installation"),
           image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
         },
         {
@@ -211,6 +225,7 @@ export const megaMenus: MegaMenuConfig[] = [
 ];
 
 export const SIMPLE_NAV: MegaLink[] = [
+  { label: "Projects", to: "/projects" },
   { label: "Quality Assurance", to: "/quality-assurance" },
   { label: "Catalogue", to: "/catalogue" },
   { label: "Resources", to: "/resources" },

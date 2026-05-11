@@ -14,7 +14,7 @@ import {
   Pickaxe, Droplets, Trash2, Construction, Sprout,
   Truck, HardHat, ClipboardCheck, Ship, LifeBuoy,
 } from "lucide-react";
-import { megaMenus, PARTNERS, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
+import { megaMenus, PARTNER_LOGOS, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
@@ -162,12 +162,16 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             Global Best-in-Class Materials
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {PARTNERS.map((p) => (
+            {PARTNER_LOGOS.map((p) => (
               <span
-                key={p}
-                className="font-display text-sm font-bold tracking-wider text-muted-foreground"
+                key={p.name}
+                className="flex items-center justify-center h-6"
               >
-                {p}
+                <img 
+                  src={p.logo} 
+                  alt={`${p.name} logo`} 
+                  className="max-h-full max-w-full object-contain brightness-0 opacity-40 hover:opacity-80 transition"
+                />
               </span>
             ))}
           </div>

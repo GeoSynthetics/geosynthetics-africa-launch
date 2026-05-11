@@ -36,7 +36,7 @@ function PartnerPortalLink() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap outline-none">
+      <DropdownMenuTrigger className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap outline-none hover:cursor-pointer">
         <UserIcon className="h-3.5 w-3.5" />
         <span className="max-w-[140px] truncate">{label}</span>
         <ChevronDown className="h-3 w-3" />
@@ -45,20 +45,20 @@ function PartnerPortalLink() {
         <DropdownMenuLabel className="truncate">{user?.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/profile">
+          <Link to="/profile" className="hover:cursor-pointer">
             <UserIcon className="h-4 w-4 mr-2" />
             Profile
           </Link>
         </DropdownMenuItem>
         {isStaff && (
           <DropdownMenuItem asChild>
-            <Link to="/admin">
+            <Link to="/admin" className="hover:cursor-pointer">
               <ShieldCheck className="h-4 w-4 mr-2" />
               Admin
             </Link>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem onClick={() => void signOut()}>
+        <DropdownMenuItem onClick={() => void signOut()} className="hover:cursor-pointer">
           <LogOut className="h-4 w-4 mr-2" />
           Sign out
         </DropdownMenuItem>

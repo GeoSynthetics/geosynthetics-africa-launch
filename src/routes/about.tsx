@@ -1,0 +1,171 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageHero } from "@/components/site/PageHero";
+import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { ShieldCheck, Truck, Cog, CheckCircle2 } from "lucide-react";
+
+export const Route = createFileRoute("/about")({
+  head: () => ({
+    meta: [
+      { title: "About Us — Geosynthetics Africa" },
+      { name: "description", content: "Africa's Only Integrated Geosynthetics Execution Partner." },
+      { property: "og:title", content: "About Us — Geosynthetics Africa" },
+    ],
+  }),
+  component: AboutPage,
+});
+
+function AboutPage() {
+  return (
+    <>
+      <PageHero
+        eyebrow="About Us"
+        title="Africa's Only Integrated Geosynthetics Execution Partner"
+        description="Geosynthetics Africa is Africa’s only integrated geosynthetic systems execution partner – delivering spec-compliant products, pan-African logistics, and QA/QC-certified installation as one accountable system."
+        image="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80"
+      />
+
+      <section className="bg-background">
+        <div className="container-page py-16 md:py-24">
+          <div className="max-w-3xl">
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight text-primary">
+              One System. One Accountability.
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+              We exist to eliminate the failure risk created by fragmented delivery models, where material supply, logistics, installation, and quality assurance are separated. We integrate the full geosynthetics lifecycle.
+            </p>
+          </div>
+
+          <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="rounded border border-border bg-card p-8 hover:border-primary transition group">
+              <ShieldCheck className="h-10 w-10 text-primary mb-6" />
+              <h3 className="font-display text-xl font-bold uppercase mb-4 group-hover:text-primary transition-colors">
+                Specification-Controlled Supply
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Geosynthetics Africa controls the integrity of every system from the first input - the material itself. We do not offer alternatives or substitutions. Every product supplied is fully aligned to engineer specifications, manufactured to international standards (GRI, ASTM), and traceable to source.
+              </p>
+            </div>
+            
+            <div className="rounded border border-border bg-card p-8 hover:border-primary transition group">
+              <Truck className="h-10 w-10 text-primary mb-6" />
+              <h3 className="font-display text-xl font-bold uppercase mb-4 group-hover:text-primary transition-colors">
+                Integrated Logistics & Execution
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                We integrate logistics directly into project execution - ensuring materials, equipment, and installation teams arrive aligned and on schedule. We operate across complex African environments, including remote mining operations and cross-border logistics. We don’t just deliver materials - we deliver execution readiness.
+              </p>
+            </div>
+            
+            <div className="rounded border border-border bg-card p-8 hover:border-primary transition group">
+              <Cog className="h-10 w-10 text-primary mb-6" />
+              <h3 className="font-display text-xl font-bold uppercase mb-4 group-hover:text-primary transition-colors">
+                QA/QC-Controlled Installation
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Installation is where most geosynthetic systems fail - not because of materials, but because of execution. We eliminate this risk through controlled installation governed by qualified teams, defined welding procedures, continuous quality control, and independent testing. We don’t install to complete scope - we install to certify performance.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface-dark text-surface-dark-foreground">
+        <div className="container-page py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">
+              Trusted Where Failure Is Not an Option
+            </h2>
+            <p className="mt-4 text-base text-surface-dark-foreground/80 leading-relaxed mb-8">
+              Geosynthetics Africa is one of only five IAGI Installer Members in Africa, trusted by engineers, EPC contractors and asset owners to deliver systems exactly as designed – from specification through to installation sign-off.
+            </p>
+            <ul className="space-y-4">
+              {[
+                "IAGI Installer Member",
+                "Certified Installation Teams",
+                "Pan-African Execution Capability",
+                "GRI-GM13 and ASTM Standards Compliant"
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                  <span className="font-bold uppercase tracking-wide text-sm">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="relative rounded overflow-hidden aspect-video lg:aspect-square">
+            <img 
+              src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80" 
+              alt="Installation team" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-8">
+              <div className="font-display text-2xl font-bold uppercase text-white mb-2">Our Execution Philosophy</div>
+              <p className="text-sm text-white/80 font-semibold uppercase tracking-widest">We do not participate in fragmented delivery.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-background">
+        <div className="container-page py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">Our Global Supply Partners</h2>
+            <p className="mt-4 text-muted-foreground">
+              We are proud to have partnered with globally renowned providers of sustainable and innovative geosynthetics. Our 10+ global partnerships across different product ranges allows us to meet specifications, offer quick delivery turnaround across Africa, and supply exact specs rather than alternatives on projects.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-12 items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+            {["Solmax", "Tensar", "Thrace", "Eurobent", "Tiltex"].map(partner => (
+              <div key={partner} className="font-display text-3xl font-bold uppercase text-muted-foreground hover:text-foreground transition-colors">
+                {partner}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      <section className="bg-surface py-16 border-t border-border">
+         <div className="container-page">
+            <h2 className="font-display text-2xl font-bold uppercase text-center mb-10">Frequently Asked Questions</h2>
+            <div className="max-w-3xl mx-auto space-y-4">
+              {[
+                {
+                  q: "Is Geosynthetics Africa an IAGI-Certified Installer?",
+                  a: "Geosynthetics Africa is an IAGI Installer Member, ensuring every project meets global geomembrane welding and QA/QC standards. Our teams are factory-trained and certified, guaranteeing professional, leak-free installations that comply with GRI-GM13 and ASTM standards."
+                },
+                {
+                  q: "Where does Geosynthetics Africa operate?",
+                  a: "Geosynthetics Africa operates across the continent, with proven delivery in Southern, West, East and Central Africa – including remote mining operations and cross-border logistics environments."
+                },
+                {
+                  q: "What does a '360-Degree Solution' mean?",
+                  a: "It means we integrate the full lifecycle of a geosynthetics project: from specification-controlled supply, through to pan-African logistics, and finally QA/QC-certified installation. One partner, full accountability."
+                },
+                {
+                  q: "How is Geosynthetics Africa different from other suppliers?",
+                  a: "Geosynthetics Africa is not a reseller — we execute engineered specifications. We do not participate in fragmented delivery models where supply, logistics, and installation are separated."
+                }
+              ].map((faq, i) => (
+                <div key={i} className="bg-card border border-border p-6 rounded">
+                  <h4 className="font-bold text-base mb-2">{faq.q}</h4>
+                  <p className="text-sm text-muted-foreground">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+         </div>
+      </section>
+
+      <div className="bg-surface-dark py-4 text-center">
+        <p className="text-xs text-surface-dark-foreground/50 max-w-4xl mx-auto px-4">
+          Trademark Notice: Mirafi® and GSE® are registered trademarks of Solmax. Tensar® is a registered trademark of Tensar International Corporation, a division of CMC. Eurobent® is a registered trademark of Eurobent Sp. z o.o. Geosynthetics Africa (Pty) Ltd supplies these products under authorization and does not claim ownership of any of the above trademarks.
+        </p>
+      </div>
+
+      <PartnerStrip />
+      <BoqCtaBand />
+    </>
+  );
+}

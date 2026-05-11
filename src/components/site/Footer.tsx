@@ -14,7 +14,7 @@ const RESOURCES = [
 ];
 
 const COMPANY = [
-  { label: "About Us", to: "/" },
+  { label: "About Us", to: "/about" },
   { label: "Careers", to: "/" },
   { label: "News", to: "/resources" },
   { label: "Sustainability", to: "/" },
@@ -72,7 +72,7 @@ export function Footer() {
     { label: "All Applications", to: "/applications" },
   ];
 
-  const services = SERVICES.map((s) => ({ label: s.label, to: "/services" }));
+  const services = SERVICES.map((s) => ({ label: s.label, to: `/services/${s.slug}` }));
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
