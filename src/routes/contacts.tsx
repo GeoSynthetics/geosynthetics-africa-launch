@@ -56,7 +56,7 @@ export const Route = createFileRoute("/contacts")({
 });
 
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80&auto=format&fit=crop";
+  "/src/assets/contact-page-hero.png";
 
 const HEAD_OFFICE = {
   company: "Geosynthetics Africa (Pty) Ltd",
@@ -157,111 +157,123 @@ function ContactsPage() {
 function ContactsHero() {
   return (
     <section
-      className="relative bg-surface-dark text-surface-dark-foreground"
-      style={{
-        backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.85) 0%, rgba(10,10,12,0.55) 55%, rgba(10,10,12,0.25) 100%), url(${HERO_IMG})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="relative overflow-hidden bg-surface-dark text-surface-dark-foreground"
+      style={{ minHeight: "420px" }}
     >
-      <div className="container-page py-10 md:py-14">
+      {/* Full-bleed background image with left-heavy gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(${HERO_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+        }}
+      />
+      {/* Gradient overlay — strong on the left, fades out right so building shows clearly */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.70) 40%, rgba(8,8,10,0.20) 72%, rgba(8,8,10,0.05) 100%)",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative container-page py-10 md:py-12">
         {/* Breadcrumbs */}
-        <nav className="text-xs text-surface-dark-foreground/70 mb-6 flex items-center gap-1.5">
+        <nav className="text-xs text-surface-dark-foreground/70 mb-5 flex items-center gap-1.5">
           <Link to="/" className="hover:text-primary">Home</Link>
           <ChevronRight className="h-3 w-3" />
           <Link to="/contacts" className="hover:text-primary">Contact Us</Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="hover:text-primary">Southern Africa</span>
+          <span>Southern Africa</span>
           <ChevronRight className="h-3 w-3" />
           <span className="text-surface-dark-foreground">Johannesburg Head Office</span>
         </nav>
 
-        <div className="grid lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-8">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
-              Contact Us
-            </p>
-            <h1 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.95] tracking-tight">
-              Johannesburg
-              <br />
-              Head Office
-            </h1>
-            <p className="mt-4 font-display text-xl md:text-2xl uppercase tracking-wide text-surface-dark-foreground/90">
-              Southern Africa Regional Hub
-            </p>
-            <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-surface-dark-foreground/85">
-              {["Supply", "Installation", "QA/QC", "Logistics"].map((s, i) => (
-                <span key={s} className="flex items-center gap-2">
-                  {i > 0 && <span className="h-1 w-1 rounded-full bg-primary" />}
-                  {s}
+        {/* Left-side content — constrained to ~55% so building photo shows on right */}
+        <div className="max-w-[58%] md:max-w-[52%]">
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-3">
+            Contact Us
+          </p>
+          <h1 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.92] tracking-tight">
+            Johannesburg
+            <br />
+            Head Office
+          </h1>
+          <p className="mt-3 font-display text-lg md:text-xl uppercase tracking-wide text-surface-dark-foreground/90">
+            Southern Africa Regional Hub
+          </p>
+          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-surface-dark-foreground/80">
+            {["Supply", "Installation", "QA/QC", "Logistics"].map((s, i) => (
+              <span key={s} className="flex items-center gap-2">
+                {i > 0 && <span className="h-1 w-1 rounded-full bg-primary" />}
+                {s}
+              </span>
+            ))}
+          </p>
+          <p className="mt-2 text-sm text-surface-dark-foreground/75 max-w-sm">
+            Proudly serving Southern Africa and cross-border projects.
+          </p>
+
+          <div className="mt-6 grid sm:grid-cols-3 gap-3 max-w-xl">
+            {HERO_BADGES.map(({ icon: Icon, title, subtitle }) => (
+              <div
+                key={title}
+                className="flex items-center gap-2.5 rounded border border-surface-dark-foreground/15 bg-surface-dark-foreground/8 backdrop-blur-sm p-2.5"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 text-primary">
+                  <Icon className="h-4 w-4" />
                 </span>
-              ))}
-            </p>
-            <p className="mt-3 text-base text-surface-dark-foreground/80 max-w-xl">
-              Proudly serving Southern Africa and cross-border projects.
-            </p>
-
-            <div className="mt-8 grid sm:grid-cols-3 gap-4 max-w-2xl">
-              {HERO_BADGES.map(({ icon: Icon, title, subtitle }) => (
-                <div
-                  key={title}
-                  className="flex items-center gap-3 rounded border border-surface-dark-foreground/15 bg-surface-dark-foreground/5 backdrop-blur-sm p-3"
-                >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div className="text-xs leading-tight">
-                    <div className="font-semibold text-surface-dark-foreground">{title}</div>
-                    <div className="text-surface-dark-foreground/70">{subtitle}</div>
-                  </div>
+                <div className="text-[11px] leading-tight">
+                  <div className="font-semibold text-surface-dark-foreground">{title}</div>
+                  <div className="text-surface-dark-foreground/65">{subtitle}</div>
                 </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#boq-form"
-                className="inline-flex items-center gap-2 rounded bg-primary px-5 py-3 text-sm font-bold uppercase tracking-wide text-primary-foreground hover:bg-primary-hover transition"
-              >
-                <Upload className="h-4 w-4" /> Upload Project BOQ
-              </a>
-              <a
-                href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
-                className="inline-flex items-center gap-2 rounded border border-surface-dark-foreground/30 bg-surface-dark-foreground/5 px-5 py-3 text-sm font-bold uppercase tracking-wide text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
-              >
-                <MessageCircle className="h-4 w-4" /> Speak to Technical Team
-              </a>
-              <a
-                href="#quick-contact"
-                className="inline-flex items-center gap-2 rounded border border-surface-dark-foreground/30 bg-surface-dark-foreground/5 px-5 py-3 text-sm font-bold uppercase tracking-wide text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
-              >
-                <Mail className="h-4 w-4" /> Request Material Supply
-              </a>
-            </div>
+              </div>
+            ))}
           </div>
 
-          {/* Inline map card */}
-          <div className="lg:col-span-4 lg:mt-20">
-            <div className="rounded-md overflow-hidden border border-surface-dark-foreground/10 shadow-2xl bg-card">
-              <div className="relative h-56">
-                <iframe
-                  title="Johannesburg Head Office map preview"
-                  src={MAP_EMBED}
-                  className="absolute inset-0 h-full w-full"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-              <div className="bg-card text-card-foreground p-4 flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <MapPin className="h-4 w-4" />
-                </span>
-                <div className="text-sm">
-                  <div className="font-display font-bold uppercase tracking-wide">Johannesburg</div>
-                  <div className="text-muted-foreground text-xs">Head Office</div>
-                </div>
-              </div>
-            </div>
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            <a
+              href="#boq-form"
+              className="inline-flex items-center gap-2 rounded bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-primary-foreground hover:bg-primary-hover transition"
+            >
+              <Upload className="h-3.5 w-3.5" /> Upload Project BOQ
+            </a>
+            <a
+              href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
+              className="inline-flex items-center gap-2 rounded border border-surface-dark-foreground/30 bg-surface-dark-foreground/5 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
+            >
+              <MessageCircle className="h-3.5 w-3.5" /> Speak to Technical Team
+            </a>
+            <a
+              href="#quick-contact"
+              className="inline-flex items-center gap-2 rounded border border-surface-dark-foreground/30 bg-surface-dark-foreground/5 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
+            >
+              <Mail className="h-3.5 w-3.5" /> Request Material Supply
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Map card — absolute, bottom-right, overlapping the building. Hidden on mobile. */}
+      <div className="hidden lg:block absolute bottom-0 right-6 xl:right-12 w-64 shadow-2xl rounded-t-md overflow-hidden border border-surface-dark-foreground/15">
+        <div className="relative h-44">
+          <iframe
+            title="Johannesburg Head Office map preview"
+            src={MAP_EMBED}
+            className="absolute inset-0 h-full w-full"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+        <div className="bg-card text-card-foreground px-4 py-3 flex items-center gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+            <MapPin className="h-3.5 w-3.5" />
+          </span>
+          <div className="text-xs">
+            <div className="font-display font-bold uppercase tracking-wide">Johannesburg</div>
+            <div className="text-muted-foreground">Head Office</div>
           </div>
         </div>
       </div>
@@ -588,229 +600,243 @@ function FormsBlock() {
   };
 
   return (
-    <section className="bg-surface">
-      <div className="container-page py-14 grid lg:grid-cols-12 gap-8">
-        {/* Project Experience — left column on desktop */}
-        <div className="lg:col-span-5 order-2 lg:order-1">
-          <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-6">
-            Project Experience In The Region
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-5">
-            {CASE_STUDIES.map((c) => (
-              <article
-                key={c.name}
-                className="rounded border border-border bg-card overflow-hidden flex flex-col group"
-              >
-                <div
-                  className="h-44 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${c.image})` }}
-                  role="img"
-                  aria-label={c.name}
-                />
-                <div className="p-4 flex-1 flex flex-col">
-                  <div className="font-display text-base font-bold uppercase">{c.name}</div>
-                  <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <MapPin className="h-3 w-3 text-primary" /> {c.location}
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground flex-1">{c.description}</p>
-                  <Link
-                    to="/resources"
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-primary hover:underline"
-                  >
-                    View Case Study <ChevronRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
+    <section className="bg-background">
+      <div className="container-page py-12">
+        {/* 3-column layout: Case Studies | BOQ Form | Quick Contact */}
+        <div className="grid lg:grid-cols-12 gap-8">
 
-        {/* Forms — right column on desktop */}
-        <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
-        {/* BOQ */}
-        <div id="boq-form">
-          <div className="rounded border border-border bg-card p-6 md:p-8">
-            <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
-              Upload Your BOQ / Drawings
+          {/* LEFT: Project Experience / Case Studies — compact horizontal cards */}
+          <div className="lg:col-span-4 order-2 lg:order-1">
+            <h2 className="font-display text-base font-bold uppercase tracking-wide mb-4">
+              Project Experience In The Region
             </h2>
-            <form onSubmit={onBoqSubmit} className="space-y-4">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Field id="name" label="Full Name" required>
-                  <Input id="name" name="name" required maxLength={120} />
-                </Field>
-                <Field id="company" label="Company">
-                  <Input id="company" name="company" maxLength={160} />
-                </Field>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Field id="email" label="Email" required>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    maxLength={255}
-                    defaultValue={user?.email ?? ""}
+            <div className="flex flex-col gap-3">
+              {CASE_STUDIES.slice(0, 3).map((c) => (
+                <article
+                  key={c.name}
+                  className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
+                >
+                  {/* Thumbnail */}
+                  <div
+                    className="w-28 shrink-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${c.image})` }}
+                    role="img"
+                    aria-label={c.name}
                   />
-                </Field>
-                <Field id="phone" label="Phone" required>
-                  <Input id="phone" name="phone" type="tel" required maxLength={40} />
-                </Field>
-              </div>
-              <Field id="country" label="Project Location / Country">
-                <Input id="country" name="country" maxLength={120} placeholder="Select country" />
-              </Field>
-              <Field id="message" label="Message / Project Description">
-                <Textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  required
-                  maxLength={2000}
-                  placeholder="Tell us about your project..."
-                />
-              </Field>
-
-              <label className="block rounded border-2 border-dashed border-border bg-surface p-6 text-center cursor-pointer hover:border-primary transition">
-                <Upload className="h-8 w-8 text-primary mx-auto" />
-                <div className="mt-2 text-sm font-semibold">
-                  Drag & drop your BOQ or drawings here
-                </div>
-                <div className="text-xs text-primary underline">or click to browse files</div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  PDF, DWG, DOC, XLS (Max 20MB)
-                </div>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  multiple
-                  className="sr-only"
-                  accept={ALLOWED_EXT.join(",")}
-                  onChange={onFileChange}
-                />
-              </label>
-
-              {files.length > 0 && (
-                <ul className="space-y-1.5">
-                  {files.map((f, idx) => (
-                    <li
-                      key={`${f.name}-${idx}`}
-                      className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
+                  {/* Content */}
+                  <div className="p-3 flex flex-col justify-between min-w-0">
+                    <div>
+                      <div className="font-display text-sm font-bold uppercase leading-tight">{c.name}</div>
+                      <div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+                        <MapPin className="h-2.5 w-2.5 text-primary shrink-0" />
+                        <span className="truncate">{c.location}</span>
+                      </div>
+                      <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">{c.description}</p>
+                    </div>
+                    <Link
+                      to="/resources"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
                     >
-                      <span className="flex items-center gap-2 min-w-0">
-                        <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
-                        <span className="truncate">{f.name}</span>
-                        <span className="text-xs text-muted-foreground shrink-0">
-                          {(f.size / 1024 / 1024).toFixed(2)} MB
-                        </span>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeFile(idx)}
-                        className="text-xs text-muted-foreground hover:text-primary"
-                      >
-                        Remove
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={boqSubmitting}
-                className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-              >
-                {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
-              </Button>
-            </form>
-          </div>
-        </div>
-
-        {/* Quick contact + assistance */}
-        <aside id="quick-contact" className="space-y-6">
-          <div className="rounded border border-border bg-card p-6">
-            <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
-              Quick Contact
-            </h2>
-            <form onSubmit={onQuickSubmit} className="space-y-3">
-              <Field id="q-name" label="Full Name" required>
-                <Input id="q-name" name="name" required maxLength={120} />
-              </Field>
-              <Field id="q-email" label="Email" required>
-                <Input
-                  id="q-email"
-                  name="email"
-                  type="email"
-                  required
-                  maxLength={255}
-                  defaultValue={user?.email ?? ""}
-                />
-              </Field>
-              <Field id="q-phone" label="Phone">
-                <Input id="q-phone" name="phone" type="tel" maxLength={40} />
-              </Field>
-              <Field id="q-message" label="Message">
-                <Textarea
-                  id="q-message"
-                  name="message"
-                  rows={4}
-                  required
-                  maxLength={2000}
-                  placeholder="How can we help?"
-                />
-              </Field>
-              <Button
-                type="submit"
-                disabled={quickSubmitting}
-                className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-              >
-                {quickSubmitting ? "Sending…" : "Send Inquiry"}
-              </Button>
-            </form>
-          </div>
-
-          <div className="rounded bg-surface-dark text-surface-dark-foreground p-6">
-            <div className="text-xs font-bold uppercase tracking-wider text-surface-dark-foreground/70">
-              Need Immediate Assistance?
+                      View Case Study <ChevronRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
             </div>
-            <ul className="mt-4 space-y-3 text-sm">
-              <li className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <Phone className="h-4 w-4" />
-                </span>
-                <a
-                  href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
-                  className="hover:text-primary"
-                >
-                  {HEAD_OFFICE.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <MessageCircle className="h-4 w-4" />
-                </span>
-                <a
-                  href={`https://wa.me/${HEAD_OFFICE.phone.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary"
-                >
-                  WhatsApp Us
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <Mail className="h-4 w-4" />
-                </span>
-                <a href={`mailto:${HEAD_OFFICE.email}`} className="hover:text-primary break-all">
-                  {HEAD_OFFICE.email}
-                </a>
-              </li>
-            </ul>
           </div>
-        </aside>
+
+          {/* RIGHT: 2-column sub-grid — BOQ Form + Quick Contact side-by-side */}
+          <div className="lg:col-span-8 order-1 lg:order-2">
+            <div className="grid lg:grid-cols-2 gap-6 items-start">
+
+              {/* RIGHT-LEFT: BOQ Upload Form */}
+              <div id="boq-form">
+                <div className="rounded border border-border bg-card p-5 md:p-6">
+                  <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-5">
+                    Upload Your BOQ / Drawings
+                  </h2>
+                  <form onSubmit={onBoqSubmit} className="space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Field id="name" label="Full Name" required>
+                        <Input id="name" name="name" required maxLength={120} />
+                      </Field>
+                      <Field id="company" label="Company">
+                        <Input id="company" name="company" maxLength={160} />
+                      </Field>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Field id="email" label="Email" required>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          required
+                          maxLength={255}
+                          defaultValue={user?.email ?? ""}
+                        />
+                      </Field>
+                      <Field id="phone" label="Phone" required>
+                        <Input id="phone" name="phone" type="tel" required maxLength={40} />
+                      </Field>
+                    </div>
+                    <Field id="country" label="Project Location / Country">
+                      <Input id="country" name="country" maxLength={120} placeholder="Select country" />
+                    </Field>
+                    <Field id="message" label="Message / Project Description">
+                      <Textarea
+                        id="message"
+                        name="message"
+                        rows={3}
+                        required
+                        maxLength={2000}
+                        placeholder="Tell us about your project..."
+                      />
+                    </Field>
+
+                    <label className="block rounded border-2 border-dashed border-border bg-surface p-4 text-center cursor-pointer hover:border-primary transition">
+                      <Upload className="h-6 w-6 text-primary mx-auto" />
+                      <div className="mt-1.5 text-sm font-semibold">
+                        Drag & drop your BOQ or drawings here
+                      </div>
+                      <div className="text-xs text-primary underline">or click to browse files</div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        PDF, DWG, DOC, XLS (Max 20MB)
+                      </div>
+                      <input
+                        ref={fileRef}
+                        type="file"
+                        multiple
+                        className="sr-only"
+                        accept={ALLOWED_EXT.join(",")}
+                        onChange={onFileChange}
+                      />
+                    </label>
+
+                    {files.length > 0 && (
+                      <ul className="space-y-1.5">
+                        {files.map((f, idx) => (
+                          <li
+                            key={`${f.name}-${idx}`}
+                            className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
+                          >
+                            <span className="flex items-center gap-2 min-w-0">
+                              <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
+                              <span className="truncate">{f.name}</span>
+                              <span className="text-xs text-muted-foreground shrink-0">
+                                {(f.size / 1024 / 1024).toFixed(2)} MB
+                              </span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeFile(idx)}
+                              className="text-xs text-muted-foreground hover:text-primary"
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={boqSubmitting}
+                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
+                    >
+                      {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
+                    </Button>
+                  </form>
+                </div>
+              </div>
+
+              {/* RIGHT-RIGHT: Quick Contact + Immediate Assistance */}
+              <aside id="quick-contact" className="space-y-4">
+                <div className="rounded border border-border bg-card p-5 md:p-6">
+                  <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-4">
+                    Quick Contact
+                  </h2>
+                  <form onSubmit={onQuickSubmit} className="space-y-3">
+                    <Field id="q-name" label="Full Name" required>
+                      <Input id="q-name" name="name" required maxLength={120} />
+                    </Field>
+                    <Field id="q-email" label="Email" required>
+                      <Input
+                        id="q-email"
+                        name="email"
+                        type="email"
+                        required
+                        maxLength={255}
+                        defaultValue={user?.email ?? ""}
+                      />
+                    </Field>
+                    <Field id="q-phone" label="Phone">
+                      <Input id="q-phone" name="phone" type="tel" maxLength={40} />
+                    </Field>
+                    <Field id="q-message" label="Message">
+                      <Textarea
+                        id="q-message"
+                        name="message"
+                        rows={4}
+                        required
+                        maxLength={2000}
+                        placeholder="How can we help?"
+                      />
+                    </Field>
+                    <Button
+                      type="submit"
+                      disabled={quickSubmitting}
+                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
+                    >
+                      {quickSubmitting ? "Sending…" : "Send Inquiry"}
+                    </Button>
+                  </form>
+                </div>
+
+                <div className="rounded bg-surface-dark text-surface-dark-foreground p-5">
+                  <div className="text-xs font-bold uppercase tracking-wider text-surface-dark-foreground/70">
+                    Need Immediate Assistance?
+                  </div>
+                  <ul className="mt-4 space-y-3 text-sm">
+                    <li className="flex items-center gap-3">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <Phone className="h-4 w-4" />
+                      </span>
+                      <a
+                        href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
+                        className="hover:text-primary"
+                      >
+                        {HEAD_OFFICE.phone}
+                      </a>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <MessageCircle className="h-4 w-4" />
+                      </span>
+                      <a
+                        href={`https://wa.me/${HEAD_OFFICE.phone.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-primary"
+                      >
+                        WhatsApp Us
+                      </a>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <Mail className="h-4 w-4" />
+                      </span>
+                      <a href={`mailto:${HEAD_OFFICE.email}`} className="hover:text-primary break-all">
+                        {HEAD_OFFICE.email}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </aside>
+
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

@@ -24,6 +24,15 @@ This file records **major** changes made to the Geosynthetics Africa platform by
 
 ---
 
+## 2026-05-11 — Fix Site Builder config saving issue
+
+**Scope:** Admin / Database
+**Summary:** The Site Builder page was failing to save configuration because the `site_config` table was missing from the database (causing a "schema cache" error and forcing the page to use fallback fake data). Fixed by applying a database migration to create the `public.site_config` table along with appropriate Row Level Security (RLS) policies for admin and staff access.
+**Files touched:** Supabase Database Schema
+**Notes / follow-ups:** None
+
+---
+
 <!--
 Entry template — copy when adding a new entry:
 

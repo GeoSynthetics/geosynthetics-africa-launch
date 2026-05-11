@@ -13,20 +13,24 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
@@ -51,6 +55,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
 const QualityAssuranceRoute = QualityAssuranceRouteImport.update({
   id: '/quality-assurance',
   path: '/quality-assurance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -83,6 +92,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -103,6 +117,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
   id: '/$category',
   path: '/$category',
@@ -121,6 +140,11 @@ const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSiteBuilderRoute = AdminSiteBuilderRouteImport.update({
+  id: '/site-builder',
+  path: '/site-builder',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminResourcesRoute = AdminResourcesRouteImport.update({
@@ -151,23 +175,27 @@ const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
+  '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -176,21 +204,25 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
+  '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
   '/resources': typeof ResourcesIndexRoute
@@ -200,23 +232,27 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
+  '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/products/$category': typeof ProductsCategoryRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/resources/': typeof ResourcesIndexRoute
@@ -227,12 +263,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/applications'
     | '/contacts'
     | '/login'
     | '/products'
     | '/profile'
+    | '/projects'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -240,10 +278,12 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
+    | '/admin/site-builder'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
+    | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
     | '/resources/'
@@ -252,21 +292,25 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/applications'
     | '/contacts'
     | '/login'
     | '/products'
     | '/profile'
+    | '/projects'
     | '/quality-assurance'
     | '/services'
     | '/signup'
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
+    | '/admin/site-builder'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
+    | '/services/$slug'
     | '/admin'
     | '/catalogue'
     | '/resources'
@@ -275,12 +319,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/applications'
     | '/contacts'
     | '/login'
     | '/products'
     | '/profile'
+    | '/projects'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -288,10 +334,12 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
+    | '/admin/site-builder'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/products/$category'
+    | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
     | '/resources/'
@@ -301,15 +349,17 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRouteWithChildren
   ProfileRoute: typeof ProfileRoute
+  ProjectsRoute: typeof ProjectsRoute
   QualityAssuranceRoute: typeof QualityAssuranceRoute
   ResourcesRoute: typeof ResourcesRouteWithChildren
-  ServicesRoute: typeof ServicesRoute
+  ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
@@ -343,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/quality-assurance'
       fullPath: '/quality-assurance'
       preLoaderRoute: typeof QualityAssuranceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -387,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -415,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRoute
+    }
     '/products/$category': {
       id: '/products/$category'
       path: '/$category'
@@ -441,6 +512,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/site-builder': {
+      id: '/admin/site-builder'
+      path: '/site-builder'
+      fullPath: '/admin/site-builder'
+      preLoaderRoute: typeof AdminSiteBuilderRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/resources': {
@@ -485,6 +563,7 @@ interface AdminRouteChildren {
   AdminProductsRoute: typeof AdminProductsRoute
   AdminQuotesRoute: typeof AdminQuotesRoute
   AdminResourcesRoute: typeof AdminResourcesRoute
+  AdminSiteBuilderRoute: typeof AdminSiteBuilderRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -493,6 +572,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminProductsRoute: AdminProductsRoute,
   AdminQuotesRoute: AdminQuotesRoute,
   AdminResourcesRoute: AdminResourcesRoute,
+  AdminSiteBuilderRoute: AdminSiteBuilderRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -539,17 +619,31 @@ const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
   ResourcesRouteChildren,
 )
 
+interface ServicesRouteChildren {
+  ServicesSlugRoute: typeof ServicesSlugRoute
+}
+
+const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesSlugRoute: ServicesSlugRoute,
+}
+
+const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
+  ServicesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRouteWithChildren,
   ProfileRoute: ProfileRoute,
+  ProjectsRoute: ProjectsRoute,
   QualityAssuranceRoute: QualityAssuranceRoute,
   ResourcesRoute: ResourcesRouteWithChildren,
-  ServicesRoute: ServicesRoute,
+  ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
@@ -557,3 +651,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
