@@ -63,6 +63,46 @@ src/routes/$slug.tsx        → lazy(() => import("@/pages/AboutPage"))
 
 ---
 
+## 2026-05-13 — Add dynamic sitemap.xml and robots.txt server routes
+
+**Scope:** SEO / Server Routes
+**Summary:** Created two TanStack Start server routes to improve search engine discoverability. `sitemap[.]xml.ts` dynamically generates an XML sitemap at `/sitemap.xml` containing all static core pages (with priority/changefreq), product category pages, application category pages, service detail pages, 125+ catalogue product pages (with `lastmod` from Supabase `updated_at`), and custom SEO slug pages. `robots[.]txt.ts` serves a `robots.txt` at `/robots.txt` that allows all crawlers, blocks admin/auth routes, and points to the sitemap. Both derive the hostname from the incoming request so they work automatically on any deployment (localhost, Vercel, Cloudflare).
+**Files touched:** `src/routes/sitemap[.]xml.ts` (new), `src/routes/robots[.]txt.ts` (new)
+**Notes / follow-ups:** None
+
+---
+
+## 2026-05-13 — Add structured data (JSON-LD) and sitemap head link
+
+**Scope:** SEO / Structured Data
+**Summary:** Implemented Google-compliant structured data using JSON-LD `<script>` tags to enhance rich search results:
+
+1. **`<link rel="sitemap">`** added to `__root.tsx` `head.links` so search engines can autodiscover `/sitemap.xml` from every page.
+2. **Organization schema** — Global JSON-LD rendered in the root layout on every page. Includes company legal name, address (7 Tamar Avenue, Lea Glen, Randburg), phone, email, service area (ZA, BW, NA, ZW, MZ, ZM), logo, and area of expertise.
+3. **Product schema** — Renders on each `/catalogue/$slug` page with product name, description, SKU, brand/manufacturer, category, material, price (when available), and stock availability.
+4. **BreadcrumbList schema** — Renders on each `/catalogue/$slug` page with a proper breadcrumb trail (Home → Catalogue → Category → Product).
+
+All schemas are built with reusable components in `src/components/seo/`:
+- `JsonLd.tsx` — Base component that renders `<script type="application/ld+json">`
+- `OrganizationSchema.tsx` — Global company info
+- `ProductSchema.tsx` — Individual product data
+- `BreadcrumbSchema.tsx` — Breadcrumb trail
+
+**Files touched:** `src/routes/__root.tsx`, `src/routes/catalogue.$slug.tsx`, `src/components/seo/JsonLd.tsx` (new), `src/components/seo/OrganizationSchema.tsx` (new), `src/components/seo/ProductSchema.tsx` (new), `src/components/seo/BreadcrumbSchema.tsx` (new)
+
+**Developer: How to update the sitemap**
+
+The sitemap at `/sitemap.xml` is generated dynamically on each request (cached for 1 hour via `Cache-Control`). It automatically picks up:
+- New products added in Supabase → appear immediately
+- New static routes → add them to the `staticPages` array in `src/routes/sitemap[.]xml.ts`
+- Custom SEO slugs → read from `site_config.seo_pages` in Supabase
+
+To force a sitemap refresh in production: simply visit `{YOUR_DOMAIN}/sitemap.xml` — it regenerates on every request. The CDN cache expires after 1 hour (`s-maxage=3600`).
+
+To validate: paste the sitemap URL into [Google's Rich Results Test](https://search.google.com/test/rich-results) or submit via [Google Search Console](https://search.google.com/search-console) → Sitemaps.
+
+---
+
 <!--
 Entry template — copy when adding a new entry:
 

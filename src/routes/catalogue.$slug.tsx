@@ -30,6 +30,8 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { ProductSchema } from "@/components/seo/ProductSchema";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 interface ProductRow {
   id: string;
@@ -289,6 +291,33 @@ function ProductDetailPage() {
 
   return (
     <>
+      {/* Structured data for search engines */}
+      <ProductSchema
+        name={product.name}
+        description={product.meta_description || product.short_description || `${product.name} — engineered geosynthetic product by Geosynthetics Africa.`}
+        slug={product.slug}
+        image={heroImg}
+        sku={product.sku}
+        category={product.product_categories?.name}
+        manufacturer={product.manufacturers?.name}
+        price={product.price}
+        inStock={(product.stock_quantity ?? 0) > 0}
+        material={product.material}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za/" },
+          { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
+          ...(product.product_categories?.name
+            ? [{
+                name: product.product_categories.name,
+                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+              }]
+            : []),
+          { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
+        ]}
+      />
+
       {/* Breadcrumb + Hero with product image as background (landscape, left-dark fade) */}
       <section
         className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"

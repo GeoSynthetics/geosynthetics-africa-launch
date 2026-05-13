@@ -9,8 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
 import { Route as ProjectsRouteImport } from './routes/projects'
@@ -39,6 +41,11 @@ import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -47,6 +54,11 @@ const SignupRoute = SignupRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -198,8 +210,10 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -227,8 +241,10 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -259,8 +275,10 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -292,8 +310,10 @@ export interface FileRouteTypes {
     | '/projects'
     | '/quality-assurance'
     | '/resources'
+    | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -321,8 +341,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/projects'
     | '/quality-assurance'
+    | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -352,8 +374,10 @@ export interface FileRouteTypes {
     | '/projects'
     | '/quality-assurance'
     | '/resources'
+    | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/sitemap.xml'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -384,14 +408,23 @@ export interface RootRouteChildren {
   ProjectsRoute: typeof ProjectsRoute
   QualityAssuranceRoute: typeof QualityAssuranceRoute
   ResourcesRoute: typeof ResourcesRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -404,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -685,8 +725,10 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRoute: ProjectsRoute,
   QualityAssuranceRoute: QualityAssuranceRoute,
   ResourcesRoute: ResourcesRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
 }
