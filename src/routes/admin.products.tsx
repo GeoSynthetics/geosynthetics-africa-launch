@@ -438,7 +438,7 @@ function ProductsAdmin() {
                       rows={2}
                       wrap="soft"
                       value={editing.slug ?? ""}
-                      onChange={(e) => setEditing((s) => ({ ...s, slug: e.target.value }))}
+                      onChange={(e) => setEditing((s) => ({ ...s, slug: e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
                       className="mt-1.5 w-full break-all"
                     />
                   </div>

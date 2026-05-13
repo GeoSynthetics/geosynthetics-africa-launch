@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { Linkedin, Facebook, Instagram, Youtube } from "lucide-react";
 import { Logo } from "./Logo";
 import { PRODUCT_CATEGORIES, APPLICATION_CATEGORIES, SERVICES, INDUSTRIES } from "./mega-menu-data";
+import { usePageSlugs } from "@/hooks/use-page-slugs";
 
 const RESOURCES = [
   { label: "Datasheets", to: "/resources" },
@@ -40,12 +40,12 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
       <ul className="space-y-1.5">
         {items.map((i) => (
           <li key={i.label}>
-            <Link
-              to={i.to}
+            <a
+              href={i.to}
               className="text-xs text-surface-dark-foreground/60 hover:text-primary transition-colors"
             >
               {i.label}
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
@@ -55,6 +55,7 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const { resolve } = usePageSlugs();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +76,17 @@ export function Footer() {
   const services = SERVICES.map((s) => ({ label: s.label, to: `/services/${s.slug}` }));
 
   const industries = INDUSTRIES.map((i) => ({ label: i.label, to: `/industries/${i.slug}` }));
+
+  // Resolve custom slugs for core page links
+  const company = COMPANY.map((item) => ({
+    ...item,
+    to: resolve(item.to),
+  }));
+
+  const resources = RESOURCES.map((item) => ({
+    ...item,
+    to: resolve(item.to),
+  }));
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
@@ -116,10 +128,10 @@ export function Footer() {
           <FooterCol title="Services" items={services} />
 
           {/* Resources */}
-          <FooterCol title="Resources" items={RESOURCES} />
+          <FooterCol title="Resources" items={resources} />
 
           {/* Company */}
-          <FooterCol title="Company" items={COMPANY} />
+          <FooterCol title="Company" items={company} />
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 min-w-0">

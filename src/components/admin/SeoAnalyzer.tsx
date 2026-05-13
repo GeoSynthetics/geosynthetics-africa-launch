@@ -5,6 +5,8 @@ export interface SeoInput {
   type?: "product" | "page";
   name?: string | null;
   slug?: string | null;
+  urlSlug?: string | null; // custom URL slug override (for pages, used as the actual path segment)
+  pageLabel?: string | null; // frontend display label (pages only)
   metaTitle?: string | null;
   metaDescription?: string | null;
   keywords?: string | null;
@@ -253,12 +255,16 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
   const { score, checks } = useMemo(() => analyzeSeo(input), [input]);
   const c = scoreColor(score);
 
-  const previewTitle = (input.metaTitle?.trim() || input.name || "Untitled product").slice(0, 60);
+  const isPage = input.type === "page";
+  const fallbackTitle = isPage ? (input.pageLabel || input.name || "Untitled page") : (input.name || "Untitled product");
+  const previewTitle = (input.metaTitle?.trim() || fallbackTitle).slice(0, 60);
   const previewDesc =
     (input.metaDescription?.trim() || input.shortDescription?.trim() || "—").slice(0, 160);
   const host = input.siteHost ?? "geosynthetics.co.za";
-  const slug = input.slug?.trim() || "product-slug";
-  const url = `https://${host}/catalogue/${slug}`;
+  const slug = input.slug?.trim() || (isPage ? "page" : "product-slug");
+  const url = isPage
+    ? (slug === "" ? `https://${host}` : `https://${host}/${slug}`)
+    : `https://${host}/catalogue/${slug}`;
 
   const passed = checks.filter((x) => x.status === "good").length;
   const warned = checks.filter((x) => x.status === "warn").length;

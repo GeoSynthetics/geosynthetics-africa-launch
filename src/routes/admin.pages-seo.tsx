@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
+import { invalidateSeoCache } from "@/hooks/use-page-slugs";
 
 export const Route = createFileRoute("/admin/pages-seo")({
   head: () => ({
@@ -32,7 +33,7 @@ function PagesSeoAdmin() {
   const [saving, setSaving] = useState(false);
   
   // pageSeo maps page paths to their SEO objects
-  const [pageSeo, setPageSeo] = useState<Record<string, { title: string; description: string; keywords: string }>>({});
+  const [pageSeo, setPageSeo] = useState<Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }>>({});
   const [selectedPath, setSelectedPath] = useState<string>(CORE_PAGES[0].path);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function PagesSeoAdmin() {
         } else {
           // initialize empty
           const init: Record<string, any> = {};
-          CORE_PAGES.forEach(p => init[p.path] = { title: "", description: "", keywords: "" });
+          CORE_PAGES.forEach(p => init[p.path] = { title: "", description: "", keywords: "", urlSlug: p.path === "/" ? "" : p.path.substring(1), pageLabel: p.label });
           setPageSeo(init);
         }
         setLoading(false);
@@ -70,6 +71,7 @@ function PagesSeoAdmin() {
         { onConflict: "key" }
       );
       if (error) throw error;
+      invalidateSeoCache();
       toast.success("Page SEO metadata saved successfully.");
     } catch (err: any) {
       console.error(err);
@@ -79,8 +81,19 @@ function PagesSeoAdmin() {
     }
   };
 
-  const currentData = pageSeo[selectedPath] || { title: "", description: "", keywords: "" };
   const currentLabel = CORE_PAGES.find(p => p.path === selectedPath)?.label || "";
+
+  // Merge loaded data with defaults for new fields that may not exist in older saved data
+  const raw = pageSeo[selectedPath];
+  const currentData = raw
+    ? {
+        title: raw.title ?? "",
+        description: raw.description ?? "",
+        keywords: raw.keywords ?? "",
+        urlSlug: raw.urlSlug ?? (selectedPath === "/" ? "" : selectedPath.substring(1)),
+        pageLabel: raw.pageLabel ?? currentLabel,
+      }
+    : { title: "", description: "", keywords: "", urlSlug: selectedPath === "/" ? "" : selectedPath.substring(1), pageLabel: currentLabel };
 
   if (loading) {
     return <div className="text-sm text-muted-foreground p-8">Loading SEO data...</div>;
@@ -139,11 +152,47 @@ function PagesSeoAdmin() {
             </div>
 
             <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="seo-url-slug">URL Slug</Label>
+                  <div className="flex items-center gap-0">
+                    <span className="inline-flex items-center h-9 px-3 rounded-l-md border border-r-0 border-border bg-muted text-xs text-muted-foreground font-mono select-none">
+                      geosynthetics.co.za/
+                    </span>
+                    <Input
+                      id="seo-url-slug"
+                      placeholder={selectedPath === "/" ? "(home — root)" : selectedPath.substring(1)}
+                      value={currentData.urlSlug ?? ""}
+                      disabled={selectedPath === "/"}
+                      onChange={(e) => {
+                        const val = e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-/]/g, "");
+                        setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, urlSlug: val } });
+                      }}
+                      className="rounded-l-none font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {selectedPath === "/" ? "Home page uses the root URL." : "The URL path for Google & server routing. Lowercase, dashes only."}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="seo-page-label">Page Label</Label>
+                  <Input
+                    id="seo-page-label"
+                    placeholder={currentLabel}
+                    value={currentData.pageLabel ?? ""}
+                    onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, pageLabel: e.target.value } })}
+                  />
+                  <p className="text-xs text-muted-foreground">Display name shown in navigation, breadcrumbs & frontend. Does not affect SEO.</p>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="seo-title">Meta Title</Label>
                 <Input
                   id="seo-title"
-                  placeholder={`${currentLabel} — Geosynthetics Africa`}
+                  placeholder={`${currentData.pageLabel || currentLabel} — Geosynthetics Africa`}
                   value={currentData.title}
                   onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, title: e.target.value } })}
                 />
@@ -183,7 +232,9 @@ function PagesSeoAdmin() {
               input={{
                 type: "page",
                 name: currentLabel,
-                slug: selectedPath === "/" ? "" : selectedPath.substring(1),
+                slug: selectedPath === "/" ? "" : (currentData.urlSlug || selectedPath.substring(1)),
+                urlSlug: currentData.urlSlug,
+                pageLabel: currentData.pageLabel || currentLabel,
                 metaTitle: currentData.title,
                 metaDescription: currentData.description,
                 keywords: currentData.keywords,
