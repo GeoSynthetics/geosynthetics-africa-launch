@@ -9,7 +9,7 @@ export type MegaFeatureItem = NavTarget & { title: string; description: string; 
 export type MegaQuickAction = NavTarget & { title: string; description: string; icon: string };
 
 export type MegaMenuConfig = {
-  key: "products" | "applications" | "services";
+  key: "products" | "applications" | "services" | "industries";
   label: string;
   to: string;
   columns: {
@@ -75,6 +75,16 @@ export const SERVICES = [
   { slug: "after-sales", label: "After Sales Support", icon: "LifeBuoy" },
 ];
 
+export const INDUSTRIES = [
+  { slug: "construction-infrastructure", label: "Construction & Infrastructure", icon: "Building2" },
+  { slug: "mining", label: "Mining", icon: "Pickaxe" },
+  { slug: "environmental-waste", label: "Environmental & Waste", icon: "Trash2" },
+  { slug: "water-management", label: "Water Management", icon: "Droplets" },
+  { slug: "agriculture-aquaculture", label: "Agriculture & Aquaculture", icon: "Sprout" },
+  { slug: "energy", label: "Energy", icon: "Zap" },
+];
+
+
 const productLink = (slug: string): NavTarget => ({
   to: "/products/$category",
   params: { category: slug },
@@ -87,6 +97,11 @@ const applicationLink = (slug: string): NavTarget => ({
 
 const serviceLink = (slug: string): NavTarget => ({
   to: "/services/$slug",
+  params: { slug },
+});
+
+const industryLink = (slug: string): NavTarget => ({
+  to: "/industries/$slug",
   params: { slug },
 });
 
@@ -219,6 +234,52 @@ export const megaMenus: MegaMenuConfig[] = [
         { title: "Speak to an Expert", description: "Talk to specialists", to: "/contacts", icon: "MessageCircle" },
         { title: "Service Brochure", description: "Download overview", to: "/resources", icon: "Download" },
         { title: "Request a Quote", description: "Get a customised quote", to: "/contacts", icon: "FileText" },
+      ],
+    },
+  },
+  {
+    key: "industries",
+    label: "Industries",
+    to: "/industries",
+    columns: {
+      primaryTitle: "Industries We Serve",
+      primary: INDUSTRIES.map((c) => ({ label: c.label, icon: c.icon, ...industryLink(c.slug) })),
+      secondaryTitle: "Construction & Infrastructure",
+      secondary: [
+        { label: "Roads & Highways", ...industryLink("construction-infrastructure") },
+        { label: "Railways", ...industryLink("construction-infrastructure") },
+        { label: "Retaining Walls", ...industryLink("construction-infrastructure") },
+        { label: "Ports & Aviation", ...industryLink("construction-infrastructure") },
+        { label: "Commercial Development", ...industryLink("construction-infrastructure") },
+      ],
+      featuredTitle: "Industry Solutions",
+      featuredKind: "image",
+      featured: [
+        {
+          title: "Mining Solutions",
+          description: "Engineered systems for heap leach pads and TSFs.",
+          ...industryLink("mining"),
+          image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80",
+        },
+        {
+          title: "Infrastructure",
+          description: "Reinforcement and stabilization for critical infrastructure.",
+          ...industryLink("construction-infrastructure"),
+          image: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80",
+        },
+        {
+          title: "Waste Management",
+          description: "Secure lining systems for environmental protection.",
+          ...industryLink("environmental-waste"),
+          image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80",
+        },
+      ] as MegaFeatureItem[],
+      quickActionsTitle: "Industry Support",
+      quickActions: [
+        { title: "Case Studies", description: "Projects by industry", to: "/resources", icon: "FileCheck" },
+        { title: "Speak to Expert", description: "Get industry advice", to: "/contacts", icon: "MessageCircle" },
+        { title: "Technical Articles", description: "Industry insights", to: "/resources", icon: "BookOpen" },
+        { title: "Design Support", description: "Engineering assistance", to: "/services", icon: "PencilRuler" },
       ],
     },
   },

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { CheckCircle2, AlertTriangle, XCircle, Globe } from "lucide-react";
 
 export interface SeoInput {
+  type?: "product" | "page";
   name?: string | null;
   slug?: string | null;
   metaTitle?: string | null;
@@ -22,7 +23,7 @@ interface Check {
 }
 
 const STOP = new Set([
-  "the","a","an","and","or","of","for","to","in","on","with","by","is","are","at","from","as","be","this","that","it","its","your","you","our",
+  "the", "a", "an", "and", "or", "of", "for", "to", "in", "on", "with", "by", "is", "are", "at", "from", "as", "be", "this", "that", "it", "its", "your", "you", "our",
 ]);
 
 function tokenize(s: string): string[] {
@@ -40,6 +41,7 @@ function containsKeyword(haystack: string, kw: string): boolean {
 }
 
 export function analyzeSeo(input: SeoInput): { score: number; checks: Check[] } {
+  const isPage = input.type === "page";
   const title = (input.metaTitle ?? "").trim();
   const desc = (input.metaDescription ?? "").trim();
   const slug = (input.slug ?? "").trim();
@@ -109,79 +111,99 @@ export function analyzeSeo(input: SeoInput): { score: number; checks: Check[] } 
   });
 
   // Keyword in slug
-  checks.push({
-    id: "kw-slug",
-    label: "Focus keyword in URL slug",
-    status: kw && slug.includes(kw.replace(/\s+/g, "-")) ? "good" : kw ? "warn" : "bad",
-    weight: 8,
-  });
+  if (isPage && slug === "") {
+    checks.push({
+      id: "kw-slug",
+      label: "Focus keyword in URL slug (Home page)",
+      status: "good",
+      weight: 8,
+    });
+  } else {
+    checks.push({
+      id: "kw-slug",
+      label: "Focus keyword in URL slug",
+      status: kw && slug.includes(kw.replace(/\s+/g, "-")) ? "good" : kw ? "warn" : "bad",
+      weight: 8,
+    });
+  }
 
   // Slug length / shape
-  checks.push({
-    id: "slug-shape",
-    label: "URL slug is short and clean",
-    status:
-      slug && slug.length <= 75 && /^[a-z0-9-]+$/.test(slug)
-        ? "good"
-        : slug
-          ? "warn"
-          : "bad",
-    weight: 5,
-    hint: "Use lowercase letters, numbers and dashes. Keep under 75 chars.",
-  });
+  if (isPage && slug === "") {
+    checks.push({
+      id: "slug-shape",
+      label: "URL slug is short and clean (Home page)",
+      status: "good",
+      weight: 5,
+    });
+  } else {
+    checks.push({
+      id: "slug-shape",
+      label: "URL slug is short and clean",
+      status:
+        slug && slug.length <= 75 && /^[a-z0-9-]+$/.test(slug)
+          ? "good"
+          : slug
+            ? "warn"
+            : "bad",
+      weight: 5,
+      hint: "Use lowercase letters, numbers and dashes. Keep under 75 chars.",
+    });
+  }
 
-  // Keyword in product name
-  checks.push({
-    id: "kw-name",
-    label: "Focus keyword appears in product name",
-    status: kw && containsKeyword(name, kw) ? "good" : kw ? "warn" : "bad",
-    weight: 5,
-  });
+  if (!isPage) {
+    // Keyword in product name
+    checks.push({
+      id: "kw-name",
+      label: "Focus keyword appears in product name",
+      status: kw && containsKeyword(name, kw) ? "good" : kw ? "warn" : "bad",
+      weight: 5,
+    });
 
-  // Description body present and contains keyword
-  checks.push({
-    id: "body",
-    label: "Short description is present",
-    status: body.length >= 80 ? "good" : body.length > 0 ? "warn" : "bad",
-    weight: 6,
-    hint: "Write at least one informative sentence (80+ chars).",
-  });
-  checks.push({
-    id: "kw-body",
-    label: "Focus keyword in short description",
-    status: kw && containsKeyword(body, kw) ? "good" : kw ? "warn" : "bad",
-    weight: 6,
-  });
+    // Description body present and contains keyword
+    checks.push({
+      id: "body",
+      label: "Short description is present",
+      status: body.length >= 80 ? "good" : body.length > 0 ? "warn" : "bad",
+      weight: 6,
+      hint: "Write at least one informative sentence (80+ chars).",
+    });
+    checks.push({
+      id: "kw-body",
+      label: "Focus keyword in short description",
+      status: kw && containsKeyword(body, kw) ? "good" : kw ? "warn" : "bad",
+      weight: 6,
+    });
 
-  // Image
-  checks.push({
-    id: "image",
-    label: "Product has a primary image",
-    status: input.imageUrl ? "good" : "bad",
-    weight: 6,
-    hint: "Add at least one product image.",
-  });
+    // Image
+    checks.push({
+      id: "image",
+      label: "Product has a primary image",
+      status: input.imageUrl ? "good" : "bad",
+      weight: 6,
+      hint: "Add at least one product image.",
+    });
 
-  // Title is unique vs name
-  checks.push({
-    id: "title-unique",
-    label: "Meta title differs from product name",
-    status:
-      title && name && title.toLowerCase() !== name.toLowerCase()
-        ? "good"
-        : title
-          ? "warn"
-          : "bad",
-    weight: 4,
-    hint: "Craft a distinct, search-friendly title (technical name + benefit + brand).",
-  });
+    // Title is unique vs name
+    checks.push({
+      id: "title-unique",
+      label: "Meta title differs from product name",
+      status:
+        title && name && title.toLowerCase() !== name.toLowerCase()
+          ? "good"
+          : title
+            ? "warn"
+            : "bad",
+      weight: 4,
+      hint: "Craft a distinct, search-friendly title (technical name + benefit + brand).",
+    });
+  }
 
   const totalWeight = checks.reduce((a, c) => a + c.weight, 0);
   const earned = checks.reduce((a, c) => {
     const f = c.status === "good" ? 1 : c.status === "warn" ? 0.5 : 0;
     return a + c.weight * f;
   }, 0);
-  const score = Math.round((earned / totalWeight) * 100);
+  const score = totalWeight > 0 ? Math.round((earned / totalWeight) * 100) : 0;
 
   return { score, checks };
 }
@@ -252,7 +274,7 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
             {passed} passed · {warned} to improve · {failed} issues
           </div>
           <div className="text-[11px] text-muted-foreground mt-1">
-            Live, rule-based analysis (Rank-Math style). Updates as you type.
+            Live, rule-based analysis. Updates as you type.
           </div>
         </div>
       </div>

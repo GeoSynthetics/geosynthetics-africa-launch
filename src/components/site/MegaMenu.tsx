@@ -12,7 +12,7 @@ import {
   ChevronRight, BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
   Pickaxe, Droplets, Trash2, Construction, Sprout,
-  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy,
+  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy, Building2, Zap,
 } from "lucide-react";
 import { megaMenus, PARTNER_LOGOS, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
 
@@ -20,7 +20,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
   Pickaxe, Droplets, Trash2, Construction, Sprout,
-  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy,
+  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy, Building2, Zap,
 };
 
 function MegaPanel({ config }: { config: MegaMenuConfig }) {

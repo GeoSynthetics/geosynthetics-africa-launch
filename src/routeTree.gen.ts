@@ -34,6 +34,7 @@ import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builde
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 
@@ -162,6 +163,11 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPagesSeoRoute = AdminPagesSeoRouteImport.update({
+  id: '/pages-seo',
+  path: '/pages-seo',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
   id: '/$category/',
   path: '/$category/',
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/quality-assurance': typeof QualityAssuranceRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/resources': typeof ResourcesRouteWithChildren
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
@@ -275,6 +284,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/services'
     | '/signup'
+    | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/quality-assurance'
     | '/services'
     | '/signup'
+    | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/services'
     | '/signup'
+    | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
     | '/admin/resources'
@@ -542,6 +554,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/pages-seo': {
+      id: '/admin/pages-seo'
+      path: '/pages-seo'
+      fullPath: '/admin/pages-seo'
+      preLoaderRoute: typeof AdminPagesSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/resources/$category/': {
       id: '/resources/$category/'
       path: '/$category'
@@ -560,6 +579,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminPagesSeoRoute: typeof AdminPagesSeoRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminQuotesRoute: typeof AdminQuotesRoute
   AdminResourcesRoute: typeof AdminResourcesRoute
@@ -569,6 +589,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminPagesSeoRoute: AdminPagesSeoRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminQuotesRoute: AdminQuotesRoute,
   AdminResourcesRoute: AdminResourcesRoute,

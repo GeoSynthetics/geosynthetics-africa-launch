@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Search, Upload, Copy, X, Star, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Upload, Copy, X, Star, Loader2, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 
@@ -112,6 +112,13 @@ function ProductsAdmin() {
   const [cats, setCats] = useState<ProductCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [showMissingSeo, setShowMissingSeo] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState("created_at");
+  const [sortAsc, setSortAsc] = useState(false);
+  const [total, setTotal] = useState(0);
+
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
@@ -226,36 +233,76 @@ function ProductsAdmin() {
 
   const load = async () => {
     setLoading(true);
+    let query = supabase
+      .from("products")
+      .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords", { count: "exact" });
+
+    if (q.trim()) {
+      const qs = q.trim();
+      query = query.or(`name.ilike.%${qs}%,slug.ilike.%${qs}%,sku.ilike.%${qs}%`);
+    }
+
+    if (showMissingSeo) {
+      query = query.or(`meta_title.is.null,meta_title.eq."",meta_description.is.null,meta_description.eq."",seo_keywords.is.null,seo_keywords.eq.""`);
+    }
+
+    query = query.order(sortField, { ascending: sortAsc });
+    if (sortField !== "id") {
+      query = query.order("id", { ascending: false });
+    }
+
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    query = query.range(from, to);
+
     const [products, manufacturers, categories] = await Promise.all([
-      supabase
-        .from("products")
-        .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords")
-        .order("created_at", { ascending: false })
-        .limit(500),
-      supabase.from("manufacturers").select("id, name").order("name"),
-      supabase.from("product_categories").select("id, name").order("name"),
+      query,
+      mans.length === 0 ? supabase.from("manufacturers").select("id, name").order("name") : Promise.resolve({ data: mans }),
+      cats.length === 0 ? supabase.from("product_categories").select("id, name").order("name") : Promise.resolve({ data: cats }),
     ]);
+
     if (products.error) toast.error(products.error.message);
     setRows((products.data ?? []) as Product[]);
-    setMans((manufacturers.data ?? []) as Manufacturer[]);
-    setCats((categories.data ?? []) as ProductCategory[]);
+    setTotal(products.count ?? 0);
+    
+    if (mans.length === 0 && manufacturers.data) setMans(manufacturers.data as Manufacturer[]);
+    if (cats.length === 0 && categories.data) setCats(categories.data as ProductCategory[]);
+    
     setLoading(false);
   };
 
   useEffect(() => {
-    void load();
-  }, []);
+    setPage(1);
+  }, [q, showMissingSeo, sortField, sortAsc, pageSize]);
 
-  const filtered = useMemo(() => {
-    if (!q.trim()) return rows;
-    const needle = q.toLowerCase();
-    return rows.filter(
-      (r) =>
-        r.name.toLowerCase().includes(needle) ||
-        r.slug.toLowerCase().includes(needle) ||
-        (r.sku ?? "").toLowerCase().includes(needle),
-    );
-  }, [rows, q]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void load();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [page, pageSize, sortField, sortAsc, q, showMissingSeo]);
+
+  const toggleSort = (field: string) => {
+    if (sortField === field) {
+      setSortAsc(!sortAsc);
+    } else {
+      setSortField(field);
+      setSortAsc(true);
+    }
+  };
+
+  const SortableHead = ({ field, children, className = "" }: { field: string; children: React.ReactNode; className?: string }) => (
+    <TableHead className={`cursor-pointer select-none hover:bg-muted/50 transition-colors ${className}`} onClick={() => toggleSort(field)}>
+      <div className={`flex items-center gap-1 ${className.includes('text-right') ? 'justify-end' : ''}`}>
+        {children}
+        {sortField === field ? (
+          sortAsc ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+        ) : (
+          <div className="w-3" />
+        )}
+      </div>
+    </TableHead>
+  );
 
   const openNew = () => {
     setEditing(empty);
@@ -344,8 +391,16 @@ function ProductsAdmin() {
             className="pl-8"
           />
         </div>
+        <div className="flex items-center gap-2">
+          <Switch
+            id="filter-missing-seo"
+            checked={showMissingSeo}
+            onCheckedChange={setShowMissingSeo}
+          />
+          <Label htmlFor="filter-missing-seo" className="text-sm cursor-pointer whitespace-nowrap">Missing SEO</Label>
+        </div>
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">{filtered.length} of {rows.length}</span>
+          <span className="text-xs text-muted-foreground">Total: {total}</span>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button onClick={openNew} className="bg-primary hover:bg-primary/90">
@@ -648,12 +703,12 @@ function ProductsAdmin() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-14"></TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>SKU</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="text-right">Price</TableHead>
-              <TableHead className="text-right">Stock</TableHead>
-              <TableHead>Active</TableHead>
+              <SortableHead field="name">Name</SortableHead>
+              <SortableHead field="sku">SKU</SortableHead>
+              <SortableHead field="category_id">Category</SortableHead>
+              <SortableHead field="price" className="text-right">Price</SortableHead>
+              <SortableHead field="stock_quantity" className="text-right">Stock</SortableHead>
+              <SortableHead field="is_active">Active</SortableHead>
               <TableHead className="w-32 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -666,15 +721,15 @@ function ProductsAdmin() {
                   </TableCell>
                 </TableRow>
               ))}
-            {!loading && filtered.length === 0 && (
+            {!loading && rows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-10">
-                  No products yet.
+                  No products found.
                 </TableCell>
               </TableRow>
             )}
             {!loading &&
-              filtered.map((p) => (
+              rows.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell>
                     {p.image_url ? (
@@ -719,6 +774,37 @@ function ProductsAdmin() {
               ))}
           </TableBody>
         </Table>
+        <div className="p-4 border-t border-border flex flex-col sm:flex-row items-center justify-between bg-muted/10 gap-4">
+          <div className="text-xs text-muted-foreground">
+            Showing {Math.min((page - 1) * pageSize + 1, total || 0)} to {Math.min(page * pageSize, total)} of {total} products
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Per page:</span>
+              <Select value={pageSize.toString()} onValueChange={(v) => setPageSize(Number(v))}>
+                <SelectTrigger className="w-[70px] h-8 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="30">30</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="h-8 px-3 text-xs" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}>
+                Prev
+              </Button>
+              <span className="text-xs text-muted-foreground px-2">Page {page} of {Math.max(1, Math.ceil(total / pageSize))}</span>
+              <Button variant="outline" size="sm" className="h-8 px-3 text-xs" onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / pageSize)}>
+                Next
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

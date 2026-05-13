@@ -2,16 +2,31 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
-import { ShieldCheck, Truck, Cog, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Truck, Cog, CheckCircle2, MapPin, Phone, Mail, Clock } from "lucide-react";
+
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About Us — Geosynthetics Africa" },
-      { name: "description", content: "Africa's Only Integrated Geosynthetics Execution Partner." },
-      { property: "og:title", content: "About Us — Geosynthetics Africa" },
-    ],
-  }),
+  loader: async () => {
+    const { data } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const seoMap = (data?.value as Record<string, any>) || {};
+    return { seo: seoMap["/about"] || null };
+  },
+  head: ({ loaderData }) => {
+    const seo = loaderData?.seo;
+    const title = seo?.title || "About Us — Geosynthetics Africa";
+    const desc = seo?.description || "Africa's Only Integrated Geosynthetics Execution Partner.";
+    const meta = [
+      { title },
+      { name: "description", content: desc },
+      { property: "og:title", content: title },
+      { property: "og:description", content: desc },
+    ];
+    if (seo?.keywords) {
+      meta.push({ name: "keywords", content: seo.keywords });
+    }
+    return { meta };
+  },
   component: AboutPage,
 });
 
@@ -72,26 +87,33 @@ function AboutPage() {
 
       <section className="bg-surface-dark text-surface-dark-foreground">
         <div className="container-page py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="font-display text-3xl font-bold uppercase tracking-tight">
-              Trusted Where Failure Is Not an Option
-            </h2>
-            <p className="mt-4 text-base text-surface-dark-foreground/80 leading-relaxed mb-8">
-              Geosynthetics Africa is one of only five IAGI Installer Members in Africa, trusted by engineers, EPC contractors and asset owners to deliver systems exactly as designed – from specification through to installation sign-off.
-            </p>
-            <ul className="space-y-4">
-              {[
-                "IAGI Installer Member",
-                "Certified Installation Teams",
-                "Pan-African Execution Capability",
-                "GRI-GM13 and ASTM Standards Compliant"
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-primary" />
-                  <span className="font-bold uppercase tracking-wide text-sm">{item}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="space-y-10">
+            <div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-primary">
+                Pan-African Execution Capability
+              </h2>
+              <p className="mt-3 text-base text-surface-dark-foreground/80 leading-relaxed">
+                Operating across the African continent – with proven delivery in Southern, West, East and Central Africa – including remote mining operations and cross-border logistics environments.
+              </p>
+            </div>
+            
+            <div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-primary">
+                Trusted Where Failure Is Not an Option
+              </h2>
+              <p className="mt-3 text-base text-surface-dark-foreground/80 leading-relaxed">
+                Geosynthetics Africa is one of only five IAGI Installer Members in Africa, trusted by engineers, EPC contractors and asset owners to deliver systems exactly as designed – from specification through to installation sign-off.
+              </p>
+            </div>
+            
+            <div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight text-primary">
+                Geosynthetics Africa
+              </h2>
+              <p className="mt-3 text-base text-surface-dark-foreground/80 leading-relaxed">
+                One system and accountable. 100+ proven tracks on QA/QC certified installation delivered for leading mines across Africa.
+              </p>
+            </div>
           </div>
           <div className="relative rounded overflow-hidden aspect-video lg:aspect-square">
             <img 
@@ -158,14 +180,117 @@ function AboutPage() {
          </div>
       </section>
 
-      <div className="bg-surface-dark py-4 text-center">
-        <p className="text-xs text-surface-dark-foreground/50 max-w-4xl mx-auto px-4">
-          Trademark Notice: Mirafi® and GSE® are registered trademarks of Solmax. Tensar® is a registered trademark of Tensar International Corporation, a division of CMC. Eurobent® is a registered trademark of Eurobent Sp. z o.o. Geosynthetics Africa (Pty) Ltd supplies these products under authorization and does not claim ownership of any of the above trademarks.
-        </p>
+      <div className="bg-background py-16 border-t border-border">
+        <div className="container-page grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 className="font-display text-3xl font-bold uppercase text-primary max-w-sm">
+              Your 360° Partner in Lining, Reinforcement & Erosion Control
+            </h2>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <span className="font-bold uppercase tracking-wider text-foreground block mb-2">Trademark Notice</span>
+              Mirafi® and GSE® are registered trademarks of Solmax. Tensar® is a registered trademark of Tensar International Corporation, a division of CMC. Eurobent® is a registered trademark of Eurobent Sp. z o.o. Geosynthetics Africa (Pty) Ltd supplies these products under authorization and does not claim ownership of any of the above trademarks.
+            </p>
+          </div>
+        </div>
       </div>
 
+      {/* Contact Section */}
+      <section className="bg-surface-dark text-surface-dark-foreground relative py-16 md:py-24 overflow-hidden border-t border-border/10">
+        <div 
+          className="absolute inset-0 opacity-10 mix-blend-overlay"
+          style={{
+            backgroundImage: `url(https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        
+        <div className="container-page relative grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-10 pr-0 lg:pr-10">
+            <div>
+              <h2 className="font-display text-4xl font-bold uppercase tracking-tight text-white">Let's Start a Conversation</h2>
+              <p className="mt-4 text-surface-dark-foreground/70">Reach out to our experts to discuss your specific project requirements.</p>
+            </div>
+            
+            <div className="space-y-8">
+              <div className="flex gap-5">
+                <MapPin className="h-6 w-6 text-primary shrink-0" />
+                <div>
+                  <h4 className="font-bold uppercase tracking-wider text-white mb-2">Head Office</h4>
+                  <p className="text-sm text-surface-dark-foreground/80 leading-relaxed">
+                    7 Tamar Avenue, Lea Glen<br/>
+                    Randburg, Johannesburg, 2191<br/>
+                    South Africa
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-5">
+                <Phone className="h-6 w-6 text-primary shrink-0" />
+                <div>
+                  <h4 className="font-bold uppercase tracking-wider text-white mb-2">Contact</h4>
+                  <p className="text-sm text-surface-dark-foreground/80 leading-relaxed">
+                    E: info@geosynthetics.co.za<br/>
+                    Sales: +27 78 1355 926<br/>
+                    Admin: +27 11 083 8384
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-5">
+                <Clock className="h-6 w-6 text-primary shrink-0" />
+                <div>
+                  <h4 className="font-bold uppercase tracking-wider text-white mb-2">Operating Hours</h4>
+                  <p className="text-sm text-surface-dark-foreground/80 leading-relaxed">
+                    Monday – Friday: 08:00 AM – 17:00 PM<br/>
+                    Weekends: Closed on Saturday & Sunday
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-card text-card-foreground rounded p-6 md:p-8 border border-border shadow-2xl relative z-10">
+             <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-muted-foreground">Name</label>
+                    <input className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="John Doe" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-muted-foreground">Email Address</label>
+                    <input className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="john@example.com" type="email" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-muted-foreground">Company (Optional)</label>
+                    <input className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="Company Ltd" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-muted-foreground">Phone Number</label>
+                    <input className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="+27 00 000 0000" type="tel" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase text-muted-foreground">Project</label>
+                  <input className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="Project name or location" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase text-muted-foreground">Your Message</label>
+                  <textarea rows={4} className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition" placeholder="Tell us about your requirements..."></textarea>
+                </div>
+                <button type="button" className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-wide py-3.5 rounded hover:bg-primary-hover transition mt-2">
+                  Submit Request
+                </button>
+             </form>
+          </div>
+        </div>
+      </section>
+
       <PartnerStrip />
-      <BoqCtaBand />
     </>
   );
 }

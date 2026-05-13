@@ -7,15 +7,29 @@ import { APPLICATION_CATEGORIES, SERVICES } from "@/components/site/mega-menu-da
 import heroInstallation from "@/assets/hero-installation.png";
 import africaMap from "@/assets/africa.svg";
 
+import { supabase } from "@/integrations/supabase/client";
+
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Geosynthetics Africa — Africa's Integrated Geosynthetics Execution Platform" },
-      { name: "description", content: "Designed. Supplied. Installed. Tested. Certified. Complete engineered geosynthetic systems delivered across Africa with global best-in-class materials." },
-      { property: "og:title", content: "Geosynthetics Africa" },
-      { property: "og:description", content: "Africa's Integrated Geosynthetics Execution Platform — one partner, full accountability." },
-    ],
-  }),
+  loader: async () => {
+    const { data } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const seoMap = (data?.value as Record<string, any>) || {};
+    return { seo: seoMap["/"] || null };
+  },
+  head: ({ loaderData }) => {
+    const seo = loaderData?.seo;
+    const title = seo?.title || "Geosynthetics Africa — Africa's Integrated Geosynthetics Execution Platform";
+    const desc = seo?.description || "Designed. Supplied. Installed. Tested. Certified. Complete engineered geosynthetic systems delivered across Africa with global best-in-class materials.";
+    const meta = [
+      { title },
+      { name: "description", content: desc },
+      { property: "og:title", content: title },
+      { property: "og:description", content: desc },
+    ];
+    if (seo?.keywords) {
+      meta.push({ name: "keywords", content: seo.keywords });
+    }
+    return { meta };
+  },
   component: HomePage,
 });
 
@@ -156,7 +170,7 @@ function HomePage() {
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
                   {i < STEPS.length - 1 && (
-                    <ArrowRight className="hidden md:block absolute -right-2 top-[35%] h-4 w-4 text-primary" />
+                    <ArrowRight className="hidden md:block absolute -right-4 top-[35%] h-5 w-5 text-primary" />
                   )}
                 </div>
               ))}

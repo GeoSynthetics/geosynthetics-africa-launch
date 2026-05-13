@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Inbox, Package, FileText, Users, LayoutTemplate } from "lucide-react";
+import { LayoutDashboard, Inbox, Package, FileText, Users, LayoutTemplate, Search } from "lucide-react";
 
 const ITEMS = [
   { to: "/admin" as const, label: "Overview", icon: LayoutDashboard, exact: true },
@@ -8,6 +8,7 @@ const ITEMS = [
   { to: "/admin/products" as const, label: "Products", icon: Package, exact: false },
   { to: "/admin/resources" as const, label: "Resources", icon: FileText, exact: false },
   { to: "/admin/site-builder" as const, label: "Site Builder", icon: LayoutTemplate, exact: false },
+  { to: "/admin/pages-seo" as const, label: "Pages SEO", icon: Search, exact: false },
   { to: "/admin/users" as const, label: "Users & Roles", icon: Users, exact: false },
 ];
 

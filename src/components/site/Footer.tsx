@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Linkedin, Facebook, Instagram, Youtube } from "lucide-react";
 import { Logo } from "./Logo";
-import { PRODUCT_CATEGORIES, APPLICATION_CATEGORIES, SERVICES } from "./mega-menu-data";
+import { PRODUCT_CATEGORIES, APPLICATION_CATEGORIES, SERVICES, INDUSTRIES } from "./mega-menu-data";
 
 const RESOURCES = [
   { label: "Datasheets", to: "/resources" },
@@ -74,11 +74,13 @@ export function Footer() {
 
   const services = SERVICES.map((s) => ({ label: s.label, to: `/services/${s.slug}` }));
 
+  const industries = INDUSTRIES.map((i) => ({ label: i.label, to: `/industries/${i.slug}` }));
+
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
       {/* Main footer grid */}
       <div className="w-full px-6 lg:px-10 xl:px-16 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-x-6 gap-y-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-x-6 gap-y-8">
 
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
@@ -106,6 +108,9 @@ export function Footer() {
 
           {/* Applications */}
           <FooterCol title="Applications" items={applications} />
+
+          {/* Industries */}
+          <FooterCol title="Industries" items={industries} />
 
           {/* Services */}
           <FooterCol title="Services" items={services} />
@@ -147,13 +152,15 @@ export function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-surface-dark-foreground/10">
-        <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col md:flex-row items-center justify-between gap-3 py-4 text-[11px] text-surface-dark-foreground/50">
-          <div>© {new Date().getFullYear()} Geosynthetics Africa (Pty) Ltd. All Rights Reserved. | <a className="text-primary-foreground hover:text-primary transition" href="https://kavaradigital.online" target="_blank" rel="noopener noreferrer">Site by Kavara Digital</a> </div>
-          <div className="flex flex-wrap items-center gap-0">
+        <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
+          <div className="leading-relaxed">
+            © {new Date().getFullYear()} Geosynthetics Africa (Pty) Ltd. All Rights Reserved. <span className="hidden md:inline">|</span><br className="md:hidden" /> <a className="text-primary-foreground hover:text-primary transition whitespace-nowrap" href="https://kavaradigital.online" target="_blank" rel="noopener noreferrer">Site by Kavara Digital</a>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-y-2 md:gap-y-0">
             {CERTIFICATIONS.map((cert, idx) => (
-              <span key={cert} className="flex items-center uppercase tracking-wider">
-                {idx > 0 && <span className="mx-3 text-surface-dark-foreground/30">|</span>}
-                {cert}
+              <span key={cert} className="flex items-center uppercase tracking-wider text-center">
+                {idx > 0 && <span className="mx-2 md:mx-3 text-surface-dark-foreground/30">|</span>}
+                <span>{cert}</span>
               </span>
             ))}
           </div>
