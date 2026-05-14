@@ -167,10 +167,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                 key={p.name}
                 className="flex items-center justify-center h-6"
               >
-                <img 
-                  src={p.logo} 
-                  alt={`${p.name} logo`} 
-                  className="max-h-full max-w-full object-contain brightness-0 opacity-40 hover:opacity-80 transition"
+                <img
+                  src={p.logo}
+                  alt={`${p.name} logo`}
+                  className="max-h-full max-w-full object-contain opacity-70 hover:opacity-100 transition"
                 />
               </span>
             ))}
