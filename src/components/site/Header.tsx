@@ -31,30 +31,18 @@ type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Reco
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function useDynamicMegaMenus() {
-  const [config, setConfig] = useState<Record<string, any>>({});
+  const [menus, setMenus] = useState<typeof megaMenus>(megaMenus);
 
   useEffect(() => {
     supabase.from("site_config").select("value").eq("key", "mega_menu").maybeSingle().then(({ data }) => {
-      if (data && data.value) {
-        setConfig(data.value);
+      if (data && data.value && Array.isArray(data.value)) {
+        // New structure: full array
+        setMenus(data.value as typeof megaMenus);
+      } else if (data && data.value && data.value.menus && Array.isArray(data.value.menus)) {
+        setMenus(data.value.menus as typeof megaMenus);
       }
     });
   }, []);
-
-  const menus = useMemo(() => {
-    return megaMenus.map(m => {
-      if (config[m.key]) {
-        return {
-          ...m,
-          columns: {
-            ...m.columns,
-            ...config[m.key]
-          }
-        };
-      }
-      return m;
-    });
-  }, [config]);
 
   return menus;
 }
@@ -68,7 +56,7 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
             <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
               {m.label}
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="left-1/2 -translate-x-1/2 !w-screen !max-w-[1280px] p-0 border-0 bg-transparent shadow-none">
+            <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
               <MegaPanel config={m} />
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -256,15 +244,6 @@ export function Header() {
       <Logo />
       <DesktopNav menus={menus} />
       <div className="flex items-center gap-2 ml-auto xl:ml-0">
-        <Button
-          asChild
-          className="hidden xl:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
-        >
-          <Link to="/contacts">
-            Upload Project BOQ
-            <Upload className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
         <MobileNav menus={menus} />
       </div>
     </div>

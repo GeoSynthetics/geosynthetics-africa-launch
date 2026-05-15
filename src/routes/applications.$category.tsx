@@ -7,20 +7,21 @@ import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
 
 export const Route = createFileRoute("/applications/$category")({
   head: ({ params }) => {
-    const cat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
-    const label = cat?.label ?? "Application";
+    const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
+    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return {
       meta: [
         { title: `${label} — Geosynthetics Africa` },
-        { name: "description", content: `Engineered ${label.toLowerCase()} solutions, delivered as a complete system.` },
+        { name: "description", content: `Explore our advanced ${label.toLowerCase()} applications and projects.` },
         { property: "og:title", content: `${label} — Geosynthetics Africa` },
+        { property: "og:description", content: `Advanced ${label.toLowerCase()} geosynthetic solutions.` },
       ],
     };
   },
-  loader: ({ params }): { category: { slug: string; label: string } } => {
-    const cat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
-    if (!cat) throw notFound();
-    return { category: cat };
+  loader: ({ params }) => {
+    const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
+    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    return { category: { slug: params.category, label } };
   },
   component: ApplicationCategoryPage,
   errorComponent: ({ error }) => (
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/applications/$category")({
   notFoundComponent: () => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-3xl font-bold uppercase">Application not found</h1>
-      <p className="mt-2 text-muted-foreground">That application isn't in our catalogue.</p>
+      <p className="mt-2 text-muted-foreground">That application category isn't defined.</p>
       <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
         <Link to="/applications">Back to Applications</Link>
       </Button>
@@ -41,8 +42,7 @@ export const Route = createFileRoute("/applications/$category")({
 });
 
 function ApplicationCategoryPage() {
-  const params = useParams({ strict: false }) as { category: string };
-  const category = APPLICATION_CATEGORIES.find((c) => c.slug === params.category) ?? APPLICATION_CATEGORIES[0];
+  const { category } = Route.useLoaderData();
   return (
     <>
       <section

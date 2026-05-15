@@ -7,8 +7,8 @@ import { SERVICES } from "@/components/site/mega-menu-data";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
-    const service = SERVICES.find((s) => s.slug === params.slug);
-    const label = service?.label ?? "Service";
+    const staticSvc = SERVICES.find((s) => s.slug === params.slug);
+    const label = staticSvc?.label ?? params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return {
       meta: [
         { title: `${label} — Geosynthetics Africa` },
@@ -17,10 +17,10 @@ export const Route = createFileRoute("/services/$slug")({
       ],
     };
   },
-  loader: ({ params }): { service: { slug: string; label: string; icon: string } } => {
-    const service = SERVICES.find((s) => s.slug === params.slug);
-    if (!service) throw notFound();
-    return { service };
+  loader: ({ params }) => {
+    const staticSvc = SERVICES.find((s) => s.slug === params.slug);
+    const label = staticSvc?.label ?? params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    return { service: { slug: params.slug, label, icon: staticSvc?.icon || "CheckCircle" } };
   },
   component: ServicePage,
   errorComponent: ({ error }) => (
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/services/$slug")({
   notFoundComponent: () => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-3xl font-bold uppercase">Service not found</h1>
-      <p className="mt-2 text-muted-foreground">That service isn't in our catalogue.</p>
+      <p className="mt-2 text-muted-foreground">That service isn't defined.</p>
       <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
         <Link to="/services">Back to Services</Link>
       </Button>
@@ -74,8 +74,7 @@ const SERVICE_CONTENT: Record<string, { desc: string; features: string[]; image:
 };
 
 function ServicePage() {
-  const params = useParams({ strict: false }) as { slug: string };
-  const service = SERVICES.find((s) => s.slug === params.slug) ?? SERVICES[0];
+  const { service } = Route.useLoaderData();
   const content = SERVICE_CONTENT[service.slug] ?? SERVICE_CONTENT.supply;
 
   return (

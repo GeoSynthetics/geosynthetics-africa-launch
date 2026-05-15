@@ -7,8 +7,8 @@ import { PRODUCT_CATEGORIES } from "@/components/site/mega-menu-data";
 
 export const Route = createFileRoute("/products/$category")({
   head: ({ params }) => {
-    const cat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
-    const label = cat?.label ?? "Product";
+    const staticCat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
+    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return {
       meta: [
         { title: `${label} — Geosynthetics Africa` },
@@ -18,10 +18,10 @@ export const Route = createFileRoute("/products/$category")({
       ],
     };
   },
-  loader: ({ params }): { category: { slug: string; label: string } } => {
-    const cat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
-    if (!cat) throw notFound();
-    return { category: cat };
+  loader: ({ params }) => {
+    const staticCat = PRODUCT_CATEGORIES.find((c) => c.slug === params.category);
+    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    return { category: { slug: params.category, label } };
   },
   component: ProductCategoryPage,
   errorComponent: ({ error }) => (
@@ -42,8 +42,7 @@ export const Route = createFileRoute("/products/$category")({
 });
 
 function ProductCategoryPage() {
-  const params = useParams({ strict: false }) as { category: string };
-  const category = PRODUCT_CATEGORIES.find((c) => c.slug === params.category) ?? PRODUCT_CATEGORIES[0];
+  const { category } = Route.useLoaderData();
   return (
     <>
       <section

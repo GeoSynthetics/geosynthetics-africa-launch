@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Award, ShieldCheck, Globe, Truck, ChevronDown, User as UserIcon, LogOut } from "lucide-react";
+import { Award, ShieldCheck, Globe, Truck, ChevronDown, User as UserIcon, LogOut, Upload } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import {
@@ -115,6 +115,13 @@ export function TopBar() {
         <MobilePerksSlider />
 
         <div className="flex items-center gap-4">
+          <Link
+            to="/contacts"
+            className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium"
+          >
+            <Upload className="h-3.5 w-3.5" />
+            <span>Upload Project BOQ</span>
+          </Link>
           <PartnerPortalLink />
           <button
             type="button"
