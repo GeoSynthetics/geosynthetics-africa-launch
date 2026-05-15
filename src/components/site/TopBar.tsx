@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Award, ShieldCheck, Globe, Truck, ChevronDown, User as UserIcon, LogOut } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -67,6 +68,37 @@ function PartnerPortalLink() {
   );
 }
 
+function MobilePerksSlider() {
+  const [index, setIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % items.length);
+        setFade(true);
+      }, 500); // Wait for fade out
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const item = items[index];
+  const Icon = item.icon;
+
+  return (
+    <div
+      className={`md:hidden flex items-center gap-2 opacity-90 transition-all duration-500 min-w-0 ${
+        fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+      }`}
+    >
+      <Icon className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+      <span className="truncate">{item.label}</span>
+    </div>
+  );
+}
+
 export function TopBar() {
   return (
     <div className="bg-surface-dark text-surface-dark-foreground text-xs">
@@ -79,10 +111,9 @@ export function TopBar() {
             </div>
           ))}
         </div>
-        <div className="md:hidden flex items-center gap-2 opacity-90">
-          <Globe className="h-3.5 w-3.5 text-primary" />
-          <span>Pan-African Geosynthetics Platform</span>
-        </div>
+        
+        <MobilePerksSlider />
+
         <div className="flex items-center gap-4">
           <PartnerPortalLink />
           <button
@@ -99,3 +130,4 @@ export function TopBar() {
     </div>
   );
 }
+

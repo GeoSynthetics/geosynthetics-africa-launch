@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
@@ -25,6 +26,18 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
 
 function MegaPanel({ config }: { config: MegaMenuConfig }) {
   const { columns } = config;
+  const [activeItem, setActiveItem] = useState(columns.primary[0]);
+
+  const displayData = {
+    secondaryTitle: activeItem?.content?.secondaryTitle || columns.secondaryTitle,
+    secondary: activeItem?.content?.secondary || columns.secondary,
+    featuredTitle: activeItem?.content?.featuredTitle || columns.featuredTitle,
+    featuredKind: activeItem?.content?.featuredKind || columns.featuredKind,
+    featured: activeItem?.content?.featured || columns.featured,
+    quickActionsTitle: activeItem?.content?.quickActionsTitle || columns.quickActionsTitle,
+    quickActions: activeItem?.content?.quickActions || columns.quickActions,
+  };
+
   return (
     <div className="w-screen max-w-[1280px] bg-popover text-popover-foreground border-t border-border shadow-2xl">
       <div className="grid grid-cols-12 gap-6 p-8">
@@ -36,17 +49,20 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           <ul className="space-y-1">
             {columns.primary.map((item) => {
               const Icon = item.icon ? ICONS[item.icon] : undefined;
+              const isActive = activeItem?.label === item.label;
               return (
-                <li key={item.label}>
+                <li key={item.label} onMouseEnter={() => setActiveItem(item)}>
                   <RLink
                     to={item.to}
                     params={item.params}
                     onClick={closeMenus}
-                    className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-primary transition"
+                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${
+                      isActive ? "bg-accent text-primary" : "text-foreground hover:bg-accent hover:text-primary"
+                    }`}
                   >
-                    {Icon && <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition" />}
+                    {Icon && <Icon className={`h-4 w-4 transition ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`} />}
                     <span className="font-medium flex-1">{item.label}</span>
-                    <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition" />
+                    <ChevronRight className={`h-4 w-4 transition ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
                   </RLink>
                 </li>
               );
@@ -57,10 +73,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
         {/* Secondary list */}
         <div className="col-span-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {columns.secondaryTitle}
+            {displayData.secondaryTitle}
           </h4>
           <ul className="space-y-1">
-            {columns.secondary.map((item) => (
+            {displayData.secondary.map((item) => (
               <li key={item.label}>
                 <RLink
                   to={item.to}
@@ -78,11 +94,11 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
         {/* Featured */}
         <div className="col-span-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {columns.featuredTitle}
+            {displayData.featuredTitle}
           </h4>
-          {columns.featuredKind === "product" ? (
+          {displayData.featuredKind === "product" ? (
             <ul className="space-y-2">
-              {(columns.featured as MegaProductItem[]).map((p) => (
+              {(displayData.featured as MegaProductItem[]).map((p) => (
                 <li key={p.label}>
                   <RLink
                     to={p.to}
@@ -102,7 +118,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             </ul>
           ) : (
             <ul className="space-y-3">
-              {(columns.featured as MegaFeatureItem[]).map((f) => (
+              {(displayData.featured as MegaFeatureItem[]).map((f) => (
                 <li key={f.title}>
                   <RLink to={f.to} params={f.params} onClick={closeMenus} className="flex gap-3 group">
                     <img
@@ -127,10 +143,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
         {/* Quick actions */}
         <div className="col-span-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {columns.quickActionsTitle}
+            {displayData.quickActionsTitle}
           </h4>
           <ul className="space-y-2">
-            {columns.quickActions.map((qa) => {
+            {displayData.quickActions.map((qa) => {
               const Icon = ICONS[qa.icon] ?? BookOpen;
               return (
                 <li key={qa.title}>

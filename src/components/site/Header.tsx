@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetDescription } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,9 +106,9 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
           <SheetTitle>
             <Logo />
           </SheetTitle>
-          <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Close menu">
-            <X className="h-5 w-5" />
-          </Button>
+          <SheetDescription className="sr-only">
+            Navigation menu for Geosynthetics Africa
+          </SheetDescription>
         </SheetHeader>
         <div className="flex-1 overflow-y-auto p-4">
           <Accordion type="single" collapsible>
@@ -232,26 +232,60 @@ function UserMenu() {
 
 export function Header() {
   const menus = useDynamicMegaMenus();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 200);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const headerContent = (
+    <div className="flex items-center gap-4 2xl:gap-6 py-4 px-5">
+      <Logo />
+      <DesktopNav menus={menus} />
+      <div className="flex items-center gap-2 ml-auto xl:ml-0">
+        <Button
+          asChild
+          className="hidden xl:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
+        >
+          <Link to="/contacts">
+            Upload Project BOQ
+            <Upload className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+        <MobileNav menus={menus} />
+      </div>
+    </div>
+  );
 
   return (
-    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
-      <TopBar />
-      <div className="flex items-center gap-4 2xl:gap-6 py-4 px-5">
-        <Logo />
-        <DesktopNav menus={menus} />
-        <div className="flex items-center gap-2 ml-auto xl:ml-0">
-          <Button
-            asChild
-            className="hidden xl:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-semibold uppercase tracking-wide text-xs"
-          >
-            <Link to="/contacts">
-              Upload Project BOQ
-              <Upload className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-          <MobileNav menus={menus} />
-        </div>
+    <>
+      <div className="w-full relative z-40">
+        <TopBar />
+        <header className="bg-background border-b border-border">
+          {headerContent}
+        </header>
       </div>
-    </header>
+
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${
+          isScrolled ? "translate-y-0 opacity-100" : "-translate-y-[100%] opacity-0 pointer-events-none"
+        }`}
+      >
+        {headerContent}
+      </header>
+    </>
   );
 }
