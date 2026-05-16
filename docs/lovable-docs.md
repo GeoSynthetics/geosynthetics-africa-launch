@@ -101,6 +101,51 @@ To force a sitemap refresh in production: simply visit `{YOUR_DOMAIN}/sitemap.xm
 
 To validate: paste the sitemap URL into [Google's Rich Results Test](https://search.google.com/test/rich-results) or submit via [Google Search Console](https://search.google.com/search-console) → Sitemaps.
 
+## 2026-05-15 — Implement reveal-on-scroll sticky Header
+
+**Scope:** UI / UX
+**Summary:** Refactored the `Header` component to implement a reveal-on-scroll effect. The static header and TopBar scroll out of view naturally, and a cloned, fixed header smoothly slides down from the top and fades in after 200px of scrolling. This provides persistent navigation without losing the TopBar context at the top of the page.
+**Files touched:** `src/components/site/Header.tsx`
+**Notes / follow-ups:** None
+
+---
+
+## 2026-05-15 — Implement Back to Top button with scroll progress
+
+**Scope:** UI / UX
+**Summary:** Created a custom `ScrollToTop` component that appears after scrolling down 300px. It features a circular progress indicator that updates based on scroll percentage and uses brand colors. Integrated it globally in the root layout.
+**Files touched:** `src/components/site/ScrollToTop.tsx` (new), `src/routes/__root.tsx`
+**Notes / follow-ups:** None
+
+---
+
+## 2026-05-15 — Restructure Header sticky behavior
+
+**Scope:** UI / Header
+**Summary:** Modified the `Header` component to move the `TopBar` outside of the sticky container. This ensures the main navigation remains fixed at the top while the TopBar scrolls away with the page content.
+**Files touched:** `src/components/site/Header.tsx`
+**Notes / follow-ups:** None
+
+---
+
+## 2026-05-15 — Implement TopBar certifications slider for mobile
+
+## 2026-05-15 — Fix double close button in mobile navigation
+
+**Scope:** UI / Mobile Navigation
+**Summary:** Removed a redundant manual close button from the mobile navigation `SheetHeader` that was overlapping with the default close button provided by `SheetContent`. Also added a visually hidden `SheetDescription` to improve accessibility and resolve console warnings.
+**Files touched:** `src/components/site/Header.tsx`
+**Notes / follow-ups:** None
+
+---
+
+## 2026-05-15 — Implement Mega Menu Admin Builder
+
+**Scope:** Admin / Navigation
+**Summary:** Overhauled the `Site Builder` page to support comprehensive, recursive visual editing of the `megaMenus` array. Administrators can now add, edit, and delete primary categories, secondary links, featured products/images, and quick actions directly from the UI. The navigation structure is saved as JSON in the Supabase `site_config` table and loaded dynamically by the `Header` component. The `products`, `applications`, and `services` catch-all routes were also decoupled from hardcoded category lists so newly created admin categories route successfully without throwing 404 errors.
+**Files touched:** `src/routes/admin.site-builder.tsx`, `src/components/site/Header.tsx`, `src/routes/products.$category.tsx`, `src/routes/applications.$category.tsx`, `src/routes/services.$slug.tsx`
+**Notes / follow-ups:** Initializing the database is handled seamlessly — visiting the Site Builder will load defaults if the database is empty, and clicking "Save" will seed it.
+
 ---
 
 <!--

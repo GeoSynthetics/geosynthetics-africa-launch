@@ -1,0 +1,3046 @@
+
+INSERT INTO public.site_config (key, value)
+VALUES ('mega_menu', '[
+  {
+    "key": "products",
+    "label": "Products",
+    "to": "/products",
+    "columns": {
+      "primaryTitle": "Browse Products",
+      "primary": [
+        {
+          "label": "Geomembranes",
+          "icon": "Layers",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          },
+          "content": {
+            "secondaryTitle": "Geomembranes",
+            "secondary": [
+              {
+                "label": "HDPE Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "LLDPE Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "PVC Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "EPDM Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "PP Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "Textured Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "Speciality Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "Floating Cover Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "All Geomembranes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "HDPE Smooth Geomembrane",
+                "spec": "0.5mm – 3.0mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "HDPE Textured Geomembrane",
+                "spec": "0.5mm – 3.0mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "LLDPE Geomembrane",
+                "spec": "0.5mm – 2.0mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              },
+              {
+                "label": "PVC Geomembrane",
+                "spec": "0.5mm – 2.0mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geomembranes"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Geomembranes",
+                "description": "Explore all Geomembranes",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Geotextiles",
+          "icon": "Grid3x3",
+          "to": "/products/$category",
+          "params": {
+            "category": "geotextiles"
+          },
+          "content": {
+            "secondaryTitle": "Geotextiles",
+            "secondary": [
+              {
+                "label": "Non-Woven Geotextiles",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Woven Geotextiles",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "High-Strength Geotextiles",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Geotextile Tubes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Paving Fabrics",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Filtration Geotextiles",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "All Geotextiles",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "Non-Woven PET Geotextile",
+                "spec": "100g – 1200g/m²",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Woven PP Geotextile",
+                "spec": "15kN – 100kN",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "High-Strength Woven PET",
+                "spec": "100kN – 1000kN",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              },
+              {
+                "label": "Geotextile Sand Containers",
+                "spec": "Custom Sizes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geotextiles"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Geotextiles",
+                "description": "Explore all Geotextiles",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Geogrids",
+          "icon": "Grid2x2",
+          "to": "/products/$category",
+          "params": {
+            "category": "geogrids"
+          },
+          "content": {
+            "secondaryTitle": "Geogrids",
+            "secondary": [
+              {
+                "label": "Biaxial Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Uniaxial Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Triaxial Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Fiberglass Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Polyester Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Geogrid Composites",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "All Geogrids",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "Extruded Biaxial PP Geogrid",
+                "spec": "20kN – 40kN",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Uniaxial HDPE Geogrid",
+                "spec": "50kN – 200kN",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Asphalt Reinforcement Fiberglass",
+                "spec": "50kN – 100kN",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              },
+              {
+                "label": "Geogrid-Geotextile Composite",
+                "spec": "High Performance",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geogrids"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Geogrids",
+                "description": "Explore all Geogrids",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Geocells",
+          "icon": "Hexagon",
+          "to": "/products/$category",
+          "params": {
+            "category": "geocells"
+          },
+          "content": {
+            "secondaryTitle": "Geocells",
+            "secondary": [
+              {
+                "label": "Standard Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Textured Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Perforated Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "High-Density Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Slope Protection Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "All Geocells",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "HDPE Textured & Perforated Geocell",
+                "spec": "75mm – 200mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Heavy Duty Load Support Geocell",
+                "spec": "High Density",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Slope Protection Geocell System",
+                "spec": "UV Stabilized",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              },
+              {
+                "label": "Channel Protection Geocell",
+                "spec": "Flow Resistant",
+                "to": "/products/$category",
+                "params": {
+                  "category": "geocells"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Geocells",
+                "description": "Explore all Geocells",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "GCLs",
+          "icon": "Sheet",
+          "to": "/products/$category",
+          "params": {
+            "category": "gcls"
+          },
+          "content": {
+            "secondaryTitle": "GCLs",
+            "secondary": [
+              {
+                "label": "Standard GCLs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "PE Coated GCLs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "Reinforced GCLs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "Unreinforced GCLs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "Bentonite Powder/Granules",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "All GCLs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "Reinforced Needle-Punched GCL",
+                "spec": "4.5kg – 5.5kg/m²",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "PE Laminated GCL",
+                "spec": "Extra Protection",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "Double Non-Woven GCL",
+                "spec": "High Filtration",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              },
+              {
+                "label": "High Swell Sodium Bentonite",
+                "spec": "Premium Grade",
+                "to": "/products/$category",
+                "params": {
+                  "category": "gcls"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All GCLs",
+                "description": "Explore all GCLs",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Drainage Composites",
+          "icon": "Waves",
+          "to": "/products/$category",
+          "params": {
+            "category": "drainage-composites"
+          },
+          "content": {
+            "secondaryTitle": "Drainage Composites",
+            "secondary": [
+              {
+                "label": "Geonets",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Geocomposite Drains",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Strip Drains",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Prefabricated Vertical Drains",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Drainage Boards",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "All Drainage Composites",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "Tri-Planar Geocomposite Drain",
+                "spec": "High Transmissivity",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Bi-Planar Geonet Composite",
+                "spec": "5mm – 8mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Prefabricated Vertical Drain (PVD)",
+                "spec": "Soil Consolidation",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              },
+              {
+                "label": "Dimple Drainage Board",
+                "spec": "Wall Drainage",
+                "to": "/products/$category",
+                "params": {
+                  "category": "drainage-composites"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Drainage Composites",
+                "description": "Explore all Drainage Composites",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Erosion Control",
+          "icon": "Mountain",
+          "to": "/products/$category",
+          "params": {
+            "category": "erosion-control"
+          },
+          "content": {
+            "secondaryTitle": "Erosion Control",
+            "secondary": [
+              {
+                "label": "Erosion Control Blankets",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Turf Reinforcement Mats",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Coir Logs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Silt Fences",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Gabions & Mattresses",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "All Erosion Control",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "3D Turf Reinforcement Mat",
+                "spec": "Heavy Duty",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Biodegradable Coir Blanket",
+                "spec": "100% Natural",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Woven Silt Fence",
+                "spec": "Premium Grade",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Woven Gabion Baskets",
+                "spec": "Zinc/PVC Coated",
+                "to": "/products/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Erosion Control",
+                "description": "Explore all Erosion Control",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Accessories",
+          "icon": "Wrench",
+          "to": "/products/$category",
+          "params": {
+            "category": "accessories"
+          },
+          "content": {
+            "secondaryTitle": "Accessories",
+            "secondary": [
+              {
+                "label": "Welding Rods",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Bentonite Paste",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Fixing Pins & Pegs",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Seaming Tapes",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Extrusion Welders",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Testing Equipment",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "All Accessories",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              }
+            ],
+            "featuredTitle": "Popular Products",
+            "featuredKind": "product",
+            "featured": [
+              {
+                "label": "HDPE/LLDPE Welding Rods",
+                "spec": "4mm – 5mm",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Sodium Bentonite Paste",
+                "spec": "Waterproofing",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Steel J-Pins & Fixing Pegs",
+                "spec": "Corrosion Resistant",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              },
+              {
+                "label": "Geotextile Joining Tape",
+                "spec": "High Tack",
+                "to": "/products/$category",
+                "params": {
+                  "category": "accessories"
+                }
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "All Accessories",
+                "description": "Explore all Accessories",
+                "to": "/catalogue",
+                "icon": "Layers"
+              },
+              {
+                "title": "Download Data Sheets",
+                "description": "Technical documents",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Installation Guides",
+                "description": "Step-by-step guides",
+                "to": "/resources",
+                "icon": "FileText"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get technical advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              }
+            ]
+          }
+        }
+      ],
+      "secondaryTitle": "Geomembranes",
+      "secondary": [
+        {
+          "label": "HDPE Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "LLDPE Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "PVC Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "EPDM Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "PP Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "Textured Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "Speciality Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "Floating Cover Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "All Geomembranes",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        }
+      ],
+      "featuredTitle": "Popular Products",
+      "featuredKind": "product",
+      "featured": [
+        {
+          "label": "HDPE Smooth Geomembrane",
+          "spec": "0.5mm – 3.0mm",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "HDPE Textured Geomembrane",
+          "spec": "0.5mm – 3.0mm",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "LLDPE Geomembrane",
+          "spec": "0.5mm – 2.0mm",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        },
+        {
+          "label": "PVC Geomembrane",
+          "spec": "0.5mm – 2.0mm",
+          "to": "/products/$category",
+          "params": {
+            "category": "geomembranes"
+          }
+        }
+      ],
+      "quickActionsTitle": "Quick Actions",
+      "quickActions": [
+        {
+          "title": "All Geomembranes",
+          "description": "Explore all Geomembranes",
+          "to": "/catalogue",
+          "icon": "Layers"
+        },
+        {
+          "title": "Download Data Sheets",
+          "description": "Technical documents",
+          "to": "/resources",
+          "icon": "Download"
+        },
+        {
+          "title": "Installation Guides",
+          "description": "Step-by-step guides",
+          "to": "/resources",
+          "icon": "FileText"
+        },
+        {
+          "title": "Speak to Expert",
+          "description": "Get technical advice",
+          "to": "/contacts",
+          "icon": "MessageCircle"
+        }
+      ]
+    }
+  },
+  {
+    "key": "applications",
+    "label": "Applications",
+    "to": "/applications",
+    "columns": {
+      "primaryTitle": "Application Categories",
+      "primary": [
+        {
+          "label": "Mining Systems",
+          "icon": "Pickaxe",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          },
+          "content": {
+            "secondaryTitle": "Mining Systems",
+            "secondary": [
+              {
+                "label": "Tailings Storage Facilities (TSF)",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                }
+              },
+              {
+                "label": "Heap Leach Pads",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                }
+              },
+              {
+                "label": "Process Ponds & Tanks",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                }
+              },
+              {
+                "label": "ROM Pads",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                }
+              }
+            ],
+            "featuredTitle": "Featured Applications",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "TSF Lining System",
+                "description": "Complete containment with HDPE geomembranes, GCLs & leak detection.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              },
+              {
+                "title": "Heap Leach Pad",
+                "description": "Engineered lining for chemical containment and leak protection.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "mining-systems"
+                },
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Water Containment",
+          "icon": "Droplets",
+          "to": "/applications/$category",
+          "params": {
+            "category": "water-containment"
+          },
+          "content": {
+            "secondaryTitle": "Water Containment",
+            "secondary": [
+              {
+                "label": "Reservoirs & Dams",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                }
+              },
+              {
+                "label": "Canals & Channels",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                }
+              },
+              {
+                "label": "Stormwater Attenuation",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                }
+              },
+              {
+                "label": "Potable Water Storage",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                }
+              }
+            ],
+            "featuredTitle": "Featured Applications",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Process Ponds",
+                "description": "Reliable, cost-effective lining systems for process water.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                },
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+              },
+              {
+                "title": "Reservoir Lining",
+                "description": "High-performance geomembranes for secure water storage.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "water-containment"
+                },
+                "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Waste & Landfills",
+          "icon": "Trash2",
+          "to": "/applications/$category",
+          "params": {
+            "category": "waste-landfills"
+          },
+          "content": {
+            "secondaryTitle": "Waste & Landfills",
+            "secondary": [
+              {
+                "label": "Landfill Basal Lining",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                }
+              },
+              {
+                "label": "Landfill Capping Systems",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                }
+              },
+              {
+                "label": "Leachate Ponds",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                }
+              },
+              {
+                "label": "Secondary Containment",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                }
+              }
+            ],
+            "featuredTitle": "Featured Applications",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Secure Landfill Lining",
+                "description": "Multi-layered barrier systems for environmental protection.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                },
+                "image": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80"
+              },
+              {
+                "title": "Landfill Capping",
+                "description": "Engineered closures for municipal and hazardous waste.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "waste-landfills"
+                },
+                "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Roads & Infrastructure",
+          "icon": "Construction",
+          "to": "/applications/$category",
+          "params": {
+            "category": "roads-infrastructure"
+          },
+          "content": {
+            "secondaryTitle": "Roads & Infrastructure",
+            "secondary": [
+              {
+                "label": "Pavement Optimization",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                }
+              },
+              {
+                "label": "Subgrade Stabilization",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                }
+              },
+              {
+                "label": "Retaining Walls",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                }
+              },
+              {
+                "label": "Railway Trackbeds",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                }
+              }
+            ],
+            "featuredTitle": "Featured Applications",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Road Reinforcement",
+                "description": "Geogrids and geotextiles for increased pavement lifespan.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                },
+                "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+              },
+              {
+                "title": "MSE Walls",
+                "description": "Mechanically Stabilized Earth walls for steep slopes.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "roads-infrastructure"
+                },
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Erosion Control",
+          "icon": "Mountain",
+          "to": "/applications/$category",
+          "params": {
+            "category": "erosion-control"
+          },
+          "content": {
+            "secondaryTitle": "Erosion Control",
+            "secondary": [
+              {
+                "label": "View All Erosion Control",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              },
+              {
+                "label": "Projects in Erosion Control",
+                "to": "/projects"
+              },
+              {
+                "label": "Technical Specs",
+                "to": "/resources"
+              },
+              {
+                "label": "Installation Methods",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "erosion-control"
+                }
+              }
+            ],
+            "featuredTitle": "Featured in Erosion Control",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Erosion Control Systems",
+                "description": "Explore our advanced geosynthetic solutions for erosion control.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "erosion-control"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              },
+              {
+                "title": "Latest Case Study",
+                "description": "See how our products perform in real-world erosion control applications.",
+                "to": "/projects",
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Drainage Systems",
+          "icon": "Waves",
+          "to": "/applications/$category",
+          "params": {
+            "category": "drainage-systems"
+          },
+          "content": {
+            "secondaryTitle": "Drainage Systems",
+            "secondary": [
+              {
+                "label": "View All Drainage Systems",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "drainage-systems"
+                }
+              },
+              {
+                "label": "Projects in Drainage Systems",
+                "to": "/projects"
+              },
+              {
+                "label": "Technical Specs",
+                "to": "/resources"
+              },
+              {
+                "label": "Installation Methods",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "drainage-systems"
+                }
+              }
+            ],
+            "featuredTitle": "Featured in Drainage Systems",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Drainage Systems Systems",
+                "description": "Explore our advanced geosynthetic solutions for drainage systems.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "drainage-systems"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              },
+              {
+                "title": "Latest Case Study",
+                "description": "See how our products perform in real-world drainage systems applications.",
+                "to": "/projects",
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Agriculture & Aquaculture",
+          "icon": "Sprout",
+          "to": "/applications/$category",
+          "params": {
+            "category": "agriculture-aquaculture"
+          },
+          "content": {
+            "secondaryTitle": "Agriculture & Aquaculture",
+            "secondary": [
+              {
+                "label": "View All Agriculture & Aquaculture",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "agriculture-aquaculture"
+                }
+              },
+              {
+                "label": "Projects in Agriculture & Aquaculture",
+                "to": "/projects"
+              },
+              {
+                "label": "Technical Specs",
+                "to": "/resources"
+              },
+              {
+                "label": "Installation Methods",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "agriculture-aquaculture"
+                }
+              }
+            ],
+            "featuredTitle": "Featured in Agriculture & Aquaculture",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Agriculture & Aquaculture Systems",
+                "description": "Explore our advanced geosynthetic solutions for agriculture & aquaculture.",
+                "to": "/applications/$category",
+                "params": {
+                  "category": "agriculture-aquaculture"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              },
+              {
+                "title": "Latest Case Study",
+                "description": "See how our products perform in real-world agriculture & aquaculture applications.",
+                "to": "/projects",
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Application Support",
+            "quickActions": [
+              {
+                "title": "Application Guides",
+                "description": "Solutions by application",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Get engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              },
+              {
+                "title": "Case Studies",
+                "description": "View completed projects",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Brochures",
+                "description": "Download brochures",
+                "to": "/resources",
+                "icon": "Download"
+              }
+            ]
+          }
+        }
+      ],
+      "secondaryTitle": "Mining Systems",
+      "secondary": [
+        {
+          "label": "Tailings Storage Facilities (TSF)",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          }
+        },
+        {
+          "label": "Heap Leach Pads",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          }
+        },
+        {
+          "label": "Process Ponds & Tanks",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          }
+        },
+        {
+          "label": "ROM Pads",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          }
+        }
+      ],
+      "featuredTitle": "Featured Applications",
+      "featuredKind": "image",
+      "featured": [
+        {
+          "title": "TSF Lining System",
+          "description": "Complete containment with HDPE geomembranes, GCLs & leak detection.",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          },
+          "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+        },
+        {
+          "title": "Heap Leach Pad",
+          "description": "Engineered lining for chemical containment and leak protection.",
+          "to": "/applications/$category",
+          "params": {
+            "category": "mining-systems"
+          },
+          "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+        }
+      ],
+      "quickActionsTitle": "Application Support",
+      "quickActions": [
+        {
+          "title": "Application Guides",
+          "description": "Solutions by application",
+          "to": "/resources",
+          "icon": "BookOpen"
+        },
+        {
+          "title": "Design Support",
+          "description": "Get engineering assistance",
+          "to": "/services",
+          "icon": "PencilRuler"
+        },
+        {
+          "title": "Case Studies",
+          "description": "View completed projects",
+          "to": "/resources",
+          "icon": "FileCheck"
+        },
+        {
+          "title": "Brochures",
+          "description": "Download brochures",
+          "to": "/resources",
+          "icon": "Download"
+        }
+      ]
+    }
+  },
+  {
+    "key": "services",
+    "label": "Services",
+    "to": "/services",
+    "columns": {
+      "primaryTitle": "Our Services",
+      "primary": [
+        {
+          "label": "Supply",
+          "icon": "Truck",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          },
+          "content": {
+            "secondaryTitle": "Supply Services",
+            "secondary": [
+              {
+                "label": "Global Sourcing",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "supply"
+                }
+              },
+              {
+                "label": "Local Expertise",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "supply"
+                }
+              },
+              {
+                "label": "Best-in-Class Brands",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "supply"
+                }
+              },
+              {
+                "label": "Quality Assurance",
+                "to": "/quality-assurance"
+              },
+              {
+                "label": "Material Availability",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "supply"
+                }
+              }
+            ],
+            "featuredTitle": "Supply Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Global Sourcing",
+                "description": "Access to global manufacturers and best-in-class materials.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "supply"
+                },
+                "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+              },
+              {
+                "title": "Pan-African Logistics",
+                "description": "Efficient delivery networks across the continent.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "logistics"
+                },
+                "image": "https://images.unsplash.com/photo-1586528116311-ad8ed7c663c0?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Installation",
+          "icon": "HardHat",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "installation"
+          },
+          "content": {
+            "secondaryTitle": "Installation",
+            "secondary": [
+              {
+                "label": "Certified Teams",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "installation"
+                }
+              },
+              {
+                "label": "Site Preparation",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "installation"
+                }
+              },
+              {
+                "label": "Geomembrane Welding",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "installation"
+                }
+              },
+              {
+                "label": "Testing & Commissioning",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "qa-qc"
+                }
+              }
+            ],
+            "featuredTitle": "Installation Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Expert Installation",
+                "description": "Certified installation teams with proven methodologies.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "installation"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              },
+              {
+                "title": "Specialized Equipment",
+                "description": "State-of-the-art welding and deployment tools.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "installation"
+                },
+                "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        },
+        {
+          "label": "QA / QC & Testing",
+          "icon": "ClipboardCheck",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "qa-qc"
+          },
+          "content": {
+            "secondaryTitle": "QA / QC & Testing",
+            "secondary": [
+              {
+                "label": "On-Site Testing",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "qa-qc"
+                }
+              },
+              {
+                "label": "Destructive Testing",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "qa-qc"
+                }
+              },
+              {
+                "label": "Non-Destructive Testing",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "qa-qc"
+                }
+              },
+              {
+                "label": "Documentation",
+                "to": "/resources"
+              }
+            ],
+            "featuredTitle": "Quality Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Quality & Testing",
+                "description": "On-site testing and documentation to international standards.",
+                "to": "/quality-assurance",
+                "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80"
+              },
+              {
+                "title": "Certified Technicians",
+                "description": "Experienced QA/QC personnel for rigorous verification.",
+                "to": "/quality-assurance",
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Design Support",
+          "icon": "PencilRuler",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "design-support"
+          },
+          "content": {
+            "secondaryTitle": "Design Support",
+            "secondary": [
+              {
+                "label": "Engineering Consultation",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                }
+              },
+              {
+                "label": "Material Selection",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                }
+              },
+              {
+                "label": "CAD Detailing",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                }
+              },
+              {
+                "label": "BOQ Optimization",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                }
+              }
+            ],
+            "featuredTitle": "Design Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Design Services",
+                "description": "Technical assistance for complex geosynthetic structures.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                },
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+              },
+              {
+                "title": "Value Engineering",
+                "description": "Optimizing material use for cost-effective performance.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "design-support"
+                },
+                "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Logistics & Customs",
+          "icon": "Ship",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "logistics"
+          },
+          "content": {
+            "secondaryTitle": "Logistics & Customs",
+            "secondary": [
+              {
+                "label": "About Logistics & Customs",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "logistics"
+                }
+              },
+              {
+                "label": "Our Approach to Logistics & Customs",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "logistics"
+                }
+              },
+              {
+                "label": "Quality & Standards",
+                "to": "/quality-assurance"
+              },
+              {
+                "label": "Contact our Logistics & Customs Team",
+                "to": "/contacts"
+              }
+            ],
+            "featuredTitle": "Logistics & Customs Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Expert Logistics & Customs",
+                "description": "We offer industry-leading logistics & customs services tailored to your project.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "logistics"
+                },
+                "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+              },
+              {
+                "title": "Proven Methodologies",
+                "description": "Our team uses certified and tested approaches for optimal results.",
+                "to": "/quality-assurance",
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        },
+        {
+          "label": "After Sales Support",
+          "icon": "LifeBuoy",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "after-sales"
+          },
+          "content": {
+            "secondaryTitle": "After Sales Support",
+            "secondary": [
+              {
+                "label": "About After Sales Support",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "after-sales"
+                }
+              },
+              {
+                "label": "Our Approach to After Sales Support",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "after-sales"
+                }
+              },
+              {
+                "label": "Quality & Standards",
+                "to": "/quality-assurance"
+              },
+              {
+                "label": "Contact our After Sales Support Team",
+                "to": "/contacts"
+              }
+            ],
+            "featuredTitle": "After Sales Support Highlights",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Expert After Sales Support",
+                "description": "We offer industry-leading after sales support services tailored to your project.",
+                "to": "/services/$slug",
+                "params": {
+                  "slug": "after-sales"
+                },
+                "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+              },
+              {
+                "title": "Proven Methodologies",
+                "description": "Our team uses certified and tested approaches for optimal results.",
+                "to": "/quality-assurance",
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Quick Actions",
+            "quickActions": [
+              {
+                "title": "Upload Project BOQ",
+                "description": "Submit your requirements",
+                "to": "/contacts",
+                "icon": "Upload"
+              },
+              {
+                "title": "Speak to an Expert",
+                "description": "Talk to specialists",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Service Brochure",
+                "description": "Download overview",
+                "to": "/resources",
+                "icon": "Download"
+              },
+              {
+                "title": "Request a Quote",
+                "description": "Get a customised quote",
+                "to": "/contacts",
+                "icon": "FileText"
+              }
+            ]
+          }
+        }
+      ],
+      "secondaryTitle": "Supply Services",
+      "secondary": [
+        {
+          "label": "Global Sourcing",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          }
+        },
+        {
+          "label": "Local Expertise",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          }
+        },
+        {
+          "label": "Best-in-Class Brands",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          }
+        },
+        {
+          "label": "Quality Assurance",
+          "to": "/quality-assurance"
+        },
+        {
+          "label": "Material Availability",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          }
+        }
+      ],
+      "featuredTitle": "Supply Highlights",
+      "featuredKind": "image",
+      "featured": [
+        {
+          "title": "Global Sourcing",
+          "description": "Access to global manufacturers and best-in-class materials.",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "supply"
+          },
+          "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+        },
+        {
+          "title": "Pan-African Logistics",
+          "description": "Efficient delivery networks across the continent.",
+          "to": "/services/$slug",
+          "params": {
+            "slug": "logistics"
+          },
+          "image": "https://images.unsplash.com/photo-1586528116311-ad8ed7c663c0?w=400&q=80"
+        }
+      ],
+      "quickActionsTitle": "Quick Actions",
+      "quickActions": [
+        {
+          "title": "Upload Project BOQ",
+          "description": "Submit your requirements",
+          "to": "/contacts",
+          "icon": "Upload"
+        },
+        {
+          "title": "Speak to an Expert",
+          "description": "Talk to specialists",
+          "to": "/contacts",
+          "icon": "MessageCircle"
+        },
+        {
+          "title": "Service Brochure",
+          "description": "Download overview",
+          "to": "/resources",
+          "icon": "Download"
+        },
+        {
+          "title": "Request a Quote",
+          "description": "Get a customised quote",
+          "to": "/contacts",
+          "icon": "FileText"
+        }
+      ]
+    }
+  },
+  {
+    "key": "industries",
+    "label": "Industries",
+    "to": "/industries",
+    "columns": {
+      "primaryTitle": "Industries We Serve",
+      "primary": [
+        {
+          "label": "Construction & Infrastructure",
+          "icon": "Building2",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          },
+          "content": {
+            "secondaryTitle": "Construction & Infrastructure",
+            "secondary": [
+              {
+                "label": "Roads & Highways",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                }
+              },
+              {
+                "label": "Retaining Walls",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                }
+              },
+              {
+                "label": "Railways",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                }
+              },
+              {
+                "label": "Embankments",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                }
+              }
+            ],
+            "featuredTitle": "Infrastructure Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Infrastructure",
+                "description": "Reinforcement and stabilization for critical infrastructure.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                },
+                "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+              },
+              {
+                "title": "Soil Stabilization",
+                "description": "Improving bearing capacity for roads and pavements.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "construction-infrastructure"
+                },
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Mining",
+          "icon": "Pickaxe",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "mining"
+          },
+          "content": {
+            "secondaryTitle": "Mining Systems",
+            "secondary": [
+              {
+                "label": "Heap Leach Pads",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                }
+              },
+              {
+                "label": "Tailings Storage",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                }
+              },
+              {
+                "label": "Process Ponds",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                }
+              },
+              {
+                "label": "Mine Capping",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                }
+              }
+            ],
+            "featuredTitle": "Mining Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Mining Solutions",
+                "description": "Engineered systems for heap leach pads and TSFs.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                },
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              },
+              {
+                "title": "Tailings Management",
+                "description": "Secure containment for mining byproducts.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "mining"
+                },
+                "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Environmental & Waste",
+          "icon": "Trash2",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "environmental-waste"
+          },
+          "content": {
+            "secondaryTitle": "Environmental & Waste",
+            "secondary": [
+              {
+                "label": "Landfill Lining",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                }
+              },
+              {
+                "label": "Landfill Capping",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                }
+              },
+              {
+                "label": "Secondary Containment",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                }
+              },
+              {
+                "label": "Remediation",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                }
+              }
+            ],
+            "featuredTitle": "Environmental Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Waste Management",
+                "description": "Secure lining systems for environmental protection.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                },
+                "image": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80"
+              },
+              {
+                "title": "Capping Systems",
+                "description": "Effective closure systems for municipal solid waste.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "environmental-waste"
+                },
+                "image": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Water Management",
+          "icon": "Droplets",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "water-management"
+          },
+          "content": {
+            "secondaryTitle": "Water Management",
+            "secondary": [
+              {
+                "label": "Reservoirs & Dams",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                }
+              },
+              {
+                "label": "Canals & Channels",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                }
+              },
+              {
+                "label": "Stormwater Attenuation",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                }
+              },
+              {
+                "label": "Potable Water Storage",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                }
+              }
+            ],
+            "featuredTitle": "Water Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Dam Lining Systems",
+                "description": "Waterproof lining for critical water infrastructure.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                },
+                "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+              },
+              {
+                "title": "Canal Conveyance",
+                "description": "Reducing seepage in irrigation and water transfer.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "water-management"
+                },
+                "image": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Agriculture & Aquaculture",
+          "icon": "Sprout",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "agriculture-aquaculture"
+          },
+          "content": {
+            "secondaryTitle": "Agriculture & Aquaculture",
+            "secondary": [
+              {
+                "label": "Agriculture & Aquaculture Overview",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "agriculture-aquaculture"
+                }
+              },
+              {
+                "label": "Solutions for Agriculture & Aquaculture",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "agriculture-aquaculture"
+                }
+              },
+              {
+                "label": "Key Projects",
+                "to": "/projects"
+              },
+              {
+                "label": "Industry Standards",
+                "to": "/quality-assurance"
+              }
+            ],
+            "featuredTitle": "Agriculture & Aquaculture Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Advanced Agriculture & Aquaculture Systems",
+                "description": "Engineered geosynthetics for modern agriculture & aquaculture requirements.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "agriculture-aquaculture"
+                },
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              },
+              {
+                "title": "Project Showcase",
+                "description": "View our successful deployments in the agriculture & aquaculture sector.",
+                "to": "/projects",
+                "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Energy",
+          "icon": "Zap",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "energy"
+          },
+          "content": {
+            "secondaryTitle": "Energy",
+            "secondary": [
+              {
+                "label": "Energy Overview",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "energy"
+                }
+              },
+              {
+                "label": "Solutions for Energy",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "energy"
+                }
+              },
+              {
+                "label": "Key Projects",
+                "to": "/projects"
+              },
+              {
+                "label": "Industry Standards",
+                "to": "/quality-assurance"
+              }
+            ],
+            "featuredTitle": "Energy Solutions",
+            "featuredKind": "image",
+            "featured": [
+              {
+                "title": "Advanced Energy Systems",
+                "description": "Engineered geosynthetics for modern energy requirements.",
+                "to": "/industries/$slug",
+                "params": {
+                  "slug": "energy"
+                },
+                "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+              },
+              {
+                "title": "Project Showcase",
+                "description": "View our successful deployments in the energy sector.",
+                "to": "/projects",
+                "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+              }
+            ],
+            "quickActionsTitle": "Industry Support",
+            "quickActions": [
+              {
+                "title": "Case Studies",
+                "description": "Projects by industry",
+                "to": "/resources",
+                "icon": "FileCheck"
+              },
+              {
+                "title": "Speak to Expert",
+                "description": "Get industry advice",
+                "to": "/contacts",
+                "icon": "MessageCircle"
+              },
+              {
+                "title": "Technical Articles",
+                "description": "Industry insights",
+                "to": "/resources",
+                "icon": "BookOpen"
+              },
+              {
+                "title": "Design Support",
+                "description": "Engineering assistance",
+                "to": "/services",
+                "icon": "PencilRuler"
+              }
+            ]
+          }
+        }
+      ],
+      "secondaryTitle": "Construction & Infrastructure",
+      "secondary": [
+        {
+          "label": "Roads & Highways",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          }
+        },
+        {
+          "label": "Retaining Walls",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          }
+        },
+        {
+          "label": "Railways",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          }
+        },
+        {
+          "label": "Embankments",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          }
+        }
+      ],
+      "featuredTitle": "Infrastructure Solutions",
+      "featuredKind": "image",
+      "featured": [
+        {
+          "title": "Infrastructure",
+          "description": "Reinforcement and stabilization for critical infrastructure.",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          },
+          "image": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=400&q=80"
+        },
+        {
+          "title": "Soil Stabilization",
+          "description": "Improving bearing capacity for roads and pavements.",
+          "to": "/industries/$slug",
+          "params": {
+            "slug": "construction-infrastructure"
+          },
+          "image": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80"
+        }
+      ],
+      "quickActionsTitle": "Industry Support",
+      "quickActions": [
+        {
+          "title": "Case Studies",
+          "description": "Projects by industry",
+          "to": "/resources",
+          "icon": "FileCheck"
+        },
+        {
+          "title": "Speak to Expert",
+          "description": "Get industry advice",
+          "to": "/contacts",
+          "icon": "MessageCircle"
+        },
+        {
+          "title": "Technical Articles",
+          "description": "Industry insights",
+          "to": "/resources",
+          "icon": "BookOpen"
+        },
+        {
+          "title": "Design Support",
+          "description": "Engineering assistance",
+          "to": "/services",
+          "icon": "PencilRuler"
+        }
+      ]
+    }
+  }
+]'::jsonb)
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;

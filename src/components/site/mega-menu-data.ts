@@ -16,7 +16,7 @@ export type MegaLink = NavTarget & {
     quickActions: MegaQuickAction[];
   };
 };
-export type MegaProductItem = NavTarget & { label: string; spec: string };
+export type MegaProductItem = NavTarget & { label: string; spec: string; image?: string };
 export type MegaFeatureItem = NavTarget & { title: string; description: string; image: string };
 export type MegaQuickAction = NavTarget & { title: string; description: string; icon: string };
 

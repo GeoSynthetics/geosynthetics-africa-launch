@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { megaMenus as defaultMegaMenus, type MegaMenuConfig, type MegaLink, type MegaFeatureItem, type MegaProductItem, type MegaQuickAction } from "@/components/site/mega-menu-data";
 import { Trash2, Plus, ChevronRight } from "lucide-react";
+import { ImageUploadCropper } from "@/components/admin/ImageUploadCropper";
+import { ProductSelector } from "@/components/admin/ProductSelector";
 
 export const Route = createFileRoute("/admin/site-builder")({
   component: SiteBuilderPage,
@@ -244,22 +246,12 @@ function ContentEditor({ content, onChange, hideSecondary = false }: { content: 
         <div className="flex items-center gap-4 flex-wrap">
           <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">Featured Title</label>
           <Input value={content.featuredTitle || ""} onChange={e => onChange({ featuredTitle: e.target.value })} className="max-w-[200px]" />
-
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap ml-4">Featured Kind</label>
-          <Select value={content.featuredKind || "product"} onValueChange={(val) => onChange({ featuredKind: val })}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="product">Products (List)</SelectItem>
-              <SelectItem value="image">Images (Cards)</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
         <FeaturedEditor
-          kind={content.featuredKind || "product"}
           items={content.featured || []}
-          onChange={(f) => onChange({ featured: f })}
+          onChange={(f) => {
+            onChange({ featured: f, featuredKind: "product" });
+          }}
         />
       </div>
 
@@ -304,10 +296,9 @@ function SimpleLinkListEditor({ items, onChange }: { items: MegaLink[], onChange
   );
 }
 
-function FeaturedEditor({ kind, items, onChange }: { kind: "product" | "image", items: any[], onChange: (items: any[]) => void }) {
+function FeaturedEditor({ items, onChange }: { items: any[], onChange: (items: any[]) => void }) {
   const add = () => {
-    if (kind === "product") onChange([...items, { label: "New Product", spec: "Spec", to: "/" }]);
-    else onChange([...items, { title: "New Feature", description: "Desc", image: "https://...", to: "/" }]);
+    onChange([...items, { label: "New Product", spec: "Spec", to: "/", image: "" }]);
   };
   const update = (idx: number, field: string, val: string) => {
     const up = [...items];
@@ -315,57 +306,69 @@ function FeaturedEditor({ kind, items, onChange }: { kind: "product" | "image", 
     onChange(up);
   };
   const remove = (idx: number) => onChange(items.filter((_, i) => i !== idx));
+  
+  const canAdd = items.length < 5;
 
   return (
     <div className="grid md:grid-cols-2 gap-4">
-      {items.map((item, i) => (
-        <div key={i} className="border border-border p-4 rounded bg-surface relative group">
-          <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive opacity-0 group-hover:opacity-100 bg-background/80 transition-opacity z-10" onClick={() => remove(i)}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
+      {items.map((item, i) => {
+        return (
+          <div key={i} className="border border-border p-4 rounded bg-surface relative group">
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-destructive opacity-0 group-hover:opacity-100 bg-background/80 transition-opacity z-10" onClick={() => remove(i)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+            
+            <div className="mb-4">
+              <ProductSelector onSelect={(prod: any) => {
+                let specParts = [];
+                if (prod.thickness_mm) specParts.push(`${prod.thickness_mm}mm`);
+                if (prod.roll_width_m && prod.roll_length_m) specParts.push(`${prod.roll_width_m}m x ${prod.roll_length_m}m`);
+                const generatedSpec = specParts.length > 0 ? specParts.join(" | ") : prod.short_description || "";
+                
+                const categorySlug = prod.product_categories?.slug || "category";
+                const to = `/products/${categorySlug}/${prod.slug}`;
+                const image = prod.image_url || prod.hero_image_url || "";
+                
+                update(i, "label", prod.name);
+                // We do NOT auto-populate spec here if we want to preserve an existing editable input, 
+                // but usually selecting a new product resets the spec. We will reset it to the generated spec.
+                update(i, "spec", generatedSpec);
+                update(i, "to", to);
+                update(i, "image", image);
+              }} />
+            </div>
 
-          {kind === "product" ? (
-            <div className="space-y-3">
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Product Label</label>
-                <Input value={item.label || ""} onChange={e => update(i, "label", e.target.value)} className="h-8 text-sm" />
+            {/* Preview Card */}
+            {(item.image || item.label || item.title) ? (
+              <div className="flex items-center gap-3 p-3 mb-4 rounded border border-border bg-background/50">
+                {item.image ? (
+                  <img src={item.image} alt={item.label || item.title} className="h-12 w-12 rounded object-cover flex-shrink-0" />
+                ) : (
+                  <div className="h-12 w-12 rounded bg-surface-dark flex-shrink-0" />
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold truncate text-foreground">{item.label || item.title || "No title"}</div>
+                  <div className="text-xs text-muted-foreground truncate">{item.spec || item.description || "No description"}</div>
+                </div>
               </div>
+            ) : null}
+
+            <div className="space-y-3 border-t border-border pt-4">
               <div>
                 <label className="text-[10px] font-bold uppercase text-muted-foreground">Spec / Subtitle</label>
-                <Input value={item.spec || ""} onChange={e => update(i, "spec", e.target.value)} className="h-8 text-sm" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Link (To)</label>
-                <Input value={item.to || ""} onChange={e => update(i, "to", e.target.value)} className="h-8 text-sm" />
+                <Input value={item.spec || item.description || ""} onChange={e => update(i, "spec", e.target.value)} className="h-8 text-sm" placeholder="e.g. 0.5mm - 3.0mm" />
               </div>
             </div>
-          ) : (
-            <div className="space-y-3">
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Image URL</label>
-                <Input value={item.image || ""} onChange={e => update(i, "image", e.target.value)} className="h-8 text-sm" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Title</label>
-                <Input value={item.title || ""} onChange={e => update(i, "title", e.target.value)} className="h-8 text-sm" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Description</label>
-                <Textarea value={item.description || ""} onChange={e => update(i, "description", e.target.value)} rows={2} className="text-sm resize-none" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground">Link (To)</label>
-                <Input value={item.to || ""} onChange={e => update(i, "to", e.target.value)} className="h-8 text-sm" />
-              </div>
-            </div>
-          )}
+          </div>
+        );
+      })}
+      {canAdd && (
+        <div className="border border-dashed border-border rounded flex items-center justify-center min-h-[150px] bg-surface/50 hover:bg-surface transition-colors">
+          <Button variant="ghost" onClick={add} className="font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground">
+            <Plus className="h-4 w-4 mr-2" /> Add Featured Item
+          </Button>
         </div>
-      ))}
-      <div className="border border-dashed border-border rounded flex items-center justify-center min-h-[150px] bg-surface/50 hover:bg-surface transition-colors">
-        <Button variant="ghost" onClick={add} className="font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground">
-          <Plus className="h-4 w-4 mr-2" /> Add Featured Item
-        </Button>
-      </div>
+      )}
     </div>
   );
 }

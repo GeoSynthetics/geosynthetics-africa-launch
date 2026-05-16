@@ -106,7 +106,11 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     onClick={closeMenus}
                     className="flex items-center gap-3 rounded-md p-2 hover:bg-accent transition group"
                   >
-                    <div className="h-12 w-12 flex-shrink-0 rounded bg-surface-dark" />
+                    {p.image ? (
+                      <img src={p.image} alt={p.label} className="h-12 w-12 flex-shrink-0 rounded object-cover" />
+                    ) : (
+                      <div className="h-12 w-12 flex-shrink-0 rounded bg-surface-dark" />
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-foreground truncate">{p.label}</div>
                       <div className="text-xs text-muted-foreground">{p.spec}</div>
