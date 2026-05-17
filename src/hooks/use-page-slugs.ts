@@ -22,16 +22,16 @@ export async function fetchSeoPages(): Promise<SeoMap> {
   if (_cache) return _cache;
   if (_fetchPromise) return _fetchPromise;
 
-  _fetchPromise = supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "seo_pages")
-    .maybeSingle()
-    .then(({ data }) => {
-      const map = (data?.value as SeoMap) ?? {};
-      _cache = map;
-      return map;
-    });
+  _fetchPromise = (async () => {
+    const { data } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "seo_pages")
+      .maybeSingle();
+    const map = (data?.value as SeoMap) ?? {};
+    _cache = map;
+    return map;
+  })();
 
   return _fetchPromise;
 }
