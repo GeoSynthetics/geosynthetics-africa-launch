@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category";
-import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck, DraftingCompass, Eye } from "lucide-react";
+import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck, DraftingCompass, Eye, FileText, BookOpen, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -259,6 +259,104 @@ export function ProductCategoryPage() {
                  </div>
               </div>
             )}
+
+            {/* Popular Products (Catalogue preview) */}
+            {content.popularProducts && content.popularProducts.length > 0 && (
+              <div>
+                <h2 className="font-display text-xl font-bold uppercase mb-2 text-foreground flex items-center gap-3">
+                  <span className="text-primary">|</span> Popular {content.label} in our Catalogue
+                </h2>
+                <p className="text-sm text-muted-foreground mb-6">
+                  A curated selection of best-selling {content.label.toLowerCase()}. View full specs, request a quote, or add to your BOQ — without leaving this page.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {content.popularProducts.map((p, i) => (
+                    <Link
+                      key={i}
+                      to="/catalogue"
+                      search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
+                      className="group flex gap-4 border border-border rounded p-4 bg-surface hover:border-primary transition"
+                    >
+                      <div className="h-20 w-20 shrink-0 rounded overflow-hidden bg-surface-dark">
+                        {p.image && (
+                          <img src={p.image} alt={p.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition">{p.name}</h3>
+                        <div className="text-xs text-primary font-medium mt-0.5">{p.spec}</div>
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.desc}</p>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center" />
+                    </Link>
+                  ))}
+                </div>
+                <div className="mt-4">
+                  <Link
+                    to="/catalogue"
+                    search={{ q: content.label, cats: [], mans: [], sort: "newest" }}
+                    className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1"
+                  >
+                    View Full Catalogue <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Industries Served */}
+            {content.industries && content.industries.length > 0 && (
+              <div>
+                <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
+                  <span className="text-primary">|</span> Industries that use {content.label}
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {content.industries.map((ind, i) => (
+                    <Link
+                      key={i}
+                      to="/applications"
+                      className="group flex items-center gap-3 border border-border bg-surface rounded p-4 hover:border-primary transition"
+                    >
+                      <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition shrink-0">
+                        <Building2 className="h-4 w-4" />
+                      </div>
+                      <span className="text-sm font-bold uppercase tracking-wide group-hover:text-primary transition">{ind.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Specsheets & Installation Guides */}
+            <div>
+              <h2 className="font-display text-xl font-bold uppercase mb-2 text-foreground flex items-center gap-3">
+                <span className="text-primary">|</span> Specsheets & Installation Guides
+              </h2>
+              <p className="text-sm text-muted-foreground mb-6">
+                Download technical datasheets and step-by-step installation guides for {content.label}.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <Link to="/resources" className="group flex items-center gap-4 border border-border bg-surface rounded p-5 hover:border-primary transition">
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition shrink-0">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-sm uppercase tracking-wide group-hover:text-primary transition">Technical Datasheets</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">TDS, SDS & test certificates</div>
+                  </div>
+                  <Download className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                </Link>
+                <Link to="/resources" className="group flex items-center gap-4 border border-border bg-surface rounded p-5 hover:border-primary transition">
+                  <div className="flex h-12 w-12 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition shrink-0">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-sm uppercase tracking-wide group-hover:text-primary transition">Installation Guides</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Step-by-step deployment & QA</div>
+                  </div>
+                  <Download className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                </Link>
+              </div>
+            </div>
 
             {/* BOQ Upload Form */}
             <div>
