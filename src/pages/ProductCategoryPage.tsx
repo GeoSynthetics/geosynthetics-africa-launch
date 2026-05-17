@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category";
-import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck, DraftingCompass, Eye } from "lucide-react";
+import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck, DraftingCompass, Eye, FileText, BookOpen, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
