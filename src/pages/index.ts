@@ -9,3 +9,4 @@ export { QAPage } from "./QAPage";
 export { ApplicationsLanding } from "./ApplicationsLanding";
 export { ServicesPage } from "./ServicesPage";
 export { ResourcesIndexPage } from "./ResourcesIndexPage";
+export { ProductCategoryPage } from "./ProductCategoryPage";
