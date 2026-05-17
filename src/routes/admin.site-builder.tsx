@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { megaMenus as defaultMegaMenus, type MegaMenuConfig, type MegaLink, type MegaFeatureItem, type MegaProductItem, type MegaQuickAction } from "@/components/site/mega-menu-data";
 import { Trash2, Plus, ChevronRight } from "lucide-react";
-import { ImageUploadCropper } from "@/components/admin/ImageUploadCropper";
+
 import { ProductSelector } from "@/components/admin/ProductSelector";
 
 export const Route = createFileRoute("/admin/site-builder")({
