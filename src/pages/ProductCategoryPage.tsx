@@ -1,15 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { Route } from "@/routes/products.$category";
+import { Route } from "@/routes/products.$category.index";
 import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck, DraftingCompass, Eye, FileText, BookOpen, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { getProductPageContent } from "@/data/product-pages";
 
 export function ProductCategoryPage() {
-  const { category } = Route.useLoaderData();
-  const content = getProductPageContent(category.slug, category.label);
+  const { category, content } = Route.useLoaderData();
+
 
   const heroImage = content.heroImage;
 

@@ -148,6 +148,31 @@ To validate: paste the sitemap URL into [Google's Rich Results Test](https://sea
 
 ---
 
+## 2026-05-20 — Dynamic Page Templates & Admin Integration Unification
+
+**Scope:** Admin / Dynamic Pages / Database
+**Summary:** Connected and unified the admin `Page Templates` visual builder with the public product category dynamic pages (`/products/$category`). All inputs from the 12-tab admin editor (including Hero, Description paragraphs, key feature bullets, technical highlight badges, properties & specifications table, product types, benefits, FAQs accordion, installation specs, popular catalog products, and applications/industries tags) are now dynamically retrieved from the Supabase `site_config` table and rendered in real-time. This provides administrators full self-service control over page content, SEO metadata, and product properties.
+**Files touched:** `src/pages/PageTemplatesAdminPage.tsx`, `src/routes/products.$category.index.tsx`, `src/data/product-pages.ts`, `src/pages/ProductCategoryPage.tsx`
+**Notes / follow-ups:** Documented the complete field mapping schema, creation, editing, deletion flows, and megamenu integration inside `docs/index.html` and `docs/style.css` for future developers and administrators.
+
+---
+
+## 2026-05-20 — Megamenu UX Simplification & Autocomplete Autopopulation
+
+**Scope:** Admin / Megamenu / UX Unification
+**Summary:** Fixed the tedious, manual megamenu linking issue where administrators had to switch screens, search visual trees, and copy-paste paths manually (risking spelling errors and 404s), by automating it into a 1-click linker pill in the category templates editor, adding a template autocomplete selector in the Site Builder identity editor, and integrating referential menu cleanup upon template deletion.
+**Files touched:** `src/pages/PageTemplatesAdminPage.tsx`, `src/components/admin/ContentEditorPanel.tsx`, `docs/index.html`
+**Notes / follow-ups:** Updated the developer/admin manual in `docs/index.html` to document the simplified two-step automated linking process.
+
+## 2026-05-21 — Resolve Admin Panel Conflicts & Align Category Overrides
+
+**Scope:** Admin UI / Megamenu / Page Templates / Database integration
+**Summary:** Resolved configuration and layout conflicts between parent product categories and child sub-page templates by renaming the template editor to "Product Page Templates" and blocking the creation of templates using protected parent slugs. Restored parent category editing in the Site Builder "Page Content" tab and implemented a loader that dynamically merges these visual site modifications onto public category fallbacks.
+**Files touched:** `src/pages/PageTemplatesAdminPage.tsx`, `src/components/admin/ContentEditorPanel.tsx`, `src/data/product-pages.ts`, `src/lib/hierarchy-utils.ts`, `docs/index.html`
+**Notes / follow-ups:** Updated user manuals in `docs/index.html` and verified the build using the bun package manager.
+
+---
+
 <!--
 Entry template — copy when adding a new entry:
 
@@ -160,3 +185,4 @@ Entry template — copy when adding a new entry:
 
 ---
 -->
+

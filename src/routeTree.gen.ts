@@ -17,7 +17,6 @@ import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as ApplicationsRouteImport } from './routes/applications'
@@ -26,10 +25,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
-import { Route as ProductsCategoryRouteImport } from './routes/products.$category'
+import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -38,8 +38,11 @@ import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
+import { Route as AdminPageTemplatesRouteImport } from './routes/admin.page-templates'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
+import { Route as ProductsCategoryIndexRouteImport } from './routes/products.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
+import { Route as ProductsCategoryFamilyRouteImport } from './routes/products.$category.$family'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -79,11 +82,6 @@ const ProjectsRoute = ProjectsRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -126,6 +124,11 @@ const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ResourcesRoute,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
   id: '/catalogue/',
   path: '/catalogue/',
@@ -141,10 +144,10 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
 } as any)
-const ProductsCategoryRoute = ProductsCategoryRouteImport.update({
-  id: '/$category',
-  path: '/$category',
-  getParentRoute: () => ProductsRoute,
+const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
+  id: '/industries/$slug',
+  path: '/industries/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
   id: '/catalogue/$slug',
@@ -186,15 +189,30 @@ const AdminPagesSeoRoute = AdminPagesSeoRouteImport.update({
   path: '/pages-seo',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPageTemplatesRoute = AdminPageTemplatesRouteImport.update({
+  id: '/page-templates',
+  path: '/page-templates',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
   id: '/$category/',
   path: '/$category/',
   getParentRoute: () => ResourcesRoute,
 } as any)
+const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
+  id: '/products/$category/',
+  path: '/products/$category/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
   id: '/$category/$slug',
   path: '/$category/$slug',
   getParentRoute: () => ResourcesRoute,
+} as any)
+const ProductsCategoryFamilyRoute = ProductsCategoryFamilyRouteImport.update({
+  id: '/products/$category/$family',
+  path: '/products/$category/$family',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -205,7 +223,6 @@ export interface FileRoutesByFullPath {
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
@@ -214,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -222,12 +240,15 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
-  '/products/$category': typeof ProductsCategoryRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
+  '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRoutesByTo {
@@ -237,7 +258,6 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
@@ -245,6 +265,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -253,12 +274,15 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
-  '/products/$category': typeof ProductsCategoryRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/products': typeof ProductsIndexRoute
   '/resources': typeof ResourcesIndexRoute
+  '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/products/$category': typeof ProductsCategoryIndexRoute
   '/resources/$category': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRoutesById {
@@ -270,7 +294,6 @@ export interface FileRoutesById {
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRouteWithChildren
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRoute
   '/quality-assurance': typeof QualityAssuranceRoute
@@ -279,6 +302,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -287,12 +311,15 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
-  '/products/$category': typeof ProductsCategoryRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/resources/': typeof ResourcesIndexRoute
+  '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
+  '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
 }
 export interface FileRouteTypes {
@@ -305,7 +332,6 @@ export interface FileRouteTypes {
     | '/applications'
     | '/contacts'
     | '/login'
-    | '/products'
     | '/profile'
     | '/projects'
     | '/quality-assurance'
@@ -314,6 +340,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -322,12 +349,15 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
-    | '/products/$category'
+    | '/industries/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
+    | '/products/'
     | '/resources/'
+    | '/products/$category/$family'
     | '/resources/$category/$slug'
+    | '/products/$category/'
     | '/resources/$category/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -337,7 +367,6 @@ export interface FileRouteTypes {
     | '/applications'
     | '/contacts'
     | '/login'
-    | '/products'
     | '/profile'
     | '/projects'
     | '/quality-assurance'
@@ -345,6 +374,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -353,12 +383,15 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
-    | '/products/$category'
+    | '/industries/$slug'
     | '/services/$slug'
     | '/admin'
     | '/catalogue'
+    | '/products'
     | '/resources'
+    | '/products/$category/$family'
     | '/resources/$category/$slug'
+    | '/products/$category'
     | '/resources/$category'
   id:
     | '__root__'
@@ -369,7 +402,6 @@ export interface FileRouteTypes {
     | '/applications'
     | '/contacts'
     | '/login'
-    | '/products'
     | '/profile'
     | '/projects'
     | '/quality-assurance'
@@ -378,6 +410,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
     | '/admin/quotes'
@@ -386,12 +419,15 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
-    | '/products/$category'
+    | '/industries/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
+    | '/products/'
     | '/resources/'
+    | '/products/$category/$family'
     | '/resources/$category/$slug'
+    | '/products/$category/'
     | '/resources/$category/'
   fileRoutesById: FileRoutesById
 }
@@ -403,7 +439,6 @@ export interface RootRouteChildren {
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
-  ProductsRoute: typeof ProductsRouteWithChildren
   ProfileRoute: typeof ProfileRoute
   ProjectsRoute: typeof ProjectsRoute
   QualityAssuranceRoute: typeof QualityAssuranceRoute
@@ -413,7 +448,11 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
+  IndustriesSlugRoute: typeof IndustriesSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
+  ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
+  ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -474,13 +513,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -537,6 +569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesIndexRouteImport
       parentRoute: typeof ResourcesRoute
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catalogue/': {
       id: '/catalogue/'
       path: '/catalogue'
@@ -558,12 +597,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
     }
-    '/products/$category': {
-      id: '/products/$category'
-      path: '/$category'
-      fullPath: '/products/$category'
-      preLoaderRoute: typeof ProductsCategoryRouteImport
-      parentRoute: typeof ProductsRoute
+    '/industries/$slug': {
+      id: '/industries/$slug'
+      path: '/industries/$slug'
+      fullPath: '/industries/$slug'
+      preLoaderRoute: typeof IndustriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/catalogue/$slug': {
       id: '/catalogue/$slug'
@@ -621,12 +660,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagesSeoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/page-templates': {
+      id: '/admin/page-templates'
+      path: '/page-templates'
+      fullPath: '/admin/page-templates'
+      preLoaderRoute: typeof AdminPageTemplatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/resources/$category/': {
       id: '/resources/$category/'
       path: '/$category'
       fullPath: '/resources/$category/'
       preLoaderRoute: typeof ResourcesCategoryIndexRouteImport
       parentRoute: typeof ResourcesRoute
+    }
+    '/products/$category/': {
+      id: '/products/$category/'
+      path: '/products/$category'
+      fullPath: '/products/$category/'
+      preLoaderRoute: typeof ProductsCategoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/resources/$category/$slug': {
       id: '/resources/$category/$slug'
@@ -635,10 +688,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesCategorySlugRouteImport
       parentRoute: typeof ResourcesRoute
     }
+    '/products/$category/$family': {
+      id: '/products/$category/$family'
+      path: '/products/$category/$family'
+      fullPath: '/products/$category/$family'
+      preLoaderRoute: typeof ProductsCategoryFamilyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminPageTemplatesRoute: typeof AdminPageTemplatesRoute
   AdminPagesSeoRoute: typeof AdminPagesSeoRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminQuotesRoute: typeof AdminQuotesRoute
@@ -649,6 +710,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminPageTemplatesRoute: AdminPageTemplatesRoute,
   AdminPagesSeoRoute: AdminPagesSeoRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminQuotesRoute: AdminQuotesRoute,
@@ -670,18 +732,6 @@ const ApplicationsRouteChildren: ApplicationsRouteChildren = {
 
 const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
-)
-
-interface ProductsRouteChildren {
-  ProductsCategoryRoute: typeof ProductsCategoryRoute
-}
-
-const ProductsRouteChildren: ProductsRouteChildren = {
-  ProductsCategoryRoute: ProductsCategoryRoute,
-}
-
-const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
-  ProductsRouteChildren,
 )
 
 interface ResourcesRouteChildren {
@@ -720,7 +770,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsRoute: ApplicationsRouteWithChildren,
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
-  ProductsRoute: ProductsRouteWithChildren,
   ProfileRoute: ProfileRoute,
   ProjectsRoute: ProjectsRoute,
   QualityAssuranceRoute: QualityAssuranceRoute,
@@ -730,8 +779,21 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
+  IndustriesSlugRoute: IndustriesSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
+  ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
+  ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

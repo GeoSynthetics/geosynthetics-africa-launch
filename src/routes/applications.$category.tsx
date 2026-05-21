@@ -1,27 +1,46 @@
-import { createFileRoute, Link, notFound, useParams } from "@tanstack/react-router";
-import { ArrowRight, ChevronRight, MessageCircle, FileText, PencilRuler } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { PartnerStrip } from "@/components/site/PartnerStrip";
-import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
+import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
+import { supabase } from "@/integrations/supabase/client";
+
+async function loadApplicationData(categorySlug: string) {
+  const { data, error } = await supabase
+    .from("site_config")
+    .select("value")
+    .eq("key", "template_applications")
+    .maybeSingle();
+
+  const templates = data?.value as Record<string, any> || {};
+  const templateData = templates[categorySlug] || null;
+
+  const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);
+  const label = staticCat?.label ?? categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+  return {
+    category: { slug: categorySlug, label },
+    templateData
+  };
+}
 
 export const Route = createFileRoute("/applications/$category")({
-  head: ({ params }) => {
-    const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
-    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  ssr: false,
+  loader: ({ params }) => loadApplicationData(params.category),
+  head: ({ loaderData }) => {
+    const { category, templateData } = loaderData || { category: { slug: "", label: "" }, templateData: null };
+    const label = category.label;
+    
+    const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
+    const description = templateData?.seo?.description || `Explore our advanced ${label.toLowerCase()} applications and projects.`;
+    
     return {
       meta: [
-        { title: `${label} — Geosynthetics Africa` },
-        { name: "description", content: `Explore our advanced ${label.toLowerCase()} applications and projects.` },
-        { property: "og:title", content: `${label} — Geosynthetics Africa` },
-        { property: "og:description", content: `Advanced ${label.toLowerCase()} geosynthetic solutions.` },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
       ],
     };
-  },
-  loader: ({ params }) => {
-    const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === params.category);
-    const label = staticCat?.label ?? params.category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    return { category: { slug: params.category, label } };
   },
   component: ApplicationCategoryPage,
   errorComponent: ({ error }) => (
@@ -40,72 +59,3 @@ export const Route = createFileRoute("/applications/$category")({
     </div>
   ),
 });
-
-function ApplicationCategoryPage() {
-  const { category } = Route.useLoaderData();
-  return (
-    <>
-      <section
-        className="bg-surface-dark text-surface-dark-foreground"
-        style={{
-          backgroundImage: "linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.4)), url(https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="container-page py-16 md:py-20">
-          <nav className="text-xs uppercase tracking-wider text-surface-dark-foreground/70 flex items-center gap-2">
-            <Link to="/" className="hover:text-primary">Home</Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/applications" className="hover:text-primary">Applications</Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-primary">{category.label}</span>
-          </nav>
-          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">{category.label}</h1>
-          <p className="mt-4 max-w-2xl text-base text-surface-dark-foreground/80">
-            Complete engineered system — design, supply, install, test and certify. One partner, full accountability.
-          </p>
-        </div>
-      </section>
-
-      <section className="bg-background">
-        <div className="container-page py-16 grid lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-8">
-            <h2 className="font-display text-2xl font-bold uppercase mb-6">Sub-systems</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {["Lining Systems", "Leak Detection", "Drainage", "Cover Systems", "Reinforcement", "Erosion Protection"].map((t) => (
-                <div key={t} className="rounded border border-border bg-card p-5 hover:border-primary transition">
-                  <PencilRuler className="h-5 w-5 text-primary" />
-                  <div className="mt-3 font-display text-base font-bold uppercase">{t}</div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Engineered {t.toLowerCase()} for {category.label.toLowerCase()} — specified, supplied and installed.
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <aside className="lg:col-span-4">
-            <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 sticky top-32">
-              <h3 className="font-display text-lg font-bold uppercase">Design Support</h3>
-              <p className="mt-2 text-sm text-surface-dark-foreground/75">
-                Get application-specific engineering assistance for {category.label}.
-              </p>
-              <Button asChild className="mt-5 w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide">
-                <Link to="/contacts"><MessageCircle className="h-4 w-4 mr-2" />Request Design Support</Link>
-              </Button>
-              <Button asChild variant="outline" className="mt-3 w-full bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
-                <Link to="/resources"><FileText className="h-4 w-4 mr-2" />Case Studies</Link>
-              </Button>
-              <Link to="/products" className="mt-4 text-xs uppercase tracking-wider text-primary inline-flex items-center gap-2">
-                Related Products <ArrowRight className="h-3 w-3" />
-              </Link>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <PartnerStrip />
-      <BoqCtaBand />
-    </>
-  );
-}

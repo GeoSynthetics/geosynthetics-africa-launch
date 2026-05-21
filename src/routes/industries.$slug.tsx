@@ -1,37 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { SERVICES } from "@/components/site/mega-menu-data";
-import { ServicePage } from "@/pages/ServicePage";
+import { INDUSTRIES } from "@/components/site/mega-menu-data";
+import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
 
-async function loadServiceData(slug: string) {
+async function loadIndustryData(slug: string) {
   const { data, error } = await supabase
     .from("site_config")
     .select("value")
-    .eq("key", "template_services")
+    .eq("key", "template_industries")
     .maybeSingle();
 
   const templates = data?.value as Record<string, any> || {};
   const templateData = templates[slug] || null;
 
-  const staticSvc = SERVICES.find((s) => s.slug === slug);
-  const label = staticSvc?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const staticInd = INDUSTRIES.find((i) => i.slug === slug);
+  const label = staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return {
-    service: { slug, label, icon: staticSvc?.icon || "CheckCircle" },
+    industry: { slug, label, icon: staticInd?.icon || "Factory" },
     templateData
   };
 }
 
-export const Route = createFileRoute("/services/$slug")({
+export const Route = createFileRoute("/industries/$slug")({
   ssr: false,
-  loader: ({ params }) => loadServiceData(params.slug),
+  loader: ({ params }) => loadIndustryData(params.slug),
   head: ({ loaderData }) => {
-    const { service, templateData } = loaderData || { service: { slug: "", label: "", icon: "" }, templateData: null };
-    const label = service.label;
+    const { industry, templateData } = loaderData || { industry: { slug: "", label: "", icon: "" }, templateData: null };
+    const label = industry.label;
     
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-    const description = templateData?.seo?.description || `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
+    const description = templateData?.seo?.description || `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
     
     return {
       meta: [
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/services/$slug")({
       ],
     };
   },
-  component: ServicePage,
+  component: IndustryPage,
   errorComponent: ({ error }) => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-2xl font-bold uppercase">Something went wrong</h1>
@@ -51,10 +51,10 @@ export const Route = createFileRoute("/services/$slug")({
   ),
   notFoundComponent: () => (
     <div className="container-page py-20 text-center">
-      <h1 className="font-display text-3xl font-bold uppercase">Service not found</h1>
-      <p className="mt-2 text-muted-foreground">That service isn't defined.</p>
+      <h1 className="font-display text-3xl font-bold uppercase">Industry not found</h1>
+      <p className="mt-2 text-muted-foreground">That industry isn't defined.</p>
       <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
-        <Link to="/services">Back to Services</Link>
+        <Link to="/">Back to Home</Link>
       </Button>
     </div>
   ),

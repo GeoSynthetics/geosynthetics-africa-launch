@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer & Admin Documentation — Geosynthetics Africa</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="https://lovable.dev/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <div class="logo-icon">G</div>
+        <span class="logo-text">Geosynthetics</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <div class="nav-category">Documentation</div>
+        <li class="nav-item active" data-section="overview">
+          <a href="#overview">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            Overview & Architecture
+          </a>
+        </li>
+        <li class="nav-item" data-section="explorer">
+          <a href="#explorer">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            Field Mapping Explorer
+          </a>
+        </li>
+        
+        <div class="nav-category">Admin Guides</div>
+        <li class="nav-item" data-section="create-page">
+          <a href="#create-page">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Creating a Page Template
+          </a>
+        </li>
+        <li class="nav-item" data-section="edit-page">
+          <a href="#edit-page">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            Editing Page Contents
+          </a>
+        </li>
+        <li class="nav-item" data-section="delete-page">
+          <a href="#delete-page">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            Deleting a Template Page
+          </a>
+        </li>
+        <li class="nav-item" data-section="link-megamenu">
+          <a href="#link-megamenu">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+            Linking to Mega Menu
+          </a>
+        </li>
+        
+        <div class="nav-category">Developer Reference</div>
+        <li class="nav-item" data-section="tech-ref">
+          <a href="#tech-ref">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            Technical & Architecture
+          </a>
+        </li>
+      </nav>
+    </aside>
+    
+    <!-- RIGHT MAIN CONTENT -->
+    <main class="main-content">
+      
+      <!-- HEADER -->
+      <header class="doc-header">
+        <span class="badge badge-primary">Platform Manual</span>
+        <h1 class="doc-title">Dynamic Page Templates & Admin Integration</h1>
+        <p class="doc-subtitle">A comprehensive manual on creating, editing, deleting dynamic product category pages and linking them to the recursive site megamenu.</p>
+      </header>
+      
+      <!-- OVERVIEW SECTION -->
+      <section id="overview" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Overview & Architecture
+        </h2>
+        <p class="paragraph">
+          The Geosynthetics Africa platform employs a highly flexible, data-driven approach to product page creation. Rather than hardcoding structural pages, administrators can visually build and update product categories directly from the admin panel. 
+        </p>
+        <p class="paragraph">
+          The connection is fully unified: when an admin modifies values in the 12-tab <strong>Page Templates</strong> visual builder, changes are saved to Supabase and immediately pushed to the public website, rendering custom titles, specifications tables, FAQs, highlight badges, and installation warnings in real-time.
+        </p>
+        
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+              Supabase Config Backing
+            </h3>
+            <p class="card-desc">
+              All template configurations live in the <code>site_config</code> table under the key <code>template_product_categories</code> as a single JSON object. This eliminates complex schema migrations while keeping data atomic and highly cached.
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+              Zero-Downtime Seeding
+            </h3>
+            <p class="card-desc">
+              If the database is clean, visiting the admin template page prompts the user to "Seed Defaults" which populates all 8 canonical geomembrane types (HDPE, LLDPE, PVC, EPDM, PP, Textured, Speciality, and Floating Covers).
+            </p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              Category Alignment
+            </h3>
+            <p class="card-desc">
+              Protects parent categories (e.g. <code>Geomembranes</code>) by blocking them in Page Templates. Instead, editing their layout content is done directly in the <strong>Site Builder</strong>, where custom inputs dynamically merge onto premium fallback layouts.
+            </p>
+          </div>
+        </div>
+        
+        <div class="callout callout-note">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Administrator Notice
+          </div>
+          <div class="callout-content">
+            Access to both <strong>Page Templates</strong> and <strong>Site Builder</strong> is restricted to verified administrators and staff. Attempting to access these pages without appropriate session roles will redirect to the secure login gateway.
+          </div>
+        </div>
+      </section>
+      
+      <!-- INTERACTIVE EXPLORER SECTION -->
+      <section id="explorer" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+          Field Mapping Explorer
+        </h2>
+        <p class="paragraph">
+          Use the interactive inspector below to understand exactly how each visual input field in the admin panel maps directly to corresponding structures, components, and templates on the live client website.
+        </p>
+        
+        <!-- EXPLORER COMPONENT -->
+        <div class="explorer-container">
+          <!-- Explorer Sidebar -->
+          <div class="explorer-sidebar">
+            <div class="explorer-sidebar-title">Admin Fields</div>
+            
+            <div class="explorer-list-item active" data-element="hero-title">
+              <span class="explorer-item-name">Page Title (H1)</span>
+              <span class="explorer-item-tab">Hero Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="hero-subtitle">
+              <span class="explorer-item-name">Subtitle / Tagline</span>
+              <span class="explorer-item-tab">Hero Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="hero-bg">
+              <span class="explorer-item-name">Hero Image URL</span>
+              <span class="explorer-item-tab">Hero Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="highlights">
+              <span class="explorer-item-name">Technical Highlights</span>
+              <span class="explorer-item-tab">Highlights Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="desc">
+              <span class="explorer-item-name">Description Paragraphs</span>
+              <span class="explorer-item-tab">Description Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="features">
+              <span class="explorer-item-name">Key Feature Bullets</span>
+              <span class="explorer-item-tab">Description Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="table">
+              <span class="explorer-item-name">Properties & Specs Table</span>
+              <span class="explorer-item-tab">Properties Table Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="types">
+              <span class="explorer-item-name">Product Types Grid</span>
+              <span class="explorer-item-tab">Types Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="benefits">
+              <span class="explorer-item-name">Value Benefits Cards</span>
+              <span class="explorer-item-tab">Benefits Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="faqs">
+              <span class="explorer-item-name">FAQs Accordion</span>
+              <span class="explorer-item-tab">FAQs Tab</span>
+            </div>
+            <div class="explorer-list-item" data-element="install">
+              <span class="explorer-item-name">Installation Specs</span>
+              <span class="explorer-item-tab">Installation Tab</span>
+            </div>
+          </div>
+          
+          <!-- Explorer Display Panel -->
+          <div class="explorer-display">
+            <div class="explorer-display-header">
+              <span class="explorer-display-title" id="display-title">Page Title (H1)</span>
+              <span class="badge badge-secondary" id="display-tab">Hero Tab</span>
+            </div>
+            
+            <div class="explorer-content-split">
+              <!-- Left side: text -->
+              <div class="explorer-description-panel">
+                <span class="explorer-desc-title">Description</span>
+                <p class="explorer-desc-text" id="display-desc">
+                  This field defines the main uppercase display heading (H1) shown in the top hero banner of the category page. It is highly optimized for H1 SEO crawlers and clearly introduces the product category (e.g. "HDPE Geomembranes").
+                </p>
+                <div style="margin-top: auto;">
+                  <span class="explorer-desc-title">Database Field</span>
+                  <code style="display:block;margin-top:0.25rem;background:#1e293b;padding:0.4rem;border-radius:4px;font-size:0.75rem" id="display-db">
+                    value.label: string
+                  </code>
+                </div>
+              </div>
+              
+              <!-- Right side: Visual mock webpage preview -->
+              <div class="explorer-preview-panel">
+                <div class="mock-webpage" id="mock-webpage">
+                  
+                  <!-- Top nav bar mockup -->
+                  <div class="mock-header">
+                    <span style="font-weight:800;color:var(--accent-red)">GEOSYNTHETICS</span>
+                    <div style="display:flex;gap:4px">
+                      <div class="mock-nav-item"></div>
+                      <div class="mock-nav-item"></div>
+                      <div class="mock-nav-item"></div>
+                    </div>
+                  </div>
+                  
+                  <!-- Hero banner -->
+                  <div class="mock-element highlighted mock-hero" id="mock-hero" data-label="Hero Container" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=500&q=80')">
+                    
+                    <!-- Highlights badges -->
+                    <div style="display:flex;gap:4px;margin-bottom:0.25rem" class="mock-element" id="el-highlights" data-label="Highlights Badges">
+                      <span style="background:var(--accent-red);color:white;padding:1px 3px;border-radius:2px;font-size:0.4rem">Thickness: 1.5mm</span>
+                      <span style="background:rgba(255,255,255,0.2);padding:1px 3px;border-radius:2px;font-size:0.4rem">Width: 7m</span>
+                    </div>
+                    
+                    <span class="mock-hero-title mock-element" id="el-hero-title" data-label="H1 Title">PP GEOMEMBRANES</span>
+                    <span class="mock-hero-subtitle mock-element" id="el-hero-subtitle" data-label="Hero Subtitle">Engineered flexible polypropylene materials for critical containment and water protection.</span>
+                  </div>
+                  
+                  <!-- Detailed description and bullets -->
+                  <div style="display:flex;flex-direction:column;gap:6px;padding:0.25rem">
+                    <div class="mock-element" id="el-desc" data-label="Description Paragraphs">
+                      <p style="color:var(--text-secondary);font-size:0.55rem;margin-bottom:4px">Flexible Polypropylene (fPP) Geomembranes provide a unique combination of high flexibility, dimensional stability, and excellent resistance to a wide range of chemicals.</p>
+                      <p style="color:var(--text-secondary);font-size:0.55rem">Unlike PVC, fPP does not contain plasticisers, meaning it will not embrittle over time. It offers superior weldability and requires less maintenance than many traditional liner systems.</p>
+                    </div>
+                    
+                    <div class="mock-element" id="el-features" data-label="Feature Checklist Bullets">
+                      <span style="font-weight:700;display:block;margin-bottom:2px">Key Features</span>
+                      <div style="display:flex;align-items:center;gap:3px;margin-bottom:2px"><span style="color:var(--accent-red)">✓</span> Highly resistant to UV and ozone degradation</div>
+                      <div style="display:flex;align-items:center;gap:3px"><span style="color:var(--accent-red)">✓</span> Excellent weldability and seam strength</div>
+                    </div>
+                  </div>
+                  
+                  <!-- Specifications Table -->
+                  <div class="mock-element" id="el-table" data-label="Specs Table">
+                    <span style="font-weight:700;display:block;margin-bottom:3px">Technical Specifications</span>
+                    <div class="mock-table">
+                      <div class="mock-table-header">
+                        <span>Property</span>
+                        <span>Test Method</span>
+                        <span>Value</span>
+                      </div>
+                      <div class="mock-table-row">
+                        <span>Thickness</span>
+                        <span>ASTM D5199</span>
+                        <span>1.5 mm</span>
+                      </div>
+                      <div class="mock-table-row">
+                        <span>Density</span>
+                        <span>ASTM D792</span>
+                        <span>0.94 g/cc</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Types Grid -->
+                  <div class="mock-element" id="el-types" data-label="Types Grid">
+                    <span style="font-weight:700;display:block;margin-bottom:3px">Available Types</span>
+                    <div class="mock-grid">
+                      <div class="mock-box">
+                        <span style="font-weight:700">Smooth PP</span>
+                        <span style="font-size:0.45rem;color:var(--text-secondary)">Standard flexible lining barrier</span>
+                      </div>
+                      <div class="mock-box">
+                        <span style="font-weight:700">Textured PP</span>
+                        <span style="font-size:0.45rem;color:var(--text-secondary)">Enhanced friction on steep slopes</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Benefits Cards -->
+                  <div class="mock-element" id="el-benefits" data-label="Benefits Cards">
+                    <span style="font-weight:700;display:block;margin-bottom:3px">Core Benefits</span>
+                    <div class="mock-grid">
+                      <div class="mock-box" style="border-left:2px solid var(--accent-red)">
+                        <span style="font-weight:700;color:var(--text-primary)">No Plasticisers</span>
+                        <span style="font-size:0.45rem;color:var(--text-secondary)">Will not embrittle or crack over years</span>
+                      </div>
+                      <div class="mock-box" style="border-left:2px solid var(--accent-red)">
+                        <span style="font-weight:700;color:var(--text-primary)">Flexibility</span>
+                        <span style="font-size:0.45rem;color:var(--text-secondary)">Excellent multi-axial strain resilience</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Installation Specification block -->
+                  <div class="mock-element mock-installation" id="el-install" data-label="Installation Specs Block">
+                    <span style="font-weight:700;display:block;margin-bottom:2px;color:var(--accent-red)">Installation Guidelines</span>
+                    <p style="font-size:0.5rem;color:var(--text-secondary)">Installation must be done by certified technicians. Prep subgrade to be completely free of sharp rocks. Test all wedge welds under GRI-GM19 rules.</p>
+                  </div>
+                  
+                  <!-- FAQs accordion -->
+                  <div class="mock-element" id="el-faqs" data-label="FAQs Accordion">
+                    <span style="font-weight:700;display:block;margin-bottom:3px">Frequently Asked Questions</span>
+                    <div class="mock-accordion" style="margin-bottom:3px">
+                      <span>How long does fPP geomembrane last?</span>
+                      <div class="mock-accordion-arrow"></div>
+                    </div>
+                    <div class="mock-accordion">
+                      <span>Is fPP certified for drinking water?</span>
+                      <div class="mock-accordion-arrow"></div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- CREATION GUIDE SECTION -->
+      <section id="create-page" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Creating a Page Template
+        </h2>
+        <p class="paragraph">
+          Adding a brand-new dynamic sub-category is fully streamlined. Follow this step-by-step procedure to add a page correctly:
+        </p>
+        
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Access Page Templates</h4>
+              <p class="paragraph">Log into the admin portal using your credential console. Once inside, locate and click the <strong>Product Page Templates</strong> item from the administration navigation menu or visit <code>/admin/page-templates</code>.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Initialize a New Slug</h4>
+              <p class="paragraph">In the left sidebar of the templates builder, click the <strong>+ New Template</strong> button. A small text input will appear inside the sidebar area.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Enter Slug Name</h4>
+              <p class="paragraph">Type in the exact lowercase URL-safe slug for your product sub-page (e.g. <code>custom-clay-liners</code>). Ensure you use only alphanumeric characters and hyphens. Click <strong>Create</strong> to initialize local defaults.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">4</div>
+            <div class="step-body">
+              <h4 class="step-title">Build Out Content & Save</h4>
+              <p class="paragraph">The template is added instantly. Now, go tab by tab (Hero, Description, FAQs, Table) and fill in your values. Once finished, click the glowing <strong>Save All</strong> button in the top right header to commit it to Supabase.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- EDITING GUIDE SECTION -->
+      <section id="edit-page" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+          Editing Page Contents
+        </h2>
+        <p class="paragraph">
+          Editing page contents is fully structured into 12 visual tabs. Select your target category from the sidebar and use the designated sub-panels:
+        </p>
+        
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">Properties & Specs Table</h3>
+            <p class="card-desc">Located in the <strong>Properties Table</strong> tab. Build a robust grid of physical specs. You can dynamically click <strong>+ Column</strong> to add new test vectors (e.g. "Metric Value", "Imperial Value") or <strong>+ Row</strong> to add custom polymer test properties (e.g. "Puncture Resistance").</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Badge Callouts</h3>
+            <p class="card-desc">Managed in the <strong>Highlights</strong> tab. Configure a set of micro key-value pairs (e.g., "Standard Roll: 7.0m", "Warranty: 20 years"). These are automatically compiled into visual pill badges that render prominently under the H1 page header.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">FAQs Accordion</h3>
+            <p class="card-desc">Located in the <strong>FAQs</strong> tab. Add recursive question and answer sections. Administrators can easily update pricing guidance, welding tolerances, or storage procedures which customers can slide open instantly.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Cross-Linking Products</h3>
+            <p class="card-desc">Located in the <strong>Products</strong> tab. Link actual items from the primary catalog by entering their exact product names, short descriptions, and technical links. These render as product recommendations at the bottom of the page.</p>
+          </div>
+        </div>
+        
+        <div class="callout callout-tip">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            Pro Tip: Real-time Live Preview
+          </div>
+          <div class="callout-content">
+            Unsaved changes are clearly marked with an amber <strong>● Unsaved</strong> indicator. You can preview your work at any time by clicking the <strong>Preview</strong> button in the active category header bar. This launches the exact draft in a separate browser tab before committing the save.
+          </div>
+        </div>
+      </section>
+      
+      <!-- DELETION GUIDE SECTION -->
+      <section id="delete-page" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          Deleting a Template Page
+        </h2>
+        <p class="paragraph">
+          If a product line is discontinued or consolidated, you can easily purge its dynamic template configuration from the platform:
+        </p>
+        
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Hover Target Template</h4>
+              <p class="paragraph">Locate the template you wish to delete in the left sidebar of the templates builder interface.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Trigger purges</h4>
+              <p class="paragraph">Click the red <strong>Trash Icon</strong> that dynamically fades in next to the template label on hover. This triggers an Alert Dialog window.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Confirm and Commit</h4>
+              <p class="paragraph">Confirm the action inside the alert box. Lastly, click the global <strong>Save All</strong> button in the top right corner. The database record is immediately purged, and the public route will safely output a clean 404 response.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- MEGAMENU LINKING SECTION -->
+      <section id="link-megamenu" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+          Linking to Mega Menu
+        </h2>
+        <p class="paragraph">
+          Creating a new template page doesn't automatically publish it in the navigation headers. To make your new page accessible to public users, you must register it in the megamenu hierarchy. Thanks to our unified system, this is now a simple **1-click automatic action**:
+        </p>
+        
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Check Menu Status Pill</h4>
+              <p class="paragraph">Look at the active template header bar inside the <strong>Page Templates</strong> page. If the template is not in the menu, you will see a warning pill: <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:0.65rem;font-weight:700">✕ Unlinked (Hidden from Nav Menu)</span>.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Link Instantly</h4>
+              <p class="paragraph">Click the glowing <strong>⚡ Link to Menu</strong> action button right next to the status pill. A dialog box will appear asking you to choose the parent menu category.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Select Parent & Confirm</h4>
+              <p class="paragraph">Select the desired parent group (e.g. <strong>Geomembranes</strong> or <strong>Geotextiles</strong>) from the dropdown list and click <strong>Confirm Link</strong>. The system will automatically build the required JSON structures, resolve parameters, purge old duplicate paths, register the link in Supabase, and update the status pill to green instantly!</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="callout callout-tip" style="margin-top:2rem">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Alternative: Site Builder Autocomplete
+          </div>
+          <div class="callout-content">
+            If you are already inside the <strong>Site Builder</strong> (<code>/admin/site-builder</code>) configuring links, you don't need to manually type labels or path names. Simply add/select a tree node, locate the <strong>⚡ Auto-fill from Page Template</strong> panel under the Identity tab, and pick your template. All parameters will instantly auto-populate without any risk of spelling errors or 404s!
+          </div>
+        </div>
+      </section>
+      
+      <!-- DEVELOPER REFERENCE SECTION -->
+      <section id="tech-ref" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          Technical & Architecture Reference
+        </h2>
+        <p class="paragraph">
+          For software engineers and AI coding agents extending this codebase, please adhere to the following architecture rules and structures:
+        </p>
+        
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Strict TanStack Router/Page Separation</h3>
+        <p class="paragraph">
+          In order to allow TanStack Router to properly code-split routes into light chunks and prevent warning console logs during <code>bun dev</code>, <strong>never export page JSX components directly from route files</strong>. Route files must only configure createFileRoute, while the full JSX live separately in pages.
+        </p>
+        
+        <pre><span class="token-comment">// ❌ AVOID - exporting component from route file breaks code-splitting</span>
+<span class="token-keyword">export function</span> <span class="token-function">ProductCategoryPage</span>() { ... }
+<span class="token-keyword">export const</span> <span class="token-number">Route</span> = <span class="token-function">createFileRoute</span>(<span class="token-string">"/products/$category"</span>)({ component: <span class="token-number">ProductCategoryPage</span> });
+
+<span class="token-comment">// ✅ CORRECT - route configuration file only exports Route config</span>
+<span class="token-keyword">import</span> { ProductCategoryPage } <span class="token-keyword">from</span> <span class="token-string">"@/pages/ProductCategoryPage"</span>;
+<span class="token-keyword">export const</span> <span class="token-number">Route</span> = <span class="token-function">createFileRoute</span>(<span class="token-string">"/products/$category/"</span>)({
+  loader: <span class="token-keyword">async</span> ({ params }) => { ... },
+  component: <span class="token-number">ProductCategoryPage</span>
+});</pre>
+        
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">2. Supabase Integration Hooks</h3>
+        <p class="paragraph">
+          Fetching from Supabase uses cached loaders and helper APIs. The core function is <code>getProductPageContent(slug)</code>, located in <code>src/data/product-pages.ts</code>. It fetches custom family templates, but also seamlessly resolves parent categories by querying the visual hierarchy tree (<code>hierarchy_products</code>) and merging site builder customizations onto premium default layouts:
+        </p>
+        
+        <pre><span class="token-keyword">export async function</span> <span class="token-function">getProductPageContent</span>(slug: <span class="token-number">string</span>): <span class="token-number">Promise</span>&lt;<span class="token-number">ProductPageContent</span> | <span class="token-number">null</span>&gt; {
+  <span class="token-comment">// 1. Query custom templates for product family sub-pages</span>
+  <span class="token-keyword">const</span> { data } = <span class="token-keyword">await</span> supabase
+    .from(<span class="token-string">"site_config"</span>)
+    .select(<span class="token-string">"value"</span>)
+    .eq(<span class="token-string">"key"</span>, <span class="token-string">"template_product_categories"</span>)
+    .maybeSingle();
+
+  <span class="token-keyword">if</span> (data?.value?.[slug]) {
+    <span class="token-keyword">return</span> data.value[slug] <span class="token-keyword">as</span> <span class="token-number">ProductPageContent</span>;
+  }
+
+  <span class="token-comment">// 2. Dynamic fallback logic for the 8 parent product categories</span>
+  <span class="token-keyword">const</span> parentCategories = [<span class="token-string">"geomembranes"</span>, <span class="token-string">"geotextiles"</span>, <span class="token-string">"geogrids"</span>, <span class="token-string">"geocells"</span>, <span class="token-string">"gcls"</span>, ...];
+  <span class="token-keyword">if</span> (parentCategories.includes(slug)) {
+    <span class="token-keyword">const</span> fallback = <span class="token-function">generateParentCategoryFallback</span>(slug);
+    
+    <span class="token-comment">// Merge customized elements edited inside the Site Builder tree</span>
+    <span class="token-keyword">const</span> { data: hierarchyData } = <span class="token-keyword">await</span> supabase
+      .from(<span class="token-string">"site_config"</span>)
+      .select(<span class="token-string">"value"</span>)
+      .eq(<span class="token-string">"key"</span>, <span class="token-string">"hierarchy_products"</span>)
+      .maybeSingle();
+      
+    <span class="token-keyword">if</span> (hierarchyData?.value?.items) {
+      <span class="token-keyword">const</span> matched = hierarchyData.value.items.find((i: <span class="token-number">any</span>) => i.slug === slug);
+      <span class="token-keyword">if</span> (matched?.pageContent) {
+        <span class="token-keyword">return</span> { ...fallback, ...matched.pageContent };
+      }
+    }
+    <span class="token-keyword">return</span> fallback;
+  }
+  <span class="token-keyword">return</span> <span class="token-number">null</span>;
+}</pre>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">3. Unified Parent Categories vs. Sub-Page Templates</h3>
+        <p class="paragraph">
+          To prevent data duplication and configuration conflicts, the platform enforces a strict separation between parent landing pages and sub-page/family templates:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Parent Category Pages:</strong> The 8 root product categories (e.g. <code>/products/geomembranes</code>, <code>/products/geotextiles</code>) are governed inside the <strong>Site Builder</strong> visual hierarchy tree. Admin customizations in the Site Builder are merged onto premium fallback layouts.</li>
+          <li><strong>Sub-Page Templates:</strong> Detailed family sub-pages (e.g. <code>/products/geomembranes/hdpe-geomembranes</code>) are governed inside <strong>Page Templates</strong>. Parent category slugs are strictly protected from creation here to prevent layout/navigation loop issues.</li>
+        </ul>
+        
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">4. XML Sitemap & SEO Discovery</h3>
+        <p class="paragraph">
+          The dynamic sitemap at <code>/sitemap.xml</code> is auto-generated by a TanStack Start server route located in <code>src/routes/sitemap[.]xml.ts</code>. It automatically queries `template_product_categories` and includes all dynamic admin-created categories seamlessly, ensuring instant Google discovery without manual updates.
+        </p>
+      </section>
+      
+    </main>
+  </div>
+  
+  <!-- INTERACTIVE EXPLORER SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const explorerItems = document.querySelectorAll('.explorer-list-item');
+      const displayTitle = document.getElementById('display-title');
+      const displayTab = document.getElementById('display-tab');
+      const displayDesc = document.getElementById('display-desc');
+      const displayDb = document.getElementById('display-db');
+      const mockWebpage = document.getElementById('mock-webpage');
+      
+      const MAPPING_DATA = {
+        'hero-title': {
+          title: 'Page Title (H1)',
+          tab: 'Hero Tab',
+          db: 'value.label: string',
+          desc: 'This field defines the main uppercase display heading (H1) shown in the top hero banner of the category page. It is highly optimized for H1 SEO crawlers and clearly introduces the product category (e.g. "HDPE Geomembranes").',
+          elementId: 'el-hero-title'
+        },
+        'hero-subtitle': {
+          title: 'Subtitle / Tagline',
+          tab: 'Hero Tab',
+          db: 'value.subtitle: string',
+          desc: 'A descriptive paragraph displayed right below the H1 title in the hero banner. Used to briefly explain the core utility and value proposition of the products in the selected category.',
+          elementId: 'el-hero-subtitle'
+        },
+        'hero-bg': {
+          title: 'Hero Background Image',
+          tab: 'Hero Tab',
+          db: 'value.heroImage: string (URL)',
+          desc: 'A full URL string pointing to an image (e.g., hosted on Unsplash or a corporate CDN). The website renders this as a rich, full-screen background image in the hero banner with a semi-opaque dark overlay to ensure high text contrast.',
+          elementId: 'mock-hero'
+        },
+        'highlights': {
+          title: 'Technical Highlights',
+          tab: 'Highlights Tab',
+          db: 'value.technicalHighlights: { label: string, value: string }[]',
+          desc: 'A key-value list that renders as high-visibility pill-shaped badges at the very top of the hero container. Perfect for displaying key engineering thresholds like "Thickness: 1.0mm - 3.0mm", "Roll Width: 7.0m", or standard materials specifications.',
+          elementId: 'el-highlights'
+        },
+        'desc': {
+          title: 'Description Paragraphs',
+          tab: 'Description Tab',
+          db: 'value.description: string[]',
+          desc: 'A dynamic list of long-form paragraphs. Each entry represents a paragraph of text. These are rendered as the primary descriptive block in the "Technical Description" section of the page, outlining technical usage, brand quality standards, and industry recommendations.',
+          elementId: 'el-desc'
+        },
+        'features': {
+          title: 'Key Feature Bullets',
+          tab: 'Description Tab',
+          db: 'value.features: string[]',
+          desc: 'An array of concise strings rendering as a beautiful checkmark bullet list. These are presented in the "Benefits of Choosing Our Products" section to highlight structural tolerances, standard approvals, or material certifications.',
+          elementId: 'el-features'
+        },
+        'table': {
+          title: 'Properties & Specs Table',
+          tab: 'Properties Table Tab',
+          db: 'value.propertiesTable: { headers: string[], rows: string[][] }',
+          desc: 'A fully dynamic matrix editor enabling administrators to compile test properties, ASTM standards, and physical thresholds into a detailed, beautiful data table. Displays critical data (e.g. Tear Resistance, Puncture Thresholds) in Metric and Imperial grids.',
+          elementId: 'el-table'
+        },
+        'types': {
+          title: 'Product Types Grid',
+          tab: 'Types Tab',
+          db: 'value.types: { name: string, description: string }[]',
+          desc: 'Displays card components in the "Available Types" section of the page. Each card features a bold type name and a short description outlining custom variants (e.g. Smooth, Textured, White, Conductive) to educate clients.',
+          elementId: 'el-types'
+        },
+        'benefits': {
+          title: 'Value Benefits Cards',
+          tab: 'Benefits Tab',
+          db: 'value.benefits: { title: string, description: string }[]',
+          desc: 'Generates structured benefit boxes in the "Benefits of Using Our Products" section. Highlight core selling points (like "Chemical Resistance", "High Durability", "Eco-friendly Composition") with clear explanations.',
+          elementId: 'el-benefits'
+        },
+        'faqs': {
+          title: 'FAQs Accordion',
+          tab: 'FAQs Tab',
+          db: 'value.faqs: { question: string, answer: string }[]',
+          desc: 'Renders dynamic interactive question/answer rows in the FAQ Accordion near the page bottom. Designed to answer client queries about roll specifications, cold-weather installations, or quality testing certifications.',
+          elementId: 'el-faqs'
+        },
+        'install': {
+          title: 'Installation Specs Block',
+          tab: 'Installation Tab',
+          db: 'value.installationSpecs: string[]',
+          desc: 'An array of paragraphs rendering inside a visually highlighted, red-bordered "Installation Specifications" alert banner. Warns of critical requirements such as subgrade smoothing, seam tests, and certified technician wedge welding.',
+          elementId: 'el-install'
+        }
+      };
+      
+      explorerItems.forEach(item => {
+        item.addEventListener('click', () => {
+          // Remove active class from all sidebar list items
+          explorerItems.forEach(i => i.classList.remove('active'));
+          // Add active class to clicked item
+          item.classList.add('active');
+          
+          const elementKey = item.getAttribute('data-element');
+          const data = MAPPING_DATA[elementKey];
+          
+          if (data) {
+            // Update display texts
+            displayTitle.textContent = data.title;
+            displayTab.textContent = data.tab;
+            displayDesc.textContent = data.desc;
+            displayDb.textContent = data.db;
+            
+            // Manage mock highlighted element
+            const mockElements = mockWebpage.querySelectorAll('.mock-element');
+            mockElements.forEach(el => el.classList.remove('highlighted'));
+            
+            const targetEl = document.getElementById(data.elementId);
+            if (targetEl) {
+              targetEl.classList.add('highlighted');
+              
+              // Smooth scroll within mockup container
+              const targetOffset = targetEl.offsetTop;
+              const containerHeight = mockWebpage.clientHeight;
+              const scrollPosition = targetOffset - (containerHeight / 2) + (targetEl.clientHeight / 2);
+              
+              mockWebpage.scrollTo({
+                top: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+      
+      // Responsive sidebar section highlighting on scroll
+      const sections = document.querySelectorAll('.doc-section');
+      const navItems = document.querySelectorAll('.nav-item');
+      
+      window.addEventListener('scroll', () => {
+        let currentSection = '';
+        sections.forEach(sec => {
+          const top = sec.offsetTop;
+          const height = sec.clientHeight;
+          if (pageYOffset >= top - 200) {
+            currentSection = sec.getAttribute('id');
+          }
+        });
+        
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('data-section') === currentSection) {
+            item.classList.add('active');
+          }
+        });
+      });
+      
+    });
+  </script>
+</body>
+</html>

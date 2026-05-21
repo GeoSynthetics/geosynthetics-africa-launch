@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Inbox, Package, FileText, Users } from "lucide-react";
+import { Inbox, Package, FileText, Users, LayoutList } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -8,34 +8,64 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
-const TILES = [
+type CountableTile = {
+  icon: React.ElementType;
+  label: string;
+  desc: string;
+  to: "/admin/quotes" | "/admin/products" | "/admin/resources" | "/admin/users";
+  table: "quote_requests" | "products" | "resources" | "profiles";
+  countKey: string;
+};
+
+type StaticTile = {
+  icon: React.ElementType;
+  label: string;
+  desc: string;
+  to: "/admin/page-templates";
+  staticBadge: string;
+};
+
+type Tile = CountableTile | StaticTile;
+
+const TILES: Tile[] = [
   {
     icon: Inbox,
     label: "Quote Requests",
     desc: "Incoming BOQs and enquiries.",
-    to: "/admin/quotes" as const,
-    table: "quote_requests" as const,
+    to: "/admin/quotes",
+    table: "quote_requests",
+    countKey: "quote_requests",
   },
   {
     icon: Package,
     label: "Products",
     desc: "Manage catalogue & specs.",
-    to: "/admin/products" as const,
-    table: "products" as const,
+    to: "/admin/products",
+    table: "products",
+    countKey: "products",
   },
   {
     icon: FileText,
     label: "Resources",
     desc: "Datasheets, brochures, case studies.",
-    to: "/admin/resources" as const,
-    table: "resources" as const,
+    to: "/admin/resources",
+    table: "resources",
+    countKey: "resources",
+  },
+  {
+    icon: LayoutList,
+    label: "Page Templates",
+    desc: "Edit product category sub-page content.",
+    to: "/admin/page-templates",
+    staticBadge: "CMS",
   },
   {
     icon: Users,
     label: "Users & Roles",
     desc: "Grant staff/admin access.",
-    to: "/admin/users" as const,
-    table: "profiles" as const,
+    to: "/admin/users",
+    table: "profiles",
+    countKey: "profiles",
   },
 ];
 
@@ -45,25 +75,26 @@ function AdminDashboard() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const countableTiles = TILES.filter((t): t is CountableTile => "table" in t);
       const entries = await Promise.all(
-        TILES.map(async (t) => {
+        countableTiles.map(async (t) => {
           const { count, error } = await supabase
             .from(t.table)
             .select("*", { count: "exact", head: true });
-          return [t.table, error ? null : count ?? 0] as const;
+          return [t.countKey, error ? null : (count ?? 0)] as const;
         }),
       );
       if (!cancelled) setCounts(Object.fromEntries(entries));
     })();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {TILES.map((t) => {
-        const c = counts[t.table];
+        const isStatic = "staticBadge" in t;
+        const count = isStatic ? null : counts[(t as CountableTile).countKey];
+
         return (
           <Link
             key={t.label}
@@ -72,10 +103,14 @@ function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <t.icon className="h-6 w-6 text-primary" />
-              {c === undefined ? (
+              {isStatic ? (
+                <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                  {(t as StaticTile).staticBadge}
+                </span>
+              ) : count === undefined ? (
                 <Skeleton className="h-6 w-10" />
               ) : (
-                <span className="font-display text-2xl font-bold">{c ?? "—"}</span>
+                <span className="font-display text-2xl font-bold">{count ?? "—"}</span>
               )}
             </div>
             <div className="mt-3 font-display text-base font-bold uppercase group-hover:text-primary transition-colors">

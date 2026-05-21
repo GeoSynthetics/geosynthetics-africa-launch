@@ -10,3 +10,4 @@ export { ApplicationsLanding } from "./ApplicationsLanding";
 export { ServicesPage } from "./ServicesPage";
 export { ResourcesIndexPage } from "./ResourcesIndexPage";
 export { ProductCategoryPage } from "./ProductCategoryPage";
+export { PageTemplatesAdminPage } from "./PageTemplatesAdminPage";

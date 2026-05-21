@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link, type LinkComponentProps } from "@tanstack/react-router";
+import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-router";
+import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetDescription } from "@/components/ui/sheet";
@@ -34,25 +35,151 @@ function useDynamicMegaMenus() {
   const [menus, setMenus] = useState<typeof megaMenus>(megaMenus);
 
   useEffect(() => {
-    supabase.from("site_config").select("value").eq("key", "mega_menu").maybeSingle().then(({ data }) => {
-      if (data && data.value && Array.isArray(data.value)) {
-        // New structure: full array
-        setMenus(data.value as typeof megaMenus);
-      } else if (data && data.value && data.value.menus && Array.isArray(data.value.menus)) {
-        setMenus(data.value.menus as typeof megaMenus);
-      }
-    });
+    const SECTION_KEYS = ["products", "applications", "services", "industries"] as const;
+
+    supabase
+      .from("site_config")
+      .select("key, value")
+      .in("key", SECTION_KEYS.map(k => `hierarchy_${k}`))
+      .then(async ({ data }) => {
+        if (!data || data.length === 0) return;
+        const defaults = getDefaultSections();
+        const sections = SECTION_KEYS.map(key => {
+          const row = data.find(d => d.key === `hierarchy_${key}`);
+          return (row?.value ?? defaults.find((d: any) => d.key === key)) as any;
+        }).filter(Boolean);
+
+        if (sections.length === 0) return;
+
+        let builtMenus = buildMegaMenuFromHierarchy(sections);
+
+        // ── Auto-hydrate featured product paths and images ────────────────────
+        // Hydrate both the redirect paths to /products/$category/$family and
+        // the real image_url from Supabase products.
+
+        const slugsToHydrate = new Set<string>();
+
+        const getProductSlug = (item: any): string | undefined => {
+          if (item.params?.family) return item.params.family;
+          if (item.params?.slug) return item.params.slug;
+          if (typeof item.to === "string") {
+            const parts = item.to.split("/").filter(Boolean);
+            const last = parts[parts.length - 1];
+            if (last && !last.startsWith("$")) return last;
+          }
+          return undefined;
+        };
+
+        const collectSlugs = (featured: any[]) => {
+          for (const item of featured) {
+            const slug = getProductSlug(item);
+            if (slug) slugsToHydrate.add(slug);
+          }
+        };
+
+        for (const menu of builtMenus) {
+          if (menu.columns.featuredKind === "product" && menu.columns.featured) {
+            collectSlugs(menu.columns.featured as any[]);
+          }
+          for (const primary of menu.columns.primary) {
+            if (primary.content?.featuredKind === "product" && primary.content.featured) {
+              collectSlugs(primary.content.featured as any[]);
+            }
+          }
+        }
+
+        if (slugsToHydrate.size > 0) {
+          const { data: productData } = await supabase
+            .from("products")
+            .select("slug, image_url, product_categories ( slug )")
+            .in("slug", Array.from(slugsToHydrate));
+
+          const productMap = new Map<string, { image_url: string | null; category_slug: string }>();
+          if (productData) {
+            for (const p of productData as any[]) {
+              const catSlug = Array.isArray(p.product_categories)
+                ? p.product_categories[0]?.slug
+                : p.product_categories?.slug;
+              productMap.set(p.slug, {
+                image_url: p.image_url,
+                category_slug: catSlug || "geomembranes",
+              });
+            }
+          }
+
+          if (productMap.size > 0) {
+            const hydrate = (featured: any[]) =>
+              featured.map(item => {
+                const slug = getProductSlug(item);
+                const dbProduct = slug ? productMap.get(slug) : undefined;
+                if (dbProduct) {
+                  return {
+                    ...item,
+                    to: "/catalogue/$slug",
+                    params: {
+                      slug: slug,
+                    },
+                    image: dbProduct.image_url || item.image || "",
+                  };
+                }
+                return item;
+              });
+
+            builtMenus = builtMenus.map(menu => ({
+              ...menu,
+              columns: {
+                ...menu.columns,
+                featured:
+                  menu.columns.featuredKind === "product" && menu.columns.featured
+                    ? (hydrate(menu.columns.featured as any[]) as any)
+                    : menu.columns.featured,
+                primary: menu.columns.primary.map(p => ({
+                  ...p,
+                  content: p.content
+                    ? {
+                        ...p.content,
+                        featured:
+                          p.content.featuredKind === "product" && p.content.featured
+                            ? (hydrate(p.content.featured as any[]) as any)
+                            : p.content.featured,
+                      }
+                    : p.content,
+                })),
+              },
+            }));
+          }
+        }
+
+        setMenus(builtMenus);
+      });
   }, []);
 
   return menus;
 }
 
 function DesktopNav({ menus }: { menus: typeof megaMenus }) {
+  const [value, setValue] = useState<string>("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setValue("");
+  }, [location.pathname]);
+
   return (
-    <NavigationMenu className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0">
+    <NavigationMenu
+      value={value}
+      onValueChange={setValue}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest("a")) {
+          setValue("");
+        }
+      }}
+      className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0"
+    >
       <NavigationMenuList className="gap-0">
         {menus.map((m) => (
-          <NavigationMenuItem key={m.key}>
+          <NavigationMenuItem key={m.key} value={m.key}>
             <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
               {m.label}
             </NavigationMenuTrigger>

@@ -56,9 +56,8 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     to={item.to}
                     params={item.params}
                     onClick={closeMenus}
-                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${
-                      isActive ? "bg-accent text-primary" : "text-foreground hover:bg-accent hover:text-primary"
-                    }`}
+                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${isActive ? "bg-accent text-primary" : "text-foreground hover:bg-accent hover:text-primary"
+                      }`}
                   >
                     {Icon && <Icon className={`h-4 w-4 transition ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`} />}
                     <span className="font-medium flex-1">{item.label}</span>
@@ -109,11 +108,15 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     {p.image ? (
                       <img src={p.image} alt={p.label} className="h-12 w-12 flex-shrink-0 rounded object-cover" />
                     ) : (
-                      <div className="h-12 w-12 flex-shrink-0 rounded bg-surface-dark" />
+                      <div className="h-12 w-12 flex-shrink-0 rounded bg-surface flex items-center justify-center border border-border">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-foreground/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-foreground truncate">{p.label}</div>
-                      <div className="text-xs text-muted-foreground">{p.spec}</div>
+                      <div className="text-xs text-muted-foreground line-clamp-2">{p.spec}</div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                   </RLink>

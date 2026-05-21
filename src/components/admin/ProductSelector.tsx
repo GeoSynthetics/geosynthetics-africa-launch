@@ -22,10 +22,12 @@ export interface ProductData {
   id: string
   name: string
   slug: string
+  image_url?: string | null
+  short_description?: string | null
   thickness_mm?: number | null
   roll_width_m?: number | null
   roll_length_m?: number | null
-  product_categories?: { slug: string } | null
+  product_categories?: { slug: string; name?: string } | null
 }
 
 interface ProductSelectorProps {
@@ -42,7 +44,7 @@ export function ProductSelector({ onSelect }: ProductSelectorProps) {
       setLoading(true)
       const { data, error } = await supabase
         .from("products")
-        .select("id, name, slug, thickness_mm, roll_width_m, roll_length_m, product_categories(slug)")
+        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
         .order("name")
 
       if (!error && data) {

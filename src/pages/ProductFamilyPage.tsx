@@ -1,0 +1,521 @@
+import { useEffect } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { Route } from "@/routes/products.$category.$family";
+import { ChevronRight, Download, FileText, BookOpen, ArrowRight, Play, Check, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
+// Mock Data Structure representing GSE HD HDPE GEOMEMBRANES
+const mockData = {
+  title: "GSE HD HDPE GEOMEMBRANES",
+  subtitle: "GSE HD is a smooth, high quality, high density polyethylene (HDPE) geomembrane produced from specially formulated, virgin polyethylene resin. This polyethylene resin is designed specifically for flexible geomembrane applications.",
+  stats: {
+    projects: "900+",
+    countries: "15+",
+    experts: "30+",
+    years: "20+"
+  },
+  technicalSpecText: "GSE HD is a smooth, high quality, high density polyethylene (HDPE) geomembrane produced from specially formulated, virgin polyethylene resin. This polyethylene resin is designed specifically for flexible geomembrane applications. It contains approximately 97.5% polyethylene, 2.5% carbon black and trace amounts of antioxidants and heat stabilizers; no other additives, fillers or extenders are used. GSE HD has outstanding chemical resistance, mechanical properties, environmental stress crack resistance, dimensional stability and thermal aging characteristics. GSE HD has excellent resistance to UV radiation and is suitable for exposed conditions. These product specifications meet or exceed GRI-GM13.",
+  typicalValues: [
+    { label: "Thickness", value: "1.0 - 2.5", unit: "mm" },
+    { label: "Density", value: "0.940", unit: "g/cm³" },
+    { label: "Tensile Strength", value: "29 - 72", unit: "kN/m" },
+    { label: "Puncture Resistance", value: "350 - 800", unit: "N" }
+  ],
+  properties: {
+    headers: ["PROPERTIES", "1.0 mm", "1.5 mm", "2.0 mm", "2.5 mm"],
+    rows: [
+      ["Thickness (Minimum Average)", "1.00 mm", "1.50 mm", "2.00 mm", "2.50 mm"],
+      ["Density (Minimum)", "0.940 g/cc", "0.940 g/cc", "0.940 g/cc", "0.940 g/cc"],
+      ["Tensile Strength at Yield", "15 kN/m", "22 kN/m", "29 kN/m", "37 kN/m"],
+      ["Tensile Strength at Break", "27 kN/m", "40 kN/m", "53 kN/m", "67 kN/m"],
+      ["Elongation at Yield", "12%", "12%", "12%", "12%"],
+      ["Elongation at Break", "700%", "700%", "700%", "700%"],
+      ["Tear Resistance", "125 N", "187 N", "249 N", "311 N"],
+      ["Puncture Resistance", "352 N", "530 N", "703 N", "881 N"],
+      ["Carbon Black Content", "2.0 - 3.0 %", "2.0 - 3.0 %", "2.0 - 3.0 %", "2.0 - 3.0 %"]
+    ]
+  },
+  popularCatalogue: [
+    { name: "GSE HD Smooth Black", spec: "1.5mm, GRI GM13", image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&q=80" },
+    { name: "GSE HD Smooth White", spec: "1.5mm, GRI GM13", image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=200&q=80" },
+    { name: "GSE HD Smooth Green", spec: "2.0mm, GRI GM13", image: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=200&q=80" }
+  ],
+  relatedProductGroups: [
+    { name: "Smooth LLDPE Geomembranes", link: "/products/geomembranes/lldpe-geomembranes" },
+    { name: "Textured HDPE Geomembranes", link: "/products/geomembranes/textured-geomembranes" },
+    { name: "Textured LLDPE Geomembranes", link: "/products/geomembranes/textured-lldpe-geomembranes" }
+  ],
+  questions: [
+    { q: "Is it exposed?", a: "Different types of Geomembranes perform very differently under UV exposure. HDPE and EPDM have excellent UV resistance while PVC requires burial." },
+    { q: "What is subgrade condition?", a: "The condition of the subgrade can dictate the thickness of the liner needed. Very rocky or uneven subgrades require thicker, more puncture-resistant liners like 2.0mm HDPE." },
+    { q: "Chemical composition of liquid?", a: "The chemical compatibility between the stored liquid and the geomembrane material is critical. HDPE offers the broadest chemical resistance for harsh industrial applications." }
+  ],
+  installationSpecs: "Quality assurance during the design and installation of GSE HD HDPE Geomembrane is critical to the success of the containment system. The surface to be lined should be smooth, free of sharp objects, and properly compacted. All panels must be deployed with adequate overlap and welded using dual-track thermal fusion for long seams, and extrusion welding for patches and details. Non-destructive testing (air pressure for dual-track, vacuum box for extrusion) must be performed on 100% of the seams. Destructive peel and shear testing must be conducted at regular intervals per project specifications.",
+  projects: [
+    { name: "Tailings Dam Facility", location: "Rustenburg, South Africa", image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80" },
+    { name: "Municipal Landfill", location: "Nairobi, Kenya", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=80" },
+    { name: "Gold Mine Heap Leach", location: "Tarkwa, Ghana", image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80" },
+    { name: "Raw Water Reservoir", location: "Windhoek, Namibia", image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80" }
+  ],
+  applications: [
+    "Mining (Heap Leach Pads, Tailings Impoundments)",
+    "Environmental (Landfill Basal Lining, Capping)",
+    "Water (Reservoirs, Dams, Canals, Ponds)",
+    "Agriculture (Irrigation Ponds, Aquaculture)",
+    "Energy (Brine Ponds, Evaporation Ponds)"
+  ]
+};
+
+function mapFamilyData(familyData: any, category: string, family: string) {
+  if (!familyData) return null;
+  
+  return {
+    title: familyData.label || familyData.title || "",
+    subtitle: familyData.subtitle || "",
+    stats: familyData.stats || {
+      projects: "900+",
+      countries: "15+",
+      experts: "30+",
+      years: "20+"
+    },
+    technicalSpecText: Array.isArray(familyData.description)
+      ? familyData.description.join("\n\n")
+      : (familyData.technicalSpecText || ""),
+    typicalValues: (familyData.technicalHighlights || familyData.typicalValues || []).map((val: any) => ({
+      label: val.label || "",
+      value: val.value || "",
+      unit: val.unit || ""
+    })),
+    properties: familyData.propertiesTable || familyData.properties || {
+      headers: ["PROPERTIES"],
+      rows: []
+    },
+    popularCatalogue: (familyData.popularProducts || familyData.popularCatalogue || []).map((item: any) => ({
+      name: item.name || "",
+      spec: item.spec || item.desc || "",
+      image: item.image || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&q=80"
+    })),
+    relatedProductGroups: (familyData.relatedProductGroups && familyData.relatedProductGroups.length > 0)
+      ? familyData.relatedProductGroups
+      : [
+          { name: "HDPE Geomembranes", slug: "hdpe-geomembranes" },
+          { name: "LLDPE Geomembranes", slug: "lldpe-geomembranes" },
+          { name: "PVC Geomembranes", slug: "pvc-geomembranes" },
+          { name: "EPDM Geomembranes", slug: "epdm-geomembranes" },
+          { name: "PP Geomembranes", slug: "pp-geomembranes" }
+        ].filter(item => item.slug !== family)
+         .map(item => ({
+           name: item.name,
+           link: `/products/${category}/${item.slug}`
+         })),
+    questions: (familyData.faqs || familyData.questions || []).map((item: any) => ({
+      q: item.question || item.q || "",
+      a: item.answer || item.a || ""
+    })),
+    installationSpecs: Array.isArray(familyData.installationSpecs)
+      ? familyData.installationSpecs.join("\n\n")
+      : (familyData.installationSpecs || ""),
+    projects: (familyData.projectReferences || familyData.projects || []).map((proj: any) => ({
+      name: proj.name || "",
+      location: proj.location || "",
+      image: proj.image || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
+    })),
+    applications: Array.isArray(familyData.applications)
+      ? familyData.applications.map((app: any) => typeof app === "string" ? app : (app.label || ""))
+      : []
+  };
+}
+
+export function ProductFamilyPage() {
+  const { category, family, familyData } = Route.useLoaderData();
+  const location = useLocation();
+
+  const data = (familyData ? mapFamilyData(familyData, category, family) : mockData) as typeof mockData;
+
+  useEffect(() => {
+    if (!familyData) {
+      console.warn("TODO: Replace `mockData` in ProductFamilyPage with dynamic content via the Site Builder / Database.");
+    }
+  }, [familyData]);
+
+  const dynamicFamilyName = family.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ').toUpperCase();
+  const dynamicCategoryName = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ').toUpperCase();
+
+  // Helper for scroll spy / sticky nav active state
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 140; // Approx header + sticky nav height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  return (
+    <div className="bg-background relative">
+      {/* Hero Section */}
+      <section className="bg-surface-dark text-white relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/40 z-0"></div>
+        <div className="container-page py-16 md:py-24 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <nav className="text-xs uppercase tracking-wider text-primary font-bold flex flex-wrap items-center gap-2 mb-6">
+              <Link to="/products" className="hover:text-white transition-colors">Products</Link>
+              <ChevronRight className="h-3 w-3" />
+              <Link to="/products/$category" params={{ category }} className="hover:text-white transition-colors">{dynamicCategoryName}</Link>
+              <ChevronRight className="h-3 w-3" />
+              <span className="text-white">{dynamicFamilyName}</span>
+            </nav>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-white leading-tight">
+              {data.title}
+            </h1>
+            <p className="mt-6 text-base text-white/80 leading-relaxed border-l-2 border-primary pl-4">
+              {data.subtitle}
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Button asChild className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide text-white">
+                <Link to="/contacts">Get a Quote</Link>
+              </Button>
+              <Button asChild variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white hover:text-surface-dark uppercase font-bold tracking-wide">
+                <Link to="/resources">View Spec Sheet</Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="hidden lg:flex justify-end">
+            <div className="relative w-full max-w-md aspect-video bg-surface-dark rounded overflow-hidden border border-white/10 group cursor-pointer shadow-2xl">
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10 flex items-center justify-center">
+                <div className="h-16 w-16 rounded-full bg-primary/90 flex items-center justify-center text-white pl-1 shadow-lg transform group-hover:scale-110 transition-transform">
+                  <Play className="h-6 w-6" />
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-surface-dark via-surface-dark/50 to-transparent"></div>
+              {/* Optional background texture/image for video placeholder */}
+              <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_20px)]"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Row */}
+        <div className="border-t border-white/10 relative z-10 bg-black/20">
+          <div className="container-page grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+            <div className="py-6 px-4 text-center">
+              <div className="font-display text-3xl font-bold text-primary">{data.stats?.projects || mockData.stats.projects}</div>
+              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">Projects</div>
+            </div>
+            <div className="py-6 px-4 text-center">
+              <div className="font-display text-3xl font-bold text-primary">{data.stats?.countries || mockData.stats.countries}</div>
+              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">Countries</div>
+            </div>
+            <div className="py-6 px-4 text-center">
+              <div className="font-display text-3xl font-bold text-primary">{data.stats?.experts || mockData.stats.experts}</div>
+              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">Experts</div>
+            </div>
+            <div className="py-6 px-4 text-center">
+              <div className="font-display text-3xl font-bold text-primary">{data.stats?.years || mockData.stats.years}</div>
+              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">Years</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sticky Navigation */}
+      <div className="sticky top-[80px] z-40 bg-surface border-b border-border shadow-sm">
+        <div className="container-page">
+          <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
+            {[
+              { id: 'description', label: 'Description' },
+              { id: 'specifications', label: 'Specifications' },
+              { id: 'documents', label: 'Documents' },
+              { id: 'applications', label: 'Applications' },
+              { id: 'projects', label: 'Projects' },
+              { id: 'faqs', label: 'FAQs' }
+            ].map(link => (
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  onClick={(e) => scrollToSection(e, link.id)}
+                  className="block py-4 text-sm font-bold uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors border-b-2 border-transparent hover:border-primary whitespace-nowrap"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="container-page py-16 grid lg:grid-cols-12 gap-16">
+
+        {/* Main Content Area */}
+        <div className="lg:col-span-8 space-y-20">
+
+          {/* Section: Description */}
+          <section id="description">
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Technical Specification of {data.title}
+            </h2>
+            <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
+              <p>{data.technicalSpecText}</p>
+            </div>
+
+            <h3 className="font-bold text-sm uppercase tracking-widest text-foreground mt-10 mb-6">Typical Values for {dynamicCategoryName}</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {(data.typicalValues || []).map((val: any, idx: number) => (
+                <div key={idx} className="bg-surface border border-border p-5 rounded text-center">
+                  <div className="text-xs font-bold uppercase text-muted-foreground mb-2">{val.label}</div>
+                  <div className="font-display text-2xl font-bold text-foreground">
+                    {val.value}
+                    {val.unit && <span className="text-sm text-primary ml-1">{val.unit}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Section: Properties & Dimensions */}
+          <section id="specifications">
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Properties & Dimensions
+            </h2>
+            <div className="overflow-x-auto bg-surface border border-border rounded">
+              <table className="w-full text-sm text-left">
+                <thead className="text-xs text-white uppercase bg-surface-dark font-bold">
+                  <tr>
+                    {(data.properties?.headers || mockData.properties.headers).map((h: string, i: number) => (
+                      <th key={i} className="px-4 py-4 whitespace-nowrap">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {(data.properties?.rows || mockData.properties.rows).map((row: string[], i: number) => (
+                    <tr key={i} className="hover:bg-accent/50 transition-colors">
+                      {row.map((cell, j) => (
+                        <td key={j} className={`px-4 py-3 ${j === 0 ? "font-bold text-foreground" : "text-muted-foreground whitespace-nowrap"}`}>
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4">
+              <Link to="/resources" className="text-primary hover:underline font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                <Download className="h-4 w-4" /> Download Full Technical Datasheet for {data.title} (PDF)
+              </Link>
+            </div>
+          </section>
+
+          {/* Section: Popular Catalogue Items */}
+          <section>
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Popular Catalogue Items
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {(data.popularCatalogue || []).map((item: any, idx: number) => (
+                <div key={idx} className="group border border-border bg-surface rounded overflow-hidden flex flex-col hover:border-primary transition-colors">
+                  <div className="aspect-square bg-surface-dark overflow-hidden relative">
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" />
+                  </div>
+                  <div className="p-4 flex flex-col flex-1">
+                    <h4 className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">{item.name}</h4>
+                    <span className="text-xs text-primary font-medium">{item.spec}</span>
+                    <div className="mt-auto pt-4 flex items-center justify-between">
+                      <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "relevant" }} className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition flex items-center gap-1">
+                        View Product <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Section: Related Product Groups */}
+          <section>
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Related Product Groups
+            </h2>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {(data.relatedProductGroups || []).map((group: any, idx: number) => (
+                <Link key={idx} to={group.link} className="border border-border bg-surface p-4 rounded hover:border-primary hover:bg-accent transition group/card flex items-center justify-between">
+                  <span className="font-bold text-sm uppercase tracking-wide text-foreground group-hover/card:text-primary transition">{group.name}</span>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover/card:text-primary transition" />
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* Section: FAQs */}
+          <section id="faqs">
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Three Questions To Ask Before You Order
+            </h2>
+            <Accordion type="single" collapsible className="w-full space-y-2">
+              {(data.questions || []).map((faq: any, i: number) => (
+                <AccordionItem key={i} value={`faq-${i}`} className="border border-border bg-surface rounded px-2">
+                  <AccordionTrigger className="text-left font-bold text-sm uppercase hover:text-primary transition-colors hover:no-underline px-2 py-4 data-[state=open]:text-primary">
+                    <div className="flex items-center gap-3">
+                      <span className="text-primary text-lg">{i + 1}.</span> {faq.q}
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground px-10 pb-4 leading-relaxed">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </section>
+
+          {/* Section: Specification for Design */}
+          <section>
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Specification For The Design, Installation Of {data.title}
+            </h2>
+            <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed bg-surface border border-border p-6 rounded">
+              <p>{data.installationSpecs}</p>
+            </div>
+          </section>
+
+        </div>
+
+        {/* Sidebar Area */}
+        <aside className="lg:col-span-4 space-y-12">
+
+          {/* Request For Quote Form */}
+          <div className="bg-surface border-t-4 border-t-primary border-x border-b border-border p-6 rounded-b shadow-sm sticky top-[160px]">
+            <h3 className="font-display text-xl font-bold uppercase tracking-wide text-foreground mb-2">Request For Quote</h3>
+            <p className="text-sm text-muted-foreground mb-6">Need pricing for {data.title}? Our sales engineers are ready to assist you.</p>
+
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Name <span className="text-primary">*</span></label>
+                <input type="text" className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Full Name" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email <span className="text-primary">*</span></label>
+                <input type="email" className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Email Address" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Project Details</label>
+                <textarea className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary min-h-[100px] resize-none" placeholder="Quantity, location, application..."></textarea>
+              </div>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary-hover font-bold uppercase tracking-wider">
+                Submit Request
+              </Button>
+            </form>
+          </div>
+
+        </aside>
+
+      </div>
+
+      {/* Featured Projects Bottom Section */}
+      <section id="projects" className="border-t border-border bg-surface/30">
+        <div className="container-page py-16">
+          <h2 className="font-display text-2xl font-bold uppercase mb-8 flex items-center">
+            <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+            Featured Projects Across Africa
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {(data.projects || []).map((project: any, idx: number) => (
+              <div key={idx} className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border">
+                <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">{project.name}</h4>
+                  <div className="text-primary text-xs uppercase font-medium mt-1">{project.location}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Related Resources & Applications */}
+      <section id="documents" className="border-t border-border bg-background">
+        <div className="container-page py-16 grid lg:grid-cols-2 gap-16">
+
+          <div>
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Related Resources
+            </h2>
+            <div className="space-y-4">
+              <Link to="/resources" className="group flex items-center justify-between border border-border bg-surface rounded p-5 hover:border-primary transition">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition shrink-0">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition">Technical Datasheets</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">TDS, SDS & specifications</div>
+                  </div>
+                </div>
+                <Download className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+              </Link>
+              <Link to="/resources" className="group flex items-center justify-between border border-border bg-surface rounded p-5 hover:border-primary transition">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition shrink-0">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition">Installation Guidelines</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Step-by-step procedures</div>
+                  </div>
+                </div>
+                <Download className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+              </Link>
+            </div>
+          </div>
+
+          <div id="applications">
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              Common {dynamicFamilyName} Applications
+            </h2>
+            <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-3">
+              {(data.applications || []).map((app: string, idx: number) => (
+                <li key={idx}>
+                  <Link to="/applications" className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition">
+                    <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+                    <span>{app}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Red Banner Bottom CTA */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="container-page py-16 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight text-white mb-2">Have a project? Start with us.</h2>
+            <p className="text-white/90 text-lg max-w-2xl mx-auto md:mx-0">
+              Get expert engineering support, reliable material supply, and best-in-class installation.
+            </p>
+          </div>
+          <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary uppercase font-bold tracking-wider shrink-0 w-full md:w-auto">
+            <Link to="/contacts">Talk To Us Today</Link>
+          </Button>
+        </div>
+      </section>
+
+    </div>
+  );
+}
