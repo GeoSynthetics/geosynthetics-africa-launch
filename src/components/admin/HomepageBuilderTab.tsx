@@ -1348,16 +1348,24 @@ const HP_TABS = [
 
 // ─── Main exported component ──────────────────────────────────────────────────
 
+// Module-level in-memory cache to keep data across route transitions / remounts
+let homepageContentCache: HomepageContent | null = null;
+
 export function HomepageBuilderTab() {
-  const [content, setContent] = useState<HomepageContent>(DEFAULT_HOMEPAGE_CONTENT);
-  const [loading, setLoading] = useState(true);
+  const [content, setContent] = useState<HomepageContent>(() => {
+    return homepageContentCache ?? DEFAULT_HOMEPAGE_CONTENT;
+  });
+  const [loading, setLoading] = useState(!homepageContentCache);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
 
   // Load from Supabase
   const load = useCallback(async () => {
-    setLoading(true);
+    // Only show loading if we don't have a cached version
+    if (!homepageContentCache) {
+      setLoading(true);
+    }
     const { data, error } = await supabase
       .from("site_config")
       .select("value")
@@ -1367,8 +1375,10 @@ export function HomepageBuilderTab() {
     if (error) {
       toast.error("Failed to load homepage content: " + error.message);
     } else if (data?.value) {
+      const merged = { ...DEFAULT_HOMEPAGE_CONTENT, ...(data.value as Partial<HomepageContent>) };
       // Merge with defaults so any new fields are populated
-      setContent({ ...DEFAULT_HOMEPAGE_CONTENT, ...(data.value as Partial<HomepageContent>) });
+      setContent(merged);
+      homepageContentCache = merged;
     }
     setLoading(false);
   }, []);
@@ -1388,12 +1398,17 @@ export function HomepageBuilderTab() {
     } else {
       toast.success("Homepage content saved successfully!");
       setDirty(false);
+      homepageContentCache = content; // Update the cache
     }
     setSaving(false);
   };
 
   const update = (patch: Partial<HomepageContent>) => {
-    setContent((prev) => ({ ...prev, ...patch }));
+    setContent((prev) => {
+      const next = { ...prev, ...patch };
+      homepageContentCache = next; // Keep cached copy in sync with unsaved state for visual preservation
+      return next;
+    });
     setDirty(true);
   };
 

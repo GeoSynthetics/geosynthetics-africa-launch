@@ -25,11 +25,16 @@ type SelectedNode =
 const SECTION_KEYS: SectionKey[] = ["products", "applications", "services", "industries"];
 const CONFIG_KEY = (k: SectionKey) => `hierarchy_${k}`;
 
+// Module-level in-memory cache to keep data across route transitions / remounts
+let siteBuilderCache: Record<SectionKey, HierarchySection | null> | null = null;
+
 function SiteBuilderPage() {
-  const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>({
-    products: null, applications: null, services: null, industries: null,
+  const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>(() => {
+    return siteBuilderCache ?? {
+      products: null, applications: null, services: null, industries: null,
+    };
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!siteBuilderCache);
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<TopLevelTab>("homepage");
   const [selected, setSelected] = useState<SelectedNode | null>(null);
@@ -37,16 +42,25 @@ function SiteBuilderPage() {
   // Load from Supabase; fall back to hardcoded defaults
   useEffect(() => {
     async function load() {
-      const { data, error } = await supabase.from("site_config").select("key, value");
-      const defaults = getDefaultSections();
-      const result: Record<SectionKey, HierarchySection> = {} as any;
-      for (const key of SECTION_KEYS) {
-        const row = data?.find(d => d.key === CONFIG_KEY(key));
-        result[key] = (row?.value as HierarchySection) ?? defaults.find(d => d.key === key)!;
+      try {
+        const { data, error } = await supabase.from("site_config").select("key, value");
+        if (error) {
+          toast.error("Failed to load config: " + error.message);
+          return;
+        }
+        const defaults = getDefaultSections();
+        const result: Record<SectionKey, HierarchySection> = {} as any;
+        for (const key of SECTION_KEYS) {
+          const row = data?.find(d => d.key === CONFIG_KEY(key));
+          result[key] = (row?.value as HierarchySection) ?? defaults.find(d => d.key === key)!;
+        }
+        setSections(result);
+        siteBuilderCache = result;
+      } catch (err: any) {
+        toast.error("Failed to load config: " + err.message);
+      } finally {
+        setLoading(false);
       }
-      setSections(result);
-      if (error) toast.error("Failed to load config: " + error.message);
-      setLoading(false);
     }
     load();
   }, []);
@@ -58,8 +72,14 @@ function SiteBuilderPage() {
     const { error } = await supabase
       .from("site_config")
       .upsert({ key: CONFIG_KEY(key), value: section as any }, { onConflict: "key" });
-    if (error) toast.error("Save failed: " + error.message);
-    else toast.success(`${section.label} saved.`);
+    if (error) {
+      toast.error("Save failed: " + error.message);
+    } else {
+      toast.success(`${section.label} saved.`);
+      if (siteBuilderCache) {
+        siteBuilderCache[key] = section;
+      }
+    }
     setSaving(false);
   }, [sections]);
 
@@ -67,7 +87,13 @@ function SiteBuilderPage() {
     SECTION_KEYS.includes(key as SectionKey);
 
   const updateSection = (key: SectionKey, updated: HierarchySection) => {
-    setSections(prev => ({ ...prev, [key]: updated }));
+    setSections(prev => {
+      const next = { ...prev, [key]: updated };
+      if (siteBuilderCache) {
+        siteBuilderCache[key] = updated;
+      }
+      return next;
+    });
     setSelected(null); // clear selection when tree changes
   };
 
@@ -86,7 +112,14 @@ function SiteBuilderPage() {
         ),
       };
     }
-    setSections(prev => ({ ...prev, [activeSection]: { ...section, items: newItems } }));
+    const updatedSection = { ...section, items: newItems };
+    setSections(prev => {
+      const next = { ...prev, [activeSection]: updatedSection };
+      if (siteBuilderCache) {
+        siteBuilderCache[activeSection] = updatedSection;
+      }
+      return next;
+    });
     toast.success("Item updated. Don't forget to Save the section.");
   };
 

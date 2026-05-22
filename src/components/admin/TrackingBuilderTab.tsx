@@ -7,10 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 import { Save, Loader2, BarChart2, Tag, ShieldAlert } from "lucide-react";
 
+// Module-level in-memory cache to keep data across route transitions / remounts
+let trackingConfigCache: { googleAnalyticsId?: string; googleTagManagerId?: string } | null = null;
+
 export function TrackingBuilderTab() {
-  const [googleAnalyticsId, setGoogleAnalyticsId] = useState("");
-  const [googleTagManagerId, setGoogleTagManagerId] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState(() => trackingConfigCache?.googleAnalyticsId || "");
+  const [googleTagManagerId, setGoogleTagManagerId] = useState(() => trackingConfigCache?.googleTagManagerId || "");
+  const [loading, setLoading] = useState(!trackingConfigCache);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -28,6 +31,7 @@ export function TrackingBuilderTab() {
           const config = data.value as { googleAnalyticsId?: string; googleTagManagerId?: string };
           setGoogleAnalyticsId(config.googleAnalyticsId || "");
           setGoogleTagManagerId(config.googleTagManagerId || "");
+          trackingConfigCache = config;
         }
       } catch (err: any) {
         toast.error("Failed to load tracking config: " + err.message);
@@ -57,6 +61,7 @@ export function TrackingBuilderTab() {
         );
 
       if (error) throw error;
+      trackingConfigCache = configValue; // Update the cache
       toast.success("Tracking configuration saved successfully.");
     } catch (err: any) {
       toast.error("Failed to save tracking config: " + err.message);

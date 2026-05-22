@@ -28,12 +28,15 @@ const CORE_PAGES = [
   { path: "/contacts", label: "Contact Us" },
 ];
 
+// Module-level in-memory cache to keep data across route transitions / remounts
+let pagesSeoCache: Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }> | null = null;
+
 function PagesSeoAdmin() {
-  const [loading, setLoading] = useState(true);
+  const [pageSeo, setPageSeo] = useState<Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }>>(() => {
+    return pagesSeoCache ?? {};
+  });
+  const [loading, setLoading] = useState(!pagesSeoCache);
   const [saving, setSaving] = useState(false);
-  
-  // pageSeo maps page paths to their SEO objects
-  const [pageSeo, setPageSeo] = useState<Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }>>({});
   const [selectedPath, setSelectedPath] = useState<string>(CORE_PAGES[0].path);
 
   useEffect(() => {
@@ -48,12 +51,15 @@ function PagesSeoAdmin() {
           toast.error("Failed to load SEO config.");
         }
         if (data?.value) {
-          setPageSeo(data.value as any);
-        } else {
+          const value = data.value as any;
+          setPageSeo(value);
+          pagesSeoCache = value;
+        } else if (!pagesSeoCache) {
           // initialize empty
           const init: Record<string, any> = {};
           CORE_PAGES.forEach(p => init[p.path] = { title: "", description: "", keywords: "", urlSlug: p.path === "/" ? "" : p.path.substring(1), pageLabel: p.label });
           setPageSeo(init);
+          pagesSeoCache = init;
         }
         setLoading(false);
       });
@@ -71,6 +77,7 @@ function PagesSeoAdmin() {
         { onConflict: "key" }
       );
       if (error) throw error;
+      pagesSeoCache = pageSeo; // Update the cache
       invalidateSeoCache();
       toast.success("Page SEO metadata saved successfully.");
     } catch (err: any) {
