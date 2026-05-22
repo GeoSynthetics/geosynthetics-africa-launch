@@ -29,5 +29,10 @@ export default defineConfig({
       "import.meta.env.VITE_SUPABASE_PUBLISABLE_KEY": JSON.stringify(supabasePublishableKey),
       "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(supabaseProjectId || ""),
     },
-  },
+    test: {
+      environment: "jsdom",
+      globals: true,
+      setupFiles: "./src/test/setup.ts",
+    },
+  } as any,
 });
