@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, useRef, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -35,36 +35,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [rolesLoaded, setRolesLoaded] = useState(false);
 
+  // Keep track of the user ID for which roles are currently loaded
+  const loadedUserIdRef = useRef<string | null>(null);
+
   const loadRoles = async (userId: string | undefined) => {
     if (!userId) {
       setRoles([]);
       setRolesLoaded(true);
+      loadedUserIdRef.current = null;
       return;
     }
+    
+    // Avoid redundant role fetches and page unmounts/reloads if already loaded for this user
+    if (loadedUserIdRef.current === userId) {
+      setRolesLoaded(true);
+      return;
+    }
+
     setRolesLoaded(false);
     const r = await fetchRoles(userId);
     setRoles(r);
     setRolesLoaded(true);
+    loadedUserIdRef.current = userId;
   };
 
   useEffect(() => {
     // CRITICAL: subscribe BEFORE getSession to avoid races.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
+      const newUserId = newSession?.user?.id ?? null;
       // Defer extra Supabase calls to avoid deadlocks inside the callback.
-      if (newSession?.user) {
-        setRolesLoaded(false);
-        setTimeout(() => void loadRoles(newSession.user.id), 0);
+      if (newUserId) {
+        if (loadedUserIdRef.current !== newUserId) {
+          setRolesLoaded(false);
+          setTimeout(() => void loadRoles(newUserId), 0);
+        }
       } else {
         setRoles([]);
         setRolesLoaded(true);
+        loadedUserIdRef.current = null;
       }
     });
 
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session?.user) {
-        void loadRoles(data.session.user.id).finally(() => setLoading(false));
+      const newUserId = data.session?.user?.id ?? null;
+      if (newUserId) {
+        void loadRoles(newUserId).finally(() => setLoading(false));
       } else {
         setLoading(false);
         setRolesLoaded(true);
@@ -92,7 +109,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await supabase.auth.signOut();
       },
       refreshRoles: async () => {
-        if (session?.user) await loadRoles(session.user.id);
+        if (session?.user) {
+          loadedUserIdRef.current = null;
+          await loadRoles(session.user.id);
+        }
       },
     };
   }, [session, roles, loading, rolesLoaded]);
