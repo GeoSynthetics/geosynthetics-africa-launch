@@ -39,10 +39,12 @@ import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
 import { Route as AdminPageTemplatesRouteImport } from './routes/admin.page-templates'
+import { Route as AdminMediaCenterRouteImport } from './routes/admin.media-center'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 import { Route as ProductsCategoryFamilyRouteImport } from './routes/products.$category.$family'
+import { Route as ApiStorageBucketSplatRouteImport } from './routes/api.storage.$bucket.$'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -194,6 +196,11 @@ const AdminPageTemplatesRoute = AdminPageTemplatesRouteImport.update({
   path: '/page-templates',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMediaCenterRoute = AdminMediaCenterRouteImport.update({
+  id: '/media-center',
+  path: '/media-center',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
   id: '/$category/',
   path: '/$category/',
@@ -214,6 +221,11 @@ const ProductsCategoryFamilyRoute = ProductsCategoryFamilyRouteImport.update({
   path: '/products/$category/$family',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStorageBucketSplatRoute = ApiStorageBucketSplatRouteImport.update({
+  id: '/api/storage/$bucket/$',
+  path: '/api/storage/$bucket/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -231,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
@@ -250,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
+  '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -265,6 +279,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
@@ -284,6 +299,7 @@ export interface FileRoutesByTo {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category': typeof ProductsCategoryIndexRoute
   '/resources/$category': typeof ResourcesCategoryIndexRoute
+  '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -302,6 +318,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
   '/admin/products': typeof AdminProductsRoute
@@ -321,6 +338,7 @@ export interface FileRoutesById {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
+  '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -340,6 +358,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
@@ -359,6 +378,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category/'
     | '/resources/$category/'
+    | '/api/storage/$bucket/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -374,6 +394,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
@@ -393,6 +414,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category'
     | '/resources/$category'
+    | '/api/storage/$bucket/$'
   id:
     | '__root__'
     | '/'
@@ -410,6 +432,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
     | '/admin/products'
@@ -429,6 +452,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category/'
     | '/resources/$category/'
+    | '/api/storage/$bucket/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -453,6 +477,7 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
+  ApiStorageBucketSplatRoute: typeof ApiStorageBucketSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -667,6 +692,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPageTemplatesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/media-center': {
+      id: '/admin/media-center'
+      path: '/media-center'
+      fullPath: '/admin/media-center'
+      preLoaderRoute: typeof AdminMediaCenterRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/resources/$category/': {
       id: '/resources/$category/'
       path: '/$category'
@@ -695,10 +727,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsCategoryFamilyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/storage/$bucket/$': {
+      id: '/api/storage/$bucket/$'
+      path: '/api/storage/$bucket/$'
+      fullPath: '/api/storage/$bucket/$'
+      preLoaderRoute: typeof ApiStorageBucketSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminMediaCenterRoute: typeof AdminMediaCenterRoute
   AdminPageTemplatesRoute: typeof AdminPageTemplatesRoute
   AdminPagesSeoRoute: typeof AdminPagesSeoRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -710,6 +750,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminMediaCenterRoute: AdminMediaCenterRoute,
   AdminPageTemplatesRoute: AdminPageTemplatesRoute,
   AdminPagesSeoRoute: AdminPagesSeoRoute,
   AdminProductsRoute: AdminProductsRoute,
@@ -784,6 +825,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
+  ApiStorageBucketSplatRoute: ApiStorageBucketSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

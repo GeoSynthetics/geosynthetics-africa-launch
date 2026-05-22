@@ -197,8 +197,9 @@ function ProductsAdmin() {
         toast.error(`Upload failed: ${error.message}`);
         continue;
       }
-      const { data } = supabase.storage.from("product-images").getPublicUrl(path);
-      uploaded.push(data.publicUrl);
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const proxyUrl = `${origin}/api/storage/product-images/${path}`;
+      uploaded.push(proxyUrl);
     }
     if (uploaded.length) {
       setEditing((s) => {

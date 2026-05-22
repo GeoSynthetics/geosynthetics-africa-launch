@@ -10,11 +10,20 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-const externalSupabaseUrl = "https://fsfwjwyzrtgayujmguvd.supabase.co";
-const externalSupabasePublishableKey =
-  "sb_publishable_Vjm9iFsH36nX7LsoRSRAgA_sgBYzVf1";
-
 export default defineConfig(({ mode }) => {
+  // Load env variables (Vite loads from process.cwd() .env by default)
+  const env = loadEnv(mode, process.cwd(), "");
+
+  const supabaseUrl = env.VITE_SUPABASE_URL || env.SUPABASE_URL;
+  const supabasePublishableKey = env.VITE_SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_PUBLISHABLE_KEY;
+  const supabaseProjectId = env.VITE_SUPABASE_PROJECT_ID;
+
+  if (!supabaseUrl || !supabasePublishableKey) {
+    throw new Error(
+      "Missing required environment variables: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Please check your .env file."
+    );
+  }
+
   // Load VITE_* env vars from .env files (same as Lovable config does)
   const loadedEnv = loadEnv(mode, process.cwd(), "VITE_");
   const envDefine: Record<string, string> = {};
@@ -25,17 +34,17 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       ...envDefine,
-      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(externalSupabaseUrl),
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
       "import.meta.env.VITE_SUPABASE_PROJECT_URL":
-        JSON.stringify(externalSupabaseUrl),
+        JSON.stringify(supabaseUrl),
       "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
-        externalSupabasePublishableKey,
+        supabasePublishableKey,
       ),
       "import.meta.env.VITE_SUPABASE_PUBLISABLE_KEY": JSON.stringify(
-        externalSupabasePublishableKey,
+        supabasePublishableKey,
       ),
       "import.meta.env.VITE_SUPABASE_PROJECT_ID":
-        JSON.stringify("fsfwjwyzrtgayujmguvd"),
+        JSON.stringify(supabaseProjectId || ""),
     },
     resolve: {
       alias: {

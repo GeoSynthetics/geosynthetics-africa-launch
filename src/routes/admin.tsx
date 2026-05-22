@@ -53,13 +53,13 @@ function AdminLayout() {
 
   return (
     <section className="bg-surface min-h-[70vh]">
-      <div className="container-page py-10">
-        <header className="mb-6">
-          <div className="text-xs font-bold uppercase tracking-wider text-primary">Admin</div>
-          <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight">Control Panel</h1>
-        </header>
-        <AdminNav />
-        <Outlet />
+      <div className="container-page py-6 lg:py-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+          <AdminNav />
+          <div className="flex-1 w-full min-w-0 bg-card border border-border/50 rounded-2xl p-6 lg:p-8 min-h-[600px] shadow-sm">
+            <Outlet />
+          </div>
+        </div>
       </div>
     </section>
   );

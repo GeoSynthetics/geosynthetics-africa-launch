@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Inbox, Package, FileText, Users, LayoutList } from "lucide-react";
+import { Inbox, Package, FileText, Users, LayoutList, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -21,7 +21,7 @@ type StaticTile = {
   icon: React.ElementType;
   label: string;
   desc: string;
-  to: "/admin/page-templates";
+  to: "/admin/page-templates" | "/admin/media-center";
   staticBadge: string;
 };
 
@@ -51,6 +51,13 @@ const TILES: Tile[] = [
     to: "/admin/resources",
     table: "resources",
     countKey: "resources",
+  },
+  {
+    icon: Image,
+    label: "Media Center",
+    desc: "Upload images, manage assets, and copy links.",
+    to: "/admin/media-center",
+    staticBadge: "Vault",
   },
   {
     icon: LayoutList,

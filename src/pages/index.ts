@@ -11,3 +11,5 @@ export { ServicesPage } from "./ServicesPage";
 export { ResourcesIndexPage } from "./ResourcesIndexPage";
 export { ProductCategoryPage } from "./ProductCategoryPage";
 export { PageTemplatesAdminPage } from "./PageTemplatesAdminPage";
+export { MediaCenterPage } from "./MediaCenterPage";
+
