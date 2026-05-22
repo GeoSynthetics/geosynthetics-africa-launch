@@ -16,17 +16,17 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminLayout() {
-  const { loading, isAuthenticated, isStaff } = useAuth();
+  const { loading, rolesLoaded, isAuthenticated, isStaff } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && rolesLoaded && !isAuthenticated) {
       navigate({ to: "/login", search: { redirect: location.href } });
     }
-  }, [loading, isAuthenticated, navigate, location.href]);
+  }, [loading, rolesLoaded, isAuthenticated, navigate, location.href]);
 
-  if (loading) {
+  if (loading || !rolesLoaded) {
     return (
       <div className="container-page py-20 text-center text-sm text-muted-foreground">
         Loading…

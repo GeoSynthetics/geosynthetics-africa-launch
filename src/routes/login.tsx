@@ -31,16 +31,20 @@ const credentialsSchema = z.object({
 function LoginPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/login" });
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, rolesLoaded, isStaff } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      navigate({ to: search.redirect ?? "/" });
+    if (!loading && rolesLoaded && isAuthenticated) {
+      if (isStaff) {
+        navigate({ to: "/admin" });
+      } else {
+        navigate({ to: search.redirect ?? "/catalogue" });
+      }
     }
-  }, [loading, isAuthenticated, navigate, search.redirect]);
+  }, [loading, rolesLoaded, isAuthenticated, isStaff, navigate, search.redirect]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +61,6 @@ function LoginPage() {
       return;
     }
     toast.success("Signed in.");
-    navigate({ to: search.redirect ?? "/" });
   };
 
   return (

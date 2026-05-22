@@ -9,6 +9,7 @@ interface AuthState {
   user: User | null;
   roles: AppRole[];
   loading: boolean;
+  rolesLoaded: boolean;
   isAuthenticated: boolean;
   isStaff: boolean;
   isAdmin: boolean;
@@ -32,14 +33,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [loading, setLoading] = useState(true);
+  const [rolesLoaded, setRolesLoaded] = useState(false);
 
   const loadRoles = async (userId: string | undefined) => {
     if (!userId) {
       setRoles([]);
+      setRolesLoaded(true);
       return;
     }
+    setRolesLoaded(false);
     const r = await fetchRoles(userId);
     setRoles(r);
+    setRolesLoaded(true);
   };
 
   useEffect(() => {
@@ -48,9 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(newSession);
       // Defer extra Supabase calls to avoid deadlocks inside the callback.
       if (newSession?.user) {
+        setRolesLoaded(false);
         setTimeout(() => void loadRoles(newSession.user.id), 0);
       } else {
         setRoles([]);
+        setRolesLoaded(true);
       }
     });
 
@@ -60,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         void loadRoles(data.session.user.id).finally(() => setLoading(false));
       } else {
         setLoading(false);
+        setRolesLoaded(true);
       }
     });
 
@@ -75,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       roles,
       loading,
+      rolesLoaded,
       isAuthenticated: !!user,
       isStaff: roles.includes("staff") || roles.includes("admin"),
       isAdmin: roles.includes("admin"),
@@ -86,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) await loadRoles(session.user.id);
       },
     };
-  }, [session, roles, loading]);
+  }, [session, roles, loading, rolesLoaded]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
