@@ -6,6 +6,8 @@ import { ScrollToTop } from "@/components/site/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
+import { CookieConsent } from "@/components/site/CookieConsent";
+import { TrackingLoader } from "@/components/site/TrackingLoader";
 
 function NotFoundComponent() {
   return (
@@ -84,6 +86,8 @@ function RootComponent() {
         <Footer />
         <Toaster />
         <ScrollToTop />
+        <CookieConsent />
+        <TrackingLoader />
       </div>
     </AuthProvider>
   );

@@ -6,6 +6,67 @@ This file records **major** changes made to the Geosynthetics Africa platform by
 
 ---
 
+# Application Directory Structure
+
+Below is an overview of the folder hierarchy and modular architectural layout utilized throughout the Geosynthetics Africa codebase:
+
+```text
+docs/                               # Developer and administrator manuals, guides, assets, and documentation styles
+├── design-images-from-james/       # Project visual reference designs and graphic mockups
+├── index.html                      # The Unified Admin & Developer Portal documentation manual (UI & UX Guide)
+├── lovable-docs.md                 # Lovable AI agent change log, architecture summaries, and folder structure
+├── old-sitemap.md                  # Legacy sitemap definitions and slug reference mappings
+└── style.css                       # Stylings for the documentation portal
+public/                             # Raw public-facing static assets, icons, and root media
+supabase/                           # Database configurations, SQL migrations, schemas, and local Supabase instance files
+src/                                # Principal application source code
+├── assets/                         # Global static images, vector graphics, logos, and UI assets
+├── components/                     # Reusable React components organized by scope
+│   ├── admin/                      # Admin-specific modules (Site Builder tree, Content Editor panels, Homepage tab)
+│   ├── seo/                        # Google-compliant JSON-LD schema compilers (Product, Breadcrumbs, Organization)
+│   ├── site/                       # Client-facing layout components (Sticky Headers, Footers, Scroll progress)
+│   └── ui/                         # Primitive Shadcn components (Button, Input, Tabs, Dialogs, Tooltips)
+├── data/                           # Hardcoded site configurations, products list, and static template pages
+├── hooks/                          # Custom utility hooks (e.g. database, layout query triggers)
+├── integrations/                   # Supabase client bridges, queries, and auto-generated database schemas
+├── lib/                            # Helper functions, CSS merge utilities, and visual tree operators
+├── pages/                          # Standalone page view components (TanStack Router route-page separation split)
+├── routes/                         # Dynamic routing configs, page loaders, head SEO meta generators, and endpoints
+├── styles.css                      # Master application stylesheet defining theme palettes and Tailwind tokens
+└── types/                          # Shared TypeScript interface declarations (e.g., site builder layouts, homepage)
+```
+
+---
+
+## 2026-05-22 — Implement Granular Cookie Preferences & Admin Tracking Configuration
+
+**Scope:** Admin / Analytics / GDPR Compliance / UI
+**Summary:** Expanded the cookie consent banner into a premium, granular preferences manager. Visitors can selectively toggle and save consent for **Necessary Cookies** (always on), **Analytical Trackers**, and **Marketing Pixels** via a sleek Radix-based `Dialog` with animated switches. Added a new "Tracking & Cookies" tab in the Admin Site Builder that allows admins to save Google Analytics GA4 Measurement IDs and Google Tag Manager Container IDs to the Supabase `site_config` database table. Created a global client-side `TrackingLoader` component that dynamically injects GA4 and GTM tracking tags dynamically and safely if and only if the visitor has enabled Analytical trackers, ensuring full GDPR, CCPA, and POPIA privacy compliance.
+**Files touched:** `src/components/site/CookieConsent.tsx`, `src/components/admin/TrackingBuilderTab.tsx` (new), `src/components/site/TrackingLoader.tsx` (new), `src/routes/admin.site-builder.tsx`, `src/routes/__root.tsx`, `docs/lovable-docs.md`
+**Notes / follow-ups:** Includes legacy consent key migration and a custom reactive event channel to instantly initialize tracking scripts upon consent. Also resolved banner overlapping by temporarily hiding the banner when the preferences dialog is open, and added a 3-hour banner dismissal grace period when the banner is closed via the direct close button.
+
+---
+
+## 2026-05-22 — Implement Global Cookie Consent Banner
+
+**Scope:** UI / UX / Layout
+**Summary:** Created a premium, glassmorphic **CookieConsent** notification banner. The banner automatically loads with a slide-up fade-in entrance transition after a 1000ms delay if no consent choice is saved. Includes an expandable brief, custom vector icons, Decline/Accept toggles, and smooth state tracking via `localStorage` so that the cookie notice respects visitor decisions and stays hidden once resolved.
+**Files touched:** `src/components/site/CookieConsent.tsx` (new), `src/routes/__root.tsx`, `docs/lovable-docs.md`
+**Notes / follow-ups:** None
+
+---
+
+
+## 2026-05-22 — Implement Dynamic Homepage Builder & Image Optimization
+
+**Scope:** Admin / Homepage / Site Builder / Media
+**Summary:** Implemented a visual **Homepage Builder** tab within the Site Builder admin interface. This empowers administrators to visually configure and customize all sections of the public landing page (Hero headlines, Trust Badges, Engineered Systems cards, Partner Logos carousel, Services checklist, Pan-African branches map pins, Projects Showcase, and BOQ Callout Banner), backing up the changes dynamically under the `homepage_content` key inside the Supabase `site_config` database table. Added an automatic client-side image compression utility that optimizes and converts non-GIF/non-SVG uploaded files to low-payload `.webp` images before saving them to Supabase storage buckets, ensuring top-tier Core Web Vitals loading metrics.
+**Files touched:** `src/routes/admin.site-builder.tsx`, `src/components/admin/HomepageBuilderTab.tsx` (new), `src/types/homepage.ts` (new), `src/routes/index.tsx`, `docs/lovable-docs.md`
+**Notes / follow-ups:** Registered the full admin operations manual and user guide in `docs/index.html`.
+
+---
+
+
 ## 2026-05-05 — Fix /resources and /resources/$category rendering identical pages
 
 **Scope:** Routing

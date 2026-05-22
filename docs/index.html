@@ -57,6 +57,12 @@
             Linking to Mega Menu
           </a>
         </li>
+        <li class="nav-item" data-section="homepage-builder">
+          <a href="#homepage-builder">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Managing Homepage Content
+          </a>
+        </li>
         
         <div class="nav-category">Developer Reference</div>
         <li class="nav-item" data-section="tech-ref">
@@ -493,6 +499,96 @@
           </div>
           <div class="callout-content">
             If you are already inside the <strong>Site Builder</strong> (<code>/admin/site-builder</code>) configuring links, you don't need to manually type labels or path names. Simply add/select a tree node, locate the <strong>⚡ Auto-fill from Page Template</strong> panel under the Identity tab, and pick your template. All parameters will instantly auto-populate without any risk of spelling errors or 404s!
+          </div>
+        </div>
+      </section>
+      
+      <!-- HOMEPAGE BUILDER GUIDE SECTION -->
+      <section id="homepage-builder" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          Managing Homepage Content
+        </h2>
+        <p class="paragraph">
+          The Geosynthetics Africa landing page is entirely data-driven. Rather than editing static code templates, administrators can visually configure all texts, checkboxes, locations, case studies, and call-to-action buttons directly from the admin dashboard.
+        </p>
+        <p class="paragraph">
+          The homepage configuration is divided into <strong>8 core modules</strong> accessible via horizontal sub-tabs inside the <strong>Homepage</strong> tab of the Site Builder (<code>/admin/site-builder</code>). All configurations are stored under the key <code>homepage_content</code> in the Supabase <code>site_config</code> database table.
+        </p>
+        
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">1. Hero Section</h3>
+            <p class="card-desc">Edit the main high-conversion banner. Adjust the three-part H1 headline (Prefix, Red Accent, and Suffix), the dynamic tagline list, the descriptive subtext, and the full-width background photo. You can configure up to 3 custom call-to-action buttons with individual labels and target paths (e.g. <code>/contacts</code>).</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">2. Trust Bar Badges</h3>
+            <p class="card-desc">Configure the horizontal security strip below the hero. Administrators can add, edit, or reorder badges (such as "IAGI MEMBER / One of only 5 in Africa"). You can upload/link custom vector icons or fall back automatically to premium red outline icons (Award, Shield, Globe, etc.).</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">3. Application Systems</h3>
+            <p class="card-desc">Manage the grid of 6 primary application systems (e.g., MINING SYSTEMS, WATER CONTAINMENT). Administrators can edit section titles, add/remove cards, upload rich background images, and customize the click-through URLs. Cards are fully collapsible inside the visual editor to simplify organization.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">4. Global Partners Carousel</h3>
+            <p class="card-desc">Customize the best-in-class materials brand section. Add or remove partner logos (e.g., Solmax) and brand names to present active industrial alliances, which render in a sleek, infinite auto-scrolling ticker strip on the public landing page.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">5. Services Grid & Quality Box</h3>
+            <p class="card-desc">Govern the middle section of the homepage. The <strong>Left Grid</strong> lets you edit 6 services cards (icon, title, and mini-description). The <strong>Right Box</strong> lets you manage the high-visibility dark QA/QC assurance panel, including editable checkmarks (e.g., Weld Integrity Testing) and background illustrations.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">6. Stats & Presence Map</h3>
+            <p class="card-desc">Edit counter metrics (e.g. "20+ Years Experience", "1000+ Projects") and specify pan-African branches. Adding a branch location name (e.g., Ghana) and type (e.g., HQ) automatically triggers an animated pulsing map coordinate pin over the custom vector outline map of Africa!</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">7. Project Case Studies</h3>
+            <p class="card-desc">Manage the case studies showcase cards by adding cover photos, categories (e.g., TSF LINING SYSTEM), location flags, system details, and titles. You can also customize the adjacent high-impact "Explore Our Catalogue" search teaser box and button.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">8. BOQ Callout Banner</h3>
+            <p class="card-desc">Optimize the red primary call-to-action bar above the website footer. Customise the bold headline ("SUBMIT YOUR BOQ."), descriptive paragraph, and two distinct primary action buttons to maximize business conversions and quote requests.</p>
+          </div>
+        </div>
+        
+        <div class="callout callout-tip" style="margin-top:2rem">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            Automatic Image Optimization Engine
+          </div>
+          <div class="callout-content">
+            Our platform features a built-in image compression pipeline. When you click <strong>Upload</strong> inside any image field, the system automatically intercepts the asset, scales extreme dimensions down to safe heights (max 1600px), converts the format to modern high-fidelity <strong>.webp</strong> format, and reduces file size by up to 80% without losing quality. This ensures your uploads never slow down public loading speeds!
+          </div>
+        </div>
+        
+        <div class="steps-container" style="margin-top:2rem">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Access the Homepage Builder Workspace</h4>
+              <p class="paragraph">From the admin panel navigation list, click on <strong>Site Builder</strong> (or visit <code>/admin/site-builder</code>). By default, the interface opens to the first tab, <strong>Homepage</strong>.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Select Target Module Tab</h4>
+              <p class="paragraph">Within the Homepage Builder workspace, use the secondary top horizontal sub-tabs (Hero Section, Trust Bar, App Systems, Partners, etc.) to view the custom fields for each visual block.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Input Content & Manage Cards</h4>
+              <p class="paragraph">Enter your desired text or links. For repeating lists (e.g. trust badges or project cards), click <strong>+ Add Card</strong>. You can expand/collapse cards by clicking their headers to easily edit fields or upload new optimized photos.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">4</div>
+            <div class="step-body">
+              <h4 class="step-title">Verify Status & Save Changes</h4>
+              <p class="paragraph">Unsaved changes are clearly flagged in the sub-header with an amber <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:0.65rem;font-weight:700">● Unsaved</span> badge. Once you are satisfied with your edits, click the glowing <strong>Save Homepage</strong> button in the top-right corner to instantly push updates live to the public site!</p>
+            </div>
           </div>
         </div>
       </section>
