@@ -38,6 +38,15 @@ src/                                # Principal application source code
 
 ---
 
+## 2026-05-22 — Move Tracking & Cookies to Dedicated Admin Control Panel Route
+
+**Scope:** Admin / Analytics / Routing
+**Summary:** Moved the visual Tracking & Cookies credentials configurations panel out of the Site Builder and into a dedicated admin control panel route (`/admin/tracking`) under the Pages SEO section. Added the "Tracking & Cookies" item to the collapsible sidebar navigation with a custom `Cookie` icon from Lucide. Documented the entire credentials connection guide, granular cookie consent state rules, storage event lifecycle, and dynamic script loader architecture in the documentation portal.
+**Files touched:** `src/pages/TrackingAdminPage.tsx` (new), `src/routes/admin.tracking.tsx` (new), `src/pages/index.ts`, `src/routes/admin.site-builder.tsx`, `src/components/admin/AdminNav.tsx`, `docs/index.html`, `docs/lovable-docs.md`
+**Notes / follow-ups:** None.
+
+---
+
 ## 2026-05-22 — Implement Granular Cookie Preferences & Admin Tracking Configuration
 
 **Scope:** Admin / Analytics / GDPR Compliance / UI

@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Menu,
   Shield,
+  Cookie,
 } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -29,6 +30,7 @@ const ITEMS = [
   { to: "/admin/page-templates" as const, label: "Page Templates", icon: LayoutList, exact: false },
   { to: "/admin/media-center" as const, label: "Media Center", icon: Image, exact: false },
   { to: "/admin/pages-seo" as const, label: "Pages SEO", icon: Search, exact: false },
+  { to: "/admin/tracking" as const, label: "Tracking & Cookies", icon: Cookie, exact: false },
   { to: "/admin/users" as const, label: "Users & Roles", icon: Users, exact: false },
 ];
 

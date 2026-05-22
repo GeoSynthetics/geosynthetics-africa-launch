@@ -10,14 +10,13 @@ import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { HierarchyTree } from "@/components/admin/HierarchyTree";
 import { ContentEditorPanel } from "@/components/admin/ContentEditorPanel";
 import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
-import { TrackingBuilderTab } from "@/components/admin/TrackingBuilderTab";
 
 export const Route = createFileRoute("/admin/site-builder")({
   component: SiteBuilderPage,
 });
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | SectionKey | "tracking";
+type TopLevelTab = "homepage" | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -114,7 +113,7 @@ function SiteBuilderPage() {
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Site Builder</h2>
           <p className="text-sm text-muted-foreground">Manage navigation hierarchy, homepage content, and page sections from one place.</p>
         </div>
-        {activeSection !== "homepage" && activeSection !== "tracking" && (
+        {activeSection !== "homepage" && (
           <Button
             onClick={() => saveSection(activeSection as SectionKey)}
             disabled={saving}
@@ -145,22 +144,11 @@ function SiteBuilderPage() {
               {sections[key]?.label ?? key}
             </TabsTrigger>
           ))}
-          <TabsTrigger
-            value="tracking"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Tracking & Cookies
-          </TabsTrigger>
         </TabsList>
 
         {/* Homepage tab content */}
         <TabsContent value="homepage" className="flex-1 overflow-hidden m-0">
           <HomepageBuilderTab />
-        </TabsContent>
-
-        {/* Tracking tab content */}
-        <TabsContent value="tracking" className="flex-1 overflow-y-auto m-0">
-          <TrackingBuilderTab />
         </TabsContent>
 
         {/* Navigation hierarchy tabs */}

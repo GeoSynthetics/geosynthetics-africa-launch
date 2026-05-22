@@ -33,6 +33,7 @@ import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
 import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
@@ -166,6 +167,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTrackingRoute = AdminTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSiteBuilderRoute = AdminSiteBuilderRouteImport.update({
   id: '/site-builder',
   path: '/site-builder',
@@ -250,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/site-builder': typeof AdminSiteBuilderRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -286,6 +293,7 @@ export interface FileRoutesByTo {
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/site-builder': typeof AdminSiteBuilderRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -325,6 +333,7 @@ export interface FileRoutesById {
   '/admin/quotes': typeof AdminQuotesRoute
   '/admin/resources': typeof AdminResourcesRoute
   '/admin/site-builder': typeof AdminSiteBuilderRoute
+  '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -365,6 +374,7 @@ export interface FileRouteTypes {
     | '/admin/quotes'
     | '/admin/resources'
     | '/admin/site-builder'
+    | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
@@ -401,6 +411,7 @@ export interface FileRouteTypes {
     | '/admin/quotes'
     | '/admin/resources'
     | '/admin/site-builder'
+    | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
@@ -439,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/quotes'
     | '/admin/resources'
     | '/admin/site-builder'
+    | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
     | '/catalogue/$slug'
@@ -650,6 +662,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tracking': {
+      id: '/admin/tracking'
+      path: '/tracking'
+      fullPath: '/admin/tracking'
+      preLoaderRoute: typeof AdminTrackingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/site-builder': {
       id: '/admin/site-builder'
       path: '/site-builder'
@@ -745,6 +764,7 @@ interface AdminRouteChildren {
   AdminQuotesRoute: typeof AdminQuotesRoute
   AdminResourcesRoute: typeof AdminResourcesRoute
   AdminSiteBuilderRoute: typeof AdminSiteBuilderRoute
+  AdminTrackingRoute: typeof AdminTrackingRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -757,6 +777,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminQuotesRoute: AdminQuotesRoute,
   AdminResourcesRoute: AdminResourcesRoute,
   AdminSiteBuilderRoute: AdminSiteBuilderRoute,
+  AdminTrackingRoute: AdminTrackingRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

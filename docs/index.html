@@ -63,6 +63,12 @@
             Managing Homepage Content
           </a>
         </li>
+        <li class="nav-item" data-section="tracking-cookies">
+          <a href="#tracking-cookies">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            Tracking & Cookie Flow
+          </a>
+        </li>
         
         <div class="nav-category">Developer Reference</div>
         <li class="nav-item" data-section="tech-ref">
@@ -592,7 +598,125 @@
           </div>
         </div>
       </section>
-      
+
+      <!-- TRACKING & COOKIES SECTION -->
+      <section id="tracking-cookies" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          Tracking & Cookie Flow
+        </h2>
+        <p class="paragraph">
+          The Geosynthetics Africa platform implements a modern, highly secure, and fully compliant privacy consent structure. Designed to respect international data privacy regulations (such as GDPR, CCPA, and South Africa's POPIA), third-party tracking scripts are loaded dynamically and strictly in accordance with each visitor's selected preferences.
+        </p>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Admin Integration Portal</h3>
+        <p class="paragraph">
+          Administrators can connect third-party analytics suites without modifying any code. Navigate to the dedicated <strong>Tracking & Cookies</strong> control panel (<code>/admin/tracking</code>) under Pages SEO.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">Google Analytics 4 (GA4)</h3>
+            <p class="card-desc">Input your GA4 Measurement ID (formatted as <code>G-XXXXXXXXXX</code>) found in your Google Analytics Admin console under <em>Data Streams > Web Stream Details</em>. GA4 tracks user engagement, pageviews, events, and funnel conversions.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Google Tag Manager (GTM)</h3>
+            <p class="card-desc">Input your GTM Container ID (formatted as <code>GTM-XXXXXXX</code>) visible at the top of your Tag Manager workspace dashboard. GTM acts as a unified container to deploy advertising pixels, heatmaps, and custom marketing scripts.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-note" style="margin-top:1.5rem">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Database Architecture
+          </div>
+          <div class="callout-content">
+            Credentials saved in the tracking control panel are committed to the <code>site_config</code> database table under the row key <code>tracking_config</code>. This data is structured as a simple JSON object: <code>{ googleAnalyticsId: string, googleTagManagerId: string }</code>, allowing direct queries and fast caching.
+          </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">2. Granular Cookie Consent Banner</h3>
+        <p class="paragraph">
+          When a new visitor arrives, a custom glassmorphic <strong>CookieConsent</strong> notice slides up from the page bottom after a 1000ms delay. The banner presents three options:
+        </p>
+
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Necessary Cookies (Always Active)</h4>
+              <p class="paragraph">Required for basic platform operations, user sessions, routing, authentication security, and recording user settings. These cannot be disabled.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Analytical Trackers</h4>
+              <p class="paragraph">Controls the dynamic loading of Google Analytics and Google Tag Manager to audit traffic patterns and measure site performance metrics anonymously.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Marketing Pixels</h4>
+              <p class="paragraph">Enables specialized campaign tracing, retargeting tags, and custom conversion events for advertising networks (e.g. LinkedIn, Meta).</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">3. Storage & Event Lifecycle Flow</h3>
+        <p class="paragraph">
+          The cookie lifecycle is designed for seamless transitions, zero-delay initialization, and persistence:
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 2rem;">
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Preference Storage</h3>
+            <p class="card-desc">When consent preferences are saved, the state is persisted in <code>localStorage</code> under the key <code>gsa-cookie-preferences</code> as JSON:<br>
+            <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-size:0.7rem;display:inline-block;margin-top:0.3rem">{ "necessary": true, "analytics": false, "marketing": false }</code></p>
+          </div>
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Grace Period Dismissal</h3>
+            <p class="card-desc">If a visitor clicks the close (<code>✕</code>) button instead of accepting/declining, the banner is dismissed and a timestamp is recorded in <code>gsa-cookie-dismissed-at</code>. The banner is hidden for a <strong>3-hour grace period</strong> before prompting again.</p>
+          </div>
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Backward Compatibility</h3>
+            <p class="card-desc">To maintain continuity for legacy visitors, any existing binary cookie consent saved as <code>gsa-cookie-consent</code> is auto-detected on load and migrated into the new granular preferences object structure seamlessly.</p>
+          </div>
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Reactive Event Dispatcher</h3>
+            <p class="card-desc">Every time a visitor modifies cookie settings, the consent panel dispatches a custom window event: <code>window.dispatchEvent(new Event("gsa-cookie-preferences-changed"))</code>. This triggers immediate response from loading scripts.</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">4. Dynamic Script Injection (TrackingLoader)</h3>
+        <p class="paragraph">
+          The <code>TrackingLoader</code> is a global, non-rendering React component mounted in the root page layout. It orchestrates script injection under strict conditions:
+        </p>
+
+        <pre><span class="token-comment">// 1. Listen for consent changes reactively</span>
+<span class="token-keyword">window</span>.<span class="token-function">addEventListener</span>(<span class="token-string">"gsa-cookie-preferences-changed"</span>, loadPreferences);
+
+<span class="token-comment">// 2. Dynamic Injection checks (GDPR/POPIA compliance)</span>
+<span class="token-keyword">if</span> (preferences.analytics && config.googleAnalyticsId) {
+  <span class="token-comment">// Create and append GA script dynamically inside document.head</span>
+  <span class="token-keyword">const</span> script = <span class="token-keyword">document</span>.<span class="token-function">createElement</span>(<span class="token-string">"script"</span>);
+  script.id = <span class="token-string">"gsa-google-analytics"</span>;
+  script.src = <span class="token-string">`https://www.googletagmanager.com/gtag/js?id=${gaId}`</span>;
+  <span class="token-keyword">document</span>.head.<span class="token-function">appendChild</span>(script);
+}</pre>
+
+        <div class="callout callout-tip" style="margin-top:1.5rem">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            Preventing Duplicate Injections
+          </div>
+          <div class="callout-content">
+            To prevent performance-degrading duplicate script initializations, all dynamically injected scripts are given unique IDs (e.g. <code>gsa-google-analytics</code>, <code>gsa-google-analytics-init</code>, <code>gsa-google-tagmanager</code>). The loader checks for the existence of these elements before executing any DOM manipulations.
+          </div>
+        </div>
+      </section>
+
       <!-- DEVELOPER REFERENCE SECTION -->
       <section id="tech-ref" class="doc-section">
         <h2 class="section-title">
