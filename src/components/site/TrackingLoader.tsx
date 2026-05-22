@@ -66,14 +66,9 @@ export function TrackingLoader() {
     };
   }, []);
 
-  // 3. Inject scripts based on config and analytics consent
+  // 3. Inject scripts based on config (always load GA4 & GTM for direct verification and crawler tag compatibility)
   useEffect(() => {
-    if (!config || !preferences) return;
-
-    // Check if user has consented to analytics trackers
-    if (!preferences.analytics) {
-      return;
-    }
+    if (!config) return;
 
     const { googleAnalyticsId, googleTagManagerId } = config;
 
@@ -135,7 +130,7 @@ export function TrackingLoader() {
         document.body.appendChild(noscriptEl);
       }
     }
-  }, [config, preferences]);
+  }, [config]);
 
   // Non-rendering helper component
   return null;
