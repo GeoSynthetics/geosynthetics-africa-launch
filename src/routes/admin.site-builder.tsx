@@ -9,12 +9,14 @@ import type { HierarchySection, HierarchyItem, HierarchyChild } from "@/types/hi
 import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { HierarchyTree } from "@/components/admin/HierarchyTree";
 import { ContentEditorPanel } from "@/components/admin/ContentEditorPanel";
+import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
 
 export const Route = createFileRoute("/admin/site-builder")({
   component: SiteBuilderPage,
 });
 
 type SectionKey = "products" | "applications" | "services" | "industries";
+type TopLevelTab = "homepage" | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -29,7 +31,7 @@ function SiteBuilderPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeSection, setActiveSection] = useState<SectionKey>("products");
+  const [activeSection, setActiveSection] = useState<TopLevelTab>("homepage");
   const [selected, setSelected] = useState<SelectedNode | null>(null);
 
   // Load from Supabase; fall back to hardcoded defaults
@@ -61,13 +63,16 @@ function SiteBuilderPage() {
     setSaving(false);
   }, [sections]);
 
+  const isHierarchySection = (key: TopLevelTab): key is SectionKey =>
+    SECTION_KEYS.includes(key as SectionKey);
+
   const updateSection = (key: SectionKey, updated: HierarchySection) => {
     setSections(prev => ({ ...prev, [key]: updated }));
     setSelected(null); // clear selection when tree changes
   };
 
   const updateSelectedNode = (updatedNode: HierarchyItem | HierarchyChild) => {
-    if (!selected) return;
+    if (!selected || !isHierarchySection(activeSection)) return;
     const section = sections[activeSection];
     if (!section) return;
     let newItems = [...section.items];
@@ -85,7 +90,7 @@ function SiteBuilderPage() {
     toast.success("Item updated. Don't forget to Save the section.");
   };
 
-  const currentSection = sections[activeSection];
+  const currentSection = isHierarchySection(activeSection) ? sections[activeSection] : null;
   const selectedNode = selected && currentSection
     ? selected.type === "item"
       ? currentSection.items[selected.itemIdx]
@@ -106,21 +111,30 @@ function SiteBuilderPage() {
       <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0">
         <div>
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Site Builder</h2>
-          <p className="text-sm text-muted-foreground">Manage navigation hierarchy and page content from one place.</p>
+          <p className="text-sm text-muted-foreground">Manage navigation hierarchy, homepage content, and page sections from one place.</p>
         </div>
-        <Button
-          onClick={() => saveSection(activeSection)}
-          disabled={saving}
-          className="bg-primary hover:bg-primary-hover text-primary-foreground"
-        >
-          {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-          Save {currentSection?.label}
-        </Button>
+        {activeSection !== "homepage" && (
+          <Button
+            onClick={() => saveSection(activeSection as SectionKey)}
+            disabled={saving}
+            className="bg-primary hover:bg-primary-hover text-primary-foreground"
+          >
+            {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+            Save {currentSection?.label}
+          </Button>
+        )}
       </div>
 
       {/* Section Tabs */}
-      <Tabs value={activeSection} onValueChange={v => { setActiveSection(v as SectionKey); setSelected(null); }} className="flex-1 flex flex-col overflow-hidden">
+      <Tabs value={activeSection} onValueChange={v => { setActiveSection(v as TopLevelTab); setSelected(null); }} className="flex-1 flex flex-col overflow-hidden">
         <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto gap-0 shrink-0">
+          {/* Homepage tab — always first */}
+          <TabsTrigger
+            value="homepage"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Homepage
+          </TabsTrigger>
           {SECTION_KEYS.map(key => (
             <TabsTrigger
               key={key}
@@ -132,6 +146,12 @@ function SiteBuilderPage() {
           ))}
         </TabsList>
 
+        {/* Homepage tab content */}
+        <TabsContent value="homepage" className="flex-1 overflow-hidden m-0">
+          <HomepageBuilderTab />
+        </TabsContent>
+
+        {/* Navigation hierarchy tabs */}
         {SECTION_KEYS.map(key => (
           <TabsContent key={key} value={key} className="flex-1 overflow-hidden m-0">
             <div className="flex h-full">
@@ -147,14 +167,14 @@ function SiteBuilderPage() {
                     section={sections[key]!}
                     onChange={updated => updateSection(key, updated)}
                     onSelect={node => setSelected(node)}
-                    selected={activeSection === key ? selected : null}
+                    selected={isHierarchySection(activeSection) && activeSection === key ? selected : null}
                   />
                 )}
               </div>
 
               {/* RIGHT: Editor */}
               <div className="flex-1 overflow-hidden">
-                {selectedNode && activeSection === key ? (
+                {selectedNode && isHierarchySection(activeSection) && activeSection === key ? (
                   <ContentEditorPanel
                     key={`${selected?.type}-${selected?.type === "item" ? selected.itemIdx : `${selected?.itemIdx}-${(selected as any).childIdx}`}`}
                     node={selectedNode}
