@@ -1167,7 +1167,7 @@ function PresenceEditor({
 
       <div>
         <div className="flex items-center justify-between mb-3">
-          <FieldLabel>Regional Branches ({data.offices.length})</FieldLabel>
+          <FieldLabel>Regional Branches & Coverage ({data.offices.length})</FieldLabel>
           <Button variant="outline" size="sm" onClick={addOffice} className="gap-1 text-xs h-7">
             <Plus className="h-3 w-3" /> Add Location
           </Button>
@@ -1176,26 +1176,41 @@ function PresenceEditor({
           {data.offices.map((office, i) => (
             <div
               key={office.id}
-              className="flex items-center gap-2 border border-border rounded-md px-3 py-2.5 bg-surface/30"
+              className="flex items-start md:items-center gap-2 border border-border rounded-md p-3 bg-surface/30"
             >
-              <div className="flex-1 grid grid-cols-2 gap-2">
-                <Input
-                  value={office.name}
-                  onChange={(e) => updateOffice(i, { name: e.target.value })}
-                  placeholder="South Africa"
-                  className="text-sm h-8"
-                />
-                <Input
-                  value={office.type}
-                  onChange={(e) => updateOffice(i, { type: e.target.value })}
-                  placeholder="HQ / REGIONAL OFFICE"
-                  className="text-sm h-8"
-                />
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Country Name</span>
+                  <Input
+                    value={office.name}
+                    onChange={(e) => updateOffice(i, { name: e.target.value })}
+                    placeholder="e.g. South Africa"
+                    className="text-sm h-8"
+                  />
+                </div>
+                <div>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Office Type / Hub</span>
+                  <Input
+                    value={office.type}
+                    onChange={(e) => updateOffice(i, { type: e.target.value })}
+                    placeholder="e.g. HQ / REGIONAL OFFICE"
+                    className="text-sm h-8"
+                  />
+                </div>
+                <div>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Link URL (Optional)</span>
+                  <Input
+                    value={office.linkUrl || ""}
+                    onChange={(e) => updateOffice(i, { linkUrl: e.target.value })}
+                    placeholder="e.g. https://geosynthetics.co.za/..."
+                    className="text-sm h-8 font-mono"
+                  />
+                </div>
               </div>
               <button
                 type="button"
                 onClick={() => removeOffice(i)}
-                className="h-8 w-8 rounded flex items-center justify-center text-destructive hover:bg-destructive/10 shrink-0"
+                className="h-8 w-8 rounded flex items-center justify-center text-destructive hover:bg-destructive/10 shrink-0 mt-6 md:mt-0"
               >
                 <Trash2 className="h-3 w-3" />
               </button>
@@ -1203,13 +1218,6 @@ function PresenceEditor({
           ))}
         </div>
       </div>
-
-      <ImageUploadField
-        label="Map Asset Image"
-        hint="Custom vector map graphic with regional pins"
-        value={data.mapAsset}
-        onChange={(v) => set("mapAsset", v)}
-      />
     </div>
   );
 }
@@ -1598,10 +1606,10 @@ export function HomepageBuilderTab() {
         <Button
           onClick={handleSave}
           disabled={saving || !dirty}
-          className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide text-xs h-8 gap-1.5"
+          className="bg-primary hover:bg-primary-hover hover:cursor-pointer text-white font-bold uppercase tracking-wide text-xs h-8 gap-1.5"
         >
           {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
-          {saving ? "Saving…" : "Save Homepage"}
+          {saving ? "Updating..." : "Save Homepage"}
         </Button>
       </div>
 

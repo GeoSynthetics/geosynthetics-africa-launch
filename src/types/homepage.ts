@@ -35,6 +35,7 @@ export interface OfficeLocation {
   id: string;
   name: string;   // e.g. "South Africa"
   type: string;   // e.g. "HQ", "REGIONAL OFFICE"
+  linkUrl?: string; // e.g. "https://geosynthetics.co.za/..."
 }
 
 export interface ProjectCard {
@@ -235,10 +236,17 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     presenceTitle: "PAN-AFRICAN PRESENCE",
     presenceSubtitle: "One partner. Africa-wide execution.",
     offices: [
-      { id: "za", name: "South Africa", type: "HQ" },
-      { id: "gh", name: "Ghana", type: "REGIONAL OFFICE" },
-      { id: "tz", name: "Tanzania", type: "REGIONAL OFFICE" },
-      { id: "zw", name: "Zimbabwe", type: "REGIONAL OFFICE" },
+      { id: "za", name: "South Africa", type: "HQ", linkUrl: "https://geosynthetics.co.za/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa/" },
+      { id: "gh", name: "Ghana", type: "WEST AFRICA MINING HUB", linkUrl: "https://geosynthetics.co.za/" },
+      { id: "tz", name: "Tanzania", type: "EAST AFRICA REGIONAL HUB", linkUrl: "https://geosynthetics.co.za/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids/" },
+      { id: "zw", name: "Zimbabwe", type: "REGIONAL OFFICE", linkUrl: "https://geosynthetics.co.za/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control/" },
+      { id: "zm", name: "Zambia", type: "", linkUrl: "https://geosynthetics.co.za/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier/" },
+      { id: "cgo", name: "Democratic Republic of Congo (DRC)", type: "", linkUrl: "https://geosynthetics.co.za/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier/" },
+      { id: "ke", name: "Kenya", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      { id: "ci", name: "Côte d'Ivoire", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      { id: "mz", name: "Mozambique", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      { id: "na", name: "Namibia", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      { id: "bw", name: "Botswana", type: "", linkUrl: "https://geosynthetics.co.za/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier/" },
     ],
     mapAsset: "",
   },

@@ -5,7 +5,6 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES, SERVICES } from "@/components/site/mega-menu-data";
 import heroInstallation from "@/assets/hero-installation.png";
-import africaMap from "@/assets/africa.svg";
 
 import { supabase } from "@/integrations/supabase/client";
 import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage";
@@ -289,7 +288,8 @@ function HomePage() {
       {/* Stats + Pan-African */}
       <section className="bg-surface-dark text-surface-dark-foreground">
         <div className="container-page py-16 grid lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-5 grid grid-cols-2 gap-6">
+          {/* Left stats column — spans 4 on large screens */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             {presence.stats.map((s, idx) => (
               <div key={s.id || idx}>
                 <div className="font-display text-4xl md:text-5xl font-bold text-surface-dark-foreground">{s.value}</div>
@@ -298,56 +298,59 @@ function HomePage() {
               </div>
             ))}
           </div>
-          <div className="lg:col-span-4">
+
+          {/* Right country cluster grid column — spans 8 on large screens */}
+          <div className="lg:col-span-8">
             <h3 className="font-display text-2xl font-bold uppercase tracking-tight">{presence.presenceTitle}</h3>
             <p className="mt-1 text-sm text-surface-dark-foreground/70">{presence.presenceSubtitle}</p>
-            <ul className="mt-5 space-y-2">
-              {presence.offices.map((o, idx) => (
-                <li key={o.id || idx} className="flex items-center justify-between border-b border-surface-dark-foreground/10 pb-2 text-sm">
-                  <span className="font-medium">{o.name}</span>
-                  <span className="text-xs uppercase tracking-wider text-surface-dark-foreground/60">{o.type}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="lg:col-span-3 flex flex-col items-center justify-center gap-4">
-            <div className="relative w-56">
-              <img src={presence.mapAsset || africaMap} alt="" aria-hidden="true" className="w-full h-auto opacity-90" />
-              <svg
-                viewBox="0 0 512 512"
-                className="absolute inset-0 w-full h-full"
-                aria-hidden="true"
-              >
-                {/* Active country markers (approx. centroids on the 512x512 silhouette) */}
-                {[
-                  { name: "South Africa", cx: 285, cy: 448 },
-                  { name: "Ghana", cx: 190, cy: 228 },
-                  { name: "Tanzania", cx: 345, cy: 315 },
-                  { name: "Zimbabwe", cx: 310, cy: 388 },
-                ].map((m) => {
-                  const isActive = presence.offices.some(
-                    (office) => office.name.toLowerCase() === m.name.toLowerCase()
-                  );
-                  if (!isActive) return null;
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-6">
+              {presence.offices.map((o, idx) => {
+                const hasOffice = o.type && o.type.trim().length > 0;
+                const isLink = o.linkUrl && o.linkUrl.trim().length > 0;
+                
+                const cardContent = (
+                  <div className={`flex flex-col justify-between p-3.5 rounded border transition-all h-full min-h-[72px] ${
+                    isLink 
+                      ? "bg-surface-dark-foreground/5 border-surface-dark-foreground/10 hover:border-primary hover:bg-surface-dark-foreground/10 cursor-pointer group" 
+                      : "bg-surface-dark-foreground/2 border-surface-dark-foreground/5"
+                  }`}>
+                    <div className="flex items-start gap-2.5">
+                      {hasOffice ? (
+                        <div className="relative flex h-2 w-2 mt-1.5 shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </div>
+                      ) : (
+                        <span className="h-1.5 w-1.5 rounded-full bg-surface-dark-foreground/30 mt-2 shrink-0" />
+                      )}
+                      <span className="font-display font-bold text-sm tracking-wide text-surface-dark-foreground group-hover:text-primary transition-colors leading-tight">
+                        {o.name}
+                      </span>
+                    </div>
+                    {hasOffice && (
+                      <span className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-surface-dark-foreground/60">
+                        {o.type}
+                      </span>
+                    )}
+                    {isLink && !hasOffice && (
+                      <span className="mt-2 text-[9px] uppercase tracking-wider text-surface-dark-foreground/40 group-hover:text-surface-dark-foreground/60 transition-colors">
+                        View Region &rarr;
+                      </span>
+                    )}
+                  </div>
+                );
+
+                if (isLink) {
                   return (
-                    <g key={m.name}>
-                      {/* Outer pulse ring */}
-                      <circle cx={m.cx} cy={m.cy} r="14" fill="var(--primary)" opacity="0.4">
-                        <animate attributeName="r" values="14;34;14" dur="2.4s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.5;0;0.5" dur="2.4s" repeatCount="indefinite" />
-                      </circle>
-                      {/* Static halo */}
-                      <circle cx={m.cx} cy={m.cy} r="18" fill="var(--primary)" opacity="0.2" />
-                      {/* Solid center dot with white stroke for contrast */}
-                      <circle cx={m.cx} cy={m.cy} r="9" fill="var(--primary)" stroke="white" strokeWidth="2.5" />
-                    </g>
+                    <a key={o.id || idx} href={o.linkUrl} target="_blank" rel="noopener noreferrer" className="block h-full">
+                      {cardContent}
+                    </a>
                   );
-                })}
-              </svg>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-surface-dark-foreground/70">
-              <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-              Active Regions
+                }
+
+                return <div key={o.id || idx} className="h-full">{cardContent}</div>;
+              })}
             </div>
           </div>
         </div>
