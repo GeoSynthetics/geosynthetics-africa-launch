@@ -1120,7 +1120,7 @@ function PresenceEditor({
             <CollapsibleCard key={stat.id} index={i} title={`${stat.value} — ${stat.label}`} onRemove={() => removeStat(i)}>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <FieldLabel hint='e.g. "20+" or "1000+"'>Stat Number / Value</FieldLabel>
+                  <FieldLabel>Stat Number / Value</FieldLabel>
                   <Input
                     value={stat.value}
                     onChange={(e) => updateStat(i, { value: e.target.value })}
