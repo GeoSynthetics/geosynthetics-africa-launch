@@ -61,9 +61,28 @@ export interface HeroSection {
   btn3Url: string;            // Third button url
 }
 
+export interface GsaStep {
+  num: number;
+  title: string;
+  desc: string;
+  img: string; // image URL
+}
+
+export interface GsaDifference {
+  subtitle: string;
+  title: string;
+  description: string;
+  ctaText: string;
+  ctaUrl: string;
+  steps: GsaStep[];
+}
+
 export interface HomepageContent {
   // § 1 & 2 – Hero Section
   hero: HeroSection;
+
+  // GSA Difference Section
+  gsaDifference: GsaDifference;
 
   // § 3 – Trust Bar
   trustBadges: TrustBadge[];
@@ -144,6 +163,20 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     btn2Url: "/contacts",
     btn3Text: "Speak to Technical Team",
     btn3Url: "/contacts",
+  },
+  gsaDifference: {
+    subtitle: "The GSA Difference",
+    title: "One System.\nOne Partner.\nOne Accountability.",
+    description: "Unlike product suppliers or installation contractors, we take full responsibility for system performance — from design through to certification.",
+    ctaText: "Learn more about GSA",
+    ctaUrl: "/services",
+    steps: [
+      { num: 1, title: "Design", desc: "We design the right system for your application.", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80" },
+      { num: 2, title: "Supply", desc: "We source the best materials — brand agnostic.", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80" },
+      { num: 3, title: "Install", desc: "Certified installation by experienced specialists.", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80" },
+      { num: 4, title: "Test", desc: "On-site testing to international standards.", img: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80" },
+      { num: 5, title: "Certify", desc: "Documentation, traceability and certification.", img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&q=80" },
+    ],
   },
   trustBadges: [
     { icon: "", text: "IAGI MEMBER / One of only 5 in Africa" },

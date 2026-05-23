@@ -41,14 +41,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const STEPS = [
-  { num: 1, title: "Design", desc: "We design the right system for your application.", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80" },
-  { num: 2, title: "Supply", desc: "We source the best materials — brand agnostic.", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80" },
-  { num: 3, title: "Install", desc: "Certified installation by experienced specialists.", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80" },
-  { num: 4, title: "Test", desc: "On-site testing to international standards.", img: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80" },
-  { num: 5, title: "Certify", desc: "Documentation, traceability and certification.", img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&q=80" },
-];
-
 function HomePage() {
   const loaderData = Route.useLoaderData();
   
@@ -56,6 +48,7 @@ function HomePage() {
   const content = { ...DEFAULT_HOMEPAGE_CONTENT, ...loaderData?.hp } as HomepageContent;
 
   const hero = { ...DEFAULT_HOMEPAGE_CONTENT.hero, ...content.hero };
+  const gsaDifference = { ...DEFAULT_HOMEPAGE_CONTENT.gsaDifference, ...content.gsaDifference };
   const trustBadges = content.trustBadges || DEFAULT_HOMEPAGE_CONTENT.trustBadges;
   const engineeredSystems = { ...DEFAULT_HOMEPAGE_CONTENT.engineeredSystems, ...content.engineeredSystems };
   const partners = { ...DEFAULT_HOMEPAGE_CONTENT.partners, ...content.partners };
@@ -148,22 +141,31 @@ function HomePage() {
       <section className="bg-background">
         <div className="container-page py-16 md:py-20 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">The GSA Difference</p>
-            <h2 className="mt-3 font-display text-3xl md:text-4xl font-bold uppercase leading-tight">
-              One System.<br />One Partner.<br />One Accountability.
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">
+              {gsaDifference.subtitle}
+            </p>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl font-bold uppercase leading-tight whitespace-pre-line">
+              {gsaDifference.title}
             </h2>
             <div className="mt-4 h-1 w-16 bg-primary" />
             <p className="mt-5 text-sm text-muted-foreground">
-              Unlike product suppliers or installation contractors, we take full responsibility for system performance — from design through to certification.
+              {gsaDifference.description}
             </p>
-            <Link to="/services" className="mt-6 inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:gap-3 gap-2 transition-all">
-              Learn more about GSA <ArrowRight className="h-4 w-4" />
+            <Link to={gsaDifference.ctaUrl as any} className="mt-6 inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:gap-3 gap-2 transition-all">
+              {gsaDifference.ctaText} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="lg:col-span-8">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              {STEPS.map((s, i) => (
-                <div key={s.num} className="relative">
+            <div className={`grid grid-cols-2 gap-3 ${
+              gsaDifference.steps.length === 1 ? "md:grid-cols-1" :
+              gsaDifference.steps.length === 2 ? "md:grid-cols-2" :
+              gsaDifference.steps.length === 3 ? "md:grid-cols-3" :
+              gsaDifference.steps.length === 4 ? "md:grid-cols-4" :
+              gsaDifference.steps.length === 5 ? "md:grid-cols-5" :
+              gsaDifference.steps.length === 6 ? "md:grid-cols-6" : "md:grid-cols-5"
+            }`}>
+              {gsaDifference.steps.map((s, i) => (
+                <div key={s.num || i} className="relative">
                   <div className="aspect-[3/4] overflow-hidden rounded">
                     <img src={s.img} alt={s.title} className="h-full w-full object-cover" loading="lazy" />
                   </div>
@@ -172,7 +174,7 @@ function HomePage() {
                     <span className="font-display text-sm font-bold uppercase tracking-wide">{s.title}</span>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
-                  {i < STEPS.length - 1 && (
+                  {i < gsaDifference.steps.length - 1 && (
                     <ArrowRight className="hidden md:block absolute -right-4 top-[35%] h-5 w-5 text-primary" />
                   )}
                 </div>

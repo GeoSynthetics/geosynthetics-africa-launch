@@ -30,6 +30,8 @@ import {
   type StatCounter,
   type OfficeLocation,
   type ProjectCard,
+  type GsaStep,
+  type GsaDifference,
 } from "@/types/homepage";
 
 const SUPABASE_KEY = "homepage_content";
@@ -484,6 +486,159 @@ function HeroEditor({
               className="text-sm font-mono"
             />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GsaDifferenceEditor({
+  data,
+  onChange,
+}: {
+  data: HomepageContent["gsaDifference"];
+  onChange: (v: HomepageContent["gsaDifference"]) => void;
+}) {
+  const set = <K extends keyof HomepageContent["gsaDifference"]>(
+    key: K,
+    val: HomepageContent["gsaDifference"][K],
+  ) => onChange({ ...data, [key]: val });
+
+  const addStep = () => {
+    const nextNum = data.steps.length + 1;
+    set("steps", [
+      ...data.steps,
+      {
+        num: nextNum,
+        title: "",
+        desc: "",
+        img: "",
+      },
+    ]);
+  };
+
+  const removeStep = (i: number) => {
+    const updatedSteps = data.steps
+      .filter((_, idx) => idx !== i)
+      .map((step, idx) => ({ ...step, num: idx + 1 })); // Recalculate step numbers
+    set("steps", updatedSteps);
+  };
+
+  const updateStep = (i: number, patch: Partial<GsaStep>) => {
+    const n = [...data.steps];
+    n[i] = { ...n[i], ...patch };
+    set("steps", n);
+  };
+
+  return (
+    <div className="space-y-6">
+      <SectionHeading>GSA Difference Section</SectionHeading>
+      <p className="text-xs text-muted-foreground">
+        Customize the "GSA Difference" headings, descriptions, and the step process layout.
+      </p>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <FieldLabel>Section Subtitle</FieldLabel>
+          <Input
+            value={data.subtitle}
+            onChange={(e) => set("subtitle", e.target.value)}
+            placeholder="The GSA Difference"
+            className="text-sm"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <FieldLabel>CTA Link Text</FieldLabel>
+            <Input
+              value={data.ctaText}
+              onChange={(e) => set("ctaText", e.target.value)}
+              placeholder="Learn more about GSA"
+              className="text-sm"
+            />
+          </div>
+          <div>
+            <FieldLabel>CTA Link URL</FieldLabel>
+            <Input
+              value={data.ctaUrl}
+              onChange={(e) => set("ctaUrl", e.target.value)}
+              placeholder="/services"
+              className="text-sm font-mono"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel hint="Supports line breaks using Enter">Section Title</FieldLabel>
+        <Textarea
+          value={data.title}
+          onChange={(e) => set("title", e.target.value)}
+          placeholder={"One System.\nOne Partner.\nOne Accountability."}
+          className="text-sm min-h-[72px] resize-none"
+        />
+      </div>
+
+      <div>
+        <FieldLabel>Description Content</FieldLabel>
+        <Textarea
+          value={data.description}
+          onChange={(e) => set("description", e.target.value)}
+          placeholder="Unlike product suppliers or installation contractors..."
+          className="text-sm min-h-[72px] resize-none"
+        />
+      </div>
+
+      <div className="border-t border-border pt-4">
+        <div className="flex items-center justify-between mb-3">
+          <FieldLabel>Execution Process Steps ({data.steps.length})</FieldLabel>
+          <Button variant="outline" size="sm" onClick={addStep} className="gap-1 text-xs h-7">
+            <Plus className="h-3 w-3" /> Add Step
+          </Button>
+        </div>
+        <div className="space-y-3">
+          {data.steps.map((step, i) => (
+            <CollapsibleCard key={i} index={i} title={step.title} onRemove={() => removeStep(i)}>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <FieldLabel>Step Number</FieldLabel>
+                  <Input
+                    type="number"
+                    value={step.num}
+                    onChange={(e) => updateStep(i, { num: parseInt(e.target.value) || i + 1 })}
+                    placeholder="1"
+                    className="text-sm font-mono"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <FieldLabel>Step Title</FieldLabel>
+                  <Input
+                    value={step.title}
+                    onChange={(e) => updateStep(i, { title: e.target.value })}
+                    placeholder="e.g. Design"
+                    className="text-sm"
+                  />
+                </div>
+              </div>
+              <ImageUploadField
+                label="Step Image"
+                value={step.img}
+                onChange={(v) => updateStep(i, { img: v })}
+              />
+              <div>
+                <FieldLabel>Step Description</FieldLabel>
+                <Input
+                  value={step.desc}
+                  onChange={(e) => updateStep(i, { desc: e.target.value })}
+                  placeholder="We design the right system for your application."
+                  className="text-sm"
+                />
+              </div>
+            </CollapsibleCard>
+          ))}
+          {data.steps.length === 0 && (
+            <p className="text-xs text-muted-foreground italic">No steps yet — click Add Step.</p>
+          )}
         </div>
       </div>
     </div>
@@ -1337,6 +1492,7 @@ function BoqBannerEditor({
 
 const HP_TABS = [
   { id: "hero", label: "Hero Section" },
+  { id: "gsaDifference", label: "GSA Difference" },
   { id: "trust", label: "Trust Bar" },
   { id: "systems", label: "App Systems" },
   { id: "partners", label: "Partners" },
@@ -1472,6 +1628,13 @@ export function HomepageBuilderTab() {
             <HeroEditor
               data={content.hero}
               onChange={(v) => update({ hero: v })}
+            />
+          </TabsContent>
+
+          <TabsContent value="gsaDifference" className="p-6 m-0">
+            <GsaDifferenceEditor
+              data={content.gsaDifference}
+              onChange={(v) => update({ gsaDifference: v })}
             />
           </TabsContent>
 
