@@ -6,9 +6,11 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import heroInstallation from "@/assets/hero-installation.png";
 import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage";
 import { Route } from "@/routes/index";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export function HomePage() {
   const loaderData = Route.useLoaderData();
+  const { open } = useQuickQuote();
   
   // Cast content safely, merging with defaults
   const content = { ...DEFAULT_HOMEPAGE_CONTENT, ...loaderData?.hp } as HomepageContent;
@@ -49,11 +51,13 @@ export function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {hero.btn1Text && (
-                <Button asChild size="lg" className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide">
-                  <Link to={hero.btn1Url as any}>
-                    <Upload className="mr-2 h-4 w-4" />
-                    {hero.btn1Text}
-                  </Link>
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0"
+                  onClick={() => open()}
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {hero.btn1Text}
                 </Button>
               )}
               {hero.btn2Text && (

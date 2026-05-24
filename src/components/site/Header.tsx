@@ -3,6 +3,7 @@ import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-rout
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetDescription } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -209,6 +210,7 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
 
 function MobileNav({ menus }: { menus: typeof megaMenus }) {
   const [open, setOpen] = useState(false);
+  const { open: openQuickQuote } = useQuickQuote();
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -274,11 +276,15 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
           </ul>
         </div>
         <div className="border-t border-border p-4">
-          <Button asChild className="w-full bg-primary hover:bg-primary-hover text-primary-foreground">
-            <Link to="/contacts" onClick={() => setOpen(false)}>
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Project BOQ
-            </Link>
+          <Button
+            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground cursor-pointer border-0"
+            onClick={() => {
+              setOpen(false);
+              openQuickQuote();
+            }}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Upload Project BOQ
           </Button>
         </div>
       </SheetContent>

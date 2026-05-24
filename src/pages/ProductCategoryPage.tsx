@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
+  const { open } = useQuickQuote();
 
 
   const heroImage = content.heroImage;
@@ -464,9 +466,12 @@ export function ProductCategoryPage() {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/contacts" className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium">
+                    <button
+                      onClick={() => open()}
+                      className="w-full flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium text-left cursor-pointer border-0 bg-transparent"
+                    >
                       BOQ Upload <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>

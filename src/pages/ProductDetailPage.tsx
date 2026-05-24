@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Route } from "@/routes/catalogue.$slug";
 
 interface KeyFeature { label: string; icon?: string }
@@ -67,7 +68,8 @@ const TABS = [
 ];
 
 export function ProductDetailPage() {
-  const { product, alternatives, systemComponents } = Route.useLoaderData();
+  const { product, alternatives, systemComponents, familyData, caseStudies } = Route.useLoaderData();
+  const { open } = useQuickQuote();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
@@ -85,25 +87,95 @@ export function ProductDetailPage() {
   }, []);
 
   const heroImg = product.image_url || product.images?.[0] || null;
-  const features = (product.key_features && product.key_features.length > 0)
-    ? product.key_features
-    : DEFAULT_FEATURES;
+  
+  const features = useMemo(() => {
+    if (product.key_features && product.key_features.length > 0) {
+      return product.key_features;
+    }
+    if (familyData?.features && familyData.features.length > 0) {
+      return familyData.features.map((f: string) => ({ label: f }));
+    }
+    return DEFAULT_FEATURES;
+  }, [product.key_features, familyData?.features]);
 
   const downloads = useMemo(() => ([
     { label: "Datasheet", url: product.datasheet_url, size: "PDF" },
-    { label: "Installation Guide", url: product.installation_guide_url, size: "PDF" },
+    { label: "Installation Guide", url: product.installation_guide_url || (familyData?.installationSpecs ? "#installation" : null), size: "PDF" },
     { label: "QA/QC Checklist", url: product.qa_checklist_url, size: "PDF" },
     { label: "Chemical Resistance Guide", url: product.chemical_resistance_url, size: "PDF" },
-  ].filter((d) => d.url)), [product]);
+  ].filter((d) => d.url)), [product, familyData]);
 
   const ataGlance = [
     { icon: Package, label: "Material", value: product.material },
     { icon: Layers, label: "Structure", value: product.structure },
     { icon: Palette, label: "Colour", value: product.colour },
-    { icon: ShieldCheck, label: "Standard", value: product.standard },
-    { icon: Ruler, label: "Roll Width", value: product.roll_width },
-    { icon: Scroll, label: "Roll Length", value: product.roll_length },
+    { icon: ShieldCheck, label: "Standard", value: product.standard || (familyData?.technicalHighlights?.[0]?.value) },
+    { icon: Ruler, label: "Roll Width", value: product.roll_width || (familyData?.technicalHighlights?.[1]?.value && familyData.technicalHighlights[1].label.toLowerCase().includes("width") ? familyData.technicalHighlights[1].value : null) },
+    { icon: Scroll, label: "Roll Length", value: product.roll_length || (familyData?.technicalHighlights?.[2]?.value && familyData.technicalHighlights[2].label.toLowerCase().includes("length") ? familyData.technicalHighlights[2].value : null) },
   ].filter((r) => r.value);
+
+  const applicationsList = useMemo(() => {
+    if (product.applications && product.applications.length > 0) {
+      return product.applications;
+    }
+    if (familyData?.applications && familyData.applications.length > 0) {
+      return familyData.applications.map((app: any) => ({
+        title: app.label || app.title,
+        subtitle: app.description || "",
+        image_url: app.image_url || undefined,
+      }));
+    }
+    return [];
+  }, [product.applications, familyData?.applications]);
+
+  const systemsList = useMemo(() => {
+    if (product.compatible_systems && product.compatible_systems.length > 0) {
+      return product.compatible_systems;
+    }
+    if (familyData?.types && familyData.types.length > 0) {
+      return familyData.types.map((t: any) => ({
+        title: t.name,
+        subtitle: t.description,
+      }));
+    }
+    return [];
+  }, [product.compatible_systems, familyData?.types]);
+
+  const documentGrid = useMemo(() => {
+    return [
+      {
+        label: "Product Selection Guide",
+        desc: "Compare performance properties across the entire category hierarchy before specifying.",
+        url: product.product_categories?.selection_guide_url || null,
+        tag: "CATEGORY GUIDE"
+      },
+      {
+        label: "Installation & Method Statement",
+        desc: "Standard procedures, wedge welding temperatures, and panel deployment guidance.",
+        url: product.installation_guide_url || null,
+        tag: "INSTALLATION",
+        isAnchor: !product.installation_guide_url && familyData?.installationSpecs ? "#installation" : false
+      },
+      {
+        label: "QA/QC Site Checklist",
+        desc: "Field testing procedures, pressure test logs, and seam verification guidelines.",
+        url: product.qa_checklist_url || null,
+        tag: "QUALITY CHECKLIST"
+      },
+      {
+        label: "Technical Data Sheet (TDS)",
+        desc: "Guaranteed minimum average roll values (MARV) and material testing properties.",
+        url: product.datasheet_url || null,
+        tag: "TECHNICAL SPEC"
+      },
+      {
+        label: "Chemical Resistance / Accessories Guide",
+        desc: "Chemical compatibility matrix and list of accessories needed for seam connection.",
+        url: product.chemical_resistance_url || null,
+        tag: "ACCESSORIES GUIDE"
+      }
+    ];
+  }, [product, familyData]);
 
   // Active section tracking — pick the last section whose top has crossed the threshold.
   useEffect(() => {
@@ -275,15 +347,13 @@ export function ProductDetailPage() {
                 <Download className="ml-2 h-4 w-4" />
               </Button>
               <Button
-                asChild
                 size="lg"
                 variant="outline"
-                className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+                className="bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide cursor-pointer border border-surface-dark-foreground/30"
+                onClick={() => open(product.name, product.id)}
               >
-                <Link to="/contacts">
-                  Upload Project BOQ
-                  <Upload className="ml-2 h-4 w-4" />
-                </Link>
+                Upload Project BOQ
+                <Upload className="ml-2 h-4 w-4" />
               </Button>
               <Button
                 asChild={!!product.datasheet_url}
@@ -409,6 +479,32 @@ export function ProductDetailPage() {
                     Note: The above values are typical and not intended for specification purposes. Please refer to the product datasheet for full details.
                   </p>
                 </>
+              ) : familyData?.propertiesTable?.rows && familyData.propertiesTable.rows.length > 0 ? (
+                <>
+                  <div className="overflow-x-auto rounded border border-border">
+                    <table className="w-full text-sm">
+                      <thead className="bg-surface text-left text-xs uppercase tracking-wider text-muted-foreground">
+                        <tr>
+                          {familyData.propertiesTable.headers.map((h: string, idx: number) => (
+                            <th key={idx} className="px-4 py-3 font-semibold">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {familyData.propertiesTable.rows.map((row: string[], i: number) => (
+                          <tr key={i} className="hover:bg-surface/60">
+                            {row.map((cell: string, idx: number) => (
+                              <td key={idx} className={cn("px-4 py-3", idx === 0 ? "font-medium" : "text-muted-foreground")}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Note: The above specifications represent the product family properties. Please refer to the product datasheet for individual SKU values.
+                  </p>
+                </>
               ) : (
                 <p className="text-sm text-muted-foreground italic">Technical specifications will be published shortly. Request the datasheet for full property values.</p>
               )}
@@ -419,7 +515,7 @@ export function ProductDetailPage() {
               id="applications"
               title="Typical Applications"
               cta={{ label: "View all applications", to: "/applications" }}
-              items={product.applications ?? []}
+              items={applicationsList}
             />
 
             {/* Systems */}
@@ -427,75 +523,201 @@ export function ProductDetailPage() {
               id="systems"
               title="Compatible Systems"
               cta={{ label: "View all systems", to: "/services" }}
-              items={product.compatible_systems ?? []}
+              items={systemsList}
             />
 
-            {/* Installation placeholder */}
+            {/* Installation Guidance */}
             <div id="installation">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">Installation</h2>
-              <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
-                Installation guides and method statements available on request. Download our installation guide above or speak to our technical team.
-              </div>
-            </div>
-
-            {/* QA & Testing placeholder */}
-            <div id="qa">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">QA & Testing</h2>
-              <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
-                All products are supplied with mill test certificates and conform to ASTM / ISO standards.
-              </div>
-            </div>
-
-            {/* Documents */}
-            <div id="documents">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">Documents</h2>
-              {downloads.length === 0 ? (
-                <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
-                  Documents will appear here once uploaded by the supplier.
+              <h2 className="font-display text-2xl font-bold uppercase mb-5">Installation Guidance</h2>
+              {familyData?.installationSpecs && familyData.installationSpecs.length > 0 ? (
+                <div className="space-y-6">
+                  <div className="rounded-xl border border-border bg-card p-6">
+                    <div className="flex items-center gap-3 text-primary mb-4">
+                      <Wrench className="h-6 w-6" />
+                      <h3 className="font-display text-lg font-bold uppercase">Standard Method Statement</h3>
+                    </div>
+                    <div className="space-y-4 text-sm leading-relaxed text-foreground/80">
+                      {familyData.installationSpecs.map((spec: string, i: number) => (
+                        <p key={i}>{spec}</p>
+                      ))}
+                    </div>
+                  </div>
+                  {product.installation_guide_url && (
+                    <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary/5 cursor-pointer uppercase font-bold tracking-wider text-[11px] h-9">
+                      <a href={product.installation_guide_url} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-1.5 h-3.5 w-3.5" /> Download Complete Installation Guide (PDF)
+                      </a>
+                    </Button>
+                  )}
                 </div>
               ) : (
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {downloads.map((d) => (
-                    <a
-                      key={d.label}
-                      href={d.url!}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded border border-border bg-card p-4 hover:border-primary transition"
-                    >
-                      <div className="h-10 w-10 rounded bg-primary/10 text-primary flex items-center justify-center">
-                        <FileText className="h-5 w-5" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-bold">{d.label}</div>
-                        <div className="text-xs text-muted-foreground">{d.size}</div>
-                      </div>
-                      <Download className="h-4 w-4 text-muted-foreground" />
-                    </a>
-                  ))}
+                <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
+                  Installation guides and method statements available on request. Download our installation guide above or speak to our technical team.
                 </div>
               )}
             </div>
 
-            {/* Case Studies placeholder */}
+            {/* QA & Testing */}
+            <div id="qa">
+              <h2 className="font-display text-2xl font-bold uppercase mb-5">Quality Assurance & Testing</h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+                  <div className="flex items-center gap-3 text-primary">
+                    <ShieldCheck className="h-6 w-6" />
+                    <h3 className="font-display text-lg font-bold uppercase">Field QA/QC Checklist</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    To ensure certified waterproof integrity, the following field quality control procedures must be completed by the contractor:
+                  </p>
+                  <ul className="space-y-2.5 text-xs text-foreground/85">
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span><strong>Subgrade Acceptance:</strong> Smooth, compacted, free of sharp stone protrusions (&gt;10mm) and standing water.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span><strong>Trial Welds:</strong> Mandatory trial seams completed at start of shift and after breaks to calibrate welding wedges.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span><strong>Non-Destructive Testing:</strong> 100% of double-track fusion seams tested via air channel pressure testing.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span><strong>Destructive Shear & Peel:</strong> Coupons cut and tested on-site using a calibrated tensiometer.</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="rounded-xl border border-border bg-card p-6 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-primary">
+                      <Scroll className="h-6 w-6" />
+                      <h3 className="font-display text-lg font-bold uppercase">Manufacturing Standards</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      This product is supplied with full Mill Test Certificates (MTC) proving compliance to strict international specifications (ASTM, ISO, and GRI).
+                    </p>
+                    <div className="bg-surface border border-border rounded-lg p-3 text-xs leading-normal">
+                      <strong>Standard Conformance:</strong> {product.standard || familyData?.technicalHighlights?.[0]?.value || "ASTM & ISO Standard Compliant"}
+                    </div>
+                  </div>
+                  {product.qa_checklist_url && (
+                    <Button asChild className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9">
+                      <a href={product.qa_checklist_url} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist (PDF)
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Documents Grid */}
+            <div id="documents">
+              <h2 className="font-display text-2xl font-bold uppercase mb-5">Documents</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {documentGrid.map((doc, idx) => {
+                  const hasUrl = !!doc.url || !!doc.isAnchor;
+                  return (
+                    <div
+                      key={idx}
+                      className={cn(
+                        "flex flex-col justify-between rounded-xl border p-4 bg-card transition duration-200",
+                        hasUrl ? "border-border hover:border-primary/50" : "border-border/60 opacity-80"
+                      )}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">
+                            {doc.tag}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground font-medium">
+                            {hasUrl ? "PDF DOCUMENT" : "REQUEST ON DEMAND"}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">{doc.label}</h3>
+                        <p className="text-xs text-muted-foreground leading-normal mb-4">{doc.desc}</p>
+                      </div>
+                      
+                      {doc.url ? (
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
+                        >
+                          Download document <Download className="h-3.5 w-3.5" />
+                        </a>
+                      ) : doc.isAnchor ? (
+                        <button
+                          type="button"
+                          onClick={() => scrollTo(doc.isAnchor as string)}
+                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start cursor-pointer"
+                        >
+                          View guidance below <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const quoteMessage = `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`;
+                            const messageEl = document.querySelector('textarea[placeholder*="Message"]') as HTMLTextAreaElement;
+                            if (messageEl) {
+                              messageEl.value = quoteMessage;
+                              messageEl.dispatchEvent(new Event('input', { bubbles: true }));
+                            }
+                            scrollTo("quote");
+                          }}
+                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start cursor-pointer"
+                        >
+                          Request this document <Mail className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Case Studies */}
             <div id="case-studies">
               <h2 className="font-display text-2xl font-bold uppercase mb-5">
                 Projects Using {product.name}
               </h2>
-              <div className="grid sm:grid-cols-3 gap-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="rounded border border-border bg-card overflow-hidden">
-                    <div className="aspect-[4/3] bg-surface" />
-                    <div className="p-4">
-                      <div className="font-display text-sm font-bold uppercase">Case Study {i}</div>
-                      <div className="text-xs text-muted-foreground mt-1">South Africa</div>
-                      <Link to="/resources" className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary">
-                        View case study <ChevronRight className="h-3 w-3" />
-                      </Link>
+              {caseStudies && caseStudies.length > 0 ? (
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {caseStudies.map((cs: any) => (
+                    <div key={cs.id} className="rounded-xl border border-border bg-card overflow-hidden hover:border-primary transition group flex flex-col justify-between">
+                      <div>
+                        <div className="aspect-[4/3] bg-surface overflow-hidden relative">
+                          {cs.hero_image_url ? (
+                            <img src={cs.hero_image_url} alt={cs.title} className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+                          ) : (
+                            <div className="h-full w-full bg-surface" />
+                          )}
+                          <div className="absolute top-2 left-2 bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                            {cs.country || cs.location || "Reference Site"}
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <div className="font-display text-xs font-bold uppercase tracking-wide leading-snug line-clamp-2 mb-1">{cs.title}</div>
+                          <p className="text-[11px] text-muted-foreground leading-normal line-clamp-2">{cs.summary}</p>
+                        </div>
+                      </div>
+                      <div className="px-4 pb-4">
+                        <Link to="/resources" className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary group-hover:text-primary-hover transition">
+                          View Case Study <ChevronRight className="h-3 w-3" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
+                  Case studies and reference projects for {product.name} will be published shortly. Contact our technical team for reference projects across Africa.
+                </div>
+              )}
             </div>
           </div>
 

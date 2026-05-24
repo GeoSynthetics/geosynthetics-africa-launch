@@ -74,6 +74,7 @@ interface Product {
   meta_title: string | null;
   meta_description: string | null;
   seo_keywords: string | null;
+  family_slug: string | null;
 }
 
 const empty: Partial<Product> = {
@@ -96,6 +97,7 @@ const empty: Partial<Product> = {
   meta_title: "",
   meta_description: "",
   seo_keywords: "",
+  family_slug: null,
 };
 
 function slugify(s: string) {
@@ -119,6 +121,7 @@ function ProductsAdmin() {
   const [sortAsc, setSortAsc] = useState(false);
   const [total, setTotal] = useState(0);
 
+  const [families, setFamilies] = useState<{ slug: string; label: string }[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
@@ -236,7 +239,7 @@ function ProductsAdmin() {
     setLoading(true);
     let query = supabase
       .from("products")
-      .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords", { count: "exact" });
+      .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords, family_slug", { count: "exact" });
 
     if (q.trim()) {
       const qs = q.trim();
@@ -268,6 +271,21 @@ function ProductsAdmin() {
     
     if (mans.length === 0 && manufacturers.data) setMans(manufacturers.data as Manufacturer[]);
     if (cats.length === 0 && categories.data) setCats(categories.data as ProductCategory[]);
+
+    // Fetch product families templates
+    const { data: templateData } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "template_product_categories")
+      .maybeSingle();
+    if (templateData?.value) {
+      const templates = templateData.value as Record<string, any>;
+      const fams = Object.keys(templates).map(slug => ({
+        slug,
+        label: templates[slug].label || slug
+      }));
+      setFamilies(fams);
+    }
     
     setLoading(false);
   };
@@ -344,6 +362,7 @@ function ProductsAdmin() {
       meta_title: editing.meta_title?.trim() || null,
       meta_description: editing.meta_description?.trim() || null,
       seo_keywords: editing.seo_keywords?.trim() || null,
+      family_slug: editing.family_slug || null,
     };
     setSaving(true);
     const res = editing.id
@@ -453,7 +472,7 @@ function ProductsAdmin() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="min-w-0">
                     <Label>Manufacturer</Label>
                     <Select
@@ -491,6 +510,27 @@ function ProductsAdmin() {
                         {cats.map((c) => (
                           <SelectItem key={c.id} value={c.id}>
                             {c.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="min-w-0">
+                    <Label>Product Family</Label>
+                    <Select
+                      value={editing.family_slug ?? "none"}
+                      onValueChange={(v) =>
+                        setEditing((s) => ({ ...s, family_slug: v === "none" ? null : v }))
+                      }
+                    >
+                      <SelectTrigger className="mt-1.5 w-full">
+                        <SelectValue placeholder="Select Family…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">— None —</SelectItem>
+                        {families.map((f) => (
+                          <SelectItem key={f.slug} value={f.slug}>
+                            {f.label}
                           </SelectItem>
                         ))}
                       </SelectContent>

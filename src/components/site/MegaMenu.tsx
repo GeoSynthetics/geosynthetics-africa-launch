@@ -9,6 +9,7 @@ function closeMenus() {
     document.activeElement.blur();
   }
 }
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import {
   ChevronRight, BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
@@ -25,6 +26,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 function MegaPanel({ config }: { config: MegaMenuConfig }) {
+  const { open } = useQuickQuote();
   const { columns } = config;
   const [activeItem, setActiveItem] = useState(columns.primary[0]);
 
@@ -155,6 +157,36 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           <ul className="space-y-2">
             {displayData.quickActions.map((qa) => {
               const Icon = ICONS[qa.icon] ?? BookOpen;
+              const isUploadBOQ = qa.title === "Upload Project BOQ";
+
+              const actionContent = (
+                <>
+                  <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="text-sm font-semibold text-foreground">{qa.title}</div>
+                    <div className="text-xs text-muted-foreground truncate">{qa.description}</div>
+                  </div>
+                </>
+              );
+
+              if (isUploadBOQ) {
+                return (
+                  <li key={qa.title}>
+                    <button
+                      onClick={() => {
+                        closeMenus();
+                        open();
+                      }}
+                      className="w-full flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent bg-transparent transition group cursor-pointer border-0"
+                    >
+                      {actionContent}
+                    </button>
+                  </li>
+                );
+              }
+
               return (
                 <li key={qa.title}>
                   <RLink
@@ -163,13 +195,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     onClick={closeMenus}
                     className="flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent transition group"
                   >
-                    <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-foreground">{qa.title}</div>
-                      <div className="text-xs text-muted-foreground truncate">{qa.description}</div>
-                    </div>
+                    {actionContent}
                   </RLink>
                 </li>
               );

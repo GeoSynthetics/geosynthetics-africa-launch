@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Upload, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export interface BoqBannerData {
   title: string;
@@ -13,11 +14,11 @@ export interface BoqBannerData {
 }
 
 export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
+  const { open } = useQuickQuote();
   const title = data?.title ?? "Submit your BOQ.";
   const subtitle = data?.subtitle ?? "Get a quote – not just a price.";
   const paragraph = data?.paragraph ?? "Upload your BOQ or speak to our technical team for expert recommendations and support.";
   const btn1Text = data?.btn1Text ?? "Upload Project BOQ";
-  const btn1Url = data?.btn1Url ?? "/contacts";
   const btn2Text = data?.btn2Text ?? "Quick Contact";
   const btn2Url = data?.btn2Url ?? "/contacts";
 
@@ -36,11 +37,13 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 lg:justify-end">
-          <Button asChild size="lg" className="bg-background text-foreground hover:bg-surface uppercase font-bold tracking-wide">
-            <Link to={btn1Url as any}>
-              <Upload className="mr-2 h-4 w-4" />
-              {btn1Text}
-            </Link>
+          <Button
+            size="lg"
+            className="bg-background text-foreground hover:bg-surface uppercase font-bold tracking-wide cursor-pointer border-0"
+            onClick={() => open()}
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            {btn1Text}
           </Button>
           <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground hover:text-primary uppercase font-bold tracking-wide">
             <Link to={btn2Url as any}>

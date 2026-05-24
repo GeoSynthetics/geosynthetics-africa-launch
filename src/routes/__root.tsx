@@ -8,6 +8,8 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { TrackingLoader } from "@/components/site/TrackingLoader";
+import { QuickQuoteProvider } from "@/hooks/use-quick-quote";
+import { QuickQuoteModal } from "@/components/site/QuickQuoteModal";
 
 function NotFoundComponent() {
   return (
@@ -77,18 +79,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <AuthProvider>
-      <OrganizationSchema />
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-        <Toaster />
-        <ScrollToTop />
-        <CookieConsent />
-        <TrackingLoader />
-      </div>
+      <QuickQuoteProvider>
+        <OrganizationSchema />
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+          <Toaster />
+          <ScrollToTop />
+          <CookieConsent />
+          <TrackingLoader />
+          <QuickQuoteModal />
+        </div>
+      </QuickQuoteProvider>
     </AuthProvider>
   );
 }

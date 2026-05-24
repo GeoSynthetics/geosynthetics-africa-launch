@@ -43,6 +43,7 @@ interface ProductRow {
   manufacturers: { id: string; name: string } | null;
   alternative_ids?: string[] | null;
   system_component_ids?: string[] | null;
+  family_slug?: string | null;
 }
 
 interface RelatedProduct {
@@ -55,7 +56,7 @@ interface RelatedProduct {
 }
 
 const PRODUCT_SELECT =
-  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)";
+  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, family_slug, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)";
 
 async function loadProduct(slug: string) {
   // Try the rich select first; if columns don't exist yet, fall back to a minimal select.
@@ -116,7 +117,32 @@ async function loadProduct(slug: string) {
     systemComponents = (sysData ?? []) as unknown as RelatedProduct[];
   }
 
-  return { product, alternatives, systemComponents };
+  // 3. Fetch product family template from site_config
+  let familyData = null;
+  if (product.family_slug) {
+    const { data: templateRes } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "template_product_categories")
+      .maybeSingle();
+    const templates = templateRes?.value as Record<string, any> || {};
+    familyData = templates[product.family_slug] || null;
+  }
+
+  // 4. Fetch dynamic Case Studies linked to this product
+  let caseStudies: any[] = [];
+  const { data: casesData } = await supabase
+    .from("case_study_products")
+    .select("case_studies(id, title, slug, summary, location, country, hero_image_url)")
+    .eq("product_id", product.id);
+  
+  if (casesData) {
+    caseStudies = casesData
+      .map((item: any) => item.case_studies)
+      .filter(Boolean);
+  }
+
+  return { product, alternatives, systemComponents, familyData, caseStudies };
 }
 
 function ProductDetailSkeleton() {
@@ -274,6 +300,9 @@ export const Route = createFileRoute("/catalogue/$slug")({
         { name: "twitter:description", content: desc },
         ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
       ],
+      links: p ? [
+        { rel: "canonical", href: `https://geosynthetics.co.za/catalogue/${p.slug}` }
+      ] : [],
     };
   },
   errorComponent: ({ error }) => (

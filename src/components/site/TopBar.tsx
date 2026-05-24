@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Award, ShieldCheck, Globe, Truck, ChevronDown, User as UserIcon, LogOut, Upload } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -100,6 +101,8 @@ function MobilePerksSlider() {
 }
 
 export function TopBar() {
+  const { open } = useQuickQuote();
+
   return (
     <div className="bg-surface-dark text-surface-dark-foreground text-xs">
       <div className="container-page flex items-center justify-between gap-4 py-2">
@@ -115,13 +118,13 @@ export function TopBar() {
         <MobilePerksSlider />
 
         <div className="flex items-center gap-4">
-          <Link
-            to="/contacts"
-            className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium"
+          <button
+            onClick={() => open()}
+            className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium cursor-pointer border-0"
           >
             <Upload className="h-3.5 w-3.5" />
             <span>Upload Project BOQ</span>
-          </Link>
+          </button>
           <PartnerPortalLink />
           <button
             type="button"
