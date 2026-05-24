@@ -14,4 +14,6 @@ export { ProductCategoryPage } from "./ProductCategoryPage";
 export { PageTemplatesAdminPage } from "./PageTemplatesAdminPage";
 export { MediaCenterPage } from "./MediaCenterPage";
 export { TrackingAdminPage } from "./TrackingAdminPage";
+export { ProductDetailPage } from "./ProductDetailPage";
+
 
