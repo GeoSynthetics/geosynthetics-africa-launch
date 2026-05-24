@@ -906,6 +906,7 @@ const MAX_FILES = 8;
 
 function QuoteCard({ productId, productName }: { productId: string; productName: string }) {
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -985,6 +986,7 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
         contact_email: email.trim(),
+        company: company.trim() || null,
         project_description: descriptionWithPaths,
         product_id: productId,
         product_name: productName,
@@ -1017,7 +1019,7 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
       if (lastError) throw new Error(lastError.message);
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
-      setName(""); setEmail(""); setMessage(""); setFiles([]);
+      setName(""); setCompany(""); setEmail(""); setMessage(""); setFiles([]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unable to submit quote request.";
       toast.error(msg);
@@ -1035,6 +1037,7 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
 
       <div className="mt-4 space-y-3">
         <Input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
+        <Input placeholder="Company" value={company} onChange={(e) => setCompany(e.target.value)} />
         <Input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Textarea
           placeholder={`Message (optional) — re: ${productName}`}

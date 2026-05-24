@@ -104,7 +104,7 @@ function QuotesAdmin() {
     setLoading(true);
     // Try the rich select first, fall back to the legacy minimal one
     // when the optional product/attachments columns aren't yet present.
-    const richSelect = "id, created_at, contact_name, contact_email, contact_phone, company, message, project_description, product_name, product_id, boq_file_path, attachment_paths, status";
+    const richSelect = "id, created_at, contact_name, contact_email, contact_phone, company, project_description, product_name, product_id, boq_file_path, attachment_paths, status";
     let q = supabase
       .from("quote_requests")
       .select(richSelect)
