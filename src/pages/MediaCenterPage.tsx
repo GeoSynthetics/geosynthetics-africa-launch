@@ -21,7 +21,9 @@ import {
   Calendar, 
   HardDrive, 
   Image as ImageIcon,
-  AlertTriangle
+  AlertTriangle,
+  FileText,
+  Play
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -74,13 +76,26 @@ export function MediaCenterPage() {
         limit: 1,
       });
 
+      const allowedMimes = [
+        "image/png", 
+        "image/jpeg", 
+        "image/webp", 
+        "image/gif", 
+        "image/svg+xml", 
+        "application/pdf", 
+        "video/mp4", 
+        "video/webm", 
+        "video/ogg", 
+        "video/quicktime"
+      ];
+
       if (error) {
         console.warn("Could not access 'media-center' bucket, attempting creation...", error.message);
         
         // 2. Try to create the bucket programmatically
         const { error: createError } = await supabase.storage.createBucket("media-center", {
           public: true,
-          allowedMimeTypes: ["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"],
+          allowedMimeTypes: allowedMimes,
         });
 
         if (createError) {
@@ -89,6 +104,25 @@ export function MediaCenterPage() {
           setFallbackMode(true);
           await loadFiles(true);
           return;
+        }
+      } else {
+        // The bucket exists, but we want to ensure application/pdf and videos are allowed.
+        // We attempt to update the allowed mime types in case it was restricted to images only.
+        try {
+          await supabase.storage.updateBucket("media-center", {
+            public: true,
+            allowedMimeTypes: allowedMimes,
+          });
+        } catch (updateErr) {
+          console.warn("Could not update bucket permissions (might be lacking admin credentials):", updateErr);
+        }
+        try {
+          await supabase.storage.updateBucket("product-images", {
+            public: true,
+            allowedMimeTypes: allowedMimes,
+          });
+        } catch (updateErr) {
+          console.warn("Could not update product-images bucket permissions:", updateErr);
         }
       }
       
@@ -240,8 +274,12 @@ export function MediaCenterPage() {
       const bucket = fallbackMode ? "product-images" : "media-center";
 
       for (const file of Array.from(files)) {
-        if (!file.type.startsWith("image/")) {
-          toast.error(`${file.name} is not an image file.`);
+        const isImage = file.type.startsWith("image/");
+        const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+        const isVideo = file.type.startsWith("video/") || file.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null;
+
+        if (!isImage && !isPdf && !isVideo) {
+          toast.error(`${file.name} is not a supported file type (Images, PDFs & Videos only).`);
           continue;
         }
         if (file.size > 25 * 1024 * 1024) {
@@ -251,8 +289,17 @@ export function MediaCenterPage() {
 
         const toastId = toast.loading(`Optimizing & uploading ${file.name}...`);
         
-        // 1. Compressing
-        const { blob, ext, contentType } = await compressImage(file);
+        let blob: Blob = file;
+        let ext = file.name.split(".").pop() || (isPdf ? "pdf" : "mp4");
+        let contentType = file.type || (isPdf ? "application/pdf" : "video/mp4");
+
+        // 1. Compressing (images only)
+        if (isImage) {
+          const comp = await compressImage(file);
+          blob = comp.blob;
+          ext = comp.ext;
+          contentType = comp.contentType;
+        }
         
         // 2. Uploading
         const uniqueId = crypto.randomUUID();
@@ -293,27 +340,31 @@ export function MediaCenterPage() {
 
     const targetUrl = urlInput.trim();
     if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
-      toast.error("Please enter a valid HTTP or HTTPS image URL.");
+      toast.error("Please enter a valid HTTP or HTTPS URL.");
       return;
     }
 
     setImportingUrl(true);
-    const toastId = toast.loading("Fetching external image...");
+    const toastId = toast.loading("Fetching external file...");
 
     try {
       // 1. Try to fetch the URL as a blob
       const response = await fetch(targetUrl).catch(() => null);
       if (!response || !response.ok) {
-        throw new Error("Could not fetch the image from the remote URL due to CORS restrictions or network errors.");
+        throw new Error("Could not fetch the file from the remote URL due to CORS restrictions or network errors.");
       }
 
       const blobData = await response.blob();
-      if (!blobData.type.startsWith("image/")) {
-        throw new Error("The specified URL does not point to a valid image file.");
+      const isImg = blobData.type.startsWith("image/");
+      const isPdf = blobData.type === "application/pdf" || targetUrl.toLowerCase().endsWith(".pdf");
+      const isVid = blobData.type.startsWith("video/") || targetUrl.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null;
+
+      if (!isImg && !isPdf && !isVid) {
+        throw new Error("The specified URL does not point to a valid image, PDF or video file.");
       }
 
       // Extract filename from URL or generate one
-      let fileName = "imported_image";
+      let fileName = isImg ? "imported_image" : (isPdf ? "imported_doc.pdf" : "imported_video.mp4");
       try {
         const urlObj = new URL(targetUrl);
         const pathParts = urlObj.pathname.split("/");
@@ -323,12 +374,21 @@ export function MediaCenterPage() {
         }
       } catch {}
 
-      // Convert Blob to a File so we can compress it
+      // Convert Blob to a File
       const file = new File([blobData], fileName, { type: blobData.type });
       
-      // Compress
-      toast.loading("Optimizing image file...", { id: toastId });
-      const { blob, ext, contentType } = await compressImage(file);
+      let blob: Blob = file;
+      let ext = file.name.split(".").pop() || (isPdf ? "pdf" : "mp4");
+      let contentType = file.type || (isPdf ? "application/pdf" : "video/mp4");
+
+      // Compress (images only)
+      if (isImg) {
+        toast.loading("Optimizing image file...", { id: toastId });
+        const comp = await compressImage(file);
+        blob = comp.blob;
+        ext = comp.ext;
+        contentType = comp.contentType;
+      }
 
       // Upload to bucket
       const bucket = fallbackMode ? "product-images" : "media-center";
@@ -345,13 +405,13 @@ export function MediaCenterPage() {
 
       if (error) throw error;
 
-      toast.success("Image successfully imported to Media Vault!", { id: toastId });
+      toast.success("File successfully imported to Media Vault!", { id: toastId });
       setUrlInput("");
       await loadFiles(fallbackMode);
     } catch (err: any) {
       console.error(err);
       toast.error(
-        err.message || "Failed to fetch image. This remote server may restrict direct downloads (CORS). Please download the image and drag-and-drop it instead.",
+        err.message || "Failed to fetch file. This remote server may restrict direct downloads (CORS). Please download it locally and drag-and-drop instead.",
         { id: toastId, duration: 6000 }
       );
     } finally {
@@ -539,7 +599,7 @@ export function MediaCenterPage() {
               <input 
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/*,.pdf,video/*"
                 multiple
                 className="hidden"
                 onChange={(e) => void handleUpload(e.target.files)}
@@ -550,7 +610,7 @@ export function MediaCenterPage() {
                 <div className="flex flex-col items-center gap-3">
                   <Loader2 className="h-10 w-10 text-primary animate-spin" />
                   <p className="font-display font-bold uppercase tracking-wider text-sm text-primary">Optimizing & Uploading...</p>
-                  <p className="text-xs text-muted-foreground">Compressing to WebP and uploading to Supabase</p>
+                  <p className="text-xs text-muted-foreground">Processing and uploading files to Supabase</p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-3">
@@ -559,7 +619,7 @@ export function MediaCenterPage() {
                   </div>
                   <div>
                     <p className="font-display font-bold uppercase text-sm tracking-wide text-foreground">
-                      Drag & Drop your images here
+                      Drag & Drop your files here
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       or click to browse local files
@@ -571,13 +631,15 @@ export function MediaCenterPage() {
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-0.5 rounded">WEBP</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-0.5 rounded">SVG</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-0.5 rounded">GIF</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">PDF</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-indigo-200/50 text-indigo-700 dark:text-indigo-400 px-2 py-0.5 rounded">VIDEO</span>
                   </div>
                 </div>
               )}
             </div>
           </CardContent>
         </Card>
-
+ 
         {/* URL Import card */}
         <Card className="border-border/80 bg-card/60 backdrop-blur-sm shadow-sm transition-all duration-300 hover:border-primary/40 flex flex-col justify-between">
           <CardContent className="p-6 h-full flex flex-col justify-between">
@@ -587,17 +649,17 @@ export function MediaCenterPage() {
                 <h3 className="font-display text-base font-bold uppercase tracking-wide">Import from URL</h3>
               </div>
               <p className="text-xs text-muted-foreground">
-                Paste an image link below. Antigravity will download, compress, and host it strictly inside Supabase Storage.
+                Paste an image, PDF or video link below. Antigravity will download, process, and host it strictly inside Supabase Storage.
               </p>
             </div>
             
             <form onSubmit={handleUrlImport} className="mt-6 space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="url-input" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Image Link</Label>
+                <Label htmlFor="url-input" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">File Link</Label>
                 <Input 
                   id="url-input"
                   type="url"
-                  placeholder="https://example.com/photo.jpg"
+                  placeholder="https://example.com/document.pdf or .mp4"
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
                   disabled={importingUrl || uploading}
@@ -705,12 +767,34 @@ export function MediaCenterPage() {
                       className="group relative aspect-square rounded-lg border border-border bg-muted/10 overflow-hidden shadow-sm transition-all duration-300 hover:border-primary hover:shadow-md hover:scale-[1.01]"
                     >
                       {/* STRICT 1:1 Image Area */}
-                      <img 
-                        src={file.url} 
-                        alt={file.name} 
-                        className="w-full h-full object-cover select-none transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
+                      {file.name.toLowerCase().endsWith(".pdf") ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-muted/20 select-none p-4">
+                          <FileText className="h-16 w-16 text-primary mb-2" />
+                          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider text-center truncate w-full">
+                            {file.name}
+                          </span>
+                        </div>
+                      ) : file.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null ? (
+                        <div className="w-full h-full relative bg-muted/20 flex items-center justify-center overflow-hidden">
+                          <video 
+                            src={file.url} 
+                            className="w-full h-full object-cover" 
+                            preload="metadata"
+                            muted
+                            playsInline
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                            <Play className="h-10 w-10 text-white opacity-85 hover:scale-110 transition duration-300" />
+                          </div>
+                        </div>
+                      ) : (
+                        <img 
+                          src={file.url} 
+                          alt={file.name} 
+                          className="w-full h-full object-cover select-none transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      )}
 
                       {/* Glassmorphic Overlay on Hover */}
                       <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
@@ -808,13 +892,30 @@ export function MediaCenterPage() {
             </DialogHeader>
             
             <div className="space-y-4">
-              {/* Image Preview */}
+              {/* File Preview */}
               <div className="relative aspect-video rounded border border-border bg-muted/20 overflow-hidden flex items-center justify-center p-2">
-                <img 
-                  src={selectedFile.url} 
-                  alt="" 
-                  className="max-h-full max-w-full object-contain rounded"
-                />
+                {selectedFile.name.toLowerCase().endsWith(".pdf") ? (
+                  <div className="flex flex-col items-center justify-center p-4 text-center">
+                    <FileText className="h-16 w-16 text-primary mb-2" />
+                    <Button asChild size="sm" variant="outline" className="mt-2 text-xs font-bold uppercase tracking-wider border-border/80 text-foreground hover:bg-surface">
+                      <a href={selectedFile.url} target="_blank" rel="noopener noreferrer">
+                        Open Document in New Tab
+                      </a>
+                    </Button>
+                  </div>
+                ) : selectedFile.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null ? (
+                  <video 
+                    src={selectedFile.url} 
+                    controls
+                    className="max-h-full max-w-full rounded"
+                  />
+                ) : (
+                  <img 
+                    src={selectedFile.url} 
+                    alt="" 
+                    className="max-h-full max-w-full object-contain rounded"
+                  />
+                )}
               </div>
 
               {/* Technical Specifications */}
@@ -822,7 +923,7 @@ export function MediaCenterPage() {
                 <div className="space-y-1">
                   <span className="text-muted-foreground uppercase tracking-wide font-semibold block text-[10px]">Dimensions</span>
                   <span className="font-bold tabular-nums">
-                    {imageDimensions ? `${imageDimensions.w} × ${imageDimensions.h} px` : "Loading dims..."}
+                    {selectedFile.name.toLowerCase().endsWith(".pdf") ? "N/A — Document" : (selectedFile.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null ? "N/A — Video" : (imageDimensions ? `${imageDimensions.w} × ${imageDimensions.h} px` : "Loading dims..."))}
                   </span>
                 </div>
                 <div className="space-y-1">
