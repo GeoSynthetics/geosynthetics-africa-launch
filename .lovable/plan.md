@@ -2,6 +2,20 @@
 
 Add a fully designed single product page at `/catalogue/$slug` that matches the uploaded Figma reference (everything except header/footer). Wire it to Supabase using the existing `products` schema, plus a small migration to support the richer content the design shows (typical properties table, key features, applications, datasheet link, long description).
 
+## ⚠️ Critical: Supabase Data API Grants (May 30, 2026 Change)
+
+To ensure this project remains compatible with new Supabase environments (e.g., new local development, staging, or production projects) and post-October 2026 updates, **all migration scripts that create new tables or views must include explicit SQL grants**. 
+
+For all new tables in the database:
+1. **Enable Row-Level Security (RLS)** as standard.
+2. **Explicitly Grant Access** to API roles:
+   ```sql
+   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.your_table_name TO anon, authenticated, service_role;
+   ```
+3. **Configure RLS Policies** to control fine-grained row access.
+
+Without these explicit `GRANT` statements, the frontend client will return permission errors when querying new tables.
+
 ## 1. Database additions (migration)
 
 The current `products` table has: name, slug, sku, short_description, price, sale_price, stock_quantity, weight/dim fields, image_url, images, category_id, manufacturer_id, is_active. The Figma needs more. Add nullable columns so existing rows stay valid:
