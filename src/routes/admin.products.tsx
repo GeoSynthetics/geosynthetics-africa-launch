@@ -33,6 +33,7 @@ import {
 import { Plus, Pencil, Trash2, Search, Upload, Copy, X, Star, Loader2, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
+import { ProductSelector } from "@/components/admin/ProductSelector";
 
 export const Route = createFileRoute("/admin/products")({
   head: () => ({
@@ -75,6 +76,7 @@ interface Product {
   meta_description: string | null;
   seo_keywords: string | null;
   family_slug: string | null;
+  alternative_ids: string[] | null;
 }
 
 const empty: Partial<Product> = {
@@ -98,6 +100,7 @@ const empty: Partial<Product> = {
   meta_description: "",
   seo_keywords: "",
   family_slug: null,
+  alternative_ids: [],
 };
 
 function slugify(s: string) {
@@ -126,6 +129,47 @@ function ProductsAdmin() {
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  const [allProductsLookup, setAllProductsLookup] = useState<Record<string, { name: string; image_url?: string | null }>>({});
+
+  useEffect(() => {
+    if (!open) return;
+    async function fetchLookup() {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, image_url");
+      if (data) {
+        const lookup: Record<string, { name: string; image_url?: string | null }> = {};
+        data.forEach(p => {
+          lookup[p.id] = { name: p.name, image_url: p.image_url };
+        });
+        setAllProductsLookup(lookup);
+      }
+    }
+    void fetchLookup();
+  }, [open]);
+
+  const addAlternative = (id: string) => {
+    const current = editing.alternative_ids ?? [];
+    if (current.length >= 5) {
+      toast.error("You can select a maximum of 5 alternative products");
+      return;
+    }
+    if (current.includes(id)) {
+      return;
+    }
+    setEditing(s => ({
+      ...s,
+      alternative_ids: [...current, id]
+    }));
+  };
+
+  const removeAlternative = (id: string) => {
+    setEditing(s => ({
+      ...s,
+      alternative_ids: (s.alternative_ids ?? []).filter(x => x !== id)
+    }));
+  };
 
   const compressImage = async (
     file: File,
@@ -239,7 +283,7 @@ function ProductsAdmin() {
     setLoading(true);
     let query = supabase
       .from("products")
-      .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords, family_slug", { count: "exact" });
+      .select("id, name, slug, sku, short_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords, family_slug, alternative_ids", { count: "exact" });
 
     if (q.trim()) {
       const qs = q.trim();
@@ -363,6 +407,7 @@ function ProductsAdmin() {
       meta_description: editing.meta_description?.trim() || null,
       seo_keywords: editing.seo_keywords?.trim() || null,
       family_slug: editing.family_slug || null,
+      alternative_ids: editing.alternative_ids ?? [],
     };
     setSaving(true);
     const res = editing.id
@@ -427,11 +472,11 @@ function ProductsAdmin() {
                 <Plus className="h-4 w-4" /> New product
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto overflow-x-hidden">
-              <DialogHeader>
+            <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] max-h-[90vh] flex flex-col p-0 overflow-hidden">
+              <DialogHeader className="px-6 py-4 border-b border-border shrink-0">
                 <DialogTitle>{editing.id ? "Edit product" : "New product"}</DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
+              <div className="space-y-4 flex-1 overflow-y-auto px-6 py-4 no-scrollbar">
                 <div>
                   <Label htmlFor="p-name">Name</Label>
                   <Textarea
@@ -647,6 +692,60 @@ function ProductsAdmin() {
                   </div>
                 </div>
 
+                <div className="border-t border-border pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <h4 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">Alternative Products</h4>
+                      <p className="text-xs text-muted-foreground">Link up to 5 alternative products to suggest on the product details page.</p>
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                      {(editing.alternative_ids ?? []).length} / 5
+                    </span>
+                  </div>
+
+                  {/* Selected Alternatives List */}
+                  {(editing.alternative_ids ?? []).length > 0 && (
+                    <div className="space-y-2 mb-3">
+                      {(editing.alternative_ids ?? []).map((id) => {
+                        const item = allProductsLookup[id];
+                        return (
+                          <div key={id} className="flex items-center justify-between p-2 rounded border border-border bg-card hover:bg-muted/30 transition-colors">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {item?.image_url ? (
+                                <img src={item.image_url} alt="" className="h-10 w-10 rounded border border-border object-cover shrink-0" />
+                              ) : (
+                                <div className="h-10 w-10 rounded border border-border bg-muted shrink-0 flex items-center justify-center text-xs text-muted-foreground">No img</div>
+                              )}
+                              <span className="text-sm font-medium truncate">{item?.name ?? "Loading product..."}</span>
+                            </div>
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
+                              onClick={() => removeAlternative(id)}
+                              title="Remove relation"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Product Search & Select */}
+                  {(editing.alternative_ids ?? []).length < 5 ? (
+                    <ProductSelector
+                      onSelect={(prod) => addAlternative(prod.id)}
+                      excludeIds={[editing.id, ...(editing.alternative_ids ?? [])].filter(Boolean) as string[]}
+                    />
+                  ) : (
+                    <div className="text-xs text-center py-2 px-3 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-md font-medium">
+                      Maximum limit of 5 alternative products reached. Remove an alternative product to select a different one.
+                    </div>
+                  )}
+                </div>
 
                 <div className="border-t border-border pt-4">
                   <h4 className="text-sm font-bold uppercase tracking-wide mb-1 text-muted-foreground">SEO</h4>
@@ -726,7 +825,7 @@ function ProductsAdmin() {
                   <Label htmlFor="p-active">Active (visible in catalogue)</Label>
                 </div>
               </div>
-              <DialogFooter>
+              <DialogFooter className="px-6 py-4 border-t border-border shrink-0 bg-muted/20">
                 <Button variant="outline" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>

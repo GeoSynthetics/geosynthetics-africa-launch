@@ -32,9 +32,10 @@ export interface ProductData {
 
 interface ProductSelectorProps {
   onSelect: (product: ProductData) => void
+  excludeIds?: string[]
 }
 
-export function ProductSelector({ onSelect }: ProductSelectorProps) {
+export function ProductSelector({ onSelect, excludeIds }: ProductSelectorProps) {
   const [open, setOpen] = React.useState(false)
   const [products, setProducts] = React.useState<ProductData[]>([])
   const [loading, setLoading] = React.useState(true)
@@ -61,6 +62,11 @@ export function ProductSelector({ onSelect }: ProductSelectorProps) {
     loadProducts()
   }, [])
 
+  const filteredProducts = React.useMemo(() => {
+    if (!excludeIds || excludeIds.length === 0) return products;
+    return products.filter((p) => !excludeIds.includes(p.id));
+  }, [products, excludeIds]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -80,7 +86,7 @@ export function ProductSelector({ onSelect }: ProductSelectorProps) {
           <CommandList>
             <CommandEmpty>No product found.</CommandEmpty>
             <CommandGroup>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <CommandItem
                   key={product.id}
                   value={product.name}

@@ -87,7 +87,7 @@ export function ProductDetailPage() {
   }, []);
 
   const heroImg = product.image_url || product.images?.[0] || null;
-  
+
   const features = useMemo(() => {
     if (product.key_features && product.key_features.length > 0) {
       return product.key_features;
@@ -253,9 +253,9 @@ export function ProductDetailPage() {
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
           ...(product.product_categories?.name
             ? [{
-                name: product.product_categories.name,
-                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
-              }]
+              name: product.product_categories.name,
+              url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+            }]
             : []),
           { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
         ]}
@@ -325,7 +325,7 @@ export function ProductDetailPage() {
                 const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
                 return (
                   <div key={i} className="text-center">
-                     <div className="mx-auto h-12 w-12 rounded-full border border-surface-dark-foreground/20 bg-surface-dark/40 backdrop-blur-sm flex items-center justify-center text-primary">
+                    <div className="mx-auto h-12 w-12 rounded-full border border-surface-dark-foreground/20 bg-surface-dark/40 backdrop-blur-sm flex items-center justify-center text-primary">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="mt-2 text-[11px] uppercase tracking-wide text-surface-dark-foreground/85 leading-tight">
@@ -588,7 +588,7 @@ export function ProductDetailPage() {
                     </li>
                   </ul>
                 </div>
-                
+
                 <div className="rounded-xl border border-border bg-card p-6 space-y-4 flex flex-col justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-primary">
@@ -639,7 +639,7 @@ export function ProductDetailPage() {
                         <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">{doc.label}</h3>
                         <p className="text-xs text-muted-foreground leading-normal mb-4">{doc.desc}</p>
                       </div>
-                      
+
                       {doc.url ? (
                         <a
                           href={doc.url}
@@ -1053,10 +1053,10 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
 
       <div className="mt-4 space-y-3">
         <Input placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
-        <Input placeholder="Company" value={company} onChange={(e) => setCompany(e.target.value)} />
-        <Input placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input placeholder="Company name" value={company} onChange={(e) => setCompany(e.target.value)} />
+        <Input placeholder="Your email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Textarea
-          placeholder={`Message (optional) — re: ${productName}`}
+          placeholder={`Enter your message`}
           rows={3}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -1074,9 +1074,9 @@ function QuoteCard({ productId, productName }: { productId: string; productName:
         >
           <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
           <div className="mt-2 text-xs">
-            <span className="font-medium text-foreground">Drag & drop files here</span>
+            <span className="font-medium text-foreground">Drag & drop your files here</span>
             <span className="text-muted-foreground"> or </span>
-            <span className="text-primary font-medium underline">click to browse</span>
+            <span className="text-primary font-medium underline">click to upload</span>
           </div>
           <div className="text-[10px] text-muted-foreground mt-1 leading-normal">
             PDF, DWG, DOC, XLS, images (Max 20MB each, up to {MAX_FILES} files)
