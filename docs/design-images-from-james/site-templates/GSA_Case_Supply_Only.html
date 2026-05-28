@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kolwezi Stage 1 — 85,000 m² HDPE Liner Supply | DRC | Geosynthetics Africa</title>
+<meta name="description" content="Case study: 85,000 m² HDPE liner supply for a copper TSF in Lualaba, DRC. Full Pan-African logistics — Africa to site, customs cleared, on-spec, on-time, with mill certificates and Certificate of Origin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #DC2626; --red-dark: #B91C1C;
+    --black: #111111; --ink: #1A1A1A;
+    --gray-900: #1F2937; --gray-800: #1E293B;
+    --gray-700: #374151; --gray-600: #4B5563; --gray-500: #6B7280;
+    --gray-400: #9CA3AF; --gray-300: #D1D5DB; --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6; --gray-50: #F9FAFB;
+    --green: #047857; --amber: #D97706; --blue: #1E40AF;
+    --white: #FFFFFF;
+    --radius: 6px; --radius-sm: 4px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; color: var(--ink); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Archivo', sans-serif; font-weight: 800; letter-spacing: -0.005em; color: var(--ink); line-height: 1.1; }
+
+  .anno { position: relative; }
+  .anno-tag { position: absolute; top: 6px; right: 6px; z-index: 50; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 8px; border-radius: var(--radius-sm); pointer-events: none; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .anno-tag.global { background: #374151; color: white; }
+  .anno-tag.template { background: #1E40AF; color: white; }
+  .anno-tag.sku { background: #6D28D9; color: white; }
+  .anno-tag.convert { background: var(--red); color: white; }
+  body.anno-off .anno-tag { display: none; }
+  .anno-banner { background: var(--ink); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 9999; }
+  .anno-banner .legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 10px; }
+  .anno-banner .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .anno-banner .legend span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
+  .anno-banner .legend .global::before { background: #374151; }
+  .anno-banner .legend .template::before { background: #1E40AF; }
+  .anno-banner .legend .sku::before { background: #6D28D9; }
+  .anno-banner .legend .convert::before { background: var(--red); }
+  .anno-banner button { background: var(--red); color: white; border: none; padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* CHROME */
+  .util-bar { background: var(--ink); color: var(--gray-300); padding: 9px 28px; font-size: 11px; border-bottom: 1px solid #2a2a2a; }
+  .util-inner { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .util-creds { display: flex; gap: 24px; flex-wrap: wrap; }
+  .util-creds span { display: flex; align-items: center; gap: 7px; }
+  .util-creds span::before { content: ''; width: 6px; height: 6px; background: var(--red); border-radius: 50%; }
+  .util-actions { display: flex; gap: 16px; align-items: center; }
+  .util-actions a { color: var(--gray-300); text-decoration: none; }
+  .util-actions .portal { color: var(--red); font-weight: 600; }
+  .util-actions .lang { padding: 2px 8px; border: 1px solid #2a2a2a; border-radius: var(--radius-sm); }
+  header.main-header { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 16px 28px; position: sticky; top: 38px; z-index: 100; }
+  .header-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 40px; }
+  .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .africa-icon { width: 32px; height: 36px; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1; }
+  .brand-text .name { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; color: var(--ink); }
+  .brand-text .sub { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; color: var(--red); letter-spacing: 0.18em; margin-top: 3px; }
+  nav.primary { margin-left: auto; display: flex; gap: 28px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
+  nav.primary a { color: var(--ink); text-decoration: none; padding: 6px 0; }
+  nav.primary a:hover, nav.primary a.active { color: var(--red); }
+
+  /* HERO — different colour/feel for Supply Only — emphasises geography/journey rather than installation */
+  .case-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1c1917 0%, #422006 60%, #292524 100%);
+    color: white;
+    padding: 0;
+    min-height: 620px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .case-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.9) 100%);
+  }
+  /* Outline of African continent */
+  .case-hero::after {
+    content: '';
+    position: absolute;
+    right: -100px; top: 30px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle at 50% 50%, rgba(220,38,38,0.12) 0%, transparent 60%);
+    pointer-events: none;
+    filter: blur(40px);
+  }
+  .africa-silhouette {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    height: 460px;
+    z-index: 1;
+    opacity: 0.18;
+  }
+  .case-hero-inner { max-width: 1440px; margin: 0 auto; padding: 48px 28px 56px; position: relative; z-index: 2; width: 100%; }
+  .case-hero .breadcrumb { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 30px; display: flex; gap: 10px; align-items: center; }
+  .case-hero .breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+  .case-hero .breadcrumb .sep { color: rgba(255,255,255,0.35); }
+  .case-hero .breadcrumb .current { color: white; }
+  .case-badges { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .case-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.9); }
+  .case-badge.primary { background: var(--ink); border-color: var(--red); color: var(--red); }
+  .case-hero h1 {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    font-size: clamp(38px, 5.2vw, 68px);
+    line-height: 0.98; text-transform: uppercase;
+    color: white; margin-bottom: 20px;
+    letter-spacing: -0.015em; max-width: 1100px;
+  }
+  .case-hero h1 .accent { color: var(--red); }
+  .case-sub { font-size: 18px; color: rgba(255,255,255,0.85); max-width: 800px; margin-bottom: 36px; line-height: 1.55; }
+  .case-facts {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 20px 0;
+  }
+  .case-fact { padding-right: 24px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .case-fact:last-child { border-right: none; }
+  .case-fact .l { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+  .case-fact .v { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 22px; color: white; line-height: 1.1; }
+  .case-fact .v .accent { color: var(--red); }
+
+  /* SUBNAV */
+  .case-subnav { background: white; border-bottom: 1px solid var(--gray-200); padding: 0 28px; position: sticky; top: 110px; z-index: 80; }
+  .case-subnav-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; overflow-x: auto; }
+  .case-subnav-label { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); padding: 18px 24px 18px 0; border-right: 1px solid var(--gray-200); margin-right: 4px; white-space: nowrap; }
+  .case-subnav a { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 20px 18px; color: var(--ink); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+  .case-subnav a:hover { color: var(--red); }
+  .case-subnav a.active { color: var(--red); border-bottom-color: var(--red); }
+  .case-subnav .download-cta { margin-left: auto; padding: 10px 18px; background: var(--red); color: white; border-bottom: none; }
+  .case-subnav .download-cta:hover { background: var(--red-dark); color: white; }
+
+  /* MAIN LAYOUT */
+  main.case-study { max-width: 1440px; margin: 0 auto; padding: 0 28px; display: grid; grid-template-columns: 1fr 360px; gap: 56px; }
+  .case-content { padding: 56px 0 80px; min-width: 0; }
+  .case-sidebar { padding: 56px 0 80px; position: sticky; top: 175px; height: fit-content; align-self: start; }
+  .case-section { margin-bottom: 56px; }
+  .case-section .eyebrow { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .case-section .eyebrow .n { background: var(--ink); color: white; padding: 3px 8px; font-size: 10px; }
+  .case-section h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(28px, 3vw, 40px); text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 24px; }
+  .case-section h2 .red { color: var(--red); }
+  .case-section h3 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.02em; margin: 28px 0 14px; }
+  .case-section p { font-size: 16px; line-height: 1.7; color: var(--gray-700); margin-bottom: 14px; }
+  .case-section p .h { background: linear-gradient(transparent 60%, rgba(220,38,38,0.18) 60%); }
+  .case-section ul { margin: 16px 0; padding-left: 0; list-style: none; }
+  .case-section ul li { padding: 8px 0 8px 24px; font-size: 15px; color: var(--gray-700); line-height: 1.55; position: relative; }
+  .case-section ul li::before { content: '▸'; color: var(--red); font-weight: 700; position: absolute; left: 0; }
+  .lede { font-size: 19px; line-height: 1.65; color: var(--ink); font-weight: 500; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-200); }
+
+  /* ============ LOGISTICS ROUTE MAP (the distinctive component) ============ */
+  .route-map {
+    background: var(--ink);
+    color: white;
+    padding: 40px 36px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .route-map::before {
+    content: 'LOGISTICS ROUTE';
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--red);
+  }
+  .route-map h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    max-width: 480px;
+  }
+  .route-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+    margin: 28px 0;
+  }
+  .route-step {
+    position: relative;
+    padding: 20px 12px 20px 0;
+    text-align: left;
+  }
+  .route-step .dot {
+    width: 14px;
+    height: 14px;
+    background: var(--red);
+    border-radius: 50%;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 2;
+  }
+  /* connecting line */
+  .route-step::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 27px;
+    right: 0;
+    height: 2px;
+    background: rgba(220,38,38,0.4);
+    z-index: 1;
+  }
+  .route-step:last-child::after { display: none; }
+  .route-step .stage {
+    font-family: 'Archivo', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+  .route-step .where {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+  .route-step .meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.45;
+  }
+  .route-step .duration {
+    margin-top: 6px;
+    display: inline-block;
+    padding: 2px 7px;
+    background: rgba(255,255,255,0.08);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .route-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 24px;
+  }
+  .route-total {
+    background: var(--ink);
+    padding: 16px 18px;
+  }
+  .route-total .v { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px; color: white; line-height: 1; margin-bottom: 4px; }
+  .route-total .v .accent { color: var(--red); }
+  .route-total .l { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+  /* DOCUMENT CHAIN (chain of custody documents) */
+  .doc-chain {
+    margin: 32px 0;
+  }
+  .doc-chain-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--red);
+    margin-bottom: 8px;
+  }
+  .doc-chain-row .stage-n {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--red);
+    line-height: 1;
+    width: 36px;
+    flex-shrink: 0;
+  }
+  .doc-chain-row .doc-info { flex: 1; }
+  .doc-chain-row .doc-info strong {
+    display: block;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  .doc-chain-row .doc-info p {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .doc-chain-row .status {
+    background: var(--green);
+    color: white;
+    padding: 5px 11px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* KPI badges (delivery performance) */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    padding: 24px 22px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--red);
+  }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card .v {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 34px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-card .v .accent { color: var(--red); }
+  .kpi-card .v.g { color: var(--green); }
+  .kpi-card .l { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-600); line-height: 1.3; }
+  .kpi-card .sub { font-size: 11px; color: var(--gray-500); margin-top: 6px; }
+
+  /* Spec compliance table */
+  .test-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  .test-table th { background: var(--ink); color: white; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 14px; text-align: left; }
+  .test-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); font-size: 13px; color: var(--gray-700); }
+  .test-table td:first-child { font-weight: 600; color: var(--ink); }
+  .test-table tr:nth-child(even) td { background: var(--gray-50); }
+  .test-table .pass { color: var(--green); font-weight: 700; }
+  .test-table .exceed { color: var(--red); font-weight: 700; }
+
+  /* Hero photo */
+  .hero-photo { aspect-ratio: 16/8; background: linear-gradient(135deg, #422006 0%, #1c1917 100%); position: relative; overflow: hidden; margin: 24px 0 32px; }
+  .hero-photo::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.7) 100%), repeating-conic-gradient(from 30deg at 50% 50%, rgba(255,255,255,0.04) 0deg 60deg, rgba(0,0,0,0.12) 60deg 120deg); background-size: auto, 60px 70px; }
+  .hero-photo .caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 28px; color: white; font-size: 13px; z-index: 2; }
+  .hero-photo .caption strong { display: block; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 4px; }
+
+  /* Products supplied */
+  .products-used { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 24px 0; }
+  .product-link { background: white; border: 1px solid var(--gray-200); padding: 22px; text-decoration: none; color: inherit; transition: all .15s; display: flex; gap: 16px; align-items: flex-start; }
+  .product-link:hover { border-color: var(--red); transform: translateY(-2px); }
+  .product-link .swatch { width: 64px; height: 64px; background: linear-gradient(135deg, #1F2937 0%, #0F172A 100%); flex-shrink: 0; }
+  .product-link .info { flex: 1; min-width: 0; }
+  .product-link .cat { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+  .product-link h4 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 15px; line-height: 1.25; margin-bottom: 8px; }
+  .product-link .qty { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; font-family: 'Inter', monospace; }
+  .product-link .origin { font-size: 11px; color: var(--gray-500); }
+  .product-link .origin strong { color: var(--ink); font-weight: 600; }
+
+  /* Testimonial */
+  .testimonial { background: var(--gray-50); border-left: 4px solid var(--red); padding: 36px 40px; margin: 36px 0; }
+  .testimonial blockquote { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; line-height: 1.4; color: var(--ink); margin-bottom: 20px; quotes: '"' '"'; }
+  .testimonial blockquote::before { content: open-quote; color: var(--red); }
+  .testimonial blockquote::after { content: close-quote; color: var(--red); }
+  .testimonial .author { display: flex; align-items: center; gap: 14px; }
+  .testimonial .author .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; }
+  .testimonial .author .name { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 2px; }
+  .testimonial .author .role { font-size: 12px; color: var(--gray-600); }
+
+  /* SIDEBAR */
+  .sidebar-card { background: white; border: 1px solid var(--gray-200); padding: 24px; margin-bottom: 20px; }
+  .sidebar-card h3 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
+  .sidebar-facts dt { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-top: 14px; }
+  .sidebar-facts dt:first-child { margin-top: 0; }
+  .sidebar-facts dd { font-size: 14px; color: var(--ink); font-weight: 600; margin-top: 4px; }
+  .sidebar-facts dd a { color: var(--red); text-decoration: none; }
+  .sidebar-cta { background: var(--red); color: white; padding: 28px; margin-bottom: 20px; }
+  .sidebar-cta h3 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; text-transform: uppercase; margin-bottom: 8px; line-height: 1.1; border: none; padding: 0; color: white; }
+  .sidebar-cta p { font-size: 13px; margin-bottom: 16px; color: rgba(255,255,255,0.95); }
+  .sidebar-cta a.btn { display: block; background: white; color: var(--ink); text-align: center; padding: 12px; text-decoration: none; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; border-radius: var(--radius-sm); }
+  .sidebar-cta a.btn.outline { background: transparent; color: white; border: 1.5px solid white; }
+  .sidebar-contact .row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); padding: 6px 0; }
+  .sidebar-contact svg { width: 16px; height: 16px; color: var(--red); }
+  .sidebar-downloads .dl-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--gray-100); text-decoration: none; color: inherit; align-items: center; }
+  .sidebar-downloads .dl-row:last-child { border-bottom: none; }
+  .sidebar-downloads .dl-row:hover .dl-title { color: var(--red); }
+  .sidebar-downloads .dl-icon { width: 28px; height: 34px; background: var(--red); color: white; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+  .sidebar-downloads .dl-title { font-size: 12px; font-weight: 600; line-height: 1.3; transition: color .15s; }
+  .sidebar-downloads .dl-size { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+  .sidebar-downloads .dl-arrow { margin-left: auto; color: var(--red); font-weight: 700; }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sidebar-tags a { font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px; }
+  .sidebar-tags a:hover { background: var(--ink); color: white; }
+  .sidebar-tags a.prod { background: var(--ink); color: white; }
+
+  /* RELATED */
+  .related-section { background: var(--gray-50); padding: 64px 28px; }
+  .related-inner { max-width: 1440px; margin: 0 auto; }
+  .related-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 32px; }
+  .related-head h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 32px; text-transform: uppercase; letter-spacing: -0.01em; }
+  .related-head h2 .red { color: var(--red); }
+  .related-head a { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); text-decoration: none; }
+  .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .related-tile { background: white; border: 1px solid var(--gray-200); text-decoration: none; color: inherit; transition: all .15s; overflow: hidden; }
+  .related-tile:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .related-tile .img { aspect-ratio: 16/10; background: linear-gradient(135deg, #422006 0%, #1c1917 100%); position: relative; }
+  .related-tile .img::after { content: ''; position: absolute; inset: 0; background-image: repeating-conic-gradient(from 30deg at 50% 50%, rgba(255,255,255,0.04) 0deg 60deg, rgba(0,0,0,0.12) 60deg 120deg); background-size: 36px 41px; }
+  .related-tile.alt .img { background: linear-gradient(135deg, #1F2937 0%, #0F172A 100%); }
+  .related-tile.alt2 .img { background: linear-gradient(135deg, #14532D 0%, #052E16 100%); }
+  .related-tile .b { padding: 18px; }
+  .related-tile .m { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+  .related-tile h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 16px; text-transform: uppercase; line-height: 1.2; margin-bottom: 6px; }
+  .related-tile .l { font-size: 12px; color: var(--gray-600); }
+
+  /* BOQ CTA */
+  .boq-cta { background: var(--red); color: white; padding: 72px 28px; }
+  .boq-cta-inner { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .boq-cta h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(36px, 4vw, 52px); text-transform: uppercase; color: white; margin-bottom: 14px; }
+  .boq-cta p { font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.95); }
+  .boq-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+  .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 26px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+  .boq-cta .btn { background: white; color: var(--ink); padding: 16px 28px; }
+  .boq-cta .btn:hover { background: var(--ink); color: white; }
+
+  /* FOOTER */
+  footer.site-footer { background: var(--black); color: white; padding: 48px 28px 24px; }
+  .footer-inner { max-width: 1440px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr repeat(5, 1fr); gap: 32px; padding-bottom: 32px; }
+  .footer-brand p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 16px; max-width: 280px; }
+  .footer-col h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: white; margin-bottom: 14px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .footer-col a { font-size: 12px; color: rgba(255,255,255,0.7); text-decoration: none; }
+  .footer-col a:hover { color: var(--red); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  @media (max-width: 1100px) {
+    main.case-study { grid-template-columns: 1fr; }
+    .case-sidebar { position: static; }
+    .case-facts { grid-template-columns: 1fr 1fr; }
+    .route-flow { grid-template-columns: 1fr 1fr; }
+    .route-totals, .kpi-grid, .products-used, .related-grid { grid-template-columns: 1fr 1fr; }
+    .boq-cta-inner { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+    nav.primary { display: none; }
+    .africa-silhouette { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="anno-banner">
+  <span><strong>MOCKUP</strong> — Case Study · Supply Only · Heavy on Pan-African logistics, COO, mill certs, spec compliance</span>
+  <div class="legend">
+    <span class="global">Global</span>
+    <span class="template">Template</span>
+    <span class="sku">Project-specific</span>
+    <span class="convert">Convert</span>
+  </div>
+  <button onclick="document.body.classList.toggle('anno-off')">Toggle</button>
+</div>
+
+<!-- CHROME -->
+<div class="util-bar anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="util-inner">
+    <div class="util-creds">
+      <span>IAGI Member — One of only 5 in Africa</span>
+      <span>B-BBEE Level 2</span>
+      <span>QA/QC Certified</span>
+      <span>Pan-African Logistics</span>
+    </div>
+    <div class="util-actions">
+      <a href="#" class="portal">Partner Portal</a>
+      <a href="#" class="lang">EN ▾</a>
+    </div>
+  </div>
+</div>
+
+<header class="main-header anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="header-inner">
+    <a href="#" class="brand-logo">
+      <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
+      <div class="brand-text"><span class="name">GEOSYNTHETICS</span><span class="sub">AFRICA</span></div>
+    </a>
+    <nav class="primary">
+      <a href="#">Products ▾</a>
+      <a href="#">Solutions ▾</a>
+      <a href="#">Services ▾</a>
+      <a href="#" class="active">Projects</a>
+      <a href="#">Resources</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="case-hero anno">
+  <span class="anno-tag sku">PROJECT-SPECIFIC · supply-focused hero</span>
+
+  <!-- Stylised Africa silhouette -->
+  <svg class="africa-silhouette" viewBox="0 0 320 380" fill="#DC2626">
+    <path d="M145 15c-25 5-50 20-65 40-20 25-30 55-25 85 5 20 20 40 35 50 10 10 15 20 10 35-5 15-10 35 0 50 10 15 30 20 50 25 15 5 25 10 30 25 5 15 15 20 30 20 15 0 25-10 30-25 5-25 0-50-10-70-10-25-20-50-15-75 5-25 20-45 15-75-5-30-30-55-60-65-15-5-30-5-25-20z"/>
+  </svg>
+
+  <div class="case-hero-inner">
+    <nav class="breadcrumb">
+      <a href="#">Home</a><span class="sep">›</span>
+      <a href="#">Projects</a><span class="sep">›</span>
+      <a href="#">Mining</a><span class="sep">›</span>
+      <a href="#">TSF</a><span class="sep">›</span>
+      <span class="current">Kolwezi Stage 1 — Liner Supply</span>
+    </nav>
+    <div class="case-badges">
+      <span class="case-badge primary">Supply Only</span>
+      <span class="case-badge">Mining</span>
+      <span class="case-badge">Copper TSF</span>
+      <span class="case-badge">DRC</span>
+      <span class="case-badge">Cross-border</span>
+    </div>
+    <h1>85,000 m² liner, <span class="accent">3,420 km, 4 borders</span> — delivered on time, on spec.</h1>
+    <p class="case-sub">A supply-only commission for a major copper producer in the DRC's Lualaba copper belt — 85,000 m² of GSE HDPE primary liner, manufactured in our European mill, shipped through Durban, road-freighted across four southern African borders to a remote site east of Kolwezi.</p>
+    <div class="case-facts">
+      <div class="case-fact"><div class="l">Scope</div><div class="v">Supply Only</div></div>
+      <div class="case-fact"><div class="l">Tonnage</div><div class="v">340 <span class="accent">t</span></div></div>
+      <div class="case-fact"><div class="l">Route</div><div class="v">3,420 km</div></div>
+      <div class="case-fact"><div class="l">Borders</div><div class="v">4</div></div>
+      <div class="case-fact"><div class="l">On-time</div><div class="v">100<span class="accent">%</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="case-subnav anno">
+  <span class="anno-tag template">TEMPLATE · subnav</span>
+  <div class="case-subnav-inner">
+    <div class="case-subnav-label">In this case study</div>
+    <a href="#brief" class="active">Brief</a>
+    <a href="#challenge">Logistics challenge</a>
+    <a href="#route">Route &amp; journey</a>
+    <a href="#products">Products supplied</a>
+    <a href="#documents">Document chain</a>
+    <a href="#compliance">Spec compliance</a>
+    <a href="#kpis">Delivery KPIs</a>
+    <a href="#testimonial">Client</a>
+    <a href="#" class="download-cta">↓ Download delivery pack</a>
+  </div>
+</nav>
+
+<main class="case-study">
+
+  <article class="case-content">
+
+    <!-- BRIEF -->
+    <section class="case-section anno" id="brief">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · lede</span>
+      <p class="lede">
+        In Q1 2023, a major international copper producer commissioned Geosynthetics Africa for the supply portion of their Stage 1 TSF lining works at a remote operation in the DRC's Lualaba copper belt. Installation was already contracted to a specialist installer pre-positioned on site. What the client needed — and what international suppliers had repeatedly failed to deliver — was <span class="h">340 tonnes of certified HDPE liner, delivered to a remote inland site, on programme, with full chain-of-custody documentation regulators would accept.</span>
+      </p>
+
+      <div class="hero-photo">
+        <div class="caption">
+          <strong>340 t HDPE loaded for road freight · Durban → Kolwezi · 14 days transit</strong>
+          Container packing under GSA supervision, with batch numbers cross-referenced to mill certificates before loading.
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGISTICS CHALLENGE -->
+    <section class="case-section anno" id="challenge">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · the framing — why this is hard</span>
+      <div class="eyebrow"><span class="n">01</span>The Logistics Challenge</div>
+      <h2>Mill to site — <span class="red">4 borders, 14 days,</span> zero tolerance for paperwork errors.</h2>
+      <p>Kolwezi is approximately 3,420 km by road from the port of Durban. Material crosses four borders — South Africa, Botswana, Zambia and into the DRC — through four customs regimes, four sets of documentation requirements, and four windows where a mismatched serial number or missing form can hold a 28-tonne truck for a week.</p>
+      <p>The client's previous supplier had two consignments held at the Kasumbalesa border for 19 days combined. Programme slippage on their Stage 1 lining works had run to 11 weeks, and the operation's CFO was directly involved in the supplier change.</p>
+      <p>The brief was specific:</p>
+      <ul>
+        <li>340 tonnes of GSE HDPE 1.5 mm liner, mill-certified to the client's specification clause-by-clause</li>
+        <li>Full SADC and COMESA documentation pack, prepared correctly first time</li>
+        <li>Just-in-time delivery to the welder's programme — no stockpiling on site, no early arrivals that incur demurrage</li>
+        <li>Daily transparency on consignment location, customs status, and projected delivery windows</li>
+      </ul>
+    </section>
+
+    <!-- ROUTE & JOURNEY -->
+    <section class="case-section anno" id="route">
+      <span class="anno-tag convert">CONVERT · the distinctive logistics map · authority signal for cross-border work</span>
+      <div class="eyebrow"><span class="n">02</span>Route &amp; Journey</div>
+      <h2>Mill in Holland.<br>Container in Durban. <span class="red">Liner in Kolwezi.</span></h2>
+
+      <div class="route-map">
+        <h3>The 14-day pan-African delivery route</h3>
+        <div class="route-flow">
+          <div class="route-step">
+            <div class="dot"></div>
+            <div class="stage">Stage 01 · Origin</div>
+            <div class="where">Heerenveen Mill</div>
+            <div class="meta">Manufacturer extrusion run, mill-certificated, batch-numbered &amp; sealed.</div>
+            <div class="duration">D0 — D+3</div>
+          </div>
+          <div class="route-step">
+            <div class="dot"></div>
+            <div class="stage">Stage 02 · Sea</div>
+            <div class="where">Rotterdam → Durban</div>
+            <div class="meta">Sea freight, refrigerated containers (HDPE storage temp), full track &amp; trace.</div>
+            <div class="duration">D+3 — D+24</div>
+          </div>
+          <div class="route-step">
+            <div class="dot"></div>
+            <div class="stage">Stage 03 · Port clearance</div>
+            <div class="where">Durban</div>
+            <div class="meta">SARS clearance, pre-shipment inspection, SADC Certificate of Origin issued.</div>
+            <div class="duration">D+24 — D+27</div>
+          </div>
+          <div class="route-step">
+            <div class="dot"></div>
+            <div class="stage">Stage 04 · Road transit</div>
+            <div class="where">RSA → Botswana → Zambia → DRC</div>
+            <div class="meta">12 articulated trucks, sealed at port, four border crossings pre-cleared.</div>
+            <div class="duration">D+27 — D+38</div>
+          </div>
+          <div class="route-step">
+            <div class="dot"></div>
+            <div class="stage">Stage 05 · Site</div>
+            <div class="where">Kolwezi laydown</div>
+            <div class="meta">Off-loaded against welder's programme, sealed-bond inspection, batch verification.</div>
+            <div class="duration">D+38 — D+41</div>
+          </div>
+        </div>
+
+        <div class="route-totals">
+          <div class="route-total"><div class="v">3,420 <span class="accent">km</span></div><div class="l">Total distance</div></div>
+          <div class="route-total"><div class="v">41 <span class="accent">days</span></div><div class="l">Mill to site</div></div>
+          <div class="route-total"><div class="v">12 <span class="accent">trucks</span></div><div class="l">Road consignments</div></div>
+          <div class="route-total"><div class="v">100<span class="accent">%</span></div><div class="l">Delivery in full</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS SUPPLIED -->
+    <section class="case-section anno" id="products">
+      <span class="anno-tag convert">CONVERT · products · cross-link to PDPs</span>
+      <div class="eyebrow"><span class="n">03</span>Products supplied</div>
+      <h2>Two SKUs. <span class="red">340 tonnes. Mill-certified.</span></h2>
+      <p>The full scope was satisfied with two stocked SKUs from manufacturer Heerenveen mill. Every roll is traceable to its extrusion batch via the mill certificate; every batch was independently verified at our Johannesburg quality laboratory before container packing.</p>
+      <div class="products-used">
+        <a class="product-link" href="#">
+          <div class="swatch"></div>
+          <div class="info">
+            <div class="cat">Geomembrane · Primary liner</div>
+            <h4>GSE HDPE Smooth 1.5 mm</h4>
+            <div class="qty">68,000 m² · 272 tonnes · 56 rolls</div>
+            <div class="origin">Origin: <strong>EU (Netherlands)</strong> · COO issued at Durban</div>
+          </div>
+        </a>
+        <a class="product-link" href="#">
+          <div class="swatch" style="background: linear-gradient(135deg, #1F2937 0%, #0F172A 100%);"></div>
+          <div class="info">
+            <div class="cat">Geomembrane · Slope sections</div>
+            <h4>GSE HDPE Textured 1.5 mm</h4>
+            <div class="qty">17,000 m² · 68 tonnes · 14 rolls</div>
+            <div class="origin">Origin: <strong>EU (Netherlands)</strong> · COO issued at Durban</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- DOCUMENT CHAIN -->
+    <section class="case-section anno" id="documents">
+      <span class="anno-tag convert">CONVERT · the documentation depth = supply-only differentiator</span>
+      <div class="eyebrow"><span class="n">04</span>Document Chain</div>
+      <h2>Every roll, traceable. <span class="red">Every document, audit-ready.</span></h2>
+      <p>The full chain-of-custody documentation pack accompanies the consignment from mill to site and is delivered in three forms: hard-copy folder with shipment, digital pack uploaded to the client's project portal, and master copy retained in our archive for the operating life of the facility.</p>
+
+      <div class="doc-chain">
+        <div class="doc-chain-row">
+          <div class="stage-n">01</div>
+          <div class="doc-info">
+            <strong>Mill Test Certificates (per roll)</strong>
+            <p>Manufacturer's mill certs issued per extrusion batch — 70 unique certs covering 70 rolls, with batch numbers stencilled on roll cores.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">02</div>
+          <div class="doc-info">
+            <strong>SADC Certificate of Origin (Form CO)</strong>
+            <p>Confirms preferential origin under SADC trade protocol — required for customs clearance into the DRC at preferential duty rate.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">03</div>
+          <div class="doc-info">
+            <strong>Bill of Lading (Maersk · sealed containers)</strong>
+            <p>Six 40' containers, sealed at Rotterdam, container numbers and seal numbers logged. No seal breakage permitted en route.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">04</div>
+          <div class="doc-info">
+            <strong>Pre-shipment Inspection Report (PSI)</strong>
+            <p>Independent third-party (SGS) inspection at Durban — visual condition, batch verification, packing list cross-check.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">05</div>
+          <div class="doc-info">
+            <strong>Independent test certificates (GSA Johannesburg lab)</strong>
+            <p>Batch sampling of mill rolls, tested for thickness, tensile, OIT and density against client specification. Results filed by batch.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">06</div>
+          <div class="doc-info">
+            <strong>Cross-border customs documents (× 4)</strong>
+            <p>RSA → Botswana → Zambia → DRC. SAD500, T1, COMESA Certificate. Cleared in advance, scanned to digital pack.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+        <div class="doc-chain-row">
+          <div class="stage-n">07</div>
+          <div class="doc-info">
+            <strong>Delivery Receipt &amp; Site Inspection</strong>
+            <p>Signed delivery receipts per truck, seal-break inspection on arrival, batch cross-reference signed by welder-of-record.</p>
+          </div>
+          <span class="status">Issued</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPEC COMPLIANCE -->
+    <section class="case-section anno" id="compliance">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · spec results — independently verified</span>
+      <div class="eyebrow"><span class="n">05</span>Specification Compliance</div>
+      <h2>Met or <span class="red">exceeded</span> on every property.</h2>
+      <p>Every batch of material delivered was independently tested at our Johannesburg laboratory against the client's project specification. The summary below shows specification minimum, certified delivered value, and the percentage margin above spec.</p>
+      <table class="test-table">
+        <thead>
+          <tr><th>Property</th><th>Test method</th><th>Client spec (min)</th><th>Delivered (avg)</th><th>Margin</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Thickness</td><td>ASTM D5199</td><td>1.50 mm</td><td>1.54 mm</td><td class="exceed">+2.7%</td></tr>
+          <tr><td>Density</td><td>ASTM D1505</td><td>0.940 g/cm³</td><td>0.946 g/cm³</td><td class="pass">PASS</td></tr>
+          <tr><td>Tensile yield strength</td><td>ASTM D6693</td><td>22 kN/m</td><td>24.8 kN/m</td><td class="exceed">+12.7%</td></tr>
+          <tr><td>Tensile break strength</td><td>ASTM D6693</td><td>40 kN/m</td><td>46.2 kN/m</td><td class="exceed">+15.5%</td></tr>
+          <tr><td>Elongation at yield</td><td>ASTM D6693</td><td>12%</td><td>14%</td><td class="pass">PASS</td></tr>
+          <tr><td>OIT (oven)</td><td>ASTM D3895</td><td>100 min</td><td>148 min</td><td class="exceed">+48%</td></tr>
+          <tr><td>Carbon black content</td><td>ASTM D4218</td><td>2.0%</td><td>2.4%</td><td class="pass">PASS</td></tr>
+          <tr><td>Stress crack resistance (SP-NCTL)</td><td>ASTM D5397</td><td>500 hours</td><td>720 hours</td><td class="exceed">+44%</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DELIVERY KPIs -->
+    <section class="case-section anno" id="kpis">
+      <span class="anno-tag convert">CONVERT · proven delivery performance</span>
+      <div class="eyebrow"><span class="n">06</span>Delivery KPIs</div>
+      <h2>The numbers <span class="red">the client tracked.</span></h2>
+      <p>The client's procurement team tracked four delivery KPIs on a weekly call throughout the project. Final-state values at handover below.</p>
+
+      <div class="kpi-grid">
+        <div class="kpi-card green">
+          <div class="v g">100<span class="accent">%</span></div>
+          <div class="l">On-time delivery</div>
+          <div class="sub">12 of 12 trucks within 24-hour window</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="v g">100<span class="accent">%</span></div>
+          <div class="l">In full</div>
+          <div class="sub">Zero shortages, zero damaged rolls</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="v g">0</div>
+          <div class="l">Customs delays</div>
+          <div class="sub">All 4 borders cleared first-pass</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="v g">0</div>
+          <div class="l">Non-conformances</div>
+          <div class="sub">No spec failures across 70 rolls</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="case-section anno" id="testimonial">
+      <span class="anno-tag convert">CONVERT · client testimonial · social proof</span>
+      <div class="testimonial">
+        <blockquote>What we had before was a global supplier shipping to a regional warehouse, then a regional supplier shipping the last leg. Two handoffs, two finger-pointing exercises every time something went wrong at a border. GSA owns the consignment from Rotterdam to laydown. That's what we needed.</blockquote>
+        <div class="author">
+          <div class="avatar">TB</div>
+          <div>
+            <div class="name">Group Procurement Manager</div>
+            <div class="role">Major Copper Producer · Lualaba operation</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="case-sidebar anno">
+    <span class="anno-tag template">TEMPLATE · sidebar</span>
+
+    <div class="sidebar-card">
+      <h3>Project facts</h3>
+      <dl class="sidebar-facts">
+        <dt>Client</dt>
+        <dd>Major copper producer (NDA)</dd>
+        <dt>Location</dt>
+        <dd>Lualaba, DRC</dd>
+        <dt>Industry</dt>
+        <dd><a href="#">Mining</a></dd>
+        <dt>Application</dt>
+        <dd><a href="#">TSF</a></dd>
+        <dt>Service scope</dt>
+        <dd>Supply only</dd>
+        <dt>Tonnage</dt>
+        <dd>340 t · 85,000 m²</dd>
+        <dt>Route</dt>
+        <dd>NL → RSA → DRC · 4 borders</dd>
+        <dt>Programme</dt>
+        <dd>Q1 2023 · 41 days mill-to-site</dd>
+      </dl>
+    </div>
+
+    <div class="sidebar-cta">
+      <h3>Need cross-border supply?</h3>
+      <p>Tell us your project location and required materials. We'll quote landed price, indicative lead time, and documentation requirements within 48 hours.</p>
+      <a href="#" class="btn">↑ Request Landed Quote</a>
+      <a href="#" class="btn outline">Talk to Logistics Team</a>
+    </div>
+
+    <div class="sidebar-card sidebar-contact">
+      <h3>Logistics direct line</h3>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.7-6.5-6.5l2.2-2.2c.3-.3.4-.7.2-1-.4-1.1-.6-2.3-.6-3.6 0-.5-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.5-1-1-1z"/></svg>
+        +27 11 794 0974
+      </div>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        logistics@geosynthetics.co.za
+      </div>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.58 2 4 5.58 4 10c0 6 8 14 8 14s8-8 8-14c0-4.42-3.58-8-8-8z"/></svg>
+        Logistics hub: Johannesburg
+      </div>
+    </div>
+
+    <div class="sidebar-card sidebar-downloads">
+      <h3>Download from this project</h3>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">Case study summary</div><div class="dl-size">2-page PDF · 920 KB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">Sample CoO &amp; Mill Certs (redacted)</div><div class="dl-size">1.8 MB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">Cross-border logistics guide</div><div class="dl-size">SADC + COMESA · 2.4 MB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">HDPE supply specification</div><div class="dl-size">1.1 MB</div></div><div class="dl-arrow">↓</div></a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Tags</h3>
+      <div class="sidebar-tags">
+        <a href="#">Mining</a>
+        <a href="#">TSF</a>
+        <a href="#">Copper</a>
+        <a href="#">DRC</a>
+        <a href="#">Cross-border</a>
+        <a href="#">Supply Only</a>
+        <a href="#" class="prod">GSE HDPE</a>
+        <a href="#">SADC</a>
+        <a href="#">COMESA</a>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<!-- RELATED -->
+<section class="related-section anno">
+  <span class="anno-tag convert">CONVERT · related supply-only projects</span>
+  <div class="related-inner">
+    <div class="related-head">
+      <h2>Other <span class="red">cross-border supply</span> projects.</h2>
+      <a href="#">View all Supply Only projects →</a>
+    </div>
+    <div class="related-grid">
+      <a class="related-tile" href="#"><div class="img"></div><div class="b"><div class="m">Rail · Cross-border · 2024</div><h4>Kitwe–Ndola Rail — Geogrid Supply</h4><div class="l">📍 Copperbelt, Zambia · 62 km</div></div></a>
+      <a class="related-tile alt" href="#"><div class="img"></div><div class="b"><div class="m">Gold TSF · Cross-border · 2023</div><h4>Obuasi TSF Liner Supply</h4><div class="l">📍 Ashanti, Ghana · 42 t HDPE</div></div></a>
+      <a class="related-tile alt2" href="#"><div class="img"></div><div class="b"><div class="m">Water · Reservoir · 2024</div><h4>Bulawayo Reservoir Liner Supply</h4><div class="l">📍 Matabeleland, Zimbabwe</div></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- BOQ CTA -->
+<section class="boq-cta anno">
+  <span class="anno-tag global">GLOBAL · final conversion</span>
+  <div class="boq-cta-inner">
+    <div>
+      <h2>Cross-border project?</h2>
+      <p>Send us your scope, location and required programme. We'll quote landed cost, lead time, customs strategy and documentation requirements — typically within 48 hours.</p>
+    </div>
+    <div class="boq-cta-actions">
+      <a href="#" class="btn">↑ Send us your scope</a>
+      <a href="#" class="btn">Speak to Logistics</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="brand-logo">
+          <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
+          <div class="brand-text"><span class="name" style="color:white">GEOSYNTHETICS</span><span class="sub">AFRICA</span></div>
+        </a>
+        <p>Africa's integrated geosynthetics platform — designed, supplied, installed, tested and certified.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><ul><li><a href="#">Geomembranes</a></li><li><a href="#">Geotextiles</a></li><li><a href="#">All Products</a></li></ul></div>
+      <div class="footer-col"><h4>Applications</h4><ul><li><a href="#">TSFs</a></li><li><a href="#">Heap Leach</a></li><li><a href="#">Reservoirs</a></li></ul></div>
+      <div class="footer-col"><h4>Industries</h4><ul><li><a href="#">Mining</a></li><li><a href="#">Infrastructure</a></li><li><a href="#">Water</a></li></ul></div>
+      <div class="footer-col"><h4>Services</h4><ul><li><a href="#">Supply</a></li><li><a href="#">Logistics</a></li><li><a href="#">QA / QC</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div>IAGI Member · B-BBEE Level 2 · QA/QC Certified · Pan-African</div>
+      <div>© 2026 Geosynthetics Africa (Pty) Ltd</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

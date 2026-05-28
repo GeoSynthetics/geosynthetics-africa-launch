@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Independent TSF Liner Integrity Review — West African Gold Mine | Geosynthetics Africa</title>
+<meta name="description" content="Independent third-party liner integrity review of an operational gold TSF in West Africa. Tensile testing, OIT, ESCR, thickness verification, electrical leak location — regulator-ready report by IAGI-member specialists.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #DC2626; --red-dark: #B91C1C;
+    --black: #111111; --ink: #1A1A1A;
+    --gray-900: #1F2937; --gray-800: #1E293B;
+    --gray-700: #374151; --gray-600: #4B5563; --gray-500: #6B7280;
+    --gray-400: #9CA3AF; --gray-300: #D1D5DB; --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6; --gray-50: #F9FAFB;
+    --green: #047857; --amber: #D97706; --blue: #1E40AF;
+    --white: #FFFFFF;
+    --radius: 6px; --radius-sm: 4px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; color: var(--ink); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Archivo', sans-serif; font-weight: 800; letter-spacing: -0.005em; color: var(--ink); line-height: 1.1; }
+
+  .anno { position: relative; }
+  .anno-tag { position: absolute; top: 6px; right: 6px; z-index: 50; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 8px; border-radius: var(--radius-sm); pointer-events: none; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .anno-tag.global { background: #374151; color: white; }
+  .anno-tag.template { background: #1E40AF; color: white; }
+  .anno-tag.sku { background: #6D28D9; color: white; }
+  .anno-tag.convert { background: var(--red); color: white; }
+  body.anno-off .anno-tag { display: none; }
+  .anno-banner { background: var(--ink); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 9999; }
+  .anno-banner .legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 10px; }
+  .anno-banner .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .anno-banner .legend span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
+  .anno-banner .legend .global::before { background: #374151; }
+  .anno-banner .legend .template::before { background: #1E40AF; }
+  .anno-banner .legend .sku::before { background: #6D28D9; }
+  .anno-banner .legend .convert::before { background: var(--red); }
+  .anno-banner button { background: var(--red); color: white; border: none; padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* CHROME */
+  .util-bar { background: var(--ink); color: var(--gray-300); padding: 9px 28px; font-size: 11px; border-bottom: 1px solid #2a2a2a; }
+  .util-inner { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .util-creds { display: flex; gap: 24px; flex-wrap: wrap; }
+  .util-creds span { display: flex; align-items: center; gap: 7px; }
+  .util-creds span::before { content: ''; width: 6px; height: 6px; background: var(--red); border-radius: 50%; }
+  .util-actions { display: flex; gap: 16px; align-items: center; }
+  .util-actions a { color: var(--gray-300); text-decoration: none; }
+  .util-actions .portal { color: var(--red); font-weight: 600; }
+  .util-actions .lang { padding: 2px 8px; border: 1px solid #2a2a2a; border-radius: var(--radius-sm); }
+  header.main-header { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 16px 28px; position: sticky; top: 38px; z-index: 100; }
+  .header-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 40px; }
+  .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .africa-icon { width: 32px; height: 36px; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1; }
+  .brand-text .name { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; color: var(--ink); }
+  .brand-text .sub { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; color: var(--red); letter-spacing: 0.18em; margin-top: 3px; }
+  nav.primary { margin-left: auto; display: flex; gap: 28px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
+  nav.primary a { color: var(--ink); text-decoration: none; padding: 6px 0; }
+  nav.primary a:hover, nav.primary a.active { color: var(--red); }
+
+  /* HERO — more clinical/technical feel for services */
+  .case-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1c1c1f 50%, #0a0a0a 100%);
+    color: white;
+    padding: 0;
+    min-height: 540px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  /* Lab-equipment-inspired diagonal scan lines + technical grid */
+  .case-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.9) 100%),
+      linear-gradient(90deg, transparent 0%, transparent calc(100% - 1px), rgba(255,255,255,0.04) 100%),
+      linear-gradient(0deg, transparent 0%, transparent calc(100% - 1px), rgba(255,255,255,0.04) 100%);
+    background-size: auto, 80px 80px, 80px 80px;
+  }
+  .case-hero::after {
+    content: '';
+    position: absolute;
+    right: -100px; top: -50px;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(220,38,38,0.1) 0%, transparent 60%);
+    filter: blur(40px);
+  }
+  /* technical decoration — lab equipment outline */
+  .tech-decoration {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    z-index: 1;
+    opacity: 0.25;
+  }
+  .case-hero-inner { max-width: 1440px; margin: 0 auto; padding: 48px 28px 56px; position: relative; z-index: 2; width: 100%; }
+  .case-hero .breadcrumb { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 30px; display: flex; gap: 10px; align-items: center; }
+  .case-hero .breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+  .case-hero .breadcrumb .sep { color: rgba(255,255,255,0.35); }
+  .case-hero .breadcrumb .current { color: white; }
+  .case-badges { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .case-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.9); }
+  .case-badge.primary { background: var(--ink); border-color: white; color: white; }
+  .case-hero h1 {
+    font-family: 'Archivo', sans-serif; font-weight: 900;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 0.98; text-transform: uppercase;
+    color: white; margin-bottom: 20px;
+    letter-spacing: -0.015em; max-width: 1100px;
+  }
+  .case-hero h1 .accent { color: var(--red); }
+  .case-sub { font-size: 18px; color: rgba(255,255,255,0.85); max-width: 800px; margin-bottom: 36px; line-height: 1.55; }
+  .case-facts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid rgba(255,255,255,0.2); border-bottom: 1px solid rgba(255,255,255,0.2); padding: 20px 0; }
+  .case-fact { padding-right: 24px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .case-fact:last-child { border-right: none; }
+  .case-fact .l { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+  .case-fact .v { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 20px; color: white; line-height: 1.1; }
+  .case-fact .v .accent { color: var(--red); }
+
+  /* SUBNAV */
+  .case-subnav { background: white; border-bottom: 1px solid var(--gray-200); padding: 0 28px; position: sticky; top: 110px; z-index: 80; }
+  .case-subnav-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; overflow-x: auto; }
+  .case-subnav-label { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); padding: 18px 24px 18px 0; border-right: 1px solid var(--gray-200); margin-right: 4px; white-space: nowrap; }
+  .case-subnav a { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 20px 18px; color: var(--ink); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+  .case-subnav a:hover { color: var(--red); }
+  .case-subnav a.active { color: var(--red); border-bottom-color: var(--red); }
+  .case-subnav .download-cta { margin-left: auto; padding: 10px 18px; background: var(--red); color: white; border-bottom: none; }
+  .case-subnav .download-cta:hover { background: var(--red-dark); color: white; }
+
+  /* MAIN LAYOUT */
+  main.case-study { max-width: 1440px; margin: 0 auto; padding: 0 28px; display: grid; grid-template-columns: 1fr 360px; gap: 56px; }
+  .case-content { padding: 56px 0 80px; min-width: 0; }
+  .case-sidebar { padding: 56px 0 80px; position: sticky; top: 175px; height: fit-content; align-self: start; }
+  .case-section { margin-bottom: 56px; }
+  .case-section .eyebrow { font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .case-section .eyebrow .n { background: var(--ink); color: white; padding: 3px 8px; font-size: 10px; }
+  .case-section h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(28px, 3vw, 40px); text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 24px; }
+  .case-section h2 .red { color: var(--red); }
+  .case-section h3 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.02em; margin: 28px 0 14px; }
+  .case-section p { font-size: 16px; line-height: 1.7; color: var(--gray-700); margin-bottom: 14px; }
+  .case-section p .h { background: linear-gradient(transparent 60%, rgba(220,38,38,0.18) 60%); }
+  .case-section ul { margin: 16px 0; padding-left: 0; list-style: none; }
+  .case-section ul li { padding: 8px 0 8px 24px; font-size: 15px; color: var(--gray-700); line-height: 1.55; position: relative; }
+  .case-section ul li::before { content: '▸'; color: var(--red); font-weight: 700; position: absolute; left: 0; }
+  .lede { font-size: 19px; line-height: 1.65; color: var(--ink); font-weight: 500; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-200); }
+
+  /* ============ INDEPENDENCE PANEL (distinctive for services case study) ============ */
+  .independence-panel {
+    background: var(--ink);
+    color: white;
+    padding: 40px 36px;
+    margin: 32px 0;
+    position: relative;
+    border-left: 4px solid var(--red);
+  }
+  .independence-panel::before {
+    content: 'INDEPENDENCE STATEMENT';
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--red);
+  }
+  .independence-panel h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    max-width: 580px;
+  }
+  .independence-panel p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 14px;
+    line-height: 1.65;
+  }
+  .independence-panel ul li { color: rgba(255,255,255,0.85); }
+  .independence-panel ul li::before { color: var(--red); }
+
+  /* ============ TEST PROGRAMME GRID ============ */
+  .test-programme {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .test-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    padding: 28px;
+    position: relative;
+    transition: all .15s;
+  }
+  .test-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--red);
+  }
+  .test-card .test-code {
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+  }
+  .test-card h4 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    margin-bottom: 12px;
+    line-height: 1.15;
+  }
+  .test-card p { font-size: 14px; color: var(--gray-600); line-height: 1.55; margin-bottom: 14px; }
+  .test-card .standards {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .test-card .standards span {
+    font-family: 'Inter', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    background: var(--gray-100);
+    color: var(--ink);
+  }
+  .test-card .samples {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ============ METHODOLOGY STEPS ============ */
+  .method-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 28px 0;
+    border: 1px solid var(--gray-200);
+  }
+  .method-step {
+    display: grid;
+    grid-template-columns: 80px 1fr 200px;
+    gap: 24px;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
+  }
+  .method-step:last-child { border-bottom: none; }
+  .method-step .step-n {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 38px;
+    color: var(--red);
+    line-height: 1;
+  }
+  .method-step .step-content h4 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .method-step .step-content p {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.55;
+    margin: 0;
+  }
+  .method-step .step-output {
+    font-size: 11px;
+    color: var(--gray-500);
+    line-height: 1.4;
+    padding-left: 18px;
+    border-left: 2px solid var(--red);
+  }
+  .method-step .step-output strong {
+    display: block;
+    font-family: 'Archivo', sans-serif;
+    color: var(--ink);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  /* ============ FINDINGS SUMMARY (with status indicators) ============ */
+  .findings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .finding-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    padding: 22px;
+    position: relative;
+  }
+  .finding-card .status {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+  }
+  .finding-card.pass { border-left: 4px solid var(--green); }
+  .finding-card.pass .status { background: var(--green); color: white; }
+  .finding-card.attention { border-left: 4px solid var(--amber); }
+  .finding-card.attention .status { background: var(--amber); color: white; }
+  .finding-card.action { border-left: 4px solid var(--red); }
+  .finding-card.action .status { background: var(--red); color: white; }
+  .finding-card .area {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 6px;
+  }
+  .finding-card h4 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+    padding-right: 80px;
+  }
+  .finding-card p {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ============ TEST RESULTS TABLE ============ */
+  .test-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  .test-table th { background: var(--ink); color: white; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 14px; text-align: left; }
+  .test-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-200); font-size: 13px; color: var(--gray-700); }
+  .test-table td:first-child { font-weight: 600; color: var(--ink); }
+  .test-table tr:nth-child(even) td { background: var(--gray-50); }
+  .test-table .pass { color: var(--green); font-weight: 700; }
+  .test-table .review { color: var(--amber); font-weight: 700; }
+
+  /* DELIVERABLE callout */
+  .deliverable-box {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--red);
+    padding: 32px;
+    margin: 28px 0;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .deliverable-box .left {}
+  .deliverable-box .doc-icon-big {
+    width: 80px;
+    height: 100px;
+    background: var(--red);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .deliverable-box h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .deliverable-box p { font-size: 14px; color: var(--gray-700); line-height: 1.6; margin: 0; }
+  .deliverable-box ul li { padding: 6px 0 6px 22px; font-size: 13px; }
+
+  /* Testimonial */
+  .testimonial { background: var(--gray-50); border-left: 4px solid var(--red); padding: 36px 40px; margin: 36px 0; }
+  .testimonial blockquote { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; line-height: 1.4; color: var(--ink); margin-bottom: 20px; quotes: '"' '"'; }
+  .testimonial blockquote::before { content: open-quote; color: var(--red); }
+  .testimonial blockquote::after { content: close-quote; color: var(--red); }
+  .testimonial .author { display: flex; align-items: center; gap: 14px; }
+  .testimonial .author .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; }
+  .testimonial .author .name { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 2px; }
+  .testimonial .author .role { font-size: 12px; color: var(--gray-600); }
+
+  /* SIDEBAR */
+  .sidebar-card { background: white; border: 1px solid var(--gray-200); padding: 24px; margin-bottom: 20px; }
+  .sidebar-card h3 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200); }
+  .sidebar-facts dt { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); margin-top: 14px; }
+  .sidebar-facts dt:first-child { margin-top: 0; }
+  .sidebar-facts dd { font-size: 14px; color: var(--ink); font-weight: 600; margin-top: 4px; }
+  .sidebar-facts dd a { color: var(--red); text-decoration: none; }
+  .sidebar-cta { background: var(--red); color: white; padding: 28px; margin-bottom: 20px; }
+  .sidebar-cta h3 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; text-transform: uppercase; margin-bottom: 8px; line-height: 1.1; border: none; padding: 0; color: white; }
+  .sidebar-cta p { font-size: 13px; margin-bottom: 16px; color: rgba(255,255,255,0.95); }
+  .sidebar-cta a.btn { display: block; background: white; color: var(--ink); text-align: center; padding: 12px; text-decoration: none; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; border-radius: var(--radius-sm); }
+  .sidebar-cta a.btn.outline { background: transparent; color: white; border: 1.5px solid white; }
+  .sidebar-contact .row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); padding: 6px 0; }
+  .sidebar-contact svg { width: 16px; height: 16px; color: var(--red); }
+
+  /* Service capability sidebar */
+  .capability-card {
+    background: var(--ink);
+    color: white;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .capability-card h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: white;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .capability-card .cap-row {
+    padding: 8px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .capability-card .cap-row:last-child { border-bottom: none; }
+  .capability-card .cap-row::before {
+    content: '◉';
+    color: var(--red);
+    font-size: 10px;
+  }
+
+  .sidebar-downloads .dl-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--gray-100); text-decoration: none; color: inherit; align-items: center; }
+  .sidebar-downloads .dl-row:last-child { border-bottom: none; }
+  .sidebar-downloads .dl-row:hover .dl-title { color: var(--red); }
+  .sidebar-downloads .dl-icon { width: 28px; height: 34px; background: var(--red); color: white; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+  .sidebar-downloads .dl-title { font-size: 12px; font-weight: 600; line-height: 1.3; }
+  .sidebar-downloads .dl-size { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+  .sidebar-downloads .dl-arrow { margin-left: auto; color: var(--red); font-weight: 700; }
+
+  /* Related — different framing for services */
+  .related-section { background: var(--gray-50); padding: 64px 28px; }
+  .related-inner { max-width: 1440px; margin: 0 auto; }
+  .related-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 32px; }
+  .related-head h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 32px; text-transform: uppercase; letter-spacing: -0.01em; }
+  .related-head h2 .red { color: var(--red); }
+  .related-head a { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); text-decoration: none; }
+  .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  /* services-themed cards */
+  .service-card {
+    background: var(--ink);
+    color: white;
+    padding: 32px 28px;
+    text-decoration: none;
+    transition: all .15s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .service-card:hover { background: #2a2422; }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--red);
+  }
+  .service-card .cat { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 14px; }
+  .service-card h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; text-transform: uppercase; color: white; line-height: 1.2; margin-bottom: 12px; }
+  .service-card p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.55; margin-bottom: 14px; flex: 1; }
+  .service-card .arrow { font-size: 18px; color: var(--red); }
+
+  /* BOQ CTA */
+  .boq-cta { background: var(--red); color: white; padding: 72px 28px; }
+  .boq-cta-inner { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .boq-cta h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(36px, 4vw, 52px); text-transform: uppercase; color: white; margin-bottom: 14px; }
+  .boq-cta p { font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.95); }
+  .boq-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+  .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 26px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+  .boq-cta .btn { background: white; color: var(--ink); padding: 16px 28px; }
+  .boq-cta .btn:hover { background: var(--ink); color: white; }
+
+  /* FOOTER */
+  footer.site-footer { background: var(--black); color: white; padding: 48px 28px 24px; }
+  .footer-inner { max-width: 1440px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr repeat(5, 1fr); gap: 32px; padding-bottom: 32px; }
+  .footer-brand p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 16px; max-width: 280px; }
+  .footer-col h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: white; margin-bottom: 14px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .footer-col a { font-size: 12px; color: rgba(255,255,255,0.7); text-decoration: none; }
+  .footer-col a:hover { color: var(--red); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  @media (max-width: 1100px) {
+    main.case-study { grid-template-columns: 1fr; }
+    .case-sidebar { position: static; }
+    .case-facts { grid-template-columns: 1fr 1fr; }
+    .test-programme, .findings-grid, .related-grid { grid-template-columns: 1fr; }
+    .method-step { grid-template-columns: 1fr; gap: 12px; }
+    .deliverable-box { grid-template-columns: 1fr; }
+    .boq-cta-inner { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+    nav.primary { display: none; }
+    .tech-decoration { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="anno-banner">
+  <span><strong>MOCKUP</strong> — Case Study · Services Only · Independence + technical authority</span>
+  <div class="legend">
+    <span class="global">Global</span>
+    <span class="template">Template</span>
+    <span class="sku">Project-specific</span>
+    <span class="convert">Convert</span>
+  </div>
+  <button onclick="document.body.classList.toggle('anno-off')">Toggle</button>
+</div>
+
+<!-- CHROME -->
+<div class="util-bar anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="util-inner">
+    <div class="util-creds">
+      <span>IAGI Member — One of only 5 in Africa</span>
+      <span>B-BBEE Level 2</span>
+      <span>QA/QC Certified</span>
+      <span>Pan-African Logistics</span>
+    </div>
+    <div class="util-actions">
+      <a href="#" class="portal">Partner Portal</a>
+      <a href="#" class="lang">EN ▾</a>
+    </div>
+  </div>
+</div>
+
+<header class="main-header anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="header-inner">
+    <a href="#" class="brand-logo">
+      <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
+      <div class="brand-text"><span class="name">GEOSYNTHETICS</span><span class="sub">AFRICA</span></div>
+    </a>
+    <nav class="primary">
+      <a href="#">Products ▾</a>
+      <a href="#">Solutions ▾</a>
+      <a href="#">Services ▾</a>
+      <a href="#" class="active">Projects</a>
+      <a href="#">Resources</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="case-hero anno">
+  <span class="anno-tag sku">PROJECT-SPECIFIC · services-focused hero</span>
+
+  <!-- Technical lab equipment outline decoration -->
+  <svg class="tech-decoration" viewBox="0 0 320 400" fill="none" stroke="#DC2626" stroke-width="1.5">
+    <!-- universal testing machine outline -->
+    <rect x="60" y="20" width="200" height="20" stroke-width="2"/>
+    <rect x="80" y="40" width="160" height="240" stroke-width="2"/>
+    <rect x="100" y="280" width="120" height="60" stroke-width="2"/>
+    <line x1="160" y1="40" x2="160" y2="120" stroke-width="3"/>
+    <line x1="160" y1="200" x2="160" y2="280" stroke-width="3"/>
+    <rect x="130" y="120" width="60" height="80" fill="#DC2626" fill-opacity="0.15"/>
+    <line x1="60" y1="350" x2="260" y2="350" stroke-width="1"/>
+    <text x="80" y="370" fill="#DC2626" font-family="monospace" font-size="10">[ ASTM D6693 ] TENSILE</text>
+  </svg>
+
+  <div class="case-hero-inner">
+    <nav class="breadcrumb">
+      <a href="#">Home</a><span class="sep">›</span>
+      <a href="#">Projects</a><span class="sep">›</span>
+      <a href="#">Mining</a><span class="sep">›</span>
+      <a href="#">Services Only</a><span class="sep">›</span>
+      <span class="current">West African Gold TSF — Liner Integrity Review</span>
+    </nav>
+    <div class="case-badges">
+      <span class="case-badge primary">Services Only</span>
+      <span class="case-badge">Independent Review</span>
+      <span class="case-badge">Mining · Gold</span>
+      <span class="case-badge">West Africa</span>
+      <span class="case-badge">Confidential</span>
+    </div>
+    <h1>Independent integrity review of an <span class="accent">operational gold TSF</span> liner — West Africa, 2024.</h1>
+    <p class="case-sub">An IAGI-led independent third-party review commissioned by the operator's environmental affairs team ahead of a scheduled regulatory audit. Tensile testing, OIT, ESCR, thickness verification, electrical leak location — followed by a regulator-ready report with prioritised recommendations.</p>
+    <div class="case-facts">
+      <div class="case-fact"><div class="l">Scope</div><div class="v">Services Only</div></div>
+      <div class="case-fact"><div class="l">Programme</div><div class="v">5 weeks</div></div>
+      <div class="case-fact"><div class="l">Tests</div><div class="v">6 streams</div></div>
+      <div class="case-fact"><div class="l">Samples</div><div class="v">94</div></div>
+      <div class="case-fact"><div class="l">Deliverable</div><div class="v">CQA Report</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBNAV -->
+<nav class="case-subnav anno">
+  <span class="anno-tag template">TEMPLATE · subnav</span>
+  <div class="case-subnav-inner">
+    <div class="case-subnav-label">In this case study</div>
+    <a href="#brief" class="active">Brief</a>
+    <a href="#independence">Independence</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#tests">Test programme</a>
+    <a href="#findings">Findings</a>
+    <a href="#results">Results</a>
+    <a href="#deliverable">Deliverable</a>
+    <a href="#testimonial">Client</a>
+    <a href="#" class="download-cta">↓ Request similar review</a>
+  </div>
+</nav>
+
+<main class="case-study">
+
+  <article class="case-content">
+
+    <!-- BRIEF -->
+    <section class="case-section anno" id="brief">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · the brief</span>
+      <p class="lede">
+        In Q3 2024, the environmental affairs team of an operational gold mine in West Africa engaged Geosynthetics Africa to conduct an <span class="h">independent integrity review of the HDPE composite lining installed on their primary TSF six years earlier</span> — ahead of a scheduled regulatory audit and as part of the operator's voluntary alignment with the Global Industry Standard on Tailings Management (GISTM).
+      </p>
+      <p>The lining had been installed by a third-party contractor in 2018. No major operational concerns had been flagged, but the operator wanted independent verification that the system was performing as designed before submitting their next Tailings Operating Plan to the regulator.</p>
+      <p>The scope was structured as a pure services engagement — no materials supply, no installation. GSA was selected on technical credentials only.</p>
+    </section>
+
+    <!-- INDEPENDENCE PANEL -->
+    <section class="case-section anno" id="independence">
+      <span class="anno-tag convert">CONVERT · independence statement is the trust signal</span>
+      <div class="eyebrow"><span class="n">01</span>Independence</div>
+      <h2>Independent. <span class="red">By design.</span></h2>
+      <p>For a review to carry weight with a regulator or an Independent Tailings Review Board (ITRB), the reviewer must have no commercial stake in the outcome. The original installer cannot review their own work; the material supplier cannot review the material they sold. Independence is the entire point of a third-party integrity review.</p>
+
+      <div class="independence-panel">
+        <h3>Our independence statement on this engagement</h3>
+        <p>For the avoidance of doubt and on the formal record of the engagement:</p>
+        <ul>
+          <li>GSA did not supply the original lining material installed in 2018</li>
+          <li>GSA did not install the original lining or any subsequent repairs</li>
+          <li>GSA has no commercial relationship with the original installation contractor or the original material supplier</li>
+          <li>GSA's engagement is fee-only — billed on time and materials, with no contingent fee, no success fee, and no kickback structure</li>
+          <li>The review team consists of IAGI-certified inspectors and ISO 17025–aligned laboratory staff who report findings without commercial influence</li>
+          <li>The report goes to the operator and, with the operator's written authorisation, to the regulator unchanged</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section class="case-section anno" id="methodology">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · the methodology — defines the report's credibility</span>
+      <div class="eyebrow"><span class="n">02</span>Methodology</div>
+      <h2>A five-stage <span class="red">forensic protocol.</span></h2>
+      <p>The review followed the standard ITRB-aligned five-stage liner integrity protocol — adapted with the operator's environmental affairs team for site-specific access constraints and tailings depositional schedule.</p>
+
+      <div class="method-flow">
+        <div class="method-step">
+          <div class="step-n">01</div>
+          <div class="step-content">
+            <h4>Document review</h4>
+            <p>Original CQA pack, installation drawings, as-built records, repair logs, monitoring data from 2018 onwards. Identifies the baseline against which current condition is measured.</p>
+          </div>
+          <div class="step-output">
+            <strong>Output</strong>Baseline summary &amp; sampling plan
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-n">02</div>
+          <div class="step-content">
+            <h4>Site walk-over &amp; visual inspection</h4>
+            <p>Two-day site visit by senior IAGI inspector. Walks the exposed liner perimeter, anchor trenches, instrumentation pits, leak-detection sumps. Photographs all defects, records GPS.</p>
+          </div>
+          <div class="step-output">
+            <strong>Output</strong>Visual inspection register, GPS map
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-n">03</div>
+          <div class="step-content">
+            <h4>Sample extraction</h4>
+            <p>94 coupons cut from exposed liner using cold-cut technique (no heat-affected zone). Strategic locations: anchor trench, slope crests, repair patches, penetration boots. Samples sealed, batched, shipped to laboratory under chain-of-custody.</p>
+          </div>
+          <div class="step-output">
+            <strong>Output</strong>Sample register, chain-of-custody log
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-n">04</div>
+          <div class="step-content">
+            <h4>Laboratory testing</h4>
+            <p>Independent ISO 17025–aligned laboratory testing. Six test streams: thickness, density, tensile, OIT (standard &amp; high pressure), ESCR (SP-NCTL), carbon black content/dispersion.</p>
+          </div>
+          <div class="step-output">
+            <strong>Output</strong>Lab test certificates per sample
+          </div>
+        </div>
+        <div class="method-step">
+          <div class="step-n">05</div>
+          <div class="step-content">
+            <h4>Electrical leak location</h4>
+            <p>Where the liner is uncovered (or covered with conductive water), full-footprint electrical leak survey using the water lance / spark survey technique. Locates discrete leaks down to pinhole scale.</p>
+          </div>
+          <div class="step-output">
+            <strong>Output</strong>Leak location map, repair register
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEST PROGRAMME -->
+    <section class="case-section anno" id="tests">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · the test programme</span>
+      <div class="eyebrow"><span class="n">03</span>Test Programme</div>
+      <h2>Six test streams.<br>94 samples. <span class="red">One independent lab.</span></h2>
+      <p>The test matrix was scoped around the failure modes most relevant to a 6-year-in-service HDPE liner exposed to tailings chemistry and UV: oxidative degradation (OIT), stress-induced cracking (ESCR), thickness loss, and tensile property retention.</p>
+
+      <div class="test-programme">
+        <div class="test-card">
+          <div class="test-code">ASTM D5199 · ASTM D5994</div>
+          <h4>Thickness Verification</h4>
+          <p>Sample-by-sample thickness measurement at multiple points. Compared to original specification thickness and to mill-cert baseline values from 2018 installation. Detects gradual loss or localised damage.</p>
+          <div class="standards"><span>ASTM D5199</span><span>ASTM D5994</span></div>
+          <div class="samples">94 samples · 470 measurements</div>
+        </div>
+        <div class="test-card">
+          <div class="test-code">ASTM D6693</div>
+          <h4>Tensile Properties</h4>
+          <p>Yield strength, break strength, elongation at yield, elongation at break. The primary indicator of polymer chain integrity. Loss of tensile properties signals oxidative ageing or chemical attack.</p>
+          <div class="standards"><span>ASTM D6693</span><span>ISO 527</span></div>
+          <div class="samples">48 samples · 240 specimens</div>
+        </div>
+        <div class="test-card">
+          <div class="test-code">ASTM D3895 · D5885</div>
+          <h4>OIT — Oxidative Induction Time</h4>
+          <p>Standard OIT (D3895) and High-Pressure OIT (D5885). Direct measurement of remaining antioxidant. The single most predictive test for long-term HDPE durability — and the test most likely to reveal a problem.</p>
+          <div class="standards"><span>ASTM D3895</span><span>ASTM D5885</span></div>
+          <div class="samples">94 samples · standard + HP</div>
+        </div>
+        <div class="test-card">
+          <div class="test-code">ASTM D5397</div>
+          <h4>ESCR (SP-NCTL)</h4>
+          <p>Single-Point Notched Constant Tensile Load — environmental stress cracking resistance. Predicts long-term performance under combined load and chemical environment. Critical for slope-installed liner.</p>
+          <div class="standards"><span>ASTM D5397</span></div>
+          <div class="samples">24 samples · slope locations</div>
+        </div>
+        <div class="test-card">
+          <div class="test-code">ASTM D1505 · D4218 · D5596</div>
+          <h4>Density, Carbon Black, Dispersion</h4>
+          <p>Confirms material identity (still HDPE, not crystallised), confirms carbon black content for UV protection, confirms carbon black dispersion (poor dispersion = stress concentrators).</p>
+          <div class="standards"><span>D1505</span><span>D4218</span><span>D5596</span></div>
+          <div class="samples">48 samples</div>
+        </div>
+        <div class="test-card">
+          <div class="test-code">ASTM D7007</div>
+          <h4>Electrical Leak Location</h4>
+          <p>Full-footprint survey of exposed and water-covered liner sections. Detects holes down to ~1 mm. Critical baseline for the repair register.</p>
+          <div class="standards"><span>ASTM D7007</span></div>
+          <div class="samples">68,000 m² surveyed</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINDINGS -->
+    <section class="case-section anno" id="findings">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · findings (kept generic for confidentiality)</span>
+      <div class="eyebrow"><span class="n">04</span>Findings Summary</div>
+      <h2>What we found, <span class="red">summarised.</span></h2>
+      <p>The full 142-page report contains the detailed findings. The summary below shows the top-level status of each assessment area — colour-coded for the operator's executive review. Specific values, exact locations and remedial-action specifications are confidential to the operator and not reproduced here.</p>
+
+      <div class="findings-grid">
+        <div class="finding-card pass">
+          <div class="status">Pass</div>
+          <div class="area">Area 01</div>
+          <h4>Material identity &amp; baseline</h4>
+          <p>Density, thickness, carbon black content and dispersion all confirm original HDPE specification. Material is what was installed.</p>
+        </div>
+        <div class="finding-card pass">
+          <div class="status">Pass</div>
+          <div class="area">Area 02</div>
+          <h4>Tensile property retention</h4>
+          <p>Yield and break strength retain &gt;90% of original specification across all samples. No measurable polymer degradation.</p>
+        </div>
+        <div class="finding-card attention">
+          <div class="status">Monitor</div>
+          <div class="area">Area 03</div>
+          <h4>OIT depletion on south-facing slope</h4>
+          <p>Standard OIT has dropped from 148 min (baseline) to 84 min (current) on samples taken from the south-facing exposed slope. Still well above the minimum operational threshold but worth retesting in 3 years.</p>
+        </div>
+        <div class="finding-card pass">
+          <div class="status">Pass</div>
+          <div class="area">Area 04</div>
+          <h4>ESCR retention</h4>
+          <p>Stress crack resistance well above specification. No samples failed below the 500-hour minimum. Median 920 hours.</p>
+        </div>
+        <div class="finding-card action">
+          <div class="status">Action</div>
+          <div class="area">Area 05</div>
+          <h4>Leak location — 2 discrete pinholes</h4>
+          <p>Electrical leak survey identified two discrete pinhole defects: one at a poorly-detailed penetration boot, one at a previously-repaired patch. Both flagged for repair before next deposition cycle.</p>
+        </div>
+        <div class="finding-card pass">
+          <div class="status">Pass</div>
+          <div class="area">Area 06</div>
+          <h4>Anchor trench &amp; perimeter</h4>
+          <p>Anchor trenches intact, no displacement, no exposure of buried liner edge. No undermining observed in any of the 14 inspected sections.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEST RESULTS -->
+    <section class="case-section anno" id="results">
+      <span class="anno-tag sku">PROJECT-SPECIFIC · sample of headline test results</span>
+      <div class="eyebrow"><span class="n">05</span>Headline Test Results</div>
+      <h2>Six years in service. <span class="red">Numbers, redacted.</span></h2>
+      <p>Headline summary of the six test streams below. Specific sample IDs, exact GPS locations and detailed per-sample data are confidential.</p>
+      <table class="test-table">
+        <thead>
+          <tr><th>Test stream</th><th>Standard</th><th>Threshold</th><th>Median result</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Thickness retention</td><td>ASTM D5199</td><td>≥ 95% of baseline</td><td>98.4%</td><td class="pass">PASS</td></tr>
+          <tr><td>Density</td><td>ASTM D1505</td><td>0.940 g/cm³</td><td>0.944 g/cm³</td><td class="pass">PASS</td></tr>
+          <tr><td>Tensile yield retention</td><td>ASTM D6693</td><td>≥ 80% of baseline</td><td>94%</td><td class="pass">PASS</td></tr>
+          <tr><td>Tensile break retention</td><td>ASTM D6693</td><td>≥ 80% of baseline</td><td>91%</td><td class="pass">PASS</td></tr>
+          <tr><td>Standard OIT</td><td>ASTM D3895</td><td>≥ 55 min</td><td>112 min · low 84 min</td><td class="review">MONITOR</td></tr>
+          <tr><td>HP OIT</td><td>ASTM D5885</td><td>≥ 400 min</td><td>624 min</td><td class="pass">PASS</td></tr>
+          <tr><td>ESCR (SP-NCTL)</td><td>ASTM D5397</td><td>≥ 500 h</td><td>920 h</td><td class="pass">PASS</td></tr>
+          <tr><td>Carbon black content</td><td>ASTM D4218</td><td>2.0 – 3.0%</td><td>2.4%</td><td class="pass">PASS</td></tr>
+          <tr><td>Leak location</td><td>ASTM D7007</td><td>No detectable leaks</td><td>2 pinholes located</td><td class="review">ACTION</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DELIVERABLE -->
+    <section class="case-section anno" id="deliverable">
+      <span class="anno-tag convert">CONVERT · the deliverable · what the client gets</span>
+      <div class="eyebrow"><span class="n">06</span>The Deliverable</div>
+      <h2>One report. <span class="red">Regulator-ready.</span></h2>
+
+      <div class="deliverable-box">
+        <div class="left">
+          <div class="doc-icon-big">142<br>PP</div>
+          <h3>Liner Integrity Review Report</h3>
+          <p>Sealed and signed by GSA's lead reviewer (IAGI-certified). The report goes to the operator and — with the operator's written authorisation — to the regulator unchanged.</p>
+        </div>
+        <div>
+          <h3 style="font-size: 14px; margin-bottom: 12px;">Report contents</h3>
+          <ul>
+            <li>Executive summary &amp; status dashboard</li>
+            <li>Independence statement (formal)</li>
+            <li>Document review &amp; baseline reconstruction</li>
+            <li>Visual inspection register with GPS-tagged photographs</li>
+            <li>Sample register and chain-of-custody log</li>
+            <li>Full laboratory results (per sample, per test)</li>
+            <li>Electrical leak survey report with repair register</li>
+            <li>Findings interpretation &amp; statistical analysis</li>
+            <li>Prioritised recommendations (Action / Monitor / OK)</li>
+            <li>Suggested re-inspection schedule</li>
+            <li>Limitations &amp; conditions of report use</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="case-section anno" id="testimonial">
+      <span class="anno-tag convert">CONVERT · client testimonial</span>
+      <div class="testimonial">
+        <blockquote>We needed a reviewer who could stand in front of our regulator and answer for the findings — independently of who installed the liner, independently of who supplied it. The GSA report did exactly that. The regulator accepted it without further questions.</blockquote>
+        <div class="author">
+          <div class="avatar">EA</div>
+          <div>
+            <div class="name">Head of Environmental Affairs</div>
+            <div class="role">Operational Gold Mine · West Africa</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="case-sidebar anno">
+    <span class="anno-tag template">TEMPLATE · sidebar</span>
+
+    <div class="sidebar-card">
+      <h3>Project facts</h3>
+      <dl class="sidebar-facts">
+        <dt>Client</dt>
+        <dd>Operating gold mine (confidential)</dd>
+        <dt>Location</dt>
+        <dd>West Africa (confidential)</dd>
+        <dt>Industry</dt>
+        <dd><a href="#">Mining</a></dd>
+        <dt>Application</dt>
+        <dd><a href="#">TSF</a></dd>
+        <dt>Service scope</dt>
+        <dd>Independent Liner Integrity Review</dd>
+        <dt>Programme</dt>
+        <dd>Q3 2024 · 5 weeks</dd>
+        <dt>Liner age at review</dt>
+        <dd>6 years in service</dd>
+        <dt>Standards</dt>
+        <dd>GISTM · ASTM · ISO 17025</dd>
+      </dl>
+    </div>
+
+    <div class="sidebar-cta">
+      <h3>Need an integrity review?</h3>
+      <p>Tell us your facility's age, area, current concern, and audit timeline. We'll come back with a scoped review proposal within 5 working days.</p>
+      <a href="#" class="btn">Request Review Scope</a>
+      <a href="#" class="btn outline">Talk to Lead Reviewer</a>
+    </div>
+
+    <!-- Service capability — distinctive to services case -->
+    <div class="capability-card">
+      <h3>Our review capability</h3>
+      <div class="cap-row">IAGI-certified inspectors</div>
+      <div class="cap-row">ISO 17025–aligned laboratory</div>
+      <div class="cap-row">Pan-African logistics + sampling</div>
+      <div class="cap-row">Multilingual (EN · FR · PT)</div>
+      <div class="cap-row">GISTM-aligned reporting</div>
+      <div class="cap-row">No commercial conflict</div>
+      <div class="cap-row">28 reviews delivered to date</div>
+    </div>
+
+    <div class="sidebar-card sidebar-contact">
+      <h3>Technical services direct</h3>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.7-6.5-6.5l2.2-2.2c.3-.3.4-.7.2-1-.4-1.1-.6-2.3-.6-3.6 0-.5-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.5-1-1-1z"/></svg>
+        +27 11 794 0974
+      </div>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        services@geosynthetics.co.za
+      </div>
+      <div class="row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.58 2 4 5.58 4 10c0 6 8 14 8 14s8-8 8-14c0-4.42-3.58-8-8-8z"/></svg>
+        Lab: Johannesburg
+      </div>
+    </div>
+
+    <div class="sidebar-card sidebar-downloads">
+      <h3>Related resources</h3>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">Liner Integrity Review — Scope template</div><div class="dl-size">2.1 MB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">HDPE ageing &amp; OIT — engineering note</div><div class="dl-size">1.4 MB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">Sample case-study report (anonymised)</div><div class="dl-size">3.6 MB</div></div><div class="dl-arrow">↓</div></a>
+      <a class="dl-row" href="#"><div class="dl-icon">PDF</div><div><div class="dl-title">GISTM alignment — what regulators ask</div><div class="dl-size">980 KB</div></div><div class="dl-arrow">↓</div></a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Tags</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">Mining</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">TSF</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">Services Only</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">Independent</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">GISTM</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">OIT</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">ESCR</a>
+        <a href="#" style="font-size: 11px; font-weight: 600; padding: 4px 10px; background: var(--gray-100); color: var(--gray-700); text-decoration: none; border-radius: 100px;">Tensile</a>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<!-- RELATED -->
+<section class="related-section anno">
+  <span class="anno-tag convert">CONVERT · related services — cross-sell into other GSA services</span>
+  <div class="related-inner">
+    <div class="related-head">
+      <h2>Other GSA <span class="red">technical services.</span></h2>
+      <a href="#">View all services →</a>
+    </div>
+    <div class="related-grid">
+      <a class="service-card" href="#">
+        <div class="cat">Service</div>
+        <h4>Pre-construction Spec Review</h4>
+        <p>Independent peer review of TSF lining specifications before tender release. Catches the costly drafting errors before they hit the procurement file.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a class="service-card" href="#">
+        <div class="cat">Service</div>
+        <h4>Construction Quality Assurance</h4>
+        <p>Independent CQA Engineer to a third-party installer — daily oversight, hold-point sign-off, regulator-ready CQA pack delivered at handover.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a class="service-card" href="#">
+        <div class="cat">Service</div>
+        <h4>Closure Liner Assessment</h4>
+        <p>Pre-closure or post-closure assessment of liner condition. Informs the operator's closure cost provision and any remedial requirements.</p>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOQ CTA -->
+<section class="boq-cta anno">
+  <span class="anno-tag global">GLOBAL · final conversion</span>
+  <div class="boq-cta-inner">
+    <div>
+      <h2>Need an integrity review?</h2>
+      <p>Whether you're aligning with GISTM, preparing for a regulatory audit, evaluating closure works or simply due-diligencing inherited infrastructure — we provide independent, IAGI-led liner integrity reviews across Africa.</p>
+    </div>
+    <div class="boq-cta-actions">
+      <a href="#" class="btn">↑ Request Review Scope</a>
+      <a href="#" class="btn">Talk to Reviewer</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer anno"><span class="anno-tag global">GLOBAL</span>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="brand-logo">
+          <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
+          <div class="brand-text"><span class="name" style="color:white">GEOSYNTHETICS</span><span class="sub">AFRICA</span></div>
+        </a>
+        <p>Africa's integrated geosynthetics platform — designed, supplied, installed, tested and certified.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><ul><li><a href="#">Geomembranes</a></li><li><a href="#">Geotextiles</a></li><li><a href="#">All Products</a></li></ul></div>
+      <div class="footer-col"><h4>Applications</h4><ul><li><a href="#">TSFs</a></li><li><a href="#">Heap Leach</a></li><li><a href="#">Reservoirs</a></li></ul></div>
+      <div class="footer-col"><h4>Industries</h4><ul><li><a href="#">Mining</a></li><li><a href="#">Infrastructure</a></li><li><a href="#">Water</a></li></ul></div>
+      <div class="footer-col"><h4>Services</h4><ul><li><a href="#">Liner Integrity Reviews</a></li><li><a href="#">CQA</a></li><li><a href="#">Spec Review</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div>IAGI Member · B-BBEE Level 2 · QA/QC Certified · Pan-African</div>
+      <div>© 2026 Geosynthetics Africa (Pty) Ltd</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
