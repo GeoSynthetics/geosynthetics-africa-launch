@@ -69,6 +69,12 @@
             Tracking & Cookie Flow
           </a>
         </li>
+        <li class="nav-item" data-section="media-center">
+          <a href="#media-center">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            Media Center Operations
+          </a>
+        </li>
         
         <div class="nav-category">Developer Reference</div>
         <li class="nav-item" data-section="tech-ref">
@@ -713,6 +719,70 @@
           </div>
           <div class="callout-content">
             To prevent performance-degrading duplicate script initializations, all dynamically injected scripts are given unique IDs (e.g. <code>gsa-google-analytics</code>, <code>gsa-google-analytics-init</code>, <code>gsa-google-tagmanager</code>). The loader checks for the existence of these elements before executing any DOM manipulations.
+          </div>
+        </div>
+      </section>
+
+      <!-- MEDIA CENTER SECTION -->
+      <section id="media-center" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Media Center Operations
+        </h2>
+        <p class="paragraph">
+          The Geosynthetics Africa platform features an integrated <strong>Media Center</strong> inside the admin control panel. This hub acts as the centralized file hosting and asset management engine for the entire website, removing the need for manual FTP client access or direct Git repository commits for simple asset updates.
+        </p>
+        <p class="paragraph">
+          Whether you need to upload high-resolution product photography, detailed product brochures, engineering data PDFs, or promotional/instructional videos, the Media Center provides a fast, drag-and-drop workflow that optimizes and hosts your files instantly.
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 2rem;">
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Supported File Types</h3>
+            <p class="card-desc">The Media Center accepts a comprehensive range of file extensions including images (<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>), document sheets (<code>.xlsx</code>, <code>.docx</code>), standard pamphlets and brochures (<code>.pdf</code>), and high-definition video files (<code>.mp4</code>, <code>.webm</code>).</p>
+          </div>
+          <div class="card" style="border-left: 2px solid var(--accent-red)">
+            <h3 class="card-title">Supabase Storage Backing</h3>
+            <p class="card-desc">All files are securely uploaded directly to our high-speed, globally distributed Supabase Storage Buckets. This guarantees rapid content delivery network (CDN) responses and zero application server load when clients download huge documents.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-bottom: 2rem;">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            Automatic Image WebP Converter
+          </div>
+          <div class="callout-content">
+            When uploading raster images like PNGs or JPEGs, the control panel dynamically compresses and converts them into the modern <strong>.webp</strong> format to ensure your web pages load lightning-fast for cellular users across Africa, saving up to 80% bandwidth with zero perceptible quality loss.
+          </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Workflow: Upload, Copy, and Distribute</h3>
+        <p class="paragraph">
+          Managing your documents and embedding them across the website is incredibly simple and requires no code updates:
+        </p>
+
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Navigate and Upload</h4>
+              <p class="paragraph">Go to the admin dashboard and select <strong>Media Center</strong> from the left menu. Drag your files directly into the dashed upload boundary, or click the box to select files from your computer. Click <strong>Upload Assets</strong> to push them to the CDN.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Copy the Public URL</h4>
+              <p class="paragraph">Once the upload completes, your file will appear in the grid list below with its thumbnail or file type icon. Hover over the asset card and click the blue <strong>🔗 Copy Link</strong> button. The fully qualified public URL will be copied to your clipboard instantly (e.g. <code>https://.../storage/v1/object/public/...</code>).</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Add it Anywhere in the Project</h4>
+              <p class="paragraph">Paste this URL directly into any admin panel inputs! For example, paste it into the <strong>Hero Image URL</strong> in Page Templates to change a banner, add it to <strong>Case Study Images</strong>, use it for a downloadable <strong>Brochure PDF Link</strong>, or insert it inside description text fields. The public website will render or link to the asset immediately.</p>
+            </div>
           </div>
         </div>
       </section>
