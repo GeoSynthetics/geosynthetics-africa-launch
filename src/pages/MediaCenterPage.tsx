@@ -884,9 +884,9 @@ export function MediaCenterPage() {
       {/* Details & Aspect Ratio Zoom Modal */}
       <Dialog open={selectedFile !== null} onOpenChange={(open) => !open && setSelectedFile(null)}>
         {selectedFile && (
-          <DialogContent className="max-w-xl w-[calc(100vw-2rem)] max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="font-display text-base font-bold uppercase tracking-wider truncate block w-[85%]">
+          <DialogContent className="max-w-xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden">
+            <DialogHeader className="pr-6 max-w-full">
+              <DialogTitle className="font-display text-sm font-bold uppercase tracking-wider break-all whitespace-normal" title={selectedFile.name}>
                 {selectedFile.name}
               </DialogTitle>
             </DialogHeader>
@@ -950,16 +950,18 @@ export function MediaCenterPage() {
               {/* Public Hostable URL Input */}
               <div className="space-y-1.5">
                 <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Public URL Link</Label>
-                <div className="flex gap-2">
-                  <Input 
-                    readOnly
-                    value={selectedFile.url}
-                    className="text-xs h-9 bg-muted/40 font-mono"
-                  />
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex-1 min-w-0">
+                    <Input 
+                      readOnly
+                      value={selectedFile.url}
+                      className="text-xs h-9 bg-muted/40 font-mono w-full"
+                    />
+                  </div>
                   <Button 
                     variant="outline" 
                     size="icon" 
-                    className="h-9 w-9 border-border transition hover:border-primary/50"
+                    className="h-9 w-9 flex-shrink-0 border-border transition hover:border-primary/50"
                     onClick={() => void handleCopyUrl(selectedFile.url)}
                     title="Copy URL"
                   >
@@ -973,7 +975,7 @@ export function MediaCenterPage() {
               </div>
             </div>
 
-            <DialogFooter className="mt-4 sm:justify-end gap-2">
+            <DialogFooter className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
               {activeTab === "media-vault" && (
                 <Button 
                   type="button" 
