@@ -29,6 +29,7 @@ import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
@@ -147,6 +148,11 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProjectsRoute,
+} as any)
 const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
   id: '/industries/$slug',
   path: '/industries/$slug',
@@ -242,7 +248,7 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-  '/projects': typeof ProjectsRoute
+  '/projects': typeof ProjectsRouteWithChildren
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
@@ -261,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
@@ -280,7 +287,7 @@ export interface FileRoutesByTo {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-  '/projects': typeof ProjectsRoute
+  '/projects': typeof ProjectsRouteWithChildren
   '/quality-assurance': typeof QualityAssuranceRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
@@ -298,6 +305,7 @@ export interface FileRoutesByTo {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
@@ -319,7 +327,7 @@ export interface FileRoutesById {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-  '/projects': typeof ProjectsRoute
+  '/projects': typeof ProjectsRouteWithChildren
   '/quality-assurance': typeof QualityAssuranceRoute
   '/resources': typeof ResourcesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
@@ -338,6 +346,7 @@ export interface FileRoutesById {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/industries/$slug'
+    | '/projects/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/industries/$slug'
+    | '/projects/$slug'
     | '/services/$slug'
     | '/admin'
     | '/catalogue'
@@ -455,6 +466,7 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/catalogue/$slug'
     | '/industries/$slug'
+    | '/projects/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
@@ -476,7 +488,7 @@ export interface RootRouteChildren {
   ContactsRoute: typeof ContactsRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
-  ProjectsRoute: typeof ProjectsRoute
+  ProjectsRoute: typeof ProjectsRouteWithChildren
   QualityAssuranceRoute: typeof QualityAssuranceRoute
   ResourcesRoute: typeof ResourcesRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -633,6 +645,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
+    }
+    '/projects/$slug': {
+      id: '/projects/$slug'
+      path: '/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ProjectsSlugRouteImport
+      parentRoute: typeof ProjectsRoute
     }
     '/industries/$slug': {
       id: '/industries/$slug'
@@ -796,6 +815,18 @@ const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
 )
 
+interface ProjectsRouteChildren {
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
+}
+
+const ProjectsRouteChildren: ProjectsRouteChildren = {
+  ProjectsSlugRoute: ProjectsSlugRoute,
+}
+
+const ProjectsRouteWithChildren = ProjectsRoute._addFileChildren(
+  ProjectsRouteChildren,
+)
+
 interface ResourcesRouteChildren {
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   ResourcesCategorySlugRoute: typeof ResourcesCategorySlugRoute
@@ -833,7 +864,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactsRoute: ContactsRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
-  ProjectsRoute: ProjectsRoute,
+  ProjectsRoute: ProjectsRouteWithChildren,
   QualityAssuranceRoute: QualityAssuranceRoute,
   ResourcesRoute: ResourcesRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,

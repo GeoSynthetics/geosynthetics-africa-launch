@@ -16,6 +16,7 @@ export { MediaCenterPage } from "./MediaCenterPage";
 export { TrackingAdminPage } from "./TrackingAdminPage";
 export { ProductDetailPage } from "./ProductDetailPage";
 export { ProductsAdminPage } from "./ProductsAdminPage";
+export { ProjectDetailPage } from "./ProjectDetailPage";
 
 
 
