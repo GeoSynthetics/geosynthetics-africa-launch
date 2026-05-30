@@ -66,8 +66,7 @@ const mockData = {
     "Energy (Brine Ponds, Evaporation Ponds)"
   ]
 };
-
-function mapFamilyData(familyData: any, category: string, family: string) {
+function mapFamilyData(familyData: any, category: string, family: string, dynamicCaseStudies?: any[]) {
   if (!familyData) return null;
   
   return {
@@ -94,7 +93,8 @@ function mapFamilyData(familyData: any, category: string, family: string) {
     popularCatalogue: (familyData.popularProducts || familyData.popularCatalogue || []).map((item: any) => ({
       name: item.name || "",
       spec: item.spec || item.desc || "",
-      image: item.image || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&q=80"
+      image: item.image || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&q=80",
+      slug: item.slug || ""
     })),
     relatedProductGroups: (familyData.relatedProductGroups && familyData.relatedProductGroups.length > 0)
       ? familyData.relatedProductGroups
@@ -116,22 +116,53 @@ function mapFamilyData(familyData: any, category: string, family: string) {
     installationSpecs: Array.isArray(familyData.installationSpecs)
       ? familyData.installationSpecs.join("\n\n")
       : (familyData.installationSpecs || ""),
-    projects: (familyData.projectReferences || familyData.projects || []).map((proj: any) => ({
-      name: proj.name || "",
-      location: proj.location || "",
-      image: proj.image || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"
-    })),
+    projects: (dynamicCaseStudies && dynamicCaseStudies.length > 0)
+      ? dynamicCaseStudies.map((cs: any) => ({
+          name: cs.title || "",
+          location: `${cs.location}, ${cs.country}`,
+          image: cs.hero_image_url || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+          slug: cs.slug || ""
+        }))
+      : (familyData.projectReferences || familyData.projects || []).map((proj: any) => ({
+          name: proj.name || "",
+          location: proj.location || "",
+          image: proj.image || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+          slug: proj.slug || ""
+        })),
     applications: Array.isArray(familyData.applications)
-      ? familyData.applications.map((app: any) => typeof app === "string" ? app : (app.label || ""))
-      : []
+      ? familyData.applications.map((app: any) => {
+          if (typeof app === "string") {
+            return {
+              label: app,
+              slug: app.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+            };
+          }
+          return { label: app.label || "", slug: app.slug || "" };
+        })
+      : [
+          { label: "Mining (Heap Leach Pads, Tailings Impoundments)", slug: "mining-systems" },
+          { label: "Environmental (Landfill Basal Lining, Capping)", slug: "waste-landfills" },
+          { label: "Water (Reservoirs, Dams, Canals, Ponds)", slug: "water-containment" },
+          { label: "Roads & Infrastructure (Subgrade Stabilization)", slug: "roads-infrastructure" }
+        ],
+    industries: (familyData.industries && familyData.industries.length > 0)
+      ? familyData.industries.map((ind: any) => ({
+          label: ind.label || "",
+          slug: ind.slug || ""
+        }))
+      : [
+          { label: "Mining", slug: "mining" },
+          { label: "Water Management", slug: "water-management" },
+          { label: "Construction & Infrastructure", slug: "construction-infrastructure" }
+        ]
   };
 }
 
 export function ProductFamilyPage() {
-  const { category, family, familyData } = Route.useLoaderData();
+  const { category, family, familyData, dynamicCaseStudies } = Route.useLoaderData();
   const location = useLocation();
 
-  const data = (familyData ? mapFamilyData(familyData, category, family) : mockData) as typeof mockData;
+  const data = (familyData ? mapFamilyData(familyData, category, family, dynamicCaseStudies) : mockData) as typeof mockData;
 
   useEffect(() => {
     if (!familyData) {
@@ -232,7 +263,7 @@ export function ProductFamilyPage() {
               { id: 'description', label: 'Description' },
               { id: 'specifications', label: 'Specifications' },
               { id: 'documents', label: 'Documents' },
-              { id: 'applications', label: 'Applications' },
+              { id: 'applications', label: 'Applications & Industries' },
               { id: 'projects', label: 'Projects' },
               { id: 'faqs', label: 'FAQs' }
             ].map(link => (
@@ -330,9 +361,15 @@ export function ProductFamilyPage() {
                     <h4 className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">{item.name}</h4>
                     <span className="text-xs text-primary font-medium">{item.spec}</span>
                     <div className="mt-auto pt-4 flex items-center justify-between">
-                      <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "relevant" }} className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition flex items-center gap-1">
-                        View Product <ArrowRight className="h-3 w-3" />
-                      </Link>
+                      {item.slug ? (
+                        <Link to="/catalogue/$slug" params={{ slug: item.slug }} className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition flex items-center gap-1">
+                          View Product <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      ) : (
+                        <Link to="/catalogue" search={{ q: item.name, cats: [], mans: [], sort: "relevant" }} className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition flex items-center gap-1">
+                          View Product <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -430,16 +467,32 @@ export function ProductFamilyPage() {
             Featured Projects Across Africa
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {(data.projects || []).map((project: any, idx: number) => (
-              <div key={idx} className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border">
-                <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">{project.name}</h4>
-                  <div className="text-primary text-xs uppercase font-medium mt-1">{project.location}</div>
+            {(data.projects || []).map((project: any, idx: number) => {
+              const cardContent = (
+                <>
+                  <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">{project.name}</h4>
+                    <div className="text-primary text-xs uppercase font-medium mt-1">{project.location}</div>
+                  </div>
+                </>
+              );
+
+              if (project.slug) {
+                return (
+                  <Link key={idx} to="/projects/$slug" params={{ slug: project.slug }} className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border block">
+                    {cardContent}
+                  </Link>
+                );
+              }
+
+              return (
+                <div key={idx} className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border">
+                  {cardContent}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -481,21 +534,52 @@ export function ProductFamilyPage() {
             </div>
           </div>
 
-          <div id="applications">
-            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
-              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-              Common {dynamicFamilyName} Applications
-            </h2>
-            <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-3">
-              {(data.applications || []).map((app: string, idx: number) => (
-                <li key={idx}>
-                  <Link to="/applications" className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition">
-                    <ArrowRight className="h-4 w-4 text-primary shrink-0" />
-                    <span>{app}</span>
+          <div id="applications" className="space-y-10">
+            <div>
+              <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                Common {dynamicFamilyName} Applications
+              </h2>
+              <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-3">
+                {(data.applications || []).map((app: any, idx: number) => (
+                  <li key={idx}>
+                    {app.slug ? (
+                      <Link to="/applications/$category" params={{ category: app.slug }} className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition">
+                        <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+                        <span>{app.label}</span>
+                      </Link>
+                    ) : (
+                      <Link to="/applications" className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition">
+                        <ArrowRight className="h-4 w-4 text-primary shrink-0" />
+                        <span>{app.label}</span>
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="pt-8 border-t border-border">
+              <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                Industries Served
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {(data.industries || []).map((ind: any, idx: number) => (
+                  <Link
+                    key={idx}
+                    to="/industries/$slug"
+                    params={{ slug: ind.slug }}
+                    className="group flex flex-col justify-between p-4 border border-border bg-surface rounded hover:border-primary hover:bg-accent transition"
+                  >
+                    <span className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition">{ind.label}</span>
+                    <span className="text-[10px] text-primary font-bold uppercase tracking-wider mt-4 flex items-center gap-1">
+                      Explore Solutions <ChevronRight className="h-3 w-3" />
+                    </span>
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </div>
 
         </div>

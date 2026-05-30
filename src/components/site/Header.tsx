@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-router";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -161,50 +161,118 @@ function useDynamicMegaMenus() {
 function DesktopNav({ menus }: { menus: typeof megaMenus }) {
   const [value, setValue] = useState<string>("");
   const location = useLocation();
+  const isInside = useRef(false);
+  const timeoutRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setValue("");
   }, [location.pathname]);
 
-  return (
-    <NavigationMenu
-      value={value}
-      onValueChange={setValue}
-      onClick={(e) => {
-        const target = e.target as HTMLElement;
-        if (target.closest("a")) {
-          setValue("");
+  const handleValueChange = (val: string) => {
+    if (val !== "") {
+      isInside.current = true;
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setValue(val);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    isInside.current = true;
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    isInside.current = false;
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    // Retain the mega menu open state for 350ms after the mouse leaves the header/menu container
+    timeoutRef.current = window.setTimeout(() => {
+      if (!isInside.current) {
+        setValue("");
+      }
+    }, 350);
+  };
+
+  useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (value && containerRef.current && !containerRef.current.contains(target)) {
+        setValue("");
+        isInside.current = false;
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
         }
-      }}
+      }
+    };
+    document.addEventListener("mousedown", handleDocumentClick);
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick);
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [value]);
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0"
     >
-      <NavigationMenuList className="gap-0">
-        {menus.map((m) => (
-          <NavigationMenuItem key={m.key} value={m.key}>
-            <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
-              {m.label}
-            </NavigationMenuTrigger>
-            <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
-              <MegaPanel config={m} />
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        ))}
-        {SIMPLE_NAV.map((item) => (
-          <NavigationMenuItem key={item.to}>
-            <NavigationMenuLink asChild>
-              <RLink
-                to={item.to}
-                params={item.params}
-                className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
-                activeProps={{ className: "text-primary" }}
-              >
-                {item.label}
-              </RLink>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+      <NavigationMenu
+        value={value}
+        onValueChange={handleValueChange}
+        onClick={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("a")) {
+            setValue("");
+            isInside.current = false;
+            if (timeoutRef.current) {
+              window.clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
+          }
+        }}
+        className="!max-w-none min-w-0"
+      >
+        <NavigationMenuList className="gap-0">
+          {menus.map((m) => (
+            <NavigationMenuItem key={m.key} value={m.key}>
+              <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
+                {m.label}
+              </NavigationMenuTrigger>
+              <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
+                <MegaPanel config={m} />
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          ))}
+          {SIMPLE_NAV.map((item) => (
+            <NavigationMenuItem key={item.to}>
+              <NavigationMenuLink asChild>
+                <RLink
+                  to={item.to}
+                  params={item.params}
+                  className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
+                  activeProps={{ className: "text-primary" }}
+                >
+                  {item.label}
+                </RLink>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
   );
 }
 
@@ -238,7 +306,7 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
                       <RLink
                         to={m.to}
                         onClick={() => setOpen(false)}
-                        className="block py-2 text-sm font-semibold text-primary"
+                        className="block py-3 text-sm font-semibold text-primary"
                       >
                         All {m.label} →
                       </RLink>
@@ -249,7 +317,7 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
                           to={item.to}
                           params={item.params}
                           onClick={() => setOpen(false)}
-                          className="block py-2 text-sm text-foreground hover:text-primary"
+                          className="block py-3 text-sm text-foreground hover:text-primary"
                         >
                           {item.label}
                         </RLink>

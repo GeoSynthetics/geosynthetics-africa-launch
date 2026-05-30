@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { Route } from "@/routes/projects";
+import { Route } from "@/routes/projects.index";
 import { 
   Search, 
   MapPin, 
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // GSA African reach country data (as perJames' Continent Band mockup)
 const AFRICAN_COUNTRIES = [

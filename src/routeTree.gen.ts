@@ -25,10 +25,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
+import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
@@ -128,6 +131,16 @@ const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ResourcesRoute,
 } as any)
+const QualityAssuranceIndexRoute = QualityAssuranceIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QualityAssuranceRoute,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProjectsRoute,
+} as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -147,6 +160,11 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
+} as any)
+const QualityAssuranceSlugRoute = QualityAssuranceSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => QualityAssuranceRoute,
 } as any)
 const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   id: '/$slug',
@@ -249,7 +267,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
-  '/quality-assurance': typeof QualityAssuranceRoute
+  '/quality-assurance': typeof QualityAssuranceRouteWithChildren
   '/resources': typeof ResourcesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
@@ -268,10 +286,13 @@ export interface FileRoutesByFullPath {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
@@ -287,8 +308,6 @@ export interface FileRoutesByTo {
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
-  '/projects': typeof ProjectsRouteWithChildren
-  '/quality-assurance': typeof QualityAssuranceRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
@@ -306,10 +325,13 @@ export interface FileRoutesByTo {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
   '/products': typeof ProductsIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/quality-assurance': typeof QualityAssuranceIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
@@ -328,7 +350,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
-  '/quality-assurance': typeof QualityAssuranceRoute
+  '/quality-assurance': typeof QualityAssuranceRouteWithChildren
   '/resources': typeof ResourcesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
@@ -347,10 +369,13 @@ export interface FileRoutesById {
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
@@ -389,10 +414,13 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
     | '/products/'
+    | '/projects/'
+    | '/quality-assurance/'
     | '/resources/'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
@@ -408,8 +436,6 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/login'
     | '/profile'
-    | '/projects'
-    | '/quality-assurance'
     | '/robots.txt'
     | '/services'
     | '/signup'
@@ -427,10 +453,13 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin'
     | '/catalogue'
     | '/products'
+    | '/projects'
+    | '/quality-assurance'
     | '/resources'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
@@ -467,10 +496,13 @@ export interface FileRouteTypes {
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/catalogue/'
     | '/products/'
+    | '/projects/'
+    | '/quality-assurance/'
     | '/resources/'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
@@ -489,7 +521,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
-  QualityAssuranceRoute: typeof QualityAssuranceRoute
+  QualityAssuranceRoute: typeof QualityAssuranceRouteWithChildren
   ResourcesRoute: typeof ResourcesRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   ServicesRoute: typeof ServicesRouteWithChildren
@@ -618,6 +650,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesIndexRouteImport
       parentRoute: typeof ResourcesRoute
     }
+    '/quality-assurance/': {
+      id: '/quality-assurance/'
+      path: '/'
+      fullPath: '/quality-assurance/'
+      preLoaderRoute: typeof QualityAssuranceIndexRouteImport
+      parentRoute: typeof QualityAssuranceRoute
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof ProjectsRoute
+    }
     '/products/': {
       id: '/products/'
       path: '/products'
@@ -645,6 +691,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
+    }
+    '/quality-assurance/$slug': {
+      id: '/quality-assurance/$slug'
+      path: '/$slug'
+      fullPath: '/quality-assurance/$slug'
+      preLoaderRoute: typeof QualityAssuranceSlugRouteImport
+      parentRoute: typeof QualityAssuranceRoute
     }
     '/projects/$slug': {
       id: '/projects/$slug'
@@ -817,15 +870,30 @@ const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
 
 interface ProjectsRouteChildren {
   ProjectsSlugRoute: typeof ProjectsSlugRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
 
 const ProjectsRouteChildren: ProjectsRouteChildren = {
   ProjectsSlugRoute: ProjectsSlugRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
 }
 
 const ProjectsRouteWithChildren = ProjectsRoute._addFileChildren(
   ProjectsRouteChildren,
 )
+
+interface QualityAssuranceRouteChildren {
+  QualityAssuranceSlugRoute: typeof QualityAssuranceSlugRoute
+  QualityAssuranceIndexRoute: typeof QualityAssuranceIndexRoute
+}
+
+const QualityAssuranceRouteChildren: QualityAssuranceRouteChildren = {
+  QualityAssuranceSlugRoute: QualityAssuranceSlugRoute,
+  QualityAssuranceIndexRoute: QualityAssuranceIndexRoute,
+}
+
+const QualityAssuranceRouteWithChildren =
+  QualityAssuranceRoute._addFileChildren(QualityAssuranceRouteChildren)
 
 interface ResourcesRouteChildren {
   ResourcesIndexRoute: typeof ResourcesIndexRoute
@@ -865,7 +933,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
-  QualityAssuranceRoute: QualityAssuranceRoute,
+  QualityAssuranceRoute: QualityAssuranceRouteWithChildren,
   ResourcesRoute: ResourcesRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   ServicesRoute: ServicesRouteWithChildren,

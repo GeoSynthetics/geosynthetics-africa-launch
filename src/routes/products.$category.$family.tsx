@@ -18,10 +18,34 @@ async function loadProductFamily(category: string, family: string) {
   const templates = data?.value as Record<string, any> || {};
   const familyData = templates[family] || null;
 
+  // Fetch dynamic case studies that are linked to products belonging to this product family
+  let dynamicCaseStudies: any[] = [];
+  try {
+    const { data: casesData } = await supabase
+      .from("case_study_products")
+      .select("case_studies(id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year), products!inner(family_slug)")
+      .eq("products.family_slug", family);
+
+    if (casesData) {
+      const seen = new Set();
+      dynamicCaseStudies = casesData
+        .map((item: any) => item.case_studies)
+        .filter((cs: any) => {
+          if (!cs) return false;
+          if (seen.has(cs.id)) return false;
+          seen.add(cs.id);
+          return true;
+        });
+    }
+  } catch (e) {
+    console.error("Failed to fetch dynamic case studies for family:", e);
+  }
+
   return {
     category,
     family,
-    familyData
+    familyData,
+    dynamicCaseStudies
   };
 }
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 
-type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+type AnyLinkProps = Omit<LinkComponentProps, "to" | "params"> & { to: string; params?: Record<string, string> };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function closeMenus() {
@@ -15,8 +15,9 @@ import {
   Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
   Pickaxe, Droplets, Trash2, Construction, Sprout,
   Truck, HardHat, ClipboardCheck, Ship, LifeBuoy, Building2, Zap,
+  Package, Globe, ShieldCheck,
 } from "lucide-react";
-import { megaMenus, PARTNER_LOGOS, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
+import { megaMenus, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
@@ -58,12 +59,12 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     to={item.to}
                     params={item.params}
                     onClick={closeMenus}
-                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${isActive ? "bg-accent text-primary" : "text-foreground hover:bg-accent hover:text-primary"
+                    className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${isActive ? "bg-accent text-primary translate-x-1.5" : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
                       }`}
                   >
-                    {Icon && <Icon className={`h-4 w-4 transition ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`} />}
-                    <span className="font-medium flex-1">{item.label}</span>
-                    <ChevronRight className={`h-4 w-4 transition ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
+                    {Icon && <Icon className={`h-4 w-4 transition-all duration-300 ${isActive ? "text-primary scale-110" : "text-muted-foreground group-hover:text-primary group-hover:scale-110"}`} />}
+                    <span className="font-medium flex-1 transition-colors duration-300">{item.label}</span>
+                    <ChevronRight className={`h-4 w-4 transition-all duration-300 ${isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"}`} />
                   </RLink>
                 </li>
               );
@@ -83,7 +84,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                   to={item.to}
                   params={item.params}
                   onClick={closeMenus}
-                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition"
+                  className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-all duration-300 hover:translate-x-1.5"
                 >
                   {item.label}
                 </RLink>
@@ -105,10 +106,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     to={p.to}
                     params={p.params}
                     onClick={closeMenus}
-                    className="flex items-center gap-3 rounded-md p-2 hover:bg-accent transition group"
+                    className="flex items-center gap-3 rounded-md p-2 hover:bg-accent transition-all duration-300 group hover:translate-x-1.5"
                   >
                     {p.image ? (
-                      <img src={p.image} alt={p.label} className="h-12 w-12 flex-shrink-0 rounded object-cover" />
+                      <img src={p.image} alt={p.label} className="h-12 w-12 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105" />
                     ) : (
                       <div className="h-12 w-12 flex-shrink-0 rounded bg-surface flex items-center justify-center border border-border">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-foreground/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -117,10 +118,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-foreground truncate">{p.label}</div>
+                      <div className="text-sm font-semibold text-foreground truncate transition-colors duration-300 group-hover:text-primary">{p.label}</div>
                       <div className="text-xs text-muted-foreground line-clamp-2">{p.spec}</div>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground transition-all duration-300 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-primary" />
                   </RLink>
                 </li>
               ))}
@@ -129,15 +130,15 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             <ul className="space-y-3">
               {(displayData.featured as MegaFeatureItem[]).map((f) => (
                 <li key={f.title}>
-                  <RLink to={f.to} params={f.params} onClick={closeMenus} className="flex gap-3 group">
+                  <RLink to={f.to} params={f.params} onClick={closeMenus} className="flex gap-3 group transition-all duration-300 hover:translate-x-1.5">
                     <img
                       src={f.image}
                       alt=""
-                      className="h-16 w-20 flex-shrink-0 rounded object-cover"
+                      className="h-16 w-20 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-foreground group-hover:text-primary transition">
+                      <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
                         {f.title}
                       </div>
                       <div className="text-xs text-muted-foreground line-clamp-2">{f.description}</div>
@@ -161,11 +162,11 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
 
               const actionContent = (
                 <>
-                  <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition">
+                  <div className="flex h-9 w-9 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:scale-105">
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <div className="text-sm font-semibold text-foreground">{qa.title}</div>
+                    <div className="text-sm font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">{qa.title}</div>
                     <div className="text-xs text-muted-foreground truncate">{qa.description}</div>
                   </div>
                 </>
@@ -179,7 +180,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                         closeMenus();
                         open();
                       }}
-                      className="w-full flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent bg-transparent transition group cursor-pointer border-0"
+                      className="w-full flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent bg-transparent transition-all duration-300 group cursor-pointer border-0 hover:translate-x-1.5"
                     >
                       {actionContent}
                     </button>
@@ -193,7 +194,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
                     to={qa.to}
                     params={qa.params}
                     onClick={closeMenus}
-                    className="flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent transition group"
+                    className="flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent transition-all duration-300 group hover:translate-x-1.5"
                   >
                     {actionContent}
                   </RLink>
@@ -204,25 +205,75 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
         </div>
       </div>
 
-      {/* Partner strip */}
-      <div className="border-t border-border bg-surface px-8 py-4">
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <div className="text-xs font-bold uppercase tracking-wider text-foreground">
-            Global Best-in-Class Materials
+      {/* Delivery Model Strip */}
+      <div className="border-t border-border bg-[#F9F9F6] dark:bg-[#1E1E1C] px-8 py-3.5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Left Block */}
+          <div className="flex items-center gap-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              How We Deliver
+            </span>
+            <div className="hidden lg:block h-6 w-px bg-border/80" />
           </div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {PARTNER_LOGOS.map((p) => (
-              <span
-                key={p.name}
-                className="flex items-center justify-center h-6"
-              >
-                <img
-                  src={p.logo}
-                  alt={`${p.name} logo`}
-                  className="max-h-full max-w-full object-contain opacity-70 hover:opacity-100 transition"
-                />
-              </span>
-            ))}
+
+          {/* Steps Block */}
+          <div className="flex flex-wrap items-center gap-y-3 gap-x-2 md:gap-x-4 lg:gap-x-6 text-xs md:text-sm text-foreground/90 font-semibold">
+            {/* Step 1: Supply */}
+            <RLink
+              to="/services/$slug"
+              params={{ slug: "supply" }}
+              onClick={closeMenus}
+              className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
+                <Package className="h-4 w-4 text-primary transition-colors duration-300" />
+              </div>
+              <span>Supply</span>
+            </RLink>
+
+            <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
+
+            {/* Step 2: Delivery */}
+            <RLink
+              to="/services/$slug"
+              params={{ slug: "logistics" }}
+              onClick={closeMenus}
+              className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
+                <Globe className="h-4 w-4 text-primary transition-colors duration-300" />
+              </div>
+              <span>30+ country delivery</span>
+            </RLink>
+
+            <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
+
+            {/* Step 3: Installation */}
+            <RLink
+              to="/services/$slug"
+              params={{ slug: "installation" }}
+              onClick={closeMenus}
+              className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
+                <Wrench className="h-4 w-4 text-primary transition-colors duration-300" />
+              </div>
+              <span>IAGI-aligned installation</span>
+            </RLink>
+
+            <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
+
+            {/* Step 4: Quality Control */}
+            <RLink
+              to="/quality-assurance"
+              onClick={closeMenus}
+              className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <span className="font-semibold text-primary">Quality assurance</span>
+            </RLink>
           </div>
         </div>
       </div>

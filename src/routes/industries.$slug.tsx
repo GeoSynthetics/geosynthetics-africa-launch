@@ -17,9 +17,27 @@ async function loadIndustryData(slug: string) {
   const staticInd = INDUSTRIES.find((i) => i.slug === slug);
   const label = staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+  // Fetch dynamic Case Studies matching this industry (sector)
+  let caseStudies: any[] = [];
+  try {
+    const { data: casesData } = await supabase
+      .from("case_studies")
+      .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+      .eq("sector", label)
+      .eq("status", "published")
+      .order("project_year", { ascending: false });
+    
+    if (casesData) {
+      caseStudies = casesData;
+    }
+  } catch (e) {
+    console.error("Failed to load industry case studies:", e);
+  }
+
   return {
     industry: { slug, label, icon: staticInd?.icon || "Factory" },
-    templateData
+    templateData,
+    caseStudies
   };
 }
 

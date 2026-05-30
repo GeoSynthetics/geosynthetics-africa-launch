@@ -15,6 +15,7 @@ import {
   ChevronRight,
   Menu,
   Shield,
+  ShieldCheck,
   Cookie,
 } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";

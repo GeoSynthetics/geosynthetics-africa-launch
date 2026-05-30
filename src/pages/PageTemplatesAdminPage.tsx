@@ -37,6 +37,8 @@ import {
   Plus, Trash2, Save, Loader2, ExternalLink, Database,
   AlertTriangle, CheckCircle2, ChevronRight, Eye,
 } from "lucide-react";
+import { ProjectsTemplatesEditor } from "@/components/admin/ProjectsTemplatesEditor";
+import { QATemplatesEditor } from "@/components/admin/QATemplatesEditor";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
@@ -277,6 +279,7 @@ function PropertiesTableEditor({
 // ─── Main Page Component ──────────────────────────────────────────────────────
 
 export function PageTemplatesAdminPage() {
+  const [editorType, setEditorType] = useState<"products" | "projects" | "quality-assurance">("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -623,16 +626,59 @@ export function PageTemplatesAdminPage() {
 
   return (
     <div className="flex flex-col">
-      {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
-        <div>
-          <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
-            Product Page Templates
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Edit the page templates for product family sub-pages. Changes save to Supabase instantly.
-          </p>
-        </div>
+      {/* ── Sub-Editor Selection Tabs ── */}
+      <div className="flex border-b border-border mb-6">
+        <button
+          onClick={() => setEditorType("products")}
+          className={cn(
+            "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
+            editorType === "products"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          Product Templates
+        </button>
+        <button
+          onClick={() => setEditorType("projects")}
+          className={cn(
+            "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
+            editorType === "projects"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          Project Templates (Case Studies)
+        </button>
+        <button
+          onClick={() => setEditorType("quality-assurance")}
+          className={cn(
+            "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
+            editorType === "quality-assurance"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          )}
+        >
+          QA Templates
+        </button>
+      </div>
+
+      {editorType === "projects" ? (
+        <ProjectsTemplatesEditor />
+      ) : editorType === "quality-assurance" ? (
+        <QATemplatesEditor />
+      ) : (
+        <>
+          {/* ── Header ── */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
+            <div>
+              <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
+                Product Page Templates
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Edit the page templates for product family sub-pages. Changes save to Supabase instantly.
+              </p>
+            </div>
         <div className="flex items-center gap-2 shrink-0">
           {dirty && (
             <span className="flex items-center gap-1.5 text-xs font-bold text-amber-500 bg-amber-500/10 px-2.5 py-1.5 rounded">
@@ -907,7 +953,7 @@ export function PageTemplatesAdminPage() {
                     {categorySlug ? (
                       <Button asChild variant="outline" size="sm"
                         className="gap-1.5 text-xs h-8">
-                        <Link to="/products/$category/$family" params={{ category: categorySlug, family: activeSlug }}
+                        <Link to="/products/$category/$family" params={{ category: categorySlug, family: activeSlug } as any}
                           target="_blank">
                           <ExternalLink className="h-3 w-3" /> Preview
                         </Link>
@@ -1187,12 +1233,14 @@ export function PageTemplatesAdminPage() {
         </div>
       )}
 
-      {/* Success tip */}
-      {!isEmpty && !dirty && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          All changes saved to Supabase
-        </div>
+          {/* Success tip */}
+          {!isEmpty && !dirty && (
+            <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              All changes saved to Supabase
+            </div>
+          )}
+        </>
       )}
     </div>
   );

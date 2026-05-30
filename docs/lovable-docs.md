@@ -36,6 +36,13 @@ src/                                # Principal application source code
 └── types/                          # Shared TypeScript interface declarations (e.g., site builder layouts, homepage)
 ```
 
+## 2026-05-29 — Fix runtime 'cn is not defined' error on /projects page
+
+**Scope:** UI / Projects Page / Bug Fix
+**Summary:** Resolved a runtime compilation crash on the `/projects` page caused by a missing import of the `cn` class utility. Added `import { cn } from "@/lib/utils"` at the top of the `ProjectsPage.tsx` page component.
+**Files touched:** `src/pages/ProjectsPage.tsx`
+**Notes / follow-ups:** Verified using dynamic build test.
+
 ---
 
 ## 2026-05-22 — Move Tracking & Cookies to Dedicated Admin Control Panel Route

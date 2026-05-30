@@ -10,13 +10,15 @@ import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { HierarchyTree } from "@/components/admin/HierarchyTree";
 import { ContentEditorPanel } from "@/components/admin/ContentEditorPanel";
 import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
+import { ProjectsTemplatesEditor } from "@/components/admin/ProjectsTemplatesEditor";
+import { QATemplatesEditor } from "@/components/admin/QATemplatesEditor";
 
 export const Route = createFileRoute("/admin/site-builder")({
   component: SiteBuilderPage,
 });
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | SectionKey;
+type TopLevelTab = "homepage" | SectionKey | "projects" | "quality-assurance";
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -146,7 +148,7 @@ function SiteBuilderPage() {
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Site Builder</h2>
           <p className="text-sm text-muted-foreground">Manage navigation hierarchy, homepage content, and page sections from one place.</p>
         </div>
-        {activeSection !== "homepage" && (
+        {activeSection !== "homepage" && isHierarchySection(activeSection) && (
           <Button
             onClick={() => saveSection(activeSection as SectionKey)}
             disabled={saving}
@@ -177,6 +179,18 @@ function SiteBuilderPage() {
               {sections[key]?.label ?? key}
             </TabsTrigger>
           ))}
+          <TabsTrigger
+            value="projects"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Projects
+          </TabsTrigger>
+          <TabsTrigger
+            value="quality-assurance"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Quality Assurance
+          </TabsTrigger>
         </TabsList>
 
         {/* Homepage tab content */}
@@ -227,6 +241,16 @@ function SiteBuilderPage() {
             </div>
           </TabsContent>
         ))}
+
+        {/* Projects tab content */}
+        <TabsContent value="projects" className="flex-1 overflow-y-auto m-0 p-6 bg-card">
+          <ProjectsTemplatesEditor />
+        </TabsContent>
+
+        {/* Quality Assurance tab content */}
+        <TabsContent value="quality-assurance" className="flex-1 overflow-y-auto m-0 p-6 bg-card">
+          <QATemplatesEditor />
+        </TabsContent>
       </Tabs>
     </div>
   );

@@ -29,11 +29,45 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export function ProjectDetailPage() {
   const { project } = Route.useLoaderData() || {};
   const [activeAnchor, setActiveAnchor] = useState("brief");
   const [headerH, setHeaderH] = useState(96);
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const productIds = project?.products_used
+      ?.map((p: any) => p.productId)
+      .filter(Boolean);
+
+    if (productIds && productIds.length > 0) {
+      async function fetchProducts() {
+        try {
+          const { data, error } = await supabase
+            .from("products")
+            .select("id, name, slug, image_url, short_description, product_categories(slug, name)")
+            .in("id", productIds);
+
+          if (!error && data) {
+            const mapped = data.map((d: any) => ({
+              ...d,
+              product_categories: Array.isArray(d.product_categories)
+                ? d.product_categories[0]
+                : d.product_categories,
+            }));
+            setDbProducts(mapped);
+          }
+        } catch (e) {
+          console.error("Error fetching db products for case study:", e);
+        }
+      }
+      fetchProducts();
+    } else {
+      setDbProducts([]);
+    }
+  }, [project?.products_used]);
 
   useEffect(() => {
     const measure = () => {
@@ -307,9 +341,12 @@ export function ProjectDetailPage() {
       )}
 
       {/* ============ IN-PAGE STICKY SUB-NAVIGATION ============ */}
-      <nav className="sticky top-[72px] md:top-[96px] z-20 bg-background border-b border-border shadow-sm">
+      <nav 
+        className="sticky z-20 bg-background border-b border-border shadow-sm"
+        style={{ top: `${headerH}px` }}
+      >
         <div className="container-page flex items-center overflow-x-auto h-12 no-scrollbar gap-1">
-          <div className="font-display text-[9px] font-extrabold uppercase tracking-widest text-primary border-r border-border pr-4 shrink-0">
+          <div className="font-display text-xs md:text-sm font-extrabold uppercase tracking-wider text-primary border-r border-border pr-4 shrink-0">
             Case Study Navigation ↓
           </div>
           {anchors.map(a => (
@@ -317,7 +354,7 @@ export function ProjectDetailPage() {
               key={a.id}
               onClick={() => scrollToSection(a.id)}
               className={cn(
-                "h-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap px-4 border-b-2 transition-colors cursor-pointer",
+                "h-full text-xs md:text-sm font-bold uppercase tracking-wide whitespace-nowrap px-4 border-b-2 transition-colors cursor-pointer",
                 activeAnchor === a.id
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -328,7 +365,7 @@ export function ProjectDetailPage() {
           ))}
           <button
             onClick={() => scrollToSection("quote-req")}
-            className="ml-auto h-7 px-3 bg-primary text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0 rounded"
+            className="ml-auto h-8 px-4 bg-primary text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shrink-0 rounded hover:bg-primary/95 transition-colors cursor-pointer"
           >
             ↓ Request Delivery Pack
           </button>
@@ -381,12 +418,14 @@ export function ProjectDetailPage() {
                     The Logistics Challenge
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Kolwezi is approximately 3,420 km by road from the Port of Durban, crossing four sovereign customs regimes — South Africa, Botswana, Zambia, and into the Democratic Republic of the Congo. demurrages are common, and mismatched documentation packages represent significant hold windows.
+                    {project.logistics_details?.challenge_description || "Kolwezi is approximately 3,420 km by road from the Port of Durban, crossing four sovereign customs regimes — South Africa, Botswana, Zambia, and into the Democratic Republic of the Congo. demurrages are common, and mismatched documentation packages represent significant hold windows."}
                   </p>
                   <div className="bg-[#FAFAF8] border-l-4 border-primary p-6 rounded-r">
-                    <div className="font-display font-bold text-xs uppercase text-foreground mb-2">Zero-Tolerance Documentation Control</div>
+                    <div className="font-display font-bold text-xs uppercase text-foreground mb-2">
+                      {project.logistics_details?.challenge_callout_title || "Zero-Tolerance Documentation Control"}
+                    </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Material transits cross border checkpoints with daily checks. A single spelling discrepancy on SADC Certificates of Origin or SGS pre-shipment inspections can trigger multi-week detentions. The client specified a logistics provider with pre-clearance capabilities.
+                      {project.logistics_details?.challenge_callout_body || "Material transits cross border checkpoints with daily checks. A single spelling discrepancy on SADC Certificates of Origin or SGS pre-shipment inspections can trigger multi-week detentions. The client specified a logistics provider with pre-clearance capabilities."}
                     </p>
                   </div>
                 </section>
@@ -485,7 +524,7 @@ export function ProjectDetailPage() {
                     Forensic Methodology Protocol
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    To comply with SANS and voluntary GISTM guidelines, GSA engineers executed a five-stage forensic examination of the in-service geomembrane composite.
+                    {project.service_details?.challenge_description || "To comply with SANS and voluntary GISTM guidelines, GSA engineers executed a five-stage forensic examination of the in-service geomembrane composite."}
                   </p>
 
                   <div className="border border-border rounded-xl overflow-hidden divide-y divide-border bg-card shadow-sm">
@@ -514,7 +553,7 @@ export function ProjectDetailPage() {
                     Laboratory Testing Programme
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Our laboratory matrix focused on chemical antioxidant levels, thickness degradation, and environmental stress cracking resistance under high pressures.
+                    {project.service_details?.testing_description || "Our laboratory matrix focused on chemical antioxidant levels, thickness degradation, and environmental stress cracking resistance under high pressures."}
                   </p>
 
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -544,7 +583,7 @@ export function ProjectDetailPage() {
                     Forensic Findings Register
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Visual checks and testing coupons yielded three discrete findings which were registered in the environmental plan.
+                    {project.service_details?.findings_description || "Visual checks and testing coupons yielded three discrete findings which were registered in the environmental plan."}
                   </p>
 
                   <div className="grid sm:grid-cols-3 gap-3">
@@ -594,10 +633,10 @@ export function ProjectDetailPage() {
                     The Installation Challenge
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Taiings storage facilities are exposed to complex mechanical loading, high chemical pH acidity, and thermal swelling forces. Double-liner composite system installation requires highly accurate wedge-welding and extensive field CQA logs.
+                    {project.qa_details?.challenge_description || "Taiings storage facilities are exposed to complex mechanical loading, high chemical pH acidity, and thermal swelling forces. Double-liner composite system installation requires highly accurate wedge-welding and extensive field CQA logs."}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Our team managed the complete sequence — clearing clay subgrade, deploying geosynthetic clay liners (GCL) to prevent leakage, installing smooth and textured HDPE geomembranes, and laying drainage geocomposites to manage hydrostatic heads.
+                    {project.qa_details?.challenge_approach || "Our team managed the complete sequence — clearing clay subgrade, deploying geosynthetic clay liners (GCL) to prevent leakage, installing smooth and textured HDPE geomembranes, and laying drainage geocomposites to manage hydrostatic heads."}
                   </p>
                 </section>
 
@@ -659,17 +698,57 @@ export function ProjectDetailPage() {
                 </section>
 
                 {/* Products Used list */}
-                <section id="products" className="scroll-mt-28 space-y-4">
-                  <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-primary rounded-full" />
-                    Products Used in Project
-                  </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    The following certified products were supplied from our European partner mills and deployed by GSA crews on site.
-                  </p>
+              </>
+            )}
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {project.products_used?.map((p: any, idx: number) => (
+            {/* Products Supplied / Used list */}
+            {(project.service_type === "supply_only" || project.service_type === "supply_install") && (
+              <section id="products" className="scroll-mt-28 space-y-4">
+                <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-primary rounded-full" />
+                  {project.service_type === "supply_only" ? "Products Supplied" : "Products Used in Project"}
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {project.service_type === "supply_only" 
+                    ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
+                    : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {project.products_used?.map((p: any, idx: number) => {
+                    const dbProd = p.productId ? dbProducts.find((db) => db.id === p.productId) : null;
+                    
+                    if (dbProd) {
+                      return (
+                        <Link
+                          key={idx}
+                          to="/catalogue/$slug"
+                          params={{ slug: dbProd.slug }}
+                          className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
+                        >
+                          <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
+                            {dbProd.image_url ? (
+                              <img src={dbProd.image_url} alt={dbProd.name} className="h-full w-full object-cover" />
+                            ) : (
+                              <Layers className="h-6 w-6" />
+                            )}
+                          </div>
+                          <div className="flex-grow min-w-0">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-primary">{p.category || dbProd.product_categories?.name}</span>
+                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">{dbProd.name}</h4>
+                            <div className="text-[10px] text-muted-foreground font-mono mt-0.5">Quantity: {p.qty}</div>
+                            {dbProd.short_description && (
+                              <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
+                                {dbProd.short_description}
+                              </p>
+                            )}
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
+                        </Link>
+                      );
+                    }
+
+                    return (
                       <Link
                         key={idx}
                         to="/catalogue"
@@ -684,17 +763,13 @@ export function ProjectDetailPage() {
                           <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">{p.name}</h4>
                           <div className="text-[10px] text-muted-foreground font-mono mt-1">Quantity: {p.qty}</div>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center" />
+                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
                       </Link>
-                    ))}
-                  </div>
-                </section>
-              </>
+                    );
+                  })}
+                </div>
+              </section>
             )}
-
-            {/* ============================================== */}
-            {/* ============ SHARED SECTIONS ============ */}
-            {/* ============================================== */}
 
             {/* Spec Compliance table */}
             <section id="compliance" className="scroll-mt-28 space-y-4">
@@ -852,6 +927,44 @@ export function ProjectDetailPage() {
                 </div>
               </dl>
             </div>
+
+            {/* FEATURED PRODUCTS SIDEBAR CARD */}
+            {dbProducts.length > 0 && (
+              <div className="bg-white border border-border rounded-xl p-5 shadow-sm space-y-4 animate-in fade-in duration-200">
+                <h3 className="font-display text-xs font-extrabold uppercase tracking-widest text-[#FF3B30] border-b border-border pb-3 mb-2 flex items-center gap-2">
+                  <span className="w-1.5 h-3 bg-[#FF3B30] rounded-full inline-block" />
+                  Featured
+                </h3>
+                <div className="space-y-4">
+                  {dbProducts.map((prod) => (
+                    <Link
+                      key={prod.id}
+                      to="/catalogue/$slug"
+                      params={{ slug: prod.slug }}
+                      className="group flex gap-3 text-xs focus:outline-none"
+                    >
+                      <div className="h-12 w-12 shrink-0 rounded border border-border bg-card overflow-hidden relative flex items-center justify-center text-primary group-hover:border-primary transition-colors duration-200">
+                        {prod.image_url ? (
+                          <img src={prod.image_url} alt={prod.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                        ) : (
+                          <Layers className="h-5 w-5 opacity-40" />
+                        )}
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <h4 className="font-display font-bold uppercase text-foreground leading-tight group-hover:text-primary transition-colors duration-200 truncate">
+                          {prod.name}
+                        </h4>
+                        {prod.short_description && (
+                          <p className="text-[10px] text-muted-foreground leading-normal line-clamp-2 mt-0.5 font-medium">
+                            {prod.short_description}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Services Capability box (depending on type) */}
             <div className="bg-foreground text-background rounded-xl p-5 border border-[#2A2A2A]">

@@ -6,7 +6,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { Route } from "@/routes/industries.$slug";
 
 export function IndustryPage() {
-  const { industry, templateData } = Route.useLoaderData();
+  const { industry, templateData, caseStudies = [] } = Route.useLoaderData();
   
   const title = templateData?.title || industry.label;
   const description = templateData?.description || `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
@@ -80,6 +80,51 @@ export function IndustryPage() {
                 <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: section.body }} />
               </div>
             ))}
+
+            {/* Featured Projects section in Industry Page */}
+            {caseStudies && caseStudies.length > 0 && (
+              <div className="mt-16 pt-12 border-t border-border">
+                <h2 className="font-display text-2xl font-bold uppercase mb-8 flex items-center">
+                  <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                  Featured Case Studies
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {caseStudies.map((cs: any, idx: number) => (
+                    <Link
+                      key={idx}
+                      to="/projects/$slug"
+                      params={{ slug: cs.slug }}
+                      className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-foreground transition duration-200"
+                    >
+                      <div className="aspect-[16/10] relative overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${cs.hero_image_url})` }}>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        <div className="absolute top-4 left-4 z-10">
+                          <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                            {cs.service_type === "supply_install" ? "Supply & Install" : cs.service_type === "supply_only" ? "Supply Only" : "Services Only"}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6 flex-1 flex flex-col justify-between font-sans">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary mb-2">
+                            {cs.project_year || "2024"}
+                          </div>
+                          <h3 className="font-display text-lg font-bold uppercase tracking-tight text-foreground group-hover:text-primary transition-colors duration-150 leading-tight mb-2">
+                            {cs.title}
+                          </h3>
+                          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                            {cs.summary}
+                          </p>
+                        </div>
+                        <span className="text-xs font-bold uppercase tracking-wider text-primary mt-4 flex items-center gap-1">
+                          View Case Study <ChevronRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <aside className="lg:col-span-4">
             <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 sticky top-32">

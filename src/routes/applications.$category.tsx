@@ -17,9 +17,36 @@ async function loadApplicationData(categorySlug: string) {
   const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);
   const label = staticCat?.label ?? categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+  // Fetch dynamic case studies that match this application category
+  let caseStudies: any[] = [];
+  try {
+    let queryTerm = label;
+    if (categorySlug === "mining-systems") queryTerm = "Mining";
+    else if (categorySlug === "water-containment") queryTerm = "Water";
+    else if (categorySlug === "waste-landfills") queryTerm = "Landfill";
+    else if (categorySlug === "roads-infrastructure") queryTerm = "Road";
+
+    const { data: casesData } = await supabase
+      .from("case_studies")
+      .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+      .eq("status", "published");
+    
+    if (casesData) {
+      caseStudies = casesData.filter((cs: any) => {
+        const text = `${cs.title} ${cs.summary} ${cs.sector}`.toLowerCase();
+        return text.includes(queryTerm.toLowerCase()) || 
+               (categorySlug === "mining-systems" && text.includes("tsf")) ||
+               (categorySlug === "waste-landfills" && text.includes("waste"));
+      });
+    }
+  } catch (e) {
+    console.error("Failed to load application case studies:", e);
+  }
+
   return {
     category: { slug: categorySlug, label },
-    templateData
+    templateData,
+    caseStudies
   };
 }
 
