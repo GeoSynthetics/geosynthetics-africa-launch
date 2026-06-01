@@ -76,6 +76,7 @@ export interface PageContent {
   industries?: { label: string; slug: string }[];
   stats?: { projects: string; countries: string; experts: string; years: string };
   seo?: { title: string; description: string };
+  sections?: { title: string; body: string }[];
 }
 
 /** Mega menu hover content for a specific item */

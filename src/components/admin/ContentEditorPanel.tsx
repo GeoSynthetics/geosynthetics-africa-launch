@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import {
-  ListEditor, FAQEditor, PropertiesTableEditor, PairsEditor, QuickActionsEditor,
+  ListEditor, FAQEditor, PropertiesTableEditor, PairsEditor, QuickActionsEditor, SectionsEditor,
 } from "./FieldEditors";
 import { ProductSelector } from "./ProductSelector";
 
@@ -275,6 +275,13 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
                 ]}
                 onChange={v => setPage({ projectReferences: v as any })}
               />
+
+              <div className="border-t border-border pt-6">
+                <SectionsEditor
+                  sections={page.sections || []}
+                  onChange={v => setPage({ sections: v })}
+                />
+              </div>
             </div>
           )}
         </TabsContent>

@@ -5,17 +5,50 @@ import { ServicePage } from "@/pages/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadServiceData(slug: string) {
-  const { data, error } = await supabase
+  // Try loading from hierarchy first
+  const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
     .select("value")
-    .eq("key", "template_services")
+    .eq("key", "hierarchy_services")
     .maybeSingle();
 
-  const templates = data?.value as Record<string, any> || {};
-  const templateData = templates[slug] || null;
+  if (hierarchyError) {
+    console.error("Failed to load hierarchy_services:", hierarchyError);
+  }
+
+  const hierarchy = hierarchyRow?.value as any || {};
+  const matchedItem = hierarchy.items?.find(
+    (item: any) => item.slug === slug || item.id === slug
+  );
+
+  let templateData = null;
+  if (matchedItem && matchedItem.pageContent) {
+    const pc = matchedItem.pageContent;
+    templateData = {
+      title: matchedItem.label,
+      description: pc.subtitle || "",
+      heroImage: pc.heroImage || "",
+      content: {
+        features: pc.features || [],
+        sections: pc.sections || [],
+      },
+      seo: pc.seo || null,
+    };
+  }
+
+  // Fallback to template_services if no custom hierarchy pageContent is present
+  if (!templateData) {
+    const { data: templateRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "template_services")
+      .maybeSingle();
+    const templates = templateRow?.value as Record<string, any> || {};
+    templateData = templates[slug] || null;
+  }
 
   const staticSvc = SERVICES.find((s) => s.slug === slug);
-  const label = staticSvc?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label = matchedItem?.label ?? staticSvc?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return {
     service: { slug, label, icon: staticSvc?.icon || "CheckCircle" },

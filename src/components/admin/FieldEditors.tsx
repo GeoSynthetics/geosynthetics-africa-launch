@@ -241,3 +241,50 @@ export function QuickActionsEditor({ items, onChange }: { items: QA[]; onChange:
     </div>
   );
 }
+
+// ─── SectionsEditor (custom rich HTML text sections) ─────────────────────────
+interface ContentSection { title: string; body: string; }
+interface SectionsEditorProps {
+  sections: ContentSection[];
+  onChange: (sections: ContentSection[]) => void;
+}
+
+export function SectionsEditor({ sections, onChange }: SectionsEditorProps) {
+  const add = () => onChange([...sections, { title: "", body: "" }]);
+  const update = (i: number, field: keyof ContentSection, val: string) => {
+    const n = [...sections];
+    n[i] = { ...n[i], [field]: val };
+    onChange(n);
+  };
+  const remove = (i: number) => onChange(sections.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between mb-1">
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Custom Rich Text Sections</label>
+        <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary">
+          <Plus className="h-3 w-3 mr-1" /> Add Section
+        </Button>
+      </div>
+      <div className="space-y-4">
+        {sections.map((section, i) => (
+          <div key={i} className="border border-border rounded p-3 bg-surface/50 space-y-2 relative">
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10" onClick={() => remove(i)}>
+              <Trash2 className="h-3 w-3" />
+            </Button>
+            <div>
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">Section Title</label>
+              <Input value={section.title} onChange={e => update(i, "title", e.target.value)} className="mt-1 text-sm font-semibold" placeholder="e.g. Design Support Services" />
+            </div>
+            <div>
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">Section Body (Supports basic HTML/text formatting)</label>
+              <Textarea value={section.body} onChange={e => update(i, "body", e.target.value)} className="mt-1 text-sm min-h-[100px]" placeholder="<p>Our team works closely with engineers to...</p>" />
+            </div>
+          </div>
+        ))}
+        {sections.length === 0 && <p className="text-xs text-muted-foreground italic">No custom sections yet.</p>}
+      </div>
+    </div>
+  );
+}
+

@@ -5,17 +5,50 @@ import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadApplicationData(categorySlug: string) {
-  const { data, error } = await supabase
+  // Try loading from hierarchy first
+  const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
     .select("value")
-    .eq("key", "template_applications")
+    .eq("key", "hierarchy_applications")
     .maybeSingle();
 
-  const templates = data?.value as Record<string, any> || {};
-  const templateData = templates[categorySlug] || null;
+  if (hierarchyError) {
+    console.error("Failed to load hierarchy_applications:", hierarchyError);
+  }
+
+  const hierarchy = hierarchyRow?.value as any || {};
+  const matchedItem = hierarchy.items?.find(
+    (item: any) => item.slug === categorySlug || item.id === categorySlug
+  );
+
+  let templateData = null;
+  if (matchedItem && matchedItem.pageContent) {
+    const pc = matchedItem.pageContent;
+    templateData = {
+      title: matchedItem.label,
+      description: pc.subtitle || "",
+      heroImage: pc.heroImage || "",
+      content: {
+        subsystems: pc.features || [],
+        sections: pc.sections || [],
+      },
+      seo: pc.seo || null,
+    };
+  }
+
+  // Fallback to template_applications key if no custom hierarchy pageContent is present
+  if (!templateData) {
+    const { data: templateRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "template_applications")
+      .maybeSingle();
+    const templates = templateRow?.value as Record<string, any> || {};
+    templateData = templates[categorySlug] || null;
+  }
 
   const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);
-  const label = staticCat?.label ?? categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label = matchedItem?.label ?? staticCat?.label ?? categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   // Fetch dynamic case studies that match this application category
   let caseStudies: any[] = [];

@@ -5,17 +5,51 @@ import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadIndustryData(slug: string) {
-  const { data, error } = await supabase
+  // Try loading from hierarchy first
+  const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
     .select("value")
-    .eq("key", "template_industries")
+    .eq("key", "hierarchy_industries")
     .maybeSingle();
 
-  const templates = data?.value as Record<string, any> || {};
-  const templateData = templates[slug] || null;
+  if (hierarchyError) {
+    console.error("Failed to load hierarchy_industries:", hierarchyError);
+  }
+
+  const hierarchy = hierarchyRow?.value as any || {};
+  const matchedItem = hierarchy.items?.find(
+    (item: any) => item.slug === slug || item.id === slug
+  );
+
+  let templateData = null;
+  if (matchedItem && matchedItem.pageContent) {
+    const pc = matchedItem.pageContent;
+    templateData = {
+      title: matchedItem.label,
+      description: pc.subtitle || "",
+      heroImage: pc.heroImage || "",
+      content: {
+        challenges: pc.features || [],
+        applications: pc.types?.map((t: any) => t.name) || [],
+        sections: pc.sections || [],
+      },
+      seo: pc.seo || null,
+    };
+  }
+
+  // Fallback to template_industries if no custom hierarchy pageContent is present
+  if (!templateData) {
+    const { data: templateRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "template_industries")
+      .maybeSingle();
+    const templates = templateRow?.value as Record<string, any> || {};
+    templateData = templates[slug] || null;
+  }
 
   const staticInd = INDUSTRIES.find((i) => i.slug === slug);
-  const label = staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label = matchedItem?.label ?? staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   // Fetch dynamic Case Studies matching this industry (sector)
   let caseStudies: any[] = [];
