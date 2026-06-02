@@ -96,7 +96,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
         {/* Featured */}
         <div className="col-span-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {displayData.featuredTitle}
+            {activeItem?.label ? `Featured ${activeItem.label}` : displayData.featuredTitle}
           </h4>
           {displayData.featuredKind === "product" ? (
             <ul className="space-y-2">
