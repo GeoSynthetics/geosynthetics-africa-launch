@@ -4,7 +4,7 @@ import { ArrowRight, ChevronRight, Download, CheckCircle2, Factory, ShieldCheck,
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
+import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export function ProductCategoryPage() {
@@ -86,7 +86,7 @@ export function ProductCategoryPage() {
                 <span className="text-primary">|</span> This is a comprehensive description of the {content.label}
               </h2>
               <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
-                {content.description.map((paragraph, idx) => (
+                {splitIntoParagraphs(content.description).map((paragraph, idx) => (
                   <p key={idx} className={idx > 0 ? "mt-4" : ""}>{paragraph}</p>
                 ))}
               </div>
@@ -208,11 +208,11 @@ export function ProductCategoryPage() {
                  <h2 className="font-display text-xl font-bold uppercase mb-4 text-foreground flex items-center gap-3">
                    <span className="text-primary">|</span> Specifications for Installing {content.label}
                  </h2>
-                 <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground bg-surface p-6 rounded border-l-4 border-primary">
-                   {content.installationSpecs.map((spec, i) => (
-                     <p key={i} className={i > 0 ? "mt-4" : ""}>{spec}</p>
-                   ))}
-                 </div>
+                  <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground bg-surface p-6 rounded border-l-4 border-primary">
+                    {splitIntoParagraphs(content.installationSpecs).map((spec, i) => (
+                      <p key={i} className={i > 0 ? "mt-4" : ""}>{spec}</p>
+                    ))}
+                  </div>
               </div>
             )}
 

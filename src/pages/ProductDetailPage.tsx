@@ -30,7 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
@@ -537,7 +537,7 @@ export function ProductDetailPage() {
                       <h3 className="font-display text-lg font-bold uppercase">Standard Method Statement</h3>
                     </div>
                     <div className="space-y-4 text-sm leading-relaxed text-foreground/80">
-                      {familyData.installationSpecs.map((spec: string, i: number) => (
+                      {splitIntoParagraphs(familyData.installationSpecs).map((spec: string, i: number) => (
                         <p key={i}>{spec}</p>
                       ))}
                     </div>

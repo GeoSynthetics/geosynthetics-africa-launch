@@ -4,6 +4,7 @@ import { Route } from "@/routes/products.$category.$family";
 import { ChevronRight, Download, FileText, BookOpen, ArrowRight, Play, Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { splitIntoParagraphs } from "@/lib/utils";
 
 // Mock Data Structure representing GSE HD HDPE GEOMEMBRANES
 const mockData = {
@@ -293,7 +294,11 @@ export function ProductFamilyPage() {
               Technical Specification of {data.title}
             </h2>
             <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
-              <p>{data.technicalSpecText}</p>
+              {splitIntoParagraphs(data.technicalSpecText).map((para, idx) => (
+                <p key={idx} className={idx > 0 ? "mt-4" : ""}>
+                  {para}
+                </p>
+              ))}
             </div>
 
             <h3 className="font-bold text-sm uppercase tracking-widest text-foreground mt-10 mb-6">Typical Values for {dynamicCategoryName}</h3>
@@ -422,7 +427,11 @@ export function ProductFamilyPage() {
               Specification For The Design, Installation Of {data.title}
             </h2>
             <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed bg-surface border border-border p-6 rounded">
-              <p>{data.installationSpecs}</p>
+              {splitIntoParagraphs(data.installationSpecs).map((para, idx) => (
+                <p key={idx} className={idx > 0 ? "mt-4" : ""}>
+                  {para}
+                </p>
+              ))}
             </div>
           </section>
 

@@ -59,6 +59,7 @@ export const Route = createFileRoute("/products/$category/$family")({
     
     const title = familyData?.seo?.title || `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
     const description = familyData?.seo?.description || `Explore our premium ${familyLabel}, fully specified for African projects.`;
+    const keywords = familyData?.seo?.keywords;
     
     return {
       meta: [
@@ -66,6 +67,7 @@ export const Route = createFileRoute("/products/$category/$family")({
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
       ],
     };
   },

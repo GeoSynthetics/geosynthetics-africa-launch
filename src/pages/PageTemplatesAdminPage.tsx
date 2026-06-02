@@ -644,6 +644,7 @@ export function PageTemplatesAdminPage() {
     { id: "projects", label: "Projects" },
     { id: "apps", label: "Applications" },
     { id: "industries", label: "Industries" },
+    { id: "seo", label: "SEO" },
   ];
 
   // ─── Loading state ────────────────────────────────────────────────────────
@@ -1299,6 +1300,65 @@ export function PageTemplatesAdminPage() {
                             onChange={v => set("industries", v as any)}
                             newItem={{ label: "", slug: "" } as any}
                           />
+                        </TabsContent>
+
+                        {/* ── SEO ── */}
+                        <TabsContent value="seo" className="p-6 space-y-5 m-0">
+                          <SectionHeading>SEO / Meta Tags</SectionHeading>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Configure the search engine optimization tags for this product family sub-page.
+                          </p>
+                          <div>
+                            <FieldLabel hint="The title displayed in browser tabs and search engine results. Recommended: 50-60 characters.">
+                              Meta Title
+                            </FieldLabel>
+                            <Input
+                              value={active.seo?.title ?? ""}
+                              onChange={(e) =>
+                                set("seo", {
+                                  title: e.target.value,
+                                  description: active.seo?.description ?? "",
+                                  keywords: active.seo?.keywords ?? "",
+                                })
+                              }
+                              placeholder="e.g. HDPE Geomembrane Liners | Geosynthetics Africa"
+                              className="text-sm"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel hint="A brief summary of the page content shown in search results. Recommended: 150-160 characters.">
+                              Meta Description
+                            </FieldLabel>
+                            <Textarea
+                              value={active.seo?.description ?? ""}
+                              onChange={(e) =>
+                                set("seo", {
+                                  title: active.seo?.title ?? "",
+                                  description: e.target.value,
+                                  keywords: active.seo?.keywords ?? "",
+                                })
+                              }
+                              placeholder="e.g. Africa's benchmark liner for permanent containment. GRI-GM13 certified HDPE geomembrane systems in smooth and textured profiles..."
+                              className="text-sm min-h-[96px] resize-none"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel hint="Comma-separated list of search keywords.">
+                              Meta Keywords
+                            </FieldLabel>
+                            <Input
+                              value={active.seo?.keywords ?? ""}
+                              onChange={(e) =>
+                                set("seo", {
+                                  title: active.seo?.title ?? "",
+                                  description: active.seo?.description ?? "",
+                                  keywords: e.target.value,
+                                })
+                              }
+                              placeholder="e.g. hdpe geomembrane, landfill liner, tailings dam, pond liner"
+                              className="text-sm"
+                            />
+                          </div>
                         </TabsContent>
 
                       </div>

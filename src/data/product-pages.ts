@@ -24,6 +24,7 @@ export interface ProductPageContent {
   popularProducts: { name: string; spec: string; desc: string; image?: string; slug?: string }[];
   applications: { label: string; slug: string; description?: string }[];
   industries: { label: string; slug: string }[];
+  seo?: { title: string; description: string; keywords?: string };
 }
 
 export const DEFAULT_IMAGES: Record<string, string> = {
@@ -659,6 +660,7 @@ export async function getProductPageContent(
         faqs: t.faqs,
         installationSpecs: t.installationSpecs,
         projectReferences: t.projectReferences,
+        seo: t.seo,
       } as ProductPageContent;
     }
   }
@@ -710,6 +712,7 @@ export async function getProductPageContent(
               popularProducts: custom.popularProducts || fallback.popularProducts,
               applications: custom.applications || fallback.applications,
               industries: custom.industries || fallback.industries,
+              seo: custom.seo || fallback.seo,
             } as ProductPageContent;
           }
         }

@@ -75,7 +75,7 @@ export interface PageContent {
   applications?: { label: string; slug: string; description?: string }[];
   industries?: { label: string; slug: string }[];
   stats?: { projects: string; countries: string; experts: string; years: string };
-  seo?: { title: string; description: string };
+  seo?: { title: string; description: string; keywords?: string };
   sections?: { title: string; body: string }[];
 }
 

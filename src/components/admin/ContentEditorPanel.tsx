@@ -195,8 +195,9 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
 
           <div className="border-t border-border pt-4 space-y-3">
             <h4 className="text-xs font-bold uppercase text-muted-foreground">SEO</h4>
-            <Input value={page.seo?.title ?? ""} onChange={e => setPage({ seo: { ...page.seo, title: e.target.value, description: page.seo?.description ?? "" } })} placeholder="SEO Title" />
-            <Textarea value={page.seo?.description ?? ""} onChange={e => setPage({ seo: { title: page.seo?.title ?? "", ...page.seo, description: e.target.value } })} placeholder="SEO Description" className="min-h-[60px]" />
+            <Input value={page.seo?.title ?? ""} onChange={e => setPage({ seo: { ...page.seo, title: e.target.value, description: page.seo?.description ?? "", keywords: page.seo?.keywords ?? "" } })} placeholder="SEO Title" />
+            <Textarea value={page.seo?.description ?? ""} onChange={e => setPage({ seo: { title: page.seo?.title ?? "", ...page.seo, description: e.target.value, keywords: page.seo?.keywords ?? "" } })} placeholder="SEO Description" className="min-h-[60px]" />
+            <Input value={page.seo?.keywords ?? ""} onChange={e => setPage({ seo: { title: page.seo?.title ?? "", description: page.seo?.description ?? "", keywords: e.target.value } })} placeholder="SEO Keywords (comma separated)" />
           </div>
         </TabsContent>
 

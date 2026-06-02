@@ -15,12 +15,18 @@ export const Route = createFileRoute("/products/$category/")({
     }
     const content = loaderData.content;
     const label = content.label;
+    
+    const title = content.seo?.title || `${label} — Geosynthetics Africa`;
+    const description = content.seo?.description || `${label} — global best-in-class materials, fully specified for African projects.`;
+    const keywords = content.seo?.keywords;
+
     return {
       meta: [
-        { title: `${label} — Geosynthetics Africa` },
-        { name: "description", content: `${label} — global best-in-class materials, fully specified for African projects.` },
-        { property: "og:title", content: `${label} — Geosynthetics Africa` },
-        { property: "og:description", content: `Engineered ${label.toLowerCase()} systems for mining, water, waste and infrastructure.` },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
       ],
     };
   },
