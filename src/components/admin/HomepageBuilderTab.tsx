@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { compressImage } from "@/lib/image-utils";
 import {
   type HomepageContent,
   DEFAULT_HOMEPAGE_CONTENT,
@@ -36,61 +37,7 @@ import {
 
 const SUPABASE_KEY = "homepage_content";
 
-// ─── Image compression engine ─────────────────────────────────────────────────
-const compressImage = async (
-  file: File,
-  maxDim = 1600,
-  quality = 0.82,
-): Promise<{ blob: Blob; ext: string; contentType: string }> => {
-  if (file.type === "image/svg+xml" || file.type === "image/gif") {
-    const ext = file.name.split(".").pop() || (file.type === "image/svg+xml" ? "svg" : "gif");
-    return { blob: file, ext, contentType: file.type };
-  }
 
-  const bitmap = await createImageBitmap(file).catch(() => null);
-  if (!bitmap) {
-    const ext = file.name.split(".").pop() || "jpg";
-    return { blob: file, ext, contentType: file.type };
-  }
-
-  const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
-  const w = Math.round(bitmap.width * scale);
-  const h = Math.round(bitmap.height * scale);
-
-  const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext("2d");
-
-  if (!ctx) {
-    bitmap.close();
-    const ext = file.name.split(".").pop() || "jpg";
-    return { blob: file, ext, contentType: file.type };
-  }
-
-  if (file.type === "image/png" || file.type === "image/jpeg") {
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, w, h);
-  }
-
-  ctx.drawImage(bitmap, 0, 0, w, h);
-  bitmap.close();
-
-  const blob: Blob = await new Promise((resolve, reject) =>
-    canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new Error("Canvas conversion to Blob failed"))),
-      "image/webp",
-      quality,
-    ),
-  );
-
-  if (blob.size >= file.size) {
-    const ext = file.name.split(".").pop() || "jpg";
-    return { blob: file, ext, contentType: file.type };
-  }
-
-  return { blob, ext: "webp", contentType: "image/webp" };
-};
 
 // ─── Reusable sub-components ─────────────────────────────────────────────────
 

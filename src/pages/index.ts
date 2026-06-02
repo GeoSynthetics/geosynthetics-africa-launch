@@ -18,6 +18,13 @@ export { ProductDetailPage } from "./ProductDetailPage";
 export { ProductsAdminPage } from "./ProductsAdminPage";
 export { ProjectDetailPage } from "./ProjectDetailPage";
 export { QADetailPage } from "./QADetailPage";
+export { AdminDashboardPage } from "./AdminDashboardPage";
+export { PagesSeoAdminPage } from "./PagesSeoAdminPage";
+export { QuotesAdminPage } from "./QuotesAdminPage";
+export { ResourcesAdminPage } from "./ResourcesAdminPage";
+export { SiteBuilderPage } from "./SiteBuilderPage";
+export { UsersAdminPage } from "./UsersAdminPage";
+
 
 
 

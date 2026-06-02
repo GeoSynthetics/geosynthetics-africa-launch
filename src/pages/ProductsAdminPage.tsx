@@ -54,6 +54,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { compressImage } from "@/lib/image-utils";
+import { slugify } from "@/lib/utils";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 import { ProductSelector } from "@/components/admin/ProductSelector";
 
@@ -165,13 +167,6 @@ const FEATURE_ICONS_LIST = [
   { value: "check", label: "Verified (Check Circle)" },
 ];
 
-function slugify(s: string) {
-  return s
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 export function ProductsAdminPage() {
   const [rows, setRows] = useState<Product[]>([]);
@@ -307,51 +302,7 @@ export function ProductsAdminPage() {
     }));
   };
 
-  const compressImage = async (
-    file: File,
-    maxDim = 1600,
-    quality = 0.82,
-  ): Promise<{ blob: Blob; ext: string; contentType: string }> => {
-    if (file.type === "image/svg+xml" || file.type === "image/gif") {
-      const ext = file.name.split(".").pop() || (file.type === "image/svg+xml" ? "svg" : "gif");
-      return { blob: file, ext, contentType: file.type };
-    }
-    const bitmap = await createImageBitmap(file).catch(() => null);
-    if (!bitmap) {
-      const ext = file.name.split(".").pop() || "jpg";
-      return { blob: file, ext, contentType: file.type };
-    }
-    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
-    const w = Math.round(bitmap.width * scale);
-    const h = Math.round(bitmap.height * scale);
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      bitmap.close();
-      const ext = file.name.split(".").pop() || "jpg";
-      return { blob: file, ext, contentType: file.type };
-    }
-    if (file.type === "image/png") {
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, w, h);
-    }
-    ctx.drawImage(bitmap, 0, 0, w, h);
-    bitmap.close();
-    const blob: Blob = await new Promise((resolve, reject) =>
-      canvas.toBlob(
-        (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-        "image/webp",
-        quality,
-      ),
-    );
-    if (blob.size >= file.size) {
-      const ext = file.name.split(".").pop() || "jpg";
-      return { blob: file, ext, contentType: file.type };
-    }
-    return { blob, ext: "webp", contentType: "image/webp" };
-  };
+
 
   const handleUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;

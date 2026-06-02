@@ -17,3 +17,15 @@ export function splitIntoParagraphs(text: string | string[] | undefined | null):
     .map(p => p.trim())
     .filter(Boolean);
 }
+
+/**
+ * Safely converts a string to a clean URL-friendly slug.
+ */
+export function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+

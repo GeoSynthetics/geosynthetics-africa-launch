@@ -48,7 +48,7 @@ import {
   Table,
 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -102,8 +102,7 @@ const SECTION_TYPES = [
   { value: "table", label: "Data Table", icon: Table, hint: "A table with custom column headers and rows." },
 ];
 
-const slugify = (s: string) =>
-  s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || `qa-${Date.now()}`;
+
 
 const makeEmpty = (): Partial<QADocument> => ({
   slug: "",
