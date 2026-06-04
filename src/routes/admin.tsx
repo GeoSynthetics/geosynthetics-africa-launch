@@ -53,10 +53,10 @@ function AdminLayout() {
 
   return (
     <section className="bg-surface min-h-[70vh]">
-      <div className="container-page py-6 lg:py-10">
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 py-6 lg:py-10">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
           <AdminNav />
-          <div className="flex-1 w-full min-w-0 bg-card border border-border/50 rounded-2xl p-6 lg:p-8 min-h-[600px] shadow-sm">
+          <div className="flex-1 w-full min-w-0 bg-card border border-border/50 rounded-2xl p-4 md:p-6 lg:p-8 min-h-[600px] shadow-sm">
             <Outlet />
           </div>
         </div>

@@ -8,7 +8,6 @@ import {
   FileText,
   BookOpen,
   ArrowRight,
-  Play,
   Check,
   ChevronDown,
 } from "lucide-react";
@@ -377,21 +376,14 @@ export function ProductFamilyPage() {
           </div>
 
           <div className="hidden lg:flex justify-end">
-            <div className="relative w-full max-w-md aspect-video bg-surface-dark rounded overflow-hidden border border-white/10 group cursor-pointer shadow-2xl">
-              {/* Hero image as thumbnail behind play button */}
-              {heroImage && (
+            <div className="relative w-full max-w-md aspect-video bg-surface-dark rounded overflow-hidden border border-white/10 shadow-2xl">
+              {heroImage ? (
                 <img
                   src={heroImage}
                   alt={data.title}
-                  className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
-              )}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10 flex items-center justify-center">
-                <div className="h-16 w-16 rounded-full bg-primary/90 flex items-center justify-center text-white pl-1 shadow-lg transform group-hover:scale-110 transition-transform">
-                  <Play className="h-6 w-6" />
-                </div>
-              </div>
-              {!heroImage && (
+              ) : (
                 <>
                   <div className="absolute inset-0 bg-gradient-to-tr from-surface-dark via-surface-dark/50 to-transparent"></div>
                   <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_20px)]"></div>
