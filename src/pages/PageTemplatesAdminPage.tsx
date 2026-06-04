@@ -477,6 +477,7 @@ export function PageTemplatesAdminPage() {
       description: [],
       features: [],
       popularProducts: [],
+      relatedProductGroups: [],
       applications: [],
       industries: [],
       technicalHighlights: [],
@@ -644,6 +645,7 @@ export function PageTemplatesAdminPage() {
     { id: "projects", label: "Projects" },
     { id: "apps", label: "Applications" },
     { id: "industries", label: "Industries" },
+    { id: "related", label: "Related Groups" },
     { id: "seo", label: "SEO" },
   ];
 
@@ -1299,6 +1301,25 @@ export function PageTemplatesAdminPage() {
                             ]}
                             onChange={v => set("industries", v as any)}
                             newItem={{ label: "", slug: "" } as any}
+                          />
+                        </TabsContent>
+
+                        {/* ── RELATED PRODUCT GROUPS ── */}
+                        <TabsContent value="related" className="p-6 m-0">
+                          <SectionHeading>Related Product Groups</SectionHeading>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Links shown in the "Related Product Groups" section on the sub-family page.
+                            Each entry needs a display name and the full path (e.g. <code className="bg-surface px-1 rounded">/products/geomembranes/lldpe-geomembranes</code>).
+                          </p>
+                          <PairsEditor
+                            label="Related product groups"
+                            items={((active as any).relatedProductGroups ?? []) as any}
+                            fields={[
+                              { key: "name", label: "Group Name", placeholder: "e.g. LLDPE Geomembranes" },
+                              { key: "link", label: "Link Path", placeholder: "e.g. /products/geomembranes/lldpe-geomembranes" },
+                            ]}
+                            onChange={v => set("relatedProductGroups" as any, v as any)}
+                            newItem={{ name: "", link: "" } as any}
                           />
                         </TabsContent>
 

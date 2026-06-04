@@ -193,16 +193,16 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
     }
-    // Retain the mega menu open state for 350ms after the mouse leaves the header/menu container
+    // Close the mega menu if the user's cursor has been outside for 5 seconds
     timeoutRef.current = window.setTimeout(() => {
       if (!isInside.current) {
         setValue("");
       }
-    }, 350);
+    }, 5000);
   };
 
   useEffect(() => {
-    const handleDocumentClick = (e: MouseEvent) => {
+    const handleOutsideClick = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
       if (value && containerRef.current && !containerRef.current.contains(target)) {
         setValue("");
@@ -211,11 +211,16 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
           window.clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
+        // Blur the active element so Radix releases its internal hover/focus state
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
       }
     };
-    document.addEventListener("mousedown", handleDocumentClick);
+    // capture:true fires before Radix can handle the event
+    window.addEventListener("pointerdown", handleOutsideClick, true);
     return () => {
-      document.removeEventListener("mousedown", handleDocumentClick);
+      window.removeEventListener("pointerdown", handleOutsideClick, true);
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);
       }

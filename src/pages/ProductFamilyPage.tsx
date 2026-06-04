@@ -20,6 +20,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { splitIntoParagraphs, cn } from "@/lib/utils";
+import { QuoteCard } from "@/components/site/QuoteCard";
 
 // Mock Data Structure representing GSE HD HDPE GEOMEMBRANES
 const mockData = {
@@ -135,6 +136,7 @@ function mapFamilyData(
 
   return {
     title: familyData.label || familyData.title || "",
+    heroImage: familyData.heroImage || familyData.heroImageUrl || "",
     subtitle: familyData.subtitle || "",
     stats: familyData.stats || {
       projects: "900+",
@@ -248,7 +250,8 @@ export function ProductFamilyPage() {
 
   const data = (
     familyData ? mapFamilyData(familyData, category, family, dynamicCaseStudies) : mockData
-  ) as typeof mockData;
+  ) as typeof mockData & { heroImage?: string };
+  const heroImage = (data as any).heroImage || "";
   const [activeSection, setActiveSection] = useState<string>("description");
 
   useEffect(() => {
@@ -322,8 +325,15 @@ export function ProductFamilyPage() {
   return (
     <div className="bg-background relative">
       {/* Hero Section */}
-      <section className="bg-surface-dark text-white relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/40 z-0"></div>
+      <section
+        className="bg-surface-dark text-white relative"
+        style={heroImage ? {
+          backgroundImage: `url(${heroImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        } : undefined}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/50 z-0"></div>
         <div className="container-page py-16 md:py-24 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <nav className="text-xs uppercase tracking-wider text-primary font-bold flex flex-wrap items-center gap-2 mb-6">
@@ -349,10 +359,12 @@ export function ProductFamilyPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
-                asChild
                 className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide text-white"
+                onClick={() => {
+                  document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
               >
-                <Link to="/contacts">Get a Quote</Link>
+                Get a Quote
               </Button>
               <Button
                 asChild
@@ -366,14 +378,25 @@ export function ProductFamilyPage() {
 
           <div className="hidden lg:flex justify-end">
             <div className="relative w-full max-w-md aspect-video bg-surface-dark rounded overflow-hidden border border-white/10 group cursor-pointer shadow-2xl">
+              {/* Hero image as thumbnail behind play button */}
+              {heroImage && (
+                <img
+                  src={heroImage}
+                  alt={data.title}
+                  className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
+                />
+              )}
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10 flex items-center justify-center">
                 <div className="h-16 w-16 rounded-full bg-primary/90 flex items-center justify-center text-white pl-1 shadow-lg transform group-hover:scale-110 transition-transform">
                   <Play className="h-6 w-6" />
                 </div>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-surface-dark via-surface-dark/50 to-transparent"></div>
-              {/* Optional background texture/image for video placeholder */}
-              <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_20px)]"></div>
+              {!heroImage && (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-surface-dark via-surface-dark/50 to-transparent"></div>
+                  <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_20px)]"></div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -856,6 +879,17 @@ export function ProductFamilyPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Quote Request Section */}
+      <section className="bg-background">
+        <div className="container-page py-16 max-w-2xl">
+          <QuoteCard
+            contextLabel={data.title}
+            heading="Request a Quote for This Product Family"
+            description="Upload your BOQ, drawings, or specifications and our technical team will provide a detailed proposal."
+          />
         </div>
       </section>
 

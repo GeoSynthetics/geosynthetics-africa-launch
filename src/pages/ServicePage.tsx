@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, MessageCircle, FileText, CheckCircle2 } from "lucide-react";
+import { ChevronRight, FileText, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/services.$slug";
 
 const SERVICE_CONTENT: Record<string, { desc: string; features: string[]; image: string }> = {
@@ -103,15 +104,13 @@ export function ServicePage() {
             ))}
           </div>
           <aside className="lg:col-span-4">
-            <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 sticky top-32">
-              <h3 className="font-display text-lg font-bold uppercase">Ready to Execute?</h3>
-              <p className="mt-2 text-sm text-surface-dark-foreground/75">
-                Engage our team for {title.toLowerCase()} on your next project.
-              </p>
-              <Button asChild className="mt-5 w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide">
-                <Link to="/contacts"><MessageCircle className="h-4 w-4 mr-2" />Request Quote</Link>
-              </Button>
-              <Button asChild variant="outline" className="mt-3 w-full bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
+            <div className="space-y-6 sticky top-32">
+              <QuoteCard
+                contextLabel={title}
+                heading="Request a Service Quote"
+                description={`Engage our team for ${title.toLowerCase()} on your next project.`}
+              />
+              <Button asChild variant="outline" className="w-full uppercase font-bold tracking-wide">
                 <Link to="/resources"><FileText className="h-4 w-4 mr-2" />View Case Studies</Link>
               </Button>
             </div>

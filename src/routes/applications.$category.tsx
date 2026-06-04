@@ -5,6 +5,18 @@ import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadApplicationData(categorySlug: string) {
+  // Per-slug fallback hero images so pages look great before James configures them
+  const FALLBACK_HEROES: Record<string, string> = {
+    "mining-systems": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
+    "water-containment": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80",
+    "waste-landfills": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80",
+    "roads-infrastructure": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    "erosion-control": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&q=80",
+    "drainage-systems": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80",
+    "agriculture-aquaculture": "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
+  };
+  const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
+
   // Try loading from hierarchy first
   const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
@@ -27,7 +39,7 @@ async function loadApplicationData(categorySlug: string) {
     templateData = {
       title: matchedItem.label,
       description: pc.subtitle || "",
-      heroImage: pc.heroImage || "",
+      heroImage: pc.heroImage || FALLBACK_HEROES[categorySlug] || DEFAULT_HERO,
       content: {
         subsystems: pc.features || [],
         sections: pc.sections || [],
@@ -44,7 +56,10 @@ async function loadApplicationData(categorySlug: string) {
       .eq("key", "template_applications")
       .maybeSingle();
     const templates = templateRow?.value as Record<string, any> || {};
-    templateData = templates[categorySlug] || null;
+    const tmpl = templates[categorySlug];
+    templateData = tmpl
+      ? { ...tmpl, heroImage: tmpl.heroImage || FALLBACK_HEROES[categorySlug] || DEFAULT_HERO }
+      : null;
   }
 
   const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);

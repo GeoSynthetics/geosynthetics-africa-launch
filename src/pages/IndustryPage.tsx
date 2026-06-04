@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronRight, MessageCircle, FileText, Factory } from "lucide-react";
+import { ChevronRight, FileText, Factory } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/industries.$slug";
 
 export function IndustryPage() {
@@ -127,15 +128,13 @@ export function IndustryPage() {
             )}
           </div>
           <aside className="lg:col-span-4">
-            <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 sticky top-32">
-              <h3 className="font-display text-lg font-bold uppercase">Sector Expertise</h3>
-              <p className="mt-2 text-sm text-surface-dark-foreground/75">
-                Our engineers understand the specific demands of the {title.toLowerCase()} industry.
-              </p>
-              <Button asChild className="mt-5 w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide">
-                <Link to="/contacts"><MessageCircle className="h-4 w-4 mr-2" />Discuss Your Project</Link>
-              </Button>
-              <Button asChild variant="outline" className="mt-3 w-full bg-transparent border-surface-dark-foreground/30 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
+            <div className="space-y-6 sticky top-32">
+              <QuoteCard
+                contextLabel={title}
+                heading="Discuss Your Project"
+                description={`Our engineers understand the specific demands of the ${title.toLowerCase()} sector.`}
+              />
+              <Button asChild variant="outline" className="w-full uppercase font-bold tracking-wide">
                 <Link to="/resources"><FileText className="h-4 w-4 mr-2" />Industry Case Studies</Link>
               </Button>
             </div>

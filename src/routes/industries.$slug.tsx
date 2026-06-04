@@ -5,6 +5,17 @@ import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadIndustryData(slug: string) {
+  // Per-slug fallback hero images so every industry page looks great before James configures them
+  const FALLBACK_HEROES: Record<string, string> = {
+    "construction-infrastructure": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    "mining": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
+    "environmental-waste": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80",
+    "water-management": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80",
+    "agriculture-aquaculture": "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
+    "energy": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
+  };
+  const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
+
   // Try loading from hierarchy first
   const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
@@ -27,7 +38,7 @@ async function loadIndustryData(slug: string) {
     templateData = {
       title: matchedItem.label,
       description: pc.subtitle || "",
-      heroImage: pc.heroImage || "",
+      heroImage: pc.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO,
       content: {
         challenges: pc.features || [],
         applications: pc.types?.map((t: any) => t.name) || [],
@@ -45,7 +56,10 @@ async function loadIndustryData(slug: string) {
       .eq("key", "template_industries")
       .maybeSingle();
     const templates = templateRow?.value as Record<string, any> || {};
-    templateData = templates[slug] || null;
+    const tmpl = templates[slug];
+    templateData = tmpl
+      ? { ...tmpl, heroImage: tmpl.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO }
+      : null;
   }
 
   const staticInd = INDUSTRIES.find((i) => i.slug === slug);

@@ -22,6 +22,7 @@ export interface ProductPageContent {
   installationSpecs?: string[];
   projectReferences?: { name: string; location: string; year: string; image: string }[];
   popularProducts: { name: string; spec: string; desc: string; image?: string; slug?: string }[];
+  relatedProductGroups?: { name: string; link: string }[];
   applications: { label: string; slug: string; description?: string }[];
   industries: { label: string; slug: string }[];
   seo?: { title: string; description: string; keywords?: string };
@@ -651,6 +652,7 @@ export async function getProductPageContent(
         description: t.description ?? [],
         features: t.features ?? [],
         popularProducts: t.popularProducts ?? [],
+        relatedProductGroups: t.relatedProductGroups,
         applications: t.applications ?? [],
         industries: t.industries ?? [],
         technicalHighlights: t.technicalHighlights,

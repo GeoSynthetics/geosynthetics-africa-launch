@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed:related-groups": "bun run scripts/seed-related-groups.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",

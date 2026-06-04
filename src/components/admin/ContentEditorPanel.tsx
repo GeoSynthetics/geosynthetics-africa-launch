@@ -278,6 +278,22 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
               />
 
               <div className="border-t border-border pt-6">
+                <PairsEditor
+                  label="Popular Products (shown in catalogue preview)"
+                  items={(page.popularProducts ?? []) as any[]}
+                  fields={[
+                    { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
+                    { key: "spec", label: "Specification Range", placeholder: "e.g. 1.0mm – 3.0mm" },
+                    { key: "desc", label: "Short Description", placeholder: "One line description…", multiline: true },
+                    { key: "image", label: "Image URL", placeholder: "https://…" },
+                    { key: "slug", label: "Catalogue Slug (optional)", placeholder: "e.g. gse-hdpe-smooth" },
+                  ]}
+                  onChange={v => setPage({ popularProducts: v as any })}
+                  newItem={{ name: "", spec: "", desc: "", image: "", slug: "" } as any}
+                />
+              </div>
+
+              <div className="border-t border-border pt-6">
                 <SectionsEditor
                   sections={page.sections || []}
                   onChange={v => setPage({ sections: v })}
