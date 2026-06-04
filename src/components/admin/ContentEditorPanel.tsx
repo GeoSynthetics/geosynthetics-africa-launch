@@ -19,15 +19,38 @@ import {
 } from "./FieldEditors";
 import { ProductSelector } from "./ProductSelector";
 
+type SectionKey = "products" | "applications" | "services" | "industries";
 type EditableNode = HierarchyItem | HierarchyChild;
 
 interface ContentEditorPanelProps {
   node: EditableNode;
   isChild?: boolean;
+  sectionKey: SectionKey;
   onSave: (updated: EditableNode) => void;
 }
 
-export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanelProps) {
+// Maps a section to the Supabase config key that holds its page templates
+const TEMPLATE_KEY: Record<SectionKey, string> = {
+  products: "template_product_categories",
+  applications: "template_applications",
+  services: "template_services",
+  industries: "template_industries",
+};
+
+// Route path each section uses
+function sectionRoute(key: SectionKey, isChild: boolean): string {
+  if (key === "products") return isChild ? "/products/$category/$family" : "/products/$category";
+  if (key === "applications") return "/applications/$category";
+  if (key === "services") return "/services/$slug";
+  return "/industries/$slug";
+}
+
+// Param key each section uses
+function sectionParamKey(key: SectionKey): string {
+  return key === "services" || key === "industries" ? "slug" : "category";
+}
+
+export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: ContentEditorPanelProps) {
   const [data, setData] = useState<EditableNode>(node);
 
   // Sync state if node changes in parent
@@ -44,51 +67,48 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
       const { data: dbData } = await supabase
         .from("site_config")
         .select("value")
-        .eq("key", "template_product_categories")
+        .eq("key", TEMPLATE_KEY[sectionKey])
         .maybeSingle();
       if (dbData?.value) {
         setTemplates(dbData.value as Record<string, any>);
+      } else {
+        setTemplates({});
       }
       setLoadingTemplates(false);
     }
     loadTemplates();
-  }, []);
+  }, [sectionKey]);
 
   const handleSelectTemplate = (templateSlug: string) => {
     const t = templates[templateSlug];
     if (!t) return;
-    
+
     setData(prev => {
       const updated: any = {
         ...prev,
-        label: t.label ?? prev.label,
+        label: t.label ?? t.title ?? prev.label,
         slug: templateSlug,
       };
-      
-      if (isChild) {
-        updated.to = "/products/$category/$family";
-        updated.params = {
-          ...(prev.params || {}),
-          family: templateSlug
-        };
-      } else {
-        updated.to = "/products/$category";
-        updated.params = {
-          ...(prev.params || {}),
-          category: templateSlug
-        };
+
+      const route = sectionRoute(sectionKey, !!isChild);
+      const paramKey = sectionParamKey(sectionKey);
+      updated.to = route;
+      updated.params = { ...(prev.params || {}), [paramKey]: templateSlug };
+      // Products with children need both category + family params
+      if (sectionKey === "products" && isChild && prev.params?.category) {
+        updated.params = { category: prev.params.category, family: templateSlug };
       }
-      
       return updated;
     });
-    
-    toast.success(`Auto-filled details from "${t.label || templateSlug}" page template!`);
+
+    toast.success(`Auto-filled from "${t.label || t.title || templateSlug}" template!`);
   };
 
   const page: PageContent = (data as any).pageContent ?? {};
   const mega: MegaContent = (data as any).megaFallback ?? (data as HierarchyChild).megaContent ?? {};
 
-  const isProductNode = data.to?.includes("/products") || data.to?.includes("products");
+  const isProductNode = sectionKey === "products";
+  const isNonProductNode = !isProductNode;
 
   const setPage = (p: Partial<PageContent>) =>
     setData(prev => ({ ...prev, pageContent: { ...(prev as any).pageContent, ...p } }));
@@ -180,7 +200,7 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
                 {Object.keys(templates).length > 0 ? (
                   Object.entries(templates).map(([slug, t]: [string, any]) => (
                     <SelectItem key={slug} value={slug} className="text-xs">
-                      {t.label || slug} ({slug})
+                      {t.label || t.title || slug} ({slug})
                     </SelectItem>
                   ))
                 ) : (
@@ -203,7 +223,34 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
 
         {/* ── Page Content ── */}
         <TabsContent value="page" className="flex-1 overflow-y-auto p-6 m-0">
-          {isChild && isProductNode ? (
+          {/* Non-product sections: direct admin to the dedicated Page Templates editors */}
+          {isNonProductNode ? (
+            <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
+              <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-display text-lg font-bold uppercase text-foreground">Page Templates Editor</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Rich page content for <strong>{data.label}</strong> is managed in the dedicated
+                  {" "}<strong className="capitalize">{sectionKey} Page Templates</strong> builder where you can edit
+                  {sectionKey === "applications" && " hero, sub-systems, and SEO."}
+                  {sectionKey === "services" && " hero, service features, and SEO."}
+                  {sectionKey === "industries" && " hero, challenges, key applications, and SEO."}
+                </p>
+              </div>
+              <div className="pt-2 w-full">
+                <Button asChild className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20">
+                  <a href={`/admin/page-templates`}>
+                    Edit in Page Templates →
+                  </a>
+                </Button>
+              </div>
+            </div>
+          ) : isChild && isProductNode ? (
+            // Product family (child) — also managed in Page Templates
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
               <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -213,7 +260,7 @@ export function ContentEditorPanel({ node, isChild, onSave }: ContentEditorPanel
               <div className="space-y-2">
                 <h3 className="font-display text-lg font-bold uppercase text-foreground">Page Templates Integration</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  This is a product category/family page. To maintain consistent layouts and rich components (FAQs, specs table, typical values), its content is managed inside the centralized <strong>Page Templates</strong> builder.
+                  This is a product category/family page. Its content is managed inside the centralized <strong>Page Templates</strong> builder.
                 </p>
               </div>
               <div className="pt-2 w-full">

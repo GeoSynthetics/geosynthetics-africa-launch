@@ -9,14 +9,32 @@ type SelectedNode =
   | { type: "item"; itemIdx: number }
   | { type: "child"; itemIdx: number; childIdx: number };
 
+type SectionKey = "products" | "applications" | "services" | "industries";
+
+// Derive the canonical route template for each section's top-level items
+function itemRoute(sectionKey: SectionKey): string {
+  switch (sectionKey) {
+    case "products": return "/products/$category";
+    case "applications": return "/applications/$category";
+    case "services": return "/services/$slug";
+    case "industries": return "/industries/$slug";
+  }
+}
+
+// Derive the route param key for each section (products/applications use $category; services/industries use $slug)
+function itemParamKey(sectionKey: SectionKey): string {
+  return sectionKey === "services" || sectionKey === "industries" ? "slug" : "category";
+}
+
 interface HierarchyTreeProps {
   section: HierarchySection;
+  sectionKey: SectionKey;
   onChange: (section: HierarchySection) => void;
   onSelect: (node: SelectedNode) => void;
   selected: SelectedNode | null;
 }
 
-export function HierarchyTree({ section, onChange, onSelect, selected }: HierarchyTreeProps) {
+export function HierarchyTree({ section, sectionKey, onChange, onSelect, selected }: HierarchyTreeProps) {
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set([0]));
   const [newItemLabel, setNewItemLabel] = useState("");
   const [addingChildToIdx, setAddingChildToIdx] = useState<number | null>(null);
@@ -32,9 +50,12 @@ export function HierarchyTree({ section, onChange, onSelect, selected }: Hierarc
   const addItem = () => {
     if (!newItemLabel.trim()) return;
     const slug = newItemLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const paramKey = itemParamKey(sectionKey);
     const newItem: HierarchyItem = {
-      id: slug, slug, label: newItemLabel, to: section.to + "/$category",
-      params: { category: slug }, children: [],
+      id: slug, slug, label: newItemLabel,
+      to: itemRoute(sectionKey),
+      params: { [paramKey]: slug },
+      children: [],
     };
     onChange({ ...section, items: [...section.items, newItem] });
     setNewItemLabel("");
@@ -44,10 +65,18 @@ export function HierarchyTree({ section, onChange, onSelect, selected }: Hierarc
     if (!newChildLabel.trim()) return;
     const slug = newChildLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     const parent = section.items[itemIdx];
+    // Products have two-level routes; all others use a single param on the parent's route
+    const childTo = sectionKey === "products"
+      ? "/products/$category/$family"
+      : itemRoute(sectionKey);
+    const paramKey = itemParamKey(sectionKey);
+    const childParams = sectionKey === "products"
+      ? { category: parent.slug, family: slug }
+      : { [paramKey]: slug };
     const child: HierarchyChild = {
       id: slug, slug, label: newChildLabel,
-      to: "/products/$category/$family",
-      params: { category: parent.slug, family: slug },
+      to: childTo,
+      params: childParams,
     };
     const items = section.items.map((item, i) =>
       i === itemIdx ? { ...item, children: [...item.children, child] } : item

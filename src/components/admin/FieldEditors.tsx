@@ -166,12 +166,13 @@ interface PairItem { [key: string]: string }
 interface PairsEditorProps {
   label: string;
   items: PairItem[];
-  fields: { key: string; label: string; multiline?: boolean }[];
+  fields: { key: string; label: string; multiline?: boolean; placeholder?: string }[];
   onChange: (items: PairItem[]) => void;
+  newItem?: PairItem;
 }
 
-export function PairsEditor({ label, items, fields, onChange }: PairsEditorProps) {
-  const add = () => onChange([...items, Object.fromEntries(fields.map(f => [f.key, ""]))]);
+export function PairsEditor({ label, items, fields, onChange, newItem }: PairsEditorProps) {
+  const add = () => onChange([...items, newItem ? { ...newItem } : Object.fromEntries(fields.map(f => [f.key, ""]))]);
   const update = (i: number, key: string, val: string) => {
     const n = [...items]; n[i] = { ...n[i], [key]: val }; onChange(n);
   };
@@ -193,9 +194,9 @@ export function PairsEditor({ label, items, fields, onChange }: PairsEditorProps
               <div key={f.key}>
                 <label className="text-[10px] font-bold uppercase text-muted-foreground">{f.label}</label>
                 {f.multiline ? (
-                  <Textarea value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm min-h-[60px]" />
+                  <Textarea value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm min-h-[60px]" placeholder={f.placeholder} />
                 ) : (
-                  <Input value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm" />
+                  <Input value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm" placeholder={f.placeholder} />
                 )}
               </div>
             ))}

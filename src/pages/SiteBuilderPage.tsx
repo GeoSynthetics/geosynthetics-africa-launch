@@ -195,6 +195,7 @@ export function SiteBuilderPage() {
                 {sections[key] && (
                   <HierarchyTree
                     section={sections[key]!}
+                    sectionKey={key}
                     onChange={updated => updateSection(key, updated)}
                     onSelect={node => setSelected(node)}
                     selected={isHierarchySection(activeSection) && activeSection === key ? selected : null}
@@ -209,6 +210,7 @@ export function SiteBuilderPage() {
                     key={`${selected?.type}-${selected?.type === "item" ? selected.itemIdx : `${selected?.itemIdx}-${(selected as any).childIdx}`}`}
                     node={selectedNode}
                     isChild={selected?.type === "child"}
+                    sectionKey={key}
                     onSave={updateSelectedNode}
                   />
                 ) : (
