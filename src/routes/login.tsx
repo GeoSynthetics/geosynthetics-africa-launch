@@ -98,7 +98,7 @@ function LoginPage() {
           <Button
             type="submit"
             disabled={submitting}
-            className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
+            className="w-full bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide"
           >
             {submitting ? "Signing in…" : "Sign In"}
           </Button>

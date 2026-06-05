@@ -92,7 +92,7 @@ function SignupPage() {
             <Input id="password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" required />
             <p className="mt-1 text-xs text-muted-foreground">Minimum 8 characters.</p>
           </div>
-          <Button type="submit" disabled={submitting} className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide">
+          <Button type="submit" disabled={submitting} className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide hover:cursor-pointer">
             {submitting ? "Creating…" : "Create Account"}
           </Button>
           <div className="text-sm text-center text-muted-foreground">
