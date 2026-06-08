@@ -261,6 +261,54 @@ export function ProjectsTemplatesEditor() {
               </p>
             </div>
 
+            {/* Add new project button at the top */}
+            <div className="p-3 border-b border-border space-y-2 shrink-0">
+              {showNewDialog ? (
+                <div className="space-y-2">
+                  <Input
+                    placeholder="e.g. Zimbabwe River Rehab"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddNew();
+                      if (e.key === "Escape") setShowNewDialog(false);
+                    }}
+                    className="text-xs h-8"
+                    autoFocus
+                  />
+                  <div className="flex gap-1">
+                    <Button
+                      size="sm"
+                      onClick={handleAddNew}
+                      className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer"
+                    >
+                      Create
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setShowNewDialog(false);
+                        setNewTitle("");
+                      }}
+                      className="h-7 text-xs cursor-pointer"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowNewDialog(true)}
+                  className="w-full h-8 text-xs gap-1.5 cursor-pointer"
+                >
+                  <Plus className="h-3 w-3" /> New Project
+                </Button>
+              )}
+            </div>
+
             <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
               {projects.map((p) => {
                 const isActive = p.id === activeId;
@@ -325,53 +373,6 @@ export function ProjectsTemplatesEditor() {
                   </button>
                 );
               })}
-            </div>
-
-            <div className="p-3 border-t border-border space-y-2">
-              {showNewDialog ? (
-                <div className="space-y-2">
-                  <Input
-                    placeholder="e.g. Zimbabwe River Rehab"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleAddNew();
-                      if (e.key === "Escape") setShowNewDialog(false);
-                    }}
-                    className="text-xs h-8"
-                    autoFocus
-                  />
-                  <div className="flex gap-1">
-                    <Button
-                      size="sm"
-                      onClick={handleAddNew}
-                      className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer"
-                    >
-                      Create
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setShowNewDialog(false);
-                        setNewTitle("");
-                      }}
-                      className="h-7 text-xs cursor-pointer"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowNewDialog(true)}
-                  className="w-full h-8 text-xs gap-1.5 cursor-pointer"
-                >
-                  <Plus className="h-3 w-3" /> New Project
-                </Button>
-              )}
             </div>
           </div>
 

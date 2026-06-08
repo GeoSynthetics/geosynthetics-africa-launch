@@ -1,11 +1,25 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SERVICES } from "@/components/site/mega-menu-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight } from "lucide-react";
+import {
+  Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
+  Plus, Trash2
+} from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { SectionHeading, FieldLabel, StringListEditor } from "./TemplateEditorShared";
@@ -55,6 +69,23 @@ export function ServicesTemplatesEditor() {
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
 
+  const [newSlug, setNewSlug] = useState("");
+  const [showNewSlug, setShowNewSlug] = useState(false);
+
+  // Dynamic list combining static mega-menu services with custom ones from DB
+  const categoriesList = useMemo(() => {
+    const list = SERVICES.map((s) => ({ slug: s.slug, label: s.label }));
+    Object.keys(allData).forEach((slug) => {
+      if (!list.some((item) => item.slug === slug)) {
+        list.push({
+          slug,
+          label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+        });
+      }
+    });
+    return list;
+  }, [allData]);
+
   // ── Load from Supabase ──
   const load = useCallback(async () => {
     setLoading(true);
@@ -87,6 +118,47 @@ export function ServicesTemplatesEditor() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleAddNew = () => {
+    if (!newSlug.trim()) return;
+    const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+    
+    if (allData[slug] || SERVICES.some(s => s.slug === slug)) {
+      toast.error("A template with that slug already exists.");
+      return;
+    }
+
+    const label = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+    
+    setAllData(prev => ({
+      ...prev,
+      [slug]: { ...blankTemplate(), title: label }
+    }));
+    setActiveSlug(slug);
+    setNewSlug("");
+    setShowNewSlug(false);
+    setDirty(true);
+    toast.success(`Created template for "${slug}". Edit and save.`);
+  };
+
+  const handleDelete = (slug: string) => {
+    if (SERVICES.some(s => s.slug === slug)) {
+      toast.error("Cannot delete static mega-menu service.");
+      return;
+    }
+
+    setAllData(prev => {
+      const next = { ...prev };
+      delete next[slug];
+      return next;
+    });
+
+    if (activeSlug === slug) {
+      setActiveSlug(SERVICES[0]?.slug ?? "");
+    }
+    setDirty(true);
+    toast.success(`Deleted template "${slug}". Save to persist changes.`);
+  };
 
   // ── Save to Supabase ──
   const handleSave = async () => {
@@ -181,13 +253,45 @@ export function ServicesTemplatesEditor() {
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Services ({SERVICES.length})
+              Services ({categoriesList.length})
             </p>
           </div>
 
+          {/* Add new template button at the top */}
+          <div className="p-3 border-b border-border space-y-2 shrink-0">
+            {showNewSlug ? (
+              <div className="space-y-2">
+                <Input
+                  placeholder="e.g. customized-delivery"
+                  value={newSlug}
+                  onChange={e => setNewSlug(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                  className="text-xs h-8"
+                  autoFocus
+                />
+                <div className="flex gap-1">
+                  <Button size="sm" onClick={handleAddNew}
+                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer">
+                    Create
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
+                    className="h-7 text-xs cursor-pointer">
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
+                className="w-full h-8 text-xs gap-1.5 cursor-pointer">
+                <Plus className="h-3 w-3" /> New Template
+              </Button>
+            )}
+          </div>
+
           <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-            {SERVICES.map((svc) => {
+            {categoriesList.map((svc) => {
               const isActive = svc.slug === activeSlug;
+              const isStatic = SERVICES.some((s) => s.slug === svc.slug);
               return (
                 <button
                   key={svc.slug}
@@ -196,7 +300,7 @@ export function ServicesTemplatesEditor() {
                     setActiveTab("hero");
                   }}
                   className={cn(
-                    "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors",
+                    "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
                     isActive
                       ? "bg-primary/10 text-primary font-semibold"
                       : "hover:bg-accent text-foreground",
@@ -208,7 +312,40 @@ export function ServicesTemplatesEditor() {
                       {svc.slug}
                     </div>
                   </div>
-                  {isActive && <ChevronRight className="h-3 w-3 text-primary shrink-0 ml-1" />}
+                  <div className="flex items-center gap-1 ml-1 shrink-0">
+                    {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
+                    {!isStatic && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Template "{svc.slug}"?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will remove the template for this custom service. You still need to click Save All to persist.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-destructive hover:bg-destructive/90 text-white border-0 cursor-pointer"
+                              onClick={() => handleDelete(svc.slug)}
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
                 </button>
               );
             })}

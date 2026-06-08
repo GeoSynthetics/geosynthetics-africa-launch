@@ -588,6 +588,37 @@ export function PageTemplatesAdminPage() {
                   </p>
                 </div>
 
+                {/* Add new template button at the top */}
+                <div className="p-3 border-b border-border space-y-2 shrink-0">
+                  {showNewSlug ? (
+                    <div className="space-y-2">
+                      <Input
+                        placeholder="e.g. hdpe-geomembranes"
+                        value={newSlug}
+                        onChange={e => setNewSlug(e.target.value)}
+                        onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                        className="text-xs h-8"
+                        autoFocus
+                      />
+                      <div className="flex gap-1">
+                        <Button size="sm" onClick={handleAddNew}
+                          className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover">
+                          Create
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
+                          className="h-7 text-xs">
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
+                      className="w-full h-8 text-xs gap-1.5">
+                      <Plus className="h-3 w-3" /> New Template
+                    </Button>
+                  )}
+                </div>
+
                 <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
                   {slugList.map(slug => {
                     const cat = allData[slug];
@@ -644,45 +675,6 @@ export function PageTemplatesAdminPage() {
                       </button>
                     );
                   })}
-                </div>
-
-                {/* Add new + seed buttons */}
-                <div className="p-3 border-t border-border space-y-2">
-                  {showNewSlug ? (
-                    <div className="space-y-2">
-                      <Input
-                        placeholder="e.g. hdpe-geomembranes"
-                        value={newSlug}
-                        onChange={e => setNewSlug(e.target.value)}
-                        onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
-                        className="text-xs h-8"
-                        autoFocus
-                      />
-                      <div className="flex gap-1">
-                        <Button size="sm" onClick={handleAddNew}
-                          className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover">
-                          Create
-                        </Button>
-                        <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
-                          className="h-7 text-xs">
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
-                      className="w-full h-8 text-xs gap-1.5">
-                      <Plus className="h-3 w-3" /> New Template
-                    </Button>
-                  )}
-                  {/* Uncomment this button below and use it to reseed the data on the site */}
-                  {/* 
-                  <Button variant="ghost" size="sm" onClick={handleSeedDefaults}
-                disabled={seeding}
-                className="w-full h-7 text-xs text-muted-foreground gap-1.5">
-                {seeding ? <Loader2 className="h-3 w-3 animate-spin" /> : <Database className="h-3 w-3" />}
-                {seeding ? "Seeding…" : "Re-seed Defaults"}
-              </Button> */}
                 </div>
               </div>
 
