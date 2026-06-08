@@ -170,13 +170,21 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
   }, [location.pathname]);
 
   const handleValueChange = (val: string) => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     if (val !== "") {
       isInside.current = true;
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
       setValue(val);
+    } else {
+      // Schedule the close timeout but verify cursor position when it runs
+      timeoutRef.current = window.setTimeout(() => {
+        if (!isInside.current) {
+          setValue("");
+        }
+      }, 1500); // 1.5 seconds delay
     }
   };
 
@@ -193,34 +201,85 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
     }
-    // Close the mega menu if the user's cursor has been outside for 5 seconds
+    // Close the mega menu if the user's cursor has been outside for 1.5 seconds
     timeoutRef.current = window.setTimeout(() => {
       if (!isInside.current) {
         setValue("");
       }
-    }, 5000);
+    }, 1500);
   };
 
   useEffect(() => {
     const handleOutsideClick = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
-      if (value && containerRef.current && !containerRef.current.contains(target)) {
+      
+      const insideViewportWrapper = target.closest('[data-megamenu-viewport-wrapper="true"]');
+      const insideMegaPanel = target.closest('[data-megamenu-panel="true"]');
+      const insideHeader = target.closest("header") && !insideViewportWrapper;
+
+      // Close if click is outside both the visible header bar and the visible white panel
+      if (value && !insideHeader && !insideMegaPanel) {
         setValue("");
         isInside.current = false;
         if (timeoutRef.current) {
           window.clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
-        // Blur the active element so Radix releases its internal hover/focus state
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur();
         }
       }
     };
+
+    const handleScroll = () => {
+      if (value) {
+        setValue("");
+        isInside.current = false;
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && value) {
+        setValue("");
+        isInside.current = false;
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+      }
+    };
+
+    const handleFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      const insideViewportWrapper = target.closest('[data-megamenu-viewport-wrapper="true"]');
+      const insideMegaPanel = target.closest('[data-megamenu-panel="true"]');
+      const insideHeader = target.closest("header") && !insideViewportWrapper;
+
+      if (value && !insideHeader && !insideMegaPanel) {
+        setValue("");
+        isInside.current = false;
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+      }
+    };
+
     // capture:true fires before Radix can handle the event
     window.addEventListener("pointerdown", handleOutsideClick, true);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("focusin", handleFocusIn);
+
     return () => {
       window.removeEventListener("pointerdown", handleOutsideClick, true);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("focusin", handleFocusIn);
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);
       }

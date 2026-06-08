@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useId } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { ImagePicker } from "./ImagePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -105,141 +106,14 @@ function ImageUploadField({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
-  const [uploading, setUploading] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    if (!value) return;
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      toast.success("URL copied to clipboard");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Copy failed");
-    }
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    const file = files[0];
-
-    if (!file.type.startsWith("image/")) {
-      toast.error(`${file.name} is not an image file.`);
-      return;
-    }
-    if (file.size > 25 * 1024 * 1024) {
-      toast.error(`${file.name} exceeds 25MB limit.`);
-      return;
-    }
-
-    setUploading(true);
-    const toastId = toast.loading(`Optimizing & uploading ${file.name}...`);
-
-    try {
-      const { blob, ext, contentType } = await compressImage(file);
-      let bucket = "media-center";
-      const uniqueId = crypto.randomUUID();
-      const baseName = file.name.substring(0, file.name.lastIndexOf(".")).replace(/[^a-zA-Z0-9-_]/g, "_");
-      const fileName = `${baseName}_${uniqueId}.${ext}`;
-
-      let uploadRes = await supabase.storage.from(bucket).upload(fileName, blob, {
-        cacheControl: "31536000",
-        upsert: false,
-        contentType,
-      });
-
-      if (uploadRes.error) {
-        console.warn(`Upload to 'media-center' failed, trying 'product-images'...`, uploadRes.error.message);
-        bucket = "product-images";
-        uploadRes = await supabase.storage.from(bucket).upload(fileName, blob, {
-          cacheControl: "31536000",
-          upsert: false,
-          contentType,
-        });
-      }
-
-      if (uploadRes.error) {
-        throw new Error(uploadRes.error.message);
-      }
-
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      const proxyUrl = `${origin}/api/storage/${bucket}/${fileName}`;
-
-      onChange(proxyUrl);
-      toast.success("Image uploaded successfully!", { id: toastId });
-    } catch (err: any) {
-      console.error(err);
-      toast.error(`Upload failed: ${err.message || err}`, { id: toastId });
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
-    <div className="space-y-2">
-      <FieldLabel hint={hint}>{label}</FieldLabel>
-      <div className="flex gap-2">
-        <Input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder ?? "https://..."}
-          className="text-xs font-mono flex-1 h-9 bg-muted/20"
-        />
-        {value && (
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={handleCopy}
-            className="h-9 w-9 shrink-0 hover:bg-muted"
-            title="Copy URL"
-          >
-            {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
-          </Button>
-        )}
-        {value && (
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() => onChange("")}
-            className="h-9 w-9 shrink-0 text-destructive hover:bg-destructive/10"
-            title="Clear Image"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        )}
-        <label className="inline-flex items-center justify-center shrink-0 h-9 px-3 rounded-md border border-input bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-bold uppercase tracking-wider cursor-pointer transition select-none disabled:opacity-50">
-          {uploading ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-          ) : (
-            <Upload className="h-3.5 w-3.5 mr-1.5" />
-          )}
-          {uploading ? "Uploading..." : "Upload"}
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileChange}
-            disabled={uploading}
-          />
-        </label>
-      </div>
-      {value && (
-        <div className="relative group rounded-md border border-border overflow-hidden bg-accent/20">
-          <img
-            src={value}
-            alt="Preview"
-            className="w-full h-24 object-contain"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
-        </div>
-      )}
-    </div>
+    <ImagePicker
+      label={label}
+      hint={hint}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+    />
   );
 }
 

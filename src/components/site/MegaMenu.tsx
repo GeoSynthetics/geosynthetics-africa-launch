@@ -42,7 +42,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
   };
 
   return (
-    <div className="w-screen max-w-[1280px] bg-popover text-popover-foreground border-t border-border shadow-2xl">
+    <div
+      data-megamenu-panel="true"
+      className="w-screen max-w-[1280px] bg-popover text-popover-foreground border-t border-border shadow-2xl"
+    >
       <div className="grid grid-cols-12 gap-6 p-8">
         {/* Primary list */}
         <div className="col-span-3">

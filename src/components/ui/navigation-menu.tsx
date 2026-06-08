@@ -76,18 +76,21 @@ const NavigationMenuLink = NavigationMenuPrimitive.Link;
 const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
->(({ className, ...props }, ref) => (
-  <div className={cn("absolute left-0 top-full w-full flex justify-center before:absolute before:-top-6 before:left-0 before:right-0 before:h-8 before:bg-transparent before:content-[''] z-50")}>
+>((({ className, ...props }, ref) => (
+  <div
+    data-megamenu-viewport-wrapper="true"
+    className={cn("absolute left-0 top-full w-full flex justify-center before:absolute before:-top-6 before:left-0 before:right-0 before:h-8 before:bg-transparent before:content-[''] z-50")}
+  >
     <NavigationMenuPrimitive.Viewport
       className={cn(
-        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
+        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)] transition-[width,height] duration-300 empty:border-0 empty:h-0 empty:bg-transparent",
         className,
       )}
       ref={ref}
       {...props}
     />
   </div>
-));
+)));
 NavigationMenuViewport.displayName = NavigationMenuPrimitive.Viewport.displayName;
 
 const NavigationMenuIndicator = React.forwardRef<

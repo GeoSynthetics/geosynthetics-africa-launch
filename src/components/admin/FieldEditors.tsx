@@ -162,11 +162,13 @@ export function PropertiesTableEditor({ table, onChange }: PropertiesTableEditor
 }
 
 // ─── PairsEditor (benefits, types) ───────────────────────────────────────────
+import { ImagePicker } from "./ImagePicker";
+
 interface PairItem { [key: string]: string }
 interface PairsEditorProps {
   label: string;
   items: PairItem[];
-  fields: { key: string; label: string; multiline?: boolean; placeholder?: string }[];
+  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea"; placeholder?: string }[];
   onChange: (items: PairItem[]) => void;
   newItem?: PairItem;
 }
@@ -193,7 +195,15 @@ export function PairsEditor({ label, items, fields, onChange, newItem }: PairsEd
             {fields.map(f => (
               <div key={f.key}>
                 <label className="text-[10px] font-bold uppercase text-muted-foreground">{f.label}</label>
-                {f.multiline ? (
+                {f.type === "image" ? (
+                  <div className="mt-1">
+                    <ImagePicker
+                      value={item[f.key] ?? ""}
+                      placeholder={f.placeholder}
+                      onChange={(val) => update(i, f.key, val)}
+                    />
+                  </div>
+                ) : f.multiline ? (
                   <Textarea value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm min-h-[60px]" placeholder={f.placeholder} />
                 ) : (
                   <Input value={item[f.key] ?? ""} onChange={e => update(i, f.key, e.target.value)} className="mt-1 text-sm" placeholder={f.placeholder} />

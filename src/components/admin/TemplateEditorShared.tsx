@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ImagePicker } from "./ImagePicker";
 
 // ─── SectionHeading ───────────────────────────────────────────────────────────
 
@@ -121,7 +122,7 @@ export function PairsEditor<T extends Record<string, string>>({
   label: string;
   hint?: string;
   items: T[];
-  fields: { key: string; label: string; multiline?: boolean; placeholder?: string }[];
+  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea"; placeholder?: string }[];
   onChange: (v: T[]) => void;
   newItem: T;
 }) {
@@ -169,11 +170,17 @@ export function PairsEditor<T extends Record<string, string>>({
               )}
             >
               {fields.map((f) => (
-                <div key={f.key} className={f.multiline ? "col-span-full" : ""}>
+                <div key={f.key} className={f.multiline || f.type === "image" ? "col-span-full" : ""}>
                   <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
                     {f.label}
                   </label>
-                  {f.multiline ? (
+                  {f.type === "image" ? (
+                    <ImagePicker
+                      value={(item as any)[f.key] ?? ""}
+                      placeholder={f.placeholder}
+                      onChange={(val) => update(i, f.key, val)}
+                    />
+                  ) : f.multiline ? (
                     <Textarea
                       value={(item as any)[f.key] ?? ""}
                       className="text-sm min-h-[60px] resize-none"

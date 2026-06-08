@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImagePicker } from "./ImagePicker";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -915,18 +916,13 @@ export function QATemplatesEditor() {
             {/* ── HERO TAB ── */}
             <TabsContent value="hero" className="space-y-4 pt-4">
               <div>
-                <FieldLabel hint="Background image shown in the hero section">Hero Image URL</FieldLabel>
-                <Input
+                <ImagePicker
+                  label="Hero Image"
+                  hint="Background image shown in the hero section"
                   value={editing.hero_image_url ?? ""}
-                  onChange={(e) => set("hero_image_url", e.target.value)}
+                  onChange={(val) => set("hero_image_url", val)}
                   placeholder="https://..."
-                  className="mt-1"
                 />
-                {editing.hero_image_url && (
-                  <div className="mt-2 rounded overflow-hidden border border-border aspect-video bg-muted max-w-sm">
-                    <img src={editing.hero_image_url} alt="Hero preview" className="w-full h-full object-cover" />
-                  </div>
-                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">

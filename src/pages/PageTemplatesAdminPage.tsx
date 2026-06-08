@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { ImagePicker } from "@/components/admin/ImagePicker";
 import { SEED_CATEGORIES, type ProductPageContent } from "@/data/product-pages";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -466,7 +467,7 @@ export function PageTemplatesAdminPage() {
               : "border-transparent text-muted-foreground hover:text-foreground"
           )}
         >
-          Project Templates (Case Studies)
+          Project Templates
         </button>
         <button
           onClick={() => setEditorType("quality-assurance")}
@@ -477,7 +478,7 @@ export function PageTemplatesAdminPage() {
               : "border-transparent text-muted-foreground hover:text-foreground"
           )}
         >
-          QA Templates
+          Q & A Templates
         </button>
         <button
           onClick={() => setEditorType("applications")}
@@ -894,15 +895,13 @@ export function PageTemplatesAdminPage() {
                               className="text-sm" />
                           </div>
                           <div>
-                            <FieldLabel hint="Full URL to the hero background image">Hero Background Image URL</FieldLabel>
-                            <Input value={active.heroImage ?? ""}
-                              onChange={e => set("heroImage", e.target.value)}
+                            <ImagePicker
+                              label="Hero Background Image"
+                              hint="Full URL or Supabase storage path to the hero background image"
+                              value={active.heroImage ?? ""}
+                              onChange={val => set("heroImage", val)}
                               placeholder="https://images.unsplash.com/..."
-                              className="text-sm font-mono" />
-                            {active.heroImage && (
-                              <img src={active.heroImage} alt="Hero preview"
-                                className="mt-2 h-24 w-full object-cover rounded border border-border" />
-                            )}
+                            />
                           </div>
                           <div>
                             <FieldLabel hint="Short paragraph shown below the title in the hero">Subtitle / Tagline</FieldLabel>
@@ -1053,7 +1052,7 @@ export function PageTemplatesAdminPage() {
                               { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
                               { key: "spec", label: "Specification Range", placeholder: "e.g. 1.0mm – 3.0mm" },
                               { key: "desc", label: "Short Description", placeholder: "One line description…", multiline: true },
-                              { key: "image", label: "Image URL", placeholder: "https://…" },
+                              { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
                               { key: "slug", label: "Catalogue Slug (optional)", placeholder: "e.g. gse-hdpe-smooth" },
                             ]}
                             onChange={v => set("popularProducts", v as any)}
@@ -1074,7 +1073,7 @@ export function PageTemplatesAdminPage() {
                               { key: "name", label: "Project Name", placeholder: "e.g. Mining Tailings Dam" },
                               { key: "location", label: "Location / Country", placeholder: "e.g. South Africa" },
                               { key: "year", label: "Year Completed", placeholder: "e.g. 2023" },
-                              { key: "image", label: "Image URL", placeholder: "https://…" },
+                              { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
                             ]}
                             onChange={v => set("projectReferences", v as any)}
                             newItem={{ name: "", location: "", year: "", image: "" } as any}

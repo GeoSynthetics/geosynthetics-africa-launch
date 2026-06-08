@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { SectionHeading, FieldLabel, StringListEditor } from "./TemplateEditorShared";
+import { ImagePicker } from "./ImagePicker";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -437,22 +438,13 @@ export function IndustriesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Full URL to the hero background image">
-                        Hero Image URL
-                      </FieldLabel>
-                      <Input
+                      <ImagePicker
+                        label="Hero Image"
+                        hint="Full URL or Supabase storage path to the hero background image"
                         value={active.heroImage ?? ""}
-                        onChange={(e) => setField("heroImage", e.target.value)}
+                        onChange={(val) => setField("heroImage", val)}
                         placeholder="https://images.unsplash.com/…"
-                        className="text-sm font-mono"
                       />
-                      {active.heroImage && (
-                        <img
-                          src={active.heroImage}
-                          alt="Hero preview"
-                          className="mt-2 h-24 w-full object-cover rounded border border-border"
-                        />
-                      )}
                     </div>
                     <div>
                       <FieldLabel hint="Short paragraph shown below the title in the hero">

@@ -29,6 +29,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSelector, type ProductData } from "./ProductSelector";
+import { ImagePicker } from "./ImagePicker";
 
 // Reusable Sub-components for Form Layouts
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -533,22 +534,14 @@ export function ProjectsTemplatesEditor() {
                               className="text-sm"
                             />
                           </div>
-                          <div className="col-span-2 space-y-1.5">
-                            <FieldLabel hint="Full-resolution background hero photo URL (Unsplash or Supabase bucket path)">Hero Image URL</FieldLabel>
-                            <div className="flex gap-2">
-                              <Input
-                                value={active.hero_image_url || ""}
-                                onChange={(e) => setField("hero_image_url", e.target.value)}
-                                className="text-sm flex-1 font-mono"
-                              />
-                              <Button
-                                variant="outline"
-                                onClick={() => window.open(active.hero_image_url, "_blank")}
-                                className="shrink-0 h-9 px-3 gap-1 text-xs cursor-pointer"
-                              >
-                                <ImageIcon className="h-4 w-4" /> Preview
-                              </Button>
-                            </div>
+                          <div className="col-span-2">
+                            <ImagePicker
+                              label="Hero Image"
+                              hint="Full-resolution background hero photo URL (Unsplash or Supabase bucket path)"
+                              value={active.hero_image_url || ""}
+                              onChange={(val) => setField("hero_image_url", val)}
+                              placeholder="https://images.unsplash.com/photo-..."
+                            />
                           </div>
                           <div className="col-span-2 space-y-1.5">
                             <FieldLabel hint="Status defines if public users can see the project">Publishing Status</FieldLabel>
