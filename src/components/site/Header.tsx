@@ -32,6 +32,8 @@ import {
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
+const MEGAMENU_CLOSE_DELAY = 1500; // milliseconds delay before closing the mega menu
+
 function useDynamicMegaMenus() {
   const [menus, setMenus] = useState<typeof megaMenus>(megaMenus);
 
@@ -138,12 +140,12 @@ function useDynamicMegaMenus() {
                   ...p,
                   content: p.content
                     ? {
-                        ...p.content,
-                        featured:
-                          p.content.featuredKind === "product" && p.content.featured
-                            ? (hydrate(p.content.featured as any[]) as any)
-                            : p.content.featured,
-                      }
+                      ...p.content,
+                      featured:
+                        p.content.featuredKind === "product" && p.content.featured
+                          ? (hydrate(p.content.featured as any[]) as any)
+                          : p.content.featured,
+                    }
                     : p.content,
                 })),
               },
@@ -184,7 +186,7 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
         if (!isInside.current) {
           setValue("");
         }
-      }, 1500); // 1.5 seconds delay
+      }, MEGAMENU_CLOSE_DELAY);
     }
   };
 
@@ -201,18 +203,18 @@ function DesktopNav({ menus }: { menus: typeof megaMenus }) {
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
     }
-    // Close the mega menu if the user's cursor has been outside for 1.5 seconds
+    // Close the mega menu if the user's cursor has been outside for the configured delay
     timeoutRef.current = window.setTimeout(() => {
       if (!isInside.current) {
         setValue("");
       }
-    }, 1500);
+    }, MEGAMENU_CLOSE_DELAY);
   };
 
   useEffect(() => {
     const handleOutsideClick = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
-      
+
       const insideViewportWrapper = target.closest('[data-megamenu-viewport-wrapper="true"]');
       const insideMegaPanel = target.closest('[data-megamenu-panel="true"]');
       const insideHeader = target.closest("header") && !insideViewportWrapper;
@@ -498,7 +500,7 @@ export function Header() {
         ticking = true;
       }
     };
-    
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
@@ -523,10 +525,9 @@ export function Header() {
         </header>
       </div>
 
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${
-          isScrolled ? "translate-y-0 opacity-100" : "-translate-y-[100%] opacity-0 pointer-events-none"
-        }`}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${isScrolled ? "translate-y-0 opacity-100" : "-translate-y-[100%] opacity-0 pointer-events-none"
+          }`}
       >
         {headerContent}
       </header>

@@ -72,7 +72,6 @@ export interface ApplicationTemplate {
   title: string;
   description: string;
   heroImage: string;
-  parentCategory?: string;
   quoteLink?: string;
   downloadGuideLabel?: string;
   downloadGuideUrl?: string;
@@ -160,7 +159,6 @@ function blankTemplate(): ApplicationTemplate {
     title: "",
     description: "",
     heroImage: "",
-    parentCategory: "Applications",
     quoteLink: "#quote",
     downloadGuideLabel: "Download System Guide",
     downloadGuideUrl: "",
@@ -645,27 +643,14 @@ export function ApplicationsTemplatesEditor() {
                   {/* ── HERO ── */}
                   <TabsContent value="hero" className="p-6 space-y-5 m-0">
                     <SectionHeading>Hero Section</SectionHeading>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <FieldLabel>Page Title (H1)</FieldLabel>
-                        <Input
-                          value={active.title ?? ""}
-                          onChange={(e) => setField("title", e.target.value)}
-                          placeholder="e.g. Mining Systems"
-                          className="text-sm"
-                        />
-                      </div>
-                      {activeSlug !== "__landing" && (
-                        <div>
-                          <FieldLabel hint="E.g. RESERVOIRS, MINING, WATER">Parent Category Badge</FieldLabel>
-                          <Input
-                            value={active.parentCategory ?? ""}
-                            onChange={(e) => setField("parentCategory", e.target.value)}
-                            placeholder="e.g. RESERVOIRS"
-                            className="text-sm font-bold uppercase"
-                          />
-                        </div>
-                      )}
+                    <div>
+                      <FieldLabel>Page Title (H1)</FieldLabel>
+                      <Input
+                        value={active.title ?? ""}
+                        onChange={(e) => setField("title", e.target.value)}
+                        placeholder="e.g. Mining Systems"
+                        className="text-sm"
+                      />
                     </div>
                     <div>
                       <ImagePicker

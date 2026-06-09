@@ -31,7 +31,6 @@ export function ApplicationCategoryPage() {
   const description = templateData?.description || "Complete engineered system — design, supply, install, test and certify.";
   const heroImage = templateData?.heroImage || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-  const parentCategory = templateData?.parentCategory || "Applications";
   const quoteLink = templateData?.quoteLink || "#quote";
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
   const downloadGuideUrl = templateData?.downloadGuideUrl || "";
@@ -151,10 +150,6 @@ export function ApplicationCategoryPage() {
             <Icons.ChevronRight className="h-3 w-3 text-white/50" />
             <span className="text-white">{title}</span>
           </nav>
-          
-          <span className="text-xs font-bold uppercase tracking-widest bg-primary/20 text-primary border border-primary/25 px-2.5 py-1 rounded">
-            {parentCategory}
-          </span>
 
           <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-white leading-tight">
             {title}
