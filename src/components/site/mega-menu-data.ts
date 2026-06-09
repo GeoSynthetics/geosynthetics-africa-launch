@@ -3,8 +3,8 @@ export type NavTarget = {
   params?: Record<string, string>;
 };
 
-export type MegaLink = NavTarget & { 
-  label: string; 
+export type MegaLink = NavTarget & {
+  label: string;
   icon?: string;
   content?: {
     secondaryTitle: string;
@@ -819,9 +819,9 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/products",
     columns: {
       primaryTitle: "Browse Products",
-      primary: PRODUCT_CATEGORIES.map((c) => ({ 
-        label: c.label, 
-        icon: c.icon, 
+      primary: PRODUCT_CATEGORIES.map((c) => ({
+        label: c.label,
+        icon: c.icon,
         ...productLink(c.slug),
         content: generateProductContent(c.slug, c.label)
       })),
@@ -834,9 +834,9 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/applications",
     columns: {
       primaryTitle: "Application Categories",
-      primary: APPLICATION_CATEGORIES.map((c) => ({ 
-        label: c.label, 
-        icon: c.icon, 
+      primary: APPLICATION_CATEGORIES.map((c) => ({
+        label: c.label,
+        icon: c.icon,
         ...applicationLink(c.slug),
         content: generateApplicationContent(c.slug, c.label)
       })),
@@ -849,9 +849,9 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/services",
     columns: {
       primaryTitle: "Our Services",
-      primary: SERVICES.map((s) => ({ 
-        label: s.label, 
-        icon: s.icon, 
+      primary: SERVICES.map((s) => ({
+        label: s.label,
+        icon: s.icon,
         ...serviceLink(s.slug),
         content: generateServiceContent(s.slug, s.label)
       })),
@@ -864,9 +864,9 @@ export const megaMenus: MegaMenuConfig[] = [
     to: "/industries",
     columns: {
       primaryTitle: "Industries We Serve",
-      primary: INDUSTRIES.map((c) => ({ 
-        label: c.label, 
-        icon: c.icon, 
+      primary: INDUSTRIES.map((c) => ({
+        label: c.label,
+        icon: c.icon,
         ...industryLink(c.slug),
         content: generateIndustryContent(c.slug, c.label)
       })),

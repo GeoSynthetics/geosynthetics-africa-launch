@@ -36,6 +36,15 @@ src/                                # Principal application source code
 └── types/                          # Shared TypeScript interface declarations (e.g., site builder layouts, homepage)
 ```
 
+## 2026-06-09 — Document Application Categories and Sub-pages Admin Guide
+
+**Scope:** Admin / Site Builder / Documentation
+**Summary:** Added a comprehensive step-by-step guide to `docs/lovable-docs.md` explaining how administrators can manage Application Categories and their associated sub-pages via the Site Builder and Page Templates editors.
+**Files touched:** `docs/lovable-docs.md`
+**Notes / follow-ups:** None
+
+---
+
 ## 2026-05-29 — Fix runtime 'cn is not defined' error on /projects page
 
 **Scope:** UI / Projects Page / Bug Fix
@@ -262,4 +271,33 @@ Entry template — copy when adding a new entry:
 
 ---
 -->
+
+# Admin Guide: Managing Application Categories & Sub-pages in Site Builder
+
+This guide explains how administrators can customize, create, reorder, and configure **Application Categories** (e.g. *Containment & Lining*) and their **Sub-pages** (e.g. *Mining TSF Lining*) in the Geosynthetics Africa Admin Control Panel.
+
+## 1. Accessing the Site Builder
+1. Log in to the application.
+2. Click your account menu in the top right of the navigation header and select **Admin** (or go directly to `/admin`).
+3. Click **Site Builder** in the left admin sidebar navigation (or go directly to `/admin/site-builder`).
+
+## 2. Managing the Applications Navigation Hierarchy
+1. Within the Site Builder screen, select the **Applications** tab in the main tab menu.
+2. The left panel shows the dynamic **Application Categories** tree. From here you can perform the following actions:
+   * **Reorder categories or sub-pages:** Click and hold the vertical drag grip (`⋮⋮`) next to any item, then drag it up/down to change its position, or drag sub-pages to move them under a different parent category.
+   * **Add a new top-level category:** Enter a label in the input field at the bottom of the tree panel and click the `+` button.
+   * **Add a new sub-page:** Hover over any parent category item in the tree list and click the `+` icon that appears on the right edge of the item. Enter the name and press Enter.
+   * **Delete an item:** Hover over any item (category or sub-page) and click the red trash can icon to remove it.
+   * **Rename or edit configuration:** Click on any category or sub-page item in the tree. This opens its details in the **Content Editor Panel** on the right side.
+3. Click the **Save Applications** button in the top-right corner to persist all changes to Supabase.
+
+## 3. Configuring Category Page Content & Templates
+If you want to customize the page template content (e.g. Hero title, images, specifications, features, or search metadata):
+1. Navigate to the **Page Templates** section from the left admin sidebar (or go to `/admin/page-templates`).
+2. Click the **Application Templates** sub-tab.
+3. Select the category page on the left sidebar to edit:
+   * **Hero Tab:** Edit the main H1 Page Title, Hero Background Image, and Description.
+   * **Content Tab:** Manage the sub-systems checklist (each entry appears as a descriptive card on the category page).
+   * **SEO Tab:** Update the Google-compliant Meta Title, Description, and Keywords.
+4. Click **Save** (or **Save All**) to persist your changes to the database.
 

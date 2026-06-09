@@ -63,6 +63,12 @@
             Managing Homepage Content
           </a>
         </li>
+        <li class="nav-item" data-section="applications-builder">
+          <a href="#applications-builder">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+            Managing Application Categories
+          </a>
+        </li>
         <li class="nav-item" data-section="tracking-cookies">
           <a href="#tracking-cookies">
             <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -601,6 +607,92 @@
               <h4 class="step-title">Verify Status & Save Changes</h4>
               <p class="paragraph">Unsaved changes are clearly flagged in the sub-header with an amber <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:0.65rem;font-weight:700">● Unsaved</span> badge. Once you are satisfied with your edits, click the glowing <strong>Save Homepage</strong> button in the top-right corner to instantly push updates live to the public site!</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MANAGING APPLICATION CATEGORIES SECTION -->
+      <section id="applications-builder" class="doc-section">
+        <h2 class="section-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          Managing Application Categories & Sub-pages
+        </h2>
+        <p class="paragraph">
+          The Geosynthetics Africa navigation systems are built dynamically. Both application categories (e.g. <em>Containment & Lining</em>) and their corresponding nested sub-pages (e.g. <em>Mining TSF Lining</em>) can be customized, reordered, added, or deleted directly in the Admin Control Panel.
+        </p>
+        <p class="paragraph">
+          The administration of applications is divided into two primary workspaces: structural hierarchy editing in the <strong>Site Builder</strong> (<code>/admin/site-builder</code>), and content detailing in the <strong>Page Templates</strong> editor (<code>/admin/page-templates</code>). All configurations are synced atomically to the Supabase <code>site_config</code> database table under the keys <code>hierarchy_applications</code> and <code>template_applications</code>.
+        </p>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Navigation Tree & Hierarchy Management</h3>
+        <p class="paragraph">
+          To modify the categories listed in the header's <strong>Applications</strong> mega menu dropdown, navigate to the <strong>Site Builder</strong> (<code>/admin/site-builder</code>) and select the <strong>Applications</strong> tab:
+        </p>
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h4 class="step-title">Reorder Items (Drag & Drop)</h4>
+              <p class="paragraph">Hover over any item in the category tree. Click and hold the vertical drag handle (<code>⋮⋮</code>) next to the item, then drag it up or down to reorder the items or move sub-pages under a different parent category.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h4 class="step-title">Add a Top-Level Category</h4>
+              <p class="paragraph">Enter the label of the new category inside the input box at the bottom of the tree sidebar (e.g., <em>Waterproofing</em>) and click the <strong>+</strong> button. The system will automatically generate a corresponding URL slug.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h4 class="step-title">Add a Child Sub-page</h4>
+              <p class="paragraph">Hover over any parent category in the tree and click the small blue <strong>+</strong> icon that appears on the right edge. Type the name of the new sub-page and press Enter to instantly create the sub-item.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">4</div>
+            <div class="step-body">
+              <h4 class="step-title">Delete an Item</h4>
+              <p class="paragraph">Hover over the category or sub-page you wish to delete and click the red <strong>Trash</strong> icon. Confirm the action in the alert box. Note that deleting a sub-page here will remove it from navigation, but you must click <strong>Save</strong> to commit it.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-number">5</div>
+            <div class="step-body">
+              <h4 class="step-title">Save to Database</h4>
+              <p class="paragraph">Any structural alterations are flagged as unsaved. Click the <strong>Save Applications</strong> button in the top-right header to commit all structural changes to Supabase.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">2. Editing Category Page Content & Layout Templates</h3>
+        <p class="paragraph">
+          To update the copy, images, and search engine metadata of category landing pages, navigate to <strong>Page Templates</strong> (<code>/admin/page-templates</code>) and choose the <strong>Application Templates</strong> sub-tab:
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title">Hero Section Tab</h3>
+            <p class="card-desc">Configure the top banner of the application landing page. Edit the main Page Title (H1), upload a custom background photo using the image picker, and enter a detailed subtitle description.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Sub-systems Content Tab</h3>
+            <p class="card-desc">Manage the sub-systems list. Each item is rendered as a stylized card on the category landing page. Administrators can add, remove, and reorder these items dynamically using the String List editor.</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">SEO Meta Tab</h3>
+            <p class="card-desc">Update metadata to optimize organic Google rankings. Write a custom Meta Title, a meta description explaining the system value, and comma-separated meta keywords (e.g. <em>tailings storage, pond liners</em>).</p>
+          </div>
+        </div>
+
+        <div class="callout callout-note" style="margin-top:1.5rem">
+          <div class="callout-title">
+            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Static vs Custom Slugs
+          </div>
+          <div class="callout-content">
+            Protected static categories built into the main menu structure (e.g., <code>mining-systems</code>, <code>water-containment</code>) cannot be deleted. However, administrators can create new custom categories or templates dynamically. Deleting custom categories will prompt a confirmation dialog to prevent accidental data loss.
           </div>
         </div>
       </section>

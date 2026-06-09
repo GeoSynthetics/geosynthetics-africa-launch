@@ -29,6 +29,7 @@ import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assu
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
+import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
@@ -150,6 +151,11 @@ const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
   id: '/catalogue/',
   path: '/catalogue/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ApplicationsRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -289,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/applications/': typeof ApplicationsIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -304,7 +311,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
-  '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -328,6 +334,7 @@ export interface FileRoutesByTo {
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/applications': typeof ApplicationsIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
   '/products': typeof ProductsIndexRoute
   '/projects': typeof ProjectsIndexRoute
@@ -372,6 +379,7 @@ export interface FileRoutesById {
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/applications/': typeof ApplicationsIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -417,6 +425,7 @@ export interface FileRouteTypes {
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
+    | '/applications/'
     | '/catalogue/'
     | '/products/'
     | '/projects/'
@@ -432,7 +441,6 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug'
     | '/about'
-    | '/applications'
     | '/contacts'
     | '/login'
     | '/profile'
@@ -456,6 +464,7 @@ export interface FileRouteTypes {
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin'
+    | '/applications'
     | '/catalogue'
     | '/products'
     | '/projects'
@@ -499,6 +508,7 @@ export interface FileRouteTypes {
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
+    | '/applications/'
     | '/catalogue/'
     | '/products/'
     | '/projects/'
@@ -677,6 +687,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/catalogue/'
       preLoaderRoute: typeof CatalogueIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/applications/': {
+      id: '/applications/'
+      path: '/'
+      fullPath: '/applications/'
+      preLoaderRoute: typeof ApplicationsIndexRouteImport
+      parentRoute: typeof ApplicationsRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -858,10 +875,12 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ApplicationsRouteChildren {
   ApplicationsCategoryRoute: typeof ApplicationsCategoryRoute
+  ApplicationsIndexRoute: typeof ApplicationsIndexRoute
 }
 
 const ApplicationsRouteChildren: ApplicationsRouteChildren = {
   ApplicationsCategoryRoute: ApplicationsCategoryRoute,
+  ApplicationsIndexRoute: ApplicationsIndexRoute,
 }
 
 const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(

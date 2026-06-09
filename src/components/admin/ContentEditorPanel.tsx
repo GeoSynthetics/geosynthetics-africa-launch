@@ -182,7 +182,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
             <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Link Path</label>
             <Input value={data.to} onChange={e => setData(p => ({ ...p, to: e.target.value }))} placeholder="/products/$category" />
           </div>
-          
+
           {/* Autocomplete template page picker */}
           <div className="border border-primary/20 bg-primary/5 rounded-lg p-3.5 space-y-2 mt-3 shadow-sm">
             <div className="flex items-center justify-between">
@@ -191,7 +191,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
               </label>
               {loadingTemplates && <span className="text-[10px] text-muted-foreground animate-pulse">Loading...</span>}
             </div>
-            
+
             <Select onValueChange={handleSelectTemplate}>
               <SelectTrigger className="w-full text-xs h-8 bg-card border-primary/20 hover:border-primary/40 focus:ring-1 focus:ring-primary">
                 <SelectValue placeholder="Choose a page template..." />

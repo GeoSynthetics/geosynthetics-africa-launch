@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -16,38 +16,52 @@ const IMAGES: Record<string, string> = {
 };
 
 export function ApplicationsLanding() {
+  const { templates } = useLoaderData({ from: "/applications/" }) as {
+    templates: Record<string, any>;
+  };
+
+  const landing = templates?.["__landing"] || {};
+  const heroTitle = landing.title || "Engineered Systems for Every Application";
+  const heroDescription = landing.description || "From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions.";
+  const heroImage = landing.heroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
+
   return (
     <>
       <PageHero
         eyebrow="Applications"
-        title="Engineered Systems for Every Application"
-        description="From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions."
+        title={heroTitle}
+        description={heroDescription}
+        image={heroImage}
       />
       <section className="bg-background">
         <div className="container-page py-16 md:py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {APPLICATION_CATEGORIES.map((c) => (
-              <Link
-                key={c.slug}
-                to="/applications/$category"
-                params={{ category: c.slug }}
-                className="group relative aspect-[4/3] overflow-hidden rounded"
-              >
-                <img
-                  src={IMAGES[c.slug] ?? IMAGES["mining-systems"]}
-                  alt={c.label}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/40 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5 text-surface-dark-foreground">
-                  <div className="font-display text-xl font-bold uppercase">{c.label}</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider opacity-80 inline-flex items-center gap-2">
-                    Explore System <ArrowRight className="h-3 w-3" />
+            {APPLICATION_CATEGORIES.map((c) => {
+              const categoryTemplate = templates?.[c.slug];
+              const cardImage = categoryTemplate?.heroImage || IMAGES[c.slug] || IMAGES["mining-systems"];
+              return (
+                <Link
+                  key={c.slug}
+                  to="/applications/$category"
+                  params={{ category: c.slug }}
+                  className="group relative aspect-[4/3] overflow-hidden rounded"
+                >
+                  <img
+                    src={cardImage}
+                    alt={c.label}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/40 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-surface-dark-foreground">
+                    <div className="font-display text-xl font-bold uppercase">{c.label}</div>
+                    <div className="mt-1 text-xs uppercase tracking-wider opacity-80 inline-flex items-center gap-2">
+                      Explore System <ArrowRight className="h-3 w-3" />
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

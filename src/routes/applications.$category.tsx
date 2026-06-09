@@ -78,23 +78,62 @@ async function loadApplicationData(categorySlug: string) {
       .from("case_studies")
       .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
       .eq("status", "published");
-    
+
     if (casesData) {
       caseStudies = casesData.filter((cs: any) => {
         const text = `${cs.title} ${cs.summary} ${cs.sector}`.toLowerCase();
-        return text.includes(queryTerm.toLowerCase()) || 
-               (categorySlug === "mining-systems" && text.includes("tsf")) ||
-               (categorySlug === "waste-landfills" && text.includes("waste"));
+        return text.includes(queryTerm.toLowerCase()) ||
+          (categorySlug === "mining-systems" && text.includes("tsf")) ||
+          (categorySlug === "waste-landfills" && text.includes("waste"));
       });
     }
   } catch (e) {
     console.error("Failed to load application case studies:", e);
   }
 
+  // Load selected products from Supabase
+  let linkedProducts: any[] = [];
+  if (templateData?.products && templateData.products.length > 0) {
+    try {
+      const { data: prodsData, error: prodsError } = await supabase
+        .from("products")
+        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .in("id", templateData.products);
+      if (!prodsError && prodsData) {
+        linkedProducts = prodsData.map((d: any) => ({
+          ...d,
+          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+        }));
+      }
+    } catch (e) {
+      console.error("Failed to load template products:", e);
+    }
+  }
+
+  // Load selected featured case study from Supabase
+  let featuredCaseStudy = null;
+  if (templateData?.featuredCaseStudySlug) {
+    try {
+      const { data: fcData, error: fcError } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .eq("slug", templateData.featuredCaseStudySlug)
+        .eq("status", "published")
+        .maybeSingle();
+      if (!fcError && fcData) {
+        featuredCaseStudy = fcData;
+      }
+    } catch (e) {
+      console.error("Failed to load featured case study:", e);
+    }
+  }
+
   return {
     category: { slug: categorySlug, label },
     templateData,
-    caseStudies
+    caseStudies,
+    linkedProducts,
+    featuredCaseStudy
   };
 }
 
@@ -104,10 +143,10 @@ export const Route = createFileRoute("/applications/$category")({
   head: ({ loaderData }) => {
     const { category, templateData } = loaderData || { category: { slug: "", label: "" }, templateData: null };
     const label = category.label;
-    
+
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
     const description = templateData?.seo?.description || `Explore our advanced ${label.toLowerCase()} applications and projects.`;
-    
+
     return {
       meta: [
         { title },
