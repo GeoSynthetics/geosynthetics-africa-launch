@@ -24,6 +24,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
 import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
@@ -126,6 +127,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRoute,
 } as any)
 const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
   id: '/',
@@ -301,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof ProjectsIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
@@ -315,7 +322,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/robots.txt': typeof RobotsDottxtRoute
-  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
@@ -340,6 +346,7 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsIndexRoute
   '/quality-assurance': typeof QualityAssuranceIndexRoute
   '/resources': typeof ResourcesIndexRoute
+  '/services': typeof ServicesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category': typeof ProductsCategoryIndexRoute
@@ -385,6 +392,7 @@ export interface FileRoutesById {
   '/projects/': typeof ProjectsIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
+  '/services/': typeof ServicesIndexRoute
   '/products/$category/$family': typeof ProductsCategoryFamilyRoute
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
@@ -431,6 +439,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/quality-assurance/'
     | '/resources/'
+    | '/services/'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
     | '/products/$category/'
@@ -445,7 +454,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/robots.txt'
-    | '/services'
     | '/signup'
     | '/sitemap.xml'
     | '/admin/media-center'
@@ -470,6 +478,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/quality-assurance'
     | '/resources'
+    | '/services'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
     | '/products/$category'
@@ -514,6 +523,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/quality-assurance/'
     | '/resources/'
+    | '/services/'
     | '/products/$category/$family'
     | '/resources/$category/$slug'
     | '/products/$category/'
@@ -652,6 +662,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRoute
     }
     '/resources/': {
       id: '/resources/'
@@ -932,10 +949,12 @@ const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
 
 interface ServicesRouteChildren {
   ServicesSlugRoute: typeof ServicesSlugRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
   ServicesSlugRoute: ServicesSlugRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
 }
 
 const ServicesRouteWithChildren = ServicesRoute._addFileChildren(

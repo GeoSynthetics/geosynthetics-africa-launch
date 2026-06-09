@@ -64,9 +64,29 @@ async function loadServiceData(slug: string) {
   const staticSvc = SERVICES.find((s) => s.slug === slug);
   const label = matchedItem?.label ?? staticSvc?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+  // Load selected products from Supabase
+  let linkedProducts: any[] = [];
+  if (templateData?.products && templateData.products.length > 0) {
+    try {
+      const { data: prodsData, error: prodsError } = await supabase
+        .from("products")
+        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .in("id", templateData.products);
+      if (!prodsError && prodsData) {
+        linkedProducts = prodsData.map((d: any) => ({
+          ...d,
+          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+        }));
+      }
+    } catch (e) {
+      console.error("Failed to load template products:", e);
+    }
+  }
+
   return {
     service: { slug, label, icon: staticSvc?.icon || "CheckCircle" },
-    templateData
+    templateData,
+    linkedProducts
   };
 }
 

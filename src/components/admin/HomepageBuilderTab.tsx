@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { compressImage } from "@/lib/image-utils";
+import { SectionHeading, FieldLabel } from "./TemplateEditorShared";
 import {
   type HomepageContent,
   DEFAULT_HOMEPAGE_CONTENT,
@@ -41,37 +42,6 @@ const SUPABASE_KEY = "homepage_content";
 
 
 // ─── Reusable sub-components ─────────────────────────────────────────────────
-
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-2">
-      <span className="w-1 h-3 bg-primary rounded-full inline-block" />
-      {children}
-    </h3>
-  );
-}
-
-function FieldLabel({
-  children,
-  hint,
-  htmlFor,
-}: {
-  children: React.ReactNode;
-  hint?: string;
-  htmlFor?: string;
-}) {
-  return (
-    <div className="mb-1">
-      <label
-        htmlFor={htmlFor}
-        className="text-xs font-bold uppercase tracking-wide text-muted-foreground"
-      >
-        {children}
-      </label>
-      {hint && <p className="text-[10px] text-muted-foreground/70 mt-0.5">{hint}</p>}
-    </div>
-  );
-}
 
 function FormField({
   label,
