@@ -16,7 +16,7 @@ import {
 import { toast } from "sonner";
 import {
   ListEditor, FAQEditor, PropertiesTableEditor, PairsEditor, QuickActionsEditor, SectionsEditor,
-} from "./FieldEditors";
+} from "./TemplateEditorShared";
 import { ProductSelector } from "./ProductSelector";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
@@ -50,7 +50,41 @@ function sectionParamKey(key: SectionKey): string {
   return key === "services" || key === "industries" ? "slug" : "category";
 }
 
+
+// ─── PageTemplatesRedirectCard ────────────────────────────────────────────────
+// Reusable "go to page templates" redirect card used in the Page Content tab.
+
+function PageTemplatesRedirectCard({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: React.ReactNode;
+  href: string;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
+      <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      </div>
+      <div className="space-y-2">
+        <h3 className="font-display text-lg font-bold uppercase text-foreground">{title}</h3>
+        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+      </div>
+      <div className="pt-2 w-full">
+        <Button asChild className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20">
+          <a href={href}>Edit in Page Templates →</a>
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: ContentEditorPanelProps) {
+
   const [data, setData] = useState<EditableNode>(node);
 
   // Sync state if node changes in parent
@@ -225,52 +259,31 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
         <TabsContent value="page" className="flex-1 overflow-y-auto p-6 m-0">
           {/* Non-product sections: direct admin to the dedicated Page Templates editors */}
           {isNonProductNode ? (
-            <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
-              <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-display text-lg font-bold uppercase text-foreground">Page Templates Editor</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Rich page content for <strong>{data.label}</strong> is managed in the dedicated
-                  {" "}<strong className="capitalize">{sectionKey} Page Templates</strong> builder where you can edit
+            <PageTemplatesRedirectCard
+              title="Page Templates Editor"
+              description={
+                <>
+                  Rich page content for <strong>{data.label}</strong> is managed in the dedicated{" "}
+                  <strong className="capitalize">{sectionKey} Page Templates</strong> builder where you can edit
                   {sectionKey === "applications" && " hero, sub-systems, and SEO."}
                   {sectionKey === "services" && " hero, service features, and SEO."}
                   {sectionKey === "industries" && " hero, challenges, key applications, and SEO."}
-                </p>
-              </div>
-              <div className="pt-2 w-full">
-                <Button asChild className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20">
-                  <a href={`/admin/page-templates`}>
-                    Edit in Page Templates →
-                  </a>
-                </Button>
-              </div>
-            </div>
+                </>
+              }
+              href="/admin/page-templates"
+            />
           ) : isChild && isProductNode ? (
-            // Product family (child) — also managed in Page Templates
-            <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
-              <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-display text-lg font-bold uppercase text-foreground">Page Templates Integration</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  This is a product category/family page. Its content is managed inside the centralized <strong>Page Templates</strong> builder.
-                </p>
-              </div>
-              <div className="pt-2 w-full">
-                <Button asChild className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20">
-                  <a href={`/admin/page-templates?slug=${data.slug}`}>
-                    Edit in Page Templates →
-                  </a>
-                </Button>
-              </div>
-            </div>
+            <PageTemplatesRedirectCard
+              title="Page Templates Integration"
+              description={
+                <>
+                  This is a product category/family page. Its content is managed inside the centralized{" "}
+                  <strong>Page Templates</strong> builder.
+                </>
+              }
+              href={`/admin/page-templates?slug=${data.slug}`}
+            />
+
           ) : (
             <div className="space-y-8">
               <div className="space-y-3">

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+﻿import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,34 +23,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Plus, Trash2, Save, Loader2, Compass, ShieldCheck, HelpCircle, Award, Image as ImageIcon,
-  MapPin, Calendar, FileText, CheckCircle2, ChevronRight, Scale, Briefcase, PlusCircle, X
+  Plus, Trash2, Save, Loader2, Compass, ChevronRight, PlusCircle, X, Layers,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSelector, type ProductData } from "./ProductSelector";
 import { ImagePicker } from "./ImagePicker";
+import {
+  SectionHeading, FieldLabel,
+  useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, AddItemButton, ListEditorHeader,
+} from "./TemplateEditorShared";
+
 
 // Reusable Sub-components for Form Layouts
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-3 flex items-center gap-2">
-      <span className="w-1.5 h-3 bg-primary rounded-full inline-block" />
-      {children}
-    </h3>
-  );
-}
-
-function FieldLabel({ children, hint }: { children: React.ReactNode; hint?: string }) {
-  return (
-    <div className="mb-1">
-      <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-        {children}
-      </label>
-      {hint && <p className="text-[10px] text-muted-foreground/70 mt-0.5">{hint}</p>}
-    </div>
-  );
-}
 
 export function ProjectsTemplatesEditor() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -63,7 +48,7 @@ export function ProjectsTemplatesEditor() {
   const [newTitle, setNewTitle] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
 
-  // ── Load from Supabase ──
+  // â”€â”€ Load from Supabase â”€â”€
   const load = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -102,7 +87,7 @@ export function ProjectsTemplatesEditor() {
     updateActive((prev) => ({ ...prev, [key]: value }));
   };
 
-  // ── Add New Project ──
+  // â”€â”€ Add New Project â”€â”€
   const handleAddNew = () => {
     if (!newTitle.trim()) return;
     const slug = newTitle
@@ -124,7 +109,7 @@ export function ProjectsTemplatesEditor() {
       body: "Full case study brief details.",
       hero_image_url: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1200&q=80",
       service_type: "supply_install",
-      scale: "10,000 m²",
+      scale: "10,000 mÂ²",
       status: "published",
       gallery: [],
       logistics_details: {
@@ -169,7 +154,7 @@ export function ProjectsTemplatesEditor() {
     toast.success(`Project "${blankProject.title}" template created. Edit it and click Save.`);
   };
 
-  // ── Delete Project ──
+  // â”€â”€ Delete Project â”€â”€
   const handleDelete = async (id: string, title: string) => {
     const { error } = await supabase.from("case_studies").delete().eq("id", id);
     if (error) {
@@ -184,7 +169,7 @@ export function ProjectsTemplatesEditor() {
     }
   };
 
-  // ── Save Current Project ──
+  // â”€â”€ Save Current Project â”€â”€
   const handleSave = async () => {
     if (!active) return;
     setSaving(true);
@@ -228,7 +213,7 @@ export function ProjectsTemplatesEditor() {
             className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2 cursor-pointer border-0"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            {saving ? "Saving…" : "Save Template"}
+            {saving ? "Savingâ€¦" : "Save Template"}
           </Button>
         </div>
       </div>
@@ -333,7 +318,7 @@ export function ProjectsTemplatesEditor() {
                       </div>
                       <div className="truncate text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1.5">
                         <span className="capitalize">{p.service_type.replace("_", " ")}</span>
-                        <span>·</span>
+                        <span>Â·</span>
                         <span>{p.country}</span>
                       </div>
                     </div>
@@ -527,7 +512,7 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Physical size of layout scope (e.g. 210,000 m²)">Scale</FieldLabel>
+                            <FieldLabel hint="Physical size of layout scope (e.g. 210,000 mÂ²)">Scale</FieldLabel>
                             <Input
                               value={active.scale || ""}
                               onChange={(e) => setField("scale", e.target.value)}
@@ -1087,27 +1072,14 @@ export function ProjectsTemplatesEditor() {
   );
 }
 
-// ─── Products Used List Sub-editor ──────────────────────────────────────────
-function ProductsEditor({
-  items,
-  onChange,
-}: {
-  items: any[];
-  onChange: (items: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...items,
-      { category: "Geomembrane", name: "GSE® Smooth HDPE 2.0 mm", qty: "20,000 m²", origin: "EU (Netherlands)" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...items];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(items.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Products Used List Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function ProductsEditor({ items, onChange }: { items: any[]; onChange: (items: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(items, onChange, () => ({
+    category: "Geomembrane",
+    name: "GSEÂ® Smooth HDPE 2.0 mm",
+    qty: "20,000 mÂ²",
+    origin: "EU (Netherlands)",
+  }));
 
   const excludeIds = items.map((it) => it.productId).filter(Boolean);
 
@@ -1124,31 +1096,14 @@ function ProductsEditor({
 
       <div className="grid sm:grid-cols-2 gap-4">
         {items.map((it, idx) => (
-          <div
-            key={idx}
-            className="border border-border rounded-xl p-4 bg-surface/40 space-y-3 relative group flex flex-col justify-between"
-          >
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer z-10"
-              onClick={() => remove(idx)}
-            >
-
-            </Button>
-
+          <ItemCard key={idx} className="flex flex-col justify-between">
+            <ItemDeleteButton onClick={() => remove(idx)} />
             <div className="space-y-3.5">
-              {/* Product Selector Dropdown from Database */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <label className="text-[9px] font-bold uppercase text-primary block">
-                    Link Database Product
-                  </label>
+                  <label className="text-[9px] font-bold uppercase text-primary block">Link Database Product</label>
                   {it.productId && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-4.5 w-4.5 text-destructive hover:bg-destructive/10 rounded cursor-pointer"
+                    <Button variant="ghost" size="icon" className="h-4.5 w-4.5 text-destructive hover:bg-destructive/10 rounded cursor-pointer"
                       onClick={() => {
                         const next = [...items];
                         delete next[idx].productId;
@@ -1157,211 +1112,104 @@ function ProductsEditor({
                         delete next[idx].short_description;
                         onChange(next);
                         toast.info("Database product link removed.");
-                      }}
-                      title="Clear product link"
-                    >
+                      }} title="Clear product link">
                       <X className="h-3 w-3" strokeWidth={3} />
                     </Button>
                   )}
                 </div>
-                <ProductSelector
-                  excludeIds={excludeIds}
-                  onSelect={(prod) => {
-                    const next = [...items];
-                    next[idx] = {
-                      ...next[idx],
-                      productId: prod.id,
-                      productSlug: prod.slug,
-                      name: prod.name,
-                      category: prod.product_categories?.name || next[idx].category || "",
-                      image_url: prod.image_url,
-                      short_description: prod.short_description,
-                    };
-                    onChange(next);
-                  }}
-                />
+                <ProductSelector excludeIds={excludeIds} onSelect={(prod) => {
+                  const next = [...items];
+                  next[idx] = {
+                    ...next[idx],
+                    productId: prod.id,
+                    productSlug: prod.slug,
+                    name: prod.name,
+                    category: prod.product_categories?.name || next[idx].category || "",
+                    image_url: prod.image_url,
+                    short_description: prod.short_description,
+                  };
+                  onChange(next);
+                }} />
               </div>
 
-              {/* Linked Product Preview Box */}
               {it.productId && (
                 <div className="flex gap-2.5 p-2.5 rounded-lg border border-border bg-surface/50 text-[11px] animate-in fade-in duration-200">
                   <div className="h-10 w-10 shrink-0 rounded border border-border bg-card flex items-center justify-center text-primary overflow-hidden">
-                    {it.image_url ? (
-                      <img src={it.image_url} alt={it.name} className="h-full w-full object-cover" />
-                    ) : (
-                      <Layers className="h-4 w-4 opacity-40" />
-                    )}
+                    {it.image_url
+                      ? <img src={it.image_url} alt={it.name} className="h-full w-full object-cover" />
+                      : <Layers className="h-4 w-4 opacity-40" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-bold text-foreground truncate">
-                      {it.name}
-                    </div>
+                    <div className="font-bold text-foreground truncate">{it.name}</div>
                     {it.short_description && (
-                      <p className="text-[10px] text-muted-foreground leading-normal mt-0.5 line-clamp-2">
-                        {it.short_description}
-                      </p>
+                      <p className="text-[10px] text-muted-foreground leading-normal mt-0.5 line-clamp-2">{it.short_description}</p>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Standard Inputs */}
               <div className="space-y-2.5">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                      Category
-                    </label>
-                    <Input
-                      value={it.category || ""}
-                      onChange={(e) => update(idx, "category", e.target.value)}
-                      className="h-7 text-xs"
-                      placeholder="e.g. Geomembrane"
-                    />
+                    <MicroLabel>Category</MicroLabel>
+                    <Input value={it.category || ""} onChange={(e) => updateByKey(idx, "category", e.target.value)} className="h-7 text-xs" placeholder="e.g. Geomembrane" />
                   </div>
                   <div>
-                    <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                      Quantity
-                    </label>
-                    <Input
-                      value={it.qty || ""}
-                      onChange={(e) => update(idx, "qty", e.target.value)}
-                      className="h-7 text-xs"
-                      placeholder="e.g. 240,000 m²"
-                    />
+                    <MicroLabel>Quantity</MicroLabel>
+                    <Input value={it.qty || ""} onChange={(e) => updateByKey(idx, "qty", e.target.value)} className="h-7 text-xs" placeholder="e.g. 240,000 mÂ²" />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                    Product Name (Override)
-                  </label>
-                  <Input
-                    value={it.name || ""}
-                    onChange={(e) => update(idx, "name", e.target.value)}
-                    className="h-7 text-xs font-semibold"
-                    placeholder="e.g. GSE® Smooth HDPE 2.0 mm"
-                  />
+                  <MicroLabel>Product Name (Override)</MicroLabel>
+                  <Input value={it.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. GSEÂ® Smooth HDPE 2.0 mm" />
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                    Mill Origin
-                  </label>
-                  <Input
-                    value={it.origin || ""}
-                    onChange={(e) => update(idx, "origin", e.target.value)}
-                    className="h-7 text-xs"
-                    placeholder="e.g. EU (Netherlands) or South Africa"
-                  />
+                  <MicroLabel>Mill Origin</MicroLabel>
+                  <Input value={it.origin || ""} onChange={(e) => updateByKey(idx, "origin", e.target.value)} className="h-7 text-xs" placeholder="e.g. EU (Netherlands) or South Africa" />
                 </div>
               </div>
             </div>
-          </div>
+          </ItemCard>
         ))}
       </div>
-      {items.length === 0 && (
-        <p className="text-xs text-muted-foreground italic text-center py-6">
-          No products associated yet. Click "Add Product".
-        </p>
-      )}
+      {items.length === 0 && <EmptyState message='No products associated yet. Click "Add Product".' />}
     </div>
   );
 }
 
-// ─── Spec Compliance Sub-editor ─────────────────────────────────────────────
-function SpecComplianceEditor({
-  items,
-  onChange,
-}: {
-  items: any[];
-  onChange: (items: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...items,
-      { property: "Thickness", method: "ASTM D5199", spec: "2.00 mm", delivered: "2.06 mm", margin: "+3.0%" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...items];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(items.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Spec Compliance Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function SpecComplianceEditor({ items, onChange }: { items: any[]; onChange: (items: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(items, onChange, () => ({
+    property: "Thickness", method: "ASTM D5199", spec: "2.00 mm", delivered: "2.06 mm", margin: "+3.0%",
+  }));
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-muted-foreground uppercase">
-          Specifications comparison matrix ({items.length})
-        </span>
+        <span className="text-xs font-bold text-muted-foreground uppercase">Specifications comparison matrix ({items.length})</span>
         <Button variant="ghost" size="sm" onClick={add} className="h-7 text-xs text-primary gap-1 cursor-pointer">
           <Plus className="h-3.5 w-3.5" /> Add Conformity
         </Button>
       </div>
-
       <div className="border border-border rounded-xl overflow-hidden bg-surface/10">
         <table className="w-full text-xs">
           <thead className="bg-[#1A1A1A] text-white uppercase font-bold text-[10px]">
             <tr>
-              <th className="px-3 py-2 text-left">Property</th>
-              <th className="px-3 py-2 text-left">Test Method</th>
-              <th className="px-3 py-2 text-left">Spec Min</th>
-              <th className="px-3 py-2 text-left">Delivered</th>
-              <th className="px-3 py-2 text-left">Margin</th>
-              <th className="px-2 py-2 w-10"></th>
+              {["Property", "Test Method", "Spec Min", "Delivered", "Margin", ""].map((h) => (
+                <th key={h} className="px-3 py-2 text-left">{h}</th>
+              ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-border font-medium">
             {items.map((it, idx) => (
               <tr key={idx} className="hover:bg-surface/30 transition">
-                <td className="p-1 min-w-[120px]">
-                  <Input
-                    value={it.property || ""}
-                    onChange={(e) => update(idx, "property", e.target.value)}
-                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-semibold"
-                    placeholder="Thickness"
-                  />
-                </td>
-                <td className="p-1 min-w-[100px]">
-                  <Input
-                    value={it.method || ""}
-                    onChange={(e) => update(idx, "method", e.target.value)}
-                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-mono text-muted-foreground"
-                    placeholder="ASTM D5199"
-                  />
-                </td>
-                <td className="p-1 min-w-[90px]">
-                  <Input
-                    value={it.spec || ""}
-                    onChange={(e) => update(idx, "spec", e.target.value)}
-                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0"
-                    placeholder="2.00 mm"
-                  />
-                </td>
-                <td className="p-1 min-w-[90px]">
-                  <Input
-                    value={it.delivered || ""}
-                    onChange={(e) => update(idx, "delivered", e.target.value)}
-                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0"
-                    placeholder="2.06 mm"
-                  />
-                </td>
-                <td className="p-1 min-w-[90px]">
-                  <Input
-                    value={it.margin || ""}
-                    onChange={(e) => update(idx, "margin", e.target.value)}
-                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-bold text-emerald-600"
-                    placeholder="+3.0% or PASS"
-                  />
-                </td>
+                <td className="p-1 min-w-[120px]"><Input value={it.property || ""} onChange={(e) => updateByKey(idx, "property", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-semibold" placeholder="Thickness" /></td>
+                <td className="p-1 min-w-[100px]"><Input value={it.method || ""} onChange={(e) => updateByKey(idx, "method", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-mono text-muted-foreground" placeholder="ASTM D5199" /></td>
+                <td className="p-1 min-w-[90px]"><Input value={it.spec || ""} onChange={(e) => updateByKey(idx, "spec", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0" placeholder="2.00 mm" /></td>
+                <td className="p-1 min-w-[90px]"><Input value={it.delivered || ""} onChange={(e) => updateByKey(idx, "delivered", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0" placeholder="2.06 mm" /></td>
+                <td className="p-1 min-w-[90px]"><Input value={it.margin || ""} onChange={(e) => updateByKey(idx, "margin", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-bold text-emerald-600" placeholder="+3.0% or PASS" /></td>
                 <td className="p-1 text-center shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
-                    onClick={() => remove(idx)}
-                  >
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => remove(idx)}>
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </td>
@@ -1370,449 +1218,201 @@ function SpecComplianceEditor({
           </tbody>
         </table>
       </div>
-
-      {items.length === 0 && (
-        <p className="text-xs text-muted-foreground italic text-center py-6">
-          No specifications conformity data. Click "Add Conformity".
-        </p>
-      )}
+      {items.length === 0 && <EmptyState message='No specifications conformity data. Click "Add Conformity".' />}
     </div>
   );
 }
 
-// ─── QA Checklist Sub-editor ──────────────────────────────────────────────
-function ChecklistEditor({
-  list,
-  onChange,
-}: {
-  list: string[];
-  onChange: (list: string[]) => void;
-}) {
+// â”€â”€â”€ QA Checklist Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function ChecklistEditor({ list, onChange }: { list: string[]; onChange: (list: string[]) => void }) {
   const add = () => onChange([...list, "New signed CQA item checklist description..."]);
-  const update = (idx: number, val: string) => {
-    const next = [...list];
-    next[idx] = val;
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(list.filter((_, i) => i !== idx));
-  };
+  const update = (idx: number, val: string) => { const next = [...list]; next[idx] = val; onChange(next); };
+  const remove = (idx: number) => onChange(list.filter((_, i) => i !== idx));
 
   return (
     <div className="space-y-2">
       <div className="space-y-2">
         {list.map((item, idx) => (
           <div key={idx} className="flex gap-2 items-start bg-surface/50 border border-border rounded-lg p-2 relative group">
-            <Input
-              value={item}
-              onChange={(e) => update(idx, e.target.value)}
-              className="text-xs border-0 bg-transparent focus-visible:ring-0 flex-1 leading-normal py-1"
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
+            <Input value={item} onChange={(e) => update(idx, e.target.value)} className="text-xs border-0 bg-transparent focus-visible:ring-0 flex-1 leading-normal py-1" />
+            <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0 cursor-pointer" onClick={() => remove(idx)}>
               <Trash2 className="h-3.5 w-3.5" />
             </Button>
           </div>
         ))}
       </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1 cursor-pointer">
-        <Plus className="h-3 w-3" /> Add QC Check
-      </Button>
-      {list.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No checklist items set.</p>
-      )}
+      <AddItemButton onClick={add} label="Add QC Check" />
+      {list.length === 0 && <EmptyState message="No checklist items set." />}
     </div>
   );
 }
 
-// ─── Photos / Gallery Sub-editor ─────────────────────────────────────────────
-function PhotosEditor({
-  photos,
-  onChange,
-}: {
-  photos: any[];
-  onChange: (photos: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...photos,
-      { url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80", caption: "Photo caption description" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...photos];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(photos.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Photos / Gallery Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function PhotosEditor({ photos, onChange }: { photos: any[]; onChange: (photos: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(photos, onChange, () => ({
+    url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
+    caption: "Photo caption description",
+  }));
 
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-2 gap-4">
         {photos.map((ph, idx) => (
-          <div key={idx} className="border border-border rounded-xl p-3 bg-surface/40 relative space-y-2 flex flex-col group">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-
-            {ph.url && (
-              <div className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border" style={{ backgroundImage: `url(${ph.url})` }} />
-            )}
-
+          <ItemCard key={idx} className="flex flex-col group">
+            <ItemDeleteButton onClick={() => remove(idx)} />
+            {ph.url && <div className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border" style={{ backgroundImage: `url(${ph.url})` }} />}
             <div className="space-y-2 flex-grow">
               <div>
-                <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Photo URL</label>
-                <Input
-                  value={ph.url || ""}
-                  onChange={(e) => update(idx, "url", e.target.value)}
-                  className="h-7 text-xs font-mono"
-                  placeholder="https://images.unsplash.com/..."
-                />
+                <MicroLabel>Photo URL</MicroLabel>
+                <Input value={ph.url || ""} onChange={(e) => updateByKey(idx, "url", e.target.value)} className="h-7 text-xs font-mono" placeholder="https://images.unsplash.com/..." />
               </div>
               <div>
-                <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Caption</label>
-                <Input
-                  value={ph.caption || ""}
-                  onChange={(e) => update(idx, "caption", e.target.value)}
-                  className="h-7 text-xs font-semibold"
-                  placeholder="e.g. Subgrade compaction acceptance test"
-                />
+                <MicroLabel>Caption</MicroLabel>
+                <Input value={ph.caption || ""} onChange={(e) => updateByKey(idx, "caption", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. Subgrade compaction acceptance test" />
               </div>
             </div>
-          </div>
+          </ItemCard>
         ))}
       </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1.5 cursor-pointer">
-        <Plus className="h-3.5 w-3.5" /> Add Work Photo
-      </Button>
-      {photos.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No photos added.</p>
-      )}
+      <AddItemButton onClick={add} label="Add Work Photo" />
+      {photos.length === 0 && <EmptyState message="No photos added." />}
     </div>
   );
 }
 
-// ─── Route Steps Sub-editor ─────────────────────────────────────────────────
-function RouteStepsEditor({
-  steps,
-  onChange,
-}: {
-  steps: any[];
-  onChange: (steps: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...steps,
-      { stage: "Stage 01", name: "Heerenveen Mill", desc: "Manufactured on spec and sealed.", duration: "D0 - D+3" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...steps];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(steps.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Route Steps Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function RouteStepsEditor({ steps, onChange }: { steps: any[]; onChange: (steps: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(steps, onChange, () => ({
+    stage: "Stage 01", name: "Heerenveen Mill", desc: "Manufactured on spec and sealed.", duration: "D0 - D+3",
+  }));
 
   return (
     <div className="space-y-3">
-      <div className="space-y-3">
-        {steps.map((st, idx) => (
-          <div key={idx} className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Stage Tag</label>
-                <Input
-                  value={st.stage || ""}
-                  onChange={(e) => update(idx, "stage", e.target.value)}
-                  className="h-7 text-xs font-semibold uppercase text-primary"
-                  placeholder="e.g. Stage 01"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Name/Checkpoint</label>
-                <Input
-                  value={st.name || ""}
-                  onChange={(e) => update(idx, "name", e.target.value)}
-                  className="h-7 text-xs font-bold"
-                  placeholder="e.g. Rotterdam Port or Durban Custom"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Description details</label>
-                <Input
-                  value={st.desc || ""}
-                  onChange={(e) => update(idx, "desc", e.target.value)}
-                  className="h-7 text-xs"
-                  placeholder="e.g. Sealed and packed containers logged."
-                />
-              </div>
-              <div>
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Duration</label>
-                <Input
-                  value={st.duration || ""}
-                  onChange={(e) => update(idx, "duration", e.target.value)}
-                  className="h-7 text-xs font-mono font-bold"
-                  placeholder="e.g. D+3 - D+24"
-                />
-              </div>
+      {steps.map((st, idx) => (
+        <ItemCard key={idx}>
+          <ItemDeleteButton onClick={() => remove(idx)} />
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <MicroLabel>Stage Tag</MicroLabel>
+              <Input value={st.stage || ""} onChange={(e) => updateByKey(idx, "stage", e.target.value)} className="h-7 text-xs font-semibold uppercase text-primary" placeholder="e.g. Stage 01" />
+            </div>
+            <div className="col-span-2">
+              <MicroLabel>Name/Checkpoint</MicroLabel>
+              <Input value={st.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. Rotterdam Port or Durban Custom" />
+            </div>
+            <div className="col-span-2">
+              <MicroLabel>Description details</MicroLabel>
+              <Input value={st.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="h-7 text-xs" placeholder="e.g. Sealed and packed containers logged." />
+            </div>
+            <div>
+              <MicroLabel>Duration</MicroLabel>
+              <Input value={st.duration || ""} onChange={(e) => updateByKey(idx, "duration", e.target.value)} className="h-7 text-xs font-mono font-bold" placeholder="e.g. D+3 - D+24" />
             </div>
           </div>
-        ))}
-      </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1.5 cursor-pointer">
-        <Plus className="h-3.5 w-3.5" /> Add Timeline Step
-      </Button>
-      {steps.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No steps registered.</p>
-      )}
+        </ItemCard>
+      ))}
+      <AddItemButton onClick={add} label="Add Timeline Step" />
+      {steps.length === 0 && <EmptyState message="No steps registered." />}
     </div>
   );
 }
 
-// ─── Logistics Documents Sub-editor ──────────────────────────────────────────
-function DocumentChecklistEditor({
-  docs,
-  onChange,
-}: {
-  docs: any[];
-  onChange: (docs: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...docs,
-      { title: "SADC Certificate", desc: "Preferential custom duties Form CO clearance.", status: "Issued" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...docs];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(docs.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Logistics Documents Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function DocumentChecklistEditor({ docs, onChange }: { docs: any[]; onChange: (docs: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(docs, onChange, () => ({
+    title: "SADC Certificate", desc: "Preferential custom duties Form CO clearance.", status: "Issued",
+  }));
 
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-2 gap-4">
         {docs.map((doc, idx) => (
-          <div key={idx} className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3 flex flex-col justify-between group">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-
+          <ItemCard key={idx} className="flex flex-col justify-between group">
+            <ItemDeleteButton onClick={() => remove(idx)} />
             <div className="space-y-2">
               <div className="flex gap-2">
                 <div className="flex-1">
-                  <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Document Title</label>
-                  <Input
-                    value={doc.title || ""}
-                    onChange={(e) => update(idx, "title", e.target.value)}
-                    className="h-7 text-xs font-bold font-display"
-                    placeholder="e.g. SADC Certificate of Origin"
-                  />
+                  <MicroLabel>Document Title</MicroLabel>
+                  <Input value={doc.title || ""} onChange={(e) => updateByKey(idx, "title", e.target.value)} className="h-7 text-xs font-bold font-display" placeholder="e.g. SADC Certificate of Origin" />
                 </div>
                 <div>
-                  <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Status</label>
-                  <Input
-                    value={doc.status || ""}
-                    onChange={(e) => update(idx, "status", e.target.value)}
-                    className="h-7 text-xs w-20 font-bold text-center text-primary uppercase"
-                    placeholder="Issued"
-                  />
+                  <MicroLabel>Status</MicroLabel>
+                  <Input value={doc.status || ""} onChange={(e) => updateByKey(idx, "status", e.target.value)} className="h-7 text-xs w-20 font-bold text-center text-primary uppercase" placeholder="Issued" />
                 </div>
               </div>
               <div>
-                <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Summary / Requirements</label>
-                <Textarea
-                  value={doc.desc || ""}
-                  onChange={(e) => update(idx, "desc", e.target.value)}
-                  className="min-h-[50px] text-xs resize-none leading-normal"
-                  placeholder="e.g. Issued per extrusion batch to secure customs pref rates."
-                />
+                <MicroLabel>Summary / Requirements</MicroLabel>
+                <Textarea value={doc.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="min-h-[50px] text-xs resize-none leading-normal" placeholder="e.g. Issued per extrusion batch to secure customs pref rates." />
               </div>
             </div>
-          </div>
+          </ItemCard>
         ))}
       </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1.5 cursor-pointer">
-        <Plus className="h-3.5 w-3.5" /> Add Document
-      </Button>
-      {docs.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No documents listed.</p>
-      )}
+      <AddItemButton onClick={add} label="Add Document" />
+      {docs.length === 0 && <EmptyState message="No documents listed." />}
     </div>
   );
 }
 
-// ─── Forensic Protocol Sub-editor ───────────────────────────────────────────
-function ForensicProtocolEditor({
-  protocols,
-  onChange,
-}: {
-  protocols: any[];
-  onChange: (protocols: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...protocols,
-      { step: "01", name: "Visual Review", desc: "Walkover photo mapping log.", output: "Defects list log" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...protocols];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(protocols.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Forensic Protocol Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function ForensicProtocolEditor({ protocols, onChange }: { protocols: any[]; onChange: (protocols: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(protocols, onChange, () => ({
+    step: "01", name: "Visual Review", desc: "Walkover photo mapping log.", output: "Defects list log",
+  }));
 
   return (
     <div className="space-y-3">
-      <div className="space-y-3">
-        {protocols.map((pr, idx) => (
-          <div key={idx} className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Step Index</label>
-                <Input
-                  maxLength={2}
-                  value={pr.step || ""}
-                  onChange={(e) => update(idx, "step", e.target.value)}
-                  className="h-7 text-xs font-mono font-bold text-center w-16 text-primary"
-                  placeholder="01"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Protocol Stage Name</label>
-                <Input
-                  value={pr.name || ""}
-                  onChange={(e) => update(idx, "name", e.target.value)}
-                  className="h-7 text-xs font-bold"
-                  placeholder="e.g. Visual Embankment Audit"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Detailed description</label>
-                <Input
-                  value={pr.desc || ""}
-                  onChange={(e) => update(idx, "desc", e.target.value)}
-                  className="h-7 text-xs leading-relaxed"
-                  placeholder="Detail visual walks, GPS maps check..."
-                />
-              </div>
-              <div>
-                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">Deliverable Output</label>
-                <Input
-                  value={pr.output || ""}
-                  onChange={(e) => update(idx, "output", e.target.value)}
-                  className="h-7 text-xs font-bold text-primary"
-                  placeholder="e.g. Visual defects logs"
-                />
-              </div>
+      {protocols.map((pr, idx) => (
+        <ItemCard key={idx}>
+          <ItemDeleteButton onClick={() => remove(idx)} />
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <MicroLabel>Step Index</MicroLabel>
+              <Input maxLength={2} value={pr.step || ""} onChange={(e) => updateByKey(idx, "step", e.target.value)} className="h-7 text-xs font-mono font-bold text-center w-16 text-primary" placeholder="01" />
+            </div>
+            <div className="col-span-2">
+              <MicroLabel>Protocol Stage Name</MicroLabel>
+              <Input value={pr.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. Visual Embankment Audit" />
+            </div>
+            <div className="col-span-2">
+              <MicroLabel>Detailed description</MicroLabel>
+              <Input value={pr.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="h-7 text-xs leading-relaxed" placeholder="Detail visual walks, GPS maps check..." />
+            </div>
+            <div>
+              <MicroLabel>Deliverable Output</MicroLabel>
+              <Input value={pr.output || ""} onChange={(e) => updateByKey(idx, "output", e.target.value)} className="h-7 text-xs font-bold text-primary" placeholder="e.g. Visual defects logs" />
             </div>
           </div>
-        ))}
-      </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1.5 cursor-pointer">
-        <Plus className="h-3.5 w-3.5" /> Add Protocol Stage
-      </Button>
-      {protocols.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No protocols established.</p>
-      )}
+        </ItemCard>
+      ))}
+      <AddItemButton onClick={add} label="Add Protocol Stage" />
+      {protocols.length === 0 && <EmptyState message="No protocols established." />}
     </div>
   );
 }
 
-// ─── Forensic Findings Sub-editor ───────────────────────────────────────────
-function FindingsRegisterEditor({
-  findings,
-  onChange,
-}: {
-  findings: any[];
-  onChange: (findings: any[]) => void;
-}) {
-  const add = () =>
-    onChange([
-      ...findings,
-      { area: "Main Pad", title: "UV Degradation Check", desc: "Antioxidants Standard OIT exceeds limits.", status: "PASS" },
-    ]);
-  const update = (idx: number, key: string, val: string) => {
-    const next = [...findings];
-    next[idx] = { ...next[idx], [key]: val };
-    onChange(next);
-  };
-  const remove = (idx: number) => {
-    onChange(findings.filter((_, i) => i !== idx));
-  };
+// â”€â”€â”€ Forensic Findings Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function FindingsRegisterEditor({ findings, onChange }: { findings: any[]; onChange: (findings: any[]) => void }) {
+  const { add, updateByKey, remove } = useListEditor(findings, onChange, () => ({
+    area: "Main Pad", title: "UV Degradation Check", desc: "Antioxidants Standard OIT exceeds limits.", status: "PASS",
+  }));
 
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-2 gap-4">
         {findings.map((fn, idx) => (
-          <div key={idx} className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3 flex flex-col justify-between group">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
-              onClick={() => remove(idx)}
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-
+          <ItemCard key={idx} className="flex flex-col justify-between group">
+            <ItemDeleteButton onClick={() => remove(idx)} />
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Physical Area</label>
-                  <Input
-                    value={fn.area || ""}
-                    onChange={(e) => update(idx, "area", e.target.value)}
-                    className="h-7 text-xs font-semibold"
-                    placeholder="e.g. Embankment Sump"
-                  />
+                  <MicroLabel>Physical Area</MicroLabel>
+                  <Input value={fn.area || ""} onChange={(e) => updateByKey(idx, "area", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. Embankment Sump" />
                 </div>
                 <div>
-                  <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Status Audit</label>
-                  <Select
-                    value={fn.status || "PASS"}
-                    onValueChange={(v) => update(idx, "status", v)}
-                  >
-                    <SelectTrigger className="h-7 text-[10px] font-bold">
-                      <SelectValue />
-                    </SelectTrigger>
+                  <MicroLabel>Status Audit</MicroLabel>
+                  <Select value={fn.status || "PASS"} onValueChange={(v) => updateByKey(idx, "status", v)}>
+                    <SelectTrigger className="h-7 text-[10px] font-bold"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="PASS">PASS (Green)</SelectItem>
                       <SelectItem value="ATTENTION">ATTENTION (Orange)</SelectItem>
@@ -1821,36 +1421,20 @@ function FindingsRegisterEditor({
                   </Select>
                 </div>
               </div>
-
               <div>
-                <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Audit Title</label>
-                <Input
-                  value={fn.title || ""}
-                  onChange={(e) => update(idx, "title", e.target.value)}
-                  className="h-7 text-xs font-bold"
-                  placeholder="e.g. UV Aging & Standard OIT"
-                />
+                <MicroLabel>Audit Title</MicroLabel>
+                <Input value={fn.title || ""} onChange={(e) => updateByKey(idx, "title", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. UV Aging & Standard OIT" />
               </div>
-
               <div>
-                <label className="text-[8px] font-bold uppercase text-muted-foreground block mb-0.5">Findings Details</label>
-                <Textarea
-                  value={fn.desc || ""}
-                  onChange={(e) => update(idx, "desc", e.target.value)}
-                  className="min-h-[60px] text-xs leading-normal resize-none"
-                  placeholder="Detail the audit checks results..."
-                />
+                <MicroLabel>Findings Details</MicroLabel>
+                <Textarea value={fn.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="min-h-[60px] text-xs leading-normal resize-none" placeholder="Detail the audit checks results..." />
               </div>
             </div>
-          </div>
+          </ItemCard>
         ))}
       </div>
-      <Button variant="outline" size="sm" onClick={add} className="h-8 text-xs gap-1.5 cursor-pointer">
-        <Plus className="h-3.5 w-3.5" /> Add Forensic Finding
-      </Button>
-      {findings.length === 0 && (
-        <p className="text-xs text-muted-foreground italic pl-1">No forensic findings registered.</p>
-      )}
+      <AddItemButton onClick={add} label="Add Forensic Finding" />
+      {findings.length === 0 && <EmptyState message="No forensic findings registered." />}
     </div>
   );
 }

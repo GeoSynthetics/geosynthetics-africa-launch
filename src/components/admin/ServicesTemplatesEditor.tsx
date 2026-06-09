@@ -22,27 +22,101 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { SectionHeading, FieldLabel, StringListEditor } from "./TemplateEditorShared";
-
+import { SectionHeading, FieldLabel, StringListEditor, PairsEditor } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
+import { ProductSelector } from "./ProductSelector";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface ServiceSeo {
+export interface BulletItem {
+  title: string;
+  description?: string;
+}
+
+export interface CapabilityItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface StatItem {
+  value: string;
+  label: string;
+}
+
+export interface DownloadItem {
+  label: string;
+  url: string;
+}
+
+export interface ServiceSeo {
   title: string;
   description: string;
   keywords: string;
 }
 
-interface ServiceTemplate {
+export interface ServiceTemplate {
   title: string;
   description: string;
   heroImage: string;
-  content: {
+  badge?: string;
+  
+  // Left Column Content
+  overviewParagraphs?: string[];
+  whyChooseTitle?: string;
+  whyChoose?: BulletItem[];
+  whatWeDeliverTitle?: string;
+  whatWeDeliver?: BulletItem[];
+  coverageTitle?: string;
+  coverageText?: string;
+  coverageBullets?: string[];
+  coverageImage?: string;
+  coverageCaption?: string;
+  
+  // Right Column Sidebar Content
+  sidebarImage?: string;
+  sidebarCaption?: string;
+  directModelTitle?: string;
+  directModelText?: string;
+  directModelItems?: BulletItem[];
+  packagingTitle?: string;
+  packagingText?: string;
+  packagingItems?: string[];
+  afcftaTitle?: string;
+  afcftaText?: string;
+  afcftaItems?: string[];
+  playbookTitle?: string;
+  playbookItems?: BulletItem[];
+  
+  // Bottom Stats Row
+  statsTitle?: string;
+  statsDescription?: string;
+  stats?: StatItem[];
+  
+  // Products & Downloads
+  productsTitle?: string;
+  products?: string[];
+  downloadsTitle?: string;
+  downloads?: DownloadItem[];
+  
+  // Landing Page Specific Fields
+  landingTitle?: string;
+  landingSubtitle?: string;
+  landingHeroImage?: string;
+  capabilitiesTitle?: string;
+  capabilities?: CapabilityItem[];
+  faqs?: { question: string; answer: string }[];
+  ctaTitle?: string;
+  ctaButtonText?: string;
+  ctaButtonUrl?: string;
+  
+  seo: ServiceSeo | null;
+  
+  // Legacy fields
+  content?: {
     features: string[];
     sections: unknown[];
   };
-  seo: ServiceSeo | null;
 }
 
 type AllServiceTemplates = Record<string, ServiceTemplate>;
@@ -56,8 +130,61 @@ function blankTemplate(): ServiceTemplate {
     title: "",
     description: "",
     heroImage: "",
+    badge: "Services",
+    
+    overviewParagraphs: [],
+    whyChooseTitle: "Why Choose Geosynthetics Africa?",
+    whyChoose: [],
+    whatWeDeliverTitle: "What We Deliver — At Speed",
+    whatWeDeliver: [],
+    coverageTitle: "Pan-African Coverage & Stock Hubs",
+    coverageText: "",
+    coverageBullets: [],
+    coverageImage: "",
+    coverageCaption: "",
+    
+    sidebarImage: "",
+    sidebarCaption: "",
+    directModelTitle: "Direct Model. Direct Support. No Distributors.",
+    directModelText: "",
+    directModelItems: [],
+    packagingTitle: "Packaging & Transport Optimization",
+    packagingText: "",
+    packagingItems: [],
+    afcftaTitle: "AfCFTA & SADC: Smarter Cross-Border Moves",
+    afcftaText: "",
+    afcftaItems: [],
+    playbookTitle: "Logistics Playbook",
+    playbookItems: [],
+    
+    statsTitle: "Pan-African Delivery and Installation Support",
+    statsDescription: "",
+    stats: [
+      { value: "2+", label: "Export Countries" },
+      { value: "19+", label: "Delivery Areas" }
+    ],
+    
+    productsTitle: "Products Supplied",
+    products: [],
+    downloadsTitle: "Technical Downloads & Guides",
+    downloads: [],
+    
+    landingTitle: "Pan-African Geosynthetics Delivery, Installation & Support",
+    landingSubtitle: "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
+    landingHeroImage: "",
+    capabilitiesTitle: "Our Logistics & Installation Capabilities",
+    capabilities: [],
+    faqs: [],
+    ctaTitle: "Let us help you!",
+    ctaButtonText: "Contact Us",
+    ctaButtonUrl: "/contacts",
+    
+    seo: {
+      title: "",
+      description: "",
+      keywords: "",
+    },
     content: { features: [], sections: [] },
-    seo: null,
   };
 }
 
@@ -74,11 +201,14 @@ export function ServicesTemplatesEditor() {
   const [newSlug, setNewSlug] = useState("");
   const [showNewSlug, setShowNewSlug] = useState(false);
 
+  // DB reference state
+  const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
+
   // Dynamic list combining static mega-menu services with custom ones from DB
   const categoriesList = useMemo(() => {
     const list = SERVICES.map((s) => ({ slug: s.slug, label: s.label }));
     Object.keys(allData).forEach((slug) => {
-      if (!list.some((item) => item.slug === slug)) {
+      if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
           slug,
           label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
@@ -87,6 +217,18 @@ export function ServicesTemplatesEditor() {
     });
     return list;
   }, [allData]);
+
+  // Load products from DB
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, slug")
+        .order("name");
+      if (data) setAllProducts(data);
+    }
+    fetchProducts();
+  }, []);
 
   // ── Load from Supabase ──
   const load = useCallback(async () => {
@@ -103,14 +245,45 @@ export function ServicesTemplatesEditor() {
       const stored = (data?.value ?? {}) as AllServiceTemplates;
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllServiceTemplates = { ...stored };
+      
       for (const svc of SERVICES) {
         if (!seeded[svc.slug]) {
           seeded[svc.slug] = { ...blankTemplate(), title: svc.label };
+        } else {
+          // Merge default values to prevent crash for templates missing new keys
+          seeded[svc.slug] = {
+            ...blankTemplate(),
+            ...seeded[svc.slug],
+            seo: {
+              title: seeded[svc.slug].seo?.title || "",
+              description: seeded[svc.slug].seo?.description || "",
+              keywords: seeded[svc.slug].seo?.keywords || "",
+            }
+          };
         }
       }
+
+      if (!seeded["__landing"]) {
+        seeded["__landing"] = {
+          ...blankTemplate(),
+          title: "Pan-African Geosynthetics Delivery, Installation & Support",
+          description: "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
+          seo: {
+            title: "Services — Geosynthetics Africa",
+            description: "Pan-African supply, installation and QA/QC of geosynthetics systems across mining, infrastructure and environmental projects.",
+            keywords: "geosynthetics installation, geomembrane welding, SANS 1526, leak detection",
+          }
+        };
+      } else {
+        seeded["__landing"] = {
+          ...blankTemplate(),
+          ...seeded["__landing"],
+        };
+      }
+
       setAllData(seeded);
       if (!activeSlug) {
-        setActiveSlug(SERVICES[0]?.slug ?? "");
+        setActiveSlug("__landing");
       }
     }
     setLoading(false);
@@ -156,7 +329,7 @@ export function ServicesTemplatesEditor() {
     });
 
     if (activeSlug === slug) {
-      setActiveSlug(SERVICES[0]?.slug ?? "");
+      setActiveSlug("__landing");
     }
     setDirty(true);
     toast.success(`Deleted template "${slug}". Save to persist changes.`);
@@ -204,12 +377,6 @@ export function ServicesTemplatesEditor() {
       },
     }));
 
-  const setFeatures = (features: string[]) =>
-    updateActive((prev) => ({
-      ...prev,
-      content: { ...prev.content, features },
-    }));
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
@@ -241,7 +408,7 @@ export function ServicesTemplatesEditor() {
           <Button
             onClick={handleSave}
             disabled={saving || !dirty}
-            className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2"
+            className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2 border-0 cursor-pointer"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {saving ? "Saving…" : "Save All"}
@@ -250,12 +417,12 @@ export function ServicesTemplatesEditor() {
       </div>
 
       {/* ── Main Split Layout ── */}
-      <div className="flex gap-0 border border-border rounded-xl overflow-hidden min-h-[780px] bg-card">
+      <div className="flex gap-0 border border-border rounded-xl overflow-hidden min-h-[820px] bg-card">
         {/* Left sidebar */}
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Services ({categoriesList.length})
+              Services Pages
             </p>
           </div>
 
@@ -290,67 +457,102 @@ export function ServicesTemplatesEditor() {
             )}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-            {categoriesList.map((svc) => {
-              const isActive = svc.slug === activeSlug;
-              const isStatic = SERVICES.some((s) => s.slug === svc.slug);
-              return (
-                <button
-                  key={svc.slug}
-                  onClick={() => {
-                    setActiveSlug(svc.slug);
-                    setActiveTab("hero");
-                  }}
-                  className={cn(
-                    "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
-                    isActive
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-accent text-foreground",
-                  )}
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate font-medium text-xs">{svc.label}</div>
-                    <div className="truncate text-[10px] text-muted-foreground mt-0.5">
-                      {svc.slug}
-                    </div>
+          <div className="flex-1 overflow-y-auto p-2 space-y-4">
+            {/* Main Pages Section */}
+            <div className="space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Main Pages
+              </p>
+              <button
+                onClick={() => {
+                  setActiveSlug("__landing");
+                  setActiveTab("hero");
+                }}
+                className={cn(
+                  "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                  activeSlug === "__landing"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "hover:bg-accent text-foreground",
+                )}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-xs">Services Landing Page</div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                    /services
                   </div>
-                  <div className="flex items-center gap-1 ml-1 shrink-0">
-                    {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
-                    {!isStatic && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Template "{svc.slug}"?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This will remove the template for this custom service. You still need to click Save All to persist.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              className="bg-destructive hover:bg-destructive/90 text-white border-0 cursor-pointer"
-                              onClick={() => handleDelete(svc.slug)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                </div>
+                {activeSlug === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
+              </button>
+            </div>
+
+            {/* Categories Section */}
+            <div className="space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Services Categories ({categoriesList.length})
+              </p>
+              <div className="space-y-0.5">
+                {categoriesList.map((svc) => {
+                  const isActive = svc.slug === activeSlug;
+                  const isStatic = SERVICES.some((s) => s.slug === svc.slug);
+                  return (
+                    <button
+                      key={svc.slug}
+                      onClick={() => {
+                        setActiveSlug(svc.slug);
+                        setActiveTab("hero");
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                        isActive
+                          ? "bg-primary/10 text-primary font-semibold"
+                          : "hover:bg-accent text-foreground",
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-medium text-xs">{svc.label}</div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                          {svc.slug}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 ml-1 shrink-0">
+                        {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
+                        {!isStatic && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Template "{svc.slug}"?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will remove the template for this custom service. You still need to click Save All to persist.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="bg-destructive hover:bg-destructive/90 text-white border-0 cursor-pointer"
+                                  onClick={() => handleDelete(svc.slug)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -367,11 +569,11 @@ export function ServicesTemplatesEditor() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                 <div>
                   <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                    {active.title || activeSlug}
+                    {activeSlug === "__landing" ? "Services Landing Page" : (active.title || activeSlug)}
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1">
                     <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
-                      /services/{activeSlug}
+                      {activeSlug === "__landing" ? "/services" : `/services/${activeSlug}`}
                     </code>
                     {dirty && (
                       <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
@@ -379,15 +581,15 @@ export function ServicesTemplatesEditor() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-                    <a href={`/services/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
+                    <a href={activeSlug === "__landing" ? "/services" : `/services/${activeSlug}`} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-3 w-3" /> Preview
                     </a>
                   </Button>
                   <Button
                     onClick={handleSave}
                     disabled={saving || !dirty}
-                    className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5"
+                    className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
                   >
                     {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
                     {saving ? "Saving…" : "Save"}
@@ -402,77 +604,535 @@ export function ServicesTemplatesEditor() {
                 className="flex-1 flex flex-col overflow-hidden"
               >
                 <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
-                  {[
-                    { id: "hero", label: "Hero" },
-                    { id: "content", label: "Content" },
-                    { id: "seo", label: "SEO" },
-                  ].map((t) => (
-                    <TabsTrigger
-                      key={t.id}
-                      value={t.id}
-                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                    >
-                      {t.label}
-                    </TabsTrigger>
-                  ))}
+                  {activeSlug === "__landing" ? (
+                    // Landing page tabs
+                    [
+                      { id: "hero", label: "Hero" },
+                      { id: "capabilities", label: "Capabilities" },
+                      { id: "faq_cta", label: "FAQ & CTA" },
+                      { id: "seo", label: "SEO" },
+                    ].map((t) => (
+                      <TabsTrigger
+                        key={t.id}
+                        value={t.id}
+                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                      >
+                        {t.label}
+                      </TabsTrigger>
+                    ))
+                  ) : (
+                    // Child page tabs
+                    [
+                      { id: "hero", label: "Hero & Stats" },
+                      { id: "left_col", label: "Left Column" },
+                      { id: "sidebar", label: "Right Sidebar" },
+                      { id: "products_downloads", label: "Products & Downloads" },
+                      { id: "seo", label: "SEO" },
+                    ].map((t) => (
+                      <TabsTrigger
+                        key={t.id}
+                        value={t.id}
+                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                      >
+                        {t.label}
+                      </TabsTrigger>
+                    ))
+                  )}
                 </TabsList>
 
                 <div className="flex-1 overflow-y-auto">
-                  {/* ── HERO ── */}
-                  <TabsContent value="hero" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Hero Section</SectionHeading>
-                    <div>
-                      <FieldLabel>Page Title (H1)</FieldLabel>
-                      <Input
-                        value={active.title ?? ""}
-                        onChange={(e) => setField("title", e.target.value)}
-                        placeholder="e.g. Supply"
-                        className="text-sm"
-                      />
-                    </div>
-                    <div>
-                      <ImagePicker
-                        label="Hero Image"
-                        hint="Full URL or Supabase storage path to the hero background image"
-                        value={active.heroImage ?? ""}
-                        onChange={(val) => setField("heroImage", val)}
-                        placeholder="https://images.unsplash.com/…"
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel hint="Short paragraph shown below the title in the hero">
-                        Description
-                      </FieldLabel>
-                      <Textarea
-                        value={active.description ?? ""}
-                        onChange={(e) => setField("description", e.target.value)}
-                        placeholder="Comprehensive supply solutions for geosynthetic projects across Africa…"
-                        className="text-sm min-h-[96px] resize-none"
-                      />
-                    </div>
-                  </TabsContent>
+                  {/* ──────────────────────────────────────────────────────── */}
+                  {/* ── LANDING PAGE TABS ─────────────────────────────────── */}
+                  {/* ──────────────────────────────────────────────────────── */}
+                  {activeSlug === "__landing" && (
+                    <>
+                      {/* Hero */}
+                      <TabsContent value="hero" className="p-6 space-y-5 m-0">
+                        <SectionHeading>Landing Hero Section</SectionHeading>
+                        <div>
+                          <FieldLabel>Landing Title (H1)</FieldLabel>
+                          <Input
+                            value={active.landingTitle ?? ""}
+                            onChange={(e) => setField("landingTitle", e.target.value)}
+                            placeholder="e.g. Pan-African Geosynthetics Delivery, Installation & Support"
+                            className="text-sm"
+                          />
+                        </div>
+                        <div>
+                          <FieldLabel>Landing Subtitle</FieldLabel>
+                          <Textarea
+                            value={active.landingSubtitle ?? ""}
+                            onChange={(e) => setField("landingSubtitle", e.target.value)}
+                            placeholder="e.g. Geosynthetics Africa delivers pan-African supply..."
+                            className="text-sm min-h-[80px]"
+                          />
+                        </div>
+                        <div>
+                          <ImagePicker
+                            label="Landing Hero Image"
+                            value={active.landingHeroImage ?? ""}
+                            onChange={(val) => setField("landingHeroImage", val)}
+                          />
+                        </div>
+                      </TabsContent>
 
-                  {/* ── CONTENT ── */}
-                  <TabsContent value="content" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Content — Service Features</SectionHeading>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      These appear as capability cards in the service features section.
-                      Each entry is a short label describing a feature or capability (e.g. "Fast lead times").
-                    </p>
-                    <StringListEditor
-                      label="Service Features"
-                      hint="Each item is shown as a capability card on the service page"
-                      items={active.content?.features ?? []}
-                      onChange={setFeatures}
-                      placeholder="e.g. Certified product range"
-                    />
-                  </TabsContent>
+                      {/* Capabilities */}
+                      <TabsContent value="capabilities" className="p-6 space-y-5 m-0">
+                        <SectionHeading>Our Capabilities Grid</SectionHeading>
+                        <div>
+                          <FieldLabel>Capabilities Header Title</FieldLabel>
+                          <Input
+                            value={active.capabilitiesTitle ?? ""}
+                            onChange={(e) => setField("capabilitiesTitle", e.target.value)}
+                            placeholder="e.g. Our Logistics & Installation Capabilities"
+                            className="text-sm"
+                          />
+                        </div>
+                        <PairsEditor
+                          label="Capability Cards"
+                          hint="List of capabilities. Appears as a grid of cards on /services listing page."
+                          items={(active.capabilities ?? []) as any[]}
+                          fields={[
+                            { key: "icon", label: "Icon Name", placeholder: "e.g. Truck, HardHat, ClipboardCheck" },
+                            { key: "title", label: "Capability Title", placeholder: "e.g. HDPE Geomembrane Installation" },
+                            { key: "description", label: "Short Paragraph", placeholder: "e.g. Precision installation of HDPE liner...", multiline: true }
+                          ]}
+                          onChange={(v) => setField("capabilities", v as any[])}
+                          newItem={{ icon: "HardHat", title: "", description: "" }}
+                        />
+                      </TabsContent>
 
-                  {/* ── SEO ── */}
+                      {/* FAQ & CTA */}
+                      <TabsContent value="faq_cta" className="p-6 space-y-5 m-0">
+                        <SectionHeading>Frequently Asked Questions</SectionHeading>
+                        <PairsEditor
+                          label="Accordion FAQs List"
+                          items={(active.faqs ?? []) as any[]}
+                          fields={[
+                            { key: "question", label: "Question Text" },
+                            { key: "answer", label: "Answer Text", multiline: true }
+                          ]}
+                          onChange={(v) => setField("faqs", v as any[])}
+                          newItem={{ question: "", answer: "" }}
+                        />
+
+                        <SectionHeading>CTA Banner Box</SectionHeading>
+                        <div className="grid md:grid-cols-3 gap-4">
+                          <div>
+                            <FieldLabel>CTA Title Text</FieldLabel>
+                            <Input
+                              value={active.ctaTitle ?? ""}
+                              onChange={(e) => setField("ctaTitle", e.target.value)}
+                              placeholder="e.g. Let us help you!"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>CTA Button Text</FieldLabel>
+                            <Input
+                              value={active.ctaButtonText ?? ""}
+                              onChange={(e) => setField("ctaButtonText", e.target.value)}
+                              placeholder="Contact Us"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>CTA Button Redirect Link</FieldLabel>
+                            <Input
+                              value={active.ctaButtonUrl ?? ""}
+                              onChange={(e) => setField("ctaButtonUrl", e.target.value)}
+                              placeholder="/contacts"
+                            />
+                          </div>
+                        </div>
+                      </TabsContent>
+                    </>
+                  )}
+
+                  {/* ──────────────────────────────────────────────────────── */}
+                  {/* ── CHILD PAGE TABS ───────────────────────────────────── */}
+                  {/* ──────────────────────────────────────────────────────── */}
+                  {activeSlug !== "__landing" && (
+                    <>
+                      {/* Hero & Stats */}
+                      <TabsContent value="hero" className="p-6 space-y-5 m-0">
+                        <SectionHeading>Hero Section</SectionHeading>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <FieldLabel>Page Title (H1)</FieldLabel>
+                            <Input
+                              value={active.title ?? ""}
+                              onChange={(e) => setField("title", e.target.value)}
+                              placeholder="e.g. Supply"
+                              className="text-sm"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel hint="E.g. Supplier of Geosynthetic Materials">Category Badge Text</FieldLabel>
+                            <Input
+                              value={active.badge ?? ""}
+                              onChange={(e) => setField("badge", e.target.value)}
+                              placeholder="e.g. Supplier of Geosynthetic Materials"
+                              className="text-sm font-bold"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <ImagePicker
+                            label="Hero Background Image"
+                            value={active.heroImage ?? ""}
+                            onChange={(val) => setField("heroImage", val)}
+                          />
+                        </div>
+                        <div>
+                          <FieldLabel>Hero Subtitle / Description</FieldLabel>
+                          <Textarea
+                            value={active.description ?? ""}
+                            onChange={(e) => setField("description", e.target.value)}
+                            placeholder="Enter short hero summary..."
+                            className="text-sm min-h-[80px]"
+                          />
+                        </div>
+
+                        <SectionHeading>Bottom Stats / Metrics Bar</SectionHeading>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <FieldLabel>Stats Header Title</FieldLabel>
+                            <Input
+                              value={active.statsTitle ?? ""}
+                              onChange={(e) => setField("statsTitle", e.target.value)}
+                              placeholder="e.g. Pan-African Delivery And Logistics Support"
+                              className="text-sm"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>Stats Short Description</FieldLabel>
+                            <Input
+                              value={active.statsDescription ?? ""}
+                              onChange={(e) => setField("statsDescription", e.target.value)}
+                              placeholder="Mirafi and GSE are registered trademarks..."
+                              className="text-sm"
+                            />
+                          </div>
+                        </div>
+                        <PairsEditor
+                          label="Metrics Counters"
+                          items={(active.stats ?? []) as any[]}
+                          fields={[
+                            { key: "value", label: "Metric Value", placeholder: "e.g. 19+" },
+                            { key: "label", label: "Metric Label", placeholder: "e.g. Delivery Areas" }
+                          ]}
+                          onChange={(v) => setField("stats", v as any[])}
+                          newItem={{ value: "", label: "" }}
+                        />
+                      </TabsContent>
+
+                      {/* Left Column Content */}
+                      <TabsContent value="left_col" className="p-6 space-y-6 m-0">
+                        <SectionHeading>Main Description Paragraphs</SectionHeading>
+                        <StringListEditor
+                          label="Overview Text Paragraphs"
+                          items={active.overviewParagraphs ?? []}
+                          onChange={(v) => setField("overviewParagraphs", v)}
+                          multiline
+                        />
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>Why Choose Section</SectionHeading>
+                          <div className="mb-4">
+                            <FieldLabel>Why Choose Heading</FieldLabel>
+                            <Input
+                              value={active.whyChooseTitle ?? ""}
+                              onChange={(e) => setField("whyChooseTitle", e.target.value)}
+                              placeholder="Why Choose Geosynthetics Africa?"
+                              className="text-sm font-bold"
+                            />
+                          </div>
+                          <PairsEditor
+                            label="Why Choose Bullet Points"
+                            items={(active.whyChoose ?? []) as any[]}
+                            fields={[
+                              { key: "title", label: "Bullet Title (bold text)", placeholder: "e.g. Direct-to-Customer Pricing" },
+                              { key: "description", label: "Bullet Detail Text", placeholder: "e.g. No distributors, no hidden agents.", multiline: true }
+                            ]}
+                            onChange={(v) => setField("whyChoose", v as any[])}
+                            newItem={{ title: "", description: "" }}
+                          />
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>What We Deliver Section</SectionHeading>
+                          <div className="mb-4">
+                            <FieldLabel>What We Deliver Heading</FieldLabel>
+                            <Input
+                              value={active.whatWeDeliverTitle ?? ""}
+                              onChange={(e) => setField("whatWeDeliverTitle", e.target.value)}
+                              placeholder="What We Deliver — At Speed"
+                              className="text-sm font-bold"
+                            />
+                          </div>
+                          <PairsEditor
+                            label="What We Deliver Grid Items"
+                            items={(active.whatWeDeliver ?? []) as any[]}
+                            fields={[
+                              { key: "title", label: "Item Name", placeholder: "e.g. GSE HDPE Liners" },
+                              { key: "description", label: "Specifications Description", placeholder: "e.g. GM-13 compliant smooth & textured liners.", multiline: true }
+                            ]}
+                            onChange={(v) => setField("whatWeDeliver", v as any[])}
+                            newItem={{ title: "", description: "" }}
+                          />
+                        </div>
+
+                        <div className="border-t border-border pt-6 space-y-4">
+                          <SectionHeading>Pan-African Coverage & Stock Hubs Section</SectionHeading>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <FieldLabel>Coverage Section Title</FieldLabel>
+                              <Input
+                                value={active.coverageTitle ?? ""}
+                                onChange={(e) => setField("coverageTitle", e.target.value)}
+                                placeholder="Pan-African Coverage & Stock Hubs"
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Coverage Description Text</FieldLabel>
+                              <Input
+                                value={active.coverageText ?? ""}
+                                onChange={(e) => setField("coverageText", e.target.value)}
+                                placeholder="From South Africa into SADC, ECOWAS..."
+                              />
+                            </div>
+                          </div>
+                          <StringListEditor
+                            label="Coverage Stock Hub Bullets"
+                            items={active.coverageBullets ?? []}
+                            onChange={(v) => setField("coverageBullets", v)}
+                            placeholder="e.g. Southern Africa: Road-ready dispatch"
+                          />
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <ImagePicker
+                                label="Coverage Section Image"
+                                value={active.coverageImage ?? ""}
+                                onChange={(val) => setField("coverageImage", val)}
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Image Caption</FieldLabel>
+                              <Input
+                                value={active.coverageCaption ?? ""}
+                                onChange={(e) => setField("coverageCaption", e.target.value)}
+                                placeholder="e.g. Geosynthetics Africa stock dispatch"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* Right Column Sidebar Content */}
+                      <TabsContent value="sidebar" className="p-6 space-y-6 m-0">
+                        <SectionHeading>Top Sidebar Image</SectionHeading>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <ImagePicker
+                              label="Sidebar Image"
+                              value={active.sidebarImage ?? ""}
+                              onChange={(val) => setField("sidebarImage", val)}
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel>Sidebar Image Caption</FieldLabel>
+                            <Input
+                              value={active.sidebarCaption ?? ""}
+                              onChange={(e) => setField("sidebarCaption", e.target.value)}
+                              placeholder="Consignment transport on-site"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>Direct Model Box</SectionHeading>
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <FieldLabel>Direct Model Heading</FieldLabel>
+                              <Input
+                                value={active.directModelTitle ?? ""}
+                                onChange={(e) => setField("directModelTitle", e.target.value)}
+                                placeholder="Direct Model. Direct Support."
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Direct Model Description Text</FieldLabel>
+                              <Input
+                                value={active.directModelText ?? ""}
+                                onChange={(e) => setField("directModelText", e.target.value)}
+                                placeholder="We keep it simple: one team, one price."
+                              />
+                            </div>
+                          </div>
+                          <PairsEditor
+                            label="Direct Model Points"
+                            items={(active.directModelItems ?? []) as any[]}
+                            fields={[
+                              { key: "title", label: "Point Name", placeholder: "e.g. One Team" },
+                              { key: "description", label: "Description detail", placeholder: "e.g. Sales, logistics, and technical support." }
+                            ]}
+                            onChange={(v) => setField("directModelItems", v as any[])}
+                            newItem={{ title: "", description: "" }}
+                          />
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>Packaging & Transport Optimization</SectionHeading>
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <FieldLabel>Section Title</FieldLabel>
+                              <Input
+                                value={active.packagingTitle ?? ""}
+                                onChange={(e) => setField("packagingTitle", e.target.value)}
+                                placeholder="Packaging & Transport Optimization"
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Description Text</FieldLabel>
+                              <Input
+                                value={active.packagingText ?? ""}
+                                onChange={(e) => setField("packagingText", e.target.value)}
+                                placeholder="We tailor packaging to the journey:"
+                              />
+                            </div>
+                          </div>
+                          <StringListEditor
+                            label="Optimization Bullets"
+                            items={active.packagingItems ?? []}
+                            onChange={(v) => setField("packagingItems", v)}
+                            placeholder="e.g. Container fill plans (20' / 40' / HC)"
+                          />
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>AfCFTA & SADC Moves</SectionHeading>
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <FieldLabel>Section Title</FieldLabel>
+                              <Input
+                                value={active.afcftaTitle ?? ""}
+                                onChange={(e) => setField("afcftaTitle", e.target.value)}
+                                placeholder="AfCFTA & SADC Moves"
+                              />
+                            </div>
+                            <div>
+                              <FieldLabel>Description Text</FieldLabel>
+                              <Input
+                                value={active.afcftaText ?? ""}
+                                onChange={(e) => setField("afcftaText", e.target.value)}
+                                placeholder="We issue certificates of origin..."
+                              />
+                            </div>
+                          </div>
+                          <StringListEditor
+                            label="Cross-Border Bullets"
+                            items={active.afcftaItems ?? []}
+                            onChange={(v) => setField("afcftaItems", v)}
+                            placeholder="e.g. HS-code aligned invoices"
+                          />
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <SectionHeading>Logistics Playbook</SectionHeading>
+                          <div className="mb-4">
+                            <FieldLabel>Playbook Title</FieldLabel>
+                            <Input
+                              value={active.playbookTitle ?? ""}
+                              onChange={(e) => setField("playbookTitle", e.target.value)}
+                              placeholder="Logistics Playbook"
+                              className="text-sm font-bold"
+                            />
+                          </div>
+                          <PairsEditor
+                            label="Playbook Rows"
+                            items={(active.playbookItems ?? []) as any[]}
+                            fields={[
+                              { key: "title", label: "Mode (e.g. Road, Rail/ICD, Sea)", placeholder: "e.g. Road" },
+                              { key: "description", label: "Details", placeholder: "e.g. Dedicated vehicles with border files pre-cleared." }
+                            ]}
+                            onChange={(v) => setField("playbookItems", v as any[])}
+                            newItem={{ title: "", description: "" }}
+                          />
+                        </div>
+                      </TabsContent>
+
+                      {/* Products & Downloads */}
+                      <TabsContent value="products_downloads" className="p-6 space-y-6 m-0">
+                        <div>
+                          <FieldLabel>Products Title</FieldLabel>
+                          <Input
+                            value={active.productsTitle ?? ""}
+                            onChange={(e) => setField("productsTitle", e.target.value)}
+                            placeholder="e.g. Products Supplied"
+                            className="text-sm"
+                          />
+                        </div>
+                        <div className="space-y-3">
+                          <FieldLabel hint="Search and add real product family items from the catalog database">
+                            Products Linked
+                          </FieldLabel>
+                          <div className="grid md:grid-cols-2 gap-2">
+                            {(active.products ?? []).map((pId) => {
+                              const pData = allProducts.find(p => p.id === pId);
+                              return (
+                                <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                                  <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                    onClick={() => setField("products", (active.products ?? []).filter(id => id !== pId))}
+                                  >
+                                    ✕
+                                  </Button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div className="pt-2">
+                            <ProductSelector
+                              excludeIds={active.products}
+                              onSelect={(prod) => setField("products", [...(active.products ?? []), prod.id])}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="border-t border-border pt-6">
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <FieldLabel>Downloads Title</FieldLabel>
+                              <Input
+                                value={active.downloadsTitle ?? ""}
+                                onChange={(e) => setField("downloadsTitle", e.target.value)}
+                                placeholder="e.g. Technical Downloads"
+                                className="text-sm"
+                              />
+                            </div>
+                          </div>
+                          <PairsEditor
+                            label="Downloadable Specifications (PDF)"
+                            items={(active.downloads ?? []) as any[]}
+                            fields={[
+                              { key: "label", label: "Document Name", placeholder: "e.g. logistics specsheet" },
+                              { key: "url", label: "File URL Path", placeholder: "e.g. /resources/docs/logistics.pdf" }
+                            ]}
+                            onChange={(v) => setField("downloads", v as any[])}
+                            newItem={{ label: "", url: "" }}
+                          />
+                        </div>
+                      </TabsContent>
+                    </>
+                  )}
+
+                  {/* Meta Tags / SEO (Shared) */}
                   <TabsContent value="seo" className="p-6 space-y-5 m-0">
                     <SectionHeading>SEO / Meta Tags</SectionHeading>
                     <p className="text-xs text-muted-foreground mb-4">
-                      Configure the search engine optimization tags for this service page.
+                      Configure the search engine optimization tags for this page.
                     </p>
                     <div>
                       <FieldLabel hint="Recommended: 50–60 characters">Meta Title</FieldLabel>
@@ -511,8 +1171,8 @@ export function ServicesTemplatesEditor() {
 
       {/* Success indicator */}
       {!dirty && Object.keys(allData).length > 0 && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
-          <CheckCircle2 className="h-3.5 w-3.5" />
+        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+          <CheckCircle2 className="h-4 w-4" />
           All changes saved to Supabase
         </div>
       )}

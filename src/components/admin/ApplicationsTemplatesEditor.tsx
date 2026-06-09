@@ -269,8 +269,9 @@ export function ApplicationsTemplatesEditor() {
             ...blankTemplate(),
             ...seeded[cat.slug],
             seo: {
-              ...blankTemplate().seo,
-              ...(seeded[cat.slug].seo || {}),
+              title: seeded[cat.slug].seo?.title || "",
+              description: seeded[cat.slug].seo?.description || "",
+              keywords: seeded[cat.slug].seo?.keywords || "",
             }
           };
         }

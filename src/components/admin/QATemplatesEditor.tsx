@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImagePicker } from "./ImagePicker";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  FieldLabel, TagsInput,
+  useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, ListEditorHeader,
+} from "./TemplateEditorShared";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -33,36 +37,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Plus,
-  Pencil,
-  Trash2,
-  Search,
-  Eye,
-  GripVertical,
-  ChevronUp,
-  ChevronDown,
-  CheckCircle,
-  FileText,
-  List,
-  MessageSquare,
-  Table,
-} from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
+import { ContentSectionsEditor, type ContentSection } from "./QAContentSectionsEditor";
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type QAStatus = "published" | "draft" | "archived";
-
-type ContentSection = {
-  type: "text" | "checklist" | "numbered" | "callout" | "table";
-  heading: string;
-  body?: string;
-  items?: string[] | Array<{ title: string; desc: string }>;
-  headers?: string[];
-  rows?: string[][];
-};
 
 type Stat = { label: string; value: string };
 type Pillar = { icon: string; title: string; desc: string };
@@ -88,22 +71,12 @@ interface QADocument {
 
 const ICON_OPTIONS = [
   { value: "ShieldCheck", label: "Shield Check" },
-  { value: "FileCheck", label: "File Check" },
-  { value: "Microscope", label: "Microscope" },
-  { value: "BadgeCheck", label: "Badge Check" },
-  { value: "Wrench", label: "Wrench" },
-  { value: "Award", label: "Award" },
+  { value: "FileCheck",   label: "File Check" },
+  { value: "Microscope",  label: "Microscope" },
+  { value: "BadgeCheck",  label: "Badge Check" },
+  { value: "Wrench",      label: "Wrench" },
+  { value: "Award",       label: "Award" },
 ];
-
-const SECTION_TYPES = [
-  { value: "text", label: "Text Block", icon: FileText, hint: "A heading with a paragraph of body text." },
-  { value: "checklist", label: "Checklist", icon: CheckCircle, hint: "A bulleted list of items with checkmarks." },
-  { value: "numbered", label: "Numbered Steps", icon: List, hint: "A numbered list with title + description per item." },
-  { value: "callout", label: "Callout Box", icon: MessageSquare, hint: "A dark highlighted callout panel with heading + body." },
-  { value: "table", label: "Data Table", icon: Table, hint: "A table with custom column headers and rows." },
-];
-
-
 
 const makeEmpty = (): Partial<QADocument> => ({
   slug: "",
@@ -124,60 +97,6 @@ const makeEmpty = (): Partial<QADocument> => ({
 
 // ─── Reusable editor sub-components ──────────────────────────────────────────
 
-function FieldLabel({ children, hint }: { children: React.ReactNode; hint?: string }) {
-  return (
-    <div className="mb-1">
-      <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{children}</label>
-      {hint && <p className="text-[10px] text-muted-foreground/70 mt-0.5">{hint}</p>}
-    </div>
-  );
-}
-
-function TagsInput({
-  label,
-  hint,
-  tags,
-  onChange,
-  placeholder = "Type and press Enter",
-}: {
-  label: string;
-  hint?: string;
-  tags: string[];
-  onChange: (v: string[]) => void;
-  placeholder?: string;
-}) {
-  const [input, setInput] = useState("");
-  const addTag = () => {
-    const val = input.trim();
-    if (!val || tags.includes(val)) return;
-    onChange([...tags, val]);
-    setInput("");
-  };
-  return (
-    <div>
-      <FieldLabel hint={hint}>{label}</FieldLabel>
-      <div className="flex flex-wrap gap-1.5 mb-2 min-h-[32px]">
-        {tags.map((t) => (
-          <Badge key={t} variant="secondary" className="text-[10px] gap-1 pr-1">
-            {t}
-            <button onClick={() => onChange(tags.filter((x) => x !== t))} className="hover:text-destructive ml-0.5">×</button>
-          </Badge>
-        ))}
-      </div>
-      <div className="flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
-          placeholder={placeholder}
-          className="text-sm h-8 flex-1"
-        />
-        <Button variant="outline" size="sm" className="h-8 text-xs" onClick={addTag}>Add</Button>
-      </div>
-    </div>
-  );
-}
-
 function PillarsEditor({
   pillars,
   onChange,
@@ -185,33 +104,27 @@ function PillarsEditor({
   pillars: Pillar[];
   onChange: (v: Pillar[]) => void;
 }) {
-  const add = () => onChange([...pillars, { icon: "ShieldCheck", title: "", desc: "" }]);
-  const update = (i: number, key: keyof Pillar, val: string) => {
-    const n = [...pillars]; n[i] = { ...n[i], [key]: val }; onChange(n);
-  };
-  const remove = (i: number) => onChange(pillars.filter((_, idx) => idx !== i));
+  const { add, update, updateByKey, remove } = useListEditor(
+    pillars,
+    onChange,
+    () => ({ icon: "ShieldCheck", title: "", desc: "" } as Pillar),
+  );
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <FieldLabel hint="Icon cards shown in the hero and sidebar. Keep to 4 pillars max.">Key Pillars</FieldLabel>
-        <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary gap-1">
-          <Plus className="h-3 w-3" /> Add Pillar
-        </Button>
-      </div>
+      <ListEditorHeader
+        label="Key Pillars"
+        hint="Icon cards shown in the hero and sidebar. Keep to 4 pillars max."
+        onAdd={add}
+        addLabel="Add Pillar"
+      />
       {pillars.map((pillar, i) => (
-        <div key={i} className="border border-border rounded-md p-3 bg-surface/40 relative space-y-2">
-          <Button
-            variant="ghost" size="icon"
-            className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
-            onClick={() => remove(i)}
-          >
-            <Trash2 className="h-3 w-3" />
-          </Button>
+        <ItemCard key={i}>
+          <ItemDeleteButton onClick={() => remove(i)} />
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Icon</label>
-              <Select value={pillar.icon} onValueChange={(v) => update(i, "icon", v)}>
+              <MicroLabel>Icon</MicroLabel>
+              <Select value={pillar.icon} onValueChange={(v) => update(i, "icon", v as Pillar["icon"])}>
                 <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {ICON_OPTIONS.map((o) => (
@@ -221,17 +134,17 @@ function PillarsEditor({
               </Select>
             </div>
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Title</label>
+              <MicroLabel>Title</MicroLabel>
               <Input value={pillar.title} onChange={(e) => update(i, "title", e.target.value)} className="h-8 text-xs" placeholder="e.g. Material Verification" />
             </div>
           </div>
           <div>
-            <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Description</label>
+            <MicroLabel>Description</MicroLabel>
             <Textarea value={pillar.desc} onChange={(e) => update(i, "desc", e.target.value)} className="text-xs min-h-[50px] resize-none" placeholder="Short description for this pillar..." />
           </div>
-        </div>
+        </ItemCard>
       ))}
-      {pillars.length === 0 && <p className="text-xs text-muted-foreground italic px-1">No pillars yet — click Add Pillar.</p>}
+      {pillars.length === 0 && <EmptyState message="No pillars yet — click Add Pillar." />}
     </div>
   );
 }
@@ -243,20 +156,20 @@ function StatsEditor({
   stats: Stat[];
   onChange: (v: Stat[]) => void;
 }) {
-  const add = () => onChange([...stats, { label: "", value: "" }]);
-  const update = (i: number, key: keyof Stat, val: string) => {
-    const n = [...stats]; n[i] = { ...n[i], [key]: val }; onChange(n);
-  };
-  const remove = (i: number) => onChange(stats.filter((_, idx) => idx !== i));
+  const { add, update, remove } = useListEditor(
+    stats,
+    onChange,
+    () => ({ label: "", value: "" } as Stat),
+  );
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <FieldLabel hint="Shown in the sidebar stats card and the bottom stats band.">Stats / Metrics</FieldLabel>
-        <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary gap-1">
-          <Plus className="h-3 w-3" /> Add Stat
-        </Button>
-      </div>
+      <ListEditorHeader
+        label="Stats / Metrics"
+        hint="Shown in the sidebar stats card and the bottom stats band."
+        onAdd={add}
+        addLabel="Add Stat"
+      />
       {stats.map((stat, i) => (
         <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
           <Input value={stat.value} onChange={(e) => update(i, "value", e.target.value)} className="text-sm h-8" placeholder="e.g. 100%" />
@@ -266,345 +179,11 @@ function StatsEditor({
           </Button>
         </div>
       ))}
-      {stats.length === 0 && <p className="text-xs text-muted-foreground italic px-1">No stats yet — click Add Stat.</p>}
+      {stats.length === 0 && <EmptyState message="No stats yet — click Add Stat." />}
     </div>
   );
 }
 
-function ContentSectionsEditor({
-  sections,
-  onChange,
-}: {
-  sections: ContentSection[];
-  onChange: (v: ContentSection[]) => void;
-}) {
-  const addSection = (type: ContentSection["type"]) => {
-    const base: ContentSection = {
-      type,
-      heading: "",
-      ...(type === "text" || type === "callout" ? { body: "" } : {}),
-      ...(type === "checklist" ? { items: [] as string[] } : {}),
-      ...(type === "numbered" ? { items: [] as Array<{ title: string; desc: string }> } : {}),
-      ...(type === "table" ? { headers: ["Column 1", "Column 2"], rows: [] } : {}),
-    };
-    onChange([...sections, base]);
-  };
-
-  const update = (i: number, patch: Partial<ContentSection>) => {
-    const n = [...sections]; n[i] = { ...n[i], ...patch }; onChange(n);
-  };
-  const remove = (i: number) => onChange(sections.filter((_, idx) => idx !== i));
-  const move = (i: number, dir: -1 | 1) => {
-    const n = [...sections];
-    const j = i + dir;
-    if (j < 0 || j >= n.length) return;
-    [n[i], n[j]] = [n[j], n[i]];
-    onChange(n);
-  };
-
-  // Checklist string item helpers
-  const addCheckItem = (sIdx: number) => {
-    const items = [...((sections[sIdx].items as string[]) || []), ""];
-    update(sIdx, { items });
-  };
-  const updateCheckItem = (sIdx: number, iIdx: number, val: string) => {
-    const items = [...(sections[sIdx].items as string[])]; items[iIdx] = val;
-    update(sIdx, { items });
-  };
-  const removeCheckItem = (sIdx: number, iIdx: number) => {
-    const items = (sections[sIdx].items as string[]).filter((_, idx) => idx !== iIdx);
-    update(sIdx, { items });
-  };
-
-  // Numbered item helpers
-  const addNumberedItem = (sIdx: number) => {
-    const items = [...((sections[sIdx].items as Array<{ title: string; desc: string }>) || []), { title: "", desc: "" }];
-    update(sIdx, { items });
-  };
-  const updateNumberedItem = (sIdx: number, iIdx: number, key: "title" | "desc", val: string) => {
-    const items = [...(sections[sIdx].items as Array<{ title: string; desc: string }>)];
-    items[iIdx] = { ...items[iIdx], [key]: val };
-    update(sIdx, { items });
-  };
-  const removeNumberedItem = (sIdx: number, iIdx: number) => {
-    const items = (sections[sIdx].items as Array<{ title: string; desc: string }>).filter((_, idx) => idx !== iIdx);
-    update(sIdx, { items });
-  };
-
-  // Table helpers
-  const addTableRow = (sIdx: number) => {
-    const s = sections[sIdx];
-    const rows = [...(s.rows || []), Array((s.headers || []).length).fill("")];
-    update(sIdx, { rows });
-  };
-  const addTableCol = (sIdx: number) => {
-    const s = sections[sIdx];
-    update(sIdx, {
-      headers: [...(s.headers || []), "New Col"],
-      rows: (s.rows || []).map((r) => [...r, ""]),
-    });
-  };
-  const updateTableHeader = (sIdx: number, j: number, val: string) => {
-    const headers = [...(sections[sIdx].headers || [])]; headers[j] = val;
-    update(sIdx, { headers });
-  };
-  const updateTableCell = (sIdx: number, i: number, j: number, val: string) => {
-    const rows = (sections[sIdx].rows || []).map((row, ri) =>
-      ri === i ? row.map((cell, ci) => (ci === j ? val : cell)) : row
-    );
-    update(sIdx, { rows });
-  };
-  const removeTableRow = (sIdx: number, i: number) => {
-    update(sIdx, { rows: (sections[sIdx].rows || []).filter((_, idx) => idx !== i) });
-  };
-  const removeTableCol = (sIdx: number, j: number) => {
-    update(sIdx, {
-      headers: (sections[sIdx].headers || []).filter((_, idx) => idx !== j),
-      rows: (sections[sIdx].rows || []).map((r) => r.filter((_, idx) => idx !== j)),
-    });
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <FieldLabel hint="These are the rich content blocks rendered on the public QA detail page.">Content Sections</FieldLabel>
-        <div className="flex flex-wrap gap-1">
-          {SECTION_TYPES.map((st) => (
-            <Button
-              key={st.value}
-              variant="outline"
-              size="sm"
-              onClick={() => addSection(st.value as ContentSection["type"])}
-              className="h-6 text-[10px] gap-1 cursor-pointer"
-              title={st.hint}
-            >
-              <Plus className="h-2.5 w-2.5" /> {st.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      {sections.map((section, sIdx) => {
-        const typeMeta = SECTION_TYPES.find((t) => t.value === section.type);
-        return (
-          <div key={sIdx} className="border border-border rounded-lg bg-surface/20 overflow-hidden">
-            {/* Section header */}
-            <div className="flex items-center gap-2 px-3 py-2 bg-surface/60 border-b border-border">
-              <GripVertical className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-              <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                {typeMeta?.icon && <typeMeta.icon className="h-3.5 w-3.5 text-primary shrink-0" />}
-                <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{typeMeta?.label || section.type}</span>
-                {section.heading && (
-                  <span className="text-[10px] text-muted-foreground truncate">— {section.heading}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <Button variant="ghost" size="icon" className="h-5 w-5 cursor-pointer" onClick={() => move(sIdx, -1)} disabled={sIdx === 0}>
-                  <ChevronUp className="h-3 w-3" />
-                </Button>
-                <Button variant="ghost" size="icon" className="h-5 w-5 cursor-pointer" onClick={() => move(sIdx, 1)} disabled={sIdx === sections.length - 1}>
-                  <ChevronDown className="h-3 w-3" />
-                </Button>
-                <Button
-                  variant="ghost" size="icon"
-                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                  onClick={() => remove(sIdx)}
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Section body */}
-            <div className="p-3 space-y-3">
-              {/* Heading — all types */}
-              <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Section Heading</label>
-                <Input value={section.heading} onChange={(e) => update(sIdx, { heading: e.target.value })} className="text-sm h-8" placeholder="e.g. Our QA/QC Philosophy" />
-              </div>
-
-              {/* TEXT: body */}
-              {section.type === "text" && (
-                <div>
-                  <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Body Text</label>
-                  <Textarea
-                    value={section.body || ""}
-                    onChange={(e) => update(sIdx, { body: e.target.value })}
-                    className="text-sm min-h-[80px] resize-none"
-                    placeholder="Write the paragraph content..."
-                  />
-                </div>
-              )}
-
-              {/* CALLOUT: body */}
-              {section.type === "callout" && (
-                <div>
-                  <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Callout Body</label>
-                  <Textarea
-                    value={section.body || ""}
-                    onChange={(e) => update(sIdx, { body: e.target.value })}
-                    className="text-sm min-h-[60px] resize-none"
-                    placeholder="Important note or highlight text..."
-                  />
-                </div>
-              )}
-
-              {/* CHECKLIST: string items */}
-              {section.type === "checklist" && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-bold uppercase text-muted-foreground">Checklist Items</label>
-                    <Button variant="ghost" size="sm" className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer" onClick={() => addCheckItem(sIdx)}>
-                      <Plus className="h-2.5 w-2.5" /> Add Item
-                    </Button>
-                  </div>
-                  {(section.items as string[]).map((item, iIdx) => (
-                    <div key={iIdx} className="flex gap-2 items-center">
-                      <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                      <Input
-                        value={item}
-                        onChange={(e) => updateCheckItem(sIdx, iIdx, e.target.value)}
-                        className="text-sm h-7 flex-1"
-                        placeholder="Checklist item..."
-                      />
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => removeCheckItem(sIdx, iIdx)}>
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                  {(section.items as string[]).length === 0 && (
-                    <p className="text-xs text-muted-foreground italic">No items — click Add Item.</p>
-                  )}
-                </div>
-              )}
-
-              {/* NUMBERED: title + desc items */}
-              {section.type === "numbered" && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-bold uppercase text-muted-foreground">Steps / Items</label>
-                    <Button variant="ghost" size="sm" className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer" onClick={() => addNumberedItem(sIdx)}>
-                      <Plus className="h-2.5 w-2.5" /> Add Step
-                    </Button>
-                  </div>
-                  {(section.items as Array<{ title: string; desc: string }>).map((item, iIdx) => (
-                    <div key={iIdx} className="border border-border rounded p-2 bg-card space-y-1.5 relative">
-                      <Button
-                        variant="ghost" size="icon"
-                        className="absolute top-1 right-1 h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                        onClick={() => removeNumberedItem(sIdx, iIdx)}
-                      >
-                        <Trash2 className="h-2.5 w-2.5" />
-                      </Button>
-                      <div className="flex items-center gap-2 pr-6">
-                        <span className="font-display font-black text-xs text-primary shrink-0">{String(iIdx + 1).padStart(2, "0")}</span>
-                        <Input
-                          value={item.title}
-                          onChange={(e) => updateNumberedItem(sIdx, iIdx, "title", e.target.value)}
-                          className="text-xs h-7 flex-1"
-                          placeholder="Step title..."
-                        />
-                      </div>
-                      <Textarea
-                        value={item.desc}
-                        onChange={(e) => updateNumberedItem(sIdx, iIdx, "desc", e.target.value)}
-                        className="text-xs min-h-[44px] resize-none"
-                        placeholder="Step description..."
-                      />
-                    </div>
-                  ))}
-                  {(section.items as Array<{ title: string; desc: string }>).length === 0 && (
-                    <p className="text-xs text-muted-foreground italic">No steps — click Add Step.</p>
-                  )}
-                </div>
-              )}
-
-              {/* TABLE: headers + rows */}
-              {section.type === "table" && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-bold uppercase text-muted-foreground">Table Data</label>
-                    <div className="flex gap-1">
-                      <Button variant="outline" size="sm" className="h-5 text-[10px] gap-0.5 cursor-pointer" onClick={() => addTableCol(sIdx)}>
-                        <Plus className="h-2.5 w-2.5" /> Column
-                      </Button>
-                      <Button variant="outline" size="sm" className="h-5 text-[10px] gap-0.5 cursor-pointer" onClick={() => addTableRow(sIdx)}>
-                        <Plus className="h-2.5 w-2.5" /> Row
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="overflow-x-auto border border-border rounded">
-                    <table className="w-full text-xs">
-                      <thead>
-                        <tr className="bg-surface-dark/90">
-                          {(section.headers || []).map((h, j) => (
-                            <th key={j} className="p-1.5 border-r border-border/50 last:border-r-0 min-w-[100px]">
-                              <div className="flex items-center gap-1">
-                                <Input
-                                  value={h}
-                                  onChange={(e) => updateTableHeader(sIdx, j, e.target.value)}
-                                  className="h-5 text-xs border-0 bg-transparent font-bold p-0 text-foreground focus-visible:ring-0"
-                                />
-                                <Button
-                                  variant="ghost" size="icon"
-                                  className="h-4 w-4 text-destructive/70 hover:text-destructive shrink-0 cursor-pointer"
-                                  onClick={() => removeTableCol(sIdx, j)}
-                                >
-                                  <Trash2 className="h-2.5 w-2.5" />
-                                </Button>
-                              </div>
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(section.rows || []).map((row, i) => (
-                          <tr key={i} className="border-t border-border group hover:bg-surface/50">
-                            {row.map((cell, j) => (
-                              <td key={j} className="p-1 border-r border-border/30 last:border-r-0">
-                                <Input
-                                  value={cell}
-                                  onChange={(e) => updateTableCell(sIdx, i, j, e.target.value)}
-                                  className="h-6 text-xs border-0 bg-transparent p-0 focus-visible:ring-0"
-                                />
-                              </td>
-                            ))}
-                            <td className="p-1 w-6">
-                              <Button
-                                variant="ghost" size="icon"
-                                className="h-5 w-5 text-destructive/70 opacity-0 group-hover:opacity-100 cursor-pointer"
-                                onClick={() => removeTableRow(sIdx, i)}
-                              >
-                                <Trash2 className="h-2.5 w-2.5" />
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                        {(section.rows || []).length === 0 && (
-                          <tr>
-                            <td colSpan={(section.headers || []).length + 1} className="p-2 text-[10px] text-muted-foreground italic text-center">
-                              No rows — click + Row to add data.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
-
-      {sections.length === 0 && (
-        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-          <p className="text-xs text-muted-foreground">No content sections yet. Use the buttons above to add sections.</p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
