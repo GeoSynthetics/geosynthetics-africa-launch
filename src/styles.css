@@ -177,4 +177,18 @@
       padding-inline: 2rem;
     }
   }
+
+  .animate-slide-progress {
+    animation: slide-progress linear forwards;
+    transform-origin: left;
+  }
+}
+
+@keyframes slide-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }

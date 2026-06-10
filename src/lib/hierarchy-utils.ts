@@ -21,6 +21,7 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
           icon: item.icon,
           to: item.to,
           params: item.params,
+          slug: item.slug,
           content: item.megaFallback
             ? {
                 secondaryTitle: item.megaFallback.secondaryTitle ?? item.label,
@@ -36,6 +37,8 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                 featured: item.megaFallback.featured ?? [],
                 quickActionsTitle: item.megaFallback.quickActionsTitle ?? "Quick Actions",
                 quickActions: item.megaFallback.quickActions ?? [],
+                topSellingProductId: item.megaFallback.topSellingProductId,
+                topSellingProductIds: item.megaFallback.topSellingProductIds,
               }
             : {
                 secondaryTitle: item.label,
@@ -49,6 +52,8 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                 featured: [],
                 quickActionsTitle: "Quick Actions",
                 quickActions: item.quickActions ?? [],
+                topSellingProductId: undefined,
+                topSellingProductIds: undefined,
               },
         })),
         secondaryTitle: fallback.secondaryTitle ?? firstItem?.label ?? "",

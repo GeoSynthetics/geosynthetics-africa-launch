@@ -94,6 +94,18 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
 
   const [templates, setTemplates] = useState<Record<string, any>>({});
   const [loadingTemplates, setLoadingTemplates] = useState(false);
+  const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data: dbProds } = await supabase
+        .from("products")
+        .select("id, name, slug")
+        .order("name");
+      if (dbProds) setAllProducts(dbProds);
+    }
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     async function loadTemplates() {
@@ -365,48 +377,128 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
 
         {/* ── Mega Menu ── */}
         <TabsContent value="mega" className="flex-1 overflow-y-auto p-6 space-y-8 m-0">
+          {/* Secondary Column or Top Selling Product */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Secondary Column</h4>
-            <Input
-              value={mega.secondaryTitle ?? ""}
-              onChange={e => setMega({ secondaryTitle: e.target.value })}
-              placeholder="Column heading, e.g. 'Geomembranes'"
-            />
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase text-muted-foreground">Links</label>
-              {(mega.secondary ?? []).map((link, i) => (
-                <div key={i} className="flex gap-2 items-center">
+            {(() => {
+              const isServiceOrAppOrIndustry = sectionKey === "services" || sectionKey === "applications" || sectionKey === "industries";
+              if (isServiceOrAppOrIndustry) {
+                return (
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Top Selling Products (Max 5)</h4>
+                    <p className="text-xs text-muted-foreground">
+                      Select up to 5 top-selling products for this category to show as a slider in the mega menu.
+                    </p>
+                    <div className="space-y-2 max-w-md">
+                      {(mega.topSellingProductIds ?? []).map((pId) => {
+                        const pData = allProducts.find(p => p.id === pId);
+                        return (
+                          <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                            <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                              onClick={() => setMega({ topSellingProductIds: (mega.topSellingProductIds ?? []).filter(id => id !== pId) })}
+                            >
+                              ✕
+                            </Button>
+                          </div>
+                        );
+                      })}
+                      
+                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) && !mega.topSellingProductId && (
+                        <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
+                      )}
+
+                      {/* Legacy single product warning / fallback */}
+                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) && mega.topSellingProductId && (
+                        <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                          <span className="flex items-center gap-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                            {allProducts.find(p => p.id === mega.topSellingProductId)?.name || `Product ID: ${mega.topSellingProductId}`} (Legacy Single)
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                            onClick={() => setMega({ topSellingProductId: "" })}
+                          >
+                            ✕
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    {(!mega.topSellingProductIds || mega.topSellingProductIds.length < 5) && (
+                      <div className="max-w-md pt-1">
+                        <ProductSelector
+                          excludeIds={[
+                            ...(mega.topSellingProductIds ?? []),
+                            ...(mega.topSellingProductId ? [mega.topSellingProductId] : [])
+                          ]}
+                          onSelect={(prod) => {
+                            let currentIds = [...(mega.topSellingProductIds ?? [])];
+                            if (mega.topSellingProductId && currentIds.length === 0) {
+                              currentIds.push(mega.topSellingProductId);
+                            }
+                            setMega({
+                              topSellingProductIds: [...currentIds, prod.id],
+                              topSellingProductId: "", // clear legacy
+                            });
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <>
+                  <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Secondary Column</h4>
                   <Input
-                    value={link.label}
-                    onChange={e => {
-                      const s = [...(mega.secondary ?? [])];
-                      s[i] = { ...s[i], label: e.target.value };
-                      setMega({ secondary: s });
-                    }}
-                    placeholder="Label"
-                    className="text-sm w-1/3"
+                    value={mega.secondaryTitle ?? ""}
+                    onChange={e => setMega({ secondaryTitle: e.target.value })}
+                    placeholder="Column heading, e.g. 'Geomembranes'"
                   />
-                  <Input
-                    value={link.to}
-                    onChange={e => {
-                      const s = [...(mega.secondary ?? [])];
-                      s[i] = { ...s[i], to: e.target.value };
-                      setMega({ secondary: s });
-                    }}
-                    placeholder="/path"
-                    className="text-sm flex-1"
-                  />
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"
-                    onClick={() => setMega({ secondary: (mega.secondary ?? []).filter((_, idx) => idx !== i) })}>
-                    ✕
-                  </Button>
-                </div>
-              ))}
-              <Button variant="outline" size="sm" className="text-xs"
-                onClick={() => setMega({ secondary: [...(mega.secondary ?? []), { label: "", to: "/" }] })}>
-                + Add Link
-              </Button>
-            </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-muted-foreground">Links</label>
+                    {(mega.secondary ?? []).map((link, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <Input
+                          value={link.label}
+                          onChange={e => {
+                            const s = [...(mega.secondary ?? [])];
+                            s[i] = { ...s[i], label: e.target.value };
+                            setMega({ secondary: s });
+                          }}
+                          placeholder="Label"
+                          className="text-sm w-1/3"
+                        />
+                        <Input
+                          value={link.to}
+                          onChange={e => {
+                            const s = [...(mega.secondary ?? [])];
+                            s[i] = { ...s[i], to: e.target.value };
+                            setMega({ secondary: s });
+                          }}
+                          placeholder="/path"
+                          className="text-sm flex-1"
+                        />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"
+                          onClick={() => setMega({ secondary: (mega.secondary ?? []).filter((_, idx) => idx !== i) })}>
+                          ✕
+                        </Button>
+                      </div>
+                    ))}
+                    <Button variant="outline" size="sm" className="text-xs"
+                      onClick={() => setMega({ secondary: [...(mega.secondary ?? []), { label: "", to: "/" }] })}>
+                      + Add Link
+                    </Button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
 
           <div className="border-t border-border pt-6">

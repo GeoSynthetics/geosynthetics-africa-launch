@@ -88,6 +88,8 @@ export interface MegaContent {
   featured?: FeaturedProduct[] | FeaturedImage[];
   quickActionsTitle?: string;
   quickActions?: QuickAction[];
+  topSellingProductId?: string;
+  topSellingProductIds?: string[];
 }
 
 /** A child/family item (e.g. HDPE Geomembranes under Geomembranes) */

@@ -6,6 +6,7 @@ export type NavTarget = {
 export type MegaLink = NavTarget & {
   label: string;
   icon?: string;
+  slug?: string;
   content?: {
     secondaryTitle: string;
     secondary: MegaLink[];
@@ -14,6 +15,19 @@ export type MegaLink = NavTarget & {
     featuredKind: "image" | "product";
     quickActionsTitle: string;
     quickActions: MegaQuickAction[];
+    topSellingProduct?: {
+      name: string;
+      slug: string;
+      image: string;
+      short_description: string;
+    };
+    topSellingProducts?: {
+      id?: string;
+      name: string;
+      slug: string;
+      image: string;
+      short_description: string;
+    }[];
   };
 };
 export type MegaProductItem = NavTarget & { label: string; spec: string; image?: string };
@@ -822,6 +836,7 @@ export const megaMenus: MegaMenuConfig[] = [
       primary: PRODUCT_CATEGORIES.map((c) => ({
         label: c.label,
         icon: c.icon,
+        slug: c.slug,
         ...productLink(c.slug),
         content: generateProductContent(c.slug, c.label)
       })),
@@ -837,6 +852,7 @@ export const megaMenus: MegaMenuConfig[] = [
       primary: APPLICATION_CATEGORIES.map((c) => ({
         label: c.label,
         icon: c.icon,
+        slug: c.slug,
         ...applicationLink(c.slug),
         content: generateApplicationContent(c.slug, c.label)
       })),
@@ -852,6 +868,7 @@ export const megaMenus: MegaMenuConfig[] = [
       primary: SERVICES.map((s) => ({
         label: s.label,
         icon: s.icon,
+        slug: s.slug,
         ...serviceLink(s.slug),
         content: generateServiceContent(s.slug, s.label)
       })),
@@ -867,6 +884,7 @@ export const megaMenus: MegaMenuConfig[] = [
       primary: INDUSTRIES.map((c) => ({
         label: c.label,
         icon: c.icon,
+        slug: c.slug,
         ...industryLink(c.slug),
         content: generateIndustryContent(c.slug, c.label)
       })),

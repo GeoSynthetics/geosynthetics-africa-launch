@@ -39,11 +39,17 @@ function useDynamicMegaMenus() {
 
   useEffect(() => {
     const SECTION_KEYS = ["products", "applications", "services", "industries"] as const;
+    const keysToFetch = [
+      ...SECTION_KEYS.map(k => `hierarchy_${k}`),
+      "template_services",
+      "template_applications",
+      "template_industries",
+    ];
 
     supabase
       .from("site_config")
       .select("key, value")
-      .in("key", SECTION_KEYS.map(k => `hierarchy_${k}`))
+      .in("key", keysToFetch)
       .then(async ({ data }) => {
         if (!data || data.length === 0) return;
         const defaults = getDefaultSections();
@@ -56,10 +62,80 @@ function useDynamicMegaMenus() {
 
         let builtMenus = buildMegaMenuFromHierarchy(sections);
 
-        // ── Auto-hydrate featured product paths and images ────────────────────
-        // Hydrate both the redirect paths to /products/$category/$family and
-        // the real image_url from Supabase products.
+        // Fetch templates map
+        const servicesTemplates = (data.find(d => d.key === "template_services")?.value ?? {}) as Record<string, any>;
+        const applicationsTemplates = (data.find(d => d.key === "template_applications")?.value ?? {}) as Record<string, any>;
+        const industriesTemplates = (data.find(d => d.key === "template_industries")?.value ?? {}) as Record<string, any>;
 
+        // Collect all topSellingProductId values
+        const topSellingProductIds = new Set<string>();
+
+        const getTemplateTopSellingIds = (menuKey: string, slug: string, itemMegaContent?: any): string[] => {
+          if (itemMegaContent?.topSellingProductIds && itemMegaContent.topSellingProductIds.length > 0) {
+            return itemMegaContent.topSellingProductIds;
+          }
+          if (itemMegaContent?.topSellingProductId) {
+            return [itemMegaContent.topSellingProductId];
+          }
+
+          let template: any = null;
+          if (menuKey === "services") {
+            template = servicesTemplates[slug];
+          } else if (menuKey === "applications") {
+            template = applicationsTemplates[slug];
+          } else if (menuKey === "industries") {
+            template = industriesTemplates[slug];
+          }
+
+          if (template) {
+            if (template.topSellingProductIds && template.topSellingProductIds.length > 0) {
+              return template.topSellingProductIds;
+            }
+            if (template.topSellingProductId) {
+              return [template.topSellingProductId];
+            }
+          }
+          return [];
+        };
+
+        for (const menu of builtMenus) {
+          if (menu.key === "services" || menu.key === "applications" || menu.key === "industries") {
+            for (const primary of menu.columns.primary) {
+              const slug = primary.slug || primary.params?.slug || primary.params?.category;
+              if (slug) {
+                const ids = getTemplateTopSellingIds(menu.key, slug, primary.content);
+                for (const id of ids) {
+                  if (id) {
+                    topSellingProductIds.add(id);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Fetch products by id for top selling product highlight
+        const topSellingMap = new Map<string, { id: string; name: string; slug: string; image: string; short_description: string }>();
+        if (topSellingProductIds.size > 0) {
+          const { data: dbProducts } = await supabase
+            .from("products")
+            .select("id, name, slug, image_url, short_description")
+            .in("id", Array.from(topSellingProductIds));
+
+          if (dbProducts) {
+            for (const p of dbProducts) {
+              topSellingMap.set(p.id, {
+                id: p.id,
+                name: p.name,
+                slug: p.slug,
+                image: p.image_url || "",
+                short_description: p.short_description || "",
+              });
+            }
+          }
+        }
+
+        // Hydrate both featured products and top-selling products
         const slugsToHydrate = new Set<string>();
 
         const getProductSlug = (item: any): string | undefined => {
@@ -91,13 +167,13 @@ function useDynamicMegaMenus() {
           }
         }
 
+        let productMap = new Map<string, { image_url: string | null; category_slug: string }>();
         if (slugsToHydrate.size > 0) {
           const { data: productData } = await supabase
             .from("products")
             .select("slug, image_url, product_categories ( slug )")
             .in("slug", Array.from(slugsToHydrate));
 
-          const productMap = new Map<string, { image_url: string | null; category_slug: string }>();
           if (productData) {
             for (const p of productData as any[]) {
               const catSlug = Array.isArray(p.product_categories)
@@ -109,49 +185,75 @@ function useDynamicMegaMenus() {
               });
             }
           }
+        }
 
-          if (productMap.size > 0) {
-            const hydrate = (featured: any[]) =>
-              featured.map(item => {
-                const slug = getProductSlug(item);
-                const dbProduct = slug ? productMap.get(slug) : undefined;
-                if (dbProduct) {
-                  return {
-                    ...item,
-                    to: "/catalogue/$slug",
-                    params: {
-                      slug: slug,
-                    },
-                    image: dbProduct.image_url || item.image || "",
-                  };
-                }
-                return item;
-              });
+        const hydrateFeatured = (featured: any[]) =>
+          featured.map(item => {
+            const slug = getProductSlug(item);
+            const dbProduct = slug ? productMap.get(slug) : undefined;
+            if (dbProduct) {
+              return {
+                ...item,
+                to: "/catalogue/$slug",
+                params: {
+                  slug: slug,
+                },
+                image: dbProduct.image_url || item.image || "",
+              };
+            }
+            return item;
+          });
 
-            builtMenus = builtMenus.map(menu => ({
-              ...menu,
-              columns: {
-                ...menu.columns,
-                featured:
-                  menu.columns.featuredKind === "product" && menu.columns.featured
-                    ? (hydrate(menu.columns.featured as any[]) as any)
-                    : menu.columns.featured,
-                primary: menu.columns.primary.map(p => ({
-                  ...p,
-                  content: p.content
-                    ? {
+        builtMenus = builtMenus.map(menu => {
+          const isTargetMenu = menu.key === "services" || menu.key === "applications" || menu.key === "industries";
+
+          return {
+            ...menu,
+            columns: {
+              ...menu.columns,
+              featured:
+                menu.columns.featuredKind === "product" && menu.columns.featured
+                  ? (hydrateFeatured(menu.columns.featured as any[]) as any)
+                  : menu.columns.featured,
+              primary: menu.columns.primary.map(p => {
+                const slug = p.slug || p.params?.slug || p.params?.category;
+                const pIds = slug ? getTemplateTopSellingIds(menu.key, slug, p.content) : [];
+                const topProds = pIds
+                  .map(id => topSellingMap.get(id))
+                  .filter((item): item is NonNullable<typeof item> => !!item);
+
+                const content = p.content
+                  ? {
                       ...p.content,
                       featured:
                         p.content.featuredKind === "product" && p.content.featured
-                          ? (hydrate(p.content.featured as any[]) as any)
+                          ? (hydrateFeatured(p.content.featured as any[]) as any)
                           : p.content.featured,
+                      topSellingProducts: topProds,
+                      topSellingProduct: topProds[0],
                     }
-                    : p.content,
-                })),
-              },
-            }));
-          }
-        }
+                  : isTargetMenu
+                  ? {
+                      secondaryTitle: p.label,
+                      secondary: [],
+                      featuredTitle: "Featured",
+                      featuredKind: "product" as const,
+                      featured: [],
+                      quickActionsTitle: "Quick Actions",
+                      quickActions: [],
+                      topSellingProducts: topProds,
+                      topSellingProduct: topProds[0],
+                    }
+                  : undefined;
+
+                return {
+                  ...p,
+                  content,
+                };
+              }),
+            },
+          };
+        });
 
         setMenus(builtMenus);
       });

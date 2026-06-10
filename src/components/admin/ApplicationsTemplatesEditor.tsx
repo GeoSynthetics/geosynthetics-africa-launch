@@ -76,6 +76,8 @@ export interface ApplicationTemplate {
   downloadGuideLabel?: string;
   downloadGuideUrl?: string;
   heroHighlights?: HighlightItem[];
+  topSellingProductId?: string;
+  topSellingProductIds?: string[];
   
   // Overview Tab
   overviewParagraphs?: string[];
@@ -162,6 +164,8 @@ function blankTemplate(): ApplicationTemplate {
     quoteLink: "#quote",
     downloadGuideLabel: "Download System Guide",
     downloadGuideUrl: "",
+    topSellingProductId: "",
+    topSellingProductIds: [],
     heroHighlights: [
       { icon: "Shield", label: "Premium Protection" },
       { icon: "CheckCircle2", label: "Certified Installers" },
@@ -982,6 +986,74 @@ export function ApplicationsTemplatesEditor() {
                             onSelect={(prod) => setField("products", [...(active.products ?? []), prod.id])}
                           />
                         </div>
+                      </div>
+
+                      <div className="border-t border-border pt-6 space-y-3">
+                        <FieldLabel hint="Select up to 5 top-selling products for this application to display as a slider in the mega menu">
+                          Top Selling Products (Max 5)
+                        </FieldLabel>
+                        
+                        <div className="space-y-2 max-w-md">
+                          {(active.topSellingProductIds ?? []).map((pId) => {
+                            const pData = allProducts.find(p => p.id === pId);
+                            return (
+                              <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                                <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            );
+                          })}
+                          
+                          {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
+                            <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
+                          )}
+
+                          {/* Show legacy single product if present but no array exists */}
+                          {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
+                            <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                              <span className="flex items-center gap-1.5">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                onClick={() => setField("topSellingProductId", "")}
+                              >
+                                ✕
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+
+                        {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
+                          <div className="max-w-md pt-2">
+                            <ProductSelector
+                              excludeIds={[
+                                ...(active.topSellingProductIds ?? []),
+                                ...(active.topSellingProductId ? [active.topSellingProductId] : [])
+                              ]}
+                              onSelect={(prod) => {
+                                let currentIds = [...(active.topSellingProductIds ?? [])];
+                                if (active.topSellingProductId && currentIds.length === 0) {
+                                  currentIds.push(active.topSellingProductId);
+                                }
+                                setField("topSellingProductIds", [...currentIds, prod.id]);
+                                if (active.topSellingProductId) {
+                                  setField("topSellingProductId", "");
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 
