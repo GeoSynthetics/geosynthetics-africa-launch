@@ -719,7 +719,8 @@ export function ApplicationsTemplatesEditor() {
                               {
                                 key: "icon",
                                 label: "Icon Name",
-                                placeholder: "e.g. Shield, Droplets, Wind, Leaf"
+                                placeholder: "e.g. Shield, Droplets, Wind, Leaf",
+                                type: "icon"
                               },
                               {
                                 key: "label",
@@ -764,7 +765,8 @@ export function ApplicationsTemplatesEditor() {
                           {
                             key: "icon",
                             label: "Icon (e.g. Droplets, Layers, Trash2, Sprout)",
-                            placeholder: "Icon name"
+                            placeholder: "Icon name",
+                            type: "icon"
                           },
                           {
                             key: "label",
@@ -935,7 +937,7 @@ export function ApplicationsTemplatesEditor() {
                       hint="A grid of quality checklist cards (e.g. Material Testing, Seam testing, etc.)."
                       items={(active.qaItems ?? []) as any[]}
                       fields={[
-                        { key: "icon", label: "Icon Name", placeholder: "e.g. ClipboardCheck, Gauge, Wrench" },
+                        { key: "icon", label: "Icon Name", placeholder: "e.g. ClipboardCheck, Gauge, Wrench", type: "icon" },
                         { key: "title", label: "Procedure Name", placeholder: "e.g. Seam Testing" },
                         { key: "description", label: "Description / Specs", placeholder: "e.g. Extrusion & welding quality checks", multiline: true }
                       ]}

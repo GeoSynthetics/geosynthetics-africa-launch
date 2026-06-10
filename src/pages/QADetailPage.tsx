@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
+import * as LucideIcons from "lucide-react";
 import { Route } from "@/routes/quality-assurance.$slug";
 import {
   ChevronRight,
@@ -21,13 +22,9 @@ import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";
 
-const ICON_MAP: Record<string, React.ComponentType<any>> = {
-  ShieldCheck,
-  FileCheck,
-  Microscope,
-  BadgeCheck,
-  Wrench,
-  Award,
+const getIconComp = (name: string | undefined): React.ComponentType<any> => {
+  if (!name) return FileCheck;
+  return (LucideIcons as any)[name] || FileCheck;
 };
 
 type ContentSection = {
@@ -160,7 +157,7 @@ export function QADetailPage() {
           {keyPillars.length > 0 && (
             <div className="flex flex-wrap gap-3 mb-6">
               {keyPillars.map((pillar) => {
-                const IconComp = ICON_MAP[pillar.icon] || FileCheck;
+                const IconComp = getIconComp(pillar.icon);
                 return (
                   <div key={pillar.title} className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded px-2.5 py-1.5">
                     <IconComp className="h-3.5 w-3.5 text-primary" />
@@ -241,7 +238,7 @@ export function QADetailPage() {
               {keyPillars.length > 0 && (
                 <div className="grid sm:grid-cols-2 gap-3 mt-6">
                   {keyPillars.map((pillar) => {
-                    const IconComp = ICON_MAP[pillar.icon] || FileCheck;
+                    const IconComp = getIconComp(pillar.icon);
                     return (
                       <div key={pillar.title} className="border border-border bg-card rounded-lg p-4 flex items-start gap-3">
                         <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -443,7 +440,7 @@ export function QADetailPage() {
                 </h3>
                 <div className="space-y-3">
                   {keyPillars.map((pillar) => {
-                    const IconComp = ICON_MAP[pillar.icon] || FileCheck;
+                        const IconComp = getIconComp(pillar.icon);
                     return (
                       <div key={pillar.title} className="flex items-center gap-2.5">
                         <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">

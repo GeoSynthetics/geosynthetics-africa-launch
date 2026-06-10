@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImagePicker } from "./ImagePicker";
+import { IconPicker } from "./IconPicker";
 
 // ─── useListEditor ────────────────────────────────────────────────────────────
 // Generic hook that provides add/update/remove helpers for any array field.
@@ -270,7 +271,7 @@ export function PairsEditor<T extends Record<string, string>>({
   label: string;
   hint?: string;
   items: T[];
-  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea"; placeholder?: string }[];
+  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea" | "icon"; placeholder?: string }[];
   onChange: (v: T[]) => void;
   newItem?: T;
 }) {
@@ -318,7 +319,7 @@ export function PairsEditor<T extends Record<string, string>>({
               )}
             >
               {fields.map((f) => (
-                <div key={f.key} className={f.multiline || f.type === "image" ? "col-span-full" : ""}>
+                <div key={f.key} className={f.multiline || f.type === "image" || f.type === "icon" ? "col-span-full" : ""}>
                   <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
                     {f.label}
                   </label>
@@ -326,6 +327,12 @@ export function PairsEditor<T extends Record<string, string>>({
                     <ImagePicker
                       value={(item as any)[f.key] ?? ""}
                       placeholder={f.placeholder}
+                      onChange={(val) => update(i, f.key, val)}
+                    />
+                  ) : f.type === "icon" ? (
+                    <IconPicker
+                      value={(item as any)[f.key] ?? ""}
+                      placeholder={f.placeholder || "Select icon..."}
                       onChange={(val) => update(i, f.key, val)}
                     />
                   ) : f.multiline ? (
@@ -537,7 +544,7 @@ export function QuickActionsEditor({ items, onChange }: { items: QA[]; onChange:
             <Input placeholder="Title" value={qa.title} onChange={e => update(i, "title", e.target.value)} className="text-sm" />
             <Input placeholder="Description" value={qa.description} onChange={e => update(i, "description", e.target.value)} className="text-sm" />
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Icon (Lucide name)" value={qa.icon} onChange={e => update(i, "icon", e.target.value)} className="text-sm" />
+              <IconPicker placeholder="Select Icon" value={qa.icon} onChange={v => update(i, "icon", v)} />
               <Input placeholder="/link-to" value={qa.to} onChange={e => update(i, "to", e.target.value)} className="text-sm" />
             </div>
           </div>

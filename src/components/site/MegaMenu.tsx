@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link, type LinkComponentProps } from "@tanstack/react-router";
+import { Link, useRouter, type LinkComponentProps } from "@tanstack/react-router";
+import * as LucideIcons from "lucide-react";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to" | "params"> & { to: string; params?: Record<string, string> };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
@@ -20,11 +21,12 @@ import {
 import { megaMenus, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
 import { ProgressiveImage } from "@/components/ui/ProgressiveImage";
 
-const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
-  Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
-  Pickaxe, Droplets, Trash2, Construction, Sprout,
-  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy, Building2, Zap,
+const getIconComponent = (
+  name: string | undefined,
+  fallback: React.ComponentType<{ className?: string }> | undefined = BookOpen
+): React.ComponentType<{ className?: string }> | undefined => {
+  if (!name) return fallback;
+  return (LucideIcons as any)[name] || fallback;
 };
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,6 +42,7 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
+  const router = useRouter();
   
   // Track loaded state of each product image by index to avoid re-showing skeleton when sliding back
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
@@ -90,6 +93,21 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
     return () => clearInterval(interval);
   }, [products.length, isHovered, isFirstImageLoaded]);
 
+  // Prefetch the active slide product detail page content to speed up transition on click
+  useEffect(() => {
+    if (!isFirstImageLoaded || !products || products.length === 0) return;
+    
+    const activeProduct = products[currentIndex];
+    if (activeProduct?.slug) {
+      router.preloadRoute({
+        to: "/catalogue/$slug",
+        params: { slug: activeProduct.slug }
+      }).catch(err => {
+        console.warn("Failed to prefetch route for product:", activeProduct.slug, err);
+      });
+    }
+  }, [currentIndex, products, isFirstImageLoaded, router]);
+
   if (!products || products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-[180px] rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
@@ -99,13 +117,16 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
     );
   }
 
-  const currentProduct = products[currentIndex];
   const showSkeleton = !isFirstImageLoaded;
 
   return (
-    <div className="relative w-full aspect-[4/3]">
+    <div 
+      className="relative w-full aspect-[4/3]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {showSkeleton && (
-        <div className="absolute inset-0 flex flex-col justify-end p-4 rounded-xl border border-border bg-stone-950 overflow-hidden">
+        <div className="absolute inset-0 flex flex-col justify-end p-4 rounded-xl border border-border bg-stone-950 overflow-hidden z-20">
           <Skeleton className="absolute inset-0 w-full h-full bg-stone-900/80 animate-pulse rounded-none" />
           <div className="space-y-2.5 relative z-10">
             <Skeleton className="h-4 w-16 bg-stone-800 rounded animate-pulse" />
@@ -116,85 +137,90 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
         </div>
       )}
 
-      <div
-        className={`w-full h-full transition-opacity duration-300 ${showSkeleton ? "opacity-0" : "opacity-100"}`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <RLink
-          to="/catalogue/$slug"
-          params={{ slug: currentProduct.slug }}
-          onClick={closeMenus}
-          className="group block relative overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl transition-all duration-500 hover:border-primary w-full h-full bg-stone-950"
-        >
-          {currentProduct.image ? (
-            <ProgressiveImage
-              key={currentIndex}
-              src={currentProduct.image}
-              alt={currentProduct.name}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-stone-900">
-              <Package className="h-10 w-10 text-stone-600" />
-            </div>
-          )}
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-95 transition-opacity duration-300" />
-
-          <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
-            <div className="absolute top-3 left-3 bg-primary text-white font-display text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm z-10">
-              Best Seller
-            </div>
-
-            {products.length > 1 && (
-              <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
-                {products.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setCurrentIndex(i);
-                    }}
-                    className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                      i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-
-            <div className="space-y-0.5 transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-              <h5 className="font-display text-xs font-black uppercase tracking-tight text-white group-hover:text-primary transition-colors duration-300 line-clamp-1">
-                {currentProduct.name}
-              </h5>
-              {currentProduct.short_description && (
-                <p className="text-[10px] text-stone-300 line-clamp-2 font-medium leading-normal group-hover:text-white transition-colors duration-300">
-                  {currentProduct.short_description}
-                </p>
-              )}
-              <div className="pt-1 flex items-center text-[9px] font-black uppercase tracking-widest text-primary gap-0.5 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                <span>View Product</span>
-                <ChevronRight className="h-3 w-3 transform group-hover:translate-x-1 transition-transform duration-300" />
-              </div>
-            </div>
-          </div>
-
-          {products.length > 1 ? (
-            <div
-              key={`${currentIndex}-${isHovered}`}
-              className={`absolute bottom-0 left-0 right-0 h-1 bg-primary ${
-                isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
+      <div className={`w-full h-full relative ${showSkeleton ? "opacity-0" : "opacity-100 transition-opacity duration-300"}`}>
+        {products.map((product, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <RLink
+              key={product.slug}
+              to="/catalogue/$slug"
+              params={{ slug: product.slug }}
+              onClick={closeMenus}
+              className={`absolute inset-0 group block overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl hover:border-primary bg-stone-950 transition-all duration-700 ease-in-out ${
+                isActive
+                  ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
+                  : "opacity-0 translate-x-6 scale-98 pointer-events-none z-0"
               }`}
-              style={{
-                animationDuration: "5000ms",
-              }}
-            />
-          ) : (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-          )}
-        </RLink>
+            >
+              {product.image ? (
+                <ProgressiveImage
+                  src={product.image}
+                  alt={product.name}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-stone-900">
+                  <Package className="h-10 w-10 text-stone-600" />
+                </div>
+              )}
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-95 transition-opacity duration-300" />
+
+              <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
+                <div className="absolute top-3 left-3 bg-primary text-white font-display text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm z-10">
+                  Best Seller
+                </div>
+
+                <div className="space-y-0.5 transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                  <h5 className="font-display text-xs font-black uppercase tracking-tight text-white group-hover:text-primary transition-colors duration-300 line-clamp-1">
+                    {product.name}
+                  </h5>
+                  {product.short_description && (
+                    <p className="text-[10px] text-stone-300 line-clamp-2 font-medium leading-normal group-hover:text-white transition-colors duration-300">
+                      {product.short_description}
+                    </p>
+                  )}
+                  <div className="pt-1 flex items-center text-[9px] font-black uppercase tracking-widest text-primary gap-0.5 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                    <span>View Product</span>
+                    <ChevronRight className="h-3 w-3 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </div>
+              </div>
+            </RLink>
+          );
+        })}
+
+        {products.length > 1 && (
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 z-20">
+            {products.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentIndex(i);
+                }}
+                className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                  i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {products.length > 1 ? (
+          <div
+            key={`${currentIndex}-${isHovered}`}
+            className={`absolute bottom-0 left-0 right-0 h-1 bg-primary z-20 ${
+              isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
+            }`}
+            style={{
+              animationDuration: "5000ms",
+            }}
+          />
+        ) : (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary transform scale-x-0 hover:scale-x-100 transition-transform duration-500 origin-left z-20" />
+        )}
       </div>
     </div>
   );
@@ -232,7 +258,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           </h4>
           <ul className="space-y-1">
             {columns.primary.map((item) => {
-              const Icon = item.icon ? ICONS[item.icon] : undefined;
+              const Icon = item.icon ? getIconComponent(item.icon, undefined) : undefined;
               const isActive = activeItem?.label === item.label;
               return (
                 <li key={item.label} onMouseEnter={() => setActiveItem(item)}>
@@ -342,7 +368,7 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           </h4>
           <ul className="space-y-2">
             {displayData.quickActions.map((qa) => {
-              const Icon = ICONS[qa.icon] ?? BookOpen;
+              const Icon = getIconComponent(qa.icon, BookOpen);
               const isUploadBOQ = qa.title === "Upload Project BOQ";
 
               const actionContent = (

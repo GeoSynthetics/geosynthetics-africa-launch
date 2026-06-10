@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GripVertical, Plus, ChevronRight, ChevronDown, Trash2 } from "lucide-react";
+import { GripVertical, Plus, ChevronRight, ChevronDown, Trash2, Copy } from "lucide-react";
 import type { HierarchySection, HierarchyItem, HierarchyChild } from "@/types/hierarchy";
 
 type SelectedNode =
@@ -24,6 +24,33 @@ function itemRoute(sectionKey: SectionKey): string {
 // Derive the route param key for each section (products/applications use $category; services/industries use $slug)
 function itemParamKey(sectionKey: SectionKey): string {
   return sectionKey === "services" || sectionKey === "industries" ? "slug" : "category";
+}
+
+// Helper to resolve slug and label collisions by appending copy suffixes and counters
+function generateUniqueSlugAndLabel(
+  existingSlugs: Set<string>,
+  baseSlug: string,
+  baseLabel: string
+): { slug: string; label: string } {
+  let targetSlug = `${baseSlug}-copy`;
+  let targetLabel = `${baseLabel} (Copy)`;
+
+  let counter = 1;
+  while (existingSlugs.has(targetSlug)) {
+    targetSlug = `${baseSlug}-copy-${counter}`;
+    targetLabel = `${baseLabel} (Copy ${counter})`;
+    counter++;
+  }
+
+  return { slug: targetSlug, label: targetLabel };
+}
+
+function getUniqueItemSlugAndLabel(items: HierarchyItem[], baseSlug: string, baseLabel: string) {
+  return generateUniqueSlugAndLabel(new Set(items.map(i => i.slug)), baseSlug, baseLabel);
+}
+
+function getUniqueChildSlugAndLabel(children: HierarchyChild[], baseSlug: string, baseLabel: string) {
+  return generateUniqueSlugAndLabel(new Set(children.map(c => c.slug)), baseSlug, baseLabel);
 }
 
 interface HierarchyTreeProps {
@@ -96,6 +123,122 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     onChange({ ...section, items });
   };
 
+  const duplicateItem = (itemIdx: number) => {
+    const originalItem = section.items[itemIdx];
+    if (!originalItem) return;
+
+    const { slug: newSlug, label: newLabel } = getUniqueItemSlugAndLabel(
+      section.items,
+      originalItem.slug,
+      originalItem.label
+    );
+
+    const paramKey = itemParamKey(sectionKey);
+    const newItem: HierarchyItem = JSON.parse(JSON.stringify(originalItem));
+    newItem.slug = newSlug;
+    newItem.id = newSlug;
+    newItem.label = newLabel;
+    newItem.params = {
+      ...newItem.params,
+      [paramKey]: newSlug,
+    };
+
+    if (newItem.pageContent && newItem.pageContent.seo) {
+      newItem.pageContent.seo = {
+        ...newItem.pageContent.seo,
+        title: newItem.pageContent.seo.title
+          ? `${newItem.pageContent.seo.title} (Copy)`
+          : "",
+      };
+    }
+
+    newItem.children = (newItem.children || []).map((child) => {
+      const childParamKey = sectionKey === "products" ? "family" : paramKey;
+      const newChildSlug = `${child.slug}-copy`;
+      const newChildLabel = `${child.label} (Copy)`;
+
+      const duplicatedChild: HierarchyChild = {
+        ...child,
+        id: newChildSlug,
+        slug: newChildSlug,
+        label: newChildLabel,
+      };
+
+      if (sectionKey === "products") {
+        duplicatedChild.params = {
+          category: newSlug,
+          family: newChildSlug,
+        };
+      } else {
+        duplicatedChild.params = {
+          [childParamKey]: newChildSlug,
+        };
+      }
+
+      if (duplicatedChild.pageContent && duplicatedChild.pageContent.seo) {
+        duplicatedChild.pageContent.seo = {
+          ...duplicatedChild.pageContent.seo,
+          title: duplicatedChild.pageContent.seo.title
+            ? `${duplicatedChild.pageContent.seo.title} (Copy)`
+            : "",
+        };
+      }
+
+      return duplicatedChild;
+    });
+
+    const newItems = [...section.items];
+    newItems.splice(itemIdx + 1, 0, newItem);
+    onChange({ ...section, items: newItems });
+  };
+
+  const duplicateChild = (itemIdx: number, childIdx: number) => {
+    const parent = section.items[itemIdx];
+    if (!parent) return;
+    const originalChild = parent.children[childIdx];
+    if (!originalChild) return;
+
+    const { slug: newSlug, label: newLabel } = getUniqueChildSlugAndLabel(
+      parent.children,
+      originalChild.slug,
+      originalChild.label
+    );
+
+    const newChild: HierarchyChild = JSON.parse(JSON.stringify(originalChild));
+    newChild.slug = newSlug;
+    newChild.id = newSlug;
+    newChild.label = newLabel;
+
+    if (sectionKey === "products") {
+      newChild.params = {
+        category: parent.slug,
+        family: newSlug,
+      };
+    } else {
+      const paramKey = itemParamKey(sectionKey);
+      newChild.params = {
+        [paramKey]: newSlug,
+      };
+    }
+
+    if (newChild.pageContent && newChild.pageContent.seo) {
+      newChild.pageContent.seo = {
+        ...newChild.pageContent.seo,
+        title: newChild.pageContent.seo.title
+          ? `${newChild.pageContent.seo.title} (Copy)`
+          : "",
+      };
+    }
+
+    const newChildren = [...parent.children];
+    newChildren.splice(childIdx + 1, 0, newChild);
+
+    const newItems = section.items.map((item, i) =>
+      i === itemIdx ? { ...item, children: newChildren } : item
+    );
+    onChange({ ...section, items: newItems });
+  };
+
   const onDragEnd = (result: DropResult) => {
     const { source, destination, type } = result;
     if (!destination) return;
@@ -155,10 +298,13 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                             <span className="ml-1.5 text-[10px] text-muted-foreground font-normal">{item.children.length} sub</span>
                           </button>
                           <button onClick={() => { setAddingChildToIdx(itemIdx); setExpandedItems(p => new Set([...p, itemIdx])); }}
-                            className="opacity-0 group-hover:opacity-100 text-primary" title="Add child">
+                            className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Add child">
                             <Plus className="h-3.5 w-3.5" />
                           </button>
-                          <button onClick={() => removeItem(itemIdx)} className="opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
+                          <button onClick={() => duplicateItem(itemIdx)} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
+                            <Copy className="h-3.5 w-3.5" />
+                          </button>
+                          <button onClick={() => removeItem(itemIdx)} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
@@ -179,7 +325,10 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                                         <button className="flex-1 text-left truncate" onClick={() => onSelect({ type: "child", itemIdx, childIdx })}>
                                           {child.label}
                                         </button>
-                                        <button onClick={() => removeChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-destructive">
+                                        <button onClick={() => duplicateChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
+                                          <Copy className="h-3 w-3" />
+                                        </button>
+                                        <button onClick={() => removeChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
                                           <Trash2 className="h-3 w-3" />
                                         </button>
                                       </div>

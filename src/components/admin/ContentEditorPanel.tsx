@@ -18,6 +18,7 @@ import {
   ListEditor, FAQEditor, PropertiesTableEditor, PairsEditor, QuickActionsEditor, SectionsEditor,
 } from "./TemplateEditorShared";
 import { ProductSelector } from "./ProductSelector";
+import { IconPicker } from "./IconPicker";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 type EditableNode = HierarchyItem | HierarchyChild;
@@ -221,8 +222,8 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
             <Input value={data.slug} onChange={e => setData(p => ({ ...p, slug: e.target.value }))} />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Icon (Lucide name)</label>
-            <Input value={data.icon ?? ""} onChange={e => setData(p => ({ ...p, icon: e.target.value }))} placeholder="e.g. Layers" />
+            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Icon</label>
+            <IconPicker value={data.icon ?? ""} onChange={v => setData(p => ({ ...p, icon: v }))} placeholder="Select icon..." />
           </div>
           <div>
             <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Link Path</label>

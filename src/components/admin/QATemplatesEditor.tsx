@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImagePicker } from "./ImagePicker";
+import { IconPicker } from "./IconPicker";
 import { Textarea } from "@/components/ui/textarea";
 import {
   FieldLabel, TagsInput,
@@ -69,14 +70,7 @@ interface QADocument {
   created_at: string;
 }
 
-const ICON_OPTIONS = [
-  { value: "ShieldCheck", label: "Shield Check" },
-  { value: "FileCheck",   label: "File Check" },
-  { value: "Microscope",  label: "Microscope" },
-  { value: "BadgeCheck",  label: "Badge Check" },
-  { value: "Wrench",      label: "Wrench" },
-  { value: "Award",       label: "Award" },
-];
+
 
 const makeEmpty = (): Partial<QADocument> => ({
   slug: "",
@@ -124,14 +118,7 @@ function PillarsEditor({
           <div className="grid grid-cols-2 gap-2">
             <div>
               <MicroLabel>Icon</MicroLabel>
-              <Select value={pillar.icon} onValueChange={(v) => update(i, "icon", v as Pillar["icon"])}>
-                <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {ICON_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <IconPicker value={pillar.icon} onChange={(v) => update(i, "icon", v)} placeholder="Select icon..." className="h-8 text-xs" />
             </div>
             <div>
               <MicroLabel>Title</MicroLabel>

@@ -697,7 +697,7 @@ export function ServicesTemplatesEditor() {
                           hint="List of capabilities. Appears as a grid of cards on /services listing page."
                           items={(active.capabilities ?? []) as any[]}
                           fields={[
-                            { key: "icon", label: "Icon Name", placeholder: "e.g. Truck, HardHat, ClipboardCheck" },
+                            { key: "icon", label: "Icon Name", placeholder: "e.g. Truck, HardHat, ClipboardCheck", type: "icon" },
                             { key: "title", label: "Capability Title", placeholder: "e.g. HDPE Geomembrane Installation" },
                             { key: "description", label: "Short Paragraph", placeholder: "e.g. Precision installation of HDPE liner...", multiline: true }
                           ]}

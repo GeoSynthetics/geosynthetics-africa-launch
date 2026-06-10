@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/quality-assurance.index";
+import * as LucideIcons from "lucide-react";
 import {
   ShieldCheck,
   FileCheck,
@@ -16,13 +17,9 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { cn } from "@/lib/utils";
 
-const ICON_MAP: Record<string, React.ComponentType<any>> = {
-  ShieldCheck,
-  FileCheck,
-  Microscope,
-  BadgeCheck,
-  Wrench,
-  Award,
+const getIconComp = (name: string | undefined): React.ComponentType<any> => {
+  if (!name) return FileCheck;
+  return (LucideIcons as any)[name] || FileCheck;
 };
 
 // Static brand content — these are core GSA brand pillars that don't change
@@ -186,7 +183,7 @@ export function QAPage() {
               {qaDocuments.map((doc: any) => {
                 const pillars: any[] = doc.key_pillars || [];
                 const firstPillar = pillars[0];
-                const IconComp = firstPillar?.icon ? ICON_MAP[firstPillar.icon] || FileCheck : FileCheck;
+                const IconComp = firstPillar?.icon ? getIconComp(firstPillar.icon) : FileCheck;
 
                 return (
                   <Link
