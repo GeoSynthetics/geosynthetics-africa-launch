@@ -429,6 +429,49 @@
             <p class="card-desc">Located in the <strong>Products</strong> tab. Link actual items from the primary catalog by entering their exact product names, short descriptions, and technical links. These render as product recommendations at the bottom of the page.</p>
           </div>
         </div>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Visual Icon Selection (Lucide Icon Picker)</h3>
+        <p class="paragraph">
+          Across the admin control panel (e.g., when editing navigation category icons in the <strong>Site Builder</strong>, setting key pillars in <strong>Quality Assurance Templates</strong>, or defining quick action lists in the <strong>Mega Menu</strong> builder), you will find the interactive <strong>Lucide Icon Picker</strong>.
+        </p>
+        <p class="paragraph">
+          Instead of manually typing icon names and risking spelling mistakes that display broken icons, the Icon Picker provides an interactive, visual interface:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Real-time Search:</strong> Simply click the icon picker button to open the popover, and type keywords (e.g., "shield", "globe", "settings") to filter Lucide's extensive catalog in real-time.</li>
+          <li><strong>Hover Name Preview:</strong> Hover your cursor over any icon in the grid to see its exact Lucide name displayed in the picker's footer before making a selection.</li>
+          <li><strong>1-Click Selection:</strong> Click any icon in the grid to assign it instantly. The picker handles dynamic rendering and resolves the selected graphic.</li>
+          <li><strong>Clear Icon:</strong> Click the small "✕" button next to the search icon in the selector to reset and remove the assigned icon.</li>
+        </ul>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Media Library Selection (Image Picker)</h3>
+        <p class="paragraph">
+          To manage visual media across the admin platform (such as hero banner background images, QA document cover pictures, partner logos, or case study photos), we use the centralized <strong>Image Picker</strong>. 
+        </p>
+        <p class="paragraph">
+          Instead of manually copy-pasting storage URLs or FTP locations, the Image Picker is integrated directly into Supabase Storage and features:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Drag & Drop Uploader:</strong> Drag any image (PNG, JPEG, WEBP, SVG, GIF up to 25MB), document (PDF), or video (MP4, WEBM) directly into the dashed upload container to host it on the CDN instantly.</li>
+          <li><strong>Automatic Bandwidth Optimization:</strong> When uploading raster files, the picker automatically compresses their dimensions and converts them to modern <code>.webp</code> format on the fly, saving up to 80% bandwidth.</li>
+          <li><strong>Search & Filter Tabs:</strong> Easily toggle between the <strong>Media Vault</strong> bucket (shared system assets) and <strong>Product Images</strong> bucket. Use the search field and sorting menu to find files by date, file name, or file size.</li>
+          <li><strong>Asset Previews:</strong> Dynamic visual cards display thumbnails for images, previews for videos, and dedicated icons for documents. Hovering over any card displays its file name and byte size.</li>
+          <li><strong>Quick Clearing:</strong> Use the red "✕" button next to any image input to instantly remove the selected asset URL.</li>
+        </ul>
+
+        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Database Product Linker (Product Selector)</h3>
+        <p class="paragraph">
+          When linking specific catalog products inside lists (like the Mega Menu's featured products or the Product Categories templates), the platform uses the <strong>Product Selector</strong> combobox.
+        </p>
+        <p class="paragraph">
+          This selector prevents administrators from typing incorrect URLs or misspelling product titles:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Direct Database Connection:</strong> The selector queries the Supabase <code>products</code> table in real-time, displaying active catalog names.</li>
+          <li><strong>Autocomplete Search:</strong> Click the selector and type search terms to instantly filter matches.</li>
+          <li><strong>Automatic Auto-Fill:</strong> Once selected, the component passes the full product record (such as its title, slug, thickness specification, description, and image URL) back to the editor, which automatically fills all associated input fields in one click.</li>
+          <li><strong>Duplicate Exclusion:</strong> The selector dynamically detects and filters out products that are already selected in the current list to avoid duplicate links.</li>
+        </ul>
         
         <div class="callout callout-tip">
           <div class="callout-title">
@@ -958,6 +1001,38 @@
         <p class="paragraph">
           The dynamic sitemap at <code>/sitemap.xml</code> is auto-generated by a TanStack Start server route located in <code>src/routes/sitemap[.]xml.ts</code>. It automatically queries `template_product_categories` and includes all dynamic admin-created categories seamlessly, ensuring instant Google discovery without manual updates.
         </p>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">5. Dynamic Lucide Icon Picker Architecture</h3>
+        <p class="paragraph">
+          The <code>IconPicker</code> component (located in <code>src/components/admin/IconPicker.tsx</code>) provides a robust way to select Lucide icons visually. For other AI agents and developers extending this system, keep the following design patterns in mind:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Dynamic Parsing:</strong> It dynamically extracts all icon exports from <code>lucide-react</code> using keys that start with a capital letter, excluding helper exports like <code>createReactComponent</code>. This ensures that any updates to the <code>lucide-react</code> package automatically make new icons available in the picker.</li>
+          <li><strong>Performance Optimization:</strong> It uses <code>useMemo</code> to filter icon names based on the search query. To prevent browser rendering lag with over 1,000 icons, it slices the filtered list to a maximum of 100 visible items at a time.</li>
+          <li><strong>Dynamic Resolution:</strong> The public site loads selected icons dynamically using their string names. When rendering icons dynamically, retrieve the corresponding Lucide React component from the <code>lucide-react</code> exports using the stored name string (e.g., <code>const Component = (LucideIcons as any)[name]</code>).</li>
+        </ul>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">6. Centralized Image Picker & Storage Integration</h3>
+        <p class="paragraph">
+          The <code>ImagePicker</code> component (located in <code>src/components/admin/ImagePicker.tsx</code>) handles all system-wide asset hosting, uploads, and media vaults. Keep the following technical specs in mind:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Supabase Storage Integration:</strong> Connects directly to Supabase storage buckets, primarily targeting the <code>media-center</code> public bucket.</li>
+          <li><strong>Image Compression & Format Conversion:</strong> Prior to upload, images are processed client-side via the <code>compressImage</code> utility (from <code>src/lib/image-utils.ts</code>), converting standard formats (JPEG, PNG) to highly compressed WebP files and reducing data payloads.</li>
+          <li><strong>Permission & Bucket Resiliency:</strong> If the primary bucket is restricted or fails to initialize, the component triggers a fallback mode, redirecting uploads to the public <code>product-images</code> bucket under a virtual <code>media-center/</code> subfolder.</li>
+          <li><strong>Mime Filtering & File Capping:</strong> Only images, PDF documents, and standard video files (MP4, WEBM, MOV) are accepted. Upload size is capped at 25MB.</li>
+          <li><strong>Proxy URLs:</strong> Selected assets generate proxy URLs (e.g., <code>/api/storage/media-center/filename.webp</code>) to ensure secure asset fetching and bypass CORS-related browser security warnings.</li>
+        </ul>
+
+        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">7. Database Product Selector Combobox</h3>
+        <p class="paragraph">
+          The <code>ProductSelector</code> component (located in <code>src/components/admin/ProductSelector.tsx</code>) provides a search-and-select autocomplete combobox. Key characteristics include:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Real-time Lookup:</strong> Queries the Supabase <code>products</code> table, selecting title, slug, cover image, brief, specifications, and category relationships.</li>
+          <li><strong>Exclusion Engine:</strong> Takes an optional <code>excludeIds</code> array prop containing already selected IDs, ensuring duplicate product relations cannot be chosen.</li>
+          <li><strong>Unified Command List:</strong> Employs the Radix-based <code>Popover</code> component wrapping the cmdk-driven <code>Command</code> library to provide optimized instant keyword searching over locally cached records.</li>
+        </ul>
       </section>
       
     </main>

@@ -36,6 +36,34 @@ src/                                # Principal application source code
 └── types/                          # Shared TypeScript interface declarations (e.g., site builder layouts, homepage)
 ```
 
+## 2026-06-10 — Integrate Centralized Image Picker & Product Selector Components
+
+**Scope:** Admin / UI / UX / Assets & Database Linkers
+**Summary:** Implemented and integrated the **ImagePicker** and **ProductSelector** components to replace manual, error-prone text input fields for storage media and catalogue product linkages. `ImagePicker` wraps Supabase storage buckets with image compression, drag-and-drop uploading, tabbed media vault filtering, sorting, and an automatic directory fallback. `ProductSelector` utilizes a Radix popover and cmdk command list to search catalog products in real-time, filtering out duplicates and passing complete metadata payloads to parent editors for automated path/info auto-population.
+**Files touched:** `src/components/admin/ImagePicker.tsx` (new), `src/components/admin/ProductSelector.tsx` (new), `src/components/admin/ContentEditorPanel.tsx`, `src/components/admin/QATemplatesEditor.tsx`, `src/components/admin/TemplateEditorShared.tsx`, `docs/index.html`, `docs/lovable-docs.md`
+**Notes / follow-ups:** Streamlines content entry and ensures catalog link and asset URL integrity.
+
+---
+
+## 2026-06-10 — Implement Real-Time Slug Sync & Validation UX
+
+**Scope:** Admin / UI / UX / Slug Inputs
+**Summary:** Implemented a reusable custom React hook (`useSlugSync`) and string utility (`formatSlugInput`) to automatically sync, format, and validate slug inputs across the admin dashboard. Slug inputs now format in real-time as the administrator types (converting spaces and special character sequences to hyphens, collapsing consecutive hyphens, and forcing lowercase). Upon field blur (`onBlur`), a full clean (`slugify`) is performed to remove leading/trailing hyphens. The slug automatically matches changes in the title/label input until the user manually focuses and types in the slug input (detaching the auto-sync). Clearing the slug input entirely resets and re-enables the auto-sync.
+**Files touched:** `src/lib/utils.ts`, `src/hooks/use-slug-sync.ts` (new), `src/components/admin/ContentEditorPanel.tsx`, `src/components/admin/ProjectsTemplatesEditor.tsx`, `src/components/admin/QATemplatesEditor.tsx`, `src/pages/ProductsAdminPage.tsx`, `src/components/admin/ServicesTemplatesEditor.tsx`, `src/components/admin/IndustriesTemplatesEditor.tsx`, `src/components/admin/ApplicationsTemplatesEditor.tsx`, `src/pages/PageTemplatesAdminPage.tsx`, `src/test/hooks/use-slug-sync.test.tsx` (new), `docs/lovable-docs.md`
+**Notes / follow-ups:** Includes comprehensive vitest unit tests in `src/test/hooks/use-slug-sync.test.tsx` which pass successfully.
+
+---
+
+## 2026-06-10 — Implement Lucide Icon Picker
+
+
+**Scope:** Admin / UI / UX / Lucide Icons
+**Summary:** Replaced error-prone manual text inputs for Lucide icon selection with an interactive visual **IconPicker** popover component. The picker dynamically reads and filters all available Lucide icons from the `lucide-react` library, offering real-time search, hover previews, lazy loading grids of up to 100 matching entries (for performance), and a single-click selection/clear mechanism. Integrated this component across three admin editors: navigation nodes (Site Builder Identity tab), Quality Assurance document pillars (QA Templates editor), and navigation quick actions (Site Builder Megamenu).
+**Files touched:** `src/components/admin/IconPicker.tsx` (new), `src/components/admin/ContentEditorPanel.tsx`, `src/components/admin/QATemplatesEditor.tsx`, `src/components/admin/TemplateEditorShared.tsx`, `docs/index.html`, `docs/lovable-docs.md`
+**Notes / follow-ups:** Improves the admin UX by eliminating typos and rendering issues on the public site layout.
+
+---
+
 ## 2026-06-09 — Document Application Categories and Sub-pages Admin Guide
 
 **Scope:** Admin / Site Builder / Documentation
