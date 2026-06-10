@@ -38,7 +38,7 @@ interface SliderProduct {
   short_description: string;
 }
 
-export function TopSellingProductsSlider({ products }: { products: SliderProduct[] }) {
+export function TopSellingProductsSlider({ products, isLoading }: { products: SliderProduct[]; isLoading?: boolean }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
@@ -108,7 +108,7 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
     }
   }, [currentIndex, products, isFirstImageLoaded, router]);
 
-  if (!products || products.length === 0) {
+  if (!isLoading && (!products || products.length === 0)) {
     return (
       <div className="flex flex-col items-center justify-center h-[180px] rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
         <Package className="h-8 w-8 text-muted-foreground/30 mb-2" />
@@ -117,7 +117,7 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
     );
   }
 
-  const showSkeleton = !isFirstImageLoaded;
+  const showSkeleton = isLoading || !isFirstImageLoaded;
 
   return (
     <div 
@@ -226,7 +226,7 @@ export function TopSellingProductsSlider({ products }: { products: SliderProduct
   );
 }
 
-function MegaPanel({ config }: { config: MegaMenuConfig }) {
+function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: boolean }) {
   const { open } = useQuickQuote();
   const { columns } = config;
   const [activeItem, setActiveItem] = useState(columns.primary[0]);
@@ -285,7 +285,10 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
             {isServiceOrAppOrIndustry ? "Top Selling Products" : displayData.secondaryTitle}
           </h4>
           {isServiceOrAppOrIndustry ? (
-            <TopSellingProductsSlider products={displayData.topSellingProducts || (displayData.topSellingProduct ? [displayData.topSellingProduct] : [])} />
+            <TopSellingProductsSlider 
+              products={displayData.topSellingProducts || (displayData.topSellingProduct ? [displayData.topSellingProduct] : [])} 
+              isLoading={isLoading}
+            />
           ) : (
             <ul className="space-y-1">
               {displayData.secondary.map((item) => (
@@ -309,7 +312,33 @@ function MegaPanel({ config }: { config: MegaMenuConfig }) {
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
             {activeItem?.label ? `Featured ${activeItem.label}` : displayData.featuredTitle}
           </h4>
-          {displayData.featuredKind === "product" ? (
+          {isLoading ? (
+            displayData.featuredKind === "product" ? (
+              <ul className="space-y-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <li key={i} className="flex items-center gap-3 rounded-md p-2">
+                    <Skeleton className="h-12 w-12 flex-shrink-0 rounded bg-muted/60" />
+                    <div className="flex-1 min-w-0 space-y-1.5">
+                      <Skeleton className="h-4 w-3/4 bg-muted" />
+                      <Skeleton className="h-3 w-1/2 bg-muted/60" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="space-y-3">
+                {[1, 2].map((i) => (
+                  <li key={i} className="flex gap-3">
+                    <Skeleton className="h-16 w-20 flex-shrink-0 rounded bg-muted/60" />
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <Skeleton className="h-4 w-3/4 bg-muted" />
+                      <Skeleton className="h-3 w-5/6 bg-muted/60" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : displayData.featuredKind === "product" ? (
             <ul className="space-y-2">
               {(displayData.featured as MegaProductItem[]).map((p) => (
                 <li key={p.label}>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,6 +75,8 @@ export function ResourcesAdminPage() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [resourceToDelete, setResourceToDelete] = useState<Resource | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [editing, setEditing] = useState<Partial<Resource>>(empty);
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
@@ -155,18 +158,24 @@ export function ResourcesAdminPage() {
     }
   };
 
-  const remove = async (r: Resource) => {
-    if (!confirm("Delete this resource?")) return;
-    if (r.file_path) {
-      await supabase.storage.from("technical-docs").remove([r.file_path]);
+  const handleConfirmDelete = async () => {
+    if (!resourceToDelete) return;
+    setIsDeleting(true);
+    const r = resourceToDelete;
+    try {
+      if (r.file_path) {
+        await supabase.storage.from("technical-docs").remove([r.file_path]);
+      }
+      const { error } = await supabase.from("resources").delete().eq("id", r.id);
+      if (error) throw error;
+      toast.success(`Resource "${r.title}" deleted successfully`);
+      setRows((rs) => rs.filter((x) => x.id !== r.id));
+      setResourceToDelete(null);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to delete resource");
+    } finally {
+      setIsDeleting(false);
     }
-    const { error } = await supabase.from("resources").delete().eq("id", r.id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Deleted");
-    setRows((rs) => rs.filter((x) => x.id !== r.id));
   };
 
   const preview = async (path: string) => {
@@ -373,7 +382,7 @@ export function ResourcesAdminPage() {
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => void remove(r)}
+                      onClick={() => setResourceToDelete(r)}
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -384,6 +393,16 @@ export function ResourcesAdminPage() {
           </TableBody>
         </Table>
       </div>
+      <DeleteConfirmationDialog
+        isOpen={!!resourceToDelete}
+        onOpenChange={(open) => !open && setResourceToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Technical Resource?"
+        description="Are you sure you want to delete this resource? This will permanently remove the document from storage and database."
+        itemName={resourceToDelete?.title}
+        isLoading={isDeleting}
+        idPrefix="technical-resource"
+      />
     </div>
   );
 }

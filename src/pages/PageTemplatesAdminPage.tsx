@@ -7,17 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import {
   Dialog,
   DialogContent,
@@ -66,6 +56,14 @@ export function PageTemplatesAdminPage() {
   const [editorType, setEditorType] = useState<"products" | "projects" | "quality-assurance" | "applications" | "services" | "industries">("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
+  const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (slugToDelete) {
+      handleDelete(slugToDelete);
+      setSlugToDelete(null);
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
@@ -642,35 +640,17 @@ export function PageTemplatesAdminPage() {
                         <div className="flex items-center gap-1 ml-1 shrink-0">
                           {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
                           {!isActive && (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10"
-                                  onClick={e => e.stopPropagation()}
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Template "{slug}"?</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This will remove the template for this sub-page. The page will show a 404 until re-created. You still need to click Save All.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    className="bg-destructive hover:bg-destructive/90"
-                                    onClick={() => handleDelete(slug)}
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                              onClick={e => {
+                                e.stopPropagation();
+                                setSlugToDelete(slug);
+                              }}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
                           )}
                         </div>
                       </button>
@@ -1212,6 +1192,15 @@ export function PageTemplatesAdminPage() {
           )}
         </>
       )}
+      <DeleteConfirmationDialog
+        isOpen={!!slugToDelete}
+        onOpenChange={(open) => !open && setSlugToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Product Template?"
+        description="This will remove the template for this sub-page. The page will show a 404 until re-created. You still need to click Save All."
+        itemName={slugToDelete || undefined}
+        idPrefix="product-template"
+      />
     </div>
   );
 }

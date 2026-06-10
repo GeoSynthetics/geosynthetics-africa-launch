@@ -27,17 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { Plus, Pencil, Trash2, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
@@ -183,6 +173,14 @@ export function QATemplatesEditor() {
   const [editing, setEditing] = useState<Partial<QADocument>>(makeEmpty());
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
+  const [qaToDelete, setQaToDelete] = useState<QADocument | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (qaToDelete) {
+      void remove(qaToDelete);
+      setQaToDelete(null);
+    }
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -358,30 +356,14 @@ export function QATemplatesEditor() {
                     <Button size="icon" variant="ghost" className="cursor-pointer" onClick={() => openEdit(doc)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive cursor-pointer">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete "{doc.category_name}"?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently remove this QA document and its child detail page will return a 404.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            className="bg-destructive hover:bg-destructive/90 text-white cursor-pointer border-0"
-                            onClick={() => void remove(doc)}
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="text-destructive hover:text-destructive cursor-pointer"
+                      onClick={() => setQaToDelete(doc)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </td>
               </tr>
@@ -568,6 +550,15 @@ export function QATemplatesEditor() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <DeleteConfirmationDialog
+        isOpen={!!qaToDelete}
+        onOpenChange={(open) => !open && setQaToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete QA Document?"
+        description="This will permanently remove this QA document and its child detail page will return a 404."
+        itemName={qaToDelete?.category_name}
+        idPrefix="qa-document"
+      />
     </div>
   );
 }

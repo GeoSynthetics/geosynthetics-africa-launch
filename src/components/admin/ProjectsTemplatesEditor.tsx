@@ -11,17 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import {
   Plus, Trash2, Save, Loader2, Compass, ChevronRight, PlusCircle, X, Layers,
 } from "lucide-react";
@@ -48,6 +38,14 @@ export function ProjectsTemplatesEditor() {
 
   const [newTitle, setNewTitle] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<{ id: string; title: string } | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (projectToDelete) {
+      handleDelete(projectToDelete.id, projectToDelete.title);
+      setProjectToDelete(null);
+    }
+  };
 
   // â”€â”€ Load from Supabase â”€â”€
   const load = useCallback(async () => {
@@ -333,35 +331,17 @@ export function ProjectsTemplatesEditor() {
                     <div className="flex items-center gap-1 ml-1 shrink-0">
                       {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
                       {!isActive && (
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Template "{p.title}"?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you absolutely sure? This will delete the case study from the database completely. This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                className="bg-destructive hover:bg-destructive/90"
-                                onClick={() => handleDelete(p.id, p.title)}
-                              >
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setProjectToDelete({ id: p.id, title: p.title });
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
                       )}
                     </div>
                   </button>
@@ -1077,6 +1057,15 @@ export function ProjectsTemplatesEditor() {
           </div>
         </div>
       )}
+      <DeleteConfirmationDialog
+        isOpen={!!projectToDelete}
+        onOpenChange={(open) => !open && setProjectToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Project Template?"
+        description="Are you absolutely sure? This will delete the case study from the database completely. This action cannot be undone."
+        itemName={projectToDelete?.title}
+        idPrefix="project-template"
+      />
     </div>
   );
 }

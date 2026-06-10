@@ -9,17 +9,7 @@ import {
   Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
   Plus, Trash2
 } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
 import { SectionHeading, FieldLabel, StringListEditor } from "./TemplateEditorShared";
@@ -75,6 +65,14 @@ export function IndustriesTemplatesEditor() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
+  const [industryToDelete, setIndustryToDelete] = useState<{ slug: string; label: string } | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (industryToDelete) {
+      handleDelete(industryToDelete.slug);
+      setIndustryToDelete(null);
+    }
+  };
 
   const [newSlug, setNewSlug] = useState("");
   const [showNewSlug, setShowNewSlug] = useState(false);
@@ -341,35 +339,17 @@ export function IndustriesTemplatesEditor() {
                   <div className="flex items-center gap-1 ml-1 shrink-0">
                     {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
                     {!isStatic && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIndustryToDelete({ slug: ind.slug, label: ind.label });
+                            }}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Template "{ind.slug}"?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This will remove the template for this custom industry. You still need to click Save All to persist.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              className="bg-destructive hover:bg-destructive/90 text-white border-0 cursor-pointer"
-                              onClick={() => handleDelete(ind.slug)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
                     )}
                   </div>
                 </button>
@@ -628,6 +608,15 @@ export function IndustriesTemplatesEditor() {
           All changes saved to Supabase
         </div>
       )}
+      <DeleteConfirmationDialog
+        isOpen={!!industryToDelete}
+        onOpenChange={(open) => !open && setIndustryToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Industry Template?"
+        description="This will remove the template for this custom industry. You still need to click Save All to persist."
+        itemName={industryToDelete?.label}
+        idPrefix="industry-template"
+      />
     </>
   );
 }

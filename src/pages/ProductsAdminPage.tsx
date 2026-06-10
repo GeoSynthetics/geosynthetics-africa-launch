@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -175,6 +176,8 @@ export function ProductsAdminPage() {
   const [cats, setCats] = useState<ProductCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [productToDelete, setProductToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [showMissingSeo, setShowMissingSeo] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -564,15 +567,19 @@ export function ProductsAdminPage() {
     void load();
   };
 
-  const remove = async (id: string) => {
-    if (!confirm("Delete this product?")) return;
+  const handleConfirmDelete = async () => {
+    if (!productToDelete) return;
+    setIsDeleting(true);
+    const { id, name } = productToDelete;
     const { error } = await supabase.from("products").delete().eq("id", id);
+    setIsDeleting(false);
     if (error) {
       toast.error(error.message);
       return;
     }
-    toast.success("Deleted");
+    toast.success(`Product "${name}" deleted successfully`);
     setRows((r) => r.filter((x) => x.id !== id));
+    setProductToDelete(null);
   };
 
   const toggleActive = async (p: Product) => {
@@ -1614,7 +1621,7 @@ export function ProductsAdminPage() {
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() => void remove(p.id)}
+                      onClick={() => setProductToDelete({ id: p.id, name: p.name })}
                       className="h-8 w-8 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -1671,6 +1678,16 @@ export function ProductsAdminPage() {
           </div>
         </div>
       </div>
+      <DeleteConfirmationDialog
+        isOpen={!!productToDelete}
+        onOpenChange={(open) => !open && setProductToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Product?"
+        description="Are you sure you want to delete this product? This will permanently remove it from the catalog and database."
+        itemName={productToDelete?.name}
+        isLoading={isDeleting}
+        idPrefix="product"
+      />
     </div>
   );
 }

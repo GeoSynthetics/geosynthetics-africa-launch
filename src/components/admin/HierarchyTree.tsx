@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GripVertical, Plus, ChevronRight, ChevronDown, Trash2, Copy } from "lucide-react";
 import type { HierarchySection, HierarchyItem, HierarchyChild } from "@/types/hierarchy";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -66,6 +67,21 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
   const [newItemLabel, setNewItemLabel] = useState("");
   const [addingChildToIdx, setAddingChildToIdx] = useState<number | null>(null);
   const [newChildLabel, setNewChildLabel] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: "item" | "child";
+    itemIdx: number;
+    childIdx?: number;
+  } | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return;
+    if (deleteTarget.type === "item") {
+      removeItem(deleteTarget.itemIdx);
+    } else if (deleteTarget.type === "child" && deleteTarget.childIdx !== undefined) {
+      removeChild(deleteTarget.itemIdx, deleteTarget.childIdx);
+    }
+    setDeleteTarget(null);
+  };
 
   const toggleExpand = (i: number) =>
     setExpandedItems(prev => {
@@ -304,7 +320,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                           <button onClick={() => duplicateItem(itemIdx)} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
                             <Copy className="h-3.5 w-3.5" />
                           </button>
-                          <button onClick={() => removeItem(itemIdx)} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
+                          <button onClick={() => setDeleteTarget({ type: "item", itemIdx })} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
@@ -328,7 +344,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                                         <button onClick={() => duplicateChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
                                           <Copy className="h-3 w-3" />
                                         </button>
-                                        <button onClick={() => removeChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
+                                        <button onClick={() => setDeleteTarget({ type: "child", itemIdx, childIdx })} className="opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
                                           <Trash2 className="h-3 w-3" />
                                         </button>
                                       </div>
@@ -377,6 +393,21 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
         />
         <Button size="sm" className="h-8 shrink-0" onClick={addItem}><Plus className="h-3.5 w-3.5" /></Button>
       </div>
+      <DeleteConfirmationDialog
+        isOpen={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        onConfirm={handleConfirmDelete}
+        title={deleteTarget?.type === "item" ? "Delete Navigation Item?" : "Delete Navigation Sub-item?"}
+        description="This will remove the item from the navigation hierarchy tree. You still need to click Save to persist this change."
+        itemName={
+          deleteTarget
+            ? deleteTarget.type === "item"
+              ? section.items[deleteTarget.itemIdx]?.label
+              : section.items[deleteTarget.itemIdx]?.children[deleteTarget.childIdx!]?.label
+            : undefined
+        }
+        idPrefix="site-builder-tree"
+      />
     </div>
   );
 }

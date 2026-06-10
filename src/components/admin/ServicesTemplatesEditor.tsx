@@ -9,17 +9,7 @@ import {
   Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
   Plus, Trash2
 } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
 import { SectionHeading, FieldLabel, StringListEditor, PairsEditor } from "./TemplateEditorShared";
@@ -201,6 +191,14 @@ export function ServicesTemplatesEditor() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
+  const [serviceToDelete, setServiceToDelete] = useState<{ slug: string; label: string } | null>(null);
+
+  const handleConfirmDelete = () => {
+    if (serviceToDelete) {
+      handleDelete(serviceToDelete.slug);
+      setServiceToDelete(null);
+    }
+  };
 
   const [newSlug, setNewSlug] = useState("");
   const [showNewSlug, setShowNewSlug] = useState(false);
@@ -521,35 +519,17 @@ export function ServicesTemplatesEditor() {
                       <div className="flex items-center gap-1 ml-1 shrink-0">
                         {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
                         {!isStatic && (
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Template "{svc.slug}"?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This will remove the template for this custom service. You still need to click Save All to persist.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className="bg-destructive hover:bg-destructive/90 text-white border-0 cursor-pointer"
-                                  onClick={() => handleDelete(svc.slug)}
-                                >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setServiceToDelete({ slug: svc.slug, label: svc.label });
+                            }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
                         )}
                       </div>
                     </button>
@@ -1248,6 +1228,15 @@ export function ServicesTemplatesEditor() {
           All changes saved to Supabase
         </div>
       )}
+      <DeleteConfirmationDialog
+        isOpen={!!serviceToDelete}
+        onOpenChange={(open) => !open && setServiceToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Service Template?"
+        description="This will remove the template for this custom service. You still need to click Save All to persist."
+        itemName={serviceToDelete?.label}
+        idPrefix="service-template"
+      />
     </>
   );
 }
