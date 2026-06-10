@@ -29,3 +29,15 @@ export function slugify(s: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/**
+ * Formats a slug in real-time as the user types, preserving trailing hyphens
+ * but lowercasing, converting spaces to hyphens, and removing other invalid characters.
+ */
+export function formatSlugInput(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+

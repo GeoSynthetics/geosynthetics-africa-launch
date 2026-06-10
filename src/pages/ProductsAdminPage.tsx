@@ -58,6 +58,7 @@ import { compressImage } from "@/lib/image-utils";
 import { slugify } from "@/lib/utils";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 import { ProductSelector } from "@/components/admin/ProductSelector";
+import { useSlugSync } from "@/hooks/use-slug-sync";
 
 interface Manufacturer {
   id: string;
@@ -186,6 +187,13 @@ export function ProductsAdminPage() {
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  const { handleSlugChange, handleSlugBlur } = useSlugSync({
+    title: editing.name || "",
+    slug: editing.slug || "",
+    onSlugChange: (newSlug) => setEditing((s) => ({ ...s, slug: newSlug })),
+    entityId: editing.id,
+  });
 
   const [allProductsLookup, setAllProductsLookup] = useState<
     Record<string, { name: string; image_url?: string | null }>
@@ -638,7 +646,6 @@ export function ProductsAdminPage() {
                             setEditing((s) => ({
                               ...s,
                               name: e.target.value,
-                              slug: s.id ? s.slug : slugify(e.target.value),
                             }))
                           }
                           className="mt-1.5 w-full font-medium"
@@ -650,12 +657,8 @@ export function ProductsAdminPage() {
                           <Input
                             id="p-slug"
                             value={editing.slug ?? ""}
-                            onChange={(e) =>
-                              setEditing((s) => ({
-                                ...s,
-                                slug: e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
-                              }))
-                            }
+                            onChange={(e) => handleSlugChange(e.target.value)}
+                            onBlur={handleSlugBlur}
                             className="mt-1.5 w-full text-xs font-mono"
                           />
                         </div>

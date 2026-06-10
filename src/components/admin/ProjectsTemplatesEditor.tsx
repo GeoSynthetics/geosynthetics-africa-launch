@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSelector, type ProductData } from "./ProductSelector";
+import { useSlugSync } from "@/hooks/use-slug-sync";
 import { ImagePicker } from "./ImagePicker";
 import {
   SectionHeading, FieldLabel,
@@ -86,6 +87,13 @@ export function ProjectsTemplatesEditor() {
   const setField = (key: string, value: any) => {
     updateActive((prev) => ({ ...prev, [key]: value }));
   };
+
+  const { handleSlugChange, handleSlugBlur } = useSlugSync({
+    title: active?.title || "",
+    slug: active?.slug || "",
+    onSlugChange: (newSlug) => setField("slug", newSlug),
+    entityId: activeId,
+  });
 
   // â”€â”€ Add New Project â”€â”€
   const handleAddNew = () => {
@@ -466,7 +474,8 @@ export function ProjectsTemplatesEditor() {
                             <FieldLabel hint="URL-friendly slug (e.g. zimbabwe-river-rehab)">Slug</FieldLabel>
                             <Input
                               value={active.slug}
-                              onChange={(e) => setField("slug", e.target.value)}
+                              onChange={(e) => handleSlugChange(e.target.value)}
+                              onBlur={handleSlugBlur}
                               className="text-sm font-mono"
                             />
                           </div>

@@ -28,7 +28,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, formatSlugInput } from "@/lib/utils";
 import { SectionHeading, FieldLabel, StringListEditor, PairsEditor } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
@@ -452,7 +452,7 @@ export function ApplicationsTemplatesEditor() {
                 <Input
                   placeholder="e.g. mining-systems"
                   value={newSlug}
-                  onChange={e => setNewSlug(e.target.value)}
+                  onChange={e => setNewSlug(formatSlugInput(e.target.value))}
                   onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
                   className="text-xs h-8"
                   autoFocus

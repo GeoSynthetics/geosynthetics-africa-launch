@@ -42,6 +42,7 @@ import { Plus, Pencil, Trash2, Search, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
 import { ContentSectionsEditor, type ContentSection } from "./QAContentSectionsEditor";
+import { useSlugSync } from "@/hooks/use-slug-sync";
 
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -260,6 +261,13 @@ export function QATemplatesEditor() {
   const set = <K extends keyof QADocument>(key: K, value: QADocument[K]) =>
     setEditing((prev) => ({ ...prev, [key]: value }));
 
+  const { handleSlugChange, handleSlugBlur } = useSlugSync({
+    title: editing.category_name || "",
+    slug: editing.slug || "",
+    onSlugChange: (newSlug) => set("slug", newSlug),
+    entityId: editing.id,
+  });
+
   const STATUS_COLORS: Record<QAStatus, string> = {
     published: "bg-emerald-500/15 text-emerald-600 border border-emerald-500/20",
     draft: "bg-amber-500/15 text-amber-600 border border-amber-500/20",
@@ -407,10 +415,7 @@ export function QATemplatesEditor() {
                   <FieldLabel hint="Shown as the card title on the listing page">Category Name *</FieldLabel>
                   <Input
                     value={editing.category_name ?? ""}
-                    onChange={(e) => {
-                      set("category_name", e.target.value);
-                      if (!editing.id) set("slug", slugify(e.target.value));
-                    }}
+                    onChange={(e) => set("category_name", e.target.value)}
                     placeholder="e.g. GSE® / Solmax Quality Assurance"
                     className="mt-1"
                   />
@@ -419,7 +424,8 @@ export function QATemplatesEditor() {
                   <FieldLabel hint="URL-safe slug for the child detail page /quality-assurance/{slug}">Slug</FieldLabel>
                   <Input
                     value={editing.slug ?? ""}
-                    onChange={(e) => set("slug", slugify(e.target.value))}
+                    onChange={(e) => handleSlugChange(e.target.value)}
+                    onBlur={handleSlugBlur}
                     placeholder="auto-generated from name"
                     className="mt-1 font-mono text-xs"
                   />

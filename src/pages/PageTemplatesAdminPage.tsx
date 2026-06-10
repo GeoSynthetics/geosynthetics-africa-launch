@@ -51,7 +51,7 @@ import {
   PropertiesTableEditor,
 } from "@/components/admin/TemplateEditorShared";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, formatSlugInput } from "@/lib/utils";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
 import type { HierarchySection, HierarchyChild } from "@/types/hierarchy";
 
@@ -596,7 +596,7 @@ export function PageTemplatesAdminPage() {
                       <Input
                         placeholder="e.g. hdpe-geomembranes"
                         value={newSlug}
-                        onChange={e => setNewSlug(e.target.value)}
+                        onChange={e => setNewSlug(formatSlugInput(e.target.value))}
                         onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
                         className="text-xs h-8"
                         autoFocus
@@ -836,7 +836,7 @@ export function PageTemplatesAdminPage() {
                               </label>
                               <Input
                                 value={dupSlug}
-                                onChange={(e) => setDupSlug(e.target.value)}
+                                onChange={(e) => setDupSlug(formatSlugInput(e.target.value))}
                                 placeholder="e.g. lldpe-geomembranes-premium"
                                 className="text-sm font-mono h-9"
                               />

@@ -19,6 +19,7 @@ import {
 } from "./TemplateEditorShared";
 import { ProductSelector } from "./ProductSelector";
 import { IconPicker } from "./IconPicker";
+import { useSlugSync } from "@/hooks/use-slug-sync";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 type EditableNode = HierarchyItem | HierarchyChild;
@@ -92,6 +93,13 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
   useEffect(() => {
     setData(node);
   }, [node]);
+
+  const { handleSlugChange, handleSlugBlur } = useSlugSync({
+    title: data.label,
+    slug: data.slug,
+    onSlugChange: (newSlug) => setData(p => ({ ...p, slug: newSlug })),
+    entityId: node.id,
+  });
 
   const [templates, setTemplates] = useState<Record<string, any>>({});
   const [loadingTemplates, setLoadingTemplates] = useState(false);
@@ -219,7 +227,11 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
           </div>
           <div>
             <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Slug</label>
-            <Input value={data.slug} onChange={e => setData(p => ({ ...p, slug: e.target.value }))} />
+            <Input 
+              value={data.slug} 
+              onChange={e => handleSlugChange(e.target.value)} 
+              onBlur={handleSlugBlur} 
+            />
           </div>
           <div>
             <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Icon</label>
