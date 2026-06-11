@@ -32,7 +32,7 @@ import {
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
-const MEGAMENU_CLOSE_DELAY = 1500; // milliseconds delay before closing the mega menu
+const MEGAMENU_CLOSE_DELAY = 150000; // milliseconds delay before closing the mega menu
 
 function useDynamicMegaMenus() {
   const [menus, setMenus] = useState<typeof megaMenus>(megaMenus);
@@ -120,7 +120,7 @@ function useDynamicMegaMenus() {
           const topSellingMap = new Map<string, { id: string; name: string; slug: string; image: string; short_description: string }>();
           if (topSellingProductIds.size > 0) {
             const { data: dbProducts } = await supabase
-              .from("products")
+              .from("products_public")
               .select("id, name, slug, image_url, short_description")
               .in("id", Array.from(topSellingProductIds));
 
@@ -172,7 +172,7 @@ function useDynamicMegaMenus() {
           let productMap = new Map<string, { image_url: string | null; category_slug: string }>();
           if (slugsToHydrate.size > 0) {
             const { data: productData } = await supabase
-              .from("products")
+              .from("products_public")
               .select("slug, image_url, product_categories ( slug )")
               .in("slug", Array.from(slugsToHydrate));
 
@@ -226,16 +226,16 @@ function useDynamicMegaMenus() {
 
                   const content = p.content
                     ? {
-                        ...p.content,
-                        featured:
-                          p.content.featuredKind === "product" && p.content.featured
-                            ? (hydrateFeatured(p.content.featured as any[]) as any)
-                            : p.content.featured,
-                        topSellingProducts: topProds,
-                        topSellingProduct: topProds[0],
-                      }
+                      ...p.content,
+                      featured:
+                        p.content.featuredKind === "product" && p.content.featured
+                          ? (hydrateFeatured(p.content.featured as any[]) as any)
+                          : p.content.featured,
+                      topSellingProducts: topProds,
+                      topSellingProduct: topProds[0],
+                    }
                     : isTargetMenu
-                    ? {
+                      ? {
                         secondaryTitle: p.label,
                         secondary: [],
                         featuredTitle: "Featured",
@@ -246,7 +246,7 @@ function useDynamicMegaMenus() {
                         topSellingProducts: topProds,
                         topSellingProduct: topProds[0],
                       }
-                    : undefined;
+                      : undefined;
 
                   return {
                     ...p,

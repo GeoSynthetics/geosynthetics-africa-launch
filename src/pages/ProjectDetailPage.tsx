@@ -46,7 +46,7 @@ export function ProjectDetailPage() {
       async function fetchProducts() {
         try {
           const { data, error } = await supabase
-            .from("products")
+            .from("products_public")
             .select("id, name, slug, image_url, short_description, product_categories(slug, name)")
             .in("id", productIds);
 

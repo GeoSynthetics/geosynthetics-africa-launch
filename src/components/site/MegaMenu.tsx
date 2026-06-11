@@ -110,7 +110,7 @@ export function TopSellingProductsSlider({ products, isLoading }: { products: Sl
 
   if (!isLoading && (!products || products.length === 0)) {
     return (
-      <div className="flex flex-col items-center justify-center h-[180px] rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
+      <div className="flex flex-col items-center justify-center h-[180px] max-w-[250px] rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
         <Package className="h-8 w-8 text-muted-foreground/30 mb-2" />
         <p className="text-xs text-muted-foreground">No top selling products selected</p>
       </div>
@@ -121,7 +121,7 @@ export function TopSellingProductsSlider({ products, isLoading }: { products: Sl
 
   return (
     <div 
-      className="relative w-full aspect-[4/3]"
+      className="relative w-full max-w-[250px] aspect-[4/3]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

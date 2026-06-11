@@ -69,7 +69,7 @@ async function loadServiceData(slug: string) {
   if (templateData?.products && templateData.products.length > 0) {
     try {
       const { data: prodsData, error: prodsError } = await supabase
-        .from("products")
+        .from("products_public")
         .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
         .in("id", templateData.products);
       if (!prodsError && prodsData) {
