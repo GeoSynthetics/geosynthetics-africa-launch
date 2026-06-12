@@ -719,6 +719,34 @@ export function ProductDetailPage() {
           {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-6">
             <div className="lg:sticky lg:top-24 space-y-6">
+
+              {/* Add to Project BOQ */}
+              <div className="rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 p-5 shadow-sm">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
+                    <Upload className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-sm font-bold uppercase tracking-wider text-foreground leading-tight">
+                      Add to Project BOQ
+                    </h3>
+                    <p className="text-[10px] text-muted-foreground">Submit a quote request</p>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">
+                  Add this product to your BOQ request. Upload drawings, fill in your project details and our technical team will respond with a proposal.
+                </p>
+                <Button
+                  id="add-to-project-boq-btn"
+                  className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wider text-[11px] h-10 text-white border-0 shadow-sm"
+                  onClick={() => open(product.name, product.id)}
+                >
+                  <Upload className="h-3.5 w-3.5 mr-2" />
+                  Add to Project BOQ
+                </Button>
+              </div>
+
               {/* Need help */}
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <h3 className="font-display text-base font-bold uppercase text-foreground">Need Help?</h3>

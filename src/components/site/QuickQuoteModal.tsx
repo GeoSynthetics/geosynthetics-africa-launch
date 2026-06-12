@@ -184,15 +184,25 @@ export function QuickQuoteModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="max-w-xl max-h-[92vh] overflow-y-auto p-6 rounded-2xl md:p-8">
+      <DialogContent className="max-w-xl max-h-[92vh] overflow-y-auto overflow-x-hidden p-6 rounded-2xl md:p-8">
         <DialogHeader className="text-left">
           <DialogTitle className="font-display text-2xl font-bold uppercase tracking-tight text-foreground">
-            UPLOAD YOUR BOQ / DRAWINGS
+            ADD TO PROJECT BOQ
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-normal mt-1.5">
-            Submit your project details and files. Our technical sales team will review your requirements and provide a customized proposal.
+            Submit your project details and files. Our technical sales team will review your requirements and provide a customised proposal.
           </DialogDescription>
         </DialogHeader>
+
+        {productName && (
+          <div className="flex items-center gap-2.5 rounded-xl border border-primary/30 bg-primary/10 px-3.5 py-2.5 mt-1 min-w-0">
+            <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Product</span>
+              <p className="text-sm font-semibold text-foreground truncate leading-snug">{productName}</p>
+            </div>
+          </div>
+        )}
 
         <div className="mt-5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
