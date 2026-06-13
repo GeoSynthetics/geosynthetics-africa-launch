@@ -193,6 +193,7 @@ function blankTemplate(): ApplicationTemplate {
 
 export function ApplicationsTemplatesEditor() {
   const [allData, setAllData] = useState<AllApplicationTemplates>({});
+  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -214,9 +215,11 @@ export function ApplicationsTemplatesEditor() {
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [caseStudies, setCaseStudies] = useState<{ id: string; title: string; slug: string }[]>([]);
 
-  // Dynamic list combining static mega-menu application categories with custom ones from DB
+  // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
-    const list = APPLICATION_CATEGORIES.map((c) => ({ slug: c.slug, label: c.label }));
+    const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
+    
+    // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
       if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
@@ -225,8 +228,23 @@ export function ApplicationsTemplatesEditor() {
         });
       }
     });
+
+    // If hierarchy is empty (e.g. not loaded or default), fallback to static APPLICATION_CATEGORIES
+    if (list.length === 0) {
+      const fallbackList = APPLICATION_CATEGORIES.map((c) => ({ slug: c.slug, label: c.label }));
+      Object.keys(allData).forEach((slug) => {
+        if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
+          fallbackList.push({
+            slug,
+            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          });
+        }
+      });
+      return fallbackList;
+    }
+
     return list;
-  }, [allData]);
+  }, [allData, hierarchyItems]);
 
   // Load products and case studies for autocomplete selects
   useEffect(() => {
@@ -250,6 +268,21 @@ export function ApplicationsTemplatesEditor() {
   // ── Load from Supabase ──
   const load = useCallback(async () => {
     setLoading(true);
+
+    // Fetch hierarchy first to align the sidebar categories
+    const { data: hierarchyRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "hierarchy_applications")
+      .maybeSingle();
+    const hierarchy = hierarchyRow?.value as any || {};
+    const hItems = (hierarchy.items || []).map((item: any) => ({
+      id: item.id,
+      slug: item.slug || item.id,
+      label: item.label,
+    }));
+    setHierarchyItems(hItems);
+
     const { data, error } = await supabase
       .from("site_config")
       .select("value")
@@ -262,7 +295,13 @@ export function ApplicationsTemplatesEditor() {
       const stored = (data?.value ?? {}) as AllApplicationTemplates;
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllApplicationTemplates = { ...stored };
-      for (const cat of APPLICATION_CATEGORIES) {
+
+      // Use hierarchy items for seeding, fallback to static categories if empty
+      const seedSource = hItems.length > 0
+        ? hItems.map(item => ({ slug: item.id, label: item.label }))
+        : APPLICATION_CATEGORIES;
+
+      for (const cat of seedSource) {
         if (!seeded[cat.slug]) {
           seeded[cat.slug] = { ...blankTemplate(), title: cat.label };
         } else {
@@ -313,7 +352,7 @@ export function ApplicationsTemplatesEditor() {
     if (!newSlug.trim()) return;
     const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
     
-    if (allData[slug] || APPLICATION_CATEGORIES.some(c => c.slug === slug)) {
+    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
@@ -332,8 +371,8 @@ export function ApplicationsTemplatesEditor() {
   };
 
   const handleDelete = (slug: string) => {
-    if (APPLICATION_CATEGORIES.some(c => c.slug === slug)) {
-      toast.error("Cannot delete static mega-menu category.");
+    if (slug === "__landing") {
+      toast.error("Cannot delete landing page template.");
       return;
     }
 
@@ -344,7 +383,7 @@ export function ApplicationsTemplatesEditor() {
     });
 
     if (activeSlug === slug) {
-      setActiveSlug(APPLICATION_CATEGORIES[0]?.slug ?? "");
+      setActiveSlug("__landing");
     }
     setDirty(true);
     toast.success(`Deleted template "${slug}". Save to persist changes.`);
@@ -510,7 +549,7 @@ export function ApplicationsTemplatesEditor() {
               <div className="space-y-0.5">
                 {categoriesList.map((cat) => {
                   const isActive = cat.slug === activeSlug;
-                  const isStatic = APPLICATION_CATEGORIES.some((c) => c.slug === cat.slug);
+                  const isStatic = cat.slug === "__landing";
                   return (
                     <button
                       key={cat.slug}

@@ -97,7 +97,27 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
   const { handleSlugChange, handleSlugBlur } = useSlugSync({
     title: data.label,
     slug: data.slug,
-    onSlugChange: (newSlug) => setData(p => ({ ...p, slug: newSlug })),
+    onSlugChange: (newSlug) => setData(p => {
+      const updated: any = {
+        ...p,
+        slug: newSlug,
+      };
+      if (p.params) {
+        const paramKey = sectionParamKey(sectionKey);
+        if (sectionKey === "products" && isChild && p.params.category) {
+          updated.params = {
+            ...p.params,
+            family: newSlug
+          };
+        } else {
+          updated.params = {
+            ...p.params,
+            [paramKey]: newSlug
+          };
+        }
+      }
+      return updated;
+    }),
     entityId: node.id,
   });
 

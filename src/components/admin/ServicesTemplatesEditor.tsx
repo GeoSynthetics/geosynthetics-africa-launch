@@ -186,6 +186,7 @@ function blankTemplate(): ServiceTemplate {
 
 export function ServicesTemplatesEditor() {
   const [allData, setAllData] = useState<AllServiceTemplates>({});
+  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -206,9 +207,11 @@ export function ServicesTemplatesEditor() {
   // DB reference state
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
 
-  // Dynamic list combining static mega-menu services with custom ones from DB
+  // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
-    const list = SERVICES.map((s) => ({ slug: s.slug, label: s.label }));
+    const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
+    
+    // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
       if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
@@ -217,8 +220,23 @@ export function ServicesTemplatesEditor() {
         });
       }
     });
+
+    // If hierarchy is empty (e.g. not loaded or default), fallback to static SERVICES
+    if (list.length === 0) {
+      const fallbackList = SERVICES.map((s) => ({ slug: s.slug, label: s.label }));
+      Object.keys(allData).forEach((slug) => {
+        if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
+          fallbackList.push({
+            slug,
+            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          });
+        }
+      });
+      return fallbackList;
+    }
+
     return list;
-  }, [allData]);
+  }, [allData, hierarchyItems]);
 
   // Load products from DB
   useEffect(() => {
@@ -235,6 +253,21 @@ export function ServicesTemplatesEditor() {
   // ── Load from Supabase ──
   const load = useCallback(async () => {
     setLoading(true);
+
+    // Fetch hierarchy first to align the sidebar categories
+    const { data: hierarchyRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "hierarchy_services")
+      .maybeSingle();
+    const hierarchy = hierarchyRow?.value as any || {};
+    const hItems = (hierarchy.items || []).map((item: any) => ({
+      id: item.id,
+      slug: item.slug || item.id,
+      label: item.label,
+    }));
+    setHierarchyItems(hItems);
+
     const { data, error } = await supabase
       .from("site_config")
       .select("value")
@@ -248,7 +281,12 @@ export function ServicesTemplatesEditor() {
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllServiceTemplates = { ...stored };
       
-      for (const svc of SERVICES) {
+      // Use hierarchy items for seeding, fallback to static services if empty
+      const seedSource = hItems.length > 0
+        ? hItems.map(item => ({ slug: item.id, label: item.label }))
+        : SERVICES;
+
+      for (const svc of seedSource) {
         if (!seeded[svc.slug]) {
           seeded[svc.slug] = { ...blankTemplate(), title: svc.label };
         } else {
@@ -300,7 +338,7 @@ export function ServicesTemplatesEditor() {
     if (!newSlug.trim()) return;
     const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
     
-    if (allData[slug] || SERVICES.some(s => s.slug === slug)) {
+    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
@@ -319,8 +357,8 @@ export function ServicesTemplatesEditor() {
   };
 
   const handleDelete = (slug: string) => {
-    if (SERVICES.some(s => s.slug === slug)) {
-      toast.error("Cannot delete static mega-menu service.");
+    if (slug === "__landing") {
+      toast.error("Cannot delete landing page template.");
       return;
     }
 
@@ -495,7 +533,7 @@ export function ServicesTemplatesEditor() {
               <div className="space-y-0.5">
                 {categoriesList.map((svc) => {
                   const isActive = svc.slug === activeSlug;
-                  const isStatic = SERVICES.some((s) => s.slug === svc.slug);
+                  const isStatic = svc.slug === "__landing";
                   return (
                     <button
                       key={svc.slug}

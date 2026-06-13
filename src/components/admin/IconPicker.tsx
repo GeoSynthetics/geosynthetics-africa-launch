@@ -78,14 +78,21 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
             </div>
             <div className="flex items-center gap-1.5 shrink-0 ml-2">
               {value && (
-                <button
-                  type="button"
+                <span
+                  role="button"
+                  tabIndex={0}
                   onClick={handleClear}
-                  className="rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition cursor-pointer"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleClear(e as any);
+                    }
+                  }}
+                  className="rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition cursor-pointer flex items-center justify-center"
                   title="Clear icon"
                 >
                   <X className="h-3 w-3" />
-                </button>
+                </span>
               )}
               <Search className="h-3.5 w-3.5 text-muted-foreground/60" />
             </div>

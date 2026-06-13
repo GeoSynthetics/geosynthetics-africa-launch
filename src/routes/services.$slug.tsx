@@ -16,7 +16,15 @@ async function loadServiceData(slug: string) {
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-  // Try loading from hierarchy first
+  // Load templates from Supabase first
+  const { data: templateRow } = await supabase
+    .from("site_config")
+    .select("value")
+    .eq("key", "template_services")
+    .maybeSingle();
+  const templates = templateRow?.value as Record<string, any> || {};
+
+  // Try loading from hierarchy
   const { data: hierarchyRow, error: hierarchyError } = await supabase
     .from("site_config")
     .select("value")
@@ -32,8 +40,18 @@ async function loadServiceData(slug: string) {
     (item: any) => item.slug === slug || item.id === slug
   );
 
+  // Determine which template slug/ID to load (prioritize matchedItem's id, which links to the template)
+  const templateSlug = matchedItem?.id || slug;
+  const tmpl = templates[templateSlug];
+
   let templateData = null;
-  if (matchedItem && matchedItem.pageContent) {
+  if (tmpl) {
+    templateData = {
+      ...tmpl,
+      heroImage: tmpl.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO,
+    };
+  } else if (matchedItem && matchedItem.pageContent) {
+    // Legacy fallback if no template exists but hierarchy pageContent has some fields
     const pc = matchedItem.pageContent;
     templateData = {
       title: matchedItem.label,
@@ -47,18 +65,24 @@ async function loadServiceData(slug: string) {
     };
   }
 
-  // Fallback to template_services if no custom hierarchy pageContent is present
-  if (!templateData) {
-    const { data: templateRow } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "template_services")
-      .maybeSingle();
-    const templates = templateRow?.value as Record<string, any> || {};
-    const tmpl = templates[slug];
-    templateData = tmpl
-      ? { ...tmpl, heroImage: tmpl.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO }
-      : null;
+  // Merge hierarchy-specific overrides (like customized SEO, title, etc.) if a hierarchy item is matched
+  if (matchedItem) {
+    if (templateData) {
+      if (matchedItem.label) {
+        templateData.title = matchedItem.label;
+      }
+      if (matchedItem.pageContent) {
+        const pc = matchedItem.pageContent;
+        if (pc.subtitle) templateData.description = pc.subtitle;
+        if (pc.heroImage) templateData.heroImage = pc.heroImage;
+        if (pc.seo) {
+          templateData.seo = {
+            ...(templateData.seo || {}),
+            ...pc.seo,
+          };
+        }
+      }
+    }
   }
 
   const staticSvc = SERVICES.find((s) => s.slug === slug);

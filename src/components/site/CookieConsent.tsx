@@ -180,7 +180,7 @@ export function CookieConsent() {
               <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
 
               {/* Banner Left: Details */}
-              <div className="flex items-start gap-4 flex-1">
+              <div className="flex items-start gap-4 flex-1 pr-8 md:pr-0">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
                   <Cookie className="h-5 w-5" />
                 </div>
@@ -228,7 +228,7 @@ export function CookieConsent() {
                 {/* Direct Close Icon (Dismisses the notification for the next 3 hours) */}
                 <button
                   onClick={handleDismiss}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground/60 hover:text-foreground hover:bg-accent transition hover:cursor-pointer shrink-0"
+                  className="absolute top-4 right-4 md:relative md:top-auto md:right-auto flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground/60 hover:text-foreground hover:bg-accent transition hover:cursor-pointer shrink-0"
                   title="Dismiss for 3 hours"
                 >
                   <X className="h-4 w-4" />

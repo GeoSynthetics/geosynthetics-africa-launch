@@ -60,6 +60,7 @@ function blankTemplate(): IndustryTemplate {
 
 export function IndustriesTemplatesEditor() {
   const [allData, setAllData] = useState<AllIndustryTemplates>({});
+  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -91,22 +92,56 @@ export function IndustriesTemplatesEditor() {
   }, []);
 
   // Dynamic list combining static mega-menu industries with custom ones from DB
+  // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
-    const list = INDUSTRIES.map((i) => ({ slug: i.slug, label: i.label }));
+    const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
+    
+    // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
-      if (!list.some((item) => item.slug === slug)) {
+      if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
           slug,
           label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
         });
       }
     });
-    return list;
-  }, [allData]);
 
+    // If hierarchy is empty (e.g. not loaded or default), fallback to static INDUSTRIES
+    if (list.length === 0) {
+      const fallbackList = INDUSTRIES.map((i) => ({ slug: i.slug, label: i.label }));
+      Object.keys(allData).forEach((slug) => {
+        if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
+          fallbackList.push({
+            slug,
+            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          });
+        }
+      });
+      return fallbackList;
+    }
+
+    return list;
+  }, [allData, hierarchyItems]);
+
+  // ── Load from Supabase ──
   // ── Load from Supabase ──
   const load = useCallback(async () => {
     setLoading(true);
+
+    // Fetch hierarchy first to align the sidebar categories
+    const { data: hierarchyRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "hierarchy_industries")
+      .maybeSingle();
+    const hierarchy = hierarchyRow?.value as any || {};
+    const hItems = (hierarchy.items || []).map((item: any) => ({
+      id: item.id,
+      slug: item.slug || item.id,
+      label: item.label,
+    }));
+    setHierarchyItems(hItems);
+
     const { data, error } = await supabase
       .from("site_config")
       .select("value")
@@ -119,14 +154,26 @@ export function IndustriesTemplatesEditor() {
       const stored = (data?.value ?? {}) as AllIndustryTemplates;
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllIndustryTemplates = { ...stored };
-      for (const ind of INDUSTRIES) {
+      
+      // Use hierarchy items for seeding, fallback to static industries if empty
+      const seedSource = hItems.length > 0
+        ? hItems.map(item => ({ slug: item.id, label: item.label }))
+        : INDUSTRIES;
+
+      for (const ind of seedSource) {
         if (!seeded[ind.slug]) {
           seeded[ind.slug] = { ...blankTemplate(), title: ind.label };
+        } else {
+          seeded[ind.slug] = {
+            ...blankTemplate(),
+            ...seeded[ind.slug],
+          };
         }
       }
       setAllData(seeded);
       if (!activeSlug) {
-        setActiveSlug(INDUSTRIES[0]?.slug ?? "");
+        const defaultSlug = seedSource[0]?.slug ?? "";
+        setActiveSlug(defaultSlug);
       }
     }
     setLoading(false);
@@ -141,7 +188,7 @@ export function IndustriesTemplatesEditor() {
     if (!newSlug.trim()) return;
     const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
     
-    if (allData[slug] || INDUSTRIES.some(i => i.slug === slug)) {
+    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
@@ -160,8 +207,8 @@ export function IndustriesTemplatesEditor() {
   };
 
   const handleDelete = (slug: string) => {
-    if (INDUSTRIES.some(i => i.slug === slug)) {
-      toast.error("Cannot delete static mega-menu industry.");
+    if (slug === "__landing") {
+      toast.error("Cannot delete landing page template.");
       return;
     }
 
@@ -172,7 +219,8 @@ export function IndustriesTemplatesEditor() {
     });
 
     if (activeSlug === slug) {
-      setActiveSlug(INDUSTRIES[0]?.slug ?? "");
+      const nextActive = categoriesList.find(c => c.slug !== slug)?.slug ?? "";
+      setActiveSlug(nextActive);
     }
     setDirty(true);
     toast.success(`Deleted template "${slug}". Save to persist changes.`);
@@ -315,7 +363,7 @@ export function IndustriesTemplatesEditor() {
           <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
             {categoriesList.map((ind) => {
               const isActive = ind.slug === activeSlug;
-              const isStatic = INDUSTRIES.some((i) => i.slug === ind.slug);
+              const isStatic = ind.slug === "__landing";
               return (
                 <button
                   key={ind.slug}
