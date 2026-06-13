@@ -57,19 +57,60 @@ const QA_PILLARS = [
 ];
 
 export function QAPage() {
-  const { qaDocuments = [] } = Route.useLoaderData() || {};
+  const { qaDocuments = [], landingContent = null } = Route.useLoaderData() || {};
+  const landing = (landingContent as any) || {};
+
+  // Custom Hero section
+  const heroTitle = landing.heroTitle || "No System Leaves\nSite Unverified.";
+  const heroSubtitle = landing.heroSubtitle || "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.";
+  const heroImage = landing.heroImage || "";
+  const heroChecklist = landing.heroChecklist && landing.heroChecklist.length > 0 ? landing.heroChecklist : [
+    "Material Verification — every product verified before installation",
+    "Installation Procedures — IAGI-certified methods on every project",
+    "On-Site Quality Control — field inspections throughout installation",
+    "Documentation & Compliance — full traceability and handover dossier",
+  ];
+
+  // Custom framework section
+  const frameworkTitle = landing.frameworkTitle || "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa";
+  const frameworkEyebrow = landing.frameworkEyebrow || "Our QA/QC Framework";
+
+  // Custom pillars section
+  const pillars = landing.pillars && landing.pillars.length > 0 ? landing.pillars : QA_PILLARS;
+
+  // Custom hero stats
+  const heroStats = landing.heroStats && landing.heroStats.length > 0 ? landing.heroStats : [
+    { value: "340+", label: "Projects QA'd", accent: true },
+    { value: "17", label: "African Countries" },
+    { value: "100%", label: "Welds Tested" },
+    { value: "IAGI", label: "International Standard" },
+  ];
+
+  // Custom IAGI section
+  const iagiTitle = landing.iagiTitle || "International Standards.\nAfrican Execution.";
+  const iagiDescription = landing.iagiDescription || "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.";
+  const iagiStats = landing.iagiStats && landing.iagiStats.length > 0 ? landing.iagiStats : [
+    { value: "17", label: "African Countries Covered" },
+    { value: "100%", label: "QA/QC Performed On All Installations" },
+    { value: "340+", label: "Projects Delivered" },
+    { value: "One of 5", label: "IAGI Members in Africa" },
+  ];
 
   return (
     <>
       {/* ============ HERO SECTION ============ */}
-      <section className="relative bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-14 overflow-hidden border-b border-[#2A2A2A]">
+      <section 
+        className="relative bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-14 overflow-hidden border-b border-[#2A2A2A]"
+        style={heroImage ? { backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+      >
+        {heroImage && <div className="absolute inset-0 bg-black/75 pointer-events-none" />}
         {/* Decorative top line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(228,30,43,0.07),_transparent_60%)] pointer-events-none" />
 
         <div className="container-page relative z-10">
           {/* Breadcrumb */}
-          <nav className="text-[10px] font-bold uppercase tracking-widest text-white/50 flex items-center gap-2 mb-6">
+          <nav className="text-[10px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-2 mb-6">
             <Link to="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="h-3 w-3 text-white/30" />
             <span className="text-primary">Quality Assurance</span>
@@ -81,22 +122,16 @@ export function QAPage() {
                 <span className="w-6 h-[1.5px] bg-primary" />
                 IAGI Member · One of only 5 in Africa
               </div>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.95] tracking-tight text-white mb-5">
-                No System Leaves<br />
-                Site <span className="text-primary">Unverified.</span>
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.95] tracking-tight text-white mb-5 whitespace-pre-line">
+                {heroTitle}
               </h1>
               <p className="max-w-2xl text-sm md:text-base text-white/75 leading-relaxed mb-6">
-                Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.
+                {heroSubtitle}
               </p>
 
               {/* QA Checklist */}
               <div className="space-y-2.5 mb-8">
-                {[
-                  "Material Verification — every product verified before installation",
-                  "Installation Procedures — IAGI-certified methods on every project",
-                  "On-Site Quality Control — field inspections throughout installation",
-                  "Documentation & Compliance — full traceability and handover dossier",
-                ].map((item) => (
+                {heroChecklist.map((item: string) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                     <span className="text-sm text-white/80">{item}</span>
@@ -105,7 +140,7 @@ export function QAPage() {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide">
+                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide border-0 cursor-pointer text-white">
                   <Link to="/contacts">Request QA/QC Documentation</Link>
                 </Button>
               </div>
@@ -114,12 +149,7 @@ export function QAPage() {
             {/* Stats */}
             <div className="lg:col-span-5">
               <div className="grid grid-cols-2 gap-[1px] bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-                {[
-                  { value: "340+", label: "Projects QA'd", accent: true },
-                  { value: "17", label: "African Countries" },
-                  { value: "100%", label: "Welds Tested" },
-                  { value: "IAGI", label: "International Standard" },
-                ].map((s) => (
+                {heroStats.map((s: any) => (
                   <div key={s.label} className="bg-[#0D0D0E] p-6 flex flex-col justify-center">
                     <div className={cn("font-display font-black text-3xl leading-none mb-1", s.accent ? "text-primary" : "text-white")}>
                       {s.value}
@@ -138,24 +168,26 @@ export function QAPage() {
         <div className="container-page py-16 md:py-20">
           <div className="text-center mb-12">
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">
-              Our QA/QC Framework
+              {frameworkEyebrow}
             </div>
-            <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-foreground">
-              Manufacturer-Aligned Quality Assurance<br />
-              <span className="text-primary">for Geosynthetics Installations Across Africa</span>
+            <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-foreground whitespace-pre-line">
+              {frameworkTitle}
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {QA_PILLARS.map((pillar) => (
-              <div key={pillar.title} className="rounded border border-border bg-card p-6 hover:border-foreground/30 transition-colors group">
-                <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary/20 transition-colors">
-                  <pillar.icon className="h-5 w-5" />
+            {pillars.map((pillar: any, i: number) => {
+              const IconComp = typeof pillar.icon === "string" ? getIconComp(pillar.icon) : pillar.icon;
+              return (
+                <div key={i} className="rounded border border-border bg-card p-6 hover:border-foreground/30 transition-colors group">
+                  <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary/20 transition-colors">
+                    <IconComp className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display text-base font-bold uppercase tracking-wide text-foreground mb-2">{pillar.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{pillar.desc}</p>
                 </div>
-                <h3 className="font-display text-base font-bold uppercase tracking-wide text-foreground mb-2">{pillar.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{pillar.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -173,7 +205,7 @@ export function QAPage() {
                 Select a product line or programme to explore the specific quality assurance documentation, standards, and processes we apply.
               </p>
             </div>
-            <Button asChild variant="outline" className="shrink-0 font-bold uppercase tracking-wide">
+            <Button asChild variant="outline" className="shrink-0 font-bold uppercase tracking-wide cursor-pointer">
               <Link to="/contacts">Request Full QA Dossier <ArrowRight className="h-4 w-4 ml-2" /></Link>
             </Button>
           </div>
@@ -181,8 +213,8 @@ export function QAPage() {
           {qaDocuments.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {qaDocuments.map((doc: any) => {
-                const pillars: any[] = doc.key_pillars || [];
-                const firstPillar = pillars[0];
+                const docPillars: any[] = doc.key_pillars || [];
+                const firstPillar = docPillars[0];
                 const IconComp = firstPillar?.icon ? getIconComp(firstPillar.icon) : FileCheck;
 
                 return (
@@ -273,23 +305,17 @@ export function QAPage() {
               <span className="w-6 h-[1.5px] bg-primary" />
               IAGI Member — One of only 5 in Africa
             </div>
-            <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase leading-none text-white mb-4">
-              International Standards.<br />
-              <span className="text-primary">African Execution.</span>
+            <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase leading-none text-white mb-4 whitespace-pre-line">
+              {iagiTitle}
             </h2>
             <p className="text-xs text-white/70 leading-relaxed mb-6 max-w-md">
-              Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.
+              {iagiDescription}
             </p>
           </div>
 
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-[1px] bg-white/10 rounded border border-white/5 overflow-hidden">
-              {[
-                { value: "17", label: "African Countries Covered" },
-                { value: "100%", label: "QA/QC Performed On All Installations" },
-                { value: "340+", label: "Projects Delivered" },
-                { value: "One of 5", label: "IAGI Members in Africa" },
-              ].map((s) => (
+              {iagiStats.map((s: any) => (
                 <div key={s.label} className="bg-foreground p-5 flex flex-col hover:bg-white/5 transition">
                   <div className="font-display font-black text-2xl text-primary leading-none mb-1">{s.value}</div>
                   <div className="text-[9px] font-bold uppercase tracking-wide text-white/60 leading-tight">{s.label}</div>

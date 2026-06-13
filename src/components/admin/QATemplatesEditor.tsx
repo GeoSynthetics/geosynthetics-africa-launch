@@ -6,8 +6,8 @@ import { ImagePicker } from "./ImagePicker";
 import { IconPicker } from "./IconPicker";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  FieldLabel, TagsInput,
-  useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, ListEditorHeader,
+  FieldLabel, TagsInput, useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, ListEditorHeader,
+  SectionHeading, StringListEditor, PairsEditor
 } from "./TemplateEditorShared";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,20 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
-import { Plus, Pencil, Trash2, Search, Eye } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, Save, Loader2, ChevronRight, AlertTriangle, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
 import { ContentSectionsEditor, type ContentSection } from "./QAContentSectionsEditor";
 import { useSlugSync } from "@/hooks/use-slug-sync";
-
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,7 +53,89 @@ interface QADocument {
   created_at: string;
 }
 
+interface QALandingContent {
+  heroTitle: string;
+  heroSubtitle: string;
+  heroImage: string;
+  heroChecklist: string[];
+  heroStats: { value: string; label: string }[];
+  frameworkTitle: string;
+  frameworkEyebrow: string;
+  pillars: Pillar[];
+  iagiTitle: string;
+  iagiDescription: string;
+  iagiStats: { value: string; label: string }[];
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
+}
 
+const defaultLandingContent = (): QALandingContent => ({
+  heroTitle: "No System Leaves\nSite Unverified.",
+  heroSubtitle: "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.",
+  heroImage: "",
+  heroChecklist: [
+    "Material Verification — every product verified before installation",
+    "Installation Procedures — IAGI-certified methods on every project",
+    "On-Site Quality Control — field inspections throughout installation",
+    "Documentation & Compliance — full traceability and handover dossier",
+  ],
+  heroStats: [
+    { value: "340+", label: "Projects QA'd" },
+    { value: "17", label: "African Countries" },
+    { value: "100%", label: "Welds Tested" },
+    { value: "IAGI", label: "International Standard" },
+  ],
+  frameworkTitle: "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa",
+  frameworkEyebrow: "Our QA/QC Framework",
+  pillars: [
+    {
+      icon: "ShieldCheck",
+      title: "Material Verification",
+      desc: "We verify every product against manufacturer specifications before installation. Mill certificates, batch numbers, and certificates of conformance are cross-referenced.",
+    },
+    {
+      icon: "Wrench",
+      title: "Installation Procedures",
+      desc: "Our team follows IAGI-certified installation procedures for every project — from subgrade preparation through final sign-off.",
+    },
+    {
+      icon: "Microscope",
+      title: "On-Site Quality Control",
+      desc: "We conduct field inspections, pressure tests, and performance checks at every stage of installation.",
+    },
+    {
+      icon: "FileCheck",
+      title: "Documentation & Compliance",
+      desc: "All installations are backed by full QA documentation, traceability records, and project handover certification packages.",
+    },
+    {
+      icon: "BadgeCheck",
+      title: "Certificates",
+      desc: "Project handover includes a complete certification package — weld logs, test results, as-built plans, and material certificates.",
+    },
+    {
+      icon: "Award",
+      title: "IAGI Standards",
+      desc: "As IAGI members (one of only 5 in Africa), our installation practices align with globally recognised international standards.",
+    },
+  ],
+  iagiTitle: "International Standards.\nAfrican Execution.",
+  iagiDescription: "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.",
+  iagiStats: [
+    { value: "17", label: "African Countries Covered" },
+    { value: "100%", label: "QA/QC Performed On All Installations" },
+    { value: "340+", label: "Projects Delivered" },
+    { value: "One of 5", label: "IAGI Members in Africa" },
+  ],
+  seo: {
+    title: "Quality Assurance — Geosynthetics Africa",
+    description: "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.",
+    keywords: "quality assurance, qa/qc, geosynthetics installation, iagi, geomembrane, testing, certification",
+  },
+});
 
 const makeEmpty = (): Partial<QADocument> => ({
   slug: "",
@@ -89,7 +163,7 @@ function PillarsEditor({
   pillars: Pillar[];
   onChange: (v: Pillar[]) => void;
 }) {
-  const { add, update, updateByKey, remove } = useListEditor(
+  const { add, update, remove } = useListEditor(
     pillars,
     onChange,
     () => ({ icon: "ShieldCheck", title: "", desc: "" } as Pillar),
@@ -99,7 +173,7 @@ function PillarsEditor({
     <div className="space-y-3">
       <ListEditorHeader
         label="Key Pillars"
-        hint="Icon cards shown in the hero and sidebar. Keep to 4 pillars max."
+        hint="Icon cards shown in the page. Keep to 6 pillars max."
         onAdd={add}
         addLabel="Add Pillar"
       />
@@ -162,86 +236,142 @@ function StatsEditor({
   );
 }
 
-
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export function QATemplatesEditor() {
   const [rows, setRows] = useState<QADocument[]>([]);
+  const [landingContent, setLandingContent] = useState<Partial<QALandingContent>>(defaultLandingContent());
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
-  const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<Partial<QADocument>>(makeEmpty());
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("basic");
+  const [dirty, setDirty] = useState(false);
+  const [activeSlug, setActiveSlug] = useState<string>("__landing");
+  const [editingDoc, setEditingDoc] = useState<Partial<QADocument>>(makeEmpty());
+  const [editingLanding, setEditingLanding] = useState<Partial<QALandingContent>>(defaultLandingContent());
+  const [activeTab, setActiveTab] = useState("hero");
   const [qaToDelete, setQaToDelete] = useState<QADocument | null>(null);
-
-  const handleConfirmDelete = () => {
-    if (qaToDelete) {
-      void remove(qaToDelete);
-      setQaToDelete(null);
-    }
-  };
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("qa_documents")
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .limit(200);
-    if (error) toast.error(error.message);
-    setRows((data ?? []) as unknown as QADocument[]);
-    setLoading(false);
+    try {
+      const { data: docData, error: docError } = await supabase
+        .from("qa_documents")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .limit(200);
+      if (docError) throw docError;
+      setRows((docData ?? []) as unknown as QADocument[]);
+
+      const { data: landingRow, error: landingError } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "qa_landing_content")
+        .maybeSingle();
+      if (landingError) throw landingError;
+      if (landingRow?.value) {
+        setLandingContent(landingRow.value as Partial<QALandingContent>);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to load templates");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { void load(); }, [load]);
 
-  const filtered = useMemo(() =>
-    q.trim() ? rows.filter((r) => r.category_name.toLowerCase().includes(q.toLowerCase())) : rows,
-    [rows, q]
-  );
+  // Synchronize edit state when selection or raw data changes
+  useEffect(() => {
+    if (activeSlug === "__landing") {
+      setEditingLanding({
+        ...defaultLandingContent(),
+        ...landingContent,
+        seo: {
+          ...defaultLandingContent().seo,
+          ...(landingContent?.seo || {}),
+        }
+      });
+      setDirty(false);
+    } else if (activeSlug === "__new") {
+      setEditingDoc(makeEmpty());
+      setDirty(false);
+    } else {
+      const found = rows.find(r => r.slug === activeSlug);
+      if (found) {
+        setEditingDoc({ ...found });
+        setDirty(false);
+      }
+    }
+  }, [activeSlug, rows, landingContent]);
 
-  const openNew = () => {
-    setEditing(makeEmpty());
-    setActiveTab("basic");
-    setOpen(true);
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (!term) return rows;
+    return rows.filter((r) => r.category_name.toLowerCase().includes(term));
+  }, [rows, q]);
+
+  const handleConfirmDelete = async () => {
+    if (qaToDelete) {
+      const { error } = await supabase.from("qa_documents").delete().eq("id", qaToDelete.id);
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      toast.success("Deleted");
+      setRows((rs) => rs.filter((x) => x.id !== qaToDelete.id));
+      if (activeSlug === qaToDelete.slug) {
+        setActiveSlug("__landing");
+      }
+      setQaToDelete(null);
+    }
   };
 
-  const openEdit = (r: QADocument) => {
-    setEditing({ ...r });
-    setActiveTab("basic");
-    setOpen(true);
-  };
-
-  const save = async () => {
-    if (!editing.category_name?.trim()) { toast.error("Category name is required"); return; }
+  const handleSave = async () => {
     setSaving(true);
     try {
-      const payload = {
-        slug: editing.slug?.trim() || slugify(editing.category_name!),
-        category_name: editing.category_name!.trim(),
-        short_description: editing.short_description?.trim() || null,
-        hero_image_url: editing.hero_image_url?.trim() || null,
-        eyebrow: editing.eyebrow?.trim() || null,
-        hero_title: editing.hero_title?.trim() || null,
-        hero_body: editing.hero_body?.trim() || null,
-        content_sections: editing.content_sections || [],
-        stats: editing.stats || [],
-        industries_served: editing.industries_served || [],
-        key_pillars: editing.key_pillars || [],
-        cta_label: editing.cta_label?.trim() || "Request QA Documentation",
-        sort_order: editing.sort_order ?? 0,
-        status: editing.status ?? "published",
-      };
+      if (activeSlug === "__landing") {
+        const { error } = await supabase
+          .from("site_config")
+          .upsert({ key: "qa_landing_content", value: editingLanding as any }, { onConflict: "key" });
+        if (error) throw error;
+        toast.success("QA Landing Page content saved!");
+        setLandingContent(editingLanding);
+        setDirty(false);
+      } else {
+        const doc = editingDoc;
+        if (!doc.category_name?.trim()) {
+          toast.error("Category name is required");
+          setSaving(false);
+          return;
+        }
+        const payload = {
+          slug: doc.slug?.trim() || slugify(doc.category_name!),
+          category_name: doc.category_name!.trim(),
+          short_description: doc.short_description?.trim() || null,
+          hero_image_url: doc.hero_image_url?.trim() || null,
+          eyebrow: doc.eyebrow?.trim() || null,
+          hero_title: doc.hero_title?.trim() || null,
+          hero_body: doc.hero_body?.trim() || null,
+          content_sections: doc.content_sections || [],
+          stats: doc.stats || [],
+          industries_served: doc.industries_served || [],
+          key_pillars: doc.key_pillars || [],
+          cta_label: doc.cta_label?.trim() || "Request QA Documentation",
+          sort_order: doc.sort_order ?? 0,
+          status: doc.status ?? "published",
+        };
 
-      const res = editing.id
-        ? await supabase.from("qa_documents").update(payload).eq("id", editing.id)
-        : await supabase.from("qa_documents").insert(payload);
+        const res = doc.id
+          ? await supabase.from("qa_documents").update(payload).eq("id", doc.id)
+          : await supabase.from("qa_documents").insert(payload);
 
-      if (res.error) throw res.error;
-      toast.success(editing.id ? "QA document updated" : "QA document created");
-      setOpen(false);
-      void load();
+        if (res.error) throw res.error;
+        toast.success(doc.id ? "QA document updated" : "QA document created");
+        setDirty(false);
+        await load();
+
+        if (activeSlug === "__new") {
+          setActiveSlug(payload.slug);
+        }
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
     } finally {
@@ -249,21 +379,34 @@ export function QATemplatesEditor() {
     }
   };
 
-  const remove = async (r: QADocument) => {
-    const { error } = await supabase.from("qa_documents").delete().eq("id", r.id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Deleted");
-    setRows((rs) => rs.filter((x) => x.id !== r.id));
+  const setLandingField = <K extends keyof QALandingContent>(key: K, value: QALandingContent[K]) => {
+    setEditingLanding((prev) => ({ ...prev, [key]: value }));
+    setDirty(true);
   };
 
-  const set = <K extends keyof QADocument>(key: K, value: QADocument[K]) =>
-    setEditing((prev) => ({ ...prev, [key]: value }));
+  const setLandingSeo = (patch: Partial<QALandingContent["seo"]>) => {
+    setEditingLanding((prev) => ({
+      ...prev,
+      seo: {
+        title: prev.seo?.title ?? "",
+        description: prev.seo?.description ?? "",
+        keywords: prev.seo?.keywords ?? "",
+        ...patch,
+      },
+    }));
+    setDirty(true);
+  };
+
+  const setDocField = <K extends keyof QADocument>(key: K, value: QADocument[K]) => {
+    setEditingDoc((prev) => ({ ...prev, [key]: value }));
+    setDirty(true);
+  };
 
   const { handleSlugChange, handleSlugBlur } = useSlugSync({
-    title: editing.category_name || "",
-    slug: editing.slug || "",
-    onSlugChange: (newSlug) => set("slug", newSlug),
-    entityId: editing.id,
+    title: editingDoc.category_name || "",
+    slug: editingDoc.slug || "",
+    onSlugChange: (newSlug) => setDocField("slug", newSlug),
+    entityId: editingDoc.id,
   });
 
   const STATUS_COLORS: Record<QAStatus, string> = {
@@ -271,6 +414,19 @@ export function QATemplatesEditor() {
     draft: "bg-amber-500/15 text-amber-600 border border-amber-500/20",
     archived: "bg-muted text-muted-foreground border border-border",
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
+        <Loader2 className="h-5 w-5 animate-spin" />
+        <span className="text-sm font-medium">Loading templates…</span>
+      </div>
+    );
+  }
+
+  const isLanding = activeSlug === "__landing";
+  const isNew = activeSlug === "__new";
+  const activeLabel = isLanding ? "QA Landing Page" : isNew ? "New QA Document" : (editingDoc.category_name || activeSlug);
 
   return (
     <div>
@@ -282,274 +438,529 @@ export function QATemplatesEditor() {
             Manage Quality Assurance pages shown on `/quality-assurance` and dynamic subpage child templates.
           </p>
         </div>
-        <Button onClick={openNew} className="bg-primary hover:bg-primary/90 shrink-0 gap-1.5 uppercase font-bold text-xs tracking-wider cursor-pointer border-0">
-          <Plus className="h-4 w-4" /> New QA Document
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="relative w-72">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search by category name" value={q} onChange={(e) => setQ(e.target.value)} className="pl-8" />
+        <div className="flex items-center gap-2 shrink-0">
+          {dirty && (
+            <span className="flex items-center gap-1.5 text-xs font-bold text-amber-500 bg-amber-500/10 px-2.5 py-1.5 rounded">
+              <AlertTriangle className="h-3 w-3" />
+              Unsaved changes
+            </span>
+          )}
+          <Button
+            onClick={handleSave}
+            disabled={saving || !dirty}
+            className="bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-wide gap-2 border-0 cursor-pointer"
+          >
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? "Saving…" : "Save All"}
+          </Button>
         </div>
-        <span className="text-xs text-muted-foreground">{filtered.length} documents</span>
       </div>
 
-      {/* Table */}
-      <div className="rounded-lg border border-border overflow-hidden bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-surface/80 border-b border-border">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">#</th>
-              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">Category Name</th>
-              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">Slug</th>
-              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-muted-foreground">Sections</th>
-              <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wide text-muted-foreground">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {loading &&
-              Array.from({ length: 4 }).map((_, i) => (
-                <tr key={i}>
-                  <td colSpan={6} className="px-4 py-3">
-                    <Skeleton className="h-5 w-full" />
-                  </td>
-                </tr>
-              ))}
-            {!loading && filtered.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground">
-                  No QA documents found.
-                </td>
-              </tr>
-            )}
-            {!loading && filtered.map((doc, idx) => (
-              <tr key={doc.id} className="hover:bg-surface/40 transition">
-                <td className="px-4 py-3 text-xs text-muted-foreground font-mono">{doc.sort_order ?? idx + 1}</td>
-                <td className="px-4 py-3">
-                  <div className="font-semibold text-foreground">{doc.category_name}</div>
-                  {doc.short_description && (
-                    <div className="text-xs text-muted-foreground truncate max-w-[280px] mt-0.5">{doc.short_description}</div>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-xs text-muted-foreground font-mono">{doc.slug}</td>
-                <td className="px-4 py-3">
-                  <span className={cn("text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded", STATUS_COLORS[doc.status])}>
-                    {doc.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-xs text-muted-foreground">
-                  {(doc.content_sections || []).length} sections
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <Button
-                      size="icon" variant="ghost"
-                      title="Preview"
-                      className="cursor-pointer"
-                      onClick={() => window.open(`/quality-assurance/${doc.slug}`, "_blank")}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button size="icon" variant="ghost" className="cursor-pointer" onClick={() => openEdit(doc)}>
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-destructive hover:text-destructive cursor-pointer"
-                      onClick={() => setQaToDelete(doc)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+      {/* Main Split Layout */}
+      <div className="flex gap-0 border border-border rounded-xl overflow-hidden min-h-[820px] bg-card">
+        {/* Left sidebar */}
+        <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
+          <div className="px-4 py-3 border-b border-border">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              QA Pages
+            </p>
+          </div>
+
+          <div className="p-3 border-b border-border shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setActiveSlug("__new");
+                setActiveTab("basic");
+              }}
+              className="w-full h-8 text-xs gap-1.5 cursor-pointer"
+              disabled={activeSlug === "__new"}
+            >
+              <Plus className="h-3 w-3" /> New QA Document
+            </Button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-2 space-y-4">
+            {/* Main Pages Section */}
+            <div className="space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Main Pages
+              </p>
+              <button
+                onClick={() => {
+                  setActiveSlug("__landing");
+                  setActiveTab("hero");
+                }}
+                className={cn(
+                  "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                  isLanding
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "hover:bg-accent text-foreground",
+                )}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-xs">QA Landing Page</div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                    /quality-assurance
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </div>
+                {isLanding && <ChevronRight className="h-3 w-3 text-primary" />}
+              </button>
+            </div>
 
-      {/* Edit / Create Dialog */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="font-display text-lg font-bold uppercase">
-              {editing.id ? `Edit: ${editing.category_name}` : "New QA Document"}
-            </DialogTitle>
-          </DialogHeader>
+            {/* Subpages Section */}
+            <div className="space-y-1">
+              <div className="px-2 flex items-center justify-between">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Sub-pages ({rows.length})
+                </p>
+              </div>
+              
+              {/* Search Box inside sidebar */}
+              <div className="px-2 py-1 relative">
+                <Search className="absolute left-4 top-2.5 h-3 w-3 text-muted-foreground" />
+                <Input
+                  placeholder="Filter..."
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  className="pl-7 h-7 text-xs"
+                />
+              </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-2">
-            <TabsList className="w-full justify-start overflow-x-auto">
-              <TabsTrigger value="basic" className="text-xs uppercase tracking-wide font-bold hover:cursor-pointer">Basic Info</TabsTrigger>
-              <TabsTrigger value="hero" className="text-xs uppercase tracking-wide font-bold hover:cursor-pointer">Hero</TabsTrigger>
-              <TabsTrigger value="pillars" className="text-xs uppercase tracking-wide font-bold hover:cursor-pointer">Pillars &amp; Stats</TabsTrigger>
-              <TabsTrigger value="content" className="text-xs uppercase tracking-wide font-bold hover:cursor-pointer">Content Sections</TabsTrigger>
-              <TabsTrigger value="industries" className="text-xs uppercase tracking-wide font-bold hover:cursor-pointer">Industries</TabsTrigger>
+              <div className="space-y-0.5 max-h-[400px] overflow-y-auto pt-1">
+                {filtered.map((doc) => {
+                  const isActive = doc.slug === activeSlug;
+                  return (
+                    <div
+                      key={doc.id}
+                      onClick={() => {
+                        setActiveSlug(doc.slug);
+                        setActiveTab("basic");
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                        isActive
+                          ? "bg-primary/10 text-primary font-semibold"
+                          : "hover:bg-accent text-foreground",
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-medium text-xs">{doc.category_name}</div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                          {doc.slug}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 ml-1 shrink-0">
+                        {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQaToDelete(doc);
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+                {filtered.length === 0 && (
+                  <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right panel */}
+        <div className="flex-1 flex flex-col overflow-hidden bg-card">
+          {/* Panel header bar */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
+            <div>
+              <h3 className="font-display text-lg font-bold uppercase tracking-tight">
+                {activeLabel}
+              </h3>
+              <div className="flex items-center gap-2 flex-wrap mt-1">
+                <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground font-mono">
+                  {isLanding ? "/quality-assurance" : isNew ? "not saved yet" : `/quality-assurance/${activeSlug}`}
+                </code>
+                {!isLanding && !isNew && (
+                  <span className={cn("text-[8px] font-bold uppercase tracking-wide px-1.5 py-0.2 rounded", STATUS_COLORS[editingDoc.status || "published"])}>
+                    {editingDoc.status}
+                  </span>
+                )}
+                {dirty && (
+                  <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {!isNew && (
+                <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
+                  <a href={isLanding ? "/quality-assurance" : `/quality-assurance/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-3 w-3" /> Preview
+                  </a>
+                </Button>
+              )}
+              <Button
+                onClick={handleSave}
+                disabled={saving || !dirty}
+                className="bg-primary hover:bg-primary/90 text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
+              >
+                {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                {saving ? "Saving…" : "Save"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Panel Tabs */}
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="flex-1 flex flex-col overflow-hidden"
+          >
+            <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
+              {isLanding ? (
+                // Landing page tabs
+                [
+                  { id: "hero", label: "Hero & Checklist" },
+                  { id: "pillars", label: "Framework & Pillars" },
+                  { id: "iagi", label: "IAGI Section" },
+                  { id: "seo", label: "SEO" },
+                ].map((t) => (
+                  <TabsTrigger
+                    key={t.id}
+                    value={t.id}
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                  >
+                    {t.label}
+                  </TabsTrigger>
+                ))
+              ) : (
+                // Detail page tabs
+                [
+                  { id: "basic", label: "Basic Info" },
+                  { id: "hero", label: "Hero" },
+                  { id: "pillars", label: "Pillars & Stats" },
+                  { id: "content", label: "Content Sections" },
+                  { id: "industries", label: "Industries" },
+                ].map((t) => (
+                  <TabsTrigger
+                    key={t.id}
+                    value={t.id}
+                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                  >
+                    {t.label}
+                  </TabsTrigger>
+                ))
+              )}
             </TabsList>
 
-            {/* ── BASIC TAB ── */}
-            <TabsContent value="basic" className="space-y-4 pt-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <FieldLabel hint="Shown as the card title on the listing page">Category Name *</FieldLabel>
-                  <Input
-                    value={editing.category_name ?? ""}
-                    onChange={(e) => set("category_name", e.target.value)}
-                    placeholder="e.g. GSE® / Solmax Quality Assurance"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <FieldLabel hint="URL-safe slug for the child detail page /quality-assurance/{slug}">Slug</FieldLabel>
-                  <Input
-                    value={editing.slug ?? ""}
-                    onChange={(e) => handleSlugChange(e.target.value)}
-                    onBlur={handleSlugBlur}
-                    placeholder="auto-generated from name"
-                    className="mt-1 font-mono text-xs"
-                  />
-                </div>
-              </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              {/* ──────────────────────────────────────────────────────── */}
+              {/* ── LANDING PAGE TABS ─────────────────────────────────── */}
+              {/* ──────────────────────────────────────────────────────── */}
+              {isLanding && (
+                <>
+                  <TabsContent value="hero" className="space-y-5 m-0 outline-none">
+                    <SectionHeading>Hero Details</SectionHeading>
+                    <div>
+                      <FieldLabel>Hero Title (H1)</FieldLabel>
+                      <Textarea
+                        value={editingLanding.heroTitle ?? ""}
+                        onChange={(e) => setLandingField("heroTitle", e.target.value)}
+                        placeholder="e.g. No System Leaves Site Unverified."
+                        rows={2}
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Hero Subtitle</FieldLabel>
+                      <Textarea
+                        value={editingLanding.heroSubtitle ?? ""}
+                        onChange={(e) => setLandingField("heroSubtitle", e.target.value)}
+                        placeholder="Supporting subtitle text..."
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <ImagePicker
+                        label="Hero Background Image"
+                        value={editingLanding.heroImage ?? ""}
+                        onChange={(val) => setLandingField("heroImage", val)}
+                      />
+                    </div>
+                    <div className="border-t border-border pt-4">
+                      <StringListEditor
+                        label="Hero Checklist Items"
+                        hint="Checklist points shown in the hero section"
+                        items={editingLanding.heroChecklist || []}
+                        onChange={(v) => setLandingField("heroChecklist", v)}
+                        placeholder="e.g. Material Verification — every product verified"
+                      />
+                    </div>
+                    <div className="border-t border-border pt-4">
+                      <PairsEditor
+                        label="Hero Stats"
+                        hint="Stats cards displayed next to the hero checklist. Max 4 items."
+                        items={editingLanding.heroStats || []}
+                        fields={[
+                          { key: "value", label: "Stat Value", placeholder: "e.g. 100%" },
+                          { key: "label", label: "Stat Label", placeholder: "e.g. Welds Tested" }
+                        ]}
+                        onChange={(v) => setLandingField("heroStats", v as any)}
+                        newItem={{ value: "", label: "" }}
+                      />
+                    </div>
+                  </TabsContent>
 
-              <div>
-                <FieldLabel hint="Shown on the listing card and as the page meta description">Short Description</FieldLabel>
-                <Textarea
-                  value={editing.short_description ?? ""}
-                  onChange={(e) => set("short_description", e.target.value)}
-                  rows={3}
-                  placeholder="Brief summary shown on the listing card..."
-                  className="mt-1 resize-none"
-                />
-              </div>
+                  <TabsContent value="pillars" className="space-y-5 m-0 outline-none">
+                    <SectionHeading>Framework Heading</SectionHeading>
+                    <div>
+                      <FieldLabel>Framework Section Title</FieldLabel>
+                      <Input
+                        value={editingLanding.frameworkTitle ?? ""}
+                        onChange={(e) => setLandingField("frameworkTitle", e.target.value)}
+                        placeholder="e.g. Manufacturer-Aligned Quality Assurance..."
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Framework Eyebrow</FieldLabel>
+                      <Input
+                        value={editingLanding.frameworkEyebrow ?? ""}
+                        onChange={(e) => setLandingField("frameworkEyebrow", e.target.value)}
+                        placeholder="e.g. Our QA/QC Framework"
+                      />
+                    </div>
+                    <div className="border-t border-border pt-4">
+                      <PillarsEditor
+                        pillars={editingLanding.pillars || []}
+                        onChange={(v) => setLandingField("pillars", v)}
+                      />
+                    </div>
+                  </TabsContent>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <FieldLabel hint="Button text on the listing card and detail page">CTA Label</FieldLabel>
-                  <Input
-                    value={editing.cta_label ?? ""}
-                    onChange={(e) => set("cta_label", e.target.value)}
-                    placeholder="e.g. View GSE® QA Documentation"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <FieldLabel hint="Controls display order on the listing page (lower = first)">Sort Order</FieldLabel>
-                  <Input
-                    type="number"
-                    value={String(editing.sort_order ?? 0)}
-                    onChange={(e) => set("sort_order", parseInt(e.target.value, 10) || 0)}
-                    className="mt-1"
-                    min={0}
-                  />
-                </div>
-              </div>
+                  <TabsContent value="iagi" className="space-y-5 m-0 outline-none">
+                    <SectionHeading>IAGI Accreditation Block</SectionHeading>
+                    <div>
+                      <FieldLabel>IAGI Title</FieldLabel>
+                      <Input
+                        value={editingLanding.iagiTitle ?? ""}
+                        onChange={(e) => setLandingField("iagiTitle", e.target.value)}
+                        placeholder="e.g. International Standards. African Execution."
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>IAGI Section Description</FieldLabel>
+                      <Textarea
+                        value={editingLanding.iagiDescription ?? ""}
+                        onChange={(e) => setLandingField("iagiDescription", e.target.value)}
+                        placeholder="Description of membership and compliance..."
+                        rows={4}
+                      />
+                    </div>
+                    <div className="border-t border-border pt-4">
+                      <PairsEditor
+                        label="IAGI Section Stats"
+                        hint="Stats grid shown inside the black IAGI section band. Max 4 items."
+                        items={editingLanding.iagiStats || []}
+                        fields={[
+                          { key: "value", label: "Stat Value", placeholder: "e.g. One of 5" },
+                          { key: "label", label: "Stat Label", placeholder: "e.g. IAGI Members in Africa" }
+                        ]}
+                        onChange={(v) => setLandingField("iagiStats", v as any)}
+                        newItem={{ value: "", label: "" }}
+                      />
+                    </div>
+                  </TabsContent>
 
-              <div className="flex items-center gap-4 pt-2">
-                <div>
-                  <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Status</Label>
-                  <Select
-                    value={editing.status ?? "published"}
-                    onValueChange={(v) => set("status", v as QAStatus)}
-                  >
-                    <SelectTrigger className="mt-1.5 w-36 font-semibold">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="published" className="font-semibold text-xs">Published</SelectItem>
-                      <SelectItem value="draft" className="font-semibold text-xs">Draft</SelectItem>
-                      <SelectItem value="archived" className="font-semibold text-xs">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </TabsContent>
+                  <TabsContent value="seo" className="space-y-5 m-0 outline-none">
+                    <SectionHeading>SEO Configuration</SectionHeading>
+                    <div>
+                      <FieldLabel>SEO Title</FieldLabel>
+                      <Input
+                        value={editingLanding.seo?.title ?? ""}
+                        onChange={(e) => setLandingSeo({ title: e.target.value })}
+                        placeholder="SEO meta title..."
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>SEO Meta Description</FieldLabel>
+                      <Textarea
+                        value={editingLanding.seo?.description ?? ""}
+                        onChange={(e) => setLandingSeo({ description: e.target.value })}
+                        placeholder="SEO meta description..."
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>SEO Keywords</FieldLabel>
+                      <Input
+                        value={editingLanding.seo?.keywords ?? ""}
+                        onChange={(e) => setLandingSeo({ keywords: e.target.value })}
+                        placeholder="Comma-separated keywords..."
+                      />
+                    </div>
+                  </TabsContent>
+                </>
+              )}
 
-            {/* ── HERO TAB ── */}
-            <TabsContent value="hero" className="space-y-4 pt-4">
-              <div>
-                <ImagePicker
-                  label="Hero Image"
-                  hint="Background image shown in the hero section"
-                  value={editing.hero_image_url ?? ""}
-                  onChange={(val) => set("hero_image_url", val)}
-                  placeholder="https://..."
-                />
-              </div>
+              {/* ──────────────────────────────────────────────────────── */}
+              {/* ── DETAIL PAGE TABS ──────────────────────────────────── */}
+              {/* ──────────────────────────────────────────────────────── */}
+              {!isLanding && (
+                <>
+                  <TabsContent value="basic" className="space-y-4 m-0 outline-none">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <FieldLabel hint="Shown as the card title on the listing page">Category Name *</FieldLabel>
+                        <Input
+                          value={editingDoc.category_name ?? ""}
+                          onChange={(e) => setDocField("category_name", e.target.value)}
+                          placeholder="e.g. GSE® / Solmax Quality Assurance"
+                        />
+                      </div>
+                      <div>
+                        <FieldLabel hint="URL-safe slug for the child detail page /quality-assurance/{slug}">Slug</FieldLabel>
+                        <Input
+                          value={editingDoc.slug ?? ""}
+                          onChange={(e) => handleSlugChange(e.target.value)}
+                          onBlur={handleSlugBlur}
+                          placeholder="auto-generated from name"
+                          className="font-mono text-xs"
+                        />
+                      </div>
+                    </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <FieldLabel hint='Small text above the title — e.g. "IAGI-Aligned" or "GRI-GM13 Certified"'>Eyebrow Text</FieldLabel>
-                  <Input value={editing.eyebrow ?? ""} onChange={(e) => set("eyebrow", e.target.value)} placeholder="e.g. IAGI-Aligned" className="mt-1" />
-                </div>
-              </div>
+                    <div>
+                      <FieldLabel hint="Shown on the listing card and as the page meta description">Short Description</FieldLabel>
+                      <Textarea
+                        value={editingDoc.short_description ?? ""}
+                        onChange={(e) => setDocField("short_description", e.target.value)}
+                        rows={3}
+                        placeholder="Brief summary shown on the listing card..."
+                        className="resize-none"
+                      />
+                    </div>
 
-              <div>
-                <FieldLabel hint="Large heading in the hero. Defaults to category name if blank.">Hero Title</FieldLabel>
-                <Input
-                  value={editing.hero_title ?? ""}
-                  onChange={(e) => set("hero_title", e.target.value)}
-                  placeholder="e.g. GSE® / Solmax Geomembrane Quality Assurance"
-                  className="mt-1"
-                />
-              </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <FieldLabel hint="Button text on the listing card and detail page">CTA Label</FieldLabel>
+                        <Input
+                          value={editingDoc.cta_label ?? ""}
+                          onChange={(e) => setDocField("cta_label", e.target.value)}
+                          placeholder="e.g. View GSE® QA Documentation"
+                        />
+                      </div>
+                      <div>
+                        <FieldLabel hint="Controls display order on the listing page (lower = first)">Sort Order</FieldLabel>
+                        <Input
+                          type="number"
+                          value={String(editingDoc.sort_order ?? 0)}
+                          onChange={(e) => setDocField("sort_order", parseInt(e.target.value, 10) || 0)}
+                          min={0}
+                        />
+                      </div>
+                    </div>
 
-              <div>
-                <FieldLabel hint="Subtitle paragraph below the hero heading">Hero Body</FieldLabel>
-                <Textarea
-                  value={editing.hero_body ?? ""}
-                  onChange={(e) => set("hero_body", e.target.value)}
-                  rows={3}
-                  placeholder="Supporting paragraph shown in the hero section..."
-                  className="mt-1 resize-none"
-                />
-              </div>
-            </TabsContent>
+                    <div className="flex items-center gap-4 pt-2">
+                      <div>
+                        <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Status</Label>
+                        <Select
+                          value={editingDoc.status ?? "published"}
+                          onValueChange={(v) => setDocField("status", v as QAStatus)}
+                        >
+                          <SelectTrigger className="mt-1.5 w-36 font-semibold">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="published" className="font-semibold text-xs">Published</SelectItem>
+                            <SelectItem value="draft" className="font-semibold text-xs">Draft</SelectItem>
+                            <SelectItem value="archived" className="font-semibold text-xs">Archived</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </TabsContent>
 
-            {/* ── PILLARS & STATS TAB ── */}
-            <TabsContent value="pillars" className="space-y-6 pt-4">
-              <PillarsEditor
-                pillars={editing.key_pillars || []}
-                onChange={(v) => set("key_pillars", v)}
-              />
-              <div className="border-t border-border pt-4">
-                <StatsEditor
-                  stats={editing.stats || []}
-                  onChange={(v) => set("stats", v)}
-                />
-              </div>
-            </TabsContent>
+                  <TabsContent value="hero" className="space-y-4 m-0 outline-none">
+                    <div>
+                      <ImagePicker
+                        label="Hero Image"
+                        hint="Background image shown in the hero section"
+                        value={editingDoc.hero_image_url ?? ""}
+                        onChange={(val) => setDocField("hero_image_url", val)}
+                        placeholder="https://..."
+                      />
+                    </div>
 
-            {/* ── CONTENT SECTIONS TAB ── */}
-            <TabsContent value="content" className="pt-4">
-              <ContentSectionsEditor
-                sections={editing.content_sections || []}
-                onChange={(v) => set("content_sections", v)}
-              />
-            </TabsContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <FieldLabel hint='Small text above the title — e.g. "IAGI-Aligned" or "GRI-GM13 Certified"'>Eyebrow Text</FieldLabel>
+                        <Input value={editingDoc.eyebrow ?? ""} onChange={(e) => setDocField("eyebrow", e.target.value)} placeholder="e.g. IAGI-Aligned" />
+                      </div>
+                    </div>
 
-            {/* ── INDUSTRIES TAB ── */}
-            <TabsContent value="industries" className="pt-4">
-              <TagsInput
-                label="Industries Served"
-                hint='Type each industry and press Enter or click Add. E.g. "Mining & Minerals", "Water & Sanitation"'
-                tags={editing.industries_served || []}
-                onChange={(v) => set("industries_served", v)}
-                placeholder="e.g. Mining & Minerals"
-              />
-            </TabsContent>
+                    <div>
+                      <FieldLabel hint="Large heading in the hero. Defaults to category name if blank.">Hero Title</FieldLabel>
+                      <Input
+                        value={editingDoc.hero_title ?? ""}
+                        onChange={(e) => setDocField("hero_title", e.target.value)}
+                        placeholder="e.g. GSE® / Solmax Geomembrane Quality Assurance"
+                      />
+                    </div>
+
+                    <div>
+                      <FieldLabel hint="Subtitle paragraph below the hero heading">Hero Body</FieldLabel>
+                      <Textarea
+                        value={editingDoc.hero_body ?? ""}
+                        onChange={(e) => setDocField("hero_body", e.target.value)}
+                        rows={3}
+                        placeholder="Supporting paragraph shown in the hero section..."
+                        className="resize-none"
+                      />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="pillars" className="space-y-6 m-0 outline-none">
+                    <PillarsEditor
+                      pillars={editingDoc.key_pillars || []}
+                      onChange={(v) => setDocField("key_pillars", v)}
+                    />
+                    <div className="border-t border-border pt-4">
+                      <StatsEditor
+                        stats={editingDoc.stats || []}
+                        onChange={(v) => setDocField("stats", v)}
+                      />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="content" className="m-0 outline-none">
+                    <ContentSectionsEditor
+                      sections={editingDoc.content_sections || []}
+                      onChange={(v) => setDocField("content_sections", v)}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="industries" className="m-0 outline-none">
+                    <TagsInput
+                      label="Industries Served"
+                      hint='Type each industry and press Enter or click Add. E.g. "Mining & Minerals", "Water & Sanitation"'
+                      tags={editingDoc.industries_served || []}
+                      onChange={(v) => setDocField("industries_served", v)}
+                      placeholder="e.g. Mining & Minerals"
+                    />
+                  </TabsContent>
+                </>
+              )}
+            </div>
           </Tabs>
+        </div>
+      </div>
 
-          <DialogFooter className="gap-2 pt-4 border-t border-border mt-4">
-            <Button variant="outline" className="cursor-pointer" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={() => void save()} disabled={saving} className="bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide text-xs cursor-pointer text-white border-0">
-              {saving ? "Saving…" : editing.id ? "Save Changes" : "Create Document"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       <DeleteConfirmationDialog
         isOpen={!!qaToDelete}
         onOpenChange={(open) => !open && setQaToDelete(null)}

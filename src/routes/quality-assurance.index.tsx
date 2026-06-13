@@ -39,27 +39,43 @@ function QALandingSkeleton() {
 
 export const Route = createFileRoute("/quality-assurance/")({
   loader: async () => {
-    const { data, error } = await supabase
+    const { data: qaDocuments, error: qaError } = await supabase
       .from("qa_documents")
       .select("id, slug, category_name, short_description, hero_image_url, eyebrow, key_pillars, cta_label, sort_order")
       .eq("status", "published")
       .order("sort_order", { ascending: true });
 
-    if (error) {
-      console.error("Error loading QA documents:", error);
-      return { qaDocuments: [] };
+    if (qaError) {
+      console.error("Error loading QA documents:", qaError);
     }
 
-    return { qaDocuments: data || [] };
+    const { data: landingRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "qa_landing_content")
+      .maybeSingle();
+
+    return {
+      qaDocuments: qaDocuments || [],
+      landingContent: landingRow?.value || null,
+    };
   },
   pendingComponent: QALandingSkeleton,
   pendingMs: 0,
-  head: () => ({
-    meta: [
-      { title: "Quality Assurance — Geosynthetics Africa" },
-      { name: "description", content: "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa." },
-      { property: "og:title", content: "Quality Assurance — Geosynthetics Africa" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const landing = (loaderData?.landingContent as any) || {};
+    const title = landing.seo?.title || "Quality Assurance — Geosynthetics Africa";
+    const description = landing.seo?.description || "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.";
+    const keywords = landing.seo?.keywords || "";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
+      ],
+    };
+  },
   component: QAPage,
 });

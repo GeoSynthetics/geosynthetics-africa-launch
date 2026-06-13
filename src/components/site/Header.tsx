@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-router";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
-import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck } from "lucide-react";
+import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetDescription } from "@/components/ui/sheet";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -269,7 +269,7 @@ function useDynamicMegaMenus() {
   return { menus, isLoading };
 }
 
-function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
+function DesktopNav({ menus, isLoading, qaDocs }: { menus: typeof megaMenus; isLoading: boolean; qaDocs: Array<{ slug: string; category_name: string }> }) {
   const [value, setValue] = useState<string>("");
   const location = useLocation();
   const isInside = useRef(false);
@@ -431,27 +431,62 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
               </NavigationMenuContent>
             </NavigationMenuItem>
           ))}
-          {SIMPLE_NAV.map((item) => (
-            <NavigationMenuItem key={item.to}>
-              <NavigationMenuLink asChild>
-                <RLink
-                  to={item.to}
-                  params={item.params}
-                  className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
-                  activeProps={{ className: "text-primary" }}
-                >
-                  {item.label}
-                </RLink>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ))}
+          {SIMPLE_NAV.map((item) => {
+            if (item.label === "Quality Assurance" && qaDocs.length > 0) {
+              return (
+                <NavigationMenuItem key={item.to}>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="inline-flex items-center gap-1.5 whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition cursor-pointer bg-transparent border-0 outline-none">
+                        {item.label}
+                        <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-72 bg-card border border-border p-2 shadow-xl rounded-lg z-50">
+                      <DropdownMenuItem asChild className="hover:bg-accent focus:bg-accent rounded px-3 py-2 cursor-pointer transition-colors">
+                        <RLink to={item.to} className="w-full text-xs font-bold uppercase tracking-wider text-foreground hover:text-primary">
+                          Overview Page
+                        </RLink>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="bg-border my-1.5" />
+                      {qaDocs.map((doc) => (
+                        <DropdownMenuItem key={doc.slug} asChild className="hover:bg-accent focus:bg-accent rounded px-3 py-2 cursor-pointer transition-colors">
+                          <RLink
+                            to="/quality-assurance/$slug"
+                            params={{ slug: doc.slug }}
+                            className="w-full text-xs font-semibold text-muted-foreground hover:text-foreground"
+                          >
+                            {doc.category_name}
+                          </RLink>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </NavigationMenuItem>
+              );
+            }
+            return (
+              <NavigationMenuItem key={item.to}>
+                <NavigationMenuLink asChild>
+                  <RLink
+                    to={item.to}
+                    params={item.params}
+                    className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
+                    activeProps={{ className: "text-primary" }}
+                  >
+                    {item.label}
+                  </RLink>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            );
+          })}
         </NavigationMenuList>
       </NavigationMenu>
     </div>
   );
 }
 
-function MobileNav({ menus }: { menus: typeof megaMenus }) {
+function MobileNav({ menus, qaDocs }: { menus: typeof megaMenus; qaDocs: Array<{ slug: string; category_name: string }> }) {
   const [open, setOpen] = useState(false);
   const { open: openQuickQuote } = useQuickQuote();
   return (
@@ -502,9 +537,39 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
                 </AccordionContent>
               </AccordionItem>
             ))}
+            {qaDocs.length > 0 && (
+              <AccordionItem value="quality-assurance">
+                <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">Quality Assurance</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="space-y-1 pl-2">
+                    <li>
+                      <RLink
+                        to="/quality-assurance"
+                        onClick={() => setOpen(false)}
+                        className="block py-3 text-sm font-semibold text-primary"
+                      >
+                        All Quality Assurance →
+                      </RLink>
+                    </li>
+                    {qaDocs.map((doc) => (
+                      <li key={doc.slug}>
+                        <RLink
+                          to="/quality-assurance/$slug"
+                          params={{ slug: doc.slug }}
+                          onClick={() => setOpen(false)}
+                          className="block py-3 text-sm text-foreground hover:text-primary"
+                        >
+                          {doc.category_name}
+                        </RLink>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            )}
           </Accordion>
           <ul className="mt-2 border-t border-border pt-2">
-            {SIMPLE_NAV.map((item) => (
+            {SIMPLE_NAV.filter(item => item.label !== "Quality Assurance" || qaDocs.length === 0).map((item) => (
               <li key={item.to}>
                 <RLink
                   to={item.to}
@@ -597,6 +662,18 @@ function UserMenu() {
 export function Header() {
   const { menus, isLoading } = useDynamicMegaMenus();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [qaDocs, setQaDocs] = useState<Array<{ slug: string; category_name: string }>>([]);
+
+  useEffect(() => {
+    supabase
+      .from("qa_documents")
+      .select("slug, category_name")
+      .eq("status", "published")
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => {
+        if (data) setQaDocs(data);
+      });
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -618,9 +695,9 @@ export function Header() {
   const headerContent = (
     <div className="flex items-center gap-4 2xl:gap-6 py-4 px-5">
       <Logo />
-      <DesktopNav menus={menus} isLoading={isLoading} />
+      <DesktopNav menus={menus} isLoading={isLoading} qaDocs={qaDocs} />
       <div className="flex items-center gap-2 ml-auto xl:ml-0">
-        <MobileNav menus={menus} />
+        <MobileNav menus={menus} qaDocs={qaDocs} />
       </div>
     </div>
   );
