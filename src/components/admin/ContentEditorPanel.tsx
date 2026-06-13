@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
 import type { HierarchyItem, HierarchyChild, PageContent, MegaContent } from "@/types/hierarchy";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -29,6 +29,7 @@ interface ContentEditorPanelProps {
   isChild?: boolean;
   sectionKey: SectionKey;
   onSave: (updated: EditableNode) => void;
+  saving?: boolean;
 }
 
 // Maps a section to the Supabase config key that holds its page templates
@@ -204,8 +205,9 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: Conten
           <h3 className="font-display font-bold uppercase tracking-tight text-lg">{data.label}</h3>
           <p className="text-xs text-muted-foreground">{data.slug}</p>
         </div>
-        <Button onClick={() => onSave(data)} className="bg-primary hover:bg-primary-hover text-white">
-          <Save className="h-4 w-4 mr-2" /> Save
+        <Button onClick={() => onSave(data)} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
+          {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+          {saving ? "Saving..." : "Save"}
         </Button>
       </div>
 

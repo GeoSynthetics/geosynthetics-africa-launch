@@ -17,3 +17,59 @@ if (typeof globalThis.document === "undefined") {
   (globalThis as any).requestAnimationFrame = (callback: any) => setTimeout(callback, 0);
   (globalThis as any).cancelAnimationFrame = (id: any) => clearTimeout(id);
 }
+
+// Mock IntersectionObserver globally for tests
+class MockIntersectionObserver {
+  readonly root: Element | null = null;
+  readonly rootMargin: string = "";
+  readonly thresholds: ReadonlyArray<number> = [];
+
+  constructor(
+    public callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit
+  ) {
+    if (options) {
+      this.root = options.root ?? null;
+      this.rootMargin = options.rootMargin ?? "";
+      this.thresholds = Array.isArray(options.threshold)
+        ? options.threshold
+        : [options.threshold ?? 0];
+    }
+  }
+
+  observe(target: Element) {
+    (target as any)._intersectionObserver = this;
+  }
+
+  unobserve(target: Element) {
+    delete (target as any)._intersectionObserver;
+  }
+
+  disconnect() {}
+}
+
+(globalThis as any).IntersectionObserver = MockIntersectionObserver;
+
+// Mock localStorage globally for tests
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value.toString();
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+})();
+
+(globalThis as any).localStorage = localStorageMock;
+if ((globalThis as any).window) {
+  (globalThis as any).window.localStorage = localStorageMock;
+}
+
+

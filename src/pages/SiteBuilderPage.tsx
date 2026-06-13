@@ -61,28 +61,10 @@ export function SiteBuilderPage() {
     load();
   }, []);
 
-  const saveSection = useCallback(async (key: SectionKey) => {
-    const section = sections[key];
-    if (!section) return;
-    setSaving(true);
-    const { error } = await supabase
-      .from("site_config")
-      .upsert({ key: CONFIG_KEY(key), value: section as any }, { onConflict: "key" });
-    if (error) {
-      toast.error("Save failed: " + error.message);
-    } else {
-      toast.success(`${section.label} saved.`);
-      if (siteBuilderCache) {
-        siteBuilderCache[key] = section;
-      }
-    }
-    setSaving(false);
-  }, [sections]);
-
   const isHierarchySection = (key: TopLevelTab): key is SectionKey =>
     SECTION_KEYS.includes(key as SectionKey);
 
-  const updateSection = (key: SectionKey, updated: HierarchySection) => {
+  const updateSection = async (key: SectionKey, updated: HierarchySection) => {
     setSections(prev => {
       const next = { ...prev, [key]: updated };
       if (siteBuilderCache) {
@@ -91,9 +73,23 @@ export function SiteBuilderPage() {
       return next;
     });
     setSelected(null); // clear selection when tree changes
+
+    // Automatically save section structure changes to database
+    try {
+      const { error } = await supabase
+        .from("site_config")
+        .upsert({ key: CONFIG_KEY(key), value: updated as any }, { onConflict: "key" });
+      if (error) {
+        toast.error("Failed to save updated structure: " + error.message);
+      } else {
+        toast.success("Structure updated and saved.");
+      }
+    } catch (err: any) {
+      toast.error("Save failed: " + err.message);
+    }
   };
 
-  const updateSelectedNode = (updatedNode: HierarchyItem | HierarchyChild) => {
+  const updateSelectedNode = async (updatedNode: HierarchyItem | HierarchyChild) => {
     if (!selected || !isHierarchySection(activeSection)) return;
     const section = sections[activeSection];
     if (!section) return;
@@ -109,6 +105,8 @@ export function SiteBuilderPage() {
       };
     }
     const updatedSection = { ...section, items: newItems };
+    
+    // Update local state
     setSections(prev => {
       const next = { ...prev, [activeSection]: updatedSection };
       if (siteBuilderCache) {
@@ -116,7 +114,23 @@ export function SiteBuilderPage() {
       }
       return next;
     });
-    toast.success("Item updated. Don't forget to Save the section.");
+
+    // Save entire updated section to database immediately
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("site_config")
+        .upsert({ key: CONFIG_KEY(activeSection), value: updatedSection as any }, { onConflict: "key" });
+      if (error) {
+        toast.error("Failed to save changes: " + error.message);
+      } else {
+        toast.success("Item changes saved successfully.");
+      }
+    } catch (err: any) {
+      toast.error("Save failed: " + err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const currentSection = isHierarchySection(activeSection) ? sections[activeSection] : null;
@@ -142,16 +156,6 @@ export function SiteBuilderPage() {
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Site Builder</h2>
           <p className="text-sm text-muted-foreground">Manage navigation hierarchy, homepage content, and page sections from one place.</p>
         </div>
-        {activeSection !== "homepage" && isHierarchySection(activeSection) && (
-          <Button
-            onClick={() => saveSection(activeSection as SectionKey)}
-            disabled={saving}
-            className="bg-primary hover:bg-primary-hover text-primary-foreground"
-          >
-            {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-            Save {currentSection?.label}
-          </Button>
-        )}
       </div>
 
       {/* Section Tabs */}
@@ -212,6 +216,7 @@ export function SiteBuilderPage() {
                     isChild={selected?.type === "child"}
                     sectionKey={key}
                     onSave={updateSelectedNode}
+                    saving={saving}
                   />
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-3">
