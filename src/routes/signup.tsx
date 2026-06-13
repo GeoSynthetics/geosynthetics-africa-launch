@@ -2,11 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
+import { Mail, Lock, User, Building2, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthLayout } from "@/components/site/AuthLayout";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -68,41 +70,133 @@ function SignupPage() {
   };
 
   return (
-    <section className="bg-surface min-h-[70vh] flex items-center">
-      <div className="container-page max-w-md w-full py-16">
-        <h1 className="font-display text-3xl font-bold uppercase tracking-tight">Create Account</h1>
+    <AuthLayout>
+      {/* Heading */}
+      <div className="mb-8">
+        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">
+          Create Account
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Save quotes, track BOQs, and access gated technical resources.
         </p>
-        <form onSubmit={onSubmit} className="mt-8 space-y-4 rounded border border-border bg-card p-6">
-          <div>
-            <Label htmlFor="fullName">Full name</Label>
-            <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1.5" required />
-          </div>
-          <div>
-            <Label htmlFor="company">Company (optional)</Label>
-            <Input id="company" value={company} onChange={(e) => setCompany(e.target.value)} className="mt-1.5" />
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" required />
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" required />
-            <p className="mt-1 text-xs text-muted-foreground">Minimum 8 characters.</p>
-          </div>
-          <Button type="submit" disabled={submitting} className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide hover:cursor-pointer">
-            {submitting ? "Creating…" : "Create Account"}
-          </Button>
-          <div className="text-sm text-center text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary font-semibold hover:underline">
-              Sign in
-            </Link>
-          </div>
-        </form>
       </div>
-    </section>
+
+      {/* Form */}
+      <form onSubmit={onSubmit} className="space-y-5">
+        <div>
+          <Label htmlFor="signup-fullName" className="text-sm font-medium">
+            Full name
+          </Label>
+          <div className="relative mt-1.5">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              id="signup-fullName"
+              placeholder="John Doe"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="h-11 pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="signup-company" className="text-sm font-medium">
+            Company
+            <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+          </Label>
+          <div className="relative mt-1.5">
+            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              id="signup-company"
+              placeholder="Acme Construction Ltd."
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="h-11 pl-10"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="signup-email" className="text-sm font-medium">
+            Email address
+          </Label>
+          <div className="relative mt-1.5">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              id="signup-email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-11 pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="signup-password" className="text-sm font-medium">
+            Password
+          </Label>
+          <div className="relative mt-1.5">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              id="signup-password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-11 pl-10"
+              required
+            />
+          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Minimum 8 characters.
+          </p>
+        </div>
+
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
+        >
+          {submitting ? (
+            "Creating…"
+          ) : (
+            <span className="flex items-center justify-center gap-2">
+              Create Account
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          )}
+        </Button>
+      </form>
+
+      {/* Divider */}
+      <div className="relative my-6">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-3 text-muted-foreground tracking-wider">
+            or
+          </span>
+        </div>
+      </div>
+
+      {/* Footer link */}
+      <p className="text-sm text-center text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          to="/login"
+          className="text-primary font-semibold hover:underline inline-flex items-center gap-1 transition-colors"
+        >
+          Sign in
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }

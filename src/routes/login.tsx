@@ -2,11 +2,13 @@ import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-r
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthLayout } from "@/components/site/AuthLayout";
 
 const searchSchema = z.object({
   redirect: z.string().optional().catch(undefined),
@@ -64,52 +66,96 @@ function LoginPage() {
   };
 
   return (
-    <section className="bg-surface min-h-[70vh] flex items-center">
-      <div className="container-page max-w-md w-full py-16">
-        <h1 className="font-display text-3xl font-bold uppercase tracking-tight">Sign In</h1>
+    <AuthLayout>
+      {/* Heading */}
+      <div className="mb-8">
+        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">
+          Sign In
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Access your contractor or customer account.
         </p>
-        <form onSubmit={onSubmit} className="mt-8 space-y-4 rounded border border-border bg-card p-6">
-          <div>
-            <Label htmlFor="email">Email</Label>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={onSubmit} className="space-y-5">
+        <div>
+          <Label htmlFor="login-email" className="text-sm font-medium">
+            Email address
+          </Label>
+          <div className="relative mt-1.5">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
-              id="email"
+              id="login-email"
               type="email"
               autoComplete="email"
+              placeholder="you@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1.5"
+              className="h-11 pl-10"
               required
             />
           </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
+        </div>
+
+        <div>
+          <Label htmlFor="login-password" className="text-sm font-medium">
+            Password
+          </Label>
+          <div className="relative mt-1.5">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
-              id="password"
+              id="login-password"
               type="password"
               autoComplete="current-password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5"
+              className="h-11 pl-10"
               required
             />
           </div>
-          <Button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide"
-          >
-            {submitting ? "Signing in…" : "Sign In"}
-          </Button>
-          <div className="text-sm text-center text-muted-foreground">
-            No account?{" "}
-            <Link to="/signup" className="text-primary font-semibold hover:underline">
-              Create one
-            </Link>
-          </div>
-        </form>
+        </div>
+
+        <Button
+          type="submit"
+          disabled={submitting}
+          className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
+        >
+          {submitting ? (
+            "Signing in…"
+          ) : (
+            <span className="flex items-center justify-center gap-2">
+              Sign In
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          )}
+        </Button>
+      </form>
+
+      {/* Divider */}
+      <div className="relative my-6">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-3 text-muted-foreground tracking-wider">
+            or
+          </span>
+        </div>
       </div>
-    </section>
+
+      {/* Footer link */}
+      <p className="text-sm text-center text-muted-foreground">
+        Don&apos;t have an account?{" "}
+        <Link
+          to="/signup"
+          className="text-primary font-semibold hover:underline inline-flex items-center gap-1 transition-colors"
+        >
+          Create one
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }
