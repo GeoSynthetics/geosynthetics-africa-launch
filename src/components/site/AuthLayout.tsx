@@ -1,7 +1,5 @@
 import { type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
 import { Shield, Award, CheckCircle } from "lucide-react";
-import africaLogo from "@/assets/africa.svg";
 import authHero from "@/assets/auth-hero.png";
 
 interface AuthLayoutProps {
@@ -50,34 +48,6 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       <div className="w-full lg:w-1/2 flex flex-col bg-background">
         {/* Top accent bar */}
         <div className="h-1 bg-primary lg:hidden" />
-
-        {/* Mobile logo */}
-        <div className="lg:hidden px-6 pt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2.5"
-            aria-label="Geosynthetics Africa home"
-          >
-            <img
-              src={africaLogo}
-              alt=""
-              aria-hidden="true"
-              className="h-8 w-8"
-              style={{
-                filter:
-                  "brightness(0) saturate(100%) invert(24%) sepia(89%) saturate(3402%) hue-rotate(346deg) brightness(95%) contrast(95%)",
-              }}
-            />
-            <div className="leading-none">
-              <div className="font-display text-base font-bold tracking-wide text-foreground">
-                GEOSYNTHETICS
-              </div>
-              <div className="font-display text-xs font-bold tracking-[0.2em] text-primary">
-                AFRICA
-              </div>
-            </div>
-          </Link>
-        </div>
 
         {/* Form content */}
         <div className="flex flex-1 items-center justify-center px-6 py-12 sm:px-10 lg:px-16">
