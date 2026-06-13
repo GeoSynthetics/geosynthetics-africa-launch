@@ -86,7 +86,7 @@ function PageTemplatesRedirectCard({
   );
 }
 
-export function ContentEditorPanel({ node, isChild, sectionKey, onSave }: ContentEditorPanelProps) {
+export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }: ContentEditorPanelProps) {
 
   const [data, setData] = useState<EditableNode>(node);
 

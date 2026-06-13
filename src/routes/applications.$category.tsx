@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
 import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
 import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function loadApplicationData(categorySlug: string) {
   // Per-slug fallback hero images so pages look great before James configures them
@@ -161,9 +162,117 @@ async function loadApplicationData(categorySlug: string) {
   };
 }
 
+function ApplicationCategorySkeleton() {
+  return (
+    <div className="w-full bg-background animate-pulse">
+      {/* Hero Section */}
+      <section className="bg-surface-dark text-white relative py-16 md:py-24">
+        <div className="container-page relative z-10">
+          <div className="flex items-center gap-2 mb-6">
+            <Skeleton className="h-3 w-12 bg-white/20" />
+            <span className="text-white/30 text-xs">/</span>
+            <Skeleton className="h-3 w-16 bg-white/20" />
+            <span className="text-white/30 text-xs">/</span>
+            <Skeleton className="h-3 w-32 bg-white/20" />
+          </div>
+          <Skeleton className="h-10 md:h-12 lg:h-14 w-2/3 bg-white/20 mb-6" />
+          <div className="space-y-2 mb-8 max-w-2xl border-l-2 border-primary/30 pl-4">
+            <Skeleton className="h-4 w-full bg-white/20" />
+            <Skeleton className="h-4 w-5/6 bg-white/20" />
+          </div>
+          <div className="flex gap-4 mt-8">
+            <Skeleton className="h-10 w-36 bg-primary/45" />
+            <Skeleton className="h-10 w-36 bg-white/20" />
+          </div>
+        </div>
+      </section>
+
+      {/* Sticky Tab Navigation */}
+      <div className="border-b border-border bg-surface py-4 sticky z-40 top-[80px]">
+        <div className="container-page flex gap-8 overflow-x-auto no-scrollbar">
+          {["Overview", "System Components", "Design Considerations", "Installation", "QA & Testing", "Products Used", "Case Studies", "Downloads"].map((label, i) => (
+            <Skeleton key={i} className="h-4 w-20 shrink-0" />
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content Split Layout */}
+      <div className="container-page py-16 grid lg:grid-cols-12 gap-16">
+        {/* Left column */}
+        <div className="lg:col-span-8 space-y-16">
+          <section>
+            <div className="flex items-center mb-6">
+              <span className="w-1.5 h-6 bg-primary/30 mr-4 block"></span>
+              <Skeleton className="h-6 w-44" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          </section>
+
+          <section className="border-t border-border pt-16">
+            <div className="flex items-center mb-6">
+              <span className="w-1.5 h-6 bg-primary/30 mr-4 block"></span>
+              <Skeleton className="h-6 w-52" />
+            </div>
+            <div className="grid lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-7 space-y-4">
+                <Skeleton className="h-64 w-full rounded-lg" />
+              </div>
+              <div className="lg:col-span-5 space-y-4">
+                <Skeleton className="h-4 w-32" />
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex gap-4 items-start">
+                    <Skeleton className="h-6 w-6 rounded-full shrink-0" />
+                    <div className="space-y-2 w-full">
+                      <Skeleton className="h-4 w-1/3" />
+                      <Skeleton className="h-3 w-5/6" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Right column / Sidebar */}
+        <aside className="lg:col-span-4 space-y-8">
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <Skeleton className="h-4 w-24" />
+            <div className="space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-4 rounded-full shrink-0" />
+                  <Skeleton className="h-3 w-5/6" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <Skeleton className="h-4 w-24" />
+            <div className="grid grid-cols-2 gap-2.5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="border border-border p-3 rounded-lg flex flex-col items-center justify-center min-h-[90px]">
+                  <Skeleton className="h-6 w-6 rounded-full mb-2" />
+                  <Skeleton className="h-3 w-12" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/applications/$category")({
   ssr: false,
   loader: ({ params }) => loadApplicationData(params.category),
+  pendingComponent: ApplicationCategorySkeleton,
+  pendingMs: 0,
   head: ({ loaderData }) => {
     const { category, templateData } = loaderData || { category: { slug: "", label: "" }, templateData: null };
     const label = category.label;

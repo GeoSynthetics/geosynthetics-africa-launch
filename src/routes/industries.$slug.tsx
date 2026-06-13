@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { INDUSTRIES } from "@/components/site/mega-menu-data";
 import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function loadIndustryData(slug: string) {
   // Per-slug fallback hero images so every industry page looks great before James configures them
@@ -113,9 +114,87 @@ async function loadIndustryData(slug: string) {
   };
 }
 
+function IndustryDetailSkeleton() {
+  return (
+    <div className="w-full bg-background animate-pulse">
+      {/* Hero Section */}
+      <section className="bg-surface-dark text-white relative py-16 md:py-24">
+        <div className="container-page relative z-10">
+          <div className="flex items-center gap-2 mb-6">
+            <Skeleton className="h-3 w-12 bg-white/20" />
+            <span className="text-white/30 text-xs">/</span>
+            <Skeleton className="h-3 w-16 bg-white/20" />
+            <span className="text-white/30 text-xs">/</span>
+            <Skeleton className="h-3 w-32 bg-white/20" />
+          </div>
+          <Skeleton className="h-10 md:h-12 lg:h-14 w-2/3 bg-white/20 mb-6" />
+          <div className="space-y-2 mb-8 max-w-2xl border-l-2 border-primary/30 pl-4">
+            <Skeleton className="h-4 w-full bg-white/20" />
+            <Skeleton className="h-4 w-5/6 bg-white/20" />
+          </div>
+          <div className="flex gap-4 mt-8">
+            <Skeleton className="h-10 w-36 bg-primary/45" />
+            <Skeleton className="h-10 w-36 bg-white/20" />
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Split Layout */}
+      <div className="container-page py-16 grid lg:grid-cols-12 gap-16">
+        {/* Left column */}
+        <div className="lg:col-span-8 space-y-16">
+          <section>
+            <div className="flex items-center mb-6">
+              <span className="w-1.5 h-6 bg-primary/30 mr-4 block"></span>
+              <Skeleton className="h-6 w-44" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          </section>
+
+          <section className="border-t border-border pt-16">
+            <div className="flex items-center mb-6">
+              <span className="w-1.5 h-6 bg-primary/30 mr-4 block"></span>
+              <Skeleton className="h-6 w-44" />
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="border border-border p-5 rounded space-y-3 bg-surface">
+                  <Skeleton className="h-5 w-1/3" />
+                  <Skeleton className="h-3 w-full" />
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        {/* Right column / Sidebar */}
+        <aside className="lg:col-span-4 space-y-8">
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <Skeleton className="h-4 w-24" />
+            <div className="space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-4 rounded-full shrink-0" />
+                  <Skeleton className="h-3 w-5/6" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/industries/$slug")({
   ssr: false,
   loader: ({ params }) => loadIndustryData(params.slug),
+  pendingComponent: IndustryDetailSkeleton,
+  pendingMs: 0,
   head: ({ loaderData }) => {
     const { industry, templateData } = loaderData || { industry: { slug: "", label: "", icon: "" }, templateData: null };
     const label = industry.label;
