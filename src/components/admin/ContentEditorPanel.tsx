@@ -15,11 +15,25 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import {
-  ListEditor, FAQEditor, PropertiesTableEditor, PairsEditor, QuickActionsEditor, SectionsEditor,
+  ListEditor,
+  FAQEditor,
+  PropertiesTableEditor,
+  PairsEditor,
+  QuickActionsEditor,
+  SectionsEditor,
 } from "./TemplateEditorShared";
 import { ProductSelector } from "./ProductSelector";
 import { IconPicker } from "./IconPicker";
 import { useSlugSync } from "@/hooks/use-slug-sync";
+
+export function stripHtml(html: string | null | undefined): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 type EditableNode = HierarchyItem | HierarchyChild;
@@ -53,7 +67,6 @@ function sectionParamKey(key: SectionKey): string {
   return key === "services" || key === "industries" ? "slug" : "category";
 }
 
-
 // ─── PageTemplatesRedirectCard ────────────────────────────────────────────────
 // Reusable "go to page templates" redirect card used in the Page Content tab.
 
@@ -69,8 +82,18 @@ function PageTemplatesRedirectCard({
   return (
     <div className="flex flex-col items-center justify-center py-12 px-6 text-center border border-dashed border-border rounded-xl bg-surface/50 h-[80%] my-auto max-w-md mx-auto space-y-5">
       <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10" />
+        <svg
+          className="h-7 w-7"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2h6a2 2 0 012 2v2M7 7h10"
+          />
         </svg>
       </div>
       <div className="space-y-2">
@@ -78,7 +101,10 @@ function PageTemplatesRedirectCard({
         <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
       </div>
       <div className="pt-2 w-full">
-        <Button asChild className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20">
+        <Button
+          asChild
+          className="w-full bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs py-2 gap-2 shadow-lg shadow-primary/20"
+        >
           <a href={href}>Edit in Page Templates →</a>
         </Button>
       </div>
@@ -86,8 +112,13 @@ function PageTemplatesRedirectCard({
   );
 }
 
-export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }: ContentEditorPanelProps) {
-
+export function ContentEditorPanel({
+  node,
+  isChild,
+  sectionKey,
+  onSave,
+  saving,
+}: ContentEditorPanelProps) {
   const [data, setData] = useState<EditableNode>(node);
 
   // Sync state if node changes in parent
@@ -98,27 +129,28 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
   const { handleSlugChange, handleSlugBlur } = useSlugSync({
     title: data.label,
     slug: data.slug,
-    onSlugChange: (newSlug) => setData(p => {
-      const updated: any = {
-        ...p,
-        slug: newSlug,
-      };
-      if (p.params) {
-        const paramKey = sectionParamKey(sectionKey);
-        if (sectionKey === "products" && isChild && p.params.category) {
-          updated.params = {
-            ...p.params,
-            family: newSlug
-          };
-        } else {
-          updated.params = {
-            ...p.params,
-            [paramKey]: newSlug
-          };
+    onSlugChange: (newSlug) =>
+      setData((p) => {
+        const updated: any = {
+          ...p,
+          slug: newSlug,
+        };
+        if (p.params) {
+          const paramKey = sectionParamKey(sectionKey);
+          if (sectionKey === "products" && isChild && p.params.category) {
+            updated.params = {
+              ...p.params,
+              family: newSlug,
+            };
+          } else {
+            updated.params = {
+              ...p.params,
+              [paramKey]: newSlug,
+            };
+          }
         }
-      }
-      return updated;
-    }),
+        return updated;
+      }),
     entityId: node.id,
   });
 
@@ -159,7 +191,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
     const t = templates[templateSlug];
     if (!t) return;
 
-    setData(prev => {
+    setData((prev) => {
       const updated: any = {
         ...prev,
         label: t.label ?? t.title ?? prev.label,
@@ -181,19 +213,26 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
   };
 
   const page: PageContent = (data as any).pageContent ?? {};
-  const mega: MegaContent = (data as any).megaFallback ?? (data as HierarchyChild).megaContent ?? {};
+  const mega: MegaContent =
+    (data as any).megaFallback ?? (data as HierarchyChild).megaContent ?? {};
 
   const isProductNode = sectionKey === "products";
   const isNonProductNode = !isProductNode;
 
   const setPage = (p: Partial<PageContent>) =>
-    setData(prev => ({ ...prev, pageContent: { ...(prev as any).pageContent, ...p } }));
+    setData((prev) => ({ ...prev, pageContent: { ...(prev as any).pageContent, ...p } }));
 
   const setMega = (m: Partial<MegaContent>) => {
     if (isChild) {
-      setData(prev => ({ ...prev, megaContent: { ...(prev as HierarchyChild).megaContent, ...m } }));
+      setData((prev) => ({
+        ...prev,
+        megaContent: { ...(prev as HierarchyChild).megaContent, ...m },
+      }));
     } else {
-      setData(prev => ({ ...prev, megaFallback: { ...(prev as HierarchyItem).megaFallback, ...m } }));
+      setData((prev) => ({
+        ...prev,
+        megaFallback: { ...(prev as HierarchyItem).megaFallback, ...m },
+      }));
     }
   };
 
@@ -205,8 +244,16 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
           <h3 className="font-display font-bold uppercase tracking-tight text-lg">{data.label}</h3>
           <p className="text-xs text-muted-foreground">{data.slug}</p>
         </div>
-        <Button onClick={() => onSave(data)} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
-          {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+        <Button
+          onClick={() => onSave(data)}
+          disabled={saving}
+          className="bg-primary hover:bg-primary-hover text-white"
+        >
+          {saving ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="h-4 w-4 mr-2" />
+          )}
           {saving ? "Saving..." : "Save"}
         </Button>
       </div>
@@ -214,14 +261,17 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
       <Tabs defaultValue="identity" className="flex-1 flex flex-col overflow-hidden">
         <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-1">
           {["identity", "page", "mega"]
-            .filter(t => {
+            .filter((t) => {
               if (t === "mega" && isChild) return false;
               if (t === "page" && isChild && isProductNode) return false;
               return true;
             })
-            .map(t => (
-              <TabsTrigger key={t} value={t}
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 text-xs uppercase tracking-wider font-bold capitalize">
+            .map((t) => (
+              <TabsTrigger
+                key={t}
+                value={t}
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 text-xs uppercase tracking-wider font-bold capitalize"
+              >
                 {t === "identity" ? "Identity" : t === "page" ? "Page Content" : "Mega Menu"}
               </TabsTrigger>
             ))}
@@ -233,10 +283,16 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-3.5 text-xs flex items-start gap-2.5 mb-2 shadow-sm animate-pulse">
               <span className="text-primary text-base select-none mt-0.5">💡</span>
               <div className="space-y-1">
-                <div className="font-bold text-foreground uppercase tracking-wider">Unified Product Content</div>
+                <div className="font-bold text-foreground uppercase tracking-wider">
+                  Unified Product Content
+                </div>
                 <div className="text-muted-foreground leading-relaxed">
-                  The page template and rich features for <strong>{data.label}</strong> are edited under <strong>Page Templates</strong>.
-                  <a href={`/admin/page-templates?slug=${data.slug}`} className="text-primary hover:underline ml-1 font-bold inline-flex items-center gap-0.5">
+                  The page template and rich features for <strong>{data.label}</strong> are edited
+                  under <strong>Page Templates</strong>.
+                  <a
+                    href={`/admin/page-templates?slug=${data.slug}`}
+                    className="text-primary hover:underline ml-1 font-bold inline-flex items-center gap-0.5"
+                  >
                     Edit content →
                   </a>
                 </div>
@@ -244,24 +300,43 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
             </div>
           )}
           <div>
-            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Label</label>
-            <Input value={data.label} onChange={e => setData(p => ({ ...p, label: e.target.value }))} />
-          </div>
-          <div>
-            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Slug</label>
-            <Input 
-              value={data.slug} 
-              onChange={e => handleSlugChange(e.target.value)} 
-              onBlur={handleSlugBlur} 
+            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">
+              Label
+            </label>
+            <Input
+              value={data.label}
+              onChange={(e) => setData((p) => ({ ...p, label: e.target.value }))}
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Icon</label>
-            <IconPicker value={data.icon ?? ""} onChange={v => setData(p => ({ ...p, icon: v }))} placeholder="Select icon..." />
+            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">
+              Slug
+            </label>
+            <Input
+              value={data.slug}
+              onChange={(e) => handleSlugChange(e.target.value)}
+              onBlur={handleSlugBlur}
+            />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">Link Path</label>
-            <Input value={data.to} onChange={e => setData(p => ({ ...p, to: e.target.value }))} placeholder="/products/$category" />
+            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">
+              Icon
+            </label>
+            <IconPicker
+              value={data.icon ?? ""}
+              onChange={(v) => setData((p) => ({ ...p, icon: v }))}
+              placeholder="Select icon..."
+            />
+          </div>
+          <div>
+            <label className="text-xs font-bold uppercase text-muted-foreground mb-1 block">
+              Link Path
+            </label>
+            <Input
+              value={data.to}
+              onChange={(e) => setData((p) => ({ ...p, to: e.target.value }))}
+              placeholder="/products/$category"
+            />
           </div>
 
           {/* Autocomplete template page picker */}
@@ -270,7 +345,9 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
               <label className="text-[10px] font-bold uppercase tracking-wider text-primary">
                 ⚡ Auto-fill from Page Template
               </label>
-              {loadingTemplates && <span className="text-[10px] text-muted-foreground animate-pulse">Loading...</span>}
+              {loadingTemplates && (
+                <span className="text-[10px] text-muted-foreground animate-pulse">Loading...</span>
+              )}
             </div>
 
             <Select onValueChange={handleSelectTemplate}>
@@ -290,15 +367,55 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
               </SelectContent>
             </Select>
             <p className="text-[10px] text-muted-foreground leading-normal">
-              Selecting a page template will automatically configure the Label, Slug, and Path parameters to ensure a perfect 100% matched link.
+              Selecting a page template will automatically configure the Label, Slug, and Path
+              parameters to ensure a perfect 100% matched link.
             </p>
           </div>
 
           <div className="border-t border-border pt-4 space-y-3">
             <h4 className="text-xs font-bold uppercase text-muted-foreground">SEO</h4>
-            <Input value={page.seo?.title ?? ""} onChange={e => setPage({ seo: { ...page.seo, title: e.target.value, description: page.seo?.description ?? "", keywords: page.seo?.keywords ?? "" } })} placeholder="SEO Title" />
-            <Textarea value={page.seo?.description ?? ""} onChange={e => setPage({ seo: { title: page.seo?.title ?? "", ...page.seo, description: e.target.value, keywords: page.seo?.keywords ?? "" } })} placeholder="SEO Description" className="min-h-[60px]" />
-            <Input value={page.seo?.keywords ?? ""} onChange={e => setPage({ seo: { title: page.seo?.title ?? "", description: page.seo?.description ?? "", keywords: e.target.value } })} placeholder="SEO Keywords (comma separated)" />
+            <Input
+              value={page.seo?.title ?? ""}
+              onChange={(e) =>
+                setPage({
+                  seo: {
+                    ...page.seo,
+                    title: e.target.value,
+                    description: page.seo?.description ?? "",
+                    keywords: page.seo?.keywords ?? "",
+                  },
+                })
+              }
+              placeholder="SEO Title"
+            />
+            <Textarea
+              value={page.seo?.description ?? ""}
+              onChange={(e) =>
+                setPage({
+                  seo: {
+                    title: page.seo?.title ?? "",
+                    ...page.seo,
+                    description: e.target.value,
+                    keywords: page.seo?.keywords ?? "",
+                  },
+                })
+              }
+              placeholder="SEO Description"
+              className="min-h-[60px]"
+            />
+            <Input
+              value={page.seo?.keywords ?? ""}
+              onChange={(e) =>
+                setPage({
+                  seo: {
+                    title: page.seo?.title ?? "",
+                    description: page.seo?.description ?? "",
+                    keywords: e.target.value,
+                  },
+                })
+              }
+              placeholder="SEO Keywords (comma separated)"
+            />
           </div>
         </TabsContent>
 
@@ -311,7 +428,8 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
               description={
                 <>
                   Rich page content for <strong>{data.label}</strong> is managed in the dedicated{" "}
-                  <strong className="capitalize">{sectionKey} Page Templates</strong> builder where you can edit
+                  <strong className="capitalize">{sectionKey} Page Templates</strong> builder where
+                  you can edit
                   {sectionKey === "applications" && " hero, sub-systems, and SEO."}
                   {sectionKey === "services" && " hero, service features, and SEO."}
                   {sectionKey === "industries" && " hero, challenges, key applications, and SEO."}
@@ -324,53 +442,92 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
               title="Page Templates Integration"
               description={
                 <>
-                  This is a product category/family page. Its content is managed inside the centralized{" "}
-                  <strong>Page Templates</strong> builder.
+                  This is a product category/family page. Its content is managed inside the
+                  centralized <strong>Page Templates</strong> builder.
                 </>
               }
               href={`/admin/page-templates?slug=${data.slug}`}
             />
-
           ) : (
             <div className="space-y-8">
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Hero</h4>
-                <Input value={page.heroImage ?? ""} onChange={e => setPage({ heroImage: e.target.value })} placeholder="Hero image URL" />
-                <Textarea value={page.subtitle ?? ""} onChange={e => setPage({ subtitle: e.target.value })} placeholder="Subtitle / tagline" className="min-h-[80px]" />
+                <Input
+                  value={page.heroImage ?? ""}
+                  onChange={(e) => setPage({ heroImage: e.target.value })}
+                  placeholder="Hero image URL"
+                />
+                <Textarea
+                  value={page.subtitle ?? ""}
+                  onChange={(e) => setPage({ subtitle: e.target.value })}
+                  placeholder="Subtitle / tagline"
+                  className="min-h-[80px]"
+                />
               </div>
 
-              <ListEditor label="Description Paragraphs" items={page.description ?? []} onChange={v => setPage({ description: v })} multiline placeholder="Paragraph text..." />
-              <ListEditor label="Key Features / Benefits (bullet list)" items={page.features ?? []} onChange={v => setPage({ features: v })} placeholder="e.g. High UV resistance" />
+              <ListEditor
+                label="Description Paragraphs"
+                items={page.description ?? []}
+                onChange={(v) => setPage({ description: v })}
+                multiline
+                placeholder="Paragraph text..."
+              />
+              <ListEditor
+                label="Key Features / Benefits (bullet list)"
+                items={page.features ?? []}
+                onChange={(v) => setPage({ features: v })}
+                placeholder="e.g. High UV resistance"
+              />
 
               <PairsEditor
                 label="Technical Highlights (label + value)"
                 items={(page.technicalHighlights ?? []) as any[]}
-                fields={[{ key: "label", label: "Label" }, { key: "value", label: "Value" }]}
-                onChange={v => setPage({ technicalHighlights: v as any })}
+                fields={[
+                  { key: "label", label: "Label" },
+                  { key: "value", label: "Value" },
+                ]}
+                onChange={(v) => setPage({ technicalHighlights: v as any })}
               />
 
               <PropertiesTableEditor
-                table={page.propertiesTable ?? { headers: ["Property", "Test Method", "Value"], rows: [] }}
-                onChange={v => setPage({ propertiesTable: v })}
+                table={
+                  page.propertiesTable ?? {
+                    headers: ["Property", "Test Method", "Value"],
+                    rows: [],
+                  }
+                }
+                onChange={(v) => setPage({ propertiesTable: v })}
               />
 
               <PairsEditor
                 label="Types"
                 items={(page.types ?? []) as any[]}
-                fields={[{ key: "name", label: "Name" }, { key: "description", label: "Description", multiline: true }]}
-                onChange={v => setPage({ types: v as any })}
+                fields={[
+                  { key: "name", label: "Name" },
+                  { key: "description", label: "Description", multiline: true },
+                ]}
+                onChange={(v) => setPage({ types: v as any })}
               />
 
               <PairsEditor
                 label="Benefits"
                 items={(page.benefits ?? []) as any[]}
-                fields={[{ key: "title", label: "Title" }, { key: "description", label: "Description", multiline: true }]}
-                onChange={v => setPage({ benefits: v as any })}
+                fields={[
+                  { key: "title", label: "Title" },
+                  { key: "description", label: "Description", multiline: true },
+                ]}
+                onChange={(v) => setPage({ benefits: v as any })}
               />
 
-              <FAQEditor faqs={page.faqs ?? []} onChange={v => setPage({ faqs: v })} />
+              <FAQEditor faqs={page.faqs ?? []} onChange={(v) => setPage({ faqs: v })} />
 
-              <ListEditor label="Installation Specs" items={page.installationSpecs ?? []} onChange={v => setPage({ installationSpecs: v })} multiline placeholder="Spec details..." />
+              <ListEditor
+                label="Installation Specs"
+                items={page.installationSpecs ?? []}
+                onChange={(v) => setPage({ installationSpecs: v })}
+                multiline
+                placeholder="Spec details..."
+              />
 
               <PairsEditor
                 label="Project References"
@@ -381,7 +538,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
                   { key: "year", label: "Year" },
                   { key: "image", label: "Image URL" },
                 ]}
-                onChange={v => setPage({ projectReferences: v as any })}
+                onChange={(v) => setPage({ projectReferences: v as any })}
               />
 
               <div className="border-t border-border pt-6">
@@ -390,12 +547,25 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
                   items={(page.popularProducts ?? []) as any[]}
                   fields={[
                     { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
-                    { key: "spec", label: "Specification Range", placeholder: "e.g. 1.0mm – 3.0mm" },
-                    { key: "desc", label: "Short Description", placeholder: "One line description…", multiline: true },
+                    {
+                      key: "spec",
+                      label: "Specification Range",
+                      placeholder: "e.g. 1.0mm – 3.0mm",
+                    },
+                    {
+                      key: "desc",
+                      label: "Short Description",
+                      placeholder: "One line description…",
+                      multiline: true,
+                    },
                     { key: "image", label: "Image URL", placeholder: "https://…" },
-                    { key: "slug", label: "Catalogue Slug (optional)", placeholder: "e.g. gse-hdpe-smooth" },
+                    {
+                      key: "slug",
+                      label: "Catalogue Slug (optional)",
+                      placeholder: "e.g. gse-hdpe-smooth",
+                    },
                   ]}
-                  onChange={v => setPage({ popularProducts: v as any })}
+                  onChange={(v) => setPage({ popularProducts: v as any })}
                   newItem={{ name: "", spec: "", desc: "", image: "", slug: "" } as any}
                 />
               </div>
@@ -403,7 +573,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
               <div className="border-t border-border pt-6">
                 <SectionsEditor
                   sections={page.sections || []}
-                  onChange={v => setPage({ sections: v })}
+                  onChange={(v) => setPage({ sections: v })}
                 />
               </div>
             </div>
@@ -415,53 +585,74 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
           {/* Secondary Column or Top Selling Product */}
           <div className="space-y-3">
             {(() => {
-              const isServiceOrAppOrIndustry = sectionKey === "services" || sectionKey === "applications" || sectionKey === "industries";
+              const isServiceOrAppOrIndustry =
+                sectionKey === "services" ||
+                sectionKey === "applications" ||
+                sectionKey === "industries";
               if (isServiceOrAppOrIndustry) {
                 return (
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Top Selling Products (Max 5)</h4>
+                    <h4 className="text-xs font-bold uppercase text-primary tracking-wider">
+                      Top Selling Products (Max 5)
+                    </h4>
                     <p className="text-xs text-muted-foreground">
-                      Select up to 5 top-selling products for this category to show as a slider in the mega menu.
+                      Select up to 5 top-selling products for this category to show as a slider in
+                      the mega menu.
                     </p>
                     <div className="space-y-2 max-w-md">
                       {(mega.topSellingProductIds ?? []).map((pId) => {
-                        const pData = allProducts.find(p => p.id === pId);
+                        const pData = allProducts.find((p) => p.id === pId);
                         return (
-                          <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                          <div
+                            key={pId}
+                            className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                          >
                             <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => setMega({ topSellingProductIds: (mega.topSellingProductIds ?? []).filter(id => id !== pId) })}
+                              onClick={() =>
+                                setMega({
+                                  topSellingProductIds: (mega.topSellingProductIds ?? []).filter(
+                                    (id) => id !== pId,
+                                  ),
+                                })
+                              }
                             >
                               ✕
                             </Button>
                           </div>
                         );
                       })}
-                      
-                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) && !mega.topSellingProductId && (
-                        <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
-                      )}
+
+                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) &&
+                        !mega.topSellingProductId && (
+                          <p className="text-xs text-muted-foreground italic">
+                            No top selling products selected.
+                          </p>
+                        )}
 
                       {/* Legacy single product warning / fallback */}
-                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) && mega.topSellingProductId && (
-                        <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                          <span className="flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                            {allProducts.find(p => p.id === mega.topSellingProductId)?.name || `Product ID: ${mega.topSellingProductId}`} (Legacy Single)
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                            onClick={() => setMega({ topSellingProductId: "" })}
-                          >
-                            ✕
-                          </Button>
-                        </div>
-                      )}
+                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) &&
+                        mega.topSellingProductId && (
+                          <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                            <span className="flex items-center gap-1.5">
+                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                              {allProducts.find((p) => p.id === mega.topSellingProductId)?.name ||
+                                `Product ID: ${mega.topSellingProductId}`}{" "}
+                              (Legacy Single)
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                              onClick={() => setMega({ topSellingProductId: "" })}
+                            >
+                              ✕
+                            </Button>
+                          </div>
+                        )}
                     </div>
 
                     {(!mega.topSellingProductIds || mega.topSellingProductIds.length < 5) && (
@@ -469,7 +660,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
                         <ProductSelector
                           excludeIds={[
                             ...(mega.topSellingProductIds ?? []),
-                            ...(mega.topSellingProductId ? [mega.topSellingProductId] : [])
+                            ...(mega.topSellingProductId ? [mega.topSellingProductId] : []),
                           ]}
                           onSelect={(prod) => {
                             let currentIds = [...(mega.topSellingProductIds ?? [])];
@@ -490,19 +681,23 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
 
               return (
                 <>
-                  <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Secondary Column</h4>
+                  <h4 className="text-xs font-bold uppercase text-primary tracking-wider">
+                    Secondary Column
+                  </h4>
                   <Input
                     value={mega.secondaryTitle ?? ""}
-                    onChange={e => setMega({ secondaryTitle: e.target.value })}
+                    onChange={(e) => setMega({ secondaryTitle: e.target.value })}
                     placeholder="Column heading, e.g. 'Geomembranes'"
                   />
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-muted-foreground">Links</label>
+                    <label className="text-xs font-bold uppercase text-muted-foreground">
+                      Links
+                    </label>
                     {(mega.secondary ?? []).map((link, i) => (
                       <div key={i} className="flex gap-2 items-center">
                         <Input
                           value={link.label}
-                          onChange={e => {
+                          onChange={(e) => {
                             const s = [...(mega.secondary ?? [])];
                             s[i] = { ...s[i], label: e.target.value };
                             setMega({ secondary: s });
@@ -512,7 +707,7 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
                         />
                         <Input
                           value={link.to}
-                          onChange={e => {
+                          onChange={(e) => {
                             const s = [...(mega.secondary ?? [])];
                             s[i] = { ...s[i], to: e.target.value };
                             setMega({ secondary: s });
@@ -520,14 +715,28 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
                           placeholder="/path"
                           className="text-sm flex-1"
                         />
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"
-                          onClick={() => setMega({ secondary: (mega.secondary ?? []).filter((_, idx) => idx !== i) })}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive"
+                          onClick={() =>
+                            setMega({
+                              secondary: (mega.secondary ?? []).filter((_, idx) => idx !== i),
+                            })
+                          }
+                        >
                           ✕
                         </Button>
                       </div>
                     ))}
-                    <Button variant="outline" size="sm" className="text-xs"
-                      onClick={() => setMega({ secondary: [...(mega.secondary ?? []), { label: "", to: "/" }] })}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() =>
+                        setMega({ secondary: [...(mega.secondary ?? []), { label: "", to: "/" }] })
+                      }
+                    >
                       + Add Link
                     </Button>
                   </div>
@@ -537,44 +746,109 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
           </div>
 
           <div className="border-t border-border pt-6">
-            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">Featured Products (up to 4)</h4>
+            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">
+              Featured Products (up to 4)
+            </h4>
             <div className="grid md:grid-cols-2 gap-3">
               {(mega.featured ?? []).slice(0, 4).map((item: any, i) => (
-                <div key={i} className="border border-border rounded p-3 bg-surface/50 space-y-2 relative">
-                  <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6 text-destructive"
-                    onClick={() => setMega({ featured: (mega.featured ?? []).filter((_, idx) => idx !== i) as any })}>
+                <div
+                  key={i}
+                  className="border border-border rounded p-3 bg-surface/50 space-y-2 relative"
+                >
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-1 right-1 h-6 w-6 text-destructive"
+                    onClick={() =>
+                      setMega({
+                        featured: (mega.featured ?? []).filter((_, idx) => idx !== i) as any,
+                      })
+                    }
+                  >
                     ✕
                   </Button>
-                  <ProductSelector onSelect={(prod: any) => {
-                    const f = [...(mega.featured ?? [])] as any[];
-                    f[i] = {
-                      label: prod.name,
-                      spec: prod.thickness_mm
-                        ? `${prod.thickness_mm}mm`
-                        : (prod.short_description ?? prod.product_categories?.name ?? ""),
-                      // Navigate to the individual catalogue product
-                      to: "/catalogue/$slug",
-                      params: {
-                        slug: prod.slug,
-                      },
-                      image: prod.image_url ?? "",
-                    };
-                    setMega({ featured: f as any, featuredKind: "product" });
-                  }} />
+                  <ProductSelector
+                    onSelect={(prod: any) => {
+                      const f = [...(mega.featured ?? [])] as any[];
+                      const rawDesc = prod.short_description ?? prod.product_categories?.name ?? "";
+                      const cleanDesc = stripHtml(rawDesc);
+
+                      f[i] = {
+                        label: prod.name,
+                        spec: prod.thickness_mm ? `${prod.thickness_mm}mm` : cleanDesc,
+                        // Navigate to the individual catalogue product
+                        to: "/catalogue/$slug",
+                        params: {
+                          slug: prod.slug,
+                        },
+                        image: prod.image_url ?? "",
+                      };
+                      setMega({ featured: f as any, featuredKind: "product" });
+                    }}
+                  />
                   {item.label && (
-                    <div className="flex items-center gap-2 p-2 bg-background rounded border border-border">
-                      {item.image && <img src={item.image} className="h-10 w-10 rounded object-cover" />}
+                    <div className="space-y-2 pt-2 border-t border-border">
                       <div>
-                        <div className="text-xs font-semibold">{item.label}</div>
-                        <div className="text-[10px] text-muted-foreground">{item.spec}</div>
+                        <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
+                          Product Title
+                        </label>
+                        <Input
+                          value={item.label}
+                          onChange={(e) => {
+                            const f = [...(mega.featured ?? [])] as any[];
+                            f[i] = { ...f[i], label: e.target.value };
+                            setMega({ featured: f as any });
+                          }}
+                          placeholder="Customize product title"
+                          className="h-8 text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
+                          Custom Preview Description
+                        </label>
+                        <Textarea
+                          value={item.spec}
+                          onChange={(e) => {
+                            const f = [...(mega.featured ?? [])] as any[];
+                            f[i] = { ...f[i], spec: e.target.value };
+                            setMega({ featured: f as any });
+                          }}
+                          placeholder="Customize description (no raw HTML, max 2 lines recommended)"
+                          className="min-h-[60px] text-xs resize-y"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-background rounded border border-border mt-1">
+                        {item.image && (
+                          <img src={item.image} className="h-10 w-10 rounded object-cover" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] font-bold uppercase text-primary tracking-wider block">
+                            Database Link
+                          </span>
+                          <span className="text-[10px] text-muted-foreground block truncate">
+                            {item.params?.slug ? `/catalogue/${item.params.slug}` : item.to}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )}
                 </div>
               ))}
               {(mega.featured ?? []).length < 4 && (
-                <Button variant="outline" className="min-h-[80px] border-dashed text-muted-foreground"
-                  onClick={() => setMega({ featured: [...(mega.featured ?? []), { label: "", spec: "", to: "/", image: "" }] as any, featuredKind: "product" })}>
+                <Button
+                  variant="outline"
+                  className="min-h-[80px] border-dashed text-muted-foreground"
+                  onClick={() =>
+                    setMega({
+                      featured: [
+                        ...(mega.featured ?? []),
+                        { label: "", spec: "", to: "/", image: "" },
+                      ] as any,
+                      featuredKind: "product",
+                    })
+                  }
+                >
                   + Add Featured Item
                 </Button>
               )}
@@ -582,10 +856,12 @@ export function ContentEditorPanel({ node, isChild, sectionKey, onSave, saving }
           </div>
 
           <div className="border-t border-border pt-6">
-            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">Quick Actions</h4>
+            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">
+              Quick Actions
+            </h4>
             <QuickActionsEditor
               items={(mega.quickActions ?? []) as any}
-              onChange={v => setMega({ quickActions: v as any })}
+              onChange={(v) => setMega({ quickActions: v as any })}
             />
           </div>
         </TabsContent>
