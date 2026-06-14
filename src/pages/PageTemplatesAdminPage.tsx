@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ImagePicker } from "@/components/admin/ImagePicker";
@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import {
   Plus, Trash2, Save, Loader2, ExternalLink, Database,
-  AlertTriangle, CheckCircle2, ChevronRight, Eye, Copy,
+  AlertTriangle, CheckCircle2, ChevronRight, Eye, Copy, Search, ChevronLeft,
 } from "lucide-react";
 import { ProjectsTemplatesEditor } from "@/components/admin/ProjectsTemplatesEditor";
 import { QATemplatesEditor } from "@/components/admin/QATemplatesEditor";
@@ -57,6 +57,11 @@ export function PageTemplatesAdminPage() {
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
+
+  // Search and Pagination states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleConfirmDelete = () => {
     if (slugToDelete) {
@@ -413,6 +418,33 @@ export function PageTemplatesAdminPage() {
   const slugList = Object.keys(allData);
   const isEmpty = slugList.length === 0;
 
+  // Filtered list based on search query
+  const filteredSlugs = useMemo(() => {
+    return slugList.filter(slug => {
+      const cat = allData[slug];
+      const label = cat?.label || slug;
+      return label.toLowerCase().includes(searchQuery.toLowerCase()) || slug.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [slugList, allData, searchQuery]);
+
+  const totalPages = Math.ceil(filteredSlugs.length / itemsPerPage);
+  const paginatedSlugs = useMemo(() => {
+    return filteredSlugs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [filteredSlugs, currentPage]);
+
+  // Synchronize current page when activeSlug changes (e.g. from linking menu or navigation)
+  useEffect(() => {
+    if (activeSlug) {
+      const index = filteredSlugs.indexOf(activeSlug);
+      if (index !== -1) {
+        const page = Math.floor(index / itemsPerPage) + 1;
+        if (page !== currentPage) {
+          setCurrentPage(page);
+        }
+      }
+    }
+  }, [activeSlug, filteredSlugs, currentPage]);
+
   // ─── Tab definitions ──────────────────────────────────────────────────────
   const TABS = [
     { id: "hero", label: "Hero" },
@@ -583,7 +615,7 @@ export function PageTemplatesAdminPage() {
               <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
                 <div className="px-4 py-3 border-b border-border">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    Sub-Page Templates ({slugList.length})
+                    Sub-Page Templates ({filteredSlugs.length !== slugList.length ? `${filteredSlugs.length}/${slugList.length}` : slugList.length})
                   </p>
                 </div>
 
@@ -618,8 +650,22 @@ export function PageTemplatesAdminPage() {
                   )}
                 </div>
 
+                {/* Search Box inside sidebar */}
+                <div className="px-3 py-1.5 relative border-b border-border shrink-0">
+                  <Search className="absolute left-5.5 top-3.5 h-3.5 w-3.5 text-muted-foreground" />
+                  <Input
+                    placeholder="Search templates..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="pl-8 h-8 text-xs bg-surface"
+                  />
+                </div>
+
                 <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-                  {slugList.map(slug => {
+                  {paginatedSlugs.map(slug => {
                     const cat = allData[slug];
                     const isActive = slug === activeSlug;
                     return (
@@ -656,7 +702,37 @@ export function PageTemplatesAdminPage() {
                       </button>
                     );
                   })}
+                  {filteredSlugs.length === 0 && (
+                    <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                  )}
                 </div>
+
+                {/* Pagination footer */}
+                {totalPages > 1 && (
+                  <div className="p-3 border-t border-border flex items-center justify-between bg-surface/50 text-xs shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                    >
+                      <ChevronLeft className="h-3 w-3 mr-1" /> Prev
+                    </Button>
+                    <span className="text-muted-foreground font-medium">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                    >
+                      Next <ChevronRight className="h-3 w-3 ml-1" />
+                    </Button>
+                  </div>
+                )}
               </div>
 
               {/* Right panel */}

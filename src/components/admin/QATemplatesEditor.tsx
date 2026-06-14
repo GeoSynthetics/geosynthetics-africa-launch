@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
-import { Plus, Pencil, Trash2, Search, Eye, Save, Loader2, ChevronRight, AlertTriangle, ExternalLink } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Eye, Save, Loader2, ChevronRight, AlertTriangle, ExternalLink, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
 import { ContentSectionsEditor, type ContentSection } from "./QAContentSectionsEditor";
@@ -241,6 +241,8 @@ export function QATemplatesEditor() {
   const [landingContent, setLandingContent] = useState<Partial<QALandingContent>>(defaultLandingContent());
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("__landing");
@@ -307,6 +309,24 @@ export function QATemplatesEditor() {
     if (!term) return rows;
     return rows.filter((r) => r.category_name.toLowerCase().includes(term));
   }, [rows, q]);
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginated = useMemo(() => {
+    return filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [filtered, currentPage]);
+
+  // Synchronize current page when activeSlug changes
+  useEffect(() => {
+    if (activeSlug && activeSlug !== "__landing" && activeSlug !== "__new") {
+      const index = filtered.findIndex((r) => r.slug === activeSlug);
+      if (index !== -1) {
+        const page = Math.floor(index / itemsPerPage) + 1;
+        if (page !== currentPage) {
+          setCurrentPage(page);
+        }
+      }
+    }
+  }, [activeSlug, filtered, currentPage]);
 
   const handleConfirmDelete = async () => {
     if (qaToDelete) {
@@ -513,7 +533,7 @@ export function QATemplatesEditor() {
             <div className="space-y-1">
               <div className="px-2 flex items-center justify-between">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                  Sub-pages ({rows.length})
+                  Sub-pages ({filtered.length !== rows.length ? `${filtered.length}/${rows.length}` : rows.length})
                 </p>
               </div>
               
@@ -523,13 +543,16 @@ export function QATemplatesEditor() {
                 <Input
                   placeholder="Filter..."
                   value={q}
-                  onChange={(e) => setQ(e.target.value)}
+                  onChange={(e) => {
+                    setQ(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="pl-7 h-7 text-xs"
                 />
               </div>
 
-              <div className="space-y-0.5 max-h-[400px] overflow-y-auto pt-1">
-                {filtered.map((doc) => {
+              <div className="space-y-0.5 pt-1">
+                {paginated.map((doc) => {
                   const isActive = doc.slug === activeSlug;
                   return (
                     <div
@@ -547,9 +570,7 @@ export function QATemplatesEditor() {
                     >
                       <div className="min-w-0 flex-1">
                         <div className="truncate font-medium text-xs">{doc.category_name}</div>
-                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
-                          {doc.slug}
-                        </div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">{doc.slug}</div>
                       </div>
                       <div className="flex items-center gap-1 ml-1 shrink-0">
                         {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
@@ -572,6 +593,33 @@ export function QATemplatesEditor() {
                   <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
                 )}
               </div>
+
+              {/* Pagination footer */}
+              {totalPages > 1 && (
+                <div className="p-3 border-t border-border flex items-center justify-between bg-surface/50 text-xs shrink-0 rounded-lg mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                  >
+                    <ChevronLeft className="h-3 w-3 mr-1" /> Prev
+                  </Button>
+                  <span className="text-muted-foreground font-medium">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                  >
+                    Next <ChevronRight className="h-3 w-3 ml-1" />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

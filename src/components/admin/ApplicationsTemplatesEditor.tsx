@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import {
   Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
-  Plus, Trash2
+  Plus, Trash2, Search, ChevronLeft
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
@@ -201,6 +201,11 @@ export function ApplicationsTemplatesEditor() {
   const [activeTab, setActiveTab] = useState("hero");
   const [appToDelete, setAppToDelete] = useState<{ slug: string } | null>(null);
 
+  // Search and Pagination states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const handleConfirmDelete = () => {
     if (appToDelete) {
       handleDelete(appToDelete.slug);
@@ -245,6 +250,31 @@ export function ApplicationsTemplatesEditor() {
 
     return list;
   }, [allData, hierarchyItems]);
+
+  const filteredCategories = useMemo(() => {
+    return categoriesList.filter((cat) => {
+      const search = searchQuery.toLowerCase();
+      return cat.label.toLowerCase().includes(search) || cat.slug.toLowerCase().includes(search);
+    });
+  }, [categoriesList, searchQuery]);
+
+  const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
+  const paginatedCategories = useMemo(() => {
+    return filteredCategories.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [filteredCategories, currentPage]);
+
+  // Synchronize current page when activeSlug changes
+  useEffect(() => {
+    if (activeSlug && activeSlug !== "__landing") {
+      const index = filteredCategories.findIndex((c) => c.slug === activeSlug);
+      if (index !== -1) {
+        const page = Math.floor(index / itemsPerPage) + 1;
+        if (page !== currentPage) {
+          setCurrentPage(page);
+        }
+      }
+    }
+  }, [activeSlug, filteredCategories, currentPage]);
 
   // Load products and case studies for autocomplete selects
   useEffect(() => {
@@ -478,7 +508,7 @@ export function ApplicationsTemplatesEditor() {
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Application Categories ({categoriesList.length})
+              Application Categories ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
             </p>
           </div>
 
@@ -513,6 +543,20 @@ export function ApplicationsTemplatesEditor() {
             )}
           </div>
 
+          {/* Search Box inside sidebar */}
+          <div className="px-3 py-1.5 relative border-b border-border shrink-0">
+            <Search className="absolute left-5.5 top-3.5 h-3.5 w-3.5 text-muted-foreground" />
+            <Input
+              placeholder="Search templates..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-8 h-8 text-xs bg-surface"
+            />
+          </div>
+
           <div className="flex-1 overflow-y-auto p-2 space-y-4">
             {/* Main Pages Section */}
             <div className="space-y-1">
@@ -544,10 +588,10 @@ export function ApplicationsTemplatesEditor() {
             {/* Categories Section */}
             <div className="space-y-1">
               <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Application Categories ({categoriesList.length})
+                Application Categories ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
               </p>
               <div className="space-y-0.5">
-                {categoriesList.map((cat) => {
+                {paginatedCategories.map((cat) => {
                   const isActive = cat.slug === activeSlug;
                   const isStatic = cat.slug === "__landing";
                   return (
@@ -589,9 +633,39 @@ export function ApplicationsTemplatesEditor() {
                     </button>
                   );
                 })}
+                {filteredCategories.length === 0 && (
+                  <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                )}
               </div>
             </div>
           </div>
+
+          {/* Pagination footer */}
+          {totalPages > 1 && (
+            <div className="p-3 border-t border-border flex items-center justify-between bg-surface/50 text-xs shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+              >
+                <ChevronLeft className="h-3 w-3 mr-1" /> Prev
+              </Button>
+              <span className="text-muted-foreground font-medium">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+              >
+                Next <ChevronRight className="h-3 w-3 ml-1" />
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Right panel */}

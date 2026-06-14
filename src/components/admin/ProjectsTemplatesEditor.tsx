@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import {
   Plus, Trash2, Save, Loader2, Compass, ChevronRight, PlusCircle, X, Layers,
+  Search, ChevronLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,45 @@ export function ProjectsTemplatesEditor() {
   const [newTitle, setNewTitle] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<{ id: string; title: string } | null>(null);
+
+  // Search and Pagination states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((p) => {
+      const title = p.title || "";
+      const slug = p.slug || "";
+      const country = p.country || "";
+      const serviceType = p.service_type || "";
+      const search = searchQuery.toLowerCase();
+      return (
+        title.toLowerCase().includes(search) ||
+        slug.toLowerCase().includes(search) ||
+        country.toLowerCase().includes(search) ||
+        serviceType.toLowerCase().includes(search)
+      );
+    });
+  }, [projects, searchQuery]);
+
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const paginatedProjects = useMemo(() => {
+    return filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [filteredProjects, currentPage]);
+
+  // Synchronize current page when activeId changes (e.g. on load or creation)
+  useEffect(() => {
+    if (activeId) {
+      const index = filteredProjects.findIndex((p) => p.id === activeId);
+      if (index !== -1) {
+        const page = Math.floor(index / itemsPerPage) + 1;
+        if (page !== currentPage) {
+          setCurrentPage(page);
+        }
+      }
+    }
+  }, [activeId, filteredProjects, currentPage]);
 
   const handleConfirmDelete = () => {
     if (projectToDelete) {
@@ -249,7 +289,7 @@ export function ProjectsTemplatesEditor() {
           <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Project Templates ({projects.length})
+                Project Templates ({filteredProjects.length !== projects.length ? `${filteredProjects.length}/${projects.length}` : projects.length})
               </p>
             </div>
 
@@ -301,8 +341,22 @@ export function ProjectsTemplatesEditor() {
               )}
             </div>
 
+            {/* Search Box inside sidebar */}
+            <div className="px-3 py-1.5 relative border-b border-border shrink-0">
+              <Search className="absolute left-5.5 top-3.5 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Search projects..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-8 h-8 text-xs bg-surface"
+              />
+            </div>
+
             <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-              {projects.map((p) => {
+              {paginatedProjects.map((p) => {
                 const isActive = p.id === activeId;
                 return (
                   <button
@@ -324,7 +378,7 @@ export function ProjectsTemplatesEditor() {
                       </div>
                       <div className="truncate text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1.5">
                         <span className="capitalize">{p.service_type.replace("_", " ")}</span>
-                        <span>Â·</span>
+                        <span>·</span>
                         <span>{p.country}</span>
                       </div>
                     </div>
@@ -347,7 +401,37 @@ export function ProjectsTemplatesEditor() {
                   </button>
                 );
               })}
+              {filteredProjects.length === 0 && (
+                <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+              )}
             </div>
+
+            {/* Pagination footer */}
+            {totalPages > 1 && (
+              <div className="p-3 border-t border-border flex items-center justify-between bg-surface/50 text-xs shrink-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                >
+                  <ChevronLeft className="h-3 w-3 mr-1" /> Prev
+                </Button>
+                <span className="text-muted-foreground font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                >
+                  Next <ChevronRight className="h-3 w-3 ml-1" />
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Right Panel - Form Editor */}
