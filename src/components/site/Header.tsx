@@ -269,12 +269,20 @@ function useDynamicMegaMenus() {
   return { menus, isLoading };
 }
 
-function DesktopNav({ menus, isLoading, qaDocs }: { menus: typeof megaMenus; isLoading: boolean; qaDocs: Array<{ slug: string; category_name: string }> }) {
+function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
   const [value, setValue] = useState<string>("");
   const location = useLocation();
   const isInside = useRef(false);
   const timeoutRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const pathname = location.pathname;
+  const isActiveRoute = (to: string) => {
+    if (to === "/") {
+      return pathname === "/";
+    }
+    return pathname === to || pathname.startsWith(to + "/");
+  };
 
   useEffect(() => {
     setValue("");
@@ -402,7 +410,7 @@ function DesktopNav({ menus, isLoading, qaDocs }: { menus: typeof megaMenus; isL
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="hidden xl:flex flex-1 justify-center !max-w-none min-w-0"
+      className="hidden xl:flex self-stretch flex-1 justify-center items-stretch !max-w-none min-w-0"
     >
       <NavigationMenu
         value={value}
@@ -418,61 +426,39 @@ function DesktopNav({ menus, isLoading, qaDocs }: { menus: typeof megaMenus; isL
             }
           }
         }}
-        className="!max-w-none min-w-0"
+        className="!max-w-none min-w-0 h-full flex items-stretch"
       >
-        <NavigationMenuList className="gap-0">
-          {menus.map((m) => (
-            <NavigationMenuItem key={m.key} value={m.key}>
-              <NavigationMenuTrigger className="bg-transparent px-2 2xl:px-3 whitespace-nowrap text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary data-[state=open]:text-primary">
-                {m.label}
-              </NavigationMenuTrigger>
-              <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
-                <MegaPanel config={m} isLoading={isLoading} />
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          ))}
-          {SIMPLE_NAV.map((item) => {
-            if (item.label === "Quality Assurance" && qaDocs.length > 0) {
-              return (
-                <NavigationMenuItem key={item.to}>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="inline-flex items-center gap-1.5 whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition cursor-pointer bg-transparent border-0 outline-none">
-                        {item.label}
-                        <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-72 bg-card border border-border p-2 shadow-xl rounded-lg z-50">
-                      <DropdownMenuItem asChild className="hover:bg-accent focus:bg-accent rounded px-3 py-2 cursor-pointer transition-colors">
-                        <RLink to={item.to} className="w-full text-xs font-bold uppercase tracking-wider text-foreground hover:text-primary">
-                          Overview Page
-                        </RLink>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="bg-border my-1.5" />
-                      {qaDocs.map((doc) => (
-                        <DropdownMenuItem key={doc.slug} asChild className="hover:bg-accent focus:bg-accent rounded px-3 py-2 cursor-pointer transition-colors">
-                          <RLink
-                            to="/quality-assurance/$slug"
-                            params={{ slug: doc.slug }}
-                            className="w-full text-xs font-semibold text-muted-foreground hover:text-foreground"
-                          >
-                            {doc.category_name}
-                          </RLink>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </NavigationMenuItem>
-              );
-            }
+        <NavigationMenuList className="gap-0 h-full flex items-stretch">
+          {menus.map((m) => {
+            const active = isActiveRoute(m.to);
             return (
-              <NavigationMenuItem key={item.to}>
+              <NavigationMenuItem key={m.key} value={m.key} className="h-full flex items-stretch">
+                <NavigationMenuTrigger
+                  className={`bg-transparent px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${active
+                    ? "text-primary border-primary"
+                    : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"
+                    }`}
+                >
+                  {m.label}
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
+                  <MegaPanel config={m} isLoading={isLoading} />
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            );
+          })}
+          {SIMPLE_NAV.map((item) => {
+            const active = isActiveRoute(item.to);
+            return (
+              <NavigationMenuItem key={item.to} className="h-full flex items-stretch">
                 <NavigationMenuLink asChild>
                   <RLink
                     to={item.to}
                     params={item.params}
-                    className="inline-flex items-center whitespace-nowrap px-2 2xl:px-3 py-2 text-sm font-semibold uppercase tracking-wide text-foreground hover:text-primary transition"
-                    activeProps={{ className: "text-primary" }}
+                    className={`inline-flex h-full items-center justify-center whitespace-nowrap px-2 2xl:px-3 text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:text-primary ${active
+                      ? "text-primary border-primary"
+                      : "text-foreground border-transparent"
+                      }`}
                   >
                     {item.label}
                   </RLink>
@@ -486,7 +472,7 @@ function DesktopNav({ menus, isLoading, qaDocs }: { menus: typeof megaMenus; isL
   );
 }
 
-function MobileNav({ menus, qaDocs }: { menus: typeof megaMenus; qaDocs: Array<{ slug: string; category_name: string }> }) {
+function MobileNav({ menus }: { menus: typeof megaMenus }) {
   const [open, setOpen] = useState(false);
   const { open: openQuickQuote } = useQuickQuote();
   return (
@@ -528,6 +514,7 @@ function MobileNav({ menus, qaDocs }: { menus: typeof megaMenus; qaDocs: Array<{
                           params={item.params}
                           onClick={() => setOpen(false)}
                           className="block py-3 text-sm text-foreground hover:text-primary"
+                          activeProps={{ className: "!text-primary" }}
                         >
                           {item.label}
                         </RLink>
@@ -537,45 +524,16 @@ function MobileNav({ menus, qaDocs }: { menus: typeof megaMenus; qaDocs: Array<{
                 </AccordionContent>
               </AccordionItem>
             ))}
-            {qaDocs.length > 0 && (
-              <AccordionItem value="quality-assurance">
-                <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">Quality Assurance</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-1 pl-2">
-                    <li>
-                      <RLink
-                        to="/quality-assurance"
-                        onClick={() => setOpen(false)}
-                        className="block py-3 text-sm font-semibold text-primary"
-                      >
-                        All Quality Assurance →
-                      </RLink>
-                    </li>
-                    {qaDocs.map((doc) => (
-                      <li key={doc.slug}>
-                        <RLink
-                          to="/quality-assurance/$slug"
-                          params={{ slug: doc.slug }}
-                          onClick={() => setOpen(false)}
-                          className="block py-3 text-sm text-foreground hover:text-primary"
-                        >
-                          {doc.category_name}
-                        </RLink>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            )}
           </Accordion>
           <ul className="mt-2 border-t border-border pt-2">
-            {SIMPLE_NAV.filter(item => item.label !== "Quality Assurance" || qaDocs.length === 0).map((item) => (
+            {SIMPLE_NAV.map((item) => (
               <li key={item.to}>
                 <RLink
                   to={item.to}
                   params={item.params}
                   onClick={() => setOpen(false)}
                   className="block py-3 text-sm font-bold uppercase tracking-wide text-foreground hover:text-primary"
+                  activeProps={{ className: "!text-primary" }}
                 >
                   {item.label}
                 </RLink>
@@ -600,80 +558,9 @@ function MobileNav({ menus, qaDocs }: { menus: typeof megaMenus; qaDocs: Array<{
   );
 }
 
-function UserMenu() {
-  const { isAuthenticated, user, isStaff, signOut } = useAuth();
-
-  if (!isAuthenticated) {
-    return (
-      <Button
-        asChild
-        variant="ghost"
-        size="sm"
-        className="hidden xl:inline-flex font-semibold uppercase tracking-wide text-xs"
-      >
-        <Link to="/login">
-          <UserIcon className="h-4 w-4 mr-1.5" />
-          Sign In
-        </Link>
-      </Button>
-    );
-  }
-
-  const label = user?.email?.split("@")[0] ?? "Account";
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="hidden xl:inline-flex font-semibold uppercase tracking-wide text-xs"
-        >
-          <UserIcon className="h-4 w-4 mr-1.5" />
-          {label}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="truncate">{user?.email}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link to="/profile">
-            <UserIcon className="h-4 w-4 mr-2" />
-            Profile
-          </Link>
-        </DropdownMenuItem>
-        {isStaff && (
-          <DropdownMenuItem asChild>
-            <Link to="/admin">
-              <ShieldCheck className="h-4 w-4 mr-2" />
-              Admin
-            </Link>
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem onClick={() => void signOut()}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
 export function Header() {
   const { menus, isLoading } = useDynamicMegaMenus();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [qaDocs, setQaDocs] = useState<Array<{ slug: string; category_name: string }>>([]);
-
-  useEffect(() => {
-    supabase
-      .from("qa_documents")
-      .select("slug, category_name")
-      .eq("status", "published")
-      .order("sort_order", { ascending: true })
-      .then(({ data }) => {
-        if (data) setQaDocs(data);
-      });
-  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -693,11 +580,11 @@ export function Header() {
   }, []);
 
   const headerContent = (
-    <div className="flex items-center gap-4 2xl:gap-6 py-4 px-5">
+    <div className="flex items-center gap-4 2xl:gap-6 px-5 h-[72px]">
       <Logo />
-      <DesktopNav menus={menus} isLoading={isLoading} qaDocs={qaDocs} />
+      <DesktopNav menus={menus} isLoading={isLoading} />
       <div className="flex items-center gap-2 ml-auto xl:ml-0">
-        <MobileNav menus={menus} qaDocs={qaDocs} />
+        <MobileNav menus={menus} />
       </div>
     </div>
   );
