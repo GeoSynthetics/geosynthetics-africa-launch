@@ -1,17 +1,17 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/projects.$slug";
-import { 
-  ChevronRight, 
-  MapPin, 
-  Download, 
-  Wrench, 
-  ShieldCheck, 
-  FileText, 
-  CheckCircle, 
-  Scale, 
-  Calendar, 
-  Briefcase, 
+import {
+  ChevronRight,
+  MapPin,
+  Download,
+  Wrench,
+  ShieldCheck,
+  FileText,
+  CheckCircle,
+  Scale,
+  Calendar,
+  Briefcase,
   Sparkles,
   ArrowRight,
   Shield,
@@ -122,7 +122,7 @@ export function ProjectDetailPage() {
     const handler = () => {
       const threshold = headerH + 80;
       let current = anchors[0]?.id || "brief";
-      
+
       for (const anchor of anchors) {
         const el = document.getElementById(anchor.id);
         if (!el) continue;
@@ -162,10 +162,10 @@ export function ProjectDetailPage() {
           {/* Stylized Africa silhouette */}
           <div className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[340px] h-[340px] opacity-15 pointer-events-none text-primary">
             <svg viewBox="0 0 320 380" fill="currentColor" className="w-full h-full">
-              <path d="M145 15c-25 5-50 20-65 40-20 25-30 55-25 85 5 20 20 40 35 50 10 10 15 20 10 35-5 15-10 35 0 50 10 15 30 20 50 25 15 5 25 10 30 25 5 15 15 20 30 20 15 0 25-10 30-25 5-25 0-50-10-70-10-25-20-50-15-75 5-25 20-45 15-75-5-30-30-55-60-65-15-5-30-5-25-20z"/>
+              <path d="M145 15c-25 5-50 20-65 40-20 25-30 55-25 85 5 20 20 40 35 50 10 10 15 20 10 35-5 15-10 35 0 50 10 15 30 20 50 25 15 5 25 10 30 25 5 15 15 20 30 20 15 0 25-10 30-25 5-25 0-50-10-70-10-25-20-50-15-75 5-25 20-45 15-75-5-30-30-55-60-65-15-5-30-5-25-20z" />
             </svg>
           </div>
-          
+
           <div className="container-page relative z-10">
             <nav className="text-[10px] font-bold uppercase tracking-widest text-white/50 flex items-center gap-2 mb-6">
               <Link to="/" className="hover:text-primary transition-colors">Home</Link>
@@ -223,13 +223,13 @@ export function ProjectDetailPage() {
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
           <div className="absolute right-[8%] top-1/2 -translate-y-1/2 w-[280px] h-[340px] opacity-20 pointer-events-none text-primary hidden md:block">
             <svg viewBox="0 0 320 400" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full">
-              <rect x="60" y="20" width="200" height="20" strokeWidth="2"/>
-              <rect x="80" y="40" width="160" height="240" strokeWidth="2"/>
-              <rect x="100" y="280" width="120" height="60" strokeWidth="2"/>
-              <line x1="160" y1="40" x2="160" y2="120" strokeWidth="3"/>
-              <line x1="160" y1="200" x2="160" y2="280" strokeWidth="3"/>
-              <rect x="130" y="120" width="60" height="80" fill="currentColor" fillOpacity="0.15"/>
-              <line x1="60" y1="350" x2="260" y2="350" strokeWidth="1"/>
+              <rect x="60" y="20" width="200" height="20" strokeWidth="2" />
+              <rect x="80" y="40" width="160" height="240" strokeWidth="2" />
+              <rect x="100" y="280" width="120" height="60" strokeWidth="2" />
+              <line x1="160" y1="40" x2="160" y2="120" strokeWidth="3" />
+              <line x1="160" y1="200" x2="160" y2="280" strokeWidth="3" />
+              <rect x="130" y="120" width="60" height="80" fill="currentColor" fillOpacity="0.15" />
+              <line x1="60" y1="350" x2="260" y2="350" strokeWidth="1" />
             </svg>
           </div>
 
@@ -341,14 +341,12 @@ export function ProjectDetailPage() {
       )}
 
       {/* ============ IN-PAGE STICKY SUB-NAVIGATION ============ */}
-      <nav 
+      <nav
         className="sticky z-20 bg-background border-b border-border shadow-sm"
         style={{ top: `${headerH}px` }}
       >
         <div className="container-page flex items-center overflow-x-auto h-12 no-scrollbar gap-1">
-          <div className="font-display text-xs md:text-sm font-extrabold uppercase tracking-wider text-primary border-r border-border pr-4 shrink-0">
-            Case Study Navigation ↓
-          </div>
+
           {anchors.map(a => (
             <button
               key={a.id}
@@ -363,12 +361,6 @@ export function ProjectDetailPage() {
               {a.label}
             </button>
           ))}
-          <button
-            onClick={() => scrollToSection("quote-req")}
-            className="ml-auto h-8 px-4 bg-primary text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shrink-0 rounded hover:bg-primary/95 transition-colors cursor-pointer"
-          >
-            ↓ Request Delivery Pack
-          </button>
         </div>
       </nav>
 
@@ -377,10 +369,10 @@ export function ProjectDetailPage() {
       {/* ========================================== */}
       <main className="bg-background">
         <div className="container-page py-12 grid lg:grid-cols-12 gap-10">
-          
+
           {/* LEFT CONTENT COLUMN */}
           <article className="lg:col-span-8 space-y-14">
-            
+
             {/* BRIEF (Shared across all templates) */}
             <section id="brief" className="scroll-mt-28">
               <h2 className="font-display text-2xl font-bold uppercase mb-4 text-foreground flex items-center gap-2">
@@ -446,7 +438,7 @@ export function ProjectDetailPage() {
                       <Compass className="h-5 w-5 text-primary" />
                       Multimodal Cross-Border Route Timeline
                     </h3>
-                    
+
                     <div className="relative border-l border-primary/45 ml-4 pl-6 space-y-8">
                       {project.logistics_details?.route_steps?.map((step: any, idx: number) => (
                         <div key={idx} className="relative group">
@@ -454,7 +446,7 @@ export function ProjectDetailPage() {
                           <span className="absolute -left-[31px] top-1.5 w-4 h-4 bg-primary rounded-full border border-foreground flex items-center justify-center text-[8px] font-black text-white shadow-md">
                             {idx + 1}
                           </span>
-                          
+
                           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-1">
                             <span className="text-[10px] font-bold uppercase text-primary tracking-wider">{step.stage}</span>
                             <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest">{step.duration}</span>
@@ -588,24 +580,24 @@ export function ProjectDetailPage() {
 
                   <div className="grid sm:grid-cols-3 gap-3">
                     {project.service_details?.findings?.map((find: any, idx: number) => (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         className={cn(
                           "bg-card border rounded-lg p-5 flex flex-col justify-between h-48",
                           find.status === "PASS" ? "border-l-4 border-l-emerald-600 border-border" :
-                          find.status === "ATTENTION" ? "border-l-4 border-l-amber-500 border-border" :
-                          "border-l-4 border-l-red-600 border-border"
+                            find.status === "ATTENTION" ? "border-l-4 border-l-amber-500 border-border" :
+                              "border-l-4 border-l-red-600 border-border"
                         )}
                       >
                         <div>
                           <div className="flex justify-between items-baseline mb-2">
                             <span className="text-[10px] font-mono text-muted-foreground">{find.area}</span>
-                            <span 
+                            <span
                               className={cn(
                                 "text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded text-white",
                                 find.status === "PASS" ? "bg-emerald-600" :
-                                find.status === "ATTENTION" ? "bg-amber-500" :
-                                "bg-red-600"
+                                  find.status === "ATTENTION" ? "bg-amber-500" :
+                                    "bg-red-600"
                               )}
                             >
                               {find.status}
@@ -677,7 +669,7 @@ export function ProjectDetailPage() {
                     <div className="absolute top-4 right-4 text-primary opacity-25">
                       <Award className="h-10 w-10" />
                     </div>
-                    
+
                     <h3 className="font-display text-white text-base font-bold uppercase mb-4 flex items-center gap-2">
                       <ShieldCheck className="h-5 w-5 text-primary" />
                       Field Quality Assurance (QA/QC) Checklist
@@ -709,7 +701,7 @@ export function ProjectDetailPage() {
                   {project.service_type === "supply_only" ? "Products Supplied" : "Products Used in Project"}
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {project.service_type === "supply_only" 
+                  {project.service_type === "supply_only"
                     ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
                     : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
                 </p>
@@ -717,7 +709,7 @@ export function ProjectDetailPage() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   {project.products_used?.map((p: any, idx: number) => {
                     const dbProd = p.productId ? dbProducts.find((db) => db.id === p.productId) : null;
-                    
+
                     if (dbProd) {
                       return (
                         <Link
@@ -883,10 +875,10 @@ export function ProjectDetailPage() {
             </section>
 
           </article>
-          
+
           {/* RIGHT SIDEBAR COLUMN */}
           <aside className="lg:col-span-4 space-y-6">
-            
+
             {/* Project Quick Facts Details */}
             <div className="bg-white border border-border rounded-xl p-5 shadow-sm">
               <h3 className="font-display text-xs font-extrabold uppercase tracking-widest text-muted-foreground border-b border-border pb-3 mb-4">
@@ -1028,7 +1020,7 @@ export function ProjectDetailPage() {
               <p className="text-xs text-white/90 leading-relaxed mb-6">
                 Consult with our civil engineers to specify, source, or inspect your geosynthetic composite systems.
               </p>
-              
+
               <div className="space-y-2">
                 <Button asChild size="sm" className="w-full bg-white hover:bg-white/95 text-foreground text-xs font-bold uppercase tracking-wider h-10 border-0">
                   <Link to="/contacts">Discuss Your Scope</Link>

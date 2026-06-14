@@ -5,10 +5,8 @@ import {
   MapPin,
   ChevronRight,
   Grid,
-  Map,
   List,
   ArrowUpDown,
-  Globe,
   ArrowRight,
 } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -59,7 +57,7 @@ export function ProjectsPage() {
 
   // --- Display States ---
   const [sortOption, setSortOption] = useState("recent"); // 'recent', 'scale', 'featured', 'country'
-  const [viewMode, setViewMode] = useState<"grid" | "map" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // --- Apply Sort ---
   const filteredCaseStudies = useMemo(() => {
@@ -179,15 +177,6 @@ export function ProjectsPage() {
               <Grid className="h-4 w-4" />
             </button>
             <button
-              onClick={() => setViewMode("map")}
-              className={cn(
-                "px-2.5 flex items-center justify-center border-r border-border text-muted-foreground",
-                viewMode === "map" && "bg-foreground text-background",
-              )}
-            >
-              <Map className="h-4 w-4" />
-            </button>
-            <button
               onClick={() => setViewMode("list")}
               className={cn(
                 "px-2.5 flex items-center justify-center text-muted-foreground",
@@ -219,21 +208,7 @@ export function ProjectsPage() {
       {/* ============ PROJECTS GRID ============ */}
       <section className="bg-background">
         <div className="container-page pb-20">
-          {viewMode === "map" ? (
-            <div className="border border-border rounded-xl p-20 text-center bg-surface/30 min-h-[400px] flex flex-col items-center justify-center">
-              <Globe className="h-10 w-10 text-primary mb-3 animate-pulse" />
-              <h3 className="font-display text-lg font-bold uppercase mb-1">
-                Pan-African Project Map
-              </h3>
-              <p className="text-xs text-muted-foreground max-w-sm mb-4">
-                Interactive spatial map of all 340+ projects currently loading. Select grid view to
-                explore list tiles.
-              </p>
-              <Button size="sm" onClick={() => setViewMode("grid")}>
-                Switch to Grid View
-              </Button>
-            </div>
-          ) : viewMode === "list" ? (
+          {viewMode === "list" ? (
             <div className="space-y-3">
               {filteredCaseStudies.map((cs) => (
                 <Link
