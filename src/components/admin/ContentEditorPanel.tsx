@@ -35,6 +35,11 @@ export function stripHtml(html: string | null | undefined): string {
     .trim();
 }
 
+export function truncateSpec(spec: string | null | undefined): string {
+  if (!spec) return "";
+  return spec.slice(0, 62);
+}
+
 type SectionKey = "products" | "applications" | "services" | "industries";
 type EditableNode = HierarchyItem | HierarchyChild;
 
@@ -772,10 +777,11 @@ export function ContentEditorPanel({
                       const f = [...(mega.featured ?? [])] as any[];
                       const rawDesc = prod.short_description ?? prod.product_categories?.name ?? "";
                       const cleanDesc = stripHtml(rawDesc);
+                      const baseSpec = prod.thickness_mm ? `${prod.thickness_mm}mm` : cleanDesc;
 
                       f[i] = {
                         label: prod.name,
-                        spec: prod.thickness_mm ? `${prod.thickness_mm}mm` : cleanDesc,
+                        spec: truncateSpec(baseSpec),
                         // Navigate to the individual catalogue product
                         to: "/catalogue/$slug",
                         params: {
@@ -804,17 +810,25 @@ export function ContentEditorPanel({
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
-                          Custom Preview Description
-                        </label>
+                        <div className="flex justify-between items-center mb-1">
+                          <label className="text-[10px] font-bold uppercase text-muted-foreground">
+                            Custom Preview Description
+                          </label>
+                          <span
+                            className={`text-[9px] font-mono ${(item.spec ?? "").length === 62 ? "text-destructive font-bold" : (item.spec ?? "").length > 50 ? "text-amber-500 font-semibold" : "text-muted-foreground"}`}
+                          >
+                            {(item.spec ?? "").length}/62
+                          </span>
+                        </div>
                         <Textarea
                           value={item.spec}
+                          maxLength={62}
                           onChange={(e) => {
                             const f = [...(mega.featured ?? [])] as any[];
-                            f[i] = { ...f[i], spec: e.target.value };
+                            f[i] = { ...f[i], spec: truncateSpec(e.target.value) };
                             setMega({ featured: f as any });
                           }}
-                          placeholder="Customize description (no raw HTML, max 2 lines recommended)"
+                          placeholder="Customize description (no raw HTML, max 62 characters)"
                           className="min-h-[60px] text-xs resize-y"
                         />
                       </div>
