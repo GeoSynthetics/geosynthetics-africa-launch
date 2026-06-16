@@ -4,6 +4,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { CookieConsent } from "@/components/site/CookieConsent";
@@ -87,6 +88,10 @@ function RootComponent() {
             <Outlet />
           </main>
           <Footer />
+          <div
+            onClick={() => toast.dismiss()}
+            className="toast-backdrop fixed inset-0 bg-black/60 backdrop-blur-[2px] z-[9990] opacity-0 pointer-events-none transition-all duration-500 cursor-pointer"
+          />
           <Toaster />
           <ScrollToTop />
           <CookieConsent />

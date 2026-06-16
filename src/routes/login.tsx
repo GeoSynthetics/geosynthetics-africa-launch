@@ -62,7 +62,7 @@ function LoginPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Signed in.");
+    toast.success("Signed in successfully.");
   };
 
   return (

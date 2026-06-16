@@ -209,3 +209,9 @@
     animation: auth-fade-in 0.5s ease-out both;
   }
 }
+
+/* Dim body and activate backdrop when a toast notification is active */
+body:has([data-sonner-toast]) .toast-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}

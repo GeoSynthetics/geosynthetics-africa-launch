@@ -90,9 +90,8 @@ function MobilePerksSlider() {
 
   return (
     <div
-      className={`md:hidden flex items-center gap-2 opacity-90 transition-all duration-500 min-w-0 ${
-        fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
-      }`}
+      className={`md:hidden flex items-center gap-2 opacity-90 transition-all duration-500 min-w-0 ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+        }`}
     >
       <Icon className="h-3.5 w-3.5 text-primary flex-shrink-0" />
       <span className="truncate">{item.label}</span>
@@ -114,7 +113,7 @@ export function TopBar() {
             </div>
           ))}
         </div>
-        
+
         <MobilePerksSlider />
 
         <div className="flex items-center gap-4">
