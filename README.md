@@ -179,7 +179,7 @@ Required Worker secrets:
 
 ## 8. Documentation
 
-Major changes are logged in [`/docs/lovable-docs.md`](./docs/lovable-docs.md). That file is **append-only and human-approved** — the AI agent must ask before writing to it. You can also find the docs at the url: [Geosynthetics Africa Docs](https://geosynthetics-africa-docs.vercel.app/).
+The .agents file is where the you AI agent will have a more guided instruction on what to do. You can also find the docs of this project at the url: [Geosynthetics Africa Docs](https://geosynthetics-africa-docs.vercel.app/).
 
 ---
 

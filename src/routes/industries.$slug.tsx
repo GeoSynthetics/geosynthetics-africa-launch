@@ -90,27 +90,72 @@ async function loadIndustryData(slug: string) {
   const staticInd = INDUSTRIES.find((i) => i.slug === slug);
   const label = matchedItem?.label ?? staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-  // Fetch dynamic Case Studies matching this industry (sector)
+  // Fetch dynamic Case Studies (prioritize nominated, fallback to sector matching)
   let caseStudies: any[] = [];
-  try {
-    const { data: casesData } = await supabase
-      .from("case_studies")
-      .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
-      .eq("sector", label)
-      .eq("status", "published")
-      .order("project_year", { ascending: false });
-    
-    if (casesData) {
-      caseStudies = casesData;
+  if (templateData?.caseStudies && templateData.caseStudies.length > 0) {
+    try {
+      const { data: casesData } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .in("id", templateData.caseStudies)
+        .eq("status", "published");
+      
+      if (casesData) {
+        // Sort case studies in the order they were nominated
+        const ordered = templateData.caseStudies
+          .map((id: string) => casesData.find((c) => c.id === id))
+          .filter(Boolean);
+        caseStudies = ordered;
+      }
+    } catch (e) {
+      console.error("Failed to load nominated case studies:", e);
     }
-  } catch (e) {
-    console.error("Failed to load industry case studies:", e);
+  } else {
+    try {
+      const { data: casesData } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .eq("sector", label)
+        .eq("status", "published")
+        .order("project_year", { ascending: false });
+      
+      if (casesData) {
+        caseStudies = casesData;
+      }
+    } catch (e) {
+      console.error("Failed to load industry case studies:", e);
+    }
+  }
+
+  // Fetch nominated Key Products
+  let keyProducts: any[] = [];
+  if (templateData?.keyProducts && templateData.keyProducts.length > 0) {
+    try {
+      const { data: prodsData } = await supabase
+        .from("products_public")
+        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .in("id", templateData.keyProducts);
+      
+      if (prodsData) {
+        // Order products in the order they were nominated
+        const ordered = templateData.keyProducts
+          .map((id: string) => prodsData.find((p) => p.id === id))
+          .filter(Boolean);
+        keyProducts = ordered.map((d: any) => ({
+          ...d,
+          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+        }));
+      }
+    } catch (e) {
+      console.error("Failed to load nominated key products:", e);
+    }
   }
 
   return {
     industry: { slug, label, icon: staticInd?.icon || "Factory" },
     templateData,
-    caseStudies
+    caseStudies,
+    keyProducts
   };
 }
 

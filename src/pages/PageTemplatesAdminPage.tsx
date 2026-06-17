@@ -39,6 +39,7 @@ import {
   StringListEditor,
   PairsEditor,
   PropertiesTableEditor,
+  TemplatesEditorSkeleton,
 } from "@/components/admin/TemplateEditorShared";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
@@ -465,12 +466,7 @@ export function PageTemplatesAdminPage() {
 
   // ─── Loading state ────────────────────────────────────────────────────────
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
-        <Loader2 className="h-5 w-5 animate-spin" />
-        <span className="text-sm font-medium">Loading page templates…</span>
-      </div>
-    );
+    return <TemplatesEditorSkeleton />;
   }
 
   return (

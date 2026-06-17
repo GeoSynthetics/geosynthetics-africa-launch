@@ -12,7 +12,7 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
-import { SectionHeading, FieldLabel, StringListEditor } from "./TemplateEditorShared";
+import { SectionHeading, FieldLabel, StringListEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
@@ -30,11 +30,13 @@ interface IndustryTemplate {
   heroImage: string;
   content: {
     challenges: string[];
-    applications: string[];
+    applications: any[];
     sections: unknown[];
   };
   topSellingProductId?: string;
   topSellingProductIds?: string[];
+  caseStudies?: string[];
+  keyProducts?: string[];
   seo: IndustrySeo | null;
 }
 
@@ -52,6 +54,8 @@ function blankTemplate(): IndustryTemplate {
     content: { challenges: [], applications: [], sections: [] },
     topSellingProductId: "",
     topSellingProductIds: [],
+    caseStudies: [],
+    keyProducts: [],
     seo: null,
   };
 }
@@ -83,6 +87,7 @@ export function IndustriesTemplatesEditor() {
   const [newSlug, setNewSlug] = useState("");
   const [showNewSlug, setShowNewSlug] = useState(false);
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [allCaseStudies, setAllCaseStudies] = useState<{ id: string; title: string; slug: string }[]>([]);
 
   // Load products from DB
   useEffect(() => {
@@ -94,6 +99,18 @@ export function IndustriesTemplatesEditor() {
       if (data) setAllProducts(data);
     }
     fetchProducts();
+  }, []);
+
+  // Load case studies from DB
+  useEffect(() => {
+    async function fetchCaseStudies() {
+      const { data } = await supabase
+        .from("case_studies")
+        .select("id, title, slug")
+        .order("title");
+      if (data) setAllCaseStudies(data);
+    }
+    fetchCaseStudies();
   }, []);
 
   // Dynamic list combining static mega-menu industries with custom ones from DB
@@ -304,19 +321,14 @@ export function IndustriesTemplatesEditor() {
       content: { ...prev.content, challenges },
     }));
 
-  const setApplications = (applications: string[]) =>
+  const setApplications = (applications: any[]) =>
     updateActive((prev) => ({
       ...prev,
       content: { ...prev.content, applications },
     }));
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
-        <Loader2 className="h-5 w-5 animate-spin" />
-        <span className="text-sm font-medium">Loading industry templates…</span>
-      </div>
-    );
+    return <TemplatesEditorSkeleton />;
   }
 
   return (
@@ -532,6 +544,7 @@ export function IndustriesTemplatesEditor() {
                     { id: "hero", label: "Hero" },
                     { id: "challenges", label: "Challenges" },
                     { id: "applications", label: "Applications" },
+                    { id: "case-studies", label: "Case Studies" },
                     { id: "products", label: "Products" },
                     { id: "seo", label: "SEO" },
                   ].map((t) => (
@@ -598,38 +611,119 @@ export function IndustriesTemplatesEditor() {
 
                   {/* ── APPLICATIONS ── */}
                   <TabsContent value="applications" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Key Applications</SectionHeading>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      These appear in the key applications grid section, showing how geosynthetics
-                      are used in this industry.
-                    </p>
-                    <StringListEditor
-                      label="Key Applications"
-                      hint="Each item is shown in the applications grid on the industry page"
-                      items={active.content?.applications ?? []}
-                      onChange={setApplications}
-                      placeholder="e.g. Heap Leach Pad Lining"
-                    />
+                    {(() => {
+                      const rawApps = active.content?.applications ?? [];
+                      const normalizedApps = rawApps.map((app: any) => {
+                        if (typeof app === "string") {
+                          return { heading: app, description: "", link: "" };
+                        }
+                        return {
+                          heading: app.heading || app.title || "",
+                          description: app.description || "",
+                          link: app.link || app.to || "",
+                        };
+                      });
+
+                      const updateApp = (index: number, patch: Partial<{ heading: string; description: string; link: string }>) => {
+                        const next = normalizedApps.map((app, idx) => {
+                          if (idx === index) return { ...app, ...patch };
+                          return app;
+                        });
+                        setApplications(next);
+                      };
+
+                      const addApp = () => {
+                        setApplications([...normalizedApps, { heading: "", description: "", link: "" }]);
+                      };
+
+                      const removeApp = (index: number) => {
+                        setApplications(normalizedApps.filter((_, idx) => idx !== index));
+                      };
+
+                      return (
+                        <>
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <SectionHeading>Key Applications</SectionHeading>
+                              <p className="text-xs text-muted-foreground">
+                                Configure structured key applications for this industry (heading, description, and link path).
+                              </p>
+                            </div>
+                            <Button size="sm" variant="outline" onClick={addApp} className="gap-1 text-xs shrink-0 cursor-pointer">
+                              <Plus className="h-3.5 w-3.5" /> Add Application
+                            </Button>
+                          </div>
+
+                          <div className="space-y-4 max-w-2xl">
+                            {normalizedApps.map((app, idx) => (
+                              <div key={idx} className="border border-border rounded-lg p-4 bg-background space-y-3 relative group">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeApp(idx)}
+                                  className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                                <div className="grid sm:grid-cols-2 gap-3">
+                                  <div>
+                                    <FieldLabel>Heading</FieldLabel>
+                                    <Input
+                                      value={app.heading}
+                                      onChange={e => updateApp(idx, { heading: e.target.value })}
+                                      placeholder="e.g. Heap Leach Pad Lining"
+                                      className="text-xs h-8"
+                                    />
+                                  </div>
+                                  <div>
+                                    <FieldLabel>Link Path (optional)</FieldLabel>
+                                    <Input
+                                      value={app.link}
+                                      onChange={e => updateApp(idx, { link: e.target.value })}
+                                      placeholder="e.g. /applications/mining-systems"
+                                      className="text-xs h-8"
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <FieldLabel>Description</FieldLabel>
+                                  <Textarea
+                                    value={app.description}
+                                    onChange={e => updateApp(idx, { description: e.target.value })}
+                                    placeholder="Provide a detailed description of this key application..."
+                                    className="text-xs min-h-[60px] resize-none"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+
+                            {normalizedApps.length === 0 && (
+                              <p className="text-xs text-muted-foreground italic py-4">No key applications configured.</p>
+                            )}
+                          </div>
+                        </>
+                      );
+                    })()}
                   </TabsContent>
 
-                  {/* ── PRODUCTS ── */}
-                  <TabsContent value="products" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Top Selling Products (Max 5)</SectionHeading>
+                  {/* ── CASE STUDIES ── */}
+                  <TabsContent value="case-studies" className="p-6 space-y-5 m-0">
+                    <SectionHeading>Featured Case Studies (Nominated)</SectionHeading>
                     <p className="text-xs text-muted-foreground mb-4">
-                      Select up to 5 top-selling products for this industry to show as a slider in the mega menu.
+                      Select and order specific case studies to feature on this industry page. If none are selected, the system will fall back to automatically matching by sector.
                     </p>
                     
                     <div className="space-y-2 max-w-md mb-4">
-                      {(active.topSellingProductIds ?? []).map((pId) => {
-                        const pData = allProducts.find(p => p.id === pId);
+                      {(active.caseStudies ?? []).map((csId) => {
+                        const csData = allCaseStudies.find(c => c.id === csId);
                         return (
-                          <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
-                            <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                          <div key={csId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                            <span>{csData ? csData.title : `Case Study ID: ${csId}`}</span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                              onClick={() => setField("caseStudies", (active.caseStudies ?? []).filter(id => id !== csId))}
                             >
                               ✕
                             </Button>
@@ -637,49 +731,148 @@ export function IndustriesTemplatesEditor() {
                         );
                       })}
                       
-                      {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
-                        <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
+                      {(!active.caseStudies || active.caseStudies.length === 0) && (
+                        <p className="text-xs text-muted-foreground italic">No specific case studies nominated (falling back to auto-matching by sector).</p>
                       )}
+                    </div>
 
-                      {/* Show legacy single product if present but no array exists */}
-                      {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
-                        <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                          <span className="flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                            {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                            onClick={() => setField("topSellingProductId", "")}
-                          >
-                            ✕
-                          </Button>
+                    <div className="max-w-md pt-2">
+                      <FieldLabel>Nominate a Case Study</FieldLabel>
+                      <select
+                        className="w-full text-xs border border-border bg-background rounded-lg p-2 h-9 text-foreground cursor-pointer focus:ring-1 focus:ring-primary focus:border-primary"
+                        value=""
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val) {
+                            const currentIds = active.caseStudies ?? [];
+                            if (!currentIds.includes(val)) {
+                              setField("caseStudies", [...currentIds, val]);
+                            }
+                          }
+                        }}
+                      >
+                        <option value="" disabled>-- Select a case study to nominate --</option>
+                        {allCaseStudies
+                          .filter(cs => !(active.caseStudies ?? []).includes(cs.id))
+                          .map(cs => (
+                            <option key={cs.id} value={cs.id}>{cs.title}</option>
+                          ))
+                        }
+                      </select>
+                    </div>
+                  </TabsContent>
+
+                  {/* ── PRODUCTS ── */}
+                  <TabsContent value="products" className="p-6 space-y-6 m-0">
+                    <div>
+                      <SectionHeading>Mega Menu Top Selling Products (Max 5)</SectionHeading>
+                      <p className="text-xs text-muted-foreground mb-4">
+                        Select up to 5 top-selling products for this industry to show as a slider in the mega menu dropdown.
+                      </p>
+                      
+                      <div className="space-y-2 max-w-md mb-4">
+                        {(active.topSellingProductIds ?? []).map((pId) => {
+                          const pData = allProducts.find(p => p.id === pId);
+                          return (
+                            <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                              <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                              >
+                                ✕
+                              </Button>
+                            </div>
+                          );
+                        })}
+                        
+                        {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
+                          <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
+                        )}
+
+                        {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
+                          <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                            <span className="flex items-center gap-1.5">
+                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                              {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                              onClick={() => setField("topSellingProductId", "")}
+                            >
+                              ✕
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
+                        <div className="max-w-md pt-2">
+                          <ProductSelector
+                            excludeIds={[
+                              ...(active.topSellingProductIds ?? []),
+                              ...(active.topSellingProductId ? [active.topSellingProductId] : [])
+                            ]}
+                            onSelect={(prod) => {
+                              let currentIds = [...(active.topSellingProductIds ?? [])];
+                              if (active.topSellingProductId && currentIds.length === 0) {
+                                currentIds.push(active.topSellingProductId);
+                              }
+                              setField("topSellingProductIds", [...currentIds, prod.id]);
+                              if (active.topSellingProductId) {
+                                setField("topSellingProductId", "");
+                              }
+                            }}
+                          />
                         </div>
                       )}
                     </div>
 
-                    {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
-                      <div className="max-w-md pt-2">
-                        <ProductSelector
-                          excludeIds={[
-                            ...(active.topSellingProductIds ?? []),
-                            ...(active.topSellingProductId ? [active.topSellingProductId] : [])
-                          ]}
-                          onSelect={(prod) => {
-                            let currentIds = [...(active.topSellingProductIds ?? [])];
-                            if (active.topSellingProductId && currentIds.length === 0) {
-                              currentIds.push(active.topSellingProductId);
-                            }
-                            setField("topSellingProductIds", [...currentIds, prod.id]);
-                            if (active.topSellingProductId) {
-                              setField("topSellingProductId", "");
-                            }
-                          }}
-                        />
+                    <div className="border-t border-border pt-6 mt-6">
+                      <SectionHeading>Industry Page Featured Products (3 to 5)</SectionHeading>
+                      <p className="text-xs text-muted-foreground mb-4">
+                        Nominate 3 to 5 products to display as a featured products block on the industry detail page.
+                      </p>
+                      
+                      <div className="space-y-2 max-w-md mb-4">
+                        {(active.keyProducts ?? []).map((pId) => {
+                          const pData = allProducts.find(p => p.id === pId);
+                          return (
+                            <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                              <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                onClick={() => setField("keyProducts", (active.keyProducts ?? []).filter(id => id !== pId))}
+                              >
+                                ✕
+                              </Button>
+                            </div>
+                          );
+                        })}
+                        
+                        {(!active.keyProducts || active.keyProducts.length === 0) && (
+                          <p className="text-xs text-muted-foreground italic">No featured products selected.</p>
+                        )}
                       </div>
-                    )}
+
+                      {(!active.keyProducts || active.keyProducts.length < 5) && (
+                        <div className="max-w-md pt-2">
+                          <ProductSelector
+                            excludeIds={active.keyProducts ?? []}
+                            onSelect={(prod) => {
+                              let currentIds = active.keyProducts ?? [];
+                              setField("keyProducts", [...currentIds, prod.id]);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </TabsContent>
 
                   {/* ── SEO ── */}

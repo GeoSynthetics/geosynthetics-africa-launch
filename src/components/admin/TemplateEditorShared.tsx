@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImagePicker } from "./ImagePicker";
@@ -661,3 +662,81 @@ export function TagsInput({
     </div>
   );
 }
+
+export function TemplatesEditorSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border">
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-64" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <Skeleton className="h-10 w-28" />
+      </div>
+
+      {/* Main Split Layout */}
+      <div className="flex gap-0 border border-border rounded-xl overflow-hidden min-h-[780px] bg-card">
+        {/* Left sidebar */}
+        <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
+          <div className="px-4 py-3 border-b border-border">
+            <Skeleton className="h-3 w-32" />
+          </div>
+          <div className="p-3 border-b border-border">
+            <Skeleton className="h-8 w-full" />
+          </div>
+          <div className="px-3 py-2 border-b border-border">
+            <Skeleton className="h-8 w-full" />
+          </div>
+          <div className="flex-1 p-2 space-y-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="p-2 space-y-2">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right panel */}
+        <div className="flex-1 flex flex-col">
+          {/* Active Header Bar */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface/30">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-3.5 w-60" />
+            </div>
+            <div className="flex gap-2">
+              <Skeleton className="h-8 w-20" />
+              <Skeleton className="h-8 w-20" />
+            </div>
+          </div>
+
+          {/* Subpage editing tabs */}
+          <div className="px-6 border-b border-border bg-surface/10 py-3 flex gap-2 overflow-x-auto">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-7 w-20 shrink-0" />
+            ))}
+          </div>
+
+          {/* Tab content editor */}
+          <div className="p-6 space-y-6 flex-1">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-32 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+

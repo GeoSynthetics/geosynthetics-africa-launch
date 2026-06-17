@@ -7,7 +7,7 @@ import { IconPicker } from "./IconPicker";
 import { Textarea } from "@/components/ui/textarea";
 import {
   FieldLabel, TagsInput, useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, ListEditorHeader,
-  SectionHeading, StringListEditor, PairsEditor
+  SectionHeading, StringListEditor, PairsEditor, TemplatesEditorSkeleton
 } from "./TemplateEditorShared";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -436,12 +436,7 @@ export function QATemplatesEditor() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
-        <Loader2 className="h-5 w-5 animate-spin" />
-        <span className="text-sm font-medium">Loading templates…</span>
-      </div>
-    );
+    return <TemplatesEditorSkeleton />;
   }
 
   const isLanding = activeSlug === "__landing";

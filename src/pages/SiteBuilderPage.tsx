@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Save, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { HierarchySection, HierarchyItem, HierarchyChild } from "@/types/hierarchy";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { HierarchyTree } from "@/components/admin/HierarchyTree";
@@ -142,8 +143,55 @@ export function SiteBuilderPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-muted-foreground gap-3">
-        <Loader2 className="h-5 w-5 animate-spin" /> Loading site builder…
+      <div className="h-full flex flex-col animate-pulse">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0">
+          <div className="space-y-2">
+            <Skeleton className="h-7 w-40" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        </div>
+
+        {/* Tabs list */}
+        <div className="px-6 pt-3 pb-2 bg-transparent border-b border-border flex gap-4 shrink-0">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+
+        {/* Main content grid */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Tree sidebar */}
+          <div className="w-72 border-r border-border flex flex-col bg-surface/30 shrink-0 p-4 space-y-4">
+            <Skeleton className="h-4 w-36" />
+            <div className="space-y-3 pt-2">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-4 rounded-sm" />
+                  <Skeleton className="h-4 w-44" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Editor */}
+          <div className="flex-1 p-6 space-y-6">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-24 w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

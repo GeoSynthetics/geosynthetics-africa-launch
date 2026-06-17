@@ -19,7 +19,7 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
-import { SectionHeading, FieldLabel, StringListEditor, PairsEditor } from "./TemplateEditorShared";
+import { SectionHeading, FieldLabel, StringListEditor, PairsEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
@@ -464,12 +464,7 @@ export function ApplicationsTemplatesEditor() {
     }));
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64 gap-3 text-muted-foreground">
-        <Loader2 className="h-5 w-5 animate-spin" />
-        <span className="text-sm font-medium">Loading application templates…</span>
-      </div>
-    );
+    return <TemplatesEditorSkeleton />;
   }
 
   return (

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Save, Loader2, BarChart2, Tag, ShieldAlert } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Module-level in-memory cache to keep data across route transitions / remounts
 let trackingConfigCache: { googleAnalyticsId?: string; googleTagManagerId?: string } | null = null;
@@ -72,8 +73,63 @@ export function TrackingBuilderTab() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-muted-foreground gap-3">
-        <Loader2 className="h-5 w-5 animate-spin" /> Loading tracking settings…
+      <div className="p-6 max-w-4xl mx-auto space-y-6 animate-pulse">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-64" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* GA4 Card */}
+          <div className="rounded-xl border border-border bg-card/50 p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-8 w-8 rounded-lg" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+            </div>
+            <div className="space-y-2 pt-2">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-9 w-full" />
+              <Skeleton className="h-3 w-4/5" />
+            </div>
+          </div>
+
+          {/* GTM Card */}
+          <div className="rounded-xl border border-border bg-card/50 p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-8 w-8 rounded-lg" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-5 w-36" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+            </div>
+            <div className="space-y-2 pt-2">
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-9 w-full" />
+              <Skeleton className="h-3 w-4/5" />
+            </div>
+          </div>
+        </div>
+
+        {/* Consent compliance note */}
+        <div className="rounded-xl border border-border bg-card/50 p-5">
+          <div className="flex gap-4">
+            <Skeleton className="h-6 w-6 rounded-full shrink-0" />
+            <div className="space-y-2 flex-1">
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-3.5 w-full" />
+              <Skeleton className="h-3.5 w-5/6" />
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-2">
+          <Skeleton className="h-10 w-56" />
+        </div>
       </div>
     );
   }

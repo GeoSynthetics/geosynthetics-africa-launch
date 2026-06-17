@@ -667,7 +667,51 @@ export async function getProductPageContent(
     }
   }
 
-  // Dynamic fallback for the 8 parent product categories if not found in custom templates
+  // Fetch active hierarchy configuration to find matching parent item dynamically
+  try {
+    const { data: hierarchyData } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "hierarchy_products")
+      .maybeSingle();
+
+    if (hierarchyData?.value) {
+      const hierarchy = hierarchyData.value as any;
+      if (hierarchy.items && Array.isArray(hierarchy.items)) {
+        const matchedItem = hierarchy.items.find(
+          (item: any) => item.slug === slug || item.id === slug
+        );
+        if (matchedItem) {
+          // Use the item ID to resolve the canonical fallback category (e.g. "geomembranes")
+          const fallback = generateParentCategoryFallback(matchedItem.id || slug);
+          const custom = matchedItem.pageContent || {};
+          return {
+            ...fallback,
+            label: matchedItem.label || fallback.label,
+            heroImage: custom.heroImage || fallback.heroImage,
+            subtitle: custom.subtitle || fallback.subtitle,
+            description: (custom.description && custom.description.length > 0) ? custom.description : fallback.description,
+            features: (custom.features && custom.features.length > 0) ? custom.features : fallback.features,
+            technicalHighlights: custom.technicalHighlights || fallback.technicalHighlights,
+            propertiesTable: custom.propertiesTable || fallback.propertiesTable,
+            types: custom.types || fallback.types,
+            benefits: custom.benefits || fallback.benefits,
+            faqs: custom.faqs || fallback.faqs,
+            installationSpecs: custom.installationSpecs || fallback.installationSpecs,
+            projectReferences: custom.projectReferences || fallback.projectReferences,
+            popularProducts: custom.popularProducts || fallback.popularProducts,
+            applications: custom.applications || fallback.applications,
+            industries: custom.industries || fallback.industries,
+            seo: custom.seo || fallback.seo,
+          } as ProductPageContent;
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[getProductPageContent] Failed to fetch or merge hierarchy customization:", err);
+  }
+
+  // Static fallback if hierarchy check failed/skipped but is one of canonical parent category IDs
   const parentCategories = [
     "geomembranes",
     "geotextiles",
@@ -680,51 +724,9 @@ export async function getProductPageContent(
   ];
 
   if (parentCategories.includes(slug)) {
-    const fallback = generateParentCategoryFallback(slug);
-    
-    try {
-      const { data: hierarchyData } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "hierarchy_products")
-        .maybeSingle();
-
-      if (hierarchyData?.value) {
-        const hierarchy = hierarchyData.value as any;
-        if (hierarchy.items && Array.isArray(hierarchy.items)) {
-          const matchedItem = hierarchy.items.find(
-            (item: any) => item.slug === slug || item.id === slug
-          );
-          if (matchedItem) {
-            const custom = matchedItem.pageContent || {};
-            return {
-              ...fallback,
-              label: matchedItem.label || fallback.label,
-              heroImage: custom.heroImage || fallback.heroImage,
-              subtitle: custom.subtitle || fallback.subtitle,
-              description: (custom.description && custom.description.length > 0) ? custom.description : fallback.description,
-              features: (custom.features && custom.features.length > 0) ? custom.features : fallback.features,
-              technicalHighlights: custom.technicalHighlights || fallback.technicalHighlights,
-              propertiesTable: custom.propertiesTable || fallback.propertiesTable,
-              types: custom.types || fallback.types,
-              benefits: custom.benefits || fallback.benefits,
-              faqs: custom.faqs || fallback.faqs,
-              installationSpecs: custom.installationSpecs || fallback.installationSpecs,
-              projectReferences: custom.projectReferences || fallback.projectReferences,
-              popularProducts: custom.popularProducts || fallback.popularProducts,
-              applications: custom.applications || fallback.applications,
-              industries: custom.industries || fallback.industries,
-              seo: custom.seo || fallback.seo,
-            } as ProductPageContent;
-          }
-        }
-      }
-    } catch (err) {
-      console.error("[getProductPageContent] Failed to fetch or merge hierarchy customization:", err);
-    }
-
-    return fallback;
+    return generateParentCategoryFallback(slug);
   }
 
   return null;
 }
+

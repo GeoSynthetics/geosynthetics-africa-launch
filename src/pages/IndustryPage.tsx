@@ -7,7 +7,7 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/industries.$slug";
 
 export function IndustryPage() {
-  const { industry, templateData, caseStudies = [] } = Route.useLoaderData();
+  const { industry, templateData, caseStudies = [], keyProducts = [] } = Route.useLoaderData();
   
   const title = templateData?.title || industry.label;
   const description = templateData?.description || `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
@@ -66,12 +66,34 @@ export function IndustryPage() {
             </div>
 
             <h2 className="font-display text-2xl font-bold uppercase mt-12 mb-6">Key Applications in {title}</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {applications.map((app: string, i: number) => (
-                <div key={i} className="border-l-2 border-primary pl-4 py-2">
-                  <div className="font-bold uppercase text-foreground">{app}</div>
-                </div>
-              ))}
+            <div className="grid sm:grid-cols-2 gap-6">
+              {applications.map((app: any, i: number) => {
+                if (typeof app === "string") {
+                  return (
+                    <div key={i} className="border-l-2 border-primary pl-4 py-2 bg-card/40 rounded-r">
+                      <div className="font-bold uppercase text-foreground">{app}</div>
+                    </div>
+                  );
+                }
+
+                const heading = app.heading || app.title || "";
+                const desc = app.description || "";
+                const link = app.link || app.to || "";
+
+                return (
+                  <div key={i} className="rounded border border-border bg-card p-6 flex flex-col justify-between hover:border-primary transition duration-200">
+                    <div>
+                      <h3 className="font-display text-base font-bold uppercase text-foreground mb-2">{heading}</h3>
+                      {desc && <p className="text-xs text-muted-foreground leading-relaxed mb-4">{desc}</p>}
+                    </div>
+                    {link && (
+                      <Link to={link as any} className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 mt-auto">
+                        Learn More <ChevronRight className="h-3.5 w-3.5" />
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             
             {/* Render any additional custom sections defined in the CMS */}
@@ -81,6 +103,57 @@ export function IndustryPage() {
                 <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: section.body }} />
               </div>
             ))}
+
+            {/* Nominated Key Products block */}
+            {keyProducts && keyProducts.length > 0 && (
+              <div className="mt-16 pt-12 border-t border-border">
+                <h2 className="font-display text-2xl font-bold uppercase mb-8 flex items-center">
+                  <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                  Featured Products
+                </h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {keyProducts.map((p: any, idx: number) => (
+                    <Link
+                      key={idx}
+                      to="/catalogue/$slug"
+                      params={{ slug: p.slug }}
+                      className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-primary transition duration-200"
+                    >
+                      <div className="aspect-[4/3] relative overflow-hidden bg-surface">
+                        {p.image_url ? (
+                          <img
+                            src={p.image_url}
+                            alt={p.name}
+                            loading="lazy"
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                            <Factory className="h-8 w-8" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col font-sans">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                          {p.product_categories?.name || "Product"}
+                        </span>
+                        <h3 className="font-display text-sm font-bold uppercase leading-tight line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                          {p.name}
+                        </h3>
+                        {p.short_description && (
+                          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-4">
+                            {p.short_description}
+                          </p>
+                        )}
+                        <span className="text-xs font-bold uppercase tracking-wider text-primary mt-auto flex items-center gap-1">
+                          View Product <ChevronRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Featured Projects section in Industry Page */}
             {caseStudies && caseStudies.length > 0 && (
