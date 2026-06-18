@@ -139,16 +139,27 @@ export function MediaCenterPage() {
   const loadFiles = async (isFallback: boolean) => {
     setLoading(true);
     try {
-      // Load Media Vault Files
       const vaultBucket = isFallback ? "product-images" : "media-center";
       const vaultPath = isFallback ? "media-center" : "";
 
-      const { data: vaultData, error: vaultError } = await supabase.storage
-        .from(vaultBucket)
-        .list(vaultPath, {
-          limit: 100,
-          sortBy: { column: "created_at", order: "desc" },
-        });
+      // Load both vaults in parallel
+      const [vaultRes, prodRes] = await Promise.all([
+        supabase.storage
+          .from(vaultBucket)
+          .list(vaultPath, {
+            limit: 100,
+            sortBy: { column: "created_at", order: "desc" },
+          }),
+        supabase.storage
+          .from("product-images")
+          .list("", {
+            limit: 100,
+            sortBy: { column: "created_at", order: "desc" },
+          }),
+      ]);
+
+      const { data: vaultData, error: vaultError } = vaultRes;
+      const { data: prodData, error: prodError } = prodRes;
 
       if (vaultError) {
         toast.error(`Failed to load Media Vault: ${vaultError.message}`);
@@ -170,14 +181,6 @@ export function MediaCenterPage() {
           });
         setVaultFiles(formattedVault);
       }
-
-      // Load Product Catalog Files
-      const { data: prodData, error: prodError } = await supabase.storage
-        .from("product-images")
-        .list("", {
-          limit: 100,
-          sortBy: { column: "created_at", order: "desc" },
-        });
 
       if (prodError) {
         toast.error(`Failed to load Product Images: ${prodError.message}`);

@@ -6,6 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -17,6 +25,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const SORT_OPTIONS = [
   { value: "relevant", label: "Relevant" },
@@ -37,6 +46,8 @@ interface CatalogueSearch {
   cats: string[];
   mans: string[];
   sort: SortValue;
+  instock?: boolean;
+  onsale?: boolean;
 }
 
 function parseList(v: unknown): string[] {
@@ -53,6 +64,8 @@ export const Route = createFileRoute("/catalogue/")({
       cats: parseList(raw.cats),
       mans: parseList(raw.mans),
       sort,
+      instock: raw.instock === true || raw.instock === "true",
+      onsale: raw.onsale === true || raw.onsale === "true",
     };
   },
   head: () => ({
@@ -102,6 +115,8 @@ function CataloguePage() {
   const selectedMans = search.mans;
   const sort = search.sort;
   const q = search.q;
+  const instock = search.instock ?? false;
+  const onsale = search.onsale ?? false;
 
   const [products, setProducts] = useState<CatalogueProduct[]>([]);
   const [categories, setCategories] = useState<FilterOption[]>([]);
@@ -157,6 +172,8 @@ function CataloguePage() {
           if (Array.isArray(next.cats) && next.cats.length === 0) delete next.cats;
           if (Array.isArray(next.mans) && next.mans.length === 0) delete next.mans;
           if (next.sort === "relevant") delete next.sort;
+          if (next.instock === false) delete next.instock;
+          if (next.onsale === false) delete next.onsale;
           return next as never;
         },
       });
@@ -221,6 +238,8 @@ function CataloguePage() {
       }
       if (selectedCats.length > 0) query = query.in("category_id", selectedCats);
       if (selectedMans.length > 0) query = query.in("manufacturer_id", selectedMans);
+      if (instock) query = query.gt("stock_quantity", 0);
+      if (onsale && isAuthenticated) query = query.not("sale_price", "is", null);
 
       const { data, error, count } = await query;
       if (reqId !== requestIdRef.current) return;
@@ -239,7 +258,7 @@ function CataloguePage() {
       setLoading(false);
       setInitialLoad(false);
     },
-    [q, selectedCats, selectedMans, sort],
+    [q, selectedCats, selectedMans, sort, instock, onsale, isAuthenticated],
   );
 
   // Reset and reload when filters/sort change
@@ -248,7 +267,7 @@ function CataloguePage() {
     setHasMore(true);
     void fetchPage(0, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, sort, selectedCats.join(","), selectedMans.join(",")]);
+  }, [q, sort, selectedCats.join(","), selectedMans.join(","), instock, onsale]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -284,10 +303,15 @@ function CataloguePage() {
 
   const clearAll = () => {
     setSearchInput("");
-    updateSearch({ q: "", cats: [], mans: [] });
+    updateSearch({ q: "", cats: [], mans: [], instock: false, onsale: false });
   };
 
-  const activeFilterCount = selectedCats.length + selectedMans.length + (q ? 1 : 0);
+  const activeFilterCount =
+    selectedCats.length +
+    selectedMans.length +
+    (q ? 1 : 0) +
+    (instock ? 1 : 0) +
+    (onsale ? 1 : 0);
 
   return (
     <>
@@ -311,51 +335,235 @@ function CataloguePage() {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search products, SKU, descriptions…"
-                className="pl-10 h-12"
+                className="pl-10 pr-10 h-12 w-full rounded-lg border-2 border-border focus:border-primary focus:ring-0 shadow-sm transition-all bg-card"
               />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchInput("");
+                    updateSearch({ q: "" });
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
-            <Button type="submit" size="lg" className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide">
+            <Button type="submit" size="lg" className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide h-12">
               Search
             </Button>
           </form>
+
+          {!initialLoad && (q || activeFilterCount > 0) && (
+            <div className="text-xs text-muted-foreground mt-3 font-medium flex items-center gap-1.5 animate-auth-fade-in">
+              <span>Found</span>
+              <span className="text-foreground font-bold px-1.5 py-0.5 rounded bg-muted/60">
+                {products.length}
+              </span>
+              <span>material{products.length === 1 ? "" : "s"}</span>
+              {q && (
+                <>
+                  <span>matching</span>
+                  <span className="text-foreground font-bold italic">"{q}"</span>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="container-page pb-20 grid lg:grid-cols-12 gap-8">
           <aside className="lg:col-span-3">
-            <div className="rounded border border-border bg-card p-5 lg:sticky lg:top-24">
+            <div className="rounded-lg border border-border bg-card p-5 lg:sticky lg:top-24 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <SlidersHorizontal className="h-4 w-4 text-primary" />
-                <h3 className="font-display text-sm font-bold uppercase">Filters</h3>
+                <h3 className="font-display text-sm font-bold uppercase tracking-wider">Filters</h3>
                 {activeFilterCount > 0 && (
                   <button
                     type="button"
                     onClick={clearAll}
-                    className="ml-auto text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1"
+                    className="ml-auto text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1 font-semibold transition-colors"
                   >
                     <X className="h-3 w-3" /> Clear ({activeFilterCount})
                   </button>
                 )}
               </div>
 
-              <FilterGroup
-                title="Category"
-                options={categories}
-                selected={new Set(selectedCats)}
-                onToggle={toggleCat}
-              />
+              <Accordion type="multiple" defaultValue={["category", "manufacturer", "status"]} className="w-full space-y-1">
+                {/* Status / Quick Toggles */}
+                <AccordionItem value="status" className="border-b border-border">
+                  <AccordionTrigger className="hover:no-underline py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
+                    Availability & Offers
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2 pb-4">
+                    <div className="space-y-4">
+                      {/* In Stock Toggle */}
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="instock-toggle" className="text-sm cursor-pointer select-none text-muted-foreground hover:text-foreground font-medium transition-colors">
+                          In Stock Only
+                        </label>
+                        <Switch
+                          id="instock-toggle"
+                          checked={instock}
+                          onCheckedChange={(checked) => updateSearch({ instock: checked })}
+                        />
+                      </div>
 
-              <div className="my-5 border-t border-border" />
+                      {/* On Sale Toggle */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-0.5">
+                          <label 
+                            htmlFor="onsale-toggle" 
+                            className={cn(
+                              "text-sm select-none font-medium transition-colors",
+                              isAuthenticated ? "text-muted-foreground hover:text-foreground cursor-pointer" : "text-muted-foreground/50 cursor-not-allowed"
+                            )}
+                          >
+                            On Sale Only
+                          </label>
+                          {!isAuthenticated && (
+                            <span className="text-[10px] text-muted-foreground/60 font-normal">
+                              (Sign in to view)
+                            </span>
+                          )}
+                        </div>
+                        <Switch
+                          id="onsale-toggle"
+                          disabled={!isAuthenticated}
+                          checked={onsale}
+                          onCheckedChange={(checked) => updateSearch({ onsale: checked })}
+                        />
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-              <FilterGroup
-                title="Manufacturer"
-                options={manufacturers}
-                selected={new Set(selectedMans)}
-                onToggle={toggleMan}
-              />
+                {/* Category Filter */}
+                <AccordionItem value="category" className="border-b border-border">
+                  <AccordionTrigger className="hover:no-underline py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
+                    Category
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2">
+                    <FilterGroup
+                      options={categories}
+                      selected={new Set(selectedCats)}
+                      onToggle={toggleCat}
+                      placeholder="Search categories..."
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Manufacturer Filter */}
+                <AccordionItem value="manufacturer" className="border-b-0">
+                  <AccordionTrigger className="hover:no-underline py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
+                    Manufacturer
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2">
+                    <FilterGroup
+                      options={manufacturers}
+                      selected={new Set(selectedMans)}
+                      onToggle={toggleMan}
+                      placeholder="Search manufacturers..."
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </aside>
 
           <div className="lg:col-span-9">
+            {/* Active Filters Bar */}
+            {activeFilterCount > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-6 p-3 rounded-xl bg-surface/50 border border-border animate-auth-fade-in">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-1">
+                  Active Filters:
+                </span>
+                
+                {q && (
+                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                    Search: "{q}"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchInput("");
+                        updateSearch({ q: "" });
+                      }}
+                      className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+
+                {selectedCats.map((catId) => {
+                  const catName = categories.find((c) => c.id === catId)?.name || "Category";
+                  return (
+                    <Badge key={catId} variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                      {catName}
+                      <button
+                        type="button"
+                        onClick={() => toggleCat(catId)}
+                        className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  );
+                })}
+
+                {selectedMans.map((manId) => {
+                  const manName = manufacturers.find((m) => m.id === manId)?.name || "Manufacturer";
+                  return (
+                    <Badge key={manId} variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                      {manName}
+                      <button
+                        type="button"
+                        onClick={() => toggleMan(manId)}
+                        className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  );
+                })}
+
+                {instock && (
+                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                    In Stock Only
+                    <button
+                      type="button"
+                      onClick={() => updateSearch({ instock: false })}
+                      className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+
+                {onsale && (
+                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                    On Sale Only
+                    <button
+                      type="button"
+                      onClick={() => updateSearch({ onsale: false })}
+                      className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearAll}
+                  className="h-7 px-2.5 text-xs font-bold text-primary hover:text-primary-hover uppercase tracking-wider ml-auto bg-transparent hover:bg-muted/50 rounded-lg transition-all"
+                >
+                  Clear All
+                </Button>
+              </div>
+            )}
+
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div className="text-xs text-muted-foreground">
                 {initialLoad ? "Loading…" : `Showing ${products.length} product${products.length === 1 ? "" : "s"}`}
@@ -433,49 +641,84 @@ function CataloguePage() {
 }
 
 function FilterGroup({
-  title,
   options,
   selected,
   onToggle,
+  placeholder,
 }: {
-  title: string;
   options: FilterOption[];
   selected: Set<string>;
   onToggle: (id: string) => void;
+  placeholder?: string;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const visible = expanded ? options : options.slice(0, 8);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredOptions = options.filter((o) =>
+    o.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const visible = expanded ? filteredOptions : filteredOptions.slice(0, 8);
+
   return (
-    <div>
-      <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
-        {title}
-      </div>
-      {options.length === 0 ? (
-        <div className="text-xs text-muted-foreground italic">None available</div>
+    <div className="flex flex-col">
+      {options.length > 8 && (
+        <div className="relative mb-3.5 mt-1">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={placeholder || "Filter list..."}
+            className="pl-8.5 pr-8 h-8.5 text-xs rounded-lg border border-input bg-muted/20 focus:bg-card focus:border-primary focus:ring-0 shadow-none"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
+        </div>
+      )}
+
+      {filteredOptions.length === 0 ? (
+        <div className="text-xs text-muted-foreground italic py-2">
+          {searchQuery ? "No matching options" : "None available"}
+        </div>
       ) : (
-        <ul className="space-y-1.5 text-sm">
+        <ul className="space-y-2 text-sm max-h-[300px] overflow-y-auto pr-1">
           {visible.map((o) => (
-            <li key={o.id}>
-              <label className="flex items-center gap-2 cursor-pointer hover:text-primary">
-                <input
-                  type="checkbox"
-                  className="rounded border-border"
-                  checked={selected.has(o.id)}
-                  onChange={() => onToggle(o.id)}
-                />
-                <span>{o.name}</span>
+            <li key={o.id} className="flex items-center space-x-2.5 py-0.5">
+              <Checkbox
+                id={`filter-${o.id}`}
+                checked={selected.has(o.id)}
+                onCheckedChange={() => onToggle(o.id)}
+                className="border-border hover:border-primary data-[state=checked]:border-primary transition-colors"
+              />
+              <label
+                htmlFor={`filter-${o.id}`}
+                className={cn(
+                  "text-sm font-medium leading-none cursor-pointer select-none transition-colors hover:text-primary-hover flex-1",
+                  selected.has(o.id) ? "text-foreground font-bold" : "text-muted-foreground"
+                )}
+              >
+                {o.name}
               </label>
             </li>
           ))}
         </ul>
       )}
-      {options.length > 8 && (
+
+      {filteredOptions.length > 8 && (
         <button
           type="button"
           onClick={() => setExpanded((s) => !s)}
-          className="mt-2 text-xs text-primary hover:underline"
+          className="mt-2 text-xs font-bold text-primary hover:text-primary-hover hover:underline inline-flex items-center w-fit transition-colors py-1"
         >
-          {expanded ? "Show less" : `Show ${options.length - 8} more`}
+          {expanded ? "Show less" : `Show ${filteredOptions.length - 8} more`}
         </button>
       )}
     </div>
@@ -490,7 +733,7 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
     <Link
       to="/catalogue/$slug"
       params={{ slug: p.slug }}
-      className="group rounded border border-border bg-card overflow-hidden hover:border-primary transition flex flex-col"
+      className="group rounded-xl border border-border bg-card overflow-hidden hover:border-primary hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col"
       aria-label={p.name}
     >
       <div className="aspect-[4/3] overflow-hidden bg-surface relative">
@@ -507,51 +750,53 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
           </div>
         )}
         {onSale && (
-          <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">Sale</Badge>
+          <Badge className="absolute top-2.5 left-2.5 bg-primary text-primary-foreground font-bold uppercase tracking-wider text-[10px] shadow-sm">
+            Sale
+          </Badge>
         )}
         {!inStock && (
-          <Badge variant="secondary" className="absolute top-2 right-2">
+          <Badge variant="secondary" className="absolute top-2.5 right-2.5 font-bold uppercase tracking-wider text-[10px] shadow-sm">
             Out of stock
           </Badge>
         )}
       </div>
-      <div className="p-4 flex flex-col gap-2 flex-1">
-        <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+      <div className="p-5 flex flex-col gap-2.5 flex-1">
+        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
           {p.product_categories?.name && <span>{p.product_categories.name}</span>}
           {p.manufacturers?.name && (
             <>
-              <span>•</span>
+              <span className="text-muted-foreground/50">•</span>
               <span>{p.manufacturers.name}</span>
             </>
           )}
         </div>
-        <h3 className="font-display text-sm font-bold uppercase leading-tight line-clamp-2">
+        <h3 className="font-display text-base font-bold uppercase leading-tight line-clamp-2 group-hover:text-primary transition-colors">
           {p.name}
         </h3>
         {p.short_description && (
-          <p className="text-xs text-muted-foreground line-clamp-2">{p.short_description}</p>
+          <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed">{p.short_description}</p>
         )}
-        {p.sku && <div className="text-[10px] text-muted-foreground mt-auto">SKU: {p.sku}</div>}
+        {p.sku && <div className="text-[10px] text-muted-foreground/60 mt-auto font-mono">SKU: {p.sku}</div>}
         {isAuthenticated ? (
           (p.price !== null || p.sale_price !== null) && (
             <div className="flex items-baseline gap-2 mt-1">
               {onSale ? (
                 <>
-                  <span className="font-bold text-primary">{formatZAR(p.sale_price!)}</span>
-                  <span className="text-xs text-muted-foreground line-through">
+                  <span className="font-bold text-primary text-base">{formatZAR(p.sale_price!)}</span>
+                  <span className="text-xs text-muted-foreground/60 line-through">
                     {formatZAR(p.price!)}
                   </span>
                 </>
               ) : (
                 p.price !== null && (
-                  <span className="font-bold text-foreground">{formatZAR(p.price)}</span>
+                  <span className="font-bold text-foreground text-base">{formatZAR(p.price)}</span>
                 )
               )}
             </div>
           )
         ) : (
-          <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
-            <Link to="/login" className="text-primary font-bold hover:underline">Sign in</Link> to view pricing
+          <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/75">
+            <Link to="/login" className="text-primary hover:text-primary-hover hover:underline">Sign in</Link> to view pricing
           </div>
         )}
       </div>

@@ -49,7 +49,7 @@ const MANUAL_MAPPINGS: Record<string, string> = {
   "/gse-hdpe-liner-installer-africa/": "/services/installation",
   "/mining-tsf-pcd-hdpe-geomembrane-lining-installer-africa/": "/services/installation",
   "/channel-lining-gccm-installation-africa/": "/services/installation",
-  
+
   // QA documents
   "/quality-assurance/gse-quality-assurance/": "/quality-assurance/gse-solmax-geomembrane-installtion-quality-assurance",
   "/quality-assurance/tensar-quality-assurance/": "/quality-assurance/tensar-geogrids-quality-assurance",
@@ -112,8 +112,8 @@ async function main() {
   const qas = dbQAs || [];
   console.log(`📄 Loaded ${qas.length} QA documents.`);
 
-  // Load scrapped urls
-  const fileContent = fs.readFileSync("docs/scrapped-urls.json", "utf-8");
+  // Load scrapped urls so that this code will validate the new paths against the old paths and create redirects for the paths that are not found in the new paths. and log it in the console.
+  const fileContent = fs.readFileSync(".agents/references/scrapped-urls.json", "utf-8");
   const scrapped: ScrappedUrl[] = JSON.parse(fileContent);
   console.log(`🔍 Found ${scrapped.length} scrapped URLs.`);
 
@@ -181,7 +181,7 @@ async function main() {
 
     // Check if the path indicates a product
     const isProductPath = cleanPath.includes("/product/") || cleanPath.includes("/products/");
-    
+
     // Check if category
     let matchedCategory = "";
     for (const catKey of Object.keys(CATEGORY_MAP)) {
@@ -220,7 +220,7 @@ async function main() {
     // Keyword matching for products
     let bestProductMatch = null;
     let maxIntersection = 0;
-    
+
     const slugWords = slug.split("-").filter(w => w.length > 2);
     if (slugWords.length > 0) {
       for (const prod of products) {
@@ -276,7 +276,7 @@ async function main() {
   const sqlStatements: string[] = [];
   sqlStatements.push("-- Seeding public.redirects table");
   sqlStatements.push("TRUNCATE TABLE public.redirects;"); // Clear existing if any to avoid uniqueness constraint violations
-  
+
   const uniqueRedirects = Object.entries(redirects);
   console.log(`🚀 Mapped ${uniqueRedirects.length} unique paths.`);
 
@@ -291,7 +291,7 @@ async function main() {
         return `('${escapedFrom}', '${escapedTo}', 301)`;
       })
       .join(",\n  ");
-    
+
     sqlStatements.push(`INSERT INTO public.redirects (from_path, to_path, status_code) VALUES\n  ${values}\nON CONFLICT (from_path) DO UPDATE SET to_path = EXCLUDED.to_path, status_code = EXCLUDED.status_code;`);
   }
 

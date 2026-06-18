@@ -131,19 +131,22 @@ export function PageTemplatesAdminPage() {
   const load = useCallback(async () => {
     setLoading(true);
 
-    // Load page templates
-    const { data, error } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", SUPABASE_KEY)
-      .maybeSingle();
+    // Load page templates and hierarchy products in parallel
+    const [templatesRes, hierarchyRes] = await Promise.all([
+      supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", SUPABASE_KEY)
+        .maybeSingle(),
+      supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "hierarchy_products")
+        .maybeSingle(),
+    ]);
 
-    // Load hierarchy products
-    const { data: hierarchyData, error: hierarchyError } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "hierarchy_products")
-      .maybeSingle();
+    const { data, error } = templatesRes;
+    const { data: hierarchyData, error: hierarchyError } = hierarchyRes;
 
     if (error) {
       toast.error("Failed to load templates: " + error.message);

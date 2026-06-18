@@ -34,7 +34,7 @@ export function ApplicationCategoryPage() {
   const quoteLink = templateData?.quoteLink || "#quote";
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
   const downloadGuideUrl = templateData?.downloadGuideUrl || "";
-  
+
   const heroHighlights = templateData?.heroHighlights || [
     { icon: "Shield", label: "Premium Protection" },
     { icon: "CheckCircle2", label: "Certified Installers" },
@@ -53,9 +53,9 @@ export function ApplicationCategoryPage() {
   const suitableFor = templateData?.suitableFor && templateData.suitableFor.length > 0
     ? templateData.suitableFor
     : (templateData?.content?.subsystems || ["Lining Systems", "Leak Detection", "Drainage"]).map((s: string) => ({
-        icon: "Droplets",
-        label: s,
-      }));
+      icon: "Droplets",
+      label: s,
+    }));
 
   const assistancePhone = templateData?.assistancePhone || "+27 11 794 0974";
   const assistanceEmail = templateData?.assistanceEmail || "sales@geosynthetics.co.za";
@@ -67,7 +67,7 @@ export function ApplicationCategoryPage() {
 
   const designTitle = templateData?.designTitle || "Design Considerations";
   const designParagraphs = templateData?.designParagraphs || [];
-  
+
   const installationTitle = templateData?.installationTitle || "Installation Guidelines";
   const installationParagraphs = templateData?.installationParagraphs || [];
 
@@ -198,7 +198,7 @@ export function ApplicationCategoryPage() {
       </section>
 
       {/* ─── Sticky Tab Navigation ─────────────────────────────────────────────── */}
-      <div className="sticky top-[80px] z-40 bg-surface border-b border-border shadow-sm">
+      <div className="sticky top-[70px] z-40 bg-surface border-b border-border shadow-sm">
         <div className="container-page">
           <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
             {[
@@ -237,7 +237,7 @@ export function ApplicationCategoryPage() {
       <div className="container-page py-16 grid lg:grid-cols-12 gap-16">
         {/* Left column */}
         <div className="lg:col-span-8 space-y-20">
-          
+
           {/* Section: Overview */}
           <section id="overview" className="scroll-mt-32">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
@@ -459,7 +459,7 @@ export function ApplicationCategoryPage() {
         {/* Right column - Sidebar */}
         <aside className="lg:col-span-4 space-y-8">
           <div className="space-y-6 sticky top-[160px]">
-            
+
             {/* Sidebar element: Key Benefits */}
             {keyBenefits.length > 0 && (
               <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">

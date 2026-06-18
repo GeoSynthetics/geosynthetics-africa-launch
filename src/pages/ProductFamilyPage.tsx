@@ -155,9 +155,9 @@ function mapFamilyData(
     ),
     properties: familyData.propertiesTable ||
       familyData.properties || {
-        headers: ["PROPERTIES"],
-        rows: [],
-      },
+      headers: ["PROPERTIES"],
+      rows: [],
+    },
     popularCatalogue: (familyData.popularProducts || familyData.popularCatalogue || []).map(
       (item: any) => ({
         name: item.name || "",
@@ -171,17 +171,17 @@ function mapFamilyData(
       familyData.relatedProductGroups && familyData.relatedProductGroups.length > 0
         ? familyData.relatedProductGroups
         : [
-            { name: "HDPE Geomembranes", slug: "hdpe-geomembranes" },
-            { name: "LLDPE Geomembranes", slug: "lldpe-geomembranes" },
-            { name: "PVC Geomembranes", slug: "pvc-geomembranes" },
-            { name: "EPDM Geomembranes", slug: "epdm-geomembranes" },
-            { name: "PP Geomembranes", slug: "pp-geomembranes" },
-          ]
-            .filter((item) => item.slug !== family)
-            .map((item) => ({
-              name: item.name,
-              link: `/products/${category}/${item.slug}`,
-            })),
+          { name: "HDPE Geomembranes", slug: "hdpe-geomembranes" },
+          { name: "LLDPE Geomembranes", slug: "lldpe-geomembranes" },
+          { name: "PVC Geomembranes", slug: "pvc-geomembranes" },
+          { name: "EPDM Geomembranes", slug: "epdm-geomembranes" },
+          { name: "PP Geomembranes", slug: "pp-geomembranes" },
+        ]
+          .filter((item) => item.slug !== family)
+          .map((item) => ({
+            name: item.name,
+            link: `/products/${category}/${item.slug}`,
+          })),
     questions: (familyData.faqs || familyData.questions || []).map((item: any) => ({
       q: item.question || item.q || "",
       a: item.answer || item.a || "",
@@ -192,54 +192,54 @@ function mapFamilyData(
     projects:
       dynamicCaseStudies && dynamicCaseStudies.length > 0
         ? dynamicCaseStudies.map((cs: any) => ({
-            name: cs.title || "",
-            location: `${cs.location}, ${cs.country}`,
-            image:
-              cs.hero_image_url ||
-              "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
-            slug: cs.slug || "",
-          }))
+          name: cs.title || "",
+          location: `${cs.location}, ${cs.country}`,
+          image:
+            cs.hero_image_url ||
+            "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+          slug: cs.slug || "",
+        }))
         : (familyData.projectReferences || familyData.projects || []).map((proj: any) => ({
-            name: proj.name || "",
-            location: proj.location || "",
-            image:
-              proj.image ||
-              "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
-            slug: proj.slug || "",
-          })),
+          name: proj.name || "",
+          location: proj.location || "",
+          image:
+            proj.image ||
+            "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+          slug: proj.slug || "",
+        })),
     applications: Array.isArray(familyData.applications)
       ? familyData.applications.map((app: any) => {
-          if (typeof app === "string") {
-            return {
-              label: app,
-              slug: app
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, ""),
-            };
-          }
-          return { label: app.label || "", slug: app.slug || "" };
-        })
+        if (typeof app === "string") {
+          return {
+            label: app,
+            slug: app
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, ""),
+          };
+        }
+        return { label: app.label || "", slug: app.slug || "" };
+      })
       : [
-          { label: "Mining (Heap Leach Pads, Tailings Impoundments)", slug: "mining-systems" },
-          { label: "Environmental (Landfill Basal Lining, Capping)", slug: "waste-landfills" },
-          { label: "Water (Reservoirs, Dams, Canals, Ponds)", slug: "water-containment" },
-          {
-            label: "Roads & Infrastructure (Subgrade Stabilization)",
-            slug: "roads-infrastructure",
-          },
-        ],
+        { label: "Mining (Heap Leach Pads, Tailings Impoundments)", slug: "mining-systems" },
+        { label: "Environmental (Landfill Basal Lining, Capping)", slug: "waste-landfills" },
+        { label: "Water (Reservoirs, Dams, Canals, Ponds)", slug: "water-containment" },
+        {
+          label: "Roads & Infrastructure (Subgrade Stabilization)",
+          slug: "roads-infrastructure",
+        },
+      ],
     industries:
       familyData.industries && familyData.industries.length > 0
         ? familyData.industries.map((ind: any) => ({
-            label: ind.label || "",
-            slug: ind.slug || "",
-          }))
+          label: ind.label || "",
+          slug: ind.slug || "",
+        }))
         : [
-            { label: "Mining", slug: "mining" },
-            { label: "Water Management", slug: "water-management" },
-            { label: "Construction & Infrastructure", slug: "construction-infrastructure" },
-          ],
+          { label: "Mining", slug: "mining" },
+          { label: "Water Management", slug: "water-management" },
+          { label: "Construction & Infrastructure", slug: "construction-infrastructure" },
+        ],
   };
 }
 
@@ -433,7 +433,7 @@ export function ProductFamilyPage() {
       </section>
 
       {/* Sticky Navigation */}
-      <div className="sticky top-[80px] z-40 bg-surface border-b border-border shadow-sm">
+      <div className="sticky top-[70px] z-40 bg-surface border-b border-border shadow-sm">
         <div className="container-page">
           <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
             {[

@@ -252,8 +252,8 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
   },
   projects: {
     sectionTitle: "PROVEN ON PROJECTS ACROSS AFRICA",
-    ctaText: "VIEW ALL CASE STUDIES →",
-    ctaUrl: "/resources",
+    ctaText: "VIEW ALL CASE STUDIES",
+    ctaUrl: "/projects",
     cards: [
       { id: "brandvlei", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80", tag: "RESERVOIR LINING", title: "BRANDVLEI RESERVOIR LINING", location: "South Africa", systemDetails: "HDPE Lining System" },
       { id: "tsf", image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&q=80", tag: "TSF LINING SYSTEM", title: "TSF LINING SYSTEM", location: "Ghana", systemDetails: "HDPE + Geotextile Protection" },

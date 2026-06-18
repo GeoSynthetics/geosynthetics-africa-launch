@@ -402,7 +402,7 @@ export function ProductsAdminPage() {
     const to = from + pageSize - 1;
     query = query.range(from, to);
 
-    const [products, manufacturers, categories] = await Promise.all([
+    const [products, manufacturers, categories, templateDataResult] = await Promise.all([
       query,
       mans.length === 0
         ? supabase.from("manufacturers").select("id, name").order("name")
@@ -410,6 +410,11 @@ export function ProductsAdminPage() {
       cats.length === 0
         ? supabase.from("product_categories").select("id, name").order("name")
         : Promise.resolve({ data: cats }),
+      supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "template_product_categories")
+        .maybeSingle(),
     ]);
 
     if (products.error) toast.error(products.error.message);
@@ -419,12 +424,8 @@ export function ProductsAdminPage() {
     if (mans.length === 0 && manufacturers.data) setMans(manufacturers.data as Manufacturer[]);
     if (cats.length === 0 && categories.data) setCats(categories.data as ProductCategory[]);
 
-    // Fetch product families templates
-    const { data: templateData } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "template_product_categories")
-      .maybeSingle();
+    // Process product families templates
+    const { data: templateData } = templateDataResult;
     if (templateData?.value) {
       const templates = templateData.value as Record<string, any>;
       const fams = Object.keys(templates).map((slug) => ({
