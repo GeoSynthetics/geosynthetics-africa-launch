@@ -6,8 +6,9 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/industries.$slug";
 
-export function IndustryPage() {
-  const { industry, templateData, caseStudies = [], keyProducts = [] } = Route.useLoaderData();
+export function IndustryPage({ data }: { data?: any } = {}) {
+  const loaderData = data ? data : Route.useLoaderData();
+  const { industry, templateData, caseStudies = [], keyProducts = [] } = loaderData;
   
   const title = templateData?.title || industry.label;
   const description = templateData?.description || `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;

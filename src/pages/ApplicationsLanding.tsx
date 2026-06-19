@@ -42,8 +42,8 @@ export function ApplicationsLanding() {
               return (
                 <Link
                   key={c.slug}
-                  to="/applications/$category"
-                  params={{ category: c.slug }}
+                  to="/$slug"
+                  params={{ slug: c.slug }}
                   className="group relative aspect-[4/3] overflow-hidden rounded"
                 >
                   <img

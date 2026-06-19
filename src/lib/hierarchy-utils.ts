@@ -16,46 +16,55 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
       to: section.to,
       columns: {
         primaryTitle: section.primaryTitle,
-        primary: section.items.map((item) => ({
-          label: item.label,
-          icon: item.icon,
-          to: item.to,
-          params: item.params,
-          slug: item.slug,
-          content: item.megaFallback
-            ? {
-                secondaryTitle: item.megaFallback.secondaryTitle ?? item.label,
-                secondary: (item.megaFallback.secondary && item.megaFallback.secondary.length > 0)
-                  ? item.megaFallback.secondary
-                  : (item.children || []).map((c) => ({
-                      label: c.label,
-                      to: c.to,
-                      params: c.params,
-                    })),
-                featuredTitle: item.megaFallback.featuredTitle ?? "Featured",
-                featuredKind: item.megaFallback.featuredKind ?? "product",
-                featured: item.megaFallback.featured ?? [],
-                quickActionsTitle: item.megaFallback.quickActionsTitle ?? "Quick Actions",
-                quickActions: item.megaFallback.quickActions ?? [],
-                topSellingProductId: item.megaFallback.topSellingProductId,
-                topSellingProductIds: item.megaFallback.topSellingProductIds,
-              }
-            : {
-                secondaryTitle: item.label,
-                secondary: item.children.map((c) => ({
-                  label: c.label,
-                  to: c.to,
-                  params: c.params,
-                })),
-                featuredTitle: "Featured",
-                featuredKind: "product" as const,
-                featured: [],
-                quickActionsTitle: "Quick Actions",
-                quickActions: item.quickActions ?? [],
-                topSellingProductId: undefined,
-                topSellingProductIds: undefined,
-              },
-        })),
+        primary: section.items.map((item) => {
+          let targetTo = item.to;
+          let targetParams = item.params;
+          if (section.key === "services" || section.key === "industries" || section.key === "applications") {
+            targetTo = "/$slug";
+            targetParams = { slug: item.slug || item.id };
+          }
+
+          return {
+            label: item.label,
+            icon: item.icon,
+            to: targetTo,
+            params: targetParams,
+            slug: item.slug,
+            content: item.megaFallback
+              ? {
+                  secondaryTitle: item.megaFallback.secondaryTitle ?? item.label,
+                  secondary: (item.megaFallback.secondary && item.megaFallback.secondary.length > 0)
+                    ? item.megaFallback.secondary
+                    : (item.children || []).map((c) => ({
+                        label: c.label,
+                        to: c.to,
+                        params: c.params,
+                      })),
+                  featuredTitle: item.megaFallback.featuredTitle ?? "Featured",
+                  featuredKind: item.megaFallback.featuredKind ?? "product",
+                  featured: item.megaFallback.featured ?? [],
+                  quickActionsTitle: item.megaFallback.quickActionsTitle ?? "Quick Actions",
+                  quickActions: item.megaFallback.quickActions ?? [],
+                  topSellingProductId: item.megaFallback.topSellingProductId,
+                  topSellingProductIds: item.megaFallback.topSellingProductIds,
+                }
+              : {
+                  secondaryTitle: item.label,
+                  secondary: item.children.map((c) => ({
+                    label: c.label,
+                    to: c.to,
+                    params: c.params,
+                  })),
+                  featuredTitle: "Featured",
+                  featuredKind: "product" as const,
+                  featured: [],
+                  quickActionsTitle: "Quick Actions",
+                  quickActions: item.quickActions ?? [],
+                  topSellingProductId: undefined,
+                  topSellingProductIds: undefined,
+                },
+          };
+        }),
         secondaryTitle: fallback.secondaryTitle ?? firstItem?.label ?? "",
         secondary: fallback.secondary ?? firstItem?.children?.map((c) => ({ label: c.label, to: c.to, params: c.params })) ?? [],
         featuredTitle: fallback.featuredTitle ?? "Featured",
@@ -137,13 +146,13 @@ export function getDefaultSections(): HierarchySection[] {
       to: "/applications",
       primaryTitle: "Application Categories",
       items: [
-        mkSimpleItem("mining-systems", "Mining Systems", "Pickaxe", "/applications/$category", { category: "mining-systems" }),
-        mkSimpleItem("water-containment", "Water Containment", "Droplets", "/applications/$category", { category: "water-containment" }),
-        mkSimpleItem("waste-landfills", "Waste & Landfills", "Trash2", "/applications/$category", { category: "waste-landfills" }),
-        mkSimpleItem("roads-infrastructure", "Roads & Infrastructure", "Construction", "/applications/$category", { category: "roads-infrastructure" }),
-        mkSimpleItem("erosion-control-app", "Erosion Control", "Mountain", "/applications/$category", { category: "erosion-control" }),
-        mkSimpleItem("drainage-systems", "Drainage Systems", "Waves", "/applications/$category", { category: "drainage-systems" }),
-        mkSimpleItem("agriculture-aquaculture", "Agriculture & Aquaculture", "Sprout", "/applications/$category", { category: "agriculture-aquaculture" }),
+        mkSimpleItem("mining-systems", "Mining Systems", "Pickaxe", "/$slug", { slug: "mining-systems" }),
+        mkSimpleItem("water-containment", "Water Containment", "Droplets", "/$slug", { slug: "water-containment" }),
+        mkSimpleItem("waste-landfills", "Waste & Landfills", "Trash2", "/$slug", { slug: "waste-landfills" }),
+        mkSimpleItem("roads-infrastructure", "Roads & Infrastructure", "Construction", "/$slug", { slug: "roads-infrastructure" }),
+        mkSimpleItem("erosion-control-app", "Erosion Control", "Mountain", "/$slug", { slug: "erosion-control" }),
+        mkSimpleItem("drainage-systems", "Drainage Systems", "Waves", "/$slug", { slug: "drainage-systems" }),
+        mkSimpleItem("agriculture-aquaculture", "Agriculture & Aquaculture", "Sprout", "/$slug", { slug: "agriculture-aquaculture" }),
       ],
     },
     {
@@ -152,12 +161,12 @@ export function getDefaultSections(): HierarchySection[] {
       to: "/services",
       primaryTitle: "Our Services",
       items: [
-        mkSimpleItem("supply", "Supply", "Truck", "/services/$slug", { slug: "supply" }),
-        mkSimpleItem("installation", "Installation", "HardHat", "/services/$slug", { slug: "installation" }),
-        mkSimpleItem("qa-qc", "QA / QC & Testing", "ClipboardCheck", "/services/$slug", { slug: "qa-qc" }),
-        mkSimpleItem("design-support", "Design Support", "PencilRuler", "/services/$slug", { slug: "design-support" }),
-        mkSimpleItem("logistics", "Logistics & Customs", "Ship", "/services/$slug", { slug: "logistics" }),
-        mkSimpleItem("after-sales", "After Sales Support", "LifeBuoy", "/services/$slug", { slug: "after-sales" }),
+        mkSimpleItem("supply", "Supply", "Truck", "/$slug", { slug: "supply" }),
+        mkSimpleItem("installation", "Installation", "HardHat", "/$slug", { slug: "installation" }),
+        mkSimpleItem("qa-qc", "QA / QC & Testing", "ClipboardCheck", "/$slug", { slug: "qa-qc" }),
+        mkSimpleItem("design-support", "Design Support", "PencilRuler", "/$slug", { slug: "design-support" }),
+        mkSimpleItem("logistics", "Logistics & Customs", "Ship", "/$slug", { slug: "logistics" }),
+        mkSimpleItem("after-sales", "After Sales Support", "LifeBuoy", "/$slug", { slug: "after-sales" }),
       ],
     },
     {
@@ -166,12 +175,12 @@ export function getDefaultSections(): HierarchySection[] {
       to: "/industries",
       primaryTitle: "Industries We Serve",
       items: [
-        mkSimpleItem("construction-infrastructure", "Construction & Infrastructure", "Building2", "/industries/$slug", { slug: "construction-infrastructure" }),
-        mkSimpleItem("mining", "Mining", "Pickaxe", "/industries/$slug", { slug: "mining" }),
-        mkSimpleItem("environmental-waste", "Environmental & Waste", "Trash2", "/industries/$slug", { slug: "environmental-waste" }),
-        mkSimpleItem("water-management", "Water Management", "Droplets", "/industries/$slug", { slug: "water-management" }),
-        mkSimpleItem("agriculture-aquaculture-ind", "Agriculture & Aquaculture", "Sprout", "/industries/$slug", { slug: "agriculture-aquaculture" }),
-        mkSimpleItem("energy", "Energy", "Zap", "/industries/$slug", { slug: "energy" }),
+        mkSimpleItem("construction-infrastructure", "Construction & Infrastructure", "Building2", "/$slug", { slug: "construction-infrastructure" }),
+        mkSimpleItem("mining", "Mining", "Pickaxe", "/$slug", { slug: "mining" }),
+        mkSimpleItem("environmental-waste", "Environmental & Waste", "Trash2", "/$slug", { slug: "environmental-waste" }),
+        mkSimpleItem("water-management", "Water Management", "Droplets", "/$slug", { slug: "water-management" }),
+        mkSimpleItem("agriculture-aquaculture-ind", "Agriculture & Aquaculture", "Sprout", "/$slug", { slug: "agriculture-aquaculture" }),
+        mkSimpleItem("energy", "Energy", "Zap", "/$slug", { slug: "energy" }),
       ],
     },
   ];

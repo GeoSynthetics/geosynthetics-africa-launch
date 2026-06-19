@@ -826,8 +826,8 @@ export function ProductFamilyPage() {
                   <li key={idx}>
                     {app.slug ? (
                       <Link
-                        to="/applications/$category"
-                        params={{ category: app.slug }}
+                        to="/$slug"
+                        params={{ slug: app.slug }}
                         className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition"
                       >
                         <ArrowRight className="h-4 w-4 text-primary shrink-0" />
@@ -856,7 +856,7 @@ export function ProductFamilyPage() {
                 {(data.industries || []).map((ind: any, idx: number) => (
                   <Link
                     key={idx}
-                    to="/industries/$slug"
+                    to="/$slug"
                     params={{ slug: ind.slug }}
                     className="group flex flex-col justify-between p-4 border border-border bg-surface rounded hover:border-primary hover:bg-accent transition"
                   >

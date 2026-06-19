@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
 import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-async function loadApplicationData(categorySlug: string) {
+export async function loadApplicationData(categorySlug: string) {
   // Per-slug fallback hero images so pages look great before James configures them
   const FALLBACK_HEROES: Record<string, string> = {
     "mining-systems": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
@@ -162,7 +162,7 @@ async function loadApplicationData(categorySlug: string) {
   };
 }
 
-function ApplicationCategorySkeleton() {
+export function ApplicationCategorySkeleton() {
   return (
     <div className="w-full bg-background animate-pulse">
       {/* Hero Section */}
@@ -270,6 +270,12 @@ function ApplicationCategorySkeleton() {
 
 export const Route = createFileRoute("/applications/$category")({
   ssr: false,
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: `/${params.category}`,
+      statusCode: 301,
+    });
+  },
   loader: ({ params }) => loadApplicationData(params.category),
   pendingComponent: ApplicationCategorySkeleton,
   pendingMs: 0,

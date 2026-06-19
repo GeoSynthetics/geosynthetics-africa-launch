@@ -35,8 +35,9 @@ const FALLBACK_HEROES: Record<string, string> = {
 
 const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-export function ServicePage() {
-  const { service, templateData, linkedProducts = [] } = Route.useLoaderData();
+export function ServicePage({ data }: { data?: any } = {}) {
+  const loaderData = data ? data : Route.useLoaderData();
+  const { service, templateData, linkedProducts = [] } = loaderData;
 
   // General details
   const title = templateData?.title || service.label;

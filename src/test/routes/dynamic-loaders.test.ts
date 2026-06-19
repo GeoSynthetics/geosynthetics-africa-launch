@@ -148,7 +148,7 @@ describe("Dynamic Route Loaders", () => {
           }
         ]
       };
-      
+
       mockDb.template_applications = {
         "tailings-storage-facilities-tsfs": {
           title: "Tailings Storage Facility Lining",
@@ -221,7 +221,7 @@ describe("Dynamic Route Loaders", () => {
           }
         ]
       };
-      
+
       mockDb.template_services = {
         "custom-supply-id": {
           title: "Supply Template Content",

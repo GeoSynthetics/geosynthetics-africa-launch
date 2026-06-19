@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/components/site/mega-menu-data";
 import { ServicePage } from "@/pages/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-async function loadServiceData(slug: string) {
+export async function loadServiceData(slug: string) {
   // Per-slug fallback hero images — kept in sync with the static SERVICE_CONTENT map in ServicePage.tsx
   const FALLBACK_HEROES: Record<string, string> = {
     "supply": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
@@ -115,7 +115,7 @@ async function loadServiceData(slug: string) {
   };
 }
 
-function ServiceDetailSkeleton() {
+export function ServiceDetailSkeleton() {
   return (
     <div className="w-full bg-background animate-pulse">
       {/* Hero Section */}
@@ -193,16 +193,22 @@ function ServiceDetailSkeleton() {
 
 export const Route = createFileRoute("/services/$slug")({
   ssr: false,
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: `/${params.slug}`,
+      statusCode: 301,
+    });
+  },
   loader: ({ params }) => loadServiceData(params.slug),
   pendingComponent: ServiceDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
     const { service, templateData } = loaderData || { service: { slug: "", label: "", icon: "" }, templateData: null };
     const label = service.label;
-    
+
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
     const description = templateData?.seo?.description || `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
-    
+
     return {
       meta: [
         { title },

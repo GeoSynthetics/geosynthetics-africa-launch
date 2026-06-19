@@ -4,6 +4,7 @@ import {
   PRODUCT_CATEGORIES,
   APPLICATION_CATEGORIES,
   SERVICES,
+  INDUSTRIES,
 } from "@/components/site/mega-menu-data";
 
 /* ------------------------------------------------------------------ */
@@ -101,7 +102,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         /* ── 3. Application category pages ────────────────────── */
         for (const cat of APPLICATION_CATEGORIES) {
           urls.push(
-            urlEntry(`${baseUrl}/applications/${cat.slug}`, {
+            urlEntry(`${baseUrl}/${cat.slug}`, {
               lastmod: now,
               changefreq: "monthly",
               priority: 0.7,
@@ -112,7 +113,18 @@ export const Route = createFileRoute("/sitemap.xml")({
         /* ── 4. Service detail pages ──────────────────────────── */
         for (const svc of SERVICES) {
           urls.push(
-            urlEntry(`${baseUrl}/services/${svc.slug}`, {
+            urlEntry(`${baseUrl}/${svc.slug}`, {
+              lastmod: now,
+              changefreq: "monthly",
+              priority: 0.7,
+            }),
+          );
+        }
+
+        /* ── 4b. Industry pages ───────────────────────────────── */
+        for (const ind of INDUSTRIES) {
+          urls.push(
+            urlEntry(`${baseUrl}/${ind.slug}`, {
               lastmod: now,
               changefreq: "monthly",
               priority: 0.7,

@@ -664,7 +664,7 @@ export function ServicesTemplatesEditor() {
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1">
                     <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
-                      {activeSlug === "__landing" ? "/services" : `/services/${activeSlug}`}
+                      {activeSlug === "__landing" ? "/services" : `/${activeSlug}`}
                     </code>
                     {dirty && (
                       <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
@@ -673,7 +673,7 @@ export function ServicesTemplatesEditor() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
-                    <a href={activeSlug === "__landing" ? "/services" : `/services/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                    <a href={activeSlug === "__landing" ? "/services" : `/${activeSlug}`} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-3 w-3" /> Preview
                     </a>
                   </Button>

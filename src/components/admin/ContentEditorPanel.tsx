@@ -62,14 +62,12 @@ const TEMPLATE_KEY: Record<SectionKey, string> = {
 // Route path each section uses
 function sectionRoute(key: SectionKey, isChild: boolean): string {
   if (key === "products") return isChild ? "/products/$category/$family" : "/products/$category";
-  if (key === "applications") return "/applications/$category";
-  if (key === "services") return "/services/$slug";
-  return "/industries/$slug";
+  return "/$slug";
 }
 
 // Param key each section uses
 function sectionParamKey(key: SectionKey): string {
-  return key === "services" || key === "industries" ? "slug" : "category";
+  return key === "products" ? "category" : "slug";
 }
 
 // ─── PageTemplatesRedirectCard ────────────────────────────────────────────────

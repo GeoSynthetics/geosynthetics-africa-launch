@@ -69,13 +69,13 @@ export function Footer() {
   ];
 
   const applications = [
-    ...APPLICATION_CATEGORIES.slice(0, 6).map((c) => ({ label: c.label, to: `/applications/${c.slug}` })),
+    ...APPLICATION_CATEGORIES.slice(0, 6).map((c) => ({ label: c.label, to: `/${c.slug}` })),
     { label: "All Applications", to: "/applications" },
   ];
 
-  const services = SERVICES.map((s) => ({ label: s.label, to: `/services/${s.slug}` }));
+  const services = SERVICES.map((s) => ({ label: s.label, to: `/${s.slug}` }));
 
-  const industries = INDUSTRIES.map((i) => ({ label: i.label, to: `/industries/${i.slug}` }));
+  const industries = INDUSTRIES.map((i) => ({ label: i.label, to: `/${i.slug}` }));
 
   // Resolve custom slugs for core page links
   const company = COMPANY.map((item) => ({

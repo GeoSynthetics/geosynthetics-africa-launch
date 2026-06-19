@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loadedUserIdRef.current = null;
       return;
     }
-    
+
     // Avoid redundant role fetches and page unmounts/reloads if already loaded for this user
     if (loadedUserIdRef.current === userId) {
       setRolesLoaded(true);

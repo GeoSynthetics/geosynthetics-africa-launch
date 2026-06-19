@@ -122,17 +122,17 @@ const productFamilyLink = (category: string, family: string): NavTarget => ({
 });
 
 const applicationLink = (slug: string): NavTarget => ({
-  to: "/applications/$category",
-  params: { category: slug },
+  to: "/$slug",
+  params: { slug },
 });
 
 const serviceLink = (slug: string): NavTarget => ({
-  to: "/services/$slug",
+  to: "/$slug",
   params: { slug },
 });
 
 const industryLink = (slug: string): NavTarget => ({
-  to: "/industries/$slug",
+  to: "/$slug",
   params: { slug },
 });
 

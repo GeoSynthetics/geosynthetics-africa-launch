@@ -17,14 +17,15 @@ function IconRenderer({ name, className }: { name: string; className?: string })
   return <IconComponent className={className} />;
 }
 
-export function ApplicationCategoryPage() {
+export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
+  const loaderData = data ? data : Route.useLoaderData();
   const {
     category,
     templateData,
     caseStudies = [],
     linkedProducts = [],
     featuredCaseStudy = null,
-  } = Route.useLoaderData();
+  } = loaderData;
 
   // ─── Visual Fields Fallbacks & Mapping ──────────────────────────────────────
   const title = templateData?.title || category.label;

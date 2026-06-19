@@ -460,7 +460,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
           <div className="flex flex-wrap items-center gap-y-3 gap-x-2 md:gap-x-4 lg:gap-x-6 text-xs md:text-sm text-foreground/90 font-semibold">
             {/* Step 1: Supply */}
             <RLink
-              to="/services/$slug"
+              to="/$slug"
               params={{ slug: "supply" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
@@ -475,7 +475,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
             {/* Step 2: Delivery */}
             <RLink
-              to="/services/$slug"
+              to="/$slug"
               params={{ slug: "logistics" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
@@ -490,7 +490,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
             {/* Step 3: Installation */}
             <RLink
-              to="/services/$slug"
+              to="/$slug"
               params={{ slug: "installation" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"

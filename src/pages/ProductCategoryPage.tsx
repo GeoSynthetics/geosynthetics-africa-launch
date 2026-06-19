@@ -104,7 +104,7 @@ export function ProductCategoryPage() {
                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                        {app.description || `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
                      </p>
-                     <Link to="/applications/$category" params={{ category: app.slug }} className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1">
+                     <Link to="/$slug" params={{ slug: app.slug }} className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1">
                        Read More <ChevronRight className="h-3 w-3" />
                      </Link>
                    </div>

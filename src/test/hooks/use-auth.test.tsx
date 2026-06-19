@@ -32,7 +32,7 @@ vi.mock("@/integrations/supabase/client", () => {
 // A dummy component to consume useAuth
 function DummyComponent() {
   const { session, roles, loading, rolesLoaded, isAuthenticated, isStaff } = useAuth();
-  
+
   if (loading) return <div data-testid="loading">Loading Auth...</div>;
   if (!rolesLoaded) return <div data-testid="roles-loading">Roles Loading...</div>;
 

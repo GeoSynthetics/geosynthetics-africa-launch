@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { INDUSTRIES } from "@/components/site/mega-menu-data";
 import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-async function loadIndustryData(slug: string) {
+export async function loadIndustryData(slug: string) {
   // Per-slug fallback hero images so every industry page looks great before James configures them
   const FALLBACK_HEROES: Record<string, string> = {
     "construction-infrastructure": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
@@ -99,7 +99,7 @@ async function loadIndustryData(slug: string) {
         .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
         .in("id", templateData.caseStudies)
         .eq("status", "published");
-      
+
       if (casesData) {
         // Sort case studies in the order they were nominated
         const ordered = templateData.caseStudies
@@ -118,7 +118,7 @@ async function loadIndustryData(slug: string) {
         .eq("sector", label)
         .eq("status", "published")
         .order("project_year", { ascending: false });
-      
+
       if (casesData) {
         caseStudies = casesData;
       }
@@ -135,7 +135,7 @@ async function loadIndustryData(slug: string) {
         .from("products_public")
         .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
         .in("id", templateData.keyProducts);
-      
+
       if (prodsData) {
         // Order products in the order they were nominated
         const ordered = templateData.keyProducts
@@ -159,7 +159,7 @@ async function loadIndustryData(slug: string) {
   };
 }
 
-function IndustryDetailSkeleton() {
+export function IndustryDetailSkeleton() {
   return (
     <div className="w-full bg-background animate-pulse">
       {/* Hero Section */}
@@ -237,16 +237,22 @@ function IndustryDetailSkeleton() {
 
 export const Route = createFileRoute("/industries/$slug")({
   ssr: false,
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: `/${params.slug}`,
+      statusCode: 301,
+    });
+  },
   loader: ({ params }) => loadIndustryData(params.slug),
   pendingComponent: IndustryDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
     const { industry, templateData } = loaderData || { industry: { slug: "", label: "", icon: "" }, templateData: null };
     const label = industry.label;
-    
+
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
     const description = templateData?.seo?.description || `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
-    
+
     return {
       meta: [
         { title },

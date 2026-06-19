@@ -16,15 +16,15 @@ type SectionKey = "products" | "applications" | "services" | "industries";
 function itemRoute(sectionKey: SectionKey): string {
   switch (sectionKey) {
     case "products": return "/products/$category";
-    case "applications": return "/applications/$category";
-    case "services": return "/services/$slug";
-    case "industries": return "/industries/$slug";
+    case "applications": return "/$slug";
+    case "services": return "/$slug";
+    case "industries": return "/$slug";
   }
 }
 
-// Derive the route param key for each section (products/applications use $category; services/industries use $slug)
+// Derive the route param key for each section (products use $category; others use $slug)
 function itemParamKey(sectionKey: SectionKey): string {
-  return sectionKey === "services" || sectionKey === "industries" ? "slug" : "category";
+  return sectionKey === "products" ? "category" : "slug";
 }
 
 // Helper to resolve slug and label collisions by appending copy suffixes and counters
