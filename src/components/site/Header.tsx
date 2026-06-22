@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-router";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -476,7 +477,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
   );
 }
 
-function MobileNav({ menus }: { menus: typeof megaMenus }) {
+function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
   const [open, setOpen] = useState(false);
   const { open: openQuickQuote } = useQuickQuote();
   return (
@@ -511,19 +512,27 @@ function MobileNav({ menus }: { menus: typeof megaMenus }) {
                         All {m.label} →
                       </RLink>
                     </li>
-                    {m.columns.primary.map((item) => (
-                      <li key={item.label}>
-                        <RLink
-                          to={item.to}
-                          params={item.params}
-                          onClick={() => setOpen(false)}
-                          className="block py-3 text-sm text-foreground hover:text-primary"
-                          activeProps={{ className: "!text-primary" }}
-                        >
-                          {item.label}
-                        </RLink>
-                      </li>
-                    ))}
+                    {isLoading ? (
+                      <div className="py-2 pl-2 space-y-2">
+                        <Skeleton className="h-4 w-3/4 bg-muted animate-pulse" />
+                        <Skeleton className="h-4 w-1/2 bg-muted animate-pulse" />
+                        <Skeleton className="h-4 w-2/3 bg-muted animate-pulse" />
+                      </div>
+                    ) : (
+                      m.columns.primary.map((item) => (
+                        <li key={item.label}>
+                          <RLink
+                            to={item.to}
+                            params={item.params}
+                            onClick={() => setOpen(false)}
+                            className="block py-3 text-sm text-foreground hover:text-primary"
+                            activeProps={{ className: "!text-primary" }}
+                          >
+                            {item.label}
+                          </RLink>
+                        </li>
+                      ))
+                    )}
                   </ul>
                 </AccordionContent>
               </AccordionItem>
@@ -588,7 +597,7 @@ export function Header() {
       <Logo />
       <DesktopNav menus={menus} isLoading={isLoading} />
       <div className="flex items-center gap-2 ml-auto xl:ml-0">
-        <MobileNav menus={menus} />
+        <MobileNav menus={menus} isLoading={isLoading} />
       </div>
     </div>
   );

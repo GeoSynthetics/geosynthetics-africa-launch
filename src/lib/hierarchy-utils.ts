@@ -46,13 +46,13 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                   quickActionsTitle: item.megaFallback.quickActionsTitle ?? "Quick Actions",
                   quickActions: (item.megaFallback.quickActions && item.megaFallback.quickActions.length > 0)
                     ? item.megaFallback.quickActions
-                    : undefined,
+                    : [],
                   topSellingProductId: item.megaFallback.topSellingProductId,
                   topSellingProductIds: item.megaFallback.topSellingProductIds,
                 }
               : {
                   secondaryTitle: item.label,
-                  secondary: item.children.map((c) => ({
+                  secondary: (item.children || []).map((c) => ({
                     label: c.label,
                     to: c.to,
                     params: c.params,
@@ -63,7 +63,7 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                   quickActionsTitle: "Quick Actions",
                   quickActions: (item.quickActions && item.quickActions.length > 0)
                     ? item.quickActions
-                    : undefined,
+                    : [],
                   topSellingProductId: undefined,
                   topSellingProductIds: undefined,
                 },
