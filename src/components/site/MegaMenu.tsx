@@ -242,8 +242,12 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
     featuredTitle: activeItem?.content?.featuredTitle || columns.featuredTitle,
     featuredKind: activeItem?.content?.featuredKind || columns.featuredKind,
     featured: activeItem?.content?.featured || columns.featured,
-    quickActionsTitle: activeItem?.content?.quickActionsTitle || columns.quickActionsTitle,
-    quickActions: activeItem?.content?.quickActions || columns.quickActions,
+    quickActionsTitle: (activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0)
+      ? activeItem.content.quickActionsTitle
+      : columns.quickActionsTitle,
+    quickActions: (activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0)
+      ? activeItem.content.quickActions
+      : columns.quickActions,
     topSellingProduct: activeItem?.content?.topSellingProduct,
     topSellingProducts: activeItem?.content?.topSellingProducts,
   };
