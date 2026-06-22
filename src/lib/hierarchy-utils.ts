@@ -44,7 +44,9 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                   featuredKind: item.megaFallback.featuredKind ?? "product",
                   featured: item.megaFallback.featured ?? [],
                   quickActionsTitle: item.megaFallback.quickActionsTitle ?? "Quick Actions",
-                  quickActions: item.megaFallback.quickActions ?? [],
+                  quickActions: (item.megaFallback.quickActions && item.megaFallback.quickActions.length > 0)
+                    ? item.megaFallback.quickActions
+                    : undefined,
                   topSellingProductId: item.megaFallback.topSellingProductId,
                   topSellingProductIds: item.megaFallback.topSellingProductIds,
                 }
@@ -59,7 +61,9 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                   featuredKind: "product" as const,
                   featured: [],
                   quickActionsTitle: "Quick Actions",
-                  quickActions: item.quickActions ?? [],
+                  quickActions: (item.quickActions && item.quickActions.length > 0)
+                    ? item.quickActions
+                    : undefined,
                   topSellingProductId: undefined,
                   topSellingProductIds: undefined,
                 },

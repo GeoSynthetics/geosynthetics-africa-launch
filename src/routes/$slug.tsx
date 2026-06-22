@@ -54,8 +54,18 @@ export const Route = createFileRoute("/$slug")({
         .maybeSingle();
       const items = (data?.value as any)?.items || [];
       isDynamicService = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
+
+      if (!isDynamicService) {
+        const { data: templatesData } = await supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "template_services")
+          .maybeSingle();
+        const templates = templatesData?.value as Record<string, any> || {};
+        isDynamicService = !!templates[customSlug];
+      }
     } catch (err) {
-      console.error("Error reading hierarchy_services:", err);
+      console.error("Error reading hierarchy_services/template_services:", err);
     }
 
     if (isStaticService || isDynamicService) {
@@ -74,8 +84,18 @@ export const Route = createFileRoute("/$slug")({
         .maybeSingle();
       const items = (data?.value as any)?.items || [];
       isDynamicIndustry = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
+
+      if (!isDynamicIndustry) {
+        const { data: templatesData } = await supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "template_industries")
+          .maybeSingle();
+        const templates = templatesData?.value as Record<string, any> || {};
+        isDynamicIndustry = !!templates[customSlug];
+      }
     } catch (err) {
-      console.error("Error reading hierarchy_industries:", err);
+      console.error("Error reading hierarchy_industries/template_industries:", err);
     }
 
     if (isStaticIndustry || isDynamicIndustry) {
@@ -94,8 +114,18 @@ export const Route = createFileRoute("/$slug")({
         .maybeSingle();
       const items = (data?.value as any)?.items || [];
       isDynamicApp = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
+
+      if (!isDynamicApp) {
+        const { data: templatesData } = await supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "template_applications")
+          .maybeSingle();
+        const templates = templatesData?.value as Record<string, any> || {};
+        isDynamicApp = !!templates[customSlug];
+      }
     } catch (err) {
-      console.error("Error reading hierarchy_applications:", err);
+      console.error("Error reading hierarchy_applications/template_applications:", err);
     }
 
     if (isStaticApp || isDynamicApp) {

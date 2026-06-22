@@ -41,9 +41,14 @@ export async function loadServiceData(slug: string) {
     (item: any) => item.slug === slug || item.id === slug
   );
 
-  // Determine which template slug/ID to load (prioritize matchedItem's id, which links to the template)
-  const templateSlug = matchedItem?.id || slug;
-  const tmpl = templates[templateSlug];
+  // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then slug)
+  let tmpl = null;
+  if (matchedItem) {
+    tmpl = templates[matchedItem.slug] || templates[matchedItem.id];
+  }
+  if (!tmpl) {
+    tmpl = templates[slug];
+  }
 
   let templateData = null;
   if (tmpl) {

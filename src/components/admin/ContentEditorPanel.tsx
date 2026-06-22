@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Save, Loader2 } from "lucide-react";
-import type { HierarchyItem, HierarchyChild, PageContent, MegaContent } from "@/types/hierarchy";
+import type { HierarchyItem, HierarchyChild, PageContent } from "@/types/hierarchy";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
@@ -216,28 +216,12 @@ export function ContentEditorPanel({
   };
 
   const page: PageContent = (data as any).pageContent ?? {};
-  const mega: MegaContent =
-    (data as any).megaFallback ?? (data as HierarchyChild).megaContent ?? {};
 
   const isProductNode = sectionKey === "products";
   const isNonProductNode = !isProductNode;
 
   const setPage = (p: Partial<PageContent>) =>
     setData((prev) => ({ ...prev, pageContent: { ...(prev as any).pageContent, ...p } }));
-
-  const setMega = (m: Partial<MegaContent>) => {
-    if (isChild) {
-      setData((prev) => ({
-        ...prev,
-        megaContent: { ...(prev as HierarchyChild).megaContent, ...m },
-      }));
-    } else {
-      setData((prev) => ({
-        ...prev,
-        megaFallback: { ...(prev as HierarchyItem).megaFallback, ...m },
-      }));
-    }
-  };
 
   return (
     <div className="flex flex-col h-full">
@@ -263,9 +247,8 @@ export function ContentEditorPanel({
 
       <Tabs defaultValue="identity" className="flex-1 flex flex-col overflow-hidden">
         <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-1">
-          {["identity", "page", "mega"]
+          {["identity", "page"]
             .filter((t) => {
-              if (t === "mega" && isChild) return false;
               if (t === "page" && isChild && isProductNode) return false;
               return true;
             })
@@ -275,7 +258,7 @@ export function ContentEditorPanel({
                 value={t}
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 text-xs uppercase tracking-wider font-bold capitalize"
               >
-                {t === "identity" ? "Identity" : t === "page" ? "Page Content" : "Mega Menu"}
+                {t === "identity" ? "Identity" : "Page Content"}
               </TabsTrigger>
             ))}
         </TabsList>
@@ -581,301 +564,6 @@ export function ContentEditorPanel({
               </div>
             </div>
           )}
-        </TabsContent>
-
-        {/* ── Mega Menu ── */}
-        <TabsContent value="mega" className="flex-1 overflow-y-auto p-6 space-y-8 m-0">
-          {/* Secondary Column or Top Selling Product */}
-          <div className="space-y-3">
-            {(() => {
-              const isServiceOrAppOrIndustry =
-                sectionKey === "services" ||
-                sectionKey === "applications" ||
-                sectionKey === "industries";
-              if (isServiceOrAppOrIndustry) {
-                return (
-                  <div className="space-y-3">
-                    <h4 className="text-xs font-bold uppercase text-primary tracking-wider">
-                      Top Selling Products (Max 5)
-                    </h4>
-                    <p className="text-xs text-muted-foreground">
-                      Select up to 5 top-selling products for this category to show as a slider in
-                      the mega menu.
-                    </p>
-                    <div className="space-y-2 max-w-md">
-                      {(mega.topSellingProductIds ?? []).map((pId) => {
-                        const pData = allProducts.find((p) => p.id === pId);
-                        return (
-                          <div
-                            key={pId}
-                            className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
-                          >
-                            <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() =>
-                                setMega({
-                                  topSellingProductIds: (mega.topSellingProductIds ?? []).filter(
-                                    (id) => id !== pId,
-                                  ),
-                                })
-                              }
-                            >
-                              ✕
-                            </Button>
-                          </div>
-                        );
-                      })}
-
-                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) &&
-                        !mega.topSellingProductId && (
-                          <p className="text-xs text-muted-foreground italic">
-                            No top selling products selected.
-                          </p>
-                        )}
-
-                      {/* Legacy single product warning / fallback */}
-                      {(!mega.topSellingProductIds || mega.topSellingProductIds.length === 0) &&
-                        mega.topSellingProductId && (
-                          <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                            <span className="flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                              {allProducts.find((p) => p.id === mega.topSellingProductId)?.name ||
-                                `Product ID: ${mega.topSellingProductId}`}{" "}
-                              (Legacy Single)
-                            </span>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => setMega({ topSellingProductId: "" })}
-                            >
-                              ✕
-                            </Button>
-                          </div>
-                        )}
-                    </div>
-
-                    {(!mega.topSellingProductIds || mega.topSellingProductIds.length < 5) && (
-                      <div className="max-w-md pt-1">
-                        <ProductSelector
-                          excludeIds={[
-                            ...(mega.topSellingProductIds ?? []),
-                            ...(mega.topSellingProductId ? [mega.topSellingProductId] : []),
-                          ]}
-                          onSelect={(prod) => {
-                            let currentIds = [...(mega.topSellingProductIds ?? [])];
-                            if (mega.topSellingProductId && currentIds.length === 0) {
-                              currentIds.push(mega.topSellingProductId);
-                            }
-                            setMega({
-                              topSellingProductIds: [...currentIds, prod.id],
-                              topSellingProductId: "", // clear legacy
-                            });
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              return (
-                <>
-                  <h4 className="text-xs font-bold uppercase text-primary tracking-wider">
-                    Secondary Column
-                  </h4>
-                  <Input
-                    value={mega.secondaryTitle ?? ""}
-                    onChange={(e) => setMega({ secondaryTitle: e.target.value })}
-                    placeholder="Column heading, e.g. 'Geomembranes'"
-                  />
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-muted-foreground">
-                      Links
-                    </label>
-                    {(mega.secondary ?? []).map((link, i) => (
-                      <div key={i} className="flex gap-2 items-center">
-                        <Input
-                          value={link.label}
-                          onChange={(e) => {
-                            const s = [...(mega.secondary ?? [])];
-                            s[i] = { ...s[i], label: e.target.value };
-                            setMega({ secondary: s });
-                          }}
-                          placeholder="Label"
-                          className="text-sm w-1/3"
-                        />
-                        <Input
-                          value={link.to}
-                          onChange={(e) => {
-                            const s = [...(mega.secondary ?? [])];
-                            s[i] = { ...s[i], to: e.target.value };
-                            setMega({ secondary: s });
-                          }}
-                          placeholder="/path"
-                          className="text-sm flex-1"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive"
-                          onClick={() =>
-                            setMega({
-                              secondary: (mega.secondary ?? []).filter((_, idx) => idx !== i),
-                            })
-                          }
-                        >
-                          ✕
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-xs"
-                      onClick={() =>
-                        setMega({ secondary: [...(mega.secondary ?? []), { label: "", to: "/" }] })
-                      }
-                    >
-                      + Add Link
-                    </Button>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-
-          <div className="border-t border-border pt-6">
-            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">
-              Featured Products (up to 4)
-            </h4>
-            <div className="grid md:grid-cols-2 gap-3">
-              {(mega.featured ?? []).slice(0, 4).map((item: any, i) => (
-                <div
-                  key={i}
-                  className="border border-border rounded p-3 bg-surface/50 space-y-2 relative"
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-1 right-1 h-6 w-6 text-destructive"
-                    onClick={() =>
-                      setMega({
-                        featured: (mega.featured ?? []).filter((_, idx) => idx !== i) as any,
-                      })
-                    }
-                  >
-                    ✕
-                  </Button>
-                  <ProductSelector
-                    onSelect={(prod: any) => {
-                      const f = [...(mega.featured ?? [])] as any[];
-                      const rawDesc = prod.short_description ?? prod.product_categories?.name ?? "";
-                      const cleanDesc = stripHtml(rawDesc);
-                      const baseSpec = prod.thickness_mm ? `${prod.thickness_mm}mm` : cleanDesc;
-
-                      f[i] = {
-                        label: prod.name,
-                        spec: truncateSpec(baseSpec),
-                        // Navigate to the individual catalogue product
-                        to: "/catalogue/$slug",
-                        params: {
-                          slug: prod.slug,
-                        },
-                        image: prod.image_url ?? "",
-                      };
-                      setMega({ featured: f as any, featuredKind: "product" });
-                    }}
-                  />
-                  {item.label && (
-                    <div className="space-y-2 pt-2 border-t border-border">
-                      <div>
-                        <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
-                          Product Title
-                        </label>
-                        <Input
-                          value={item.label}
-                          onChange={(e) => {
-                            const f = [...(mega.featured ?? [])] as any[];
-                            f[i] = { ...f[i], label: e.target.value };
-                            setMega({ featured: f as any });
-                          }}
-                          placeholder="Customize product title"
-                          className="h-8 text-xs"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <label className="text-[10px] font-bold uppercase text-muted-foreground">
-                            Custom Preview Description
-                          </label>
-                          <span
-                            className={`text-[9px] font-mono ${(item.spec ?? "").length === 62 ? "text-destructive font-bold" : (item.spec ?? "").length > 50 ? "text-amber-500 font-semibold" : "text-muted-foreground"}`}
-                          >
-                            {(item.spec ?? "").length}/62
-                          </span>
-                        </div>
-                        <Textarea
-                          value={item.spec}
-                          maxLength={62}
-                          onChange={(e) => {
-                            const f = [...(mega.featured ?? [])] as any[];
-                            f[i] = { ...f[i], spec: truncateSpec(e.target.value) };
-                            setMega({ featured: f as any });
-                          }}
-                          placeholder="Customize description (no raw HTML, max 62 characters)"
-                          className="min-h-[60px] text-xs resize-y"
-                        />
-                      </div>
-                      <div className="flex items-center gap-2 p-2 bg-background rounded border border-border mt-1">
-                        {item.image && (
-                          <img src={item.image} className="h-10 w-10 rounded object-cover" />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <span className="text-[9px] font-bold uppercase text-primary tracking-wider block">
-                            Database Link
-                          </span>
-                          <span className="text-[10px] text-muted-foreground block truncate">
-                            {item.params?.slug ? `/catalogue/${item.params.slug}` : item.to}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-              {(mega.featured ?? []).length < 4 && (
-                <Button
-                  variant="outline"
-                  className="min-h-[80px] border-dashed text-muted-foreground"
-                  onClick={() =>
-                    setMega({
-                      featured: [
-                        ...(mega.featured ?? []),
-                        { label: "", spec: "", to: "/", image: "" },
-                      ] as any,
-                      featuredKind: "product",
-                    })
-                  }
-                >
-                  + Add Featured Item
-                </Button>
-              )}
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-6">
-            <h4 className="text-xs font-bold uppercase text-primary tracking-wider mb-3">
-              Quick Actions
-            </h4>
-            <QuickActionsEditor
-              items={(mega.quickActions ?? []) as any}
-              onChange={(v) => setMega({ quickActions: v as any })}
-            />
-          </div>
         </TabsContent>
       </Tabs>
     </div>

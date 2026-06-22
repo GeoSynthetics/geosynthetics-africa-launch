@@ -42,9 +42,14 @@ export async function loadApplicationData(categorySlug: string) {
     (item: any) => item.slug === categorySlug || item.id === categorySlug
   );
 
-  // Determine which template slug/ID to load (prioritize matchedItem's id, which links to the template)
-  const templateSlug = matchedItem?.id || categorySlug;
-  const tmpl = templates[templateSlug];
+  // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then categorySlug)
+  let tmpl = null;
+  if (matchedItem) {
+    tmpl = templates[matchedItem.slug] || templates[matchedItem.id];
+  }
+  if (!tmpl) {
+    tmpl = templates[categorySlug];
+  }
 
   let templateData = null;
   if (tmpl) {

@@ -57,7 +57,11 @@ function useDynamicMegaMenus() {
           const defaults = getDefaultSections();
           const sections = SECTION_KEYS.map(key => {
             const row = data.find(d => d.key === `hierarchy_${key}`);
-            return (row?.value ?? defaults.find((d: any) => d.key === key)) as any;
+            const dbVal = row?.value as any;
+            if (dbVal && Array.isArray(dbVal.items)) {
+              return dbVal;
+            }
+            return defaults.find((d: any) => d.key === key);
           }).filter(Boolean);
 
           if (sections.length === 0) return;

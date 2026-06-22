@@ -12,6 +12,7 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
+import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { SectionHeading, FieldLabel, StringListEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
@@ -65,6 +66,8 @@ function blankTemplate(): IndustryTemplate {
 export function IndustriesTemplatesEditor() {
   const [allData, setAllData] = useState<AllIndustryTemplates>({});
   const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
+  const [rawHierarchy, setRawHierarchy] = useState<any>(null);
+  const [hierarchyDirty, setHierarchyDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -181,7 +184,11 @@ export function IndustriesTemplatesEditor() {
       .select("value")
       .eq("key", "hierarchy_industries")
       .maybeSingle();
-    const hierarchy = hierarchyRow?.value as any || {};
+    
+    const defaults = getDefaultSections();
+    const defaultIndustries = defaults.find(d => d.key === "industries")!;
+    const hierarchy = (hierarchyRow?.value as any)?.items ? (hierarchyRow?.value as any) : defaultIndustries;
+    setRawHierarchy(hierarchy);
     const hItems = (hierarchy.items || []).map((item: any) => ({
       id: item.id,
       slug: item.slug || item.id,
@@ -204,7 +211,7 @@ export function IndustriesTemplatesEditor() {
       
       // Use hierarchy items for seeding, fallback to static industries if empty
       const seedSource = hItems.length > 0
-        ? hItems.map(item => ({ slug: item.id, label: item.label }))
+        ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
         : INDUSTRIES;
 
       for (const ind of seedSource) {
@@ -265,6 +272,22 @@ export function IndustriesTemplatesEditor() {
       return next;
     });
 
+    if (rawHierarchy) {
+      const updatedItems = (rawHierarchy.items || []).filter(
+        (item: any) => item.id !== slug && item.slug !== slug
+      );
+      const updatedHierarchy = { ...rawHierarchy, items: updatedItems };
+      setRawHierarchy(updatedHierarchy);
+      setHierarchyItems(
+        updatedItems.map((item: any) => ({
+          id: item.id,
+          slug: item.slug || item.id,
+          label: item.label,
+        }))
+      );
+      setHierarchyDirty(true);
+    }
+
     if (activeSlug === slug) {
       const nextActive = categoriesList.find(c => c.slug !== slug)?.slug ?? "";
       setActiveSlug(nextActive);
@@ -276,15 +299,29 @@ export function IndustriesTemplatesEditor() {
   // ── Save to Supabase ──
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await supabase
+    
+    const { error: templateError } = await supabase
       .from("site_config")
       .upsert({ key: SUPABASE_KEY, value: allData as any }, { onConflict: "key" });
 
-    if (error) {
-      toast.error("Save failed: " + error.message);
+    let hierarchyError = null;
+    if (hierarchyDirty && rawHierarchy) {
+      const { error } = await supabase
+        .from("site_config")
+        .upsert({ key: "hierarchy_industries", value: rawHierarchy }, { onConflict: "key" });
+      hierarchyError = error;
+    }
+
+    if (templateError || hierarchyError) {
+      toast.error(
+        "Save failed: " + 
+        (templateError?.message || "") + 
+        (hierarchyError ? " | Hierarchy: " + hierarchyError.message : "")
+      );
     } else {
-      toast.success("Industry templates saved successfully!");
+      toast.success("Industry templates and navigation saved successfully!");
       setDirty(false);
+      setHierarchyDirty(false);
     }
     setSaving(false);
   };

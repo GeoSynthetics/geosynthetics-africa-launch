@@ -10,10 +10,11 @@ import { getDefaultSections } from "@/lib/hierarchy-utils";
 import { HierarchyTree } from "@/components/admin/HierarchyTree";
 import { ContentEditorPanel } from "@/components/admin/ContentEditorPanel";
 import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
+import { MegaMenuBuilderTab } from "@/components/admin/MegaMenuBuilderTab";
 
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | SectionKey;
+type TopLevelTab = "homepage" | "megamenu" | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -22,16 +23,11 @@ type SelectedNode =
 const SECTION_KEYS: SectionKey[] = ["products", "applications", "services", "industries"];
 const CONFIG_KEY = (k: SectionKey) => `hierarchy_${k}`;
 
-// Module-level in-memory cache to keep data across route transitions / remounts
-let siteBuilderCache: Record<SectionKey, HierarchySection | null> | null = null;
-
 export function SiteBuilderPage() {
-  const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>(() => {
-    return siteBuilderCache ?? {
-      products: null, applications: null, services: null, industries: null,
-    };
+  const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>({
+    products: null, applications: null, services: null, industries: null,
   });
-  const [loading, setLoading] = useState(!siteBuilderCache);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<TopLevelTab>("homepage");
   const [selected, setSelected] = useState<SelectedNode | null>(null);
@@ -49,10 +45,14 @@ export function SiteBuilderPage() {
         const result: Record<SectionKey, HierarchySection> = {} as any;
         for (const key of SECTION_KEYS) {
           const row = data?.find(d => d.key === CONFIG_KEY(key));
-          result[key] = (row?.value as HierarchySection) ?? defaults.find(d => d.key === key)!;
+          const val = row?.value as HierarchySection | undefined;
+          if (val && Array.isArray(val.items)) {
+            result[key] = val;
+          } else {
+            result[key] = defaults.find(d => d.key === key)!;
+          }
         }
         setSections(result);
-        siteBuilderCache = result;
       } catch (err: any) {
         toast.error("Failed to load config: " + err.message);
       } finally {
@@ -68,9 +68,6 @@ export function SiteBuilderPage() {
   const updateSection = async (key: SectionKey, updated: HierarchySection) => {
     setSections(prev => {
       const next = { ...prev, [key]: updated };
-      if (siteBuilderCache) {
-        siteBuilderCache[key] = updated;
-      }
       return next;
     });
     setSelected(null); // clear selection when tree changes
@@ -110,9 +107,6 @@ export function SiteBuilderPage() {
     // Update local state
     setSections(prev => {
       const next = { ...prev, [activeSection]: updatedSection };
-      if (siteBuilderCache) {
-        siteBuilderCache[activeSection] = updatedSection;
-      }
       return next;
     });
 
@@ -216,6 +210,12 @@ export function SiteBuilderPage() {
           >
             Homepage
           </TabsTrigger>
+          <TabsTrigger
+            value="megamenu"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Mega Menu
+          </TabsTrigger>
           {SECTION_KEYS.map(key => (
             <TabsTrigger
               key={key}
@@ -231,6 +231,16 @@ export function SiteBuilderPage() {
         {/* Homepage tab content */}
         <TabsContent value="homepage" className="flex-1 overflow-hidden m-0">
           <HomepageBuilderTab />
+        </TabsContent>
+
+        {/* Mega Menu tab content */}
+        <TabsContent value="megamenu" className="flex-1 overflow-hidden m-0">
+          <MegaMenuBuilderTab
+            initialSections={sections}
+            onSectionsChange={(updatedSections) => {
+              setSections(updatedSections);
+            }}
+          />
         </TabsContent>
 
         {/* Navigation hierarchy tabs */}

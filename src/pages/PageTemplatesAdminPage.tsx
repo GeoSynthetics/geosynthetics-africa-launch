@@ -80,6 +80,7 @@ export function PageTemplatesAdminPage() {
 
   // ── Megamenu Integration States ──
   const [hierarchyProducts, setHierarchyProducts] = useState<HierarchySection | null>(null);
+  const [hierarchyDirty, setHierarchyDirty] = useState(false);
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const [selectedParentId, setSelectedParentId] = useState("");
   const [linkingMenu, setLinkingMenu] = useState(false);
@@ -210,14 +211,16 @@ export function PageTemplatesAdminPage() {
       return;
     }
 
-    // Save hierarchy config if loaded
-    if (hierarchyProducts) {
+    // Save hierarchy config if loaded and dirty
+    if (hierarchyProducts && hierarchyDirty) {
       const { error: hierarchyError } = await supabase
         .from("site_config")
         .upsert({ key: "hierarchy_products", value: hierarchyProducts as any }, { onConflict: "key" });
 
       if (hierarchyError) {
         toast.error("Warning: Templates saved, but failed to update mega menu: " + hierarchyError.message);
+      } else {
+        setHierarchyDirty(false);
       }
     }
 
@@ -299,6 +302,7 @@ export function PageTemplatesAdminPage() {
     if (hierarchyProducts) {
       const updatedHierarchy = cleanHierarchy(hierarchyProducts, slug);
       setHierarchyProducts(updatedHierarchy);
+      setHierarchyDirty(true);
     }
 
     if (activeSlug === slug) setActiveSlug("");
