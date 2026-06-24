@@ -27,6 +27,7 @@ import {
   BookOpen,
   Image as ImageIcon,
 } from "lucide-react";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -161,15 +162,15 @@ function ContactsHero() {
       {/* Content */}
       <div className="relative container-page py-10 md:py-12">
         {/* Breadcrumbs */}
-        <nav className="text-xs text-surface-dark-foreground/70 mb-5 flex items-center gap-1.5">
-          <Link to="/" className="hover:text-primary">Home</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link to="/contacts" className="hover:text-primary">Contact Us</Link>
-          <ChevronRight className="h-3 w-3" />
-          <span>Southern Africa</span>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-surface-dark-foreground">Johannesburg Head Office</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: "Home", to: "/" },
+            { label: "Contact Us", to: "/contacts" },
+            { label: "Southern Africa" },
+            { label: "Johannesburg Head Office" },
+          ]}
+          variant="contacts"
+        />
 
         {/* Left-side content ΓÇö constrained to ~55% so building photo shows on right */}
         <div className="max-w-[58%] md:max-w-[52%]">

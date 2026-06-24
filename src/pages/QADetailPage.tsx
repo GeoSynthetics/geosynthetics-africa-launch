@@ -19,8 +19,11 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QuoteCard } from "@/components/site/QuoteCard";
+import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
   if (!name) return FileCheck;
@@ -129,14 +132,14 @@ export function QADetailPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
 
         <div className="container-page relative z-10 pb-10 pt-20">
-          {/* Breadcrumb */}
-          <nav className="text-[10px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-2 mb-5">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <ChevronRight className="h-3 w-3 text-white/30" />
-            <Link to="/quality-assurance" className="hover:text-primary transition-colors">Quality Assurance</Link>
-            <ChevronRight className="h-3 w-3 text-white/30" />
-            <span className="text-primary truncate max-w-[200px]">{doc.category_name}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              { label: "Quality Assurance", to: "/quality-assurance" },
+              { label: doc.category_name || "" },
+            ]}
+            variant="tiny"
+          />
 
           {doc.eyebrow && (
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3 flex items-center gap-2">

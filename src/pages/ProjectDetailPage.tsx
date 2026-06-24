@@ -26,10 +26,12 @@ import {
   ArrowLeftRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 export function ProjectDetailPage() {
   const { project } = Route.useLoaderData() || {};
@@ -167,13 +169,14 @@ export function ProjectDetailPage() {
           </div>
 
           <div className="container-page relative z-10">
-            <nav className="text-[10px] font-bold uppercase tracking-widest text-white/50 flex items-center gap-2 mb-6">
-              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <Link to="/projects" className="hover:text-primary transition-colors">Projects</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <span className="text-primary">Supply Case Study</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Home", to: "/" },
+                { label: "Projects", to: "/projects" },
+                { label: "Supply Case Study" },
+              ]}
+              variant="tiny"
+            />
 
             <div className="flex flex-wrap gap-1.5 mb-4">
               <span className="bg-black/60 border border-primary text-primary text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded">Supply Only</span>
@@ -234,13 +237,14 @@ export function ProjectDetailPage() {
           </div>
 
           <div className="container-page relative z-10">
-            <nav className="text-[10px] font-bold uppercase tracking-widest text-white/50 flex items-center gap-2 mb-6">
-              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <Link to="/projects" className="hover:text-primary transition-colors">Projects</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <span className="text-primary">Services Case Study</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Home", to: "/" },
+                { label: "Projects", to: "/projects" },
+                { label: "Services Case Study" },
+              ]}
+              variant="tiny"
+            />
 
             <div className="flex flex-wrap gap-1.5 mb-4">
               <span className="bg-black/60 border border-white text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded">Services Only</span>
@@ -292,13 +296,14 @@ export function ProjectDetailPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
 
           <div className="container-page relative z-10 pb-12 w-full">
-            <nav className="text-[10px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-2 mb-6">
-              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <Link to="/projects" className="hover:text-primary transition-colors">Projects</Link>
-              <ChevronRight className="h-3 w-3 text-white/30" />
-              <span className="text-primary">Install Case Study</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Home", to: "/" },
+                { label: "Projects", to: "/projects" },
+                { label: "Install Case Study" },
+              ]}
+              variant="tiny"
+            />
 
             <div className="flex flex-wrap gap-1.5 mb-4">
               <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded">Supply &amp; Install</span>

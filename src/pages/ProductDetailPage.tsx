@@ -31,6 +31,7 @@ import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/catalogue.$slug";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 interface KeyFeature { label: string; icon?: string }
 interface SpecRow { property: string; test_method?: string; unit?: string; typical_value?: string }
@@ -279,25 +280,47 @@ export function ProductDetailPage() {
         />
 
         <div className="relative container-page pt-6 pb-12 md:pt-8 md:pb-16">
-          <nav className="text-xs uppercase tracking-wider text-surface-dark-foreground/70 flex flex-wrap items-center gap-2">
-            <Link to="/" className="hover:text-primary">Home</Link>
-            <ChevronRight className="h-3 w-3" />
-            <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }} className="hover:text-primary">Catalogue</Link>
-            {product.product_categories?.name && (
-              <>
-                <ChevronRight className="h-3 w-3" />
-                <span className="hover:text-primary">{product.product_categories.name}</span>
-              </>
-            )}
-            {product.manufacturers?.name && (
-              <>
-                <ChevronRight className="h-3 w-3" />
-                <span className="hover:text-primary">{product.manufacturers.name}</span>
-              </>
-            )}
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-primary">{product.name}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              {
+                label: "Catalogue",
+                to: "/catalogue",
+                search: { q: "", cats: [], mans: [], sort: "newest" },
+              },
+              ...(product.product_categories?.name
+                ? [
+                    product.product_categories.slug
+                      ? {
+                          label: product.product_categories.name,
+                          to: "/products/$category",
+                          params: { category: product.product_categories.slug },
+                        }
+                      : {
+                          label: product.product_categories.name,
+                          to: "/catalogue",
+                          search: {
+                            q: "",
+                            cats: [product.product_categories.id],
+                            mans: [],
+                            sort: "newest",
+                          },
+                        },
+                  ]
+                : []),
+              ...(product.manufacturers?.name
+                ? [
+                    {
+                      label: product.manufacturers.name,
+                      to: "/catalogue",
+                      search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
+                    },
+                  ]
+                : []),
+              { label: product.name },
+            ]}
+            variant="default"
+          />
 
           <div className="mt-8 max-w-2xl">
             {product.product_categories?.name && (

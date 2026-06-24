@@ -6,6 +6,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
@@ -26,13 +27,14 @@ export function ProductCategoryPage() {
       >
         <div className="container-page py-16 md:py-24 relative z-10 flex flex-col md:flex-row gap-10">
           <div className="flex-1">
-            <nav className="text-xs uppercase tracking-wider text-primary font-bold flex items-center gap-2 mb-6">
-              <Link to="/products" className="hover:text-white transition-colors">Products</Link>
-              <ChevronRight className="h-3 w-3" />
-              <Link to="/products" className="hover:text-white transition-colors">Geomembranes</Link>
-              <ChevronRight className="h-3 w-3" />
-              <span className="text-white">{content.label}</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Home", to: "/" },
+                { label: "Products", to: "/products" },
+                { label: content.label },
+              ]}
+              variant="primary-bold"
+            />
             <h1 className="mt-2 font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-white">
               {content.label}
             </h1>

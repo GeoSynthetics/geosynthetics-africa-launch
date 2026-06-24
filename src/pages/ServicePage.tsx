@@ -6,6 +6,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/services.$slug";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // Interface Definitions for Type Safety
 interface BulletItem {
@@ -160,13 +161,14 @@ export function ServicePage({ data }: { data?: any } = {}) {
         }}
       >
         <div className="container-page py-16 md:py-24 relative z-10">
-          <nav className="text-xs uppercase tracking-widest text-primary font-bold flex flex-wrap items-center gap-2 mb-6">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <Icons.ChevronRight className="h-3 w-3 text-white/50" />
-            <Link to="/services" className="hover:text-white transition-colors">Services</Link>
-            <Icons.ChevronRight className="h-3 w-3 text-white/50" />
-            <span className="text-white">{title}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              { label: "Services", to: "/services" },
+              { label: title },
+            ]}
+            variant="primary-bold"
+          />
 
           <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/15 px-3 py-1.5 rounded-full border border-primary/20">
             {badgeText}

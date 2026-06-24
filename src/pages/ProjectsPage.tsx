@@ -13,6 +13,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // GSA African reach country data (as perJames' Continent Band mockup)
 const AFRICAN_COUNTRIES = [
@@ -95,13 +96,13 @@ export function ProjectsPage() {
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
         <div className="container-page relative z-10">
-          <nav className="text-[10px] font-bold uppercase tracking-widest text-white/50 flex items-center gap-2 mb-6">
-            <Link to="/" className="hover:text-primary transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3 text-white/30" />
-            <span className="text-primary">Projects</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              { label: "Projects" },
+            ]}
+            variant="tiny"
+          />
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3 flex items-center gap-2">
             <span className="w-6 h-[1.5px] bg-primary" />
             Project Portfolio

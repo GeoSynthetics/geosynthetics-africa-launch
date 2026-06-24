@@ -7,6 +7,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/applications.$category";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // Helper to render Lucide icons dynamically by string name
 function IconRenderer({ name, className }: { name: string; className?: string }) {
@@ -144,13 +145,14 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
         }}
       >
         <div className="container-page py-16 md:py-24 relative z-10">
-          <nav className="text-xs uppercase tracking-widest text-primary font-bold flex flex-wrap items-center gap-2 mb-6">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <Icons.ChevronRight className="h-3 w-3 text-white/50" />
-            <Link to="/applications" className="hover:text-white transition-colors">Applications</Link>
-            <Icons.ChevronRight className="h-3 w-3 text-white/50" />
-            <span className="text-white">{title}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              { label: "Applications", to: "/applications" },
+              { label: title },
+            ]}
+            variant="primary-bold"
+          />
 
           <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-white leading-tight">
             {title}

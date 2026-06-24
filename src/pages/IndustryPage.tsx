@@ -5,6 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/industries.$slug";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 export function IndustryPage({ data }: { data?: any } = {}) {
   const loaderData = data ? data : Route.useLoaderData();
@@ -26,6 +27,12 @@ export function IndustryPage({ data }: { data?: any } = {}) {
     "Structural Reinforcement"
   ];
 
+  const breadcrumbs = [
+    { label: "Home", to: "/" },
+    { label: "Industries", to: "/industries" },
+    { label: title },
+  ];
+
   return (
     <>
       <section
@@ -37,13 +44,7 @@ export function IndustryPage({ data }: { data?: any } = {}) {
         }}
       >
         <div className="container-page py-16 md:py-20">
-          <nav className="text-xs uppercase tracking-wider text-surface-dark-foreground/70 flex items-center gap-2">
-            <Link to="/" className="hover:text-primary">Home</Link>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-surface-dark-foreground/70 uppercase">Industries</span>
-            <ChevronRight className="h-3 w-3" />
-            <span className="text-primary">{title}</span>
-          </nav>
+          <Breadcrumbs items={breadcrumbs} variant="default" />
           <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">{title}</h1>
           <p className="mt-4 max-w-2xl text-base text-surface-dark-foreground/80">
             {description}

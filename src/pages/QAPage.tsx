@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
   if (!name) return FileCheck;
@@ -109,12 +110,13 @@ export function QAPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(228,30,43,0.07),_transparent_60%)] pointer-events-none" />
 
         <div className="container-page relative z-10">
-          {/* Breadcrumb */}
-          <nav className="text-[10px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-2 mb-6">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <ChevronRight className="h-3 w-3 text-white/30" />
-            <span className="text-primary">Quality Assurance</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: "Home", to: "/" },
+              { label: "Quality Assurance" },
+            ]}
+            variant="tiny"
+          />
 
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">

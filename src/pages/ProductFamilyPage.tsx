@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/accordion";
 import { splitIntoParagraphs, cn } from "@/lib/utils";
 import { QuoteCard } from "@/components/site/QuoteCard";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // Mock Data Structure representing GSE HD HDPE GEOMEMBRANES
 const mockData = {
@@ -335,21 +336,15 @@ export function ProductFamilyPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/50 z-0"></div>
         <div className="container-page py-16 md:py-24 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <nav className="text-xs uppercase tracking-wider text-primary font-bold flex flex-wrap items-center gap-2 mb-6">
-              <Link to="/products" className="hover:text-white transition-colors">
-                Products
-              </Link>
-              <ChevronRight className="h-3 w-3" />
-              <Link
-                to="/products/$category"
-                params={{ category }}
-                className="hover:text-white transition-colors"
-              >
-                {dynamicCategoryName}
-              </Link>
-              <ChevronRight className="h-3 w-3" />
-              <span className="text-white">{dynamicFamilyName}</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: "Home", to: "/" },
+                { label: "Products", to: "/products" },
+                { label: dynamicCategoryName, to: "/products/$category", params: { category } },
+                { label: dynamicFamilyName },
+              ]}
+              variant="primary-bold"
+            />
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight text-white leading-tight">
               {data.title}
             </h1>
