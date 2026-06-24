@@ -18,6 +18,7 @@ import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -29,6 +30,7 @@ import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
 import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
+import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -98,6 +100,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndustriesRoute = IndustriesRouteImport.update({
+  id: '/industries',
+  path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactsRoute = ContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
@@ -153,6 +160,11 @@ const ProductsIndexRoute = ProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => IndustriesRoute,
+} as any)
 const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
   id: '/catalogue/',
   path: '/catalogue/',
@@ -184,9 +196,9 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   getParentRoute: () => ProjectsRoute,
 } as any)
 const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
-  id: '/industries/$slug',
-  path: '/industries/$slug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => IndustriesRoute,
 } as any)
 const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
   id: '/catalogue/$slug',
@@ -276,6 +288,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
+  '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
@@ -303,6 +316,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
@@ -342,6 +356,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/industries': typeof IndustriesIndexRoute
   '/products': typeof ProductsIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/quality-assurance': typeof QualityAssuranceIndexRoute
@@ -361,6 +376,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/contacts': typeof ContactsRoute
+  '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
@@ -388,6 +404,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
@@ -408,6 +425,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/contacts'
+    | '/industries'
     | '/login'
     | '/profile'
     | '/projects'
@@ -435,6 +453,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/applications/'
     | '/catalogue/'
+    | '/industries/'
     | '/products/'
     | '/projects/'
     | '/quality-assurance/'
@@ -474,6 +493,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/catalogue'
+    | '/industries'
     | '/products'
     | '/projects'
     | '/quality-assurance'
@@ -492,6 +512,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/contacts'
+    | '/industries'
     | '/login'
     | '/profile'
     | '/projects'
@@ -519,6 +540,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/applications/'
     | '/catalogue/'
+    | '/industries/'
     | '/products/'
     | '/projects/'
     | '/quality-assurance/'
@@ -538,6 +560,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
   ContactsRoute: typeof ContactsRoute
+  IndustriesRoute: typeof IndustriesRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
@@ -548,7 +571,6 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
-  IndustriesSlugRoute: typeof IndustriesSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
@@ -619,6 +641,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries': {
+      id: '/industries'
+      path: '/industries'
+      fullPath: '/industries'
+      preLoaderRoute: typeof IndustriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacts': {
@@ -698,6 +727,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/industries/': {
+      id: '/industries/'
+      path: '/'
+      fullPath: '/industries/'
+      preLoaderRoute: typeof IndustriesIndexRouteImport
+      parentRoute: typeof IndustriesRoute
+    }
     '/catalogue/': {
       id: '/catalogue/'
       path: '/catalogue'
@@ -742,10 +778,10 @@ declare module '@tanstack/react-router' {
     }
     '/industries/$slug': {
       id: '/industries/$slug'
-      path: '/industries/$slug'
+      path: '/$slug'
       fullPath: '/industries/$slug'
       preLoaderRoute: typeof IndustriesSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof IndustriesRoute
     }
     '/catalogue/$slug': {
       id: '/catalogue/$slug'
@@ -904,6 +940,20 @@ const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
 )
 
+interface IndustriesRouteChildren {
+  IndustriesSlugRoute: typeof IndustriesSlugRoute
+  IndustriesIndexRoute: typeof IndustriesIndexRoute
+}
+
+const IndustriesRouteChildren: IndustriesRouteChildren = {
+  IndustriesSlugRoute: IndustriesSlugRoute,
+  IndustriesIndexRoute: IndustriesIndexRoute,
+}
+
+const IndustriesRouteWithChildren = IndustriesRoute._addFileChildren(
+  IndustriesRouteChildren,
+)
+
 interface ProjectsRouteChildren {
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -968,6 +1018,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
   ContactsRoute: ContactsRoute,
+  IndustriesRoute: IndustriesRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
@@ -978,7 +1029,6 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
-  IndustriesSlugRoute: IndustriesSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
