@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useLoaderData } from "@tanstack/react-router";
 import * as Icons from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
@@ -72,8 +73,9 @@ const WHY_WORK_WITH_US = [
 ];
 
 export function ServicesPage() {
-  const { templates } = useLoaderData({ from: "/services/" }) as {
+  const { templates, hierarchy } = useLoaderData({ from: "/services/" }) as {
     templates: Record<string, any>;
+    hierarchy: any;
   };
 
   const landing = templates?.["__landing"] || {};
@@ -88,6 +90,29 @@ export function ServicesPage() {
   const ctaTitle = landing.ctaTitle || "Need a custom supply, installation, or logistics package?";
   const ctaButtonText = landing.ctaButtonText || "Contact Our Experts";
   const ctaButtonUrl = landing.ctaButtonUrl || "/contacts";
+
+  const servicesItems = useMemo(() => {
+    if (hierarchy?.items && hierarchy.items.length > 0) {
+      return hierarchy.items;
+    }
+    // Fallback if hierarchy is not present
+    return Object.entries(templates || {})
+      .filter(([key]) => key !== "__landing")
+      .map(([slug, data]: [string, any]) => ({
+        id: slug,
+        slug,
+        label: data.title || slug,
+        icon: "Layers",
+      }));
+  }, [hierarchy, templates]);
+
+  const serviceDetails = (slug: string, fallbackLabel: string) => {
+    const t = templates?.[slug] || {};
+    return {
+      title: t.title || fallbackLabel,
+      description: t.description || "Professional supply and quality-controlled installation services across Africa.",
+    };
+  };
 
   const resolveIcon = (iconName: string) => {
     const IconComp = (Icons as any)[iconName];
@@ -107,6 +132,54 @@ export function ServicesPage() {
           <Link to="/contacts">Speak to Technical Team</Link>
         </Button>
       </PageHero>
+
+      {/* ── Services Grid ── */}
+      <section className="bg-background border-b border-border">
+        <div className="container-page py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/15 px-3 py-1.5 rounded-full">
+              Specialized Execution
+            </span>
+            <h2 className="mt-4 font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+              Our Specialized Services
+            </h2>
+            <div className="h-1.5 w-20 bg-primary mx-auto mt-4 rounded-full" />
+            <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
+              From high-integrity geomembrane welding to modular concrete channel lining, we manage procurement, logistics, and SANS-compliant installation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {servicesItems.map((s: any) => {
+              const details = serviceDetails(s.slug || s.id, s.label);
+              return (
+                <Link
+                  key={s.slug || s.id}
+                  to="/$slug"
+                  params={{ slug: s.slug || s.id }}
+                  className="group relative rounded-xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer"
+                >
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom rounded-l-xl" />
+                  <div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary/20">
+                      {resolveIcon(s.icon || "Layers")}
+                    </div>
+                    <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground">
+                      {details.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                      {details.description}
+                    </p>
+                  </div>
+                  <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
+                    Explore Service <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* ── Capabilities Grid ── */}
       <section className="bg-background border-b border-border">

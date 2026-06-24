@@ -4,14 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
 async function loadServicesLandingData() {
-  const { data: templateRow } = await supabase
+  const { data: rows } = await supabase
     .from("site_config")
-    .select("value")
-    .eq("key", "template_services")
-    .maybeSingle();
-  const templates = (templateRow?.value as Record<string, any>) || {};
+    .select("key, value")
+    .in("key", ["template_services", "hierarchy_services"]);
+
+  const templates = (rows?.find(r => r.key === "template_services")?.value as Record<string, any>) || {};
+  const hierarchy = (rows?.find(r => r.key === "hierarchy_services")?.value as any) || null;
+
   return {
     templates,
+    hierarchy,
   };
 }
 

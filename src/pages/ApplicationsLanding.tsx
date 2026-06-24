@@ -1,19 +1,10 @@
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import * as Icons from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
-
-const IMAGES: Record<string, string> = {
-  "mining-systems": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&q=80",
-  "water-containment": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-  "waste-landfills": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-  "roads-infrastructure": "https://images.unsplash.com/photo-1473445730015-841f29a9490b?w=800&q=80",
-  "erosion-control": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-  "drainage-systems": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80",
-  "agriculture-aquaculture": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-};
 
 export function ApplicationsLanding() {
   const { templates } = useLoaderData({ from: "/applications/" }) as {
@@ -25,6 +16,12 @@ export function ApplicationsLanding() {
   const heroDescription = landing.description || "From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions.";
   const heroImage = landing.heroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
 
+  const resolveIcon = (iconName: string) => {
+    const IconComp = (Icons as any)[iconName];
+    if (IconComp) return <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />;
+    return <Icons.CheckCircle2 className="h-6 w-6 text-primary" />;
+  };
+
   return (
     <>
       <PageHero
@@ -35,29 +32,31 @@ export function ApplicationsLanding() {
       />
       <section className="bg-background">
         <div className="container-page py-16 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {APPLICATION_CATEGORIES.map((c) => {
-              const categoryTemplate = templates?.[c.slug];
-              const cardImage = categoryTemplate?.heroImage || IMAGES[c.slug] || IMAGES["mining-systems"];
+              const categoryTemplate = templates?.[c.slug] || {};
+              const description = categoryTemplate?.description || `Engineered geosynthetic systems and installation solutions for ${c.label.toLowerCase()} across Africa.`;
               return (
                 <Link
                   key={c.slug}
                   to="/$slug"
                   params={{ slug: c.slug }}
-                  className="group relative aspect-[4/3] overflow-hidden rounded"
+                  className="group relative rounded-xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer"
                 >
-                  <img
-                    src={cardImage}
-                    alt={c.label}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/40 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-surface-dark-foreground">
-                    <div className="font-display text-xl font-bold uppercase">{c.label}</div>
-                    <div className="mt-1 text-xs uppercase tracking-wider opacity-80 inline-flex items-center gap-2">
-                      Explore System <ArrowRight className="h-3 w-3" />
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom rounded-l-xl" />
+                  <div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary/20">
+                      {resolveIcon(c.icon || "Layers")}
                     </div>
+                    <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground">
+                      {c.label}
+                    </h3>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                      {description}
+                    </p>
+                  </div>
+                  <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
+                    Explore System <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
               );
