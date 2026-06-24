@@ -52,9 +52,15 @@ interface CaseStudy {
 }
 
 export function ProjectsPage() {
-  const { caseStudies = [] } = (Route.useLoaderData() || {}) as {
+  const { caseStudies = [], landingContent } = (Route.useLoaderData() || {}) as {
     caseStudies: CaseStudy[];
+    landingContent: any;
   };
+
+  const landing = landingContent || {};
+  const heroTitle = landing.title || "340+ projects.\n17 countries.\nOne partner.";
+  const heroDescription = landing.description || "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.";
+  const heroImage = landing.heroImage || "";
 
   // --- Display States ---
   const [sortOption, setSortOption] = useState("recent"); // 'recent', 'scale', 'featured', 'country'
@@ -90,10 +96,28 @@ export function ProjectsPage() {
   return (
     <>
       {/* ============ HERO SECTION ============ */}
-      <section className="relative bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]">
+      <section
+        className={cn(
+          "relative text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
+          heroImage ? "bg-surface-dark" : "bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111]"
+        )}
+        style={
+          heroImage
+            ? {
+                backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.9), rgba(10,10,12,0.55)), url(${heroImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : undefined
+        }
+      >
         {/* Decorative elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,_rgba(228,30,43,0.06),_transparent_65%)] pointer-events-none filter blur-3xl" />
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        {!heroImage && (
+          <>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,_rgba(228,30,43,0.06),_transparent_65%)] pointer-events-none filter blur-3xl" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          </>
+        )}
 
         <div className="container-page relative z-10">
           <Breadcrumbs
@@ -107,17 +131,11 @@ export function ProjectsPage() {
             <span className="w-6 h-[1.5px] bg-primary" />
             Project Portfolio
           </div>
-          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold uppercase leading-[0.95] tracking-tight text-white mb-6">
-            340+ projects.
-            <br />
-            17 countries.
-            <br />
-            <span className="text-primary">One partner.</span>
+          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold uppercase leading-[0.95] tracking-tight text-white mb-6 whitespace-pre-line">
+            {heroTitle}
           </h1>
           <p className="max-w-2xl text-sm md:text-base text-white/80 leading-relaxed font-normal mb-10">
-            Every project listed below was designed, supplied, installed, tested, or certified by
-            Geosynthetics Africa. Filter by industry, application, product, or country to find
-            reference designs that match your scope — or upload your tender pack for comparables.
+            {heroDescription}
           </p>
 
           {/* Stats Ribbon */}

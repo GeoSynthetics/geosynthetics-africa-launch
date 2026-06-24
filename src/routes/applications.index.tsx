@@ -3,14 +3,17 @@ import { ApplicationsLanding } from "@/pages/ApplicationsLanding";
 import { supabase } from "@/integrations/supabase/client";
 
 async function loadApplicationsLandingData() {
-  const { data: templateRow } = await supabase
+  const { data: rows } = await supabase
     .from("site_config")
-    .select("value")
-    .eq("key", "template_applications")
-    .maybeSingle();
-  const templates = (templateRow?.value as Record<string, any>) || {};
+    .select("key, value")
+    .in("key", ["template_applications", "hierarchy_applications"]);
+
+  const templates = (rows?.find(r => r.key === "template_applications")?.value as Record<string, any>) || {};
+  const hierarchy = (rows?.find(r => r.key === "hierarchy_applications")?.value as any) || null;
+
   return {
     templates,
+    hierarchy,
   };
 }
 

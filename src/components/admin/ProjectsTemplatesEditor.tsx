@@ -29,13 +29,35 @@ import {
 
 // Reusable Sub-components for Form Layouts
 
+interface ProjectsLandingContent {
+  title: string;
+  description: string;
+  heroImage: string;
+  seo?: {
+    title: string;
+    description: string;
+    keywords?: string;
+  };
+}
+
+const defaultLandingContent = (): ProjectsLandingContent => ({
+  title: "340+ projects.\n17 countries.\nOne partner.",
+  description: "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.",
+  heroImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+  seo: {
+    title: "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa",
+    description: "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.",
+    keywords: "geosynthetics, projects, case studies, africa, geomembrane, installation"
+  }
+});
+
 export function ProjectsTemplatesEditor() {
   const [projects, setProjects] = useState<any[]>([]);
-  const [activeId, setActiveId] = useState<string>("");
+  const [activeId, setActiveId] = useState<string>("__landing");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const [activeTab, setActiveTab] = useState("hero");
+  const [activeTab, setActiveTab] = useState("landing");
 
   const [newTitle, setNewTitle] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
@@ -45,6 +67,10 @@ export function ProjectsTemplatesEditor() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  // Projects Landing Content states
+  const [landingContent, setLandingContent] = useState<ProjectsLandingContent>(defaultLandingContent());
+  const [editingLanding, setEditingLanding] = useState<ProjectsLandingContent>(defaultLandingContent());
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -69,7 +95,7 @@ export function ProjectsTemplatesEditor() {
 
   // Synchronize current page when activeId changes (e.g. on load or creation)
   useEffect(() => {
-    if (activeId) {
+    if (activeId && activeId !== "__landing") {
       const index = filteredProjects.findIndex((p) => p.id === activeId);
       if (index !== -1) {
         const page = Math.floor(index / itemsPerPage) + 1;
@@ -80,6 +106,50 @@ export function ProjectsTemplatesEditor() {
     }
   }, [activeId, filteredProjects, currentPage]);
 
+  // Synchronize edit state when selection or raw data changes
+  useEffect(() => {
+    if (activeId === "__landing") {
+      setEditingLanding({
+        ...defaultLandingContent(),
+        ...landingContent,
+        seo: {
+          ...defaultLandingContent().seo,
+          ...(landingContent?.seo || {}),
+        }
+      });
+      setDirty(false);
+    }
+  }, [activeId, landingContent]);
+
+  // Handle activeTab switching between landing vs normal project tabs
+  useEffect(() => {
+    if (activeId === "__landing") {
+      if (activeTab !== "landing" && activeTab !== "seo") {
+        setActiveTab("landing");
+      }
+    } else {
+      if (activeTab === "landing" || activeTab === "seo") {
+        setActiveTab("hero");
+      }
+    }
+  }, [activeId]);
+
+  const setLandingField = (key: keyof ProjectsLandingContent, value: any) => {
+    setEditingLanding((prev) => ({ ...prev, [key]: value }));
+    setDirty(true);
+  };
+
+  const setLandingSeoField = (key: string, value: any) => {
+    setEditingLanding((prev) => ({
+      ...prev,
+      seo: {
+        ...prev.seo,
+        [key]: value
+      }
+    }));
+    setDirty(true);
+  };
+
   const handleConfirmDelete = () => {
     if (projectToDelete) {
       handleDelete(projectToDelete.id, projectToDelete.title);
@@ -87,28 +157,41 @@ export function ProjectsTemplatesEditor() {
     }
   };
 
-  // â”€â”€ Load from Supabase â”€â”€
+  // ─── Load from Supabase ───
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("case_studies")
-      .select("*")
-      .order("project_year", { ascending: false })
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("case_studies")
+        .select("*")
+        .order("project_year", { ascending: false })
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      toast.error("Failed to load project templates: " + error.message);
-    } else if (data) {
-      setProjects(data);
-      if (data.length > 0 && !activeId) {
-        setActiveId(data[0].id);
+      if (error) {
+        toast.error("Failed to load project templates: " + error.message);
+      } else if (data) {
+        setProjects(data);
       }
+
+      const { data: landingRow, error: landingError } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "projects_landing_content")
+        .maybeSingle();
+
+      if (landingError) {
+        console.error("Failed to load projects_landing_content:", landingError);
+      } else if (landingRow?.value) {
+        setLandingContent(landingRow.value as ProjectsLandingContent);
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to load projects");
     }
     setLoading(false);
-  }, [activeId]);
+  }, []);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   // Active project helper
@@ -215,21 +298,39 @@ export function ProjectsTemplatesEditor() {
     }
   };
 
-  // â”€â”€ Save Current Project â”€â”€
+  // ─── Save Current Project / Landing Page ───
   const handleSave = async () => {
-    if (!active) return;
     setSaving(true);
 
-    const { error } = await supabase
-      .from("case_studies")
-      .upsert(active, { onConflict: "id" });
+    if (activeId === "__landing") {
+      const { error } = await supabase
+        .from("site_config")
+        .upsert({ key: "projects_landing_content", value: editingLanding as any }, { onConflict: "key" });
 
-    if (error) {
-      toast.error("Save failed: " + error.message);
+      if (error) {
+        toast.error("Save failed: " + error.message);
+      } else {
+        toast.success("Projects landing page settings saved successfully!");
+        setLandingContent(editingLanding);
+        setDirty(false);
+      }
     } else {
-      toast.success(`Project template "${active.title}" saved successfully!`);
-      setDirty(false);
-      load();
+      if (!active) {
+        setSaving(false);
+        return;
+      }
+
+      const { error } = await supabase
+        .from("case_studies")
+        .upsert(active, { onConflict: "id" });
+
+      if (error) {
+        toast.error("Save failed: " + error.message);
+      } else {
+        toast.success(`Project template "${active.title}" saved successfully!`);
+        setDirty(false);
+        load();
+      }
     }
     setSaving(false);
   };
@@ -240,10 +341,12 @@ export function ProjectsTemplatesEditor() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
         <div>
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
-            Project Templates (Case Studies)
+            {activeId === "__landing" ? "Projects Landing Page" : "Project Templates (Case Studies)"}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Input, manage, and structure high-fidelity project templates to populate `/projects/$slug`.
+            {activeId === "__landing"
+              ? "Input and manage the hero and SEO details for the /projects landing page."
+              : "Input, manage, and structure high-fidelity project templates to populate '/projects/$slug'."}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -287,6 +390,32 @@ export function ProjectsTemplatesEditor() {
         <div className="flex gap-0 border border-border rounded-xl overflow-hidden min-h-[780px] bg-card shadow-sm">
           {/* Left Sidebar */}
           <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
+            <div className="px-2 py-2 border-b border-border shrink-0 space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Main Pages
+              </p>
+              <button
+                onClick={() => {
+                  setActiveId("__landing");
+                  setActiveTab("landing");
+                }}
+                className={cn(
+                  "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                  activeId === "__landing"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "hover:bg-accent text-foreground",
+                )}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-xs">Projects Landing Page</div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                    /projects
+                  </div>
+                </div>
+                {activeId === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
+              </button>
+            </div>
+
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Project Templates ({filteredProjects.length !== projects.length ? `${filteredProjects.length}/${projects.length}` : projects.length})
@@ -435,11 +564,117 @@ export function ProjectsTemplatesEditor() {
           </div>
 
           {/* Right Panel - Form Editor */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {!active ? (
+          <div className="flex-1 flex flex-col overflow-hidden bg-card">
+            {!active && activeId !== "__landing" ? (
               <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-3 p-8 text-center">
                 <Compass className="h-10 w-10 opacity-30" />
                 <p className="text-sm font-medium">Select a project template to edit its fields</p>
+              </div>
+            ) : activeId === "__landing" ? (
+              <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Active Category Header Bar */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30 gap-2">
+                  <div>
+                    <h3 className="font-display text-lg font-bold uppercase tracking-tight text-foreground leading-tight">
+                      Projects Landing Page
+                    </h3>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      Route: <code className="bg-surface px-1.5 py-0.5 rounded font-mono text-primary font-bold">/projects</code>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Landing page editing tabs */}
+                <div className="flex-1 flex flex-col overflow-hidden">
+                  <div className="px-6 border-b border-border bg-surface/10 shrink-0">
+                    <Tabs
+                      value={activeTab}
+                      onValueChange={setActiveTab}
+                      className="w-full"
+                    >
+                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
+                        <TabsTrigger
+                          value="landing"
+                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          Hero & Details
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="seo"
+                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          SEO Settings
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto p-6">
+                    <Tabs value={activeTab} className="h-full">
+                      {/* LANDING TAB */}
+                      <TabsContent value="landing" className="space-y-6 m-0 focus-visible:outline-none">
+                        <SectionHeading>Hero Details</SectionHeading>
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <FieldLabel hint="Hero title displayed in bold display font (e.g. 340+ projects. 17 countries.)">Hero Title (H1)</FieldLabel>
+                            <Input
+                              value={editingLanding.title ?? ""}
+                              onChange={(e) => setLandingField("title", e.target.value)}
+                              className="text-sm font-semibold"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <FieldLabel hint="Descriptive text paragraph displayed below the H1 title">Description</FieldLabel>
+                            <Textarea
+                              value={editingLanding.description ?? ""}
+                              onChange={(e) => setLandingField("description", e.target.value)}
+                              className="min-h-[120px] text-sm leading-relaxed"
+                            />
+                          </div>
+                          <div>
+                            <ImagePicker
+                              label="Hero Background Image"
+                              hint="Optional background hero photo URL. Leave empty to use the dark gradient background."
+                              value={editingLanding.heroImage ?? ""}
+                              onChange={(val) => setLandingField("heroImage", val)}
+                            />
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* SEO TAB */}
+                      <TabsContent value="seo" className="space-y-6 m-0 focus-visible:outline-none">
+                        <SectionHeading>SEO Meta Tags</SectionHeading>
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <FieldLabel hint="Browser tab title and Google search snippet header">Meta Title</FieldLabel>
+                            <Input
+                              value={editingLanding.seo?.title ?? ""}
+                              onChange={(e) => setLandingSeoField("title", e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <FieldLabel hint="Brief summary shown in Google search results below the title link">Meta Description</FieldLabel>
+                            <Textarea
+                              value={editingLanding.seo?.description ?? ""}
+                              onChange={(e) => setLandingSeoField("description", e.target.value)}
+                              className="min-h-[100px] text-sm leading-relaxed"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <FieldLabel hint="Comma-separated keywords for legacy search engine signals">SEO Keywords</FieldLabel>
+                            <Input
+                              value={editingLanding.seo?.keywords ?? ""}
+                              onChange={(e) => setLandingSeoField("keywords", e.target.value)}
+                              className="text-sm"
+                            />
+                          </div>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="flex-1 flex flex-col overflow-hidden">

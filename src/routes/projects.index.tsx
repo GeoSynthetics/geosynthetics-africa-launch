@@ -58,19 +58,34 @@ export const Route = createFileRoute("/projects/")({
 
     if (error) {
       console.error("Error loading case studies:", error);
-      return { caseStudies: [] };
     }
 
-    return { caseStudies: data || [] };
+    const { data: landingRow } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "projects_landing_content")
+      .maybeSingle();
+
+    return {
+      caseStudies: data || [],
+      landingContent: landingRow?.value || null,
+    };
   },
   pendingComponent: ProjectsLandingSkeleton,
   pendingMs: 0,
-  head: () => ({
-    meta: [
-      { title: "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa" },
-      { name: "description", content: "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type." },
-      { property: "og:title", content: "Projects — Geosynthetics Africa" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const landing = (loaderData?.landingContent as any) || {};
+    const title = landing.seo?.title || "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa";
+    const description = landing.seo?.description || "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.";
+    const keywords = landing.seo?.keywords || "";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
+      ],
+    };
+  },
   component: ProjectsPage,
 });
