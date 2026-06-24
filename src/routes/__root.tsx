@@ -11,7 +11,6 @@ import { CookieConsent } from "@/components/site/CookieConsent";
 import { TrackingLoader } from "@/components/site/TrackingLoader";
 import { QuickQuoteProvider } from "@/hooks/use-quick-quote";
 import { QuickQuoteModal } from "@/components/site/QuickQuoteModal";
-import { getRedirectTarget } from "@/lib/redirects";
 
 function NotFoundComponent() {
   return (
@@ -36,15 +35,6 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
-  beforeLoad: async ({ location }) => {
-    const target = await getRedirectTarget(location.pathname);
-    if (target) {
-      throw redirect({
-        to: target,
-        statusCode: 301,
-      });
-    }
-  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },

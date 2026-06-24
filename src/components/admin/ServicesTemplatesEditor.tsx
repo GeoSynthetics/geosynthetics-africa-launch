@@ -217,7 +217,7 @@ export function ServicesTemplatesEditor() {
 
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
-    const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
+    const list = hierarchyItems.map((item) => ({ slug: item.slug, label: item.label }));
     
     // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
@@ -320,7 +320,7 @@ export function ServicesTemplatesEditor() {
       
       // Use hierarchy items for seeding, fallback to static services if empty
       const seedSource = hItems.length > 0
-        ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
+        ? hItems.map((item: any) => ({ slug: item.slug, label: item.label }))
         : SERVICES;
 
       for (const svc of seedSource) {
@@ -375,7 +375,7 @@ export function ServicesTemplatesEditor() {
     if (!newSlug.trim()) return;
     const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
     
-    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
+    if (allData[slug] || hierarchyItems.some(item => item.slug === slug || item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
