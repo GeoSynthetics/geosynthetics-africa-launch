@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, type LinkComponentProps, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, type LinkComponentProps, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
@@ -278,6 +278,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
   const [value, setValue] = useState<string>("");
   const location = useLocation();
   const navigate = useNavigate();
+  const router = useRouter();
   const isInside = useRef(false);
   const timeoutRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -440,6 +441,11 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
             return (
               <NavigationMenuItem key={m.key} value={m.key} className="h-full flex items-stretch">
                 <NavigationMenuTrigger
+                  onMouseEnter={() => {
+                    router.preloadRoute({ to: m.to }).catch((err) => {
+                      console.warn("Failed to prefetch route:", m.to, err);
+                    });
+                  }}
                   onClick={(e) => {
                     if (value === m.key) {
                       e.preventDefault();

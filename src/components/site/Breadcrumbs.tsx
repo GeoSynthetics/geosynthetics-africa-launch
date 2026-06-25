@@ -31,9 +31,8 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
   const linkClasses = cn(
     "transition-colors",
     {
-      "hover:text-primary": variant === "default" || variant === "contacts",
+      "hover:text-primary": variant === "default" || variant === "contacts" || variant === "tiny",
       "hover:text-white": variant === "primary-bold",
-      "hover:text-primary": variant === "tiny",
     }
   );
 
