@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, type LinkComponentProps, useLocation } from "@tanstack/react-router";
+import { Link, type LinkComponentProps, useLocation, useNavigate } from "@tanstack/react-router";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
@@ -277,6 +277,7 @@ function useDynamicMegaMenus() {
 function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
   const [value, setValue] = useState<string>("");
   const location = useLocation();
+  const navigate = useNavigate();
   const isInside = useRef(false);
   const timeoutRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -439,6 +440,12 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
             return (
               <NavigationMenuItem key={m.key} value={m.key} className="h-full flex items-stretch">
                 <NavigationMenuTrigger
+                  onClick={(e) => {
+                    if (value === m.key) {
+                      e.preventDefault();
+                      navigate({ to: m.to });
+                    }
+                  }}
                   className={`bg-transparent px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${active
                     ? "text-primary border-primary"
                     : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"

@@ -151,8 +151,24 @@ export function PageTemplatesAdminPage() {
 
     if (error) {
       toast.error("Failed to load templates: " + error.message);
-    } else if (data?.value) {
-      const templates = data.value as Record<string, ProductPageContent>;
+    } else {
+      const templates = (data?.value as Record<string, ProductPageContent>) || {};
+      if (!templates["__landing"]) {
+        templates["__landing"] = {
+          slug: "__landing",
+          label: "Products Landing Page",
+          heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
+          subtitle: "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
+          description: [],
+          features: [],
+          popularProducts: [],
+          seo: {
+            title: "Products — Geosynthetics Africa",
+            description: "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
+            keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl"
+          }
+        } as any;
+      }
       setAllData(templates);
 
       // Auto-select slug from URL search param if present and exists in loaded templates
@@ -161,10 +177,7 @@ export function PageTemplatesAdminPage() {
       if (querySlug && templates[querySlug]) {
         setActiveSlug(querySlug);
       } else {
-        const keys = Object.keys(templates);
-        if (keys.length > 0) {
-          setActiveSlug(keys[0]);
-        }
+        setActiveSlug(templates["__landing"] ? "__landing" : Object.keys(templates)[0] || "");
       }
     }
 
@@ -184,14 +197,31 @@ export function PageTemplatesAdminPage() {
   // ── Seed defaults ──
   const handleSeedDefaults = async () => {
     setSeeding(true);
+    const seeded = { ...SEED_CATEGORIES } as Record<string, any>;
+    if (!seeded["__landing"]) {
+      seeded["__landing"] = {
+        slug: "__landing",
+        label: "Products Landing Page",
+        heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
+        subtitle: "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
+        description: [],
+        features: [],
+        popularProducts: [],
+        seo: {
+          title: "Products — Geosynthetics Africa",
+          description: "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
+          keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl"
+        }
+      };
+    }
     const { error } = await supabase
       .from("site_config")
-      .upsert({ key: SUPABASE_KEY, value: SEED_CATEGORIES as any }, { onConflict: "key" });
+      .upsert({ key: SUPABASE_KEY, value: seeded }, { onConflict: "key" });
     if (error) {
       toast.error("Seed failed: " + error.message);
     } else {
       toast.success("All default category templates seeded to Supabase!");
-      setAllData(SEED_CATEGORIES as any);
+      setAllData(seeded);
     }
     setSeeding(false);
   };
@@ -423,7 +453,7 @@ export function PageTemplatesAdminPage() {
     }
   };
 
-  const slugList = Object.keys(allData);
+  const slugList = Object.keys(allData).filter(s => s !== "__landing");
   const isEmpty = slugList.length === 0;
 
   // Filtered list based on search query
@@ -667,47 +697,82 @@ export function PageTemplatesAdminPage() {
                   />
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-                  {paginatedSlugs.map(slug => {
-                    const cat = allData[slug];
-                    const isActive = slug === activeSlug;
-                    return (
-                      <button
-                        key={slug}
-                        onClick={() => { setActiveSlug(slug); setActiveTab("hero"); }}
-                        className={cn(
-                          "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors",
-                          isActive
-                            ? "bg-primary/10 text-primary font-semibold"
-                            : "hover:bg-accent text-foreground",
-                        )}
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate font-medium text-xs">{cat?.label || slug}</div>
-                          <div className="truncate text-[10px] text-muted-foreground mt-0.5">{slug}</div>
+                <div className="flex-1 overflow-y-auto p-2 space-y-4">
+                  {/* Main Pages Section */}
+                  <div className="space-y-1">
+                    <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      Main Pages
+                    </p>
+                    <button
+                      onClick={() => {
+                        setActiveSlug("__landing");
+                        setActiveTab("hero");
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                        activeSlug === "__landing"
+                          ? "bg-primary/10 text-primary font-semibold"
+                          : "hover:bg-accent text-foreground",
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-medium text-xs">Products Landing Page</div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                          /products
                         </div>
-                        <div className="flex items-center gap-1 ml-1 shrink-0">
-                          {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
-                          {!isActive && (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                              onClick={e => {
-                                e.stopPropagation();
-                                setSlugToDelete(slug);
-                              }}
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                  {filteredSlugs.length === 0 && (
-                    <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
-                  )}
+                      </div>
+                      {activeSlug === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
+                    </button>
+                  </div>
+
+                  {/* Sub-Page Templates Section */}
+                  <div className="space-y-1">
+                    <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                      Sub-Page Templates ({filteredSlugs.length !== slugList.length ? `${filteredSlugs.length}/${slugList.length}` : slugList.length})
+                    </p>
+                    <div className="space-y-0.5">
+                      {paginatedSlugs.map(slug => {
+                        const cat = allData[slug];
+                        const isActive = slug === activeSlug;
+                        return (
+                          <button
+                            key={slug}
+                            onClick={() => { setActiveSlug(slug); setActiveTab("hero"); }}
+                            className={cn(
+                              "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                              isActive
+                                ? "bg-primary/10 text-primary font-semibold"
+                                : "hover:bg-accent text-foreground",
+                            )}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="truncate font-medium text-xs">{cat?.label || slug}</div>
+                              <div className="truncate text-[10px] text-muted-foreground mt-0.5">{slug}</div>
+                            </div>
+                            <div className="flex items-center gap-1 ml-1 shrink-0">
+                              {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
+                              {!isActive && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    setSlugToDelete(slug);
+                                  }}
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+                      {filteredSlugs.length === 0 && (
+                        <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Pagination footer */}
@@ -755,10 +820,14 @@ export function PageTemplatesAdminPage() {
                     <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                       <div>
                         <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                          {active.label || activeSlug}
+                          {activeSlug === "__landing" ? "Products Landing Page" : (active.label || activeSlug)}
                         </h3>
                         <div className="flex items-center gap-2 flex-wrap mt-1">
-                          {categorySlug ? (
+                          {activeSlug === "__landing" ? (
+                            <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
+                              /products
+                            </code>
+                          ) : categorySlug ? (
                             <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
                               /products/{categorySlug}/{activeSlug}
                             </code>
@@ -769,89 +838,91 @@ export function PageTemplatesAdminPage() {
                           )}
 
                           {/* Mega Menu Linkage Status Badge & Action */}
-                          {linkage.linked ? (
-                            <div className="flex items-center gap-1">
-                              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                Active in Navigation {linkage.parentName ? `(under ${linkage.parentName})` : ""}
-                              </span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleUnlink}
-                                disabled={linkingMenu}
-                                className="h-5 px-1.5 text-[10px] font-semibold text-destructive hover:bg-destructive/10 uppercase tracking-wider"
-                              >
-                                Unlink
-                              </Button>
-                            </div>
-                          ) : (
-                            <div className="flex items-center gap-1">
-                              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                                Unlinked (Hidden from Nav Menu)
-                              </span>
+                          {activeSlug !== "__landing" && (
+                            linkage.linked ? (
+                              <div className="flex items-center gap-1">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                  Active in Navigation {linkage.parentName ? `(under ${linkage.parentName})` : ""}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={handleUnlink}
+                                  disabled={linkingMenu}
+                                  className="h-5 px-1.5 text-[10px] font-semibold text-destructive hover:bg-destructive/10 uppercase tracking-wider"
+                                >
+                                  Unlink
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1">
+                                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                  Unlinked (Hidden from Nav Menu)
+                                </span>
 
-                              <Dialog open={linkDialogOpen} onOpenChange={(open) => { setLinkDialogOpen(open); if (open && !selectedParentId && hierarchyProducts?.items?.[0]) setSelectedParentId(hierarchyProducts.items[0].id); }}>
-                                <DialogTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-5 px-1.5 text-[10px] font-bold text-primary border-primary/30 hover:border-primary/60 hover:bg-primary/5 uppercase tracking-wider gap-0.5"
-                                  >
-                                    ⚡ Link to Menu
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[400px] bg-card border border-border">
-                                  <DialogHeader>
-                                    <DialogTitle className="font-display uppercase text-base tracking-tight">Link Page to Mega Menu</DialogTitle>
-                                    <DialogDescription className="text-xs text-muted-foreground mt-1">
-                                      Select the parent category in the Products Mega Menu where you want to place <strong>{active?.label || activeSlug}</strong>.
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <div className="py-4">
-                                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-2">
-                                      Parent Category
-                                    </label>
-                                    {hierarchyProducts?.items ? (
-                                      <Select
-                                        value={selectedParentId}
-                                        onValueChange={setSelectedParentId}
+                                <Dialog open={linkDialogOpen} onOpenChange={(open) => { setLinkDialogOpen(open); if (open && !selectedParentId && hierarchyProducts?.items?.[0]) setSelectedParentId(hierarchyProducts.items[0].id); }}>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="h-5 px-1.5 text-[10px] font-bold text-primary border-primary/30 hover:border-primary/60 hover:bg-primary/5 uppercase tracking-wider gap-0.5"
+                                    >
+                                      ⚡ Link to Menu
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[400px] bg-card border border-border">
+                                    <DialogHeader>
+                                      <DialogTitle className="font-display uppercase text-base tracking-tight">Link Page to Mega Menu</DialogTitle>
+                                      <DialogDescription className="text-xs text-muted-foreground mt-1">
+                                        Select the parent category in the Products Mega Menu where you want to place <strong>{active?.label || activeSlug}</strong>.
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="py-4">
+                                      <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-2">
+                                        Parent Category
+                                      </label>
+                                      {hierarchyProducts?.items ? (
+                                        <Select
+                                          value={selectedParentId}
+                                          onValueChange={setSelectedParentId}
+                                        >
+                                          <SelectTrigger className="w-full text-sm">
+                                            <SelectValue placeholder="Select parent category..." />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            {hierarchyProducts.items.map(item => (
+                                              <SelectItem key={item.id} value={item.id} className="text-sm">
+                                                {item.label}
+                                              </SelectItem>
+                                            ))}
+                                          </SelectContent>
+                                        </Select>
+                                      ) : (
+                                        <p className="text-xs text-muted-foreground italic">Loading parent categories...</p>
+                                      )}
+                                    </div>
+                                    <DialogFooter className="gap-2 sm:gap-0">
+                                      <Button
+                                        variant="ghost"
+                                        onClick={() => setLinkDialogOpen(false)}
+                                        className="text-xs uppercase font-bold"
                                       >
-                                        <SelectTrigger className="w-full text-sm">
-                                          <SelectValue placeholder="Select parent category..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          {hierarchyProducts.items.map(item => (
-                                            <SelectItem key={item.id} value={item.id} className="text-sm">
-                                              {item.label}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectContent>
-                                      </Select>
-                                    ) : (
-                                      <p className="text-xs text-muted-foreground italic">Loading parent categories...</p>
-                                    )}
-                                  </div>
-                                  <DialogFooter className="gap-2 sm:gap-0">
-                                    <Button
-                                      variant="ghost"
-                                      onClick={() => setLinkDialogOpen(false)}
-                                      className="text-xs uppercase font-bold"
-                                    >
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      onClick={handleLinkToMenu}
-                                      disabled={!selectedParentId || linkingMenu}
-                                      className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs px-4"
-                                    >
-                                      {linkingMenu ? "Linking..." : "Confirm Link"}
-                                    </Button>
-                                  </DialogFooter>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
+                                        Cancel
+                                      </Button>
+                                      <Button
+                                        onClick={handleLinkToMenu}
+                                        disabled={!selectedParentId || linkingMenu}
+                                        className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs px-4"
+                                      >
+                                        {linkingMenu ? "Linking..." : "Confirm Link"}
+                                      </Button>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            )
                           )}
 
                           {dirty && (
@@ -861,7 +932,14 @@ export function PageTemplatesAdminPage() {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {categorySlug ? (
+                        {activeSlug === "__landing" ? (
+                          <Button asChild variant="outline" size="sm"
+                            className="gap-1.5 text-xs h-8">
+                            <Link to="/products" target="_blank">
+                              <ExternalLink className="h-3 w-3" /> Preview
+                            </Link>
+                          </Button>
+                        ) : categorySlug ? (
                           <Button asChild variant="outline" size="sm"
                             className="gap-1.5 text-xs h-8">
                             <Link to="/products/$category/$family" params={{ category: categorySlug, family: activeSlug } as any}
@@ -876,48 +954,51 @@ export function PageTemplatesAdminPage() {
                             <ExternalLink className="h-3 w-3" /> Preview
                           </Button>
                         )}
-                        <Dialog open={duplicateDialogOpen} onOpenChange={(open) => { setDuplicateDialogOpen(open); if (open) setDupSlug(`${activeSlug}-copy`); }}>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 uppercase font-bold tracking-wider cursor-pointer">
-                              <Copy className="h-3 w-3" /> Duplicate
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[400px] bg-card border border-border">
-                            <DialogHeader>
-                              <DialogTitle className="font-display uppercase text-base tracking-tight">Duplicate Template</DialogTitle>
-                              <DialogDescription className="text-xs text-muted-foreground mt-1">
-                                Enter the new URL-friendly slug for the duplicated template of <strong>{active.label || activeSlug}</strong>.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="py-4">
-                              <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-2">
-                                New Slug
-                              </label>
-                              <Input
-                                value={dupSlug}
-                                onChange={(e) => setDupSlug(formatSlugInput(e.target.value))}
-                                placeholder="e.g. lldpe-geomembranes-premium"
-                                className="text-sm font-mono h-9"
-                              />
-                            </div>
-                            <DialogFooter className="gap-2 sm:gap-0">
-                              <Button
-                                variant="ghost"
-                                onClick={() => setDuplicateDialogOpen(false)}
-                                className="text-xs uppercase font-bold cursor-pointer"
-                              >
-                                Cancel
+
+                        {activeSlug !== "__landing" && (
+                          <Dialog open={duplicateDialogOpen} onOpenChange={(open) => { setDuplicateDialogOpen(open); if (open) setDupSlug(`${activeSlug}-copy`); }}>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 uppercase font-bold tracking-wider cursor-pointer">
+                                <Copy className="h-3 w-3" /> Duplicate
                               </Button>
-                              <Button
-                                onClick={handleDuplicate}
-                                disabled={!dupSlug.trim()}
-                                className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs px-4 cursor-pointer"
-                              >
-                                Confirm Duplicate
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[400px] bg-card border border-border">
+                              <DialogHeader>
+                                <DialogTitle className="font-display uppercase text-base tracking-tight">Duplicate Template</DialogTitle>
+                                <DialogDescription className="text-xs text-muted-foreground mt-1">
+                                  Enter the new URL-friendly slug for the duplicated template of <strong>{active.label || activeSlug}</strong>.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="py-4">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block mb-2">
+                                  New Slug
+                                </label>
+                                <Input
+                                  value={dupSlug}
+                                  onChange={(e) => setDupSlug(formatSlugInput(e.target.value))}
+                                  placeholder="e.g. lldpe-geomembranes-premium"
+                                  className="text-sm font-mono h-9"
+                                />
+                              </div>
+                              <DialogFooter className="gap-2 sm:gap-0">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => setDuplicateDialogOpen(false)}
+                                  className="text-xs uppercase font-bold cursor-pointer"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={handleDuplicate}
+                                  disabled={!dupSlug.trim()}
+                                  className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider text-xs px-4 cursor-pointer"
+                                >
+                                  Confirm Duplicate
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        )}
                         <Button onClick={handleSave} disabled={saving || !dirty}
                           className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5">
                           {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
@@ -932,13 +1013,15 @@ export function PageTemplatesAdminPage() {
                       <TabsList
                         className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap"
                       >
-                        {TABS.map(t => (
-                          <TabsTrigger key={t.id} value={t.id}
-                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                          >
-                            {t.label}
-                          </TabsTrigger>
-                        ))}
+                        {TABS
+                          .filter((t) => !(activeSlug === "__landing" && t.id !== "hero" && t.id !== "seo"))
+                          .map(t => (
+                            <TabsTrigger key={t.id} value={t.id}
+                              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                            >
+                              {t.label}
+                            </TabsTrigger>
+                          ))}
                       </TabsList>
 
                       <div className="flex-1 overflow-y-auto">
@@ -947,10 +1030,10 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="hero" className="p-6 space-y-5 m-0">
                           <SectionHeading>Hero Section</SectionHeading>
                           <div>
-                            <FieldLabel>Page Title (H1)</FieldLabel>
+                            <FieldLabel>{activeSlug === "__landing" ? "Hero Title" : "Page Title (H1)"}</FieldLabel>
                             <Input value={active.label ?? ""}
                               onChange={e => set("label", e.target.value)}
-                              placeholder="e.g. HDPE Geomembranes"
+                              placeholder={activeSlug === "__landing" ? "e.g. Engineered Materials for Every Application" : "e.g. HDPE Geomembranes"}
                               className="text-sm" />
                           </div>
                           <div>
@@ -963,10 +1046,12 @@ export function PageTemplatesAdminPage() {
                             />
                           </div>
                           <div>
-                            <FieldLabel hint="Short paragraph shown below the title in the hero">Subtitle / Tagline</FieldLabel>
+                            <FieldLabel hint="Short paragraph shown below the title in the hero">
+                              {activeSlug === "__landing" ? "Hero Subtitle / Description" : "Subtitle / Tagline"}
+                            </FieldLabel>
                             <Textarea value={active.subtitle ?? ""}
                               onChange={e => set("subtitle", e.target.value)}
-                              placeholder="Engineered materials for critical infrastructure…"
+                              placeholder={activeSlug === "__landing" ? "Browse our full catalogue of geosynthetic products..." : "Engineered materials for critical infrastructure…"}
                               className="text-sm min-h-[96px] resize-none" />
                           </div>
                         </TabsContent>

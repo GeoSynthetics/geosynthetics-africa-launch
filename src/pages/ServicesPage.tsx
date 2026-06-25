@@ -167,7 +167,7 @@ export function ServicesPage() {
                     <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground">
                       {details.title}
                     </h3>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-4">
                       {details.description}
                     </p>
                   </div>
@@ -208,7 +208,7 @@ export function ServicesPage() {
                   <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground">
                     {c.title}
                   </h3>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-4">
                     {c.description}
                   </p>
                 </div>
