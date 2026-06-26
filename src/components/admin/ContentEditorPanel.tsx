@@ -24,6 +24,7 @@ import {
 } from "./TemplateEditorShared";
 import { ProductSelector } from "./ProductSelector";
 import { IconPicker } from "./IconPicker";
+import { ImagePicker } from "./ImagePicker";
 import { useSlugSync } from "@/hooks/use-slug-sync";
 
 export function stripHtml(html: string | null | undefined): string {
@@ -438,9 +439,11 @@ export function ContentEditorPanel({
             <div className="space-y-8">
               <div className="space-y-3">
                 <h4 className="text-xs font-bold uppercase text-primary tracking-wider">Hero</h4>
-                <Input
+                <ImagePicker
+                  label="Hero Image"
+                  hint="Full URL or Supabase storage path to the hero image"
                   value={page.heroImage ?? ""}
-                  onChange={(e) => setPage({ heroImage: e.target.value })}
+                  onChange={(v) => setPage({ heroImage: v })}
                   placeholder="Hero image URL"
                 />
                 <Textarea
@@ -522,7 +525,7 @@ export function ContentEditorPanel({
                   { key: "name", label: "Project Name" },
                   { key: "location", label: "Location" },
                   { key: "year", label: "Year" },
-                  { key: "image", label: "Image URL" },
+                  { key: "image", label: "Image URL", type: "image" },
                 ]}
                 onChange={(v) => setPage({ projectReferences: v as any })}
               />
@@ -544,7 +547,7 @@ export function ContentEditorPanel({
                       placeholder: "One line description…",
                       multiline: true,
                     },
-                    { key: "image", label: "Image URL", placeholder: "https://…" },
+                    { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
                     {
                       key: "slug",
                       label: "Catalogue Slug (optional)",
