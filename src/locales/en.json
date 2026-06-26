@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "applications": "Applications",
+    "products": "Products",
+    "services": "Services",
+    "industries": "Industries",
+    "projects": "Projects",
+    "qualityAssurance": "Quality Assurance",
+    "catalogue": "Catalogue",
+    "resources": "Resources",
+    "contacts": "Contacts",
+    "uploadBoq": "Upload Project BOQ",
+    "partnerPortal": "Partner Portal",
+    "profile": "Profile",
+    "admin": "Admin",
+    "signOut": "Sign out"
+  },
+  "topbar": {
+    "iagi": "IAGI Member - One of only 5 in Africa",
+    "bbbee": "B-BBEE Level 2",
+    "qa": "QA/QC Certified",
+    "logistics": "Pan-African Logistics"
+  },
+  "footer": {
+    "resources": "Resources",
+    "company": "Company",
+    "newsletterTitle": "Subscribe to our newsletter",
+    "newsletterDesc": "Get the latest updates, case studies and technical articles.",
+    "newsletterPlaceholder": "Enter your email address",
+    "newsletterBtn": "Subscribe",
+    "copyright": "© {{year}} Geosynthetics Africa. All rights reserved."
+  },
+  "cookies": {
+    "message": "We use cookies to improve your experience on our website.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "quote": {
+    "title": "Quick Project Quote",
+    "subtitle": "Upload your project BOQ or details and our team will get back to you with a comprehensive quote.",
+    "uploadLabel": "Upload BOQ File",
+    "uploadDesc": "Drag and drop your file, or click to browse (PDF, Excel, Word, or Zip)",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "company": "Company Name",
+    "projectLocation": "Project Location",
+    "notes": "Project Notes / Special Requirements",
+    "submit": "Submit Quote Request",
+    "submitting": "Submitting...",
+    "success": "Quote request submitted successfully!",
+    "error": "Error submitting request. Please try again."
+  },
+  "common": {
+    "home": "Home",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try again",
+    "goHome": "Go home",
+    "notFound": "Page Not Found",
+    "notFoundDesc": "The page you're looking for doesn't exist or has been moved."
+  }
+}

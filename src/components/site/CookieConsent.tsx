@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface CookiePreferences {
   necessary: boolean;
@@ -19,6 +20,7 @@ interface CookiePreferences {
 }
 
 export function CookieConsent() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -188,19 +190,7 @@ export function CookieConsent() {
                     Cookie Preferences Notice
                   </h4>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-4xl">
-                    We use cookies to optimize site functionality, analyze web traffic, and improve
-                    your overall browsing experience. By continuing your visit to this site or
-                    clicking <span className="font-semibold text-foreground">"Accept All"</span>,
-                    you consent to our use of cookies. You can selectively manage your tracking
-                    options via <span className="font-semibold text-foreground">"Settings"</span>.
-                    For further details, view our{" "}
-                    <a
-                      href="#privacy-policy"
-                      className="underline text-primary hover:text-primary-hover font-medium transition-colors"
-                    >
-                      Privacy Policy & Terms
-                    </a>
-                    .
+                    {t("cookies.message", "We use cookies to improve your experience on our website.")}
                   </p>
                 </div>
               </div>
@@ -214,7 +204,7 @@ export function CookieConsent() {
                   className="text-xs uppercase font-bold tracking-wider h-9 px-4 border-border hover:bg-accent text-muted-foreground w-1/3 md:w-auto hover:cursor-pointer transition-all duration-300"
                 >
                   <Settings className="h-3.5 w-3.5 mr-1.5" />
-                  Settings
+                  {t("cookies.settings", "Settings")}
                 </Button>
                 <Button
                   variant="outline"
@@ -222,7 +212,7 @@ export function CookieConsent() {
                   onClick={handleDeclineAll}
                   className="text-xs uppercase font-bold tracking-wider h-9 px-4 border-border hover:bg-accent text-muted-foreground w-1/3 md:w-auto hover:cursor-pointer transition-all duration-300"
                 >
-                  Decline
+                  {t("cookies.decline", "Decline")}
                 </Button>
                 <Button
                   variant="default"
@@ -230,7 +220,7 @@ export function CookieConsent() {
                   onClick={handleAcceptAll}
                   className="text-xs uppercase font-bold tracking-wider h-9 px-5 bg-primary hover:bg-primary-hover text-white w-1/3 md:w-auto hover:cursor-pointer transition-all duration-300"
                 >
-                  Accept All
+                  {t("cookies.accept", "Accept All")}
                 </Button>
 
                 {/* Direct Close Icon (Dismisses the notification for the next 3 hours) */}

@@ -4,7 +4,6 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
-  redirect,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
@@ -18,24 +17,28 @@ import { CookieConsent } from "@/components/site/CookieConsent";
 import { TrackingLoader } from "@/components/site/TrackingLoader";
 import { QuickQuoteProvider } from "@/hooks/use-quick-quote";
 import { QuickQuoteModal } from "@/components/site/QuickQuoteModal";
+import "@/lib/i18n";
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 
 function NotFoundComponent() {
+  const { t } = useTranslation();
   return (
     <div className="flex min-h-[60vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl font-bold text-primary">404</h1>
         <h2 className="mt-4 font-display text-2xl font-bold uppercase tracking-tight">
-          Page Not Found
+          {t("common.notFound")}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          {t("common.notFoundDesc")}
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded bg-primary px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-primary-foreground hover:bg-primary-hover transition"
           >
-            Go Home
+            {t("common.goHome")}
           </Link>
         </div>
       </div>
@@ -90,8 +93,9 @@ export const Route = createRootRoute({
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const currentLang = i18n.language || "en";
   return (
-    <html lang="en">
+    <html lang={currentLang}>
       <head>
         <HeadContent />
       </head>

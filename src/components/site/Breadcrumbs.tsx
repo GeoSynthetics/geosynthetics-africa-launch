@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { Fragment } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export interface BreadcrumbItem {
   label: string;
@@ -17,6 +18,7 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, variant = "default", className }: BreadcrumbsProps) {
+  const { t } = useTranslation();
   const containerClasses = cn(
     "flex flex-wrap items-center gap-2",
     {
@@ -46,6 +48,13 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
     "text-surface-dark-foreground": variant === "contacts",
   });
 
+  const getTranslatedLabel = (label: string) => {
+    if (label.toLowerCase() === "home") {
+      return t("common.home", "Home");
+    }
+    return label;
+  };
+
   return (
     <nav className={containerClasses} aria-label="breadcrumb">
       {items.map((item, idx) => {
@@ -55,7 +64,9 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
           <Fragment key={idx}>
             {idx > 0 && <ChevronRight className={chevronClasses} />}
             {isLast || !item.to ? (
-              <span className={isLast ? currentItemClasses : linkClasses}>{item.label}</span>
+              <span className={isLast ? currentItemClasses : linkClasses}>
+                {getTranslatedLabel(item.label)}
+              </span>
             ) : (
               <Link
                 to={item.to as any}
@@ -63,7 +74,7 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
                 search={item.search}
                 className={linkClasses}
               >
-                {item.label}
+                {getTranslatedLabel(item.label)}
               </Link>
             )}
           </Fragment>

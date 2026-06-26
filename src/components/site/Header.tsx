@@ -11,6 +11,7 @@ import {
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
+import { useTranslation } from "react-i18next";
 import {
   Sheet,
   SheetContent,
@@ -57,6 +58,7 @@ const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 const MEGAMENU_CLOSE_DELAY = 150000; // milliseconds delay before closing the mega menu
 
 function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
+  const { t } = useTranslation();
   const [value, setValue] = useState<string>("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -261,7 +263,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                       : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"
                   }`}
                 >
-                  {m.label}
+                  {t(`nav.${m.key}`, m.label)}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="w-[1280px] max-w-[calc(100vw-2rem)] p-0 border-0 bg-transparent shadow-none">
                   <MegaPanel config={m} isLoading={isLoading} />
@@ -271,6 +273,14 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
           })}
           {SIMPLE_NAV.map((item) => {
             const active = isActiveRoute(item.to);
+            const getSimpleNavKey = (label: string) => {
+              if (label === "Projects") return "nav.projects";
+              if (label === "Quality Assurance") return "nav.qualityAssurance";
+              if (label === "Catalogue") return "nav.catalogue";
+              if (label === "Resources") return "nav.resources";
+              if (label === "Contacts") return "nav.contacts";
+              return label;
+            };
             return (
               <NavigationMenuItem key={item.to} className="h-full flex items-stretch">
                 <NavigationMenuLink asChild>
@@ -281,7 +291,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                       active ? "text-primary border-primary" : "text-foreground border-transparent"
                     }`}
                   >
-                    {item.label}
+                    {t(getSimpleNavKey(item.label), item.label)}
                   </RLink>
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -294,6 +304,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
 }
 
 function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { open: openQuickQuote } = useQuickQuote();
   const location = useLocation();
@@ -352,7 +363,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                   <AccordionTrigger
                     className={`text-sm font-bold uppercase tracking-wide transition-colors ${active ? "text-primary" : "text-foreground"}`}
                   >
-                    {m.label}
+                    {t(`nav.${m.key}`, m.label)}
                   </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-1 pl-2">
@@ -362,7 +373,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                           onClick={() => setOpen(false)}
                           className="block py-3 text-sm font-semibold text-primary"
                         >
-                          All {m.label} →
+                          {t("nav.allCategory", "All {{category}} →", { category: t(`nav.${m.key}`, m.label) })}
                         </RLink>
                       </li>
                       {isLoading ? (
@@ -395,6 +406,14 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
           <ul className="mt-2 border-t border-border pt-2">
             {SIMPLE_NAV.map((item) => {
               const active = isActiveRoute(item.to);
+              const getSimpleNavKey = (label: string) => {
+                if (label === "Projects") return "nav.projects";
+                if (label === "Quality Assurance") return "nav.qualityAssurance";
+                if (label === "Catalogue") return "nav.catalogue";
+                if (label === "Resources") return "nav.resources";
+                if (label === "Contacts") return "nav.contacts";
+                return label;
+              };
               return (
                 <li key={item.to}>
                   <RLink
@@ -405,7 +424,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                       active ? "text-primary" : "text-foreground"
                     }`}
                   >
-                    {item.label}
+                    {t(getSimpleNavKey(item.label), item.label)}
                   </RLink>
                 </li>
               );
@@ -421,7 +440,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
             }}
           >
             <Upload className="h-4 w-4 mr-2" />
-            Upload Project BOQ
+            {t("nav.uploadBoq", "Upload Project BOQ")}
           </Button>
         </div>
       </SheetContent>

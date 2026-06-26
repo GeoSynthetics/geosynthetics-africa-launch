@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "applications": "Aplicações",
+    "products": "Produtos",
+    "services": "Serviços",
+    "industries": "Setores de Atuação",
+    "projects": "Projetos",
+    "qualityAssurance": "Garantia de Qualidade",
+    "catalogue": "Catálogo",
+    "resources": "Recursos",
+    "contacts": "Contatos",
+    "uploadBoq": "Enviar a BOQ do Projeto",
+    "partnerPortal": "Portal do Parceiro",
+    "profile": "Perfil",
+    "admin": "Admin",
+    "signOut": "Sair"
+  },
+  "topbar": {
+    "iagi": "Membro IAGI - Um dos 5 únicos na África",
+    "bbbee": "Nível B-BBEE 2",
+    "qa": "Certificação QA/QC",
+    "logistics": "Logística Pan-Africana"
+  },
+  "footer": {
+    "resources": "Recursos",
+    "company": "Empresa",
+    "newsletterTitle": "Inscreva-se na nossa newsletter",
+    "newsletterDesc": "Receba as últimas atualizações, estudos de caso e artigos técnicos.",
+    "newsletterPlaceholder": "Digite seu endereço de e-mail",
+    "newsletterBtn": "Inscrever-se",
+    "copyright": "© {{year}} Geosynthetics Africa. Todos os direitos reservados."
+  },
+  "cookies": {
+    "message": "Utilizamos cookies para melhorar sua experiência em nosso site.",
+    "accept": "Aceitar",
+    "decline": "Recusar"
+  },
+  "quote": {
+    "title": "Orçamento Rápido de Projeto",
+    "subtitle": "Envie a BOQ ou os detalhes do seu projeto e nossa equipe entrará em contato com um orçamento completo.",
+    "uploadLabel": "Enviar Arquivo BOQ",
+    "uploadDesc": "Arraste e solte seu arquivo aqui ou clique para buscar (PDF, Excel, Word ou Zip)",
+    "name": "Nome Completo",
+    "email": "Endereço de E-mail",
+    "phone": "Número de Telefone",
+    "company": "Nome da Empresa",
+    "projectLocation": "Localização do Projeto",
+    "notes": "Notas do Projeto / Requisitos Especiais",
+    "submit": "Enviar Solicitação de Orçamento",
+    "submitting": "Enviando...",
+    "success": "Solicitação de orçamento enviada com sucesso!",
+    "error": "Erro ao enviar a solicitação. Por favor, tente novamente."
+  },
+  "common": {
+    "home": "Início",
+    "loading": "Carregando...",
+    "error": "Algo deu errado",
+    "tryAgain": "Tentar novamente",
+    "goHome": "Ir para a página inicial",
+    "notFound": "Página Não Encontrada",
+    "notFoundDesc": "A página que você está procurando não existe ou foi movida."
+  }
+}

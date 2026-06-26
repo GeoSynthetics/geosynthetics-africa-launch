@@ -4,6 +4,7 @@ import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { usePageSlugs } from "@/hooks/use-page-slugs";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
+import { useTranslation } from "react-i18next";
 
 const RESOURCES = [
   { label: "Datasheets", to: "/resources" },
@@ -73,6 +74,7 @@ function FooterCol({
 }
 
 export function Footer() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const { resolve } = usePageSlugs();
   const { menus } = useDynamicMegaMenus();
@@ -125,15 +127,39 @@ export function Footer() {
     : [];
 
   // Resolve custom slugs for core page links
-  const company = COMPANY.map((item) => ({
-    ...item,
-    to: resolve(item.to),
-  }));
+  const company = COMPANY.map((item) => {
+    let key = "footer.aboutUs";
+    if (item.label === "Careers") key = "footer.careers";
+    if (item.label === "News") key = "footer.news";
+    if (item.label === "Sustainability") key = "footer.sustainability";
+    if (item.label === "Privacy Policy") key = "footer.privacyPolicy";
+    if (item.label === "Terms & Conditions") key = "footer.termsConditions";
+    return {
+      label: t(key, item.label),
+      to: resolve(item.to),
+    };
+  });
 
-  const resources = RESOURCES.map((item) => ({
-    ...item,
-    to: resolve(item.to),
-  }));
+  const resources = RESOURCES.map((item) => {
+    let key = "footer.datasheets";
+    if (item.label === "Installation Guides") key = "footer.installationGuides";
+    if (item.label === "QA Checklists") key = "footer.qaChecklists";
+    if (item.label === "Technical Articles") key = "footer.technicalArticles";
+    if (item.label === "Videos") key = "footer.videos";
+    if (item.label === "FAQs") key = "footer.faqs";
+    return {
+      label: t(key, item.label),
+      to: resolve(item.to),
+    };
+  });
+
+  const certificationsMapped = CERTIFICATIONS.map((cert) => {
+    let key = "topbar.iagi";
+    if (cert === "B-BBEE Level 2") key = "topbar.bbbee";
+    if (cert === "Pan-African Logistics") key = "topbar.logistics";
+    if (cert === "QA/QC Certified") key = "topbar.qa";
+    return t(key, cert);
+  });
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
@@ -144,8 +170,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
-              Africa's integrated geosynthetics platform delivering quality products, expert
-              services and technical solutions.
+              {t("footer.desc", "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.")}
             </p>
             <div className="mt-5 flex items-center gap-2">
               {SOCIAL_LINKS.map(({ Icon, label, href }) => (
@@ -162,37 +187,37 @@ export function Footer() {
           </div>
 
           {/* Products */}
-          <FooterCol title="Products" items={products} />
+          <FooterCol title={t("nav.products", "Products")} items={products} />
 
           {/* Applications */}
-          <FooterCol title="Applications" items={applications} />
+          <FooterCol title={t("nav.applications", "Applications")} items={applications} />
 
           {/* Industries */}
-          <FooterCol title="Industries" items={industries} />
+          <FooterCol title={t("nav.industries", "Industries")} items={industries} />
 
           {/* Services */}
-          <FooterCol title="Services" items={services} />
+          <FooterCol title={t("nav.services", "Services")} items={services} />
 
           {/* Resources */}
-          <FooterCol title="Resources" items={resources} />
+          <FooterCol title={t("footer.resources", "Resources")} items={resources} />
 
           {/* Company */}
-          <FooterCol title="Company" items={company} />
+          <FooterCol title={t("footer.company", "Company")} items={company} />
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 min-w-0">
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-surface-dark-foreground mb-3">
-              Newsletter
+              {t("footer.newsletterTitle", "Newsletter")}
             </h4>
             <p className="text-xs text-surface-dark-foreground/60 leading-relaxed mb-3">
-              Subscribe to our newsletter for latest updates and insights.
+              {t("footer.newsletterDesc", "Subscribe to our newsletter for latest updates and insights.")}
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder={t("footer.newsletterPlaceholder", "Enter your email")}
                 required
                 className="w-full rounded bg-surface-dark-foreground/10 border border-surface-dark-foreground/20 px-3 py-2 text-xs text-surface-dark-foreground placeholder:text-surface-dark-foreground/40 focus:outline-none focus:border-primary transition"
               />
@@ -200,7 +225,7 @@ export function Footer() {
                 type="submit"
                 className="w-full rounded bg-primary px-3 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 transition"
               >
-                Subscribe
+                {t("footer.newsletterBtn", "Subscribe")}
               </button>
             </form>
           </div>
@@ -211,7 +236,7 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            © {new Date().getFullYear()} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.{" "}
+            {t("footer.copyright", "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.", { year: new Date().getFullYear() })}{" "}
             <span className="hidden md:inline">|</span>
             <br className="md:hidden" />{" "}
             <a
@@ -224,7 +249,7 @@ export function Footer() {
             </a>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-y-2 md:gap-y-0">
-            {CERTIFICATIONS.map((cert, idx) => (
+            {certificationsMapped.map((cert, idx) => (
               <span key={cert} className="flex items-center uppercase tracking-wider text-center">
                 {idx > 0 && <span className="mx-2 md:mx-3 text-surface-dark-foreground/30">|</span>}
                 <span>{cert}</span>

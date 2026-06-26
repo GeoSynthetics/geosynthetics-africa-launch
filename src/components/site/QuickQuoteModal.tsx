@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ALLOWED_TYPES = [
   ".pdf",
@@ -55,6 +56,7 @@ const COUNTRIES = [
 ];
 
 export function QuickQuoteModal() {
+  const { t } = useTranslation();
   const { isOpen, close, productName, productId } = useQuickQuote();
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -210,11 +212,10 @@ export function QuickQuoteModal() {
       <DialogContent className="max-w-xl max-h-[92vh] overflow-y-auto overflow-x-hidden p-6 rounded-2xl md:p-8">
         <DialogHeader className="text-left">
           <DialogTitle className="font-display text-2xl font-bold uppercase tracking-tight text-foreground">
-            ADD TO PROJECT BOQ
+            {t("quote.title", "ADD TO PROJECT BOQ")}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-normal mt-1.5">
-            Submit your project details and files. Our technical sales team will review your
-            requirements and provide a customised proposal.
+            {t("quote.subtitle", "Submit your project details and files. Our technical sales team will review your requirements and provide a customised proposal.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -236,10 +237,10 @@ export function QuickQuoteModal() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                Full Name <span className="text-primary">*</span>
+                {t("quote.name", "Full Name")} <span className="text-primary">*</span>
               </label>
               <Input
-                placeholder="Your name"
+                placeholder={t("quote.namePlaceholder", "Your name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
@@ -247,10 +248,10 @@ export function QuickQuoteModal() {
             </div>
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                Company
+                {t("quote.company", "Company")}
               </label>
               <Input
-                placeholder="Company Name"
+                placeholder={t("quote.companyPlaceholder", "Company Name")}
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
@@ -261,7 +262,7 @@ export function QuickQuoteModal() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                Email <span className="text-primary">*</span>
+                {t("quote.email", "Email")} <span className="text-primary">*</span>
               </label>
               <Input
                 type="email"
@@ -273,11 +274,11 @@ export function QuickQuoteModal() {
             </div>
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                Phone <span className="text-primary">*</span>
+                {t("quote.phone", "Phone")} <span className="text-primary">*</span>
               </label>
               <Input
                 type="tel"
-                placeholder="Contact number"
+                placeholder={t("quote.phonePlaceholder", "Contact number")}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
@@ -287,7 +288,7 @@ export function QuickQuoteModal() {
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-              Project Location / Country
+              {t("quote.projectLocation", "Project Location / Country")}
             </label>
             <select
               value={country}
@@ -295,7 +296,7 @@ export function QuickQuoteModal() {
               className="w-full bg-background border border-input rounded-xl px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-11 transition shadow-sm"
             >
               <option value="" disabled>
-                Select country
+                {t("quote.selectCountry", "Select country")}
               </option>
               {COUNTRIES.map((c) => (
                 <option key={c} value={c}>
@@ -307,10 +308,10 @@ export function QuickQuoteModal() {
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-              Message / Project Description
+              {t("quote.notes", "Message / Project Description")}
             </label>
             <Textarea
-              placeholder="Tell us about your project..."
+              placeholder={t("quote.notesPlaceholder", "Tell us about your project...")}
               rows={3}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -338,13 +339,13 @@ export function QuickQuoteModal() {
               <CloudUpload className="h-8 w-8 mx-auto text-primary" />
               <div className="mt-2 text-xs">
                 <span className="font-semibold text-foreground">
-                  Drag & drop your BOQ or drawings here
+                  {t("quote.dragDrop", "Drag & drop your BOQ or drawings here")}
                 </span>
-                <span className="text-muted-foreground"> or </span>
-                <span className="text-primary font-semibold underline">click to browse files</span>
+                <span className="text-muted-foreground"> {t("quote.or", "or")} </span>
+                <span className="text-primary font-semibold underline">{t("quote.browse", "click to browse files")}</span>
               </div>
               <div className="text-[10px] text-muted-foreground mt-1 leading-normal">
-                PDF, DWG, DOC, XLS (Max 20MB)
+                {t("quote.allowedFormats", "PDF, DWG, DOC, XLS (Max 20MB)")}
               </div>
               <input
                 ref={inputRef}
@@ -395,7 +396,7 @@ export function QuickQuoteModal() {
             className="w-full bg-primary hover:bg-primary-hover text-white uppercase font-display font-extrabold tracking-wider text-sm h-11 rounded-xl mt-2 transition duration-200 border-0"
           >
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-            SUBMIT & GET PROPOSAL
+            {submitting ? t("quote.submitting", "Submitting...") : t("quote.submit", "SUBMIT & GET PROPOSAL")}
           </Button>
         </div>
       </DialogContent>

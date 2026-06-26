@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "applications": "Applications",
+    "products": "Produits",
+    "services": "Services",
+    "industries": "Secteurs d'activité",
+    "projects": "Projets",
+    "qualityAssurance": "Assurance Qualité",
+    "catalogue": "Catalogue",
+    "resources": "Ressources",
+    "contacts": "Contacts",
+    "uploadBoq": "Soumettre le DQE du projet",
+    "partnerPortal": "Espace Partenaires",
+    "profile": "Profil",
+    "admin": "Admin",
+    "signOut": "Déconnexion"
+  },
+  "topbar": {
+    "iagi": "Membre de l'IAGI - L'un des 5 seuls en Afrique",
+    "bbbee": "Niveau B-BBEE 2",
+    "qa": "Certifié QA/QC",
+    "logistics": "Logistique Panafricaine"
+  },
+  "footer": {
+    "resources": "Ressources",
+    "company": "Entreprise",
+    "newsletterTitle": "Inscrivez-vous à notre newsletter",
+    "newsletterDesc": "Recevez les dernières mises à jour, études de cas et articles techniques.",
+    "newsletterPlaceholder": "Entrez votre adresse e-mail",
+    "newsletterBtn": "S'abonner",
+    "copyright": "© {{year}} Geosynthetics Africa. Tous droits réservés."
+  },
+  "cookies": {
+    "message": "Nous utilisons des cookies pour améliorer votre expérience sur notre site web.",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "quote": {
+    "title": "Devis Rapide de Projet",
+    "subtitle": "Téléchargez le DQE ou les détails de votre projet et notre équipe vous recontactera avec un devis complet.",
+    "uploadLabel": "Télécharger le fichier DQE",
+    "uploadDesc": "Glissez-déposez votre fichier, ou cliquez pour parcourir (PDF, Excel, Word ou Zip)",
+    "name": "Nom complet",
+    "email": "Adresse e-mail",
+    "phone": "Numéro de téléphone",
+    "company": "Nom de l'entreprise",
+    "projectLocation": "Emplacement du projet",
+    "notes": "Notes du projet / Exigences particulières",
+    "submit": "Soumettre la demande de devis",
+    "submitting": "Envoi en cours...",
+    "success": "Demande de devis soumise avec succès !",
+    "error": "Erreur lors de la soumission de la demande. Veuillez réessayer."
+  },
+  "common": {
+    "home": "Accueil",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "tryAgain": "Réessayer",
+    "goHome": "Retourner à l'accueil",
+    "notFound": "Page non trouvée",
+    "notFoundDesc": "La page que vous recherchez n'existe pas ou a été déplacée."
+  }
+}

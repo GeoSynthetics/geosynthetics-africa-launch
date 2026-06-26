@@ -20,16 +20,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "./LanguageSelector";
 
 const items = [
-  { icon: Award, label: "IAGI Member - One of only 5 in Africa" },
-  { icon: ShieldCheck, label: "B-BBEE Level 2" },
-  { icon: ShieldCheck, label: "QA/QC Certified" },
-  { icon: Truck, label: "Pan-African Logistics" },
+  { icon: Award, key: "topbar.iagi", defaultLabel: "IAGI Member - One of only 5 in Africa" },
+  { icon: ShieldCheck, key: "topbar.bbbee", defaultLabel: "B-BBEE Level 2" },
+  { icon: ShieldCheck, key: "topbar.qa", defaultLabel: "QA/QC Certified" },
+  { icon: Truck, key: "topbar.logistics", defaultLabel: "Pan-African Logistics" },
 ];
 
 function PartnerPortalLink() {
   const { isAuthenticated, user, isStaff, signOut } = useAuth();
+  const { t } = useTranslation();
 
   if (!isAuthenticated) {
     return (
@@ -38,12 +41,12 @@ function PartnerPortalLink() {
         className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap"
       >
         <UserIcon className="h-3.5 w-3.5" />
-        <span>Partner Portal</span>
+        <span>{t("nav.partnerPortal", "Partner Portal")}</span>
       </Link>
     );
   }
 
-  const label = user?.email?.split("@")[0] ?? "Account";
+  const label = user?.email?.split("@")[0] ?? t("nav.profile", "Profile");
 
   return (
     <DropdownMenu>
@@ -58,20 +61,20 @@ function PartnerPortalLink() {
         <DropdownMenuItem asChild>
           <Link to="/profile" className="hover:cursor-pointer">
             <UserIcon className="h-4 w-4 mr-2" />
-            Profile
+            {t("nav.profile", "Profile")}
           </Link>
         </DropdownMenuItem>
         {isStaff && (
           <DropdownMenuItem asChild>
             <Link to="/admin" className="hover:cursor-pointer">
               <ShieldCheck className="h-4 w-4 mr-2" />
-              Admin
+              {t("nav.admin", "Admin")}
             </Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuItem onClick={() => void signOut()} className="hover:cursor-pointer">
           <LogOut className="h-4 w-4 mr-2" />
-          Sign out
+          {t("nav.signOut", "Sign out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -81,6 +84,7 @@ function PartnerPortalLink() {
 function MobilePerksSlider() {
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,22 +108,23 @@ function MobilePerksSlider() {
       }`}
     >
       <Icon className="h-3.5 w-3.5 text-primary flex-shrink-0" />
-      <span className="truncate">{item.label}</span>
+      <span className="truncate">{t(item.key, item.defaultLabel)}</span>
     </div>
   );
 }
 
 export function TopBar() {
   const { open } = useQuickQuote();
+  const { t } = useTranslation();
 
   return (
     <div className="bg-surface-dark text-surface-dark-foreground text-xs">
       <div className="container-page flex items-center justify-between gap-4 py-2">
         <div className="hidden md:flex items-center gap-6 overflow-hidden">
-          {items.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-2 whitespace-nowrap opacity-90">
+          {items.map(({ icon: Icon, key, defaultLabel }) => (
+            <div key={key} className="flex items-center gap-2 whitespace-nowrap opacity-90">
               <Icon className="h-3.5 w-3.5 text-primary" />
-              <span>{label}</span>
+              <span>{t(key, defaultLabel)}</span>
             </div>
           ))}
         </div>
@@ -132,18 +137,10 @@ export function TopBar() {
             className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium cursor-pointer border-0"
           >
             <Upload className="h-3.5 w-3.5" />
-            <span>Upload Project BOQ</span>
+            <span>{t("nav.uploadBoq", "Upload Project BOQ")}</span>
           </button>
           <PartnerPortalLink />
-          <button
-            type="button"
-            className="hidden sm:flex items-center gap-1 opacity-90 hover:opacity-100 transition"
-            aria-label="Language selector"
-          >
-            <Globe className="h-3.5 w-3.5" />
-            <span>EN</span>
-            <ChevronDown className="h-3 w-3" />
-          </button>
+          <LanguageSelector />
         </div>
       </div>
     </div>
