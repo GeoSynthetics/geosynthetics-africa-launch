@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import {
   MapPin,
@@ -122,12 +122,305 @@ const quickSchema = z.object({
   message: z.string().trim().min(5, "How can we help?").max(2000),
 });
 
+const REGIONAL_LOCATIONS = [
+  {
+    country: "South Africa",
+    title: "Johannesburg Head Office",
+    subtitle: "Southern Africa Regional Hub",
+    coords: [-26.2041, 28.0473] as [number, number],
+    address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191",
+    phone: "+27 78 1355 926",
+    email: "sales@geosynthetics.co.za",
+    services: "Full Supply, Installation & QA/QC Hub",
+  },
+  {
+    country: "Botswana",
+    title: "Botswana Logistics Hub",
+    subtitle: "Gaborone Distribution Center",
+    coords: [-24.6282, 25.9231] as [number, number],
+    address: "Plot 22017, Gaborone West Industrial, Gaborone",
+    phone: "+27 78 1355 926",
+    email: "botswana@geosynthetics.co.za",
+    services: "Material Supply & Cross-Border Logistics",
+  },
+  {
+    country: "Namibia",
+    title: "Namibia Logistics Hub",
+    subtitle: "Windhoek Distribution Center",
+    coords: [-22.5609, 17.0658] as [number, number],
+    address: "12 Edison Street, Southern Industrial Area, Windhoek",
+    phone: "+27 78 1355 926",
+    email: "namibia@geosynthetics.co.za",
+    services: "Material Supply & QA/QC Support",
+  },
+  {
+    country: "Zimbabwe",
+    title: "Zimbabwe Operations Hub",
+    subtitle: "Harare Office",
+    coords: [-17.8252, 31.0335] as [number, number],
+    address: "55 Coventry Road, Workington, Harare",
+    phone: "+27 78 1355 926",
+    email: "zimbabwe@geosynthetics.co.za",
+    services: "Lining Installation & Technical Support",
+  },
+  {
+    country: "Mozambique",
+    title: "Mozambique Regional Hub",
+    subtitle: "Maputo Office",
+    coords: [-25.9692, 32.5732] as [number, number],
+    address: "Avenida de Moçambique, Bairro do Jardim, Maputo",
+    phone: "+27 78 1355 926",
+    email: "mozambique@geosynthetics.co.za",
+    services: "Coastal Works Supply & Installation QA/QC",
+  },
+  {
+    country: "Zambia",
+    title: "Zambia & DRC Hub",
+    subtitle: "Lusaka Office",
+    coords: [-15.3875, 28.3228] as [number, number],
+    address: "Stand 10432, Katanga Road, Industrial Area, Lusaka",
+    phone: "+27 78 1355 926",
+    email: "zambia@geosynthetics.co.za",
+    services: "Mining TSF Lining & Cross-Border Cleared Supply",
+  },
+];
+
+const REGIONAL_DETAILS = {
+  "South Africa": {
+    flag: "🇿🇦",
+    code: "RSA",
+    hub: "Johannesburg (HQ)",
+    transit: "Same day / Next day dispatch",
+    description: "Our primary manufacturing, warehousing, and QA/QC hub. We manage large-scale manufacturing, custom lining fabrication, and coordinate all cross-border engineering teams.",
+    routes: "Direct distribution across all 9 provinces.",
+    stats: "500K+ m² installed · ISO 9001 QA/QC",
+    services: ["Material Supply", "HDPE Liner Installation", "QA/QC Testing", "Technical Support"]
+  },
+  "Botswana": {
+    flag: "🇧🇼",
+    code: "BWA",
+    hub: "Gaborone Logistics Hub",
+    transit: "2 - 3 Days (Road Freight)",
+    description: "Supporting major diamond, copper, and iron ore mining operations. We handle advance customs clearances (SAD500) to ensure seamless material deliveries via Tlokweng/Pioneer Gate.",
+    routes: "Johannesburg → Pioneer Gate / Tlokweng → Gaborone",
+    stats: "Ikongwe Iron Ore & Lucara Diamond projects",
+    services: ["Material Supply", "Cross-Border Logistics", "HDPE Liner Installation", "On-site QA/QC"]
+  },
+  "Namibia": {
+    flag: "🇳🇦",
+    code: "NAM",
+    hub: "Windhoek Hub",
+    transit: "3 - 4 Days (Road Freight)",
+    description: "Key supply route for uranium mines, marine civil works, and water conservation reservoirs. Logistics managed via the Trans-Kalahari Corridor.",
+    routes: "Johannesburg → Trans-Kalahari Corridor → Windhoek",
+    stats: "Husab Uranium & Swakopmund water projects",
+    services: ["Material Supply", "Logistics & Customs", "QA/QC Testing"]
+  },
+  "Zimbabwe": {
+    flag: "🇿🇼",
+    code: "ZWE",
+    hub: "Harare Hub",
+    transit: "3 - 5 Days (Road Freight)",
+    description: "Serving agriculture, gold mining, and waste water treatment facilities. Full logistics support through Beitbridge border clearance with pre-scanned digital customs packs.",
+    routes: "Johannesburg → Beitbridge → Harare / Bulawayo",
+    stats: "Great Dyke platinum and agricultural reservoirs",
+    services: ["Material Supply", "HDPE Liner Installation", "Technical Support"]
+  },
+  "Mozambique": {
+    flag: "🇲🇿",
+    code: "MOZ",
+    hub: "Maputo Hub",
+    transit: "2 - 3 Days (Road Freight)",
+    description: "Critical support for port infrastructure, coal mining, and coastal containment barriers. Specialized GCL (Geosynthetic Clay Liner) and geotextile supply for erosion control.",
+    routes: "Johannesburg → Lebombo / Ressano Garcia → Maputo",
+    stats: "Nacala Corridor and Maputo Port projects",
+    services: ["Material Supply", "Logistics & Export", "QA/QC Support"]
+  },
+  "Zambia": {
+    flag: "🇿🇲",
+    code: "ZMB",
+    hub: "Lusaka Hub",
+    transit: "4 - 6 Days (Road Freight)",
+    description: "Serving the Copperbelt mining sector and large-scale agricultural projects. Coordinates cross-border transit towards DRC (Kolwezi) with full COMESA documentation.",
+    routes: "Johannesburg → Martins Drift (Botswana) → Kazungula / Chirundu → Lusaka",
+    stats: "Copperbelt TSF lining & Kazungula bridge routes",
+    services: ["Material Supply", "HDPE Liner Installation", "Logistics & Export"]
+  }
+};
+
+function RegionalMap({
+  selectedCountry,
+  onSelectCountry,
+}: {
+  selectedCountry: string;
+  onSelectCountry: (country: string) => void;
+}) {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const leafletInstanceRef = useRef<any>(null);
+  const markersRef = useRef<Record<string, any>>({});
+  const [L, setL] = useState<any>(null);
+
+  useEffect(() => {
+    import("leaflet").then((mod) => {
+      setL(mod.default);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!L || !mapRef.current) return;
+
+    const map = L.map(mapRef.current, {
+      center: [-21.0, 24.5],
+      zoom: 4.5,
+      zoomControl: true,
+      scrollWheelZoom: false,
+    });
+
+    leafletInstanceRef.current = map;
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: "abcd",
+      maxZoom: 20,
+    }).addTo(map);
+
+    const pinColor = "rgb(225, 29, 72)";
+    const customMarkerHtml = `
+      <div style="position: relative; width: 30px; height: 30px;">
+        <div style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 8px;
+          height: 8px;
+          background-color: ${pinColor};
+          border-radius: 50%;
+          box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.2);
+        "></div>
+        <div style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 24px;
+          height: 24px;
+          border: 2px solid ${pinColor};
+          border-radius: 50%;
+          animation: map-pulse 1.8s infinite ease-out;
+        "></div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${pinColor}" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="
+          position: absolute;
+          top: -6px;
+          left: 3px;
+          width: 24px;
+          height: 24px;
+          filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
+        ">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3" fill="#fff"/>
+        </svg>
+      </div>
+    `;
+
+    const styleEl = document.createElement("style");
+    styleEl.innerHTML = `
+      @keyframes map-pulse {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+      }
+      .custom-leaflet-popup .leaflet-popup-content-wrapper {
+        background: oklch(1 0 0);
+        color: oklch(0.18 0.01 260);
+        border: 1px solid oklch(0.91 0.005 260);
+        border-radius: 6px;
+        padding: 4px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .custom-leaflet-popup .leaflet-popup-tip {
+        background: oklch(1 0 0);
+        border: 1px solid oklch(0.91 0.005 260);
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    const customMarkerIcon = L.divIcon({
+      html: customMarkerHtml,
+      className: "custom-marker-icon",
+      iconSize: [30, 30],
+      iconAnchor: [15, 20],
+      popupAnchor: [0, -15],
+    });
+
+    REGIONAL_LOCATIONS.forEach((loc) => {
+      const marker = L.marker(loc.coords, { icon: customMarkerIcon }).addTo(map);
+
+      const popupContent = `
+        <div style="font-family: sans-serif; width: 220px; text-transform: none;">
+          <div style="font-size: 11px; font-weight: bold; color: ${pinColor}; text-transform: uppercase; letter-spacing: 0.05em;">${loc.country}</div>
+          <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; margin-top: 2px; line-height: 1.2;">${loc.title}</div>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 1px; font-style: italic;">${loc.subtitle}</div>
+          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 8px 0;" />
+          <div style="font-size: 11px; line-height: 1.4; color: #374151;">
+            <strong>Services:</strong> ${loc.services}<br/>
+            <strong>Address:</strong> ${loc.address}<br/>
+            <strong>Phone:</strong> <a href="tel:${loc.phone.replace(/\s+/g, "")}" style="color: ${pinColor}; text-decoration: none; font-weight: bold;">${loc.phone}</a>
+          </div>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent, {
+        className: "custom-leaflet-popup",
+        closeButton: false,
+      });
+
+      marker.on("click", () => {
+        onSelectCountry(loc.country);
+      });
+
+      markersRef.current[loc.country] = marker;
+    });
+
+    return () => {
+      map.remove();
+      document.head.removeChild(styleEl);
+    };
+  }, [L]);
+
+  useEffect(() => {
+    const map = leafletInstanceRef.current;
+    if (!map || !L || !selectedCountry) return;
+
+    const loc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry);
+    const marker = markersRef.current[selectedCountry];
+
+    if (loc && marker) {
+      map.setView(loc.coords, 6, { animate: true, duration: 1 });
+      marker.openPopup();
+    }
+  }, [selectedCountry, L]);
+
+  if (!L) {
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/20 text-muted-foreground gap-3">
+        <MapPin className="h-8 w-8 text-primary animate-pulse" />
+        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Loading Regional Map...</div>
+      </div>
+    );
+  }
+
+  return <div ref={mapRef} className="absolute inset-0 h-full w-full" />;
+}
+
 export function ContactsPage() {
+  const [selectedCountry, setSelectedCountry] = useState<string>("South Africa");
+
   return (
     <>
       <ContactsHero />
-      <OfficeAndMap />
-      <ServicesAndCoverage />
+      <OfficeAndMap selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+      <ServicesAndCoverage selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
       <FormsBlock />
       <ResourceStrip />
     </>
@@ -263,7 +556,15 @@ function ContactsHero() {
 }
 
 /* -------------------- Office details + Map -------------------- */
-function OfficeAndMap() {
+function OfficeAndMap({
+  selectedCountry,
+  onSelectCountry,
+}: {
+  selectedCountry: string;
+  onSelectCountry: (country: string) => void;
+}) {
+  const activeLoc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry) || REGIONAL_LOCATIONS[0];
+
   return (
     <section className="bg-background">
       <div className="container-page py-14 grid lg:grid-cols-12 gap-8">
@@ -343,30 +644,26 @@ function OfficeAndMap() {
               <MapPin className="h-3.5 w-3.5" /> View All African Offices
             </Link>
           </div>
-          <div className="rounded border border-border overflow-hidden bg-card">
-            <div className="relative h-[360px]">
-              <iframe
-                title="Geosynthetics Africa Johannesburg Head Office"
-                src={MAP_EMBED}
-                className="absolute inset-0 h-full w-full"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-              <div className="absolute top-4 left-4 bg-card text-card-foreground rounded shadow-lg p-3 max-w-[260px] text-xs">
-                <div className="font-display font-bold text-sm uppercase">Geosynthetics Africa</div>
-                <div className="mt-1 text-muted-foreground space-y-0.5">
-                  {HEAD_OFFICE.address.map((l) => (
-                    <div key={l}>{l}</div>
-                  ))}
+          <div className="rounded border border-border overflow-hidden bg-card relative">
+            <div className="relative h-[390px] w-full">
+              <RegionalMap selectedCountry={selectedCountry} onSelectCountry={onSelectCountry} />
+              
+              {/* Dynamic floating detail card */}
+              <div className="absolute top-4 left-4 bg-card/95 backdrop-blur-sm text-card-foreground rounded border border-border shadow-lg p-3.5 max-w-[260px] text-xs z-[1000] pointer-events-auto transition-all duration-300">
+                <div className="text-[10px] font-bold text-primary uppercase tracking-wider">{activeLoc.country} Presence</div>
+                <div className="font-display font-bold text-sm uppercase mt-0.5 leading-snug">{activeLoc.title}</div>
+                <div className="mt-1.5 text-muted-foreground">
+                  <div>{activeLoc.address}</div>
                 </div>
-                <a
-                  href={MAP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-block text-primary hover:underline font-semibold"
-                >
-                  View larger map
-                </a>
+                <div className="mt-2.5 space-y-1 pt-2 border-t border-border/60 text-[11px]">
+                  <div className="font-semibold text-foreground leading-snug">{activeLoc.services}</div>
+                  <a href={`tel:${activeLoc.phone.replace(/\s+/g, "")}`} className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1">
+                    <Phone className="h-3 w-3 shrink-0" /> {activeLoc.phone}
+                  </a>
+                  <a href={`mailto:${activeLoc.email}`} className="flex items-center gap-1.5 text-primary hover:underline font-medium break-all">
+                    <Mail className="h-3 w-3 shrink-0" /> {activeLoc.email}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -400,16 +697,23 @@ function DetailRow({
   );
 }
 
-/* -------------------- Services + Regional coverage -------------------- */
-function ServicesAndCoverage() {
+function ServicesAndCoverage({
+  selectedCountry,
+  onSelectCountry,
+}: {
+  selectedCountry: string;
+  onSelectCountry: (country: string) => void;
+}) {
+  const activeDetails = REGIONAL_DETAILS[selectedCountry as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+
   return (
     <section className="bg-surface">
       <div className="container-page py-14 grid lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-6">
           <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
             Services Available From This Office
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {OFFICE_SERVICES.map(({ icon: Icon, label }) => (
               <div
                 key={label}
@@ -426,29 +730,99 @@ function ServicesAndCoverage() {
           </div>
         </div>
 
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-6">
           <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
             Regional Coverage
           </h2>
-          <div className="rounded border border-border bg-card p-5 grid grid-cols-2 gap-x-4 gap-y-3 items-center">
-            <div className="flex items-center justify-center text-muted-foreground">
-              <ImageIcon className="h-24 w-24 opacity-30" />
+          <div className="rounded border border-border bg-card p-6 grid md:grid-cols-12 gap-6 min-h-[340px]">
+            {/* Left side: Interactive Country Details Dashboard */}
+            <div className="md:col-span-7 flex flex-col justify-between bg-surface border border-border rounded p-5">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl animate-bounce-subtle" role="img" aria-label={selectedCountry}>
+                    {activeDetails.flag}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg font-bold uppercase tracking-wide leading-none">
+                      {selectedCountry}
+                    </h3>
+                    <span className="inline-block mt-1 px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">
+                      Hub: {activeDetails.code}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+                  {activeDetails.description}
+                </p>
+
+                <div className="mt-4 space-y-2 border-t border-border/80 pt-3 text-xs">
+                  <div>
+                    <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
+                      Transit Time
+                    </span>
+                    <span className="text-foreground font-medium">{activeDetails.transit}</span>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
+                      Logistics Route
+                    </span>
+                    <span className="text-foreground font-medium">{activeDetails.routes}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-border/80">
+                <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-1.5">
+                  Core Capabilities
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {activeDetails.services.map((svc) => (
+                    <span key={svc} className="text-[10px] bg-card border border-border px-2 py-0.5 rounded font-medium text-foreground/80">
+                      {svc}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <ul className="space-y-2">
-              {REGIONAL_COVERAGE.map((c) => (
-                <li key={c} className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-primary" />
-                  {c}
-                </li>
-              ))}
-            </ul>
-            <div className="col-span-2 mt-2">
-              <Link
-                to="/contacts"
-                className="inline-flex items-center gap-2 rounded border border-primary text-primary px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition"
-              >
-                View All Regions <ChevronRight className="h-3.5 w-3.5" />
-              </Link>
+
+            {/* Right side: Country Selector buttons */}
+            <div className="md:col-span-5 flex flex-col justify-between">
+              <div className="space-y-1.5">
+                <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-2">
+                  Select a Region
+                </span>
+                {REGIONAL_COVERAGE.map((c) => {
+                  const isSelected = c === selectedCountry;
+                  const details = REGIONAL_DETAILS[c as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+                  return (
+                    <button
+                      key={c}
+                      onClick={() => onSelectCountry(c)}
+                      className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 ${
+                        isSelected
+                          ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
+                          : "bg-card border-border text-foreground hover:border-primary/50"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span>{details.flag}</span>
+                        <span>{c}</span>
+                      </span>
+                      <CheckCircle2 className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary-foreground" : "text-primary opacity-60"}`} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 pt-3">
+                <a
+                  href="#boq-form"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded border border-primary text-primary px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                >
+                  Request Regional Quote <ChevronRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
