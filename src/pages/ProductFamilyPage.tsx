@@ -206,7 +206,7 @@ function mapFamilyData(
           image:
             proj.image ||
             "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
-          slug: proj.slug || "",
+          slug: proj.slug || proj.project_slug || "",
         })),
     applications: Array.isArray(familyData.applications)
       ? familyData.applications.map((app: any) => {

@@ -240,20 +240,42 @@ export function ProductCategoryPage() {
                    <span className="text-primary">|</span> Projects with {content.label} Across Africa
                  </h2>
                  <div className="grid sm:grid-cols-2 gap-4">
-                   {content.projectReferences.map((project, i) => (
-                     <div key={i} className="group relative h-40 rounded overflow-hidden cursor-pointer">
-                       <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                       <div className="absolute bottom-4 left-4 right-4">
-                         <h3 className="text-white font-bold text-sm uppercase tracking-wide">{project.name}</h3>
-                         <div className="flex items-center gap-2 mt-1">
-                           <span className="text-primary text-xs uppercase font-medium">{project.location}</span>
-                           <span className="text-white/50 text-xs">|</span>
-                           <span className="text-white/70 text-xs">{project.year}</span>
-                         </div>
-                       </div>
-                     </div>
-                   ))}
+                    {content.projectReferences.map((project, i) => {
+                      const slug = (project as any).slug || project.project_slug;
+                      const cardContent = (
+                        <>
+                          <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <h3 className="text-white font-bold text-sm uppercase tracking-wide">{project.name}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-primary text-xs uppercase font-medium">{project.location}</span>
+                              <span className="text-white/50 text-xs">|</span>
+                              <span className="text-white/70 text-xs">{project.year}</span>
+                            </div>
+                          </div>
+                        </>
+                      );
+
+                      if (slug) {
+                        return (
+                          <Link
+                            key={i}
+                            to="/projects/$slug"
+                            params={{ slug }}
+                            className="group relative h-40 rounded overflow-hidden cursor-pointer block"
+                          >
+                            {cardContent}
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <div key={i} className="group relative h-40 rounded overflow-hidden cursor-pointer">
+                          {cardContent}
+                        </div>
+                      );
+                    })}
                  </div>
                  <div className="mt-4">
                    <Link to="/projects" className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1">

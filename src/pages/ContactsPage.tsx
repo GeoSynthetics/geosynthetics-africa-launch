@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import {
@@ -466,6 +466,19 @@ function FormsBlock() {
   const [boqSubmitting, setBoqSubmitting] = useState(false);
   const [quickSubmitting, setQuickSubmitting] = useState(false);
 
+  const { caseStudies = [] } = useLoaderData({ from: "/contacts" }) as { caseStudies?: any[] } || {};
+
+  // Map database projects if available, otherwise fall back to static CASE_STUDIES
+  const projectExperience = caseStudies.length > 0
+    ? caseStudies.map((cs) => ({
+        name: cs.title,
+        location: cs.location && cs.country ? `${cs.location}, ${cs.country}` : (cs.location || cs.country || ""),
+        description: cs.summary || "",
+        image: cs.hero_image_url || "",
+        slug: cs.slug,
+      }))
+    : CASE_STUDIES;
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = Array.from(e.target.files ?? []);
     if (!incoming.length) return;
@@ -592,7 +605,7 @@ function FormsBlock() {
               Project Experience In The Region
             </h2>
             <div className="flex flex-col gap-3">
-              {CASE_STUDIES.slice(0, 3).map((c) => (
+              {projectExperience.slice(0, 3).map((c) => (
                 <article
                   key={c.name}
                   className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
@@ -614,12 +627,22 @@ function FormsBlock() {
                       </div>
                       <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">{c.description}</p>
                     </div>
-                    <Link
-                      to="/resources"
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
-                    >
-                      View Case Study <ChevronRight className="h-3 w-3" />
-                    </Link>
+                    {c.slug ? (
+                      <Link
+                        to="/projects/$slug"
+                        params={{ slug: c.slug }}
+                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
+                      >
+                        View Case Study <ChevronRight className="h-3 w-3" />
+                      </Link>
+                    ) : (
+                      <Link
+                        to="/resources"
+                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
+                      >
+                        View Case Study <ChevronRight className="h-3 w-3" />
+                      </Link>
+                    )}
                   </div>
                 </article>
               ))}

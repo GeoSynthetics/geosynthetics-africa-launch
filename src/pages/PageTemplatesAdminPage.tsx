@@ -1193,14 +1193,14 @@ export function PageTemplatesAdminPage() {
                             label="Popular products"
                             items={(active.popularProducts ?? []) as any}
                             fields={[
+                              { key: "slug", label: "Select Product", type: "product" },
                               { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
                               { key: "spec", label: "Specification Range", placeholder: "e.g. 1.0mm – 3.0mm" },
                               { key: "desc", label: "Short Description", placeholder: "One line description…", multiline: true },
                               { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
-                              { key: "slug", label: "Catalogue Slug (optional)", placeholder: "e.g. gse-hdpe-smooth" },
                             ]}
                             onChange={v => set("popularProducts", v as any)}
-                            newItem={{ name: "", spec: "", desc: "", image: "", slug: "" } as any}
+                            newItem={{ slug: "", name: "", spec: "", desc: "", image: "" } as any}
                           />
                         </TabsContent>
 
@@ -1214,13 +1214,14 @@ export function PageTemplatesAdminPage() {
                             label="Project references"
                             items={(active.projectReferences ?? []) as any}
                             fields={[
+                              { key: "project_slug", label: "Link to Case Study", type: "project" },
                               { key: "name", label: "Project Name", placeholder: "e.g. Mining Tailings Dam" },
                               { key: "location", label: "Location / Country", placeholder: "e.g. South Africa" },
                               { key: "year", label: "Year Completed", placeholder: "e.g. 2023" },
                               { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
                             ]}
                             onChange={v => set("projectReferences", v as any)}
-                            newItem={{ name: "", location: "", year: "", image: "" } as any}
+                            newItem={{ project_slug: "", name: "", location: "", year: "", image: "" } as any}
                           />
                         </TabsContent>
 

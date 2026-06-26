@@ -47,6 +47,7 @@ export interface PropertiesTable {
 }
 
 export interface ProjectReference {
+  project_slug?: string;
   name: string;
   location: string;
   year: string;

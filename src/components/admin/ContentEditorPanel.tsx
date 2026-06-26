@@ -522,6 +522,7 @@ export function ContentEditorPanel({
                 label="Project References"
                 items={(page.projectReferences ?? []) as any[]}
                 fields={[
+                  { key: "project_slug", label: "Link to Case Study", type: "project" },
                   { key: "name", label: "Project Name" },
                   { key: "location", label: "Location" },
                   { key: "year", label: "Year" },
@@ -535,6 +536,7 @@ export function ContentEditorPanel({
                   label="Popular Products (shown in catalogue preview)"
                   items={(page.popularProducts ?? []) as any[]}
                   fields={[
+                    { key: "slug", label: "Select Product", type: "product" },
                     { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
                     {
                       key: "spec",
@@ -548,14 +550,9 @@ export function ContentEditorPanel({
                       multiline: true,
                     },
                     { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
-                    {
-                      key: "slug",
-                      label: "Catalogue Slug (optional)",
-                      placeholder: "e.g. gse-hdpe-smooth",
-                    },
                   ]}
                   onChange={(v) => setPage({ popularProducts: v as any })}
-                  newItem={{ name: "", spec: "", desc: "", image: "", slug: "" } as any}
+                  newItem={{ slug: "", name: "", spec: "", desc: "", image: "" } as any}
                 />
               </div>
 

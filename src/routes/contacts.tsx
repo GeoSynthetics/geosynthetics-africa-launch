@@ -4,9 +4,25 @@ import { ContactsPage } from "@/pages/ContactsPage";
 
 export const Route = createFileRoute("/contacts")({
   loader: async () => {
-    const { data } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
-    const seoMap = (data?.value as Record<string, any>) || {};
-    return { seo: seoMap["/contacts"] || null };
+    const { data: seoData } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const seoMap = (seoData?.value as Record<string, any>) || {};
+
+    const { data: caseStudies, error } = await supabase
+      .from("case_studies")
+      .select("id, title, slug, summary, location, country, hero_image_url")
+      .eq("status", "published")
+      .order("project_year", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (error) {
+      console.error("Error loading case studies for contacts page:", error);
+    }
+
+    return {
+      seo: seoMap["/contacts"] || null,
+      caseStudies: caseStudies || [],
+    };
   },
   head: ({ loaderData }) => {
     const seo = loaderData?.seo;

@@ -20,7 +20,7 @@ export interface ProductPageContent {
   benefits?: { title: string; description: string }[];
   faqs?: { question: string; answer: string }[];
   installationSpecs?: string[];
-  projectReferences?: { name: string; location: string; year: string; image: string }[];
+  projectReferences?: { name: string; location: string; year: string; image: string; project_slug?: string }[];
   popularProducts: { name: string; spec: string; desc: string; image?: string; slug?: string }[];
   relatedProductGroups?: { name: string; link: string }[];
   applications: { label: string; slug: string; description?: string }[];

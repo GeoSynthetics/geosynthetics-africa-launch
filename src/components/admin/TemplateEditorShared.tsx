@@ -8,6 +8,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImagePicker } from "./ImagePicker";
 import { IconPicker } from "./IconPicker";
+import { ProjectSelector } from "./ProjectSelector";
+import { ProductSelector } from "./ProductSelector";
 
 // ─── useListEditor ────────────────────────────────────────────────────────────
 // Generic hook that provides add/update/remove helpers for any array field.
@@ -272,7 +274,7 @@ export function PairsEditor<T extends Record<string, string>>({
   label: string;
   hint?: string;
   items: T[];
-  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea" | "icon"; placeholder?: string }[];
+  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea" | "icon" | "project" | "product"; placeholder?: string }[];
   onChange: (v: T[]) => void;
   newItem?: T;
 }) {
@@ -320,7 +322,7 @@ export function PairsEditor<T extends Record<string, string>>({
               )}
             >
               {fields.map((f) => (
-                <div key={f.key} className={f.multiline || f.type === "image" || f.type === "icon" ? "col-span-full" : ""}>
+                <div key={f.key} className={f.multiline || f.type === "image" || f.type === "icon" || f.type === "project" || f.type === "product" ? "col-span-full" : ""}>
                   <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
                     {f.label}
                   </label>
@@ -335,6 +337,69 @@ export function PairsEditor<T extends Record<string, string>>({
                       value={(item as any)[f.key] ?? ""}
                       placeholder={f.placeholder || "Select icon..."}
                       onChange={(val) => update(i, f.key, val)}
+                    />
+                  ) : f.type === "project" ? (
+                    <ProjectSelector
+                      className="w-full justify-between h-9 text-xs bg-surface border border-border hover:bg-accent/10 font-medium"
+                      placeholder={(item as any)[f.key] ? `Linked: ${(item as any)[f.key]}` : "Link to Case Study / Project..."}
+                      onSelect={(project) => {
+                        const n = [...items];
+                        const updatedItem = { ...n[i] };
+                        updatedItem[f.key] = project.slug;
+
+                        // Auto-fill other fields if present in the item definition:
+                        if ("name" in updatedItem) {
+                          updatedItem["name" as keyof T] = project.title as any;
+                        }
+                        if ("location" in updatedItem) {
+                          updatedItem["location" as keyof T] = (project.country || "") as any;
+                        }
+                        if ("year" in updatedItem) {
+                          updatedItem["year" as keyof T] = (project.project_year?.toString() || "") as any;
+                        }
+                        if ("image" in updatedItem) {
+                          updatedItem["image" as keyof T] = (project.hero_image_url || "") as any;
+                        }
+
+                        n[i] = updatedItem;
+                        onChange(n);
+                      }}
+                    />
+                  ) : f.type === "product" ? (
+                    <ProductSelector
+                      onSelect={(product) => {
+                        const n = [...items];
+                        const updatedItem = { ...n[i] };
+                        updatedItem[f.key] = product.slug;
+
+                        // Auto-fill other fields if present in the item definition:
+                        if ("name" in updatedItem) {
+                          updatedItem["name" as keyof T] = product.name as any;
+                        }
+                        if ("slug" in updatedItem) {
+                          updatedItem["slug" as keyof T] = product.slug as any;
+                        }
+                        if ("desc" in updatedItem) {
+                          updatedItem["desc" as keyof T] = (product.short_description || "") as any;
+                        }
+                        if ("image" in updatedItem) {
+                          updatedItem["image" as keyof T] = (product.image_url || "") as any;
+                        }
+                        if ("spec" in updatedItem) {
+                          let specStr = "";
+                          if (product.thickness_mm) specStr += `${product.thickness_mm}mm`;
+                          if (product.roll_width_m && product.roll_length_m) {
+                            if (specStr) specStr += " · ";
+                            specStr += `${product.roll_width_m}m x ${product.roll_length_m}m`;
+                          }
+                          if (specStr) {
+                            updatedItem["spec" as keyof T] = specStr as any;
+                          }
+                        }
+
+                        n[i] = updatedItem;
+                        onChange(n);
+                      }}
                     />
                   ) : f.multiline ? (
                     <Textarea
