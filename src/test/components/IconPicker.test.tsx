@@ -113,12 +113,12 @@ describe("IconPicker Component", () => {
     const button = screen.getByRole("combobox");
     fireEvent.click(button);
     expect(screen.queryByText("Recently Used")).not.toBeInTheDocument();
-    
+
     // Select an icon to populate localStorage
     const iconBtn = screen.getByTitle("Activity");
     fireEvent.click(iconBtn);
     expect(onChange).toHaveBeenCalledWith("Activity");
-    
+
     // Unmount and remount to simulate opening again with stored items
     unmount();
 

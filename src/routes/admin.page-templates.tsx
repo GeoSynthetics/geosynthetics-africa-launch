@@ -3,10 +3,7 @@ import { PageTemplatesAdminPage } from "@/pages/PageTemplatesAdminPage";
 
 export const Route = createFileRoute("/admin/page-templates")({
   head: () => ({
-    meta: [
-      { title: "Page Templates — Admin" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Page Templates — Admin" }, { name: "robots", content: "noindex" }],
   }),
   component: PageTemplatesAdminPage,
 });

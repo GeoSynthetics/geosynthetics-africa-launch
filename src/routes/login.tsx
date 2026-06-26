@@ -69,9 +69,7 @@ function LoginPage() {
     <AuthLayout>
       {/* Heading */}
       <div className="mb-8">
-        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">
-          Sign In
-        </h1>
+        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">Sign In</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Access your contractor or customer account.
         </p>
@@ -139,9 +137,7 @@ function LoginPage() {
           <span className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-3 text-muted-foreground tracking-wider">
-            or
-          </span>
+          <span className="bg-background px-3 text-muted-foreground tracking-wider">or</span>
         </div>
       </div>
 

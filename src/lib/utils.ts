@@ -13,8 +13,8 @@ export function splitIntoParagraphs(text: string | string[] | undefined | null):
   if (!text) return [];
   const items = Array.isArray(text) ? text : [text];
   return items
-    .flatMap(item => (item || "").split(/\r?\n\r?\n/))
-    .map(p => p.trim())
+    .flatMap((item) => (item || "").split(/\r?\n\r?\n/))
+    .map((p) => p.trim())
     .filter(Boolean);
 }
 
@@ -39,5 +39,3 @@ export function formatSlugInput(value: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/-+/g, "-");
 }
-
-

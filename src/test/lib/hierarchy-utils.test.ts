@@ -27,9 +27,7 @@ describe("buildMegaMenuFromHierarchy", () => {
                 params: { category: "geomembranes", family: "hdpe-geomembranes" },
               },
             ],
-            quickActions: [
-              { label: "Request Quote", to: "/contact" }
-            ]
+            quickActions: [{ label: "Request Quote", to: "/contact" }],
           },
         ],
       },
@@ -42,7 +40,7 @@ describe("buildMegaMenuFromHierarchy", () => {
     expect(mega.key).toBe("products");
     expect(mega.label).toBe("Products");
     expect(mega.to).toBe("/products");
-    
+
     const primary = mega.columns.primary;
     expect(primary).toHaveLength(1);
     expect(primary[0].label).toBe("Geomembranes");
@@ -54,7 +52,7 @@ describe("buildMegaMenuFromHierarchy", () => {
     const secondary = primary[0].content.secondary;
     expect(secondary).toHaveLength(1);
     expect(secondary[0].label).toBe("HDPE Geomembranes");
-    
+
     // Quick actions mapped correctly
     expect(primary[0].content.quickActions).toHaveLength(1);
     expect(primary[0].content.quickActions[0].label).toBe("Request Quote");
@@ -109,7 +107,7 @@ describe("buildMegaMenuFromHierarchy", () => {
     expect(sections).toBeInstanceOf(Array);
     expect(sections.length).toBeGreaterThan(0);
 
-    const products = sections.find(s => s.key === "products");
+    const products = sections.find((s) => s.key === "products");
     expect(products).toBeDefined();
     expect(products?.label).toBe("Products");
     expect(products?.items.length).toBeGreaterThan(0);

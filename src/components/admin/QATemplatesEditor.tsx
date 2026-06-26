@@ -6,8 +6,18 @@ import { ImagePicker } from "./ImagePicker";
 import { IconPicker } from "./IconPicker";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  FieldLabel, TagsInput, useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, ListEditorHeader,
-  SectionHeading, StringListEditor, PairsEditor, TemplatesEditorSkeleton
+  FieldLabel,
+  TagsInput,
+  useListEditor,
+  ItemCard,
+  ItemDeleteButton,
+  MicroLabel,
+  EmptyState,
+  ListEditorHeader,
+  SectionHeading,
+  StringListEditor,
+  PairsEditor,
+  TemplatesEditorSkeleton,
 } from "./TemplateEditorShared";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,7 +31,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
-import { Plus, Pencil, Trash2, Search, Eye, Save, Loader2, ChevronRight, AlertTriangle, ExternalLink, ChevronLeft } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Search,
+  Eye,
+  Save,
+  Loader2,
+  ChevronRight,
+  AlertTriangle,
+  ExternalLink,
+  ChevronLeft,
+} from "lucide-react";
 import { toast } from "sonner";
 import { cn, slugify } from "@/lib/utils";
 import { ContentSectionsEditor, type ContentSection } from "./QAContentSectionsEditor";
@@ -74,7 +96,8 @@ interface QALandingContent {
 
 const defaultLandingContent = (): QALandingContent => ({
   heroTitle: "No System Leaves\nSite Unverified.",
-  heroSubtitle: "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.",
+  heroSubtitle:
+    "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.",
   heroImage: "",
   heroChecklist: [
     "Material Verification — every product verified before installation",
@@ -88,7 +111,8 @@ const defaultLandingContent = (): QALandingContent => ({
     { value: "100%", label: "Welds Tested" },
     { value: "IAGI", label: "International Standard" },
   ],
-  frameworkTitle: "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa",
+  frameworkTitle:
+    "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa",
   frameworkEyebrow: "Our QA/QC Framework",
   pillars: [
     {
@@ -123,7 +147,8 @@ const defaultLandingContent = (): QALandingContent => ({
     },
   ],
   iagiTitle: "International Standards.\nAfrican Execution.",
-  iagiDescription: "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.",
+  iagiDescription:
+    "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.",
   iagiStats: [
     { value: "17", label: "African Countries Covered" },
     { value: "100%", label: "QA/QC Performed On All Installations" },
@@ -132,8 +157,10 @@ const defaultLandingContent = (): QALandingContent => ({
   ],
   seo: {
     title: "Quality Assurance — Geosynthetics Africa",
-    description: "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.",
-    keywords: "quality assurance, qa/qc, geosynthetics installation, iagi, geomembrane, testing, certification",
+    description:
+      "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.",
+    keywords:
+      "quality assurance, qa/qc, geosynthetics installation, iagi, geomembrane, testing, certification",
   },
 });
 
@@ -166,7 +193,7 @@ function PillarsEditor({
   const { add, update, remove } = useListEditor(
     pillars,
     onChange,
-    () => ({ icon: "ShieldCheck", title: "", desc: "" } as Pillar),
+    () => ({ icon: "ShieldCheck", title: "", desc: "" }) as Pillar,
   );
 
   return (
@@ -183,16 +210,31 @@ function PillarsEditor({
           <div className="grid grid-cols-2 gap-2">
             <div>
               <MicroLabel>Icon</MicroLabel>
-              <IconPicker value={pillar.icon} onChange={(v) => update(i, "icon", v)} placeholder="Select icon..." className="h-8 text-xs" />
+              <IconPicker
+                value={pillar.icon}
+                onChange={(v) => update(i, "icon", v)}
+                placeholder="Select icon..."
+                className="h-8 text-xs"
+              />
             </div>
             <div>
               <MicroLabel>Title</MicroLabel>
-              <Input value={pillar.title} onChange={(e) => update(i, "title", e.target.value)} className="h-8 text-xs" placeholder="e.g. Material Verification" />
+              <Input
+                value={pillar.title}
+                onChange={(e) => update(i, "title", e.target.value)}
+                className="h-8 text-xs"
+                placeholder="e.g. Material Verification"
+              />
             </div>
           </div>
           <div>
             <MicroLabel>Description</MicroLabel>
-            <Textarea value={pillar.desc} onChange={(e) => update(i, "desc", e.target.value)} className="text-xs min-h-[50px] resize-none" placeholder="Short description for this pillar..." />
+            <Textarea
+              value={pillar.desc}
+              onChange={(e) => update(i, "desc", e.target.value)}
+              className="text-xs min-h-[50px] resize-none"
+              placeholder="Short description for this pillar..."
+            />
           </div>
         </ItemCard>
       ))}
@@ -201,17 +243,11 @@ function PillarsEditor({
   );
 }
 
-function StatsEditor({
-  stats,
-  onChange,
-}: {
-  stats: Stat[];
-  onChange: (v: Stat[]) => void;
-}) {
+function StatsEditor({ stats, onChange }: { stats: Stat[]; onChange: (v: Stat[]) => void }) {
   const { add, update, remove } = useListEditor(
     stats,
     onChange,
-    () => ({ label: "", value: "" } as Stat),
+    () => ({ label: "", value: "" }) as Stat,
   );
 
   return (
@@ -224,9 +260,24 @@ function StatsEditor({
       />
       {stats.map((stat, i) => (
         <div key={i} className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
-          <Input value={stat.value} onChange={(e) => update(i, "value", e.target.value)} className="text-sm h-8" placeholder="e.g. 100%" />
-          <Input value={stat.label} onChange={(e) => update(i, "label", e.target.value)} className="text-sm h-8" placeholder="e.g. Welds Tested" />
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:bg-destructive/10" onClick={() => remove(i)}>
+          <Input
+            value={stat.value}
+            onChange={(e) => update(i, "value", e.target.value)}
+            className="text-sm h-8"
+            placeholder="e.g. 100%"
+          />
+          <Input
+            value={stat.label}
+            onChange={(e) => update(i, "label", e.target.value)}
+            className="text-sm h-8"
+            placeholder="e.g. Welds Tested"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+            onClick={() => remove(i)}
+          >
             <Trash2 className="h-3 w-3" />
           </Button>
         </div>
@@ -238,7 +289,8 @@ function StatsEditor({
 
 export function QATemplatesEditor() {
   const [rows, setRows] = useState<QADocument[]>([]);
-  const [landingContent, setLandingContent] = useState<Partial<QALandingContent>>(defaultLandingContent());
+  const [landingContent, setLandingContent] =
+    useState<Partial<QALandingContent>>(defaultLandingContent());
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -247,7 +299,8 @@ export function QATemplatesEditor() {
   const [dirty, setDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("__landing");
   const [editingDoc, setEditingDoc] = useState<Partial<QADocument>>(makeEmpty());
-  const [editingLanding, setEditingLanding] = useState<Partial<QALandingContent>>(defaultLandingContent());
+  const [editingLanding, setEditingLanding] =
+    useState<Partial<QALandingContent>>(defaultLandingContent());
   const [activeTab, setActiveTab] = useState("hero");
   const [qaToDelete, setQaToDelete] = useState<QADocument | null>(null);
 
@@ -278,7 +331,9 @@ export function QATemplatesEditor() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   // Synchronize edit state when selection or raw data changes
   useEffect(() => {
@@ -289,14 +344,14 @@ export function QATemplatesEditor() {
         seo: {
           ...defaultLandingContent().seo,
           ...(landingContent?.seo || {}),
-        }
+        },
       });
       setDirty(false);
     } else if (activeSlug === "__new") {
       setEditingDoc(makeEmpty());
       setDirty(false);
     } else {
-      const found = rows.find(r => r.slug === activeSlug);
+      const found = rows.find((r) => r.slug === activeSlug);
       if (found) {
         setEditingDoc({ ...found });
         setDirty(false);
@@ -350,7 +405,10 @@ export function QATemplatesEditor() {
       if (activeSlug === "__landing") {
         const { error } = await supabase
           .from("site_config")
-          .upsert({ key: "qa_landing_content", value: editingLanding as any }, { onConflict: "key" });
+          .upsert(
+            { key: "qa_landing_content", value: editingLanding as any },
+            { onConflict: "key" },
+          );
         if (error) throw error;
         toast.success("QA Landing Page content saved!");
         setLandingContent(editingLanding);
@@ -399,7 +457,10 @@ export function QATemplatesEditor() {
     }
   };
 
-  const setLandingField = <K extends keyof QALandingContent>(key: K, value: QALandingContent[K]) => {
+  const setLandingField = <K extends keyof QALandingContent>(
+    key: K,
+    value: QALandingContent[K],
+  ) => {
     setEditingLanding((prev) => ({ ...prev, [key]: value }));
     setDirty(true);
   };
@@ -441,16 +502,23 @@ export function QATemplatesEditor() {
 
   const isLanding = activeSlug === "__landing";
   const isNew = activeSlug === "__new";
-  const activeLabel = isLanding ? "QA Landing Page" : isNew ? "New QA Document" : (editingDoc.category_name || activeSlug);
+  const activeLabel = isLanding
+    ? "QA Landing Page"
+    : isNew
+      ? "New QA Document"
+      : editingDoc.category_name || activeSlug;
 
   return (
     <div>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
         <div>
-          <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Quality Assurance Templates</h2>
+          <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
+            Quality Assurance Templates
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage Quality Assurance pages shown on `/quality-assurance` and dynamic subpage child templates.
+            Manage Quality Assurance pages shown on `/quality-assurance` and dynamic subpage child
+            templates.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -528,10 +596,14 @@ export function QATemplatesEditor() {
             <div className="space-y-1">
               <div className="px-2 flex items-center justify-between">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                  Sub-pages ({filtered.length !== rows.length ? `${filtered.length}/${rows.length}` : rows.length})
+                  Sub-pages (
+                  {filtered.length !== rows.length
+                    ? `${filtered.length}/${rows.length}`
+                    : rows.length}
+                  )
                 </p>
               </div>
-              
+
               {/* Search Box inside sidebar */}
               <div className="px-2 py-1 relative">
                 <Search className="absolute left-4 top-2.5 h-3 w-3 text-muted-foreground" />
@@ -565,7 +637,9 @@ export function QATemplatesEditor() {
                     >
                       <div className="min-w-0 flex-1">
                         <div className="truncate font-medium text-xs">{doc.category_name}</div>
-                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">{doc.slug}</div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                          {doc.slug}
+                        </div>
                       </div>
                       <div className="flex items-center gap-1 ml-1 shrink-0">
                         {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
@@ -595,7 +669,7 @@ export function QATemplatesEditor() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                     className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                   >
@@ -607,7 +681,7 @@ export function QATemplatesEditor() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                     className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                   >
@@ -629,10 +703,19 @@ export function QATemplatesEditor() {
               </h3>
               <div className="flex items-center gap-2 flex-wrap mt-1">
                 <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground font-mono">
-                  {isLanding ? "/quality-assurance" : isNew ? "not saved yet" : `/quality-assurance/${activeSlug}`}
+                  {isLanding
+                    ? "/quality-assurance"
+                    : isNew
+                      ? "not saved yet"
+                      : `/quality-assurance/${activeSlug}`}
                 </code>
                 {!isLanding && !isNew && (
-                  <span className={cn("text-[8px] font-bold uppercase tracking-wide px-1.5 py-0.2 rounded", STATUS_COLORS[editingDoc.status || "published"])}>
+                  <span
+                    className={cn(
+                      "text-[8px] font-bold uppercase tracking-wide px-1.5 py-0.2 rounded",
+                      STATUS_COLORS[editingDoc.status || "published"],
+                    )}
+                  >
                     {editingDoc.status}
                   </span>
                 )}
@@ -643,8 +726,17 @@ export function QATemplatesEditor() {
             </div>
             <div className="flex items-center gap-2">
               {!isNew && (
-                <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
-                  <a href={isLanding ? "/quality-assurance" : `/quality-assurance/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 text-xs h-8 cursor-pointer"
+                >
+                  <a
+                    href={isLanding ? "/quality-assurance" : `/quality-assurance/${activeSlug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <ExternalLink className="h-3 w-3" /> Preview
                   </a>
                 </Button>
@@ -654,7 +746,11 @@ export function QATemplatesEditor() {
                 disabled={saving || !dirty}
                 className="bg-primary hover:bg-primary/90 text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
               >
-                {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                {saving ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <Save className="h-3 w-3" />
+                )}
                 {saving ? "Saving…" : "Save"}
               </Button>
             </div>
@@ -667,40 +763,38 @@ export function QATemplatesEditor() {
             className="flex-1 flex flex-col overflow-hidden"
           >
             <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
-              {isLanding ? (
-                // Landing page tabs
-                [
-                  { id: "hero", label: "Hero & Checklist" },
-                  { id: "pillars", label: "Framework & Pillars" },
-                  { id: "iagi", label: "IAGI Section" },
-                  { id: "seo", label: "SEO" },
-                ].map((t) => (
-                  <TabsTrigger
-                    key={t.id}
-                    value={t.id}
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                  >
-                    {t.label}
-                  </TabsTrigger>
-                ))
-              ) : (
-                // Detail page tabs
-                [
-                  { id: "basic", label: "Basic Info" },
-                  { id: "hero", label: "Hero" },
-                  { id: "pillars", label: "Pillars & Stats" },
-                  { id: "content", label: "Content Sections" },
-                  { id: "industries", label: "Industries" },
-                ].map((t) => (
-                  <TabsTrigger
-                    key={t.id}
-                    value={t.id}
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                  >
-                    {t.label}
-                  </TabsTrigger>
-                ))
-              )}
+              {isLanding
+                ? // Landing page tabs
+                  [
+                    { id: "hero", label: "Hero & Checklist" },
+                    { id: "pillars", label: "Framework & Pillars" },
+                    { id: "iagi", label: "IAGI Section" },
+                    { id: "seo", label: "SEO" },
+                  ].map((t) => (
+                    <TabsTrigger
+                      key={t.id}
+                      value={t.id}
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                    >
+                      {t.label}
+                    </TabsTrigger>
+                  ))
+                : // Detail page tabs
+                  [
+                    { id: "basic", label: "Basic Info" },
+                    { id: "hero", label: "Hero" },
+                    { id: "pillars", label: "Pillars & Stats" },
+                    { id: "content", label: "Content Sections" },
+                    { id: "industries", label: "Industries" },
+                  ].map((t) => (
+                    <TabsTrigger
+                      key={t.id}
+                      value={t.id}
+                      className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                    >
+                      {t.label}
+                    </TabsTrigger>
+                  ))}
             </TabsList>
 
             <div className="flex-1 overflow-y-auto p-6">
@@ -752,7 +846,7 @@ export function QATemplatesEditor() {
                         items={editingLanding.heroStats || []}
                         fields={[
                           { key: "value", label: "Stat Value", placeholder: "e.g. 100%" },
-                          { key: "label", label: "Stat Label", placeholder: "e.g. Welds Tested" }
+                          { key: "label", label: "Stat Label", placeholder: "e.g. Welds Tested" },
                         ]}
                         onChange={(v) => setLandingField("heroStats", v as any)}
                         newItem={{ value: "", label: "" }}
@@ -812,7 +906,11 @@ export function QATemplatesEditor() {
                         items={editingLanding.iagiStats || []}
                         fields={[
                           { key: "value", label: "Stat Value", placeholder: "e.g. One of 5" },
-                          { key: "label", label: "Stat Label", placeholder: "e.g. IAGI Members in Africa" }
+                          {
+                            key: "label",
+                            label: "Stat Label",
+                            placeholder: "e.g. IAGI Members in Africa",
+                          },
                         ]}
                         onChange={(v) => setLandingField("iagiStats", v as any)}
                         newItem={{ value: "", label: "" }}
@@ -859,7 +957,9 @@ export function QATemplatesEditor() {
                   <TabsContent value="basic" className="space-y-4 m-0 outline-none">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <FieldLabel hint="Shown as the card title on the listing page">Category Name *</FieldLabel>
+                        <FieldLabel hint="Shown as the card title on the listing page">
+                          Category Name *
+                        </FieldLabel>
                         <Input
                           value={editingDoc.category_name ?? ""}
                           onChange={(e) => setDocField("category_name", e.target.value)}
@@ -867,7 +967,9 @@ export function QATemplatesEditor() {
                         />
                       </div>
                       <div>
-                        <FieldLabel hint="URL-safe slug for the child detail page /quality-assurance/{slug}">Slug</FieldLabel>
+                        <FieldLabel hint="URL-safe slug for the child detail page /quality-assurance/{slug}">
+                          Slug
+                        </FieldLabel>
                         <Input
                           value={editingDoc.slug ?? ""}
                           onChange={(e) => handleSlugChange(e.target.value)}
@@ -879,7 +981,9 @@ export function QATemplatesEditor() {
                     </div>
 
                     <div>
-                      <FieldLabel hint="Shown on the listing card and as the page meta description">Short Description</FieldLabel>
+                      <FieldLabel hint="Shown on the listing card and as the page meta description">
+                        Short Description
+                      </FieldLabel>
                       <Textarea
                         value={editingDoc.short_description ?? ""}
                         onChange={(e) => setDocField("short_description", e.target.value)}
@@ -891,7 +995,9 @@ export function QATemplatesEditor() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <FieldLabel hint="Button text on the listing card and detail page">CTA Label</FieldLabel>
+                        <FieldLabel hint="Button text on the listing card and detail page">
+                          CTA Label
+                        </FieldLabel>
                         <Input
                           value={editingDoc.cta_label ?? ""}
                           onChange={(e) => setDocField("cta_label", e.target.value)}
@@ -899,11 +1005,15 @@ export function QATemplatesEditor() {
                         />
                       </div>
                       <div>
-                        <FieldLabel hint="Controls display order on the listing page (lower = first)">Sort Order</FieldLabel>
+                        <FieldLabel hint="Controls display order on the listing page (lower = first)">
+                          Sort Order
+                        </FieldLabel>
                         <Input
                           type="number"
                           value={String(editingDoc.sort_order ?? 0)}
-                          onChange={(e) => setDocField("sort_order", parseInt(e.target.value, 10) || 0)}
+                          onChange={(e) =>
+                            setDocField("sort_order", parseInt(e.target.value, 10) || 0)
+                          }
                           min={0}
                         />
                       </div>
@@ -911,7 +1021,9 @@ export function QATemplatesEditor() {
 
                     <div className="flex items-center gap-4 pt-2">
                       <div>
-                        <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Status</Label>
+                        <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                          Status
+                        </Label>
                         <Select
                           value={editingDoc.status ?? "published"}
                           onValueChange={(v) => setDocField("status", v as QAStatus)}
@@ -920,9 +1032,15 @@ export function QATemplatesEditor() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="published" className="font-semibold text-xs">Published</SelectItem>
-                            <SelectItem value="draft" className="font-semibold text-xs">Draft</SelectItem>
-                            <SelectItem value="archived" className="font-semibold text-xs">Archived</SelectItem>
+                            <SelectItem value="published" className="font-semibold text-xs">
+                              Published
+                            </SelectItem>
+                            <SelectItem value="draft" className="font-semibold text-xs">
+                              Draft
+                            </SelectItem>
+                            <SelectItem value="archived" className="font-semibold text-xs">
+                              Archived
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -942,13 +1060,21 @@ export function QATemplatesEditor() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <FieldLabel hint='Small text above the title — e.g. "IAGI-Aligned" or "GRI-GM13 Certified"'>Eyebrow Text</FieldLabel>
-                        <Input value={editingDoc.eyebrow ?? ""} onChange={(e) => setDocField("eyebrow", e.target.value)} placeholder="e.g. IAGI-Aligned" />
+                        <FieldLabel hint='Small text above the title — e.g. "IAGI-Aligned" or "GRI-GM13 Certified"'>
+                          Eyebrow Text
+                        </FieldLabel>
+                        <Input
+                          value={editingDoc.eyebrow ?? ""}
+                          onChange={(e) => setDocField("eyebrow", e.target.value)}
+                          placeholder="e.g. IAGI-Aligned"
+                        />
                       </div>
                     </div>
 
                     <div>
-                      <FieldLabel hint="Large heading in the hero. Defaults to category name if blank.">Hero Title</FieldLabel>
+                      <FieldLabel hint="Large heading in the hero. Defaults to category name if blank.">
+                        Hero Title
+                      </FieldLabel>
                       <Input
                         value={editingDoc.hero_title ?? ""}
                         onChange={(e) => setDocField("hero_title", e.target.value)}
@@ -957,7 +1083,9 @@ export function QATemplatesEditor() {
                     </div>
 
                     <div>
-                      <FieldLabel hint="Subtitle paragraph below the hero heading">Hero Body</FieldLabel>
+                      <FieldLabel hint="Subtitle paragraph below the hero heading">
+                        Hero Body
+                      </FieldLabel>
                       <Textarea
                         value={editingDoc.hero_body ?? ""}
                         onChange={(e) => setDocField("hero_body", e.target.value)}

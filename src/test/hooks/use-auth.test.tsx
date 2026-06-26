@@ -83,7 +83,7 @@ describe("AuthProvider & useAuth Integration Tests", () => {
     render(
       <AuthProvider>
         <DummyComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // Verify initial loading state
@@ -120,7 +120,7 @@ describe("AuthProvider & useAuth Integration Tests", () => {
     render(
       <AuthProvider>
         <DummyComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // Verify resolving authentication and loading roles
@@ -159,7 +159,7 @@ describe("AuthProvider & useAuth Integration Tests", () => {
     render(
       <AuthProvider>
         <DummyComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // Wait for initial load
@@ -208,7 +208,7 @@ describe("AuthProvider & useAuth Integration Tests", () => {
     render(
       <AuthProvider>
         <DummyComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // Wait for user 1 load
@@ -263,7 +263,7 @@ describe("AuthProvider & useAuth Integration Tests", () => {
     render(
       <AuthProvider>
         <DummyComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {

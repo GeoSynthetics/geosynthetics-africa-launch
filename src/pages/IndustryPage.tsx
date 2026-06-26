@@ -10,21 +10,25 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 export function IndustryPage({ data }: { data?: any } = {}) {
   const loaderData = data ? data : Route.useLoaderData();
   const { industry, templateData, caseStudies = [], keyProducts = [] } = loaderData;
-  
+
   const title = templateData?.title || industry.label;
-  const description = templateData?.description || `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
-  const heroImage = templateData?.heroImage || "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
-  
+  const description =
+    templateData?.description ||
+    `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
+  const heroImage =
+    templateData?.heroImage ||
+    "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
+
   const challenges = templateData?.content?.challenges || [
     "Strict environmental regulations and compliance",
     "Extreme operating conditions and remote locations",
-    "Demand for rapid deployment and cost efficiency"
+    "Demand for rapid deployment and cost efficiency",
   ];
-  
+
   const applications = templateData?.content?.applications || [
     "Containment Systems",
     "Erosion Protection",
-    "Structural Reinforcement"
+    "Structural Reinforcement",
   ];
 
   const breadcrumbs = [
@@ -45,20 +49,25 @@ export function IndustryPage({ data }: { data?: any } = {}) {
       >
         <div className="container-page py-16 md:py-20">
           <Breadcrumbs items={breadcrumbs} variant="default" />
-          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">{title}</h1>
-          <p className="mt-4 max-w-2xl text-base text-surface-dark-foreground/80">
-            {description}
-          </p>
+          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">
+            {title}
+          </h1>
+          <p className="mt-4 max-w-2xl text-base text-surface-dark-foreground/80">{description}</p>
         </div>
       </section>
 
       <section className="bg-background">
         <div className="container-page py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8">
-            <h2 className="font-display text-2xl font-bold uppercase mb-6">Industry Challenges Solved</h2>
+            <h2 className="font-display text-2xl font-bold uppercase mb-6">
+              Industry Challenges Solved
+            </h2>
             <div className="space-y-4">
               {challenges.map((challenge: string, i: number) => (
-                <div key={i} className="rounded border border-border bg-card p-6 flex items-start gap-4">
+                <div
+                  key={i}
+                  className="rounded border border-border bg-card p-6 flex items-start gap-4"
+                >
                   <Factory className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-display text-lg font-bold">{challenge}</div>
@@ -67,12 +76,17 @@ export function IndustryPage({ data }: { data?: any } = {}) {
               ))}
             </div>
 
-            <h2 className="font-display text-2xl font-bold uppercase mt-12 mb-6">Key Applications in {title}</h2>
+            <h2 className="font-display text-2xl font-bold uppercase mt-12 mb-6">
+              Key Applications in {title}
+            </h2>
             <div className="grid sm:grid-cols-2 gap-6">
               {applications.map((app: any, i: number) => {
                 if (typeof app === "string") {
                   return (
-                    <div key={i} className="border-l-2 border-primary pl-4 py-2 bg-card/40 rounded-r">
+                    <div
+                      key={i}
+                      className="border-l-2 border-primary pl-4 py-2 bg-card/40 rounded-r"
+                    >
                       <div className="font-bold uppercase text-foreground">{app}</div>
                     </div>
                   );
@@ -83,13 +97,23 @@ export function IndustryPage({ data }: { data?: any } = {}) {
                 const link = app.link || app.to || "";
 
                 return (
-                  <div key={i} className="rounded border border-border bg-card p-6 flex flex-col justify-between hover:border-primary transition duration-200">
+                  <div
+                    key={i}
+                    className="rounded border border-border bg-card p-6 flex flex-col justify-between hover:border-primary transition duration-200"
+                  >
                     <div>
-                      <h3 className="font-display text-base font-bold uppercase text-foreground mb-2">{heading}</h3>
-                      {desc && <p className="text-xs text-muted-foreground leading-relaxed mb-4">{desc}</p>}
+                      <h3 className="font-display text-base font-bold uppercase text-foreground mb-2">
+                        {heading}
+                      </h3>
+                      {desc && (
+                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{desc}</p>
+                      )}
                     </div>
                     {link && (
-                      <Link to={link as any} className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 mt-auto">
+                      <Link
+                        to={link as any}
+                        className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 mt-auto"
+                      >
                         Learn More <ChevronRight className="h-3.5 w-3.5" />
                       </Link>
                     )}
@@ -97,12 +121,15 @@ export function IndustryPage({ data }: { data?: any } = {}) {
                 );
               })}
             </div>
-            
+
             {/* Render any additional custom sections defined in the CMS */}
             {templateData?.content?.sections?.map((section: any, idx: number) => (
               <div key={idx} className="mt-12">
                 <h2 className="font-display text-2xl font-bold uppercase mb-4">{section.title}</h2>
-                <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: section.body }} />
+                <div
+                  className="prose prose-sm max-w-none text-muted-foreground"
+                  dangerouslySetInnerHTML={{ __html: section.body }}
+                />
               </div>
             ))}
 
@@ -172,11 +199,18 @@ export function IndustryPage({ data }: { data?: any } = {}) {
                       params={{ slug: cs.slug }}
                       className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-foreground transition duration-200"
                     >
-                      <div className="aspect-[16/10] relative overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${cs.hero_image_url})` }}>
+                      <div
+                        className="aspect-[16/10] relative overflow-hidden bg-cover bg-center"
+                        style={{ backgroundImage: `url(${cs.hero_image_url})` }}
+                      >
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div className="absolute top-4 left-4 z-10">
                           <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                            {cs.service_type === "supply_install" ? "Supply & Install" : cs.service_type === "supply_only" ? "Supply Only" : "Services Only"}
+                            {cs.service_type === "supply_install"
+                              ? "Supply & Install"
+                              : cs.service_type === "supply_only"
+                                ? "Supply Only"
+                                : "Services Only"}
                           </span>
                         </div>
                       </div>
@@ -209,8 +243,15 @@ export function IndustryPage({ data }: { data?: any } = {}) {
                 heading="Discuss Your Project"
                 description={`Our engineers understand the specific demands of the ${title.toLowerCase()} sector.`}
               />
-              <Button asChild variant="outline" className="w-full uppercase font-bold tracking-wide">
-                <Link to="/resources"><FileText className="h-4 w-4 mr-2" />Industry Case Studies</Link>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full uppercase font-bold tracking-wide"
+              >
+                <Link to="/resources">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Industry Case Studies
+                </Link>
               </Button>
             </div>
           </aside>

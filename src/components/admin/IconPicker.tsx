@@ -41,7 +41,12 @@ function fuzzyMatch(name: string, query: string): boolean {
 const LOCAL_STORAGE_KEY = "icon-picker-recent-icons";
 const MAX_RECENT_ICONS = 6;
 
-export function IconPicker({ value, onChange, placeholder = "Select icon...", className }: IconPickerProps) {
+export function IconPicker({
+  value,
+  onChange,
+  placeholder = "Select icon...",
+  className,
+}: IconPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
@@ -57,7 +62,7 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
         if (stored) {
           const parsed = JSON.parse(stored);
           if (Array.isArray(parsed)) {
-            setRecentIcons(parsed.filter(name => ALL_ICON_NAMES.includes(name)));
+            setRecentIcons(parsed.filter((name) => ALL_ICON_NAMES.includes(name)));
           }
         }
       } catch (e) {
@@ -79,14 +84,12 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
     }
 
     // First check standard search (substring matches)
-    const standardMatches = ALL_ICON_NAMES.filter((name) =>
-      name.toLowerCase().includes(query)
-    );
+    const standardMatches = ALL_ICON_NAMES.filter((name) => name.toLowerCase().includes(query));
 
     // If it's not found in standard matches, search the rest of the icons using fuzzy matching
     const standardMatchSet = new Set(standardMatches);
     const restMatches = ALL_ICON_NAMES.filter(
-      (name) => !standardMatchSet.has(name) && fuzzyMatch(name, query)
+      (name) => !standardMatchSet.has(name) && fuzzyMatch(name, query),
     );
 
     return [...standardMatches, ...restMatches];
@@ -98,26 +101,29 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
   }, [allFilteredIcons, visibleCount]);
 
   // Callback ref for Infinite Scroll / Lazy Loading intersection observer
-  const loadMoreRef = useCallback((node: HTMLDivElement | null) => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-      observerRef.current = null;
-    }
+  const loadMoreRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
 
-    if (node && typeof IntersectionObserver !== "undefined") {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            setVisibleCount((prev) => Math.min(prev + 100, allFilteredIcons.length));
-          }
-        },
-        { threshold: 0.1 }
-      );
-      observer.observe(node);
-      observerRef.current = observer;
-      (node as any)._intersectionObserver = observer;
-    }
-  }, [allFilteredIcons.length]);
+      if (node && typeof IntersectionObserver !== "undefined") {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              setVisibleCount((prev) => Math.min(prev + 100, allFilteredIcons.length));
+            }
+          },
+          { threshold: 0.1 },
+        );
+        observer.observe(node);
+        observerRef.current = observer;
+        (node as any)._intersectionObserver = observer;
+      }
+    },
+    [allFilteredIcons.length],
+  );
 
   // Resolve the selected icon component dynamically
   const SelectedIconComponent = useMemo(() => {
@@ -129,7 +135,10 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
     try {
       const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       const recents: string[] = stored ? JSON.parse(stored) : [];
-      const updated = [iconName, ...recents.filter(name => name !== iconName)].slice(0, MAX_RECENT_ICONS);
+      const updated = [iconName, ...recents.filter((name) => name !== iconName)].slice(
+        0,
+        MAX_RECENT_ICONS,
+      );
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
     } catch (e) {
       console.warn("Failed to save recent icon to localStorage", e);
@@ -154,14 +163,16 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
             aria-expanded={open}
             className={cn(
               "w-full justify-between text-left font-normal h-9 px-3 bg-background border-border hover:bg-accent/50 text-xs truncate cursor-pointer",
-              !value && "text-muted-foreground"
+              !value && "text-muted-foreground",
             )}
           >
             <div className="flex items-center gap-2 truncate">
               {SelectedIconComponent ? (
                 <SelectedIconComponent className="h-4 w-4 shrink-0 text-primary" />
               ) : (
-                <span className="h-4 w-4 shrink-0 rounded border border-dashed border-muted-foreground/30 flex items-center justify-center text-[10px]">?</span>
+                <span className="h-4 w-4 shrink-0 rounded border border-dashed border-muted-foreground/30 flex items-center justify-center text-[10px]">
+                  ?
+                </span>
               )}
               <span className="truncate">{value || placeholder}</span>
             </div>
@@ -187,7 +198,10 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[300px] p-0 bg-popover border border-border rounded-lg shadow-xl z-50" align="start">
+        <PopoverContent
+          className="w-[300px] p-0 bg-popover border border-border rounded-lg shadow-xl z-50"
+          align="start"
+        >
           <div className="flex items-center border-b border-border px-3 py-2">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <Input
@@ -208,7 +222,7 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
               </Button>
             )}
           </div>
-          
+
           {recentIcons.length > 0 && !search && (
             <div className="border-b border-border p-2 bg-muted/10">
               <div className="text-[10px] text-muted-foreground font-semibold px-1 mb-1.5 uppercase tracking-wider">
@@ -232,7 +246,7 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
                         "flex h-10 w-10 items-center justify-center rounded-md border border-transparent transition-all duration-200 cursor-pointer",
                         isSelected
                           ? "bg-primary text-primary-foreground border-primary"
-                          : "hover:bg-accent hover:text-primary hover:scale-105 text-muted-foreground"
+                          : "hover:bg-accent hover:text-primary hover:scale-105 text-muted-foreground",
                       )}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -242,7 +256,7 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
               </div>
             </div>
           )}
-          
+
           <ScrollArea className="h-[220px]">
             {displayedIcons.length > 0 ? (
               <div className="grid grid-cols-6 gap-1 p-2">
@@ -263,7 +277,7 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
                         "flex h-10 w-10 items-center justify-center rounded-md border border-transparent transition-all duration-200 cursor-pointer",
                         isSelected
                           ? "bg-primary text-primary-foreground border-primary"
-                          : "hover:bg-accent hover:text-primary hover:scale-105 text-muted-foreground"
+                          : "hover:bg-accent hover:text-primary hover:scale-105 text-muted-foreground",
                       )}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -280,7 +294,9 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
                 )}
               </div>
             ) : (
-              <div className="py-6 text-center text-xs text-muted-foreground italic">No matching icons found</div>
+              <div className="py-6 text-center text-xs text-muted-foreground italic">
+                No matching icons found
+              </div>
             )}
           </ScrollArea>
 
@@ -288,7 +304,9 @@ export function IconPicker({ value, onChange, placeholder = "Select icon...", cl
             {hoveredIcon ? (
               <span className="text-primary truncate">{hoveredIcon}</span>
             ) : value ? (
-              <span>Selected: <strong className="text-foreground">{value}</strong></span>
+              <span>
+                Selected: <strong className="text-foreground">{value}</strong>
+              </span>
             ) : (
               <span>Hover an icon to see name</span>
             )}

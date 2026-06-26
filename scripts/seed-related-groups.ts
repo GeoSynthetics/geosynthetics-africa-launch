@@ -19,17 +19,12 @@
 import { createClient } from "@supabase/supabase-js";
 
 // ─── Load .env manually (Bun picks up .env automatically) ────────────────────
-const SUPABASE_URL =
-  process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
 const SUPABASE_KEY =
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  process.env.SUPABASE_PUBLISHABLE_KEY ??
-  "";
+  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? "";
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error(
-    "❌  Missing env vars: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY",
-  );
+  console.error("❌  Missing env vars: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY");
   process.exit(1);
 }
 
@@ -117,9 +112,9 @@ const CATEGORY_ALIASES: Record<string, string> = {
   "geomembrane-liner": "geomembranes",
   "geotextile-fabrics": "geotextiles",
   "geotextile-fabric": "geotextiles",
-  "geogrid": "geogrids",
-  "geocell": "geocells",
-  "gcl": "gcls",
+  geogrid: "geogrids",
+  geocell: "geocells",
+  gcl: "gcls",
   "drainage-composite": "drainage-composites",
 };
 
@@ -170,7 +165,7 @@ async function main() {
   if (!data?.value) {
     console.log(
       "⚠️   No template_product_categories record found in site_config.\n" +
-      "    Run the initial seed from the admin panel first, then re-run this script.",
+        "    Run the initial seed from the admin panel first, then re-run this script.",
     );
     process.exit(0);
   }
@@ -195,9 +190,7 @@ async function main() {
 
     if (!needsSeeding(tmpl)) {
       const existing = tmpl.relatedProductGroups as any[];
-      console.log(
-        `  ✅  [${slug}] — already has ${existing.length} related group(s), preserving.`,
-      );
+      console.log(`  ✅  [${slug}] — already has ${existing.length} related group(s), preserving.`);
       skippedCount++;
       continue;
     }
@@ -205,9 +198,7 @@ async function main() {
     const related = buildRelatedGroups(category, slug);
 
     if (related.length === 0) {
-      console.log(
-        `  ⚠️  [${slug}] — category "${category}" not in sibling map, skipping.`,
-      );
+      console.log(`  ⚠️  [${slug}] — category "${category}" not in sibling map, skipping.`);
       skippedCount++;
       continue;
     }
@@ -240,10 +231,7 @@ async function main() {
 
     const { error: upsertError } = await supabase
       .from("site_config")
-      .upsert(
-        { key: "template_product_categories", value: templates },
-        { onConflict: "key" },
-      );
+      .upsert({ key: "template_product_categories", value: templates }, { onConflict: "key" });
 
     if (!upsertError) {
       console.log(

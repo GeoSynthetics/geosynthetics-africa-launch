@@ -1,1500 +1,2812 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Infrastructure — Industry Solutions | Geosynthetics Africa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --red: #DC2626;
-    --red-dark: #B91C1C;
-    --red-deep: #991B1B;
-    --black: #111111;
-    --ink: #1A1A1A;
-    --gray-900: #1F2937;
-    --gray-800: #1E293B;
-    --gray-700: #374151;
-    --gray-600: #4B5563;
-    --gray-500: #6B7280;
-    --gray-400: #9CA3AF;
-    --gray-300: #D1D5DB;
-    --gray-200: #E5E7EB;
-    --gray-100: #F3F4F6;
-    --gray-50: #F9FAFB;
-    --amber: #D97706;
-    --amber-bg: #FEF3C7;
-    --green: #047857;
-    --blue: #1E40AF;
-    --white: #FFFFFF;
-    --radius: 6px;
-    --radius-sm: 4px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', system-ui, sans-serif; color: var(--ink); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, h4, h5, h6 { font-family: 'Archivo', sans-serif; font-weight: 800; letter-spacing: -0.005em; color: var(--ink); line-height: 1.05; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infrastructure — Industry Solutions | Geosynthetics Africa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --red: #dc2626;
+        --red-dark: #b91c1c;
+        --red-deep: #991b1b;
+        --black: #111111;
+        --ink: #1a1a1a;
+        --gray-900: #1f2937;
+        --gray-800: #1e293b;
+        --gray-700: #374151;
+        --gray-600: #4b5563;
+        --gray-500: #6b7280;
+        --gray-400: #9ca3af;
+        --gray-300: #d1d5db;
+        --gray-200: #e5e7eb;
+        --gray-100: #f3f4f6;
+        --gray-50: #f9fafb;
+        --amber: #d97706;
+        --amber-bg: #fef3c7;
+        --green: #047857;
+        --blue: #1e40af;
+        --white: #ffffff;
+        --radius: 6px;
+        --radius-sm: 4px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--white);
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.005em;
+        color: var(--ink);
+        line-height: 1.05;
+      }
 
-  /* ============ ANNOTATIONS ============ */
-  .anno { position: relative; }
-  .anno-tag {
-    position: absolute; top: 6px; right: 6px; z-index: 50;
-    font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    padding: 4px 8px; border-radius: var(--radius-sm);
-    pointer-events: none; white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,.15);
-  }
-  .anno-tag.global   { background: #374151; color: white; }
-  .anno-tag.template { background: #1E40AF; color: white; }
-  .anno-tag.cross    { background: var(--red); color: white; }
-  .anno-tag.derived  { background: #047857; color: white; }
-  .anno-tag.fixed    { background: #6D28D9; color: white; }
-  body.anno-off .anno-tag { display: none; }
+      /* ============ ANNOTATIONS ============ */
+      .anno {
+        position: relative;
+      }
+      .anno-tag {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        z-index: 50;
+        font-family: "Inter", sans-serif;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        pointer-events: none;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .anno-tag.global {
+        background: #374151;
+        color: white;
+      }
+      .anno-tag.template {
+        background: #1e40af;
+        color: white;
+      }
+      .anno-tag.cross {
+        background: var(--red);
+        color: white;
+      }
+      .anno-tag.derived {
+        background: #047857;
+        color: white;
+      }
+      .anno-tag.fixed {
+        background: #6d28d9;
+        color: white;
+      }
+      body.anno-off .anno-tag {
+        display: none;
+      }
 
-  .anno-banner {
-    background: var(--ink); color: white; padding: 10px 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; flex-wrap: wrap; gap: 10px;
-    position: sticky; top: 0; z-index: 9999;
-  }
-  .anno-banner .legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 10px; }
-  .anno-banner .legend span { display: inline-flex; align-items: center; gap: 5px; }
-  .anno-banner .legend span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
-  .anno-banner .legend .global::before   { background: #374151; }
-  .anno-banner .legend .template::before { background: #1E40AF; }
-  .anno-banner .legend .cross::before    { background: var(--red); }
-  .anno-banner .legend .derived::before  { background: #047857; }
-  .anno-banner .legend .fixed::before    { background: #6D28D9; }
-  .anno-banner button { background: var(--red); color: white; border: none; padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+      .anno-banner {
+        background: var(--ink);
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        flex-wrap: wrap;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+      }
+      .anno-banner .legend {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+        font-size: 10px;
+      }
+      .anno-banner .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .anno-banner .legend span::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+      }
+      .anno-banner .legend .global::before {
+        background: #374151;
+      }
+      .anno-banner .legend .template::before {
+        background: #1e40af;
+      }
+      .anno-banner .legend .cross::before {
+        background: var(--red);
+      }
+      .anno-banner .legend .derived::before {
+        background: #047857;
+      }
+      .anno-banner .legend .fixed::before {
+        background: #6d28d9;
+      }
+      .anno-banner button {
+        background: var(--red);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
 
-  /* ============ UTILITY BAR ============ */
-  .util-bar { background: var(--ink); color: var(--gray-300); padding: 9px 28px; font-size: 11px; border-bottom: 1px solid #2a2a2a; }
-  .util-inner { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
-  .util-creds { display: flex; gap: 24px; flex-wrap: wrap; }
-  .util-creds span { display: flex; align-items: center; gap: 7px; }
-  .util-creds span::before { content: ''; width: 6px; height: 6px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
-  .util-actions { display: flex; gap: 16px; align-items: center; }
-  .util-actions a { color: var(--gray-300); text-decoration: none; }
-  .util-actions .lang { padding: 2px 8px; border: 1px solid #2a2a2a; border-radius: var(--radius-sm); }
-  .util-actions .portal { color: var(--red); font-weight: 600; }
+      /* ============ UTILITY BAR ============ */
+      .util-bar {
+        background: var(--ink);
+        color: var(--gray-300);
+        padding: 9px 28px;
+        font-size: 11px;
+        border-bottom: 1px solid #2a2a2a;
+      }
+      .util-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .util-creds {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .util-creds span {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .util-creds span::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--red);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .util-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      .util-actions a {
+        color: var(--gray-300);
+        text-decoration: none;
+      }
+      .util-actions .lang {
+        padding: 2px 8px;
+        border: 1px solid #2a2a2a;
+        border-radius: var(--radius-sm);
+      }
+      .util-actions .portal {
+        color: var(--red);
+        font-weight: 600;
+      }
 
-  /* ============ MAIN HEADER ============ */
-  header.main-header { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 16px 28px; position: sticky; top: 38px; z-index: 100; }
-  .header-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 40px; }
-  .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .africa-icon { width: 32px; height: 36px; flex-shrink: 0; }
-  .brand-text { display: flex; flex-direction: column; line-height: 1; }
-  .brand-text .name { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 18px; color: var(--ink); }
-  .brand-text .sub { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; color: var(--red); letter-spacing: 0.18em; margin-top: 3px; }
-  nav.primary { margin-left: auto; display: flex; gap: 28px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
-  nav.primary a { color: var(--ink); text-decoration: none; padding: 6px 0; display: flex; align-items: center; gap: 5px; transition: color .15s; }
-  nav.primary a:hover, nav.primary a.active { color: var(--red); }
-  nav.primary .caret { font-size: 8px; }
+      /* ============ MAIN HEADER ============ */
+      header.main-header {
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 16px 28px;
+        position: sticky;
+        top: 38px;
+        z-index: 100;
+      }
+      .header-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .africa-icon {
+        width: 32px;
+        height: 36px;
+        flex-shrink: 0;
+      }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+      }
+      .brand-text .name {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--ink);
+      }
+      .brand-text .sub {
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        color: var(--red);
+        letter-spacing: 0.18em;
+        margin-top: 3px;
+      }
+      nav.primary {
+        margin-left: auto;
+        display: flex;
+        gap: 28px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      nav.primary a {
+        color: var(--ink);
+        text-decoration: none;
+        padding: 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.15s;
+      }
+      nav.primary a:hover,
+      nav.primary a.active {
+        color: var(--red);
+      }
+      nav.primary .caret {
+        font-size: 8px;
+      }
 
-  /* ============ HERO — distinct from Application page: linear/infrastructure feel ============ */
-  .hero {
-    position: relative;
-    background:
-      linear-gradient(135deg, rgba(15,15,15,0.96) 0%, rgba(20,30,40,0.92) 60%, rgba(15,15,15,0.95) 100%);
-    background-color: #0a0a0a;
-    color: white;
-    overflow: hidden;
-    padding: 56px 28px 72px;
-  }
-  /* Diagonal "highway lane marking" motif — distinctive vs TSF hero */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      repeating-linear-gradient(105deg,
-        transparent 0px, transparent 38px,
-        rgba(255,255,255,0.018) 38px, rgba(255,255,255,0.018) 40px);
-    pointer-events: none;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    right: -100px; top: 50%; transform: translateY(-50%);
-    width: 600px; height: 600px;
-    background-image:
-      conic-gradient(from 0deg at 50% 50%,
-        transparent 0deg,
-        rgba(220,38,38,0.08) 30deg,
-        transparent 60deg,
-        rgba(220,38,38,0.06) 120deg,
-        transparent 180deg);
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(40px);
-  }
-  /* dashed centre-line decoration */
-  .hero-deco-line {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background-image: linear-gradient(to right, var(--red) 0, var(--red) 80px, transparent 80px, transparent 120px);
-    background-size: 120px 3px;
-    opacity: 0.7;
-    z-index: 2;
-  }
-  .hero-inner { max-width: 1440px; margin: 0 auto; position: relative; z-index: 2; }
-  .breadcrumb { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 24px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .breadcrumb a { color: rgba(255,255,255,0.65); text-decoration: none; }
-  .breadcrumb .sep { color: rgba(255,255,255,0.35); }
-  .breadcrumb .current { color: white; }
+      /* ============ HERO — distinct from Application page: linear/infrastructure feel ============ */
+      .hero {
+        position: relative;
+        background: linear-gradient(
+          135deg,
+          rgba(15, 15, 15, 0.96) 0%,
+          rgba(20, 30, 40, 0.92) 60%,
+          rgba(15, 15, 15, 0.95) 100%
+        );
+        background-color: #0a0a0a;
+        color: white;
+        overflow: hidden;
+        padding: 56px 28px 72px;
+      }
+      /* Diagonal "highway lane marking" motif — distinctive vs TSF hero */
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+          105deg,
+          transparent 0px,
+          transparent 38px,
+          rgba(255, 255, 255, 0.018) 38px,
+          rgba(255, 255, 255, 0.018) 40px
+        );
+        pointer-events: none;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -100px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 600px;
+        height: 600px;
+        background-image: conic-gradient(
+          from 0deg at 50% 50%,
+          transparent 0deg,
+          rgba(220, 38, 38, 0.08) 30deg,
+          transparent 60deg,
+          rgba(220, 38, 38, 0.06) 120deg,
+          transparent 180deg
+        );
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(40px);
+      }
+      /* dashed centre-line decoration */
+      .hero-deco-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background-image: linear-gradient(
+          to right,
+          var(--red) 0,
+          var(--red) 80px,
+          transparent 80px,
+          transparent 120px
+        );
+        background-size: 120px 3px;
+        opacity: 0.7;
+        z-index: 2;
+      }
+      .hero-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+      .breadcrumb {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.65);
+        margin-bottom: 24px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.65);
+        text-decoration: none;
+      }
+      .breadcrumb .sep {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .breadcrumb .current {
+        color: white;
+      }
 
-  .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 64px; align-items: end; }
-  .hero-meta { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
-  .hero-meta::before { content: ''; width: 36px; height: 2px; background: var(--red); }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 64px;
+        align-items: end;
+      }
+      .hero-meta {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .hero-meta::before {
+        content: "";
+        width: 36px;
+        height: 2px;
+        background: var(--red);
+      }
 
-  .hero h1 {
-    font-family: 'Archivo', sans-serif; font-weight: 900;
-    font-size: clamp(40px, 5.4vw, 76px);
-    line-height: 0.95; text-transform: uppercase;
-    color: white;
-    margin-bottom: 24px;
-    letter-spacing: -0.015em;
-  }
-  .hero h1 .accent { color: var(--red); }
-  .hero-desc {
-    font-size: 16px;
-    line-height: 1.65;
-    color: rgba(255,255,255,0.88);
-    max-width: 600px;
-    margin-bottom: 32px;
-  }
+      .hero h1 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 900;
+        font-size: clamp(40px, 5.4vw, 76px);
+        line-height: 0.95;
+        text-transform: uppercase;
+        color: white;
+        margin-bottom: 24px;
+        letter-spacing: -0.015em;
+      }
+      .hero h1 .accent {
+        color: var(--red);
+      }
+      .hero-desc {
+        font-size: 16px;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.88);
+        max-width: 600px;
+        margin-bottom: 32px;
+      }
 
-  /* SUB-SECTOR mini-strip — replaces the "convergence bar" from TSF page;
+      /* SUB-SECTOR mini-strip — replaces the "convergence bar" from TSF page;
      here it shows which subsectors of Infrastructure GSA serves */
-  .subsector-strip {
-    display: flex; flex-wrap: wrap; gap: 0;
-    margin-bottom: 28px;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-  }
-  .subsector-pill {
-    padding: 14px 22px 14px 0;
-    margin-right: 22px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-    border-right: 1px solid rgba(255,255,255,0.1);
-    transition: color .15s;
-    cursor: pointer;
-  }
-  .subsector-pill:last-child { border-right: none; margin-right: 0; }
-  .subsector-pill:hover, .subsector-pill.active { color: white; }
-  .subsector-pill .dot { display: inline-block; width: 6px; height: 6px; background: var(--red); margin-right: 8px; border-radius: 50%; vertical-align: middle; }
+      .subsector-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+        margin-bottom: 28px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .subsector-pill {
+        padding: 14px 22px 14px 0;
+        margin-right: 22px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        transition: color 0.15s;
+        cursor: pointer;
+      }
+      .subsector-pill:last-child {
+        border-right: none;
+        margin-right: 0;
+      }
+      .subsector-pill:hover,
+      .subsector-pill.active {
+        color: white;
+      }
+      .subsector-pill .dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background: var(--red);
+        margin-right: 8px;
+        border-radius: 50%;
+        vertical-align: middle;
+      }
 
-  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
-  .btn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 26px; border-radius: var(--radius-sm); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all .15s; white-space: nowrap; }
-  .btn-red { background: var(--red); color: white; }
-  .btn-red:hover { background: var(--red-dark); }
-  .btn-outline-light { background: transparent; color: white; border: 1.5px solid white; }
-  .btn-outline-light:hover { background: white; color: var(--ink); }
+      .hero-ctas {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .btn {
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 14px 26px;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      .btn-red {
+        background: var(--red);
+        color: white;
+      }
+      .btn-red:hover {
+        background: var(--red-dark);
+      }
+      .btn-outline-light {
+        background: transparent;
+        color: white;
+        border: 1.5px solid white;
+      }
+      .btn-outline-light:hover {
+        background: white;
+        color: var(--ink);
+      }
 
-  /* Hero side: sector scale */
-  .hero-scale {
-    background: rgba(0,0,0,0.45);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 32px;
-    backdrop-filter: blur(6px);
-  }
-  .hero-scale-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .hero-scale-label::after { content: ''; flex: 1; height: 1px; background: rgba(220,38,38,0.4); }
-  .scale-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .scale-row:last-child { border-bottom: none; }
-  .scale-row .l { font-size: 12px; color: rgba(255,255,255,0.7); flex: 1; }
-  .scale-row .v {
-    font-family: 'Archivo', sans-serif; font-weight: 800;
-    font-size: 22px; color: white;
-    letter-spacing: -0.005em;
-  }
-  .scale-row .v .small { font-size: 12px; color: rgba(255,255,255,0.7); margin-left: 4px; }
+      /* Hero side: sector scale */
+      .hero-scale {
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 32px;
+        backdrop-filter: blur(6px);
+      }
+      .hero-scale-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hero-scale-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(220, 38, 38, 0.4);
+      }
+      .scale-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .scale-row:last-child {
+        border-bottom: none;
+      }
+      .scale-row .l {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        flex: 1;
+      }
+      .scale-row .v {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        color: white;
+        letter-spacing: -0.005em;
+      }
+      .scale-row .v .small {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-left: 4px;
+      }
 
-  /* ============ FACET NAV ============ */
-  .facet-nav { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 0 28px; position: sticky; top: 110px; z-index: 90; }
-  .facet-nav-inner { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; }
-  .facet-label {
-    font-family: 'Archivo', sans-serif;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--red);
-    padding: 18px 24px 18px 0;
-    border-right: 1px solid var(--gray-200);
-    margin-right: 4px;
-  }
-  .facet-link {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 20px 22px;
-    color: var(--ink); text-decoration: none;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -1px;
-    white-space: nowrap;
-    transition: all .15s;
-  }
-  .facet-link:hover { color: var(--red); }
-  .facet-link.active { color: var(--red); border-bottom-color: var(--red); }
-  .facet-link .num { font-family: 'Archivo', sans-serif; font-size: 10px; opacity: 0.6; margin-right: 4px; }
+      /* ============ FACET NAV ============ */
+      .facet-nav {
+        background: var(--white);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 0 28px;
+        position: sticky;
+        top: 110px;
+        z-index: 90;
+      }
+      .facet-nav-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+      }
+      .facet-label {
+        font-family: "Archivo", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--red);
+        padding: 18px 24px 18px 0;
+        border-right: 1px solid var(--gray-200);
+        margin-right: 4px;
+      }
+      .facet-link {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 20px 22px;
+        color: var(--ink);
+        text-decoration: none;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1px;
+        white-space: nowrap;
+        transition: all 0.15s;
+      }
+      .facet-link:hover {
+        color: var(--red);
+      }
+      .facet-link.active {
+        color: var(--red);
+        border-bottom-color: var(--red);
+      }
+      .facet-link .num {
+        font-family: "Archivo", sans-serif;
+        font-size: 10px;
+        opacity: 0.6;
+        margin-right: 4px;
+      }
 
-  /* ============ MAIN LAYOUT ============ */
-  main.industry-page { max-width: 1440px; margin: 0 auto; padding: 0 28px; }
-  .section { padding: 80px 0; border-bottom: 1px solid var(--gray-100); position: relative; }
-  .section:last-of-type { border-bottom: none; }
-  .section-eyebrow {
-    font-family: 'Archivo', sans-serif;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 14px; display: flex; align-items: center; gap: 12px;
-  }
-  .section-eyebrow .num {
-    background: var(--ink); color: white;
-    padding: 3px 8px; font-size: 10px; font-weight: 800;
-  }
-  .section-title {
-    font-family: 'Archivo', sans-serif; font-weight: 900;
-    font-size: clamp(32px, 3.6vw, 48px);
-    text-transform: uppercase; letter-spacing: -0.01em;
-    line-height: 1;
-    margin-bottom: 24px;
-  }
-  .section-title .red { color: var(--red); }
-  .section-intro {
-    font-size: 16px; line-height: 1.65;
-    color: var(--gray-700);
-    max-width: 720px;
-    margin-bottom: 40px;
-  }
-  .section-head { display: grid; grid-template-columns: 2fr 1fr; gap: 56px; margin-bottom: 48px; align-items: end; }
-  .section-head .right { text-align: right; }
-  .section-link {
-    font-family: 'Inter', sans-serif;
-    font-size: 12px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--red); text-decoration: none;
-    display: inline-flex; align-items: center; gap: 5px;
-  }
-  .section-link::after { content: '→'; transition: transform .15s; }
-  .section-link:hover::after { transform: translateX(4px); }
+      /* ============ MAIN LAYOUT ============ */
+      main.industry-page {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+      .section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--gray-100);
+        position: relative;
+      }
+      .section:last-of-type {
+        border-bottom: none;
+      }
+      .section-eyebrow {
+        font-family: "Archivo", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .section-eyebrow .num {
+        background: var(--ink);
+        color: white;
+        padding: 3px 8px;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .section-title {
+        font-family: "Archivo", sans-serif;
+        font-weight: 900;
+        font-size: clamp(32px, 3.6vw, 48px);
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        line-height: 1;
+        margin-bottom: 24px;
+      }
+      .section-title .red {
+        color: var(--red);
+      }
+      .section-intro {
+        font-size: 16px;
+        line-height: 1.65;
+        color: var(--gray-700);
+        max-width: 720px;
+        margin-bottom: 40px;
+      }
+      .section-head {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 56px;
+        margin-bottom: 48px;
+        align-items: end;
+      }
+      .section-head .right {
+        text-align: right;
+      }
+      .section-link {
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--red);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .section-link::after {
+        content: "→";
+        transition: transform 0.15s;
+      }
+      .section-link:hover::after {
+        transform: translateX(4px);
+      }
 
-  /* ============ § 1 — SUB-SECTORS (the heart of an industry page) ============ */
-  .subsector-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-    border-top: 2px solid var(--ink);
-    border-left: 1px solid var(--gray-200);
-  }
-  .subsector-card {
-    border-right: 1px solid var(--gray-200);
-    border-bottom: 1px solid var(--gray-200);
-    padding: 36px 32px;
-    transition: all .2s;
-    text-decoration: none; color: inherit;
-    cursor: pointer;
-    position: relative;
-    background: white;
-    display: flex; flex-direction: column;
-    min-height: 280px;
-  }
-  .subsector-card:hover {
-    background: var(--ink);
-    color: white;
-  }
-  .subsector-card:hover h3, .subsector-card:hover .stat-v { color: white; }
-  .subsector-card:hover p { color: rgba(255,255,255,0.75); }
-  .subsector-card:hover .stat-l { color: rgba(255,255,255,0.6); }
-  .subsector-card .ico {
-    width: 44px; height: 44px;
-    color: var(--red);
-    margin-bottom: 22px;
-  }
-  .subsector-card h3 {
-    font-size: 22px; text-transform: uppercase; letter-spacing: -0.005em;
-    margin-bottom: 12px;
-    transition: color .2s;
-  }
-  .subsector-card p {
-    font-size: 14px; color: var(--gray-600); line-height: 1.55;
-    flex: 1; margin-bottom: 18px;
-    transition: color .2s;
-  }
-  .subsector-card .stats {
-    display: flex; gap: 24px;
-    padding-top: 14px;
-    border-top: 1px solid var(--gray-200);
-  }
-  .subsector-card:hover .stats { border-color: rgba(255,255,255,0.15); }
-  .subsector-card .stat-v {
-    font-family: 'Archivo', sans-serif; font-weight: 800;
-    font-size: 17px; color: var(--ink);
-    transition: color .2s;
-  }
-  .subsector-card .stat-l {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--gray-500);
-    margin-top: 2px;
-    transition: color .2s;
-  }
-  .subsector-card .arrow {
-    position: absolute; top: 32px; right: 32px;
-    font-size: 20px; color: var(--red);
-    transition: transform .2s;
-  }
-  .subsector-card:hover .arrow { transform: translate(4px, -4px); }
+      /* ============ § 1 — SUB-SECTORS (the heart of an industry page) ============ */
+      .subsector-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        border-top: 2px solid var(--ink);
+        border-left: 1px solid var(--gray-200);
+      }
+      .subsector-card {
+        border-right: 1px solid var(--gray-200);
+        border-bottom: 1px solid var(--gray-200);
+        padding: 36px 32px;
+        transition: all 0.2s;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        position: relative;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        min-height: 280px;
+      }
+      .subsector-card:hover {
+        background: var(--ink);
+        color: white;
+      }
+      .subsector-card:hover h3,
+      .subsector-card:hover .stat-v {
+        color: white;
+      }
+      .subsector-card:hover p {
+        color: rgba(255, 255, 255, 0.75);
+      }
+      .subsector-card:hover .stat-l {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .subsector-card .ico {
+        width: 44px;
+        height: 44px;
+        color: var(--red);
+        margin-bottom: 22px;
+      }
+      .subsector-card h3 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: -0.005em;
+        margin-bottom: 12px;
+        transition: color 0.2s;
+      }
+      .subsector-card p {
+        font-size: 14px;
+        color: var(--gray-600);
+        line-height: 1.55;
+        flex: 1;
+        margin-bottom: 18px;
+        transition: color 0.2s;
+      }
+      .subsector-card .stats {
+        display: flex;
+        gap: 24px;
+        padding-top: 14px;
+        border-top: 1px solid var(--gray-200);
+      }
+      .subsector-card:hover .stats {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .subsector-card .stat-v {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 17px;
+        color: var(--ink);
+        transition: color 0.2s;
+      }
+      .subsector-card .stat-l {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--gray-500);
+        margin-top: 2px;
+        transition: color 0.2s;
+      }
+      .subsector-card .arrow {
+        position: absolute;
+        top: 32px;
+        right: 32px;
+        font-size: 20px;
+        color: var(--red);
+        transition: transform 0.2s;
+      }
+      .subsector-card:hover .arrow {
+        transform: translate(4px, -4px);
+      }
 
-  /* ============ § 2 — APPLICATIONS within Infrastructure (the router) ============ */
-  .app-router-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-  }
-  .app-router-card {
-    background: white;
-    border: 1px solid var(--gray-200);
-    padding: 24px 22px;
-    text-decoration: none;
-    color: inherit;
-    transition: all .15s;
-    display: flex; flex-direction: column;
-    position: relative;
-  }
-  .app-router-card:hover {
-    border-color: var(--red);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.06);
-  }
-  .app-router-card .app-num {
-    font-family: 'Archivo', sans-serif;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
-    color: var(--gray-400);
-    margin-bottom: 12px;
-  }
-  .app-router-card h4 {
-    font-size: 16px; line-height: 1.15;
-    text-transform: uppercase; letter-spacing: 0.005em;
-    margin-bottom: 10px;
-  }
-  .app-router-card p {
-    font-size: 12px; color: var(--gray-600); line-height: 1.5;
-    flex: 1; margin-bottom: 14px;
-  }
-  .app-router-card .meta {
-    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
-  }
-  .app-router-card .meta span {
-    font-size: 10px; font-weight: 600;
-    padding: 2px 6px;
-    background: var(--gray-100);
-    color: var(--gray-700);
-    border-radius: 2px;
-  }
-  .app-router-card .view {
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--red);
-    padding-top: 12px;
-    border-top: 1px solid var(--gray-100);
-  }
+      /* ============ § 2 — APPLICATIONS within Infrastructure (the router) ============ */
+      .app-router-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .app-router-card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        padding: 24px 22px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.15s;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .app-router-card:hover {
+        border-color: var(--red);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+      }
+      .app-router-card .app-num {
+        font-family: "Archivo", sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--gray-400);
+        margin-bottom: 12px;
+      }
+      .app-router-card h4 {
+        font-size: 16px;
+        line-height: 1.15;
+        text-transform: uppercase;
+        letter-spacing: 0.005em;
+        margin-bottom: 10px;
+      }
+      .app-router-card p {
+        font-size: 12px;
+        color: var(--gray-600);
+        line-height: 1.5;
+        flex: 1;
+        margin-bottom: 14px;
+      }
+      .app-router-card .meta {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .app-router-card .meta span {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 6px;
+        background: var(--gray-100);
+        color: var(--gray-700);
+        border-radius: 2px;
+      }
+      .app-router-card .view {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--red);
+        padding-top: 12px;
+        border-top: 1px solid var(--gray-100);
+      }
 
-  /* ============ § 3 — CAPABILITIES MATRIX (apps × products) ============ */
-  .matrix-wrapper {
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    overflow: hidden;
-  }
-  .capability-matrix {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    background: white;
-  }
-  .capability-matrix th, .capability-matrix td {
-    padding: 0; text-align: center;
-    border-right: 1px solid var(--gray-100);
-    border-bottom: 1px solid var(--gray-100);
-    vertical-align: middle;
-  }
-  .capability-matrix thead th {
-    background: var(--ink); color: white;
-    padding: 18px 12px;
-    font-family: 'Archivo', sans-serif; font-weight: 700;
-    font-size: 11px; letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-color: rgba(255,255,255,0.1);
-  }
-  .capability-matrix thead th:first-child {
-    text-align: left;
-    background: #2a2a2a;
-    width: 25%;
-  }
-  .capability-matrix tbody tr:hover td { background: rgba(220,38,38,0.04); }
-  .capability-matrix tbody td:first-child {
-    text-align: left;
-    padding: 14px 18px;
-    font-family: 'Archivo', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
-    background: var(--gray-50);
-    color: var(--ink);
-    border-right: 2px solid var(--gray-200);
-  }
-  .capability-matrix tbody td { padding: 14px 8px; }
-  .cap-dot {
-    display: inline-block; width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--red);
-  }
-  .cap-dot.partial { background: white; border: 2px solid var(--red); }
-  .cap-dot.no { background: var(--gray-200); width: 6px; height: 6px; }
-  .matrix-legend {
-    display: flex; gap: 24px; padding: 14px 20px;
-    border-top: 1px solid var(--gray-200);
-    font-size: 11px;
-    color: var(--gray-600);
-    background: var(--gray-50);
-  }
-  .matrix-legend span { display: flex; align-items: center; gap: 6px; }
+      /* ============ § 3 — CAPABILITIES MATRIX (apps × products) ============ */
+      .matrix-wrapper {
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        overflow: hidden;
+      }
+      .capability-matrix {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        background: white;
+      }
+      .capability-matrix th,
+      .capability-matrix td {
+        padding: 0;
+        text-align: center;
+        border-right: 1px solid var(--gray-100);
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: middle;
+      }
+      .capability-matrix thead th {
+        background: var(--ink);
+        color: white;
+        padding: 18px 12px;
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      .capability-matrix thead th:first-child {
+        text-align: left;
+        background: #2a2a2a;
+        width: 25%;
+      }
+      .capability-matrix tbody tr:hover td {
+        background: rgba(220, 38, 38, 0.04);
+      }
+      .capability-matrix tbody td:first-child {
+        text-align: left;
+        padding: 14px 18px;
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        background: var(--gray-50);
+        color: var(--ink);
+        border-right: 2px solid var(--gray-200);
+      }
+      .capability-matrix tbody td {
+        padding: 14px 8px;
+      }
+      .cap-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      .cap-dot.partial {
+        background: white;
+        border: 2px solid var(--red);
+      }
+      .cap-dot.no {
+        background: var(--gray-200);
+        width: 6px;
+        height: 6px;
+      }
+      .matrix-legend {
+        display: flex;
+        gap: 24px;
+        padding: 14px 20px;
+        border-top: 1px solid var(--gray-200);
+        font-size: 11px;
+        color: var(--gray-600);
+        background: var(--gray-50);
+      }
+      .matrix-legend span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
 
-  /* ============ § 4 — SERVICES (sector-framed) ============ */
-  .services-flow {
-    background: var(--ink); color: white;
-    padding: 64px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .services-flow::before {
-    content: ''; position: absolute; inset: 0;
-    background:
-      repeating-linear-gradient(105deg,
-        transparent 0px, transparent 38px,
-        rgba(255,255,255,0.02) 38px, rgba(255,255,255,0.02) 40px),
-      radial-gradient(circle at 80% 30%, rgba(220,38,38,0.1) 0%, transparent 50%);
-    pointer-events: none;
-  }
-  .services-flow .lead {
-    font-family: 'Archivo', sans-serif;
-    font-weight: 800;
-    font-size: clamp(28px, 3.2vw, 40px);
-    text-transform: uppercase; line-height: 1;
-    margin-bottom: 16px;
-    position: relative;
-  }
-  .services-flow .lead .accent { color: var(--red); }
-  .services-flow .sub {
-    font-size: 15px; color: rgba(255,255,255,0.75);
-    max-width: 720px; line-height: 1.6;
-    margin-bottom: 48px;
-    position: relative;
-  }
-  .service-row {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
-    background: rgba(255,255,255,0.1);
-    position: relative;
-  }
-  .service-step { background: var(--ink); padding: 28px 24px; transition: background .2s; }
-  .service-step:hover { background: #2a2422; }
-  .service-step .step-n {
-    font-family: 'Archivo', sans-serif;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 12px;
-  }
-  .service-step h4 {
-    font-family: 'Archivo', sans-serif; font-weight: 800;
-    font-size: 20px; color: white;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .service-step p { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.55; margin-bottom: 14px; }
-  .service-step .out { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); }
+      /* ============ § 4 — SERVICES (sector-framed) ============ */
+      .services-flow {
+        background: var(--ink);
+        color: white;
+        padding: 64px 48px;
+        position: relative;
+        overflow: hidden;
+      }
+      .services-flow::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          repeating-linear-gradient(
+            105deg,
+            transparent 0px,
+            transparent 38px,
+            rgba(255, 255, 255, 0.02) 38px,
+            rgba(255, 255, 255, 0.02) 40px
+          ),
+          radial-gradient(circle at 80% 30%, rgba(220, 38, 38, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .services-flow .lead {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: clamp(28px, 3.2vw, 40px);
+        text-transform: uppercase;
+        line-height: 1;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .services-flow .lead .accent {
+        color: var(--red);
+      }
+      .services-flow .sub {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 720px;
+        line-height: 1.6;
+        margin-bottom: 48px;
+        position: relative;
+      }
+      .service-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        position: relative;
+      }
+      .service-step {
+        background: var(--ink);
+        padding: 28px 24px;
+        transition: background 0.2s;
+      }
+      .service-step:hover {
+        background: #2a2422;
+      }
+      .service-step .step-n {
+        font-family: "Archivo", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 12px;
+      }
+      .service-step h4 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: white;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .service-step p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.55;
+        margin-bottom: 14px;
+      }
+      .service-step .out {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--red);
+      }
 
-  /* ============ § 5 — STANDARDS (sector-specific) ============ */
-  .standards-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; }
-  .standards-table { width: 100%; border-collapse: collapse; }
-  .standards-table th { background: var(--gray-100); font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; text-align: left; padding: 14px 18px; color: var(--ink); }
-  .standards-table td { padding: 14px 18px; border-bottom: 1px solid var(--gray-200); font-size: 13px; color: var(--gray-700); vertical-align: top; }
-  .standards-table td.code { font-family: 'Inter', monospace; font-weight: 700; color: var(--ink); width: 28%; }
-  .standards-side {
-    background: var(--gray-50); padding: 36px;
-    border-left: 4px solid var(--red);
-  }
-  .standards-side h3 { font-size: 22px; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 16px; }
-  .standards-side p { font-size: 14px; color: var(--gray-700); line-height: 1.6; margin-bottom: 14px; }
-  .standards-side ul { list-style: none; }
-  .standards-side ul li {
-    padding: 8px 0; border-bottom: 1px solid var(--gray-200);
-    font-size: 13px; color: var(--gray-700);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .standards-side ul li::before { content: '✓'; color: var(--red); font-weight: 700; }
+      /* ============ § 5 — STANDARDS (sector-specific) ============ */
+      .standards-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 56px;
+      }
+      .standards-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .standards-table th {
+        background: var(--gray-100);
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-align: left;
+        padding: 14px 18px;
+        color: var(--ink);
+      }
+      .standards-table td {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 13px;
+        color: var(--gray-700);
+        vertical-align: top;
+      }
+      .standards-table td.code {
+        font-family: "Inter", monospace;
+        font-weight: 700;
+        color: var(--ink);
+        width: 28%;
+      }
+      .standards-side {
+        background: var(--gray-50);
+        padding: 36px;
+        border-left: 4px solid var(--red);
+      }
+      .standards-side h3 {
+        font-size: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        margin-bottom: 16px;
+      }
+      .standards-side p {
+        font-size: 14px;
+        color: var(--gray-700);
+        line-height: 1.6;
+        margin-bottom: 14px;
+      }
+      .standards-side ul {
+        list-style: none;
+      }
+      .standards-side ul li {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 13px;
+        color: var(--gray-700);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .standards-side ul li::before {
+        content: "✓";
+        color: var(--red);
+        font-weight: 700;
+      }
 
-  /* ============ § 6 — CLIENT TYPES (sector-specific) ============ */
-  .clients-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-  }
-  .client-card {
-    background: white;
-    border: 1px solid var(--gray-200);
-    padding: 28px 24px;
-    display: flex; flex-direction: column;
-    transition: all .15s;
-  }
-  .client-card:hover { border-color: var(--red); }
-  .client-card .role {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 12px;
-  }
-  .client-card h4 {
-    font-size: 18px; text-transform: uppercase; letter-spacing: 0.005em;
-    margin-bottom: 12px;
-  }
-  .client-card p {
-    font-size: 13px; color: var(--gray-600); line-height: 1.55;
-    flex: 1; margin-bottom: 18px;
-  }
-  .client-card .typical {
-    padding-top: 14px;
-    border-top: 1px solid var(--gray-100);
-    font-size: 11px;
-    color: var(--gray-500);
-  }
-  .client-card .typical strong {
-    display: block;
-    font-family: 'Archivo', sans-serif;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 4px;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+      /* ============ § 6 — CLIENT TYPES (sector-specific) ============ */
+      .clients-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .client-card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.15s;
+      }
+      .client-card:hover {
+        border-color: var(--red);
+      }
+      .client-card .role {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 12px;
+      }
+      .client-card h4 {
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.005em;
+        margin-bottom: 12px;
+      }
+      .client-card p {
+        font-size: 13px;
+        color: var(--gray-600);
+        line-height: 1.55;
+        flex: 1;
+        margin-bottom: 18px;
+      }
+      .client-card .typical {
+        padding-top: 14px;
+        border-top: 1px solid var(--gray-100);
+        font-size: 11px;
+        color: var(--gray-500);
+      }
+      .client-card .typical strong {
+        display: block;
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 4px;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
 
-  /* ============ § 7 — FEATURED PROJECTS ============ */
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .project-card {
-    background: var(--ink); color: white;
-    position: relative;
-    overflow: hidden;
-    min-height: 280px;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 24px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .project-card.feature { grid-column: span 2; grid-row: span 2; min-height: 576px; }
-  .project-card .img { position: absolute; inset: 0; z-index: 0; }
-  .project-card .img::after {
-    content: ''; position: absolute; inset: 0;
-    background:
-      linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.85) 100%),
-      repeating-linear-gradient(45deg,
-        rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
-        transparent 1px, transparent 24px);
-  }
-  .project-card.c1 .img { background: linear-gradient(135deg, #1F2937 0%, #0F172A 100%); }
-  .project-card.c2 .img { background: linear-gradient(135deg, #292524 0%, #1c1917 100%); }
-  .project-card.c3 .img { background: linear-gradient(135deg, #1c1917 0%, #422006 100%); }
-  .project-card.c4 .img { background: linear-gradient(135deg, #292524 0%, #1F2937 100%); }
-  .project-card.c5 .img { background: linear-gradient(135deg, #1F2937 0%, #292524 100%); }
-  .project-card .scale {
-    position: absolute; top: 24px; right: 24px; z-index: 2;
-    font-family: 'Archivo', sans-serif;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--red);
-    background: rgba(0,0,0,0.6);
-    padding: 6px 10px;
-    border: 1px solid var(--red);
-  }
-  .project-card .subsec {
-    position: absolute; top: 24px; left: 24px; z-index: 2;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: rgba(255,255,255,0.8);
-    background: rgba(0,0,0,0.6);
-    padding: 5px 9px;
-  }
-  .project-card .body { position: relative; z-index: 1; }
-  .project-card .tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
-  .project-card h3 { font-family: 'Archivo', sans-serif; font-weight: 800; color: white; text-transform: uppercase; font-size: 22px; line-height: 1.1; letter-spacing: -0.005em; margin-bottom: 8px; }
-  .project-card.feature h3 { font-size: 34px; }
-  .project-card .loc { font-size: 12px; color: rgba(255,255,255,0.7); }
-  .project-card .arrow { position: absolute; bottom: 24px; right: 24px; font-size: 24px; color: var(--red); z-index: 2; }
+      /* ============ § 7 — FEATURED PROJECTS ============ */
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .project-card {
+        background: var(--ink);
+        color: white;
+        position: relative;
+        overflow: hidden;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 24px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .project-card.feature {
+        grid-column: span 2;
+        grid-row: span 2;
+        min-height: 576px;
+      }
+      .project-card .img {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .project-card .img::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.85) 100%),
+          repeating-linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.04) 0px,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px,
+            transparent 24px
+          );
+      }
+      .project-card.c1 .img {
+        background: linear-gradient(135deg, #1f2937 0%, #0f172a 100%);
+      }
+      .project-card.c2 .img {
+        background: linear-gradient(135deg, #292524 0%, #1c1917 100%);
+      }
+      .project-card.c3 .img {
+        background: linear-gradient(135deg, #1c1917 0%, #422006 100%);
+      }
+      .project-card.c4 .img {
+        background: linear-gradient(135deg, #292524 0%, #1f2937 100%);
+      }
+      .project-card.c5 .img {
+        background: linear-gradient(135deg, #1f2937 0%, #292524 100%);
+      }
+      .project-card .scale {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        z-index: 2;
+        font-family: "Archivo", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--red);
+        background: rgba(0, 0, 0, 0.6);
+        padding: 6px 10px;
+        border: 1px solid var(--red);
+      }
+      .project-card .subsec {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        z-index: 2;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(0, 0, 0, 0.6);
+        padding: 5px 9px;
+      }
+      .project-card .body {
+        position: relative;
+        z-index: 1;
+      }
+      .project-card .tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 8px;
+      }
+      .project-card h3 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        color: white;
+        text-transform: uppercase;
+        font-size: 22px;
+        line-height: 1.1;
+        letter-spacing: -0.005em;
+        margin-bottom: 8px;
+      }
+      .project-card.feature h3 {
+        font-size: 34px;
+      }
+      .project-card .loc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .project-card .arrow {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        font-size: 24px;
+        color: var(--red);
+        z-index: 2;
+      }
 
-  /* ============ § 8 — KNOWLEDGE ============ */
-  .knowledge-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 56px; }
-  .docs-list { display: flex; flex-direction: column; gap: 8px; }
-  .doc-row { display: flex; align-items: center; gap: 16px; padding: 16px 18px; border: 1px solid var(--gray-200); text-decoration: none; color: inherit; transition: all .15s; background: white; }
-  .doc-row:hover { border-color: var(--red); background: var(--gray-50); }
-  .doc-row .doc-icon { width: 36px; height: 44px; background: var(--red); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; flex-shrink: 0; }
-  .doc-row .doc-body { flex: 1; }
-  .doc-row .doc-body strong { display: block; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 3px; }
-  .doc-row .doc-body span { font-size: 12px; color: var(--gray-500); }
-  .doc-row .doc-arrow { color: var(--red); font-weight: 700; font-size: 18px; }
-  .articles-side h3 { font-size: 18px; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 18px; }
-  .article-item { padding: 16px 0; border-bottom: 1px solid var(--gray-100); text-decoration: none; color: inherit; display: block; }
-  .article-item .tag { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 4px; }
-  .article-item h4 { font-size: 14px; line-height: 1.3; text-transform: none; letter-spacing: 0; font-family: 'Archivo', sans-serif; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .article-item .meta { font-size: 11px; color: var(--gray-500); }
-  .article-item:hover h4 { color: var(--red); }
+      /* ============ § 8 — KNOWLEDGE ============ */
+      .knowledge-layout {
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 56px;
+      }
+      .docs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .doc-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 18px;
+        border: 1px solid var(--gray-200);
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.15s;
+        background: white;
+      }
+      .doc-row:hover {
+        border-color: var(--red);
+        background: var(--gray-50);
+      }
+      .doc-row .doc-icon {
+        width: 36px;
+        height: 44px;
+        background: var(--red);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Archivo", sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .doc-row .doc-body {
+        flex: 1;
+      }
+      .doc-row .doc-body strong {
+        display: block;
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin-bottom: 3px;
+      }
+      .doc-row .doc-body span {
+        font-size: 12px;
+        color: var(--gray-500);
+      }
+      .doc-row .doc-arrow {
+        color: var(--red);
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .articles-side h3 {
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        margin-bottom: 18px;
+      }
+      .article-item {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--gray-100);
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .article-item .tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 4px;
+      }
+      .article-item h4 {
+        font-size: 14px;
+        line-height: 1.3;
+        text-transform: none;
+        letter-spacing: 0;
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+      .article-item .meta {
+        font-size: 11px;
+        color: var(--gray-500);
+      }
+      .article-item:hover h4 {
+        color: var(--red);
+      }
 
-  /* ============ § 9 — RELATED INDUSTRIES ============ */
-  .related-industries {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
-  }
-  .related-industry {
-    background: white;
-    border: 1px solid var(--gray-200);
-    padding: 24px 22px;
-    text-decoration: none; color: inherit;
-    transition: all .15s;
-    display: flex; flex-direction: column;
-  }
-  .related-industry:hover { border-color: var(--red); }
-  .related-industry .ico { width: 36px; height: 36px; color: var(--red); margin-bottom: 14px; }
-  .related-industry h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.01em; margin-bottom: 6px; }
-  .related-industry p { font-size: 11px; color: var(--gray-600); line-height: 1.5; flex: 1; margin-bottom: 14px; }
-  .related-industry .view { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); }
+      /* ============ § 9 — RELATED INDUSTRIES ============ */
+      .related-industries {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+      .related-industry {
+        background: white;
+        border: 1px solid var(--gray-200);
+        padding: 24px 22px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.15s;
+        display: flex;
+        flex-direction: column;
+      }
+      .related-industry:hover {
+        border-color: var(--red);
+      }
+      .related-industry .ico {
+        width: 36px;
+        height: 36px;
+        color: var(--red);
+        margin-bottom: 14px;
+      }
+      .related-industry h4 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        margin-bottom: 6px;
+      }
+      .related-industry p {
+        font-size: 11px;
+        color: var(--gray-600);
+        line-height: 1.5;
+        flex: 1;
+        margin-bottom: 14px;
+      }
+      .related-industry .view {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--red);
+      }
 
-  /* ============ ACCOUNTABILITY STRIP ============ */
-  .accountability-strip {
-    background: var(--ink); color: white;
-    padding: 22px 32px;
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 28px; flex-wrap: wrap;
-  }
-  .accountability-strip .lead { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .accountability-strip .lead .accent { color: var(--red); }
-  .accountability-strip .steps { display: flex; gap: 18px; flex-wrap: wrap; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-  .accountability-strip .steps span { display: flex; align-items: center; gap: 8px; }
-  .accountability-strip .steps span::before { content: ''; width: 5px; height: 5px; background: var(--red); border-radius: 50%; }
+      /* ============ ACCOUNTABILITY STRIP ============ */
+      .accountability-strip {
+        background: var(--ink);
+        color: white;
+        padding: 22px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .accountability-strip .lead {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .accountability-strip .lead .accent {
+        color: var(--red);
+      }
+      .accountability-strip .steps {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .accountability-strip .steps span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .accountability-strip .steps span::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        background: var(--red);
+        border-radius: 50%;
+      }
 
-  /* ============ BOQ CTA ============ */
-  .boq-cta { background: var(--red); color: white; padding: 72px 28px; }
-  .boq-cta-inner { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-  .boq-cta h2 { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: clamp(36px, 4vw, 52px); text-transform: uppercase; color: white; margin-bottom: 14px; }
-  .boq-cta .lead { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 18px; }
-  .boq-cta p { font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.95); }
-  .boq-cta-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
-  .boq-cta .btn { background: white; color: var(--ink); padding: 16px 28px; }
-  .boq-cta .btn:hover { background: var(--ink); color: white; }
+      /* ============ BOQ CTA ============ */
+      .boq-cta {
+        background: var(--red);
+        color: white;
+        padding: 72px 28px;
+      }
+      .boq-cta-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: center;
+      }
+      .boq-cta h2 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 900;
+        font-size: clamp(36px, 4vw, 52px);
+        text-transform: uppercase;
+        color: white;
+        margin-bottom: 14px;
+      }
+      .boq-cta .lead {
+        font-family: "Archivo", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 18px;
+      }
+      .boq-cta p {
+        font-size: 15px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.95);
+      }
+      .boq-cta-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .boq-cta .btn {
+        background: white;
+        color: var(--ink);
+        padding: 16px 28px;
+      }
+      .boq-cta .btn:hover {
+        background: var(--ink);
+        color: white;
+      }
 
-  /* ============ FOOTER ============ */
-  footer.site-footer { background: var(--black); color: white; padding: 64px 28px 24px; }
-  .footer-inner { max-width: 1440px; margin: 0 auto; }
-  .footer-grid { display: grid; grid-template-columns: 1.4fr repeat(6, 1fr); gap: 32px; padding-bottom: 40px; }
-  .footer-brand p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 16px; margin-bottom: 18px; max-width: 280px; }
-  .footer-socials { display: flex; gap: 10px; }
-  .footer-socials a { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; }
-  .footer-col h4 { font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: white; margin-bottom: 16px; }
-  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-  .footer-col a { font-size: 13px; color: rgba(255,255,255,0.7); text-decoration: none; }
-  .footer-col a:hover { color: var(--red); }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; font-size: 11px; color: rgba(255,255,255,0.5); }
-  .footer-bottom .badges { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-  .footer-bottom .badges span:not(:last-child)::after { content: '|'; margin-left: 16px; color: rgba(255,255,255,0.3); }
+      /* ============ FOOTER ============ */
+      footer.site-footer {
+        background: var(--black);
+        color: white;
+        padding: 64px 28px 24px;
+      }
+      .footer-inner {
+        max-width: 1440px;
+        margin: 0 auto;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.4fr repeat(6, 1fr);
+        gap: 32px;
+        padding-bottom: 40px;
+      }
+      .footer-brand p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 16px;
+        margin-bottom: 18px;
+        max-width: 280px;
+      }
+      .footer-socials {
+        display: flex;
+        gap: 10px;
+      }
+      .footer-socials a {
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .footer-col h4 {
+        font-family: "Archivo", sans-serif;
+        font-weight: 800;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: white;
+        margin-bottom: 16px;
+      }
+      .footer-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      .footer-col a {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+      }
+      .footer-col a:hover {
+        color: var(--red);
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 14px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .footer-bottom .badges {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+      }
+      .footer-bottom .badges span:not(:last-child)::after {
+        content: "|";
+        margin-left: 16px;
+        color: rgba(255, 255, 255, 0.3);
+      }
 
-  @media (max-width: 1100px) {
-    .hero-grid, .standards-grid, .knowledge-layout, .boq-cta-inner { grid-template-columns: 1fr; }
-    .subsector-grid, .clients-grid { grid-template-columns: repeat(2, 1fr); }
-    .app-router-grid { grid-template-columns: repeat(2, 1fr); }
-    .related-industries { grid-template-columns: repeat(3, 1fr); }
-    .service-row { grid-template-columns: repeat(2, 1fr); }
-    .project-grid { grid-template-columns: 1fr 1fr; }
-    .project-card.feature { grid-column: auto; grid-row: auto; }
-    .section-head { grid-template-columns: 1fr; }
-    .section-head .right { text-align: left; }
-    nav.primary { display: none; }
-    .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-  }
-</style>
-</head>
-<body>
-
-<!-- ============ ANNOTATION BANNER ============ -->
-<div class="anno-banner">
-  <span><strong>MOCKUP</strong> — Industry page template · Infrastructure example · sector aggregator (contrast with Application page)</span>
-  <div class="legend">
-    <span class="global">Global chrome</span>
-    <span class="template">Industry template</span>
-    <span class="fixed">Industry-fixed (set once)</span>
-    <span class="derived">Auto-derived</span>
-    <span class="cross">Cross-link</span>
-  </div>
-  <button onclick="document.body.classList.toggle('anno-off')">Toggle</button>
-</div>
-
-<!-- ============ UTILITY BAR ============ -->
-<div class="util-bar anno">
-  <span class="anno-tag global">GLOBAL</span>
-  <div class="util-inner">
-    <div class="util-creds">
-      <span>IAGI Member — One of only 5 in Africa</span>
-      <span>B-BBEE Level 2</span>
-      <span>QA/QC Certified</span>
-      <span>Pan-African Logistics</span>
-      <span>Products Catalogue</span>
-    </div>
-    <div class="util-actions">
-      <a href="#" class="portal">Partner Portal</a>
-      <a href="#" class="lang">EN ▾</a>
-    </div>
-  </div>
-</div>
-
-<!-- ============ MAIN HEADER ============ -->
-<header class="main-header anno">
-  <span class="anno-tag global">GLOBAL</span>
-  <div class="header-inner">
-    <a href="#" class="brand-logo">
-      <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
-      <div class="brand-text">
-        <span class="name">GEOSYNTHETICS</span>
-        <span class="sub">AFRICA</span>
+      @media (max-width: 1100px) {
+        .hero-grid,
+        .standards-grid,
+        .knowledge-layout,
+        .boq-cta-inner {
+          grid-template-columns: 1fr;
+        }
+        .subsector-grid,
+        .clients-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .app-router-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .related-industries {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .service-row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .project-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .project-card.feature {
+          grid-column: auto;
+          grid-row: auto;
+        }
+        .section-head {
+          grid-template-columns: 1fr;
+        }
+        .section-head .right {
+          text-align: left;
+        }
+        nav.primary {
+          display: none;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ ANNOTATION BANNER ============ -->
+    <div class="anno-banner">
+      <span
+        ><strong>MOCKUP</strong> — Industry page template · Infrastructure example · sector
+        aggregator (contrast with Application page)</span
+      >
+      <div class="legend">
+        <span class="global">Global chrome</span>
+        <span class="template">Industry template</span>
+        <span class="fixed">Industry-fixed (set once)</span>
+        <span class="derived">Auto-derived</span>
+        <span class="cross">Cross-link</span>
       </div>
-    </a>
-    <nav class="primary">
-      <a href="#">Products <span class="caret">▾</span></a>
-      <a href="#" class="active">Solutions <span class="caret">▾</span></a>
-      <a href="#">Services <span class="caret">▾</span></a>
-      <a href="#">Projects</a>
-      <a href="#">Resources</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-  </div>
-</header>
+      <button onclick="document.body.classList.toggle('anno-off')">Toggle</button>
+    </div>
 
-<!-- ============ HERO ============ -->
-<section class="hero anno">
-  <span class="anno-tag fixed">INDUSTRY-FIXED · sector identity, scale stats, primary subsectors</span>
-  <div class="hero-inner">
-    <nav class="breadcrumb">
-      <a href="#">Home</a><span class="sep">›</span>
-      <a href="#">Solutions</a><span class="sep">›</span>
-      <a href="#">By Industry</a><span class="sep">›</span>
-      <span class="current">Infrastructure</span>
-    </nav>
-
-    <div class="hero-grid">
-      <div>
-        <div class="hero-meta">Industry · Civil &amp; Transport</div>
-        <h1>Infrastructure that <span class="accent">lasts.</span></h1>
-        <p class="hero-desc">
-          Geosynthetic systems for the roads, railways, bridges, airports and ports that carry African economies. We design, supply, install, test and certify the unseen layers that keep formations stable, embankments standing, surfaces draining and asset lives long — to SANRAL TRH, COTO, AASHTO and FIDIC standards.
-        </p>
-
-        <!-- Sub-sector strip — the entry points for any infra visitor -->
-        <div class="subsector-strip">
-          <div class="subsector-pill active"><span class="dot"></span>Roads &amp; Highways</div>
-          <div class="subsector-pill"><span class="dot"></span>Railways</div>
-          <div class="subsector-pill"><span class="dot"></span>Bridges</div>
-          <div class="subsector-pill"><span class="dot"></span>Airports</div>
-          <div class="subsector-pill"><span class="dot"></span>Ports &amp; Harbours</div>
-          <div class="subsector-pill"><span class="dot"></span>Tunnels</div>
+    <!-- ============ UTILITY BAR ============ -->
+    <div class="util-bar anno">
+      <span class="anno-tag global">GLOBAL</span>
+      <div class="util-inner">
+        <div class="util-creds">
+          <span>IAGI Member — One of only 5 in Africa</span>
+          <span>B-BBEE Level 2</span>
+          <span>QA/QC Certified</span>
+          <span>Pan-African Logistics</span>
+          <span>Products Catalogue</span>
         </div>
-
-        <div class="hero-ctas">
-          <a href="#" class="btn btn-red">↑ Upload Tender Documents</a>
-          <a href="#" class="btn btn-outline-light">Speak to an Infrastructure Specialist</a>
-        </div>
-      </div>
-
-      <div class="hero-scale">
-        <div class="hero-scale-label">Sector capability</div>
-        <div class="scale-row">
-          <div class="l">Road formation reinforced</div>
-          <div class="v">1,820 <span class="small">km</span></div>
-        </div>
-        <div class="scale-row">
-          <div class="l">Geogrid installed across Africa</div>
-          <div class="v">14.6M <span class="small">m²</span></div>
-        </div>
-        <div class="scale-row">
-          <div class="l">Infrastructure projects delivered</div>
-          <div class="v">340<span class="small">+</span></div>
-        </div>
-        <div class="scale-row">
-          <div class="l">Countries with active projects</div>
-          <div class="v">17</div>
-        </div>
-        <div class="scale-row">
-          <div class="l">Standards compliance</div>
-          <div class="v" style="font-size: 14px;">SANRAL · AASHTO<br>COTO · FIDIC</div>
+        <div class="util-actions">
+          <a href="#" class="portal">Partner Portal</a>
+          <a href="#" class="lang">EN ▾</a>
         </div>
       </div>
     </div>
-  </div>
-  <div class="hero-deco-line"></div>
-</section>
 
-<!-- ============ FACET NAV ============ -->
-<nav class="facet-nav anno">
-  <span class="anno-tag template">TEMPLATE · industry facets</span>
-  <div class="facet-nav-inner">
-    <div class="facet-label">On this page</div>
-    <a href="#subsectors" class="facet-link active"><span class="num">01</span>Sub-sectors</a>
-    <a href="#applications" class="facet-link"><span class="num">02</span>Applications</a>
-    <a href="#capabilities" class="facet-link"><span class="num">03</span>Capabilities</a>
-    <a href="#services" class="facet-link"><span class="num">04</span>Services</a>
-    <a href="#standards" class="facet-link"><span class="num">05</span>Standards</a>
-    <a href="#clients" class="facet-link"><span class="num">06</span>Who we serve</a>
-    <a href="#projects" class="facet-link"><span class="num">07</span>Projects</a>
-    <a href="#knowledge" class="facet-link"><span class="num">08</span>Knowledge</a>
-    <a href="#related" class="facet-link"><span class="num">09</span>Other industries</a>
-  </div>
-</nav>
-
-<main class="industry-page">
-
-  <!-- ============ § 1 — SUB-SECTORS (the heart of an industry page) ============ -->
-  <section class="section anno" id="subsectors">
-    <span class="anno-tag fixed">INDUSTRY-FIXED · 6 sub-sectors define the sector entry points</span>
-    <div class="section-eyebrow"><span class="num">01</span>The Infrastructure Sector</div>
-    <h2 class="section-title">Six sub-sectors. <span class="red">One delivery model.</span></h2>
-    <p class="section-intro">Infrastructure spans civil works that look very different at the surface — roads, rails, runways, quay walls — but share a common engineering reality below grade. GSA delivers integrated geosynthetic systems across all six. Click any sub-sector to explore the relevant applications, products and references.</p>
-
-    <div class="subsector-grid">
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M2 19h20l-6-12h-3l1 3-2 1-2-3H8L2 19zm5-3l3-6 2 3-2 4H7zm9 0l-2-4 2-3 3 6h-3z"/></svg>
-        <h3>Roads &amp; Highways</h3>
-        <p>National highways, urban arterials, rural roads, haul roads. Subgrade stabilisation, basal reinforcement, drainage, erosion protection from formation to verge.</p>
-        <div class="stats">
-          <div><div class="stat-v">1,820 km</div><div class="stat-l">Formation</div></div>
-          <div><div class="stat-v">186</div><div class="stat-l">Projects</div></div>
-        </div>
-      </a>
-
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M4 15.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V5c0-3.5-3.58-4-8-4s-8 .5-8 4v10.5zM12 17c-.83 0-1.5-.67-1.5-1.5S11.17 14 12 14s1.5.67 1.5 1.5S12.83 17 12 17zm6-7H6V5h12v5z"/></svg>
-        <h3>Railways</h3>
-        <p>Heavy haul, passenger and freight rail formation. Subballast reinforcement, capping, drainage and erosion control on rail embankments and cuttings.</p>
-        <div class="stats">
-          <div><div class="stat-v">410 km</div><div class="stat-l">Formation</div></div>
-          <div><div class="stat-v">42</div><div class="stat-l">Projects</div></div>
-        </div>
-      </a>
-
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17h2v3H3v-3zm16 0h2v3h-2v-3zM3 10c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v6H3v-6zm-2 0h22v-1c0-3-4-6-11-6S1 6 1 9v1z"/></svg>
-        <h3>Bridges</h3>
-        <p>Approach embankments, abutment backfill reinforcement, scour protection. The geosynthetic work that makes the structure above possible.</p>
-        <div class="stats">
-          <div><div class="stat-v">68</div><div class="stat-l">Bridges</div></div>
-          <div><div class="stat-v">14 m</div><div class="stat-l">Max approach</div></div>
-        </div>
-      </a>
-
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
-        <h3>Airports</h3>
-        <p>Runway and taxiway formations, apron paving, airside drainage. Tight tolerance, high axle loads, no margin for differential settlement.</p>
-        <div class="stats">
-          <div><div class="stat-v">12</div><div class="stat-l">Airports</div></div>
-          <div><div class="stat-v">285,000 m²</div><div class="stat-l">Apron / RW</div></div>
-        </div>
-      </a>
-
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20h18v2H3v-2zM2 5l10-3 10 3v3l-10-3-10 3V5zm5 13l5-1.5 5 1.5v-7l-5 1.5-5-1.5v7zM12 9.5l-3-1V11l3 1 3-1V8.5l-3 1z"/></svg>
-        <h3>Ports &amp; Harbours</h3>
-        <p>Quay wall backfill, container yard reinforcement, marine erosion protection, dredging containment. Saline and dynamic loading conditions.</p>
-        <div class="stats">
-          <div><div class="stat-v">9</div><div class="stat-l">Ports</div></div>
-          <div><div class="stat-v">580,000 m²</div><div class="stat-l">Yard area</div></div>
-        </div>
-      </a>
-
-      <a class="subsector-card" href="#">
-        <div class="arrow">→</div>
-        <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.58 2 4 5.58 4 10c0 .29.02.58.05.85L1 14h2v6h18v-6h2l-3.05-3.15c.03-.27.05-.56.05-.85 0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
-        <h3>Tunnels</h3>
-        <p>Tunnel waterproofing membranes, drainage composites, segment protection. Cut-and-cover, NATM and TBM-driven civil tunnels.</p>
-        <div class="stats">
-          <div><div class="stat-v">23</div><div class="stat-l">Tunnels</div></div>
-          <div><div class="stat-v">11.4 km</div><div class="stat-l">Length</div></div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Accountability strip -->
-  <div class="accountability-strip anno">
-    <span class="anno-tag global">GLOBAL · GSA service promise</span>
-    <div class="lead">One System. <span class="accent">One Partner.</span> Full Accountability.</div>
-    <div class="steps">
-      <span>Designed</span><span>Supplied</span><span>Installed</span><span>Tested</span><span>Certified</span>
-    </div>
-  </div>
-
-  <!-- ============ § 2 — APPLICATIONS (THE ROUTER) ============ -->
-  <section class="section anno" id="applications">
-    <span class="anno-tag derived">AUTO-DERIVED · filters /solutions/by-application where industries[] contains "Infrastructure"</span>
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow"><span class="num">02</span>Applications in Infrastructure</div>
-        <h2 class="section-title">Find your <span class="red">specific problem.</span></h2>
-        <p class="section-intro">Eight engineered applications cut across the six sub-sectors above. Each application has its own dedicated page with system build-up, products, design references and projects. Choose the one closest to your scope.</p>
-      </div>
-      <div class="right">
-        <a class="section-link" href="#">Browse all applications</a>
-      </div>
-    </div>
-
-    <div class="app-router-grid">
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 01 · Roads · Rail · Airports</div>
-        <h4>Subgrade Stabilisation</h4>
-        <p>Mechanical stabilisation of weak subgrades using triaxial geogrids — extends pavement life and reduces base course depth.</p>
-        <div class="meta"><span>Geogrid</span><span>Geotextile</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 02 · Roads · Rail · Embankments</div>
-        <h4>Basal Reinforcement</h4>
-        <p>High-strength geogrid layers beneath embankments on soft soils — controls settlement and improves bearing capacity.</p>
-        <div class="meta"><span>Geogrid</span><span>Geotextile</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 03 · Bridges · Ports · Walls</div>
-        <h4>Reinforced Soil Walls &amp; Slopes</h4>
-        <p>MSE walls and reinforced soil slopes for bridge approaches, retaining structures and steepened slope construction.</p>
-        <div class="meta"><span>Geogrid</span><span>Facing systems</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 04 · All sub-sectors</div>
-        <h4>Drainage Systems</h4>
-        <p>Subsoil drainage, edge drains, formation drainage. Drainage composites and filter geotextiles for controlled water management.</p>
-        <div class="meta"><span>Drainage</span><span>Geotextile</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 05 · Roads · Rail · Slopes</div>
-        <h4>Erosion Control</h4>
-        <p>Permanent and temporary erosion blankets, vegetated systems, cellular confinement on cuts, fills and verges.</p>
-        <div class="meta"><span>RECPs</span><span>Geocells</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 06 · Ports · Roads · Yards</div>
-        <h4>Working Platforms</h4>
-        <p>Temporary and permanent working platforms over soft ground for cranes, piling rigs and heavy plant.</p>
-        <div class="meta"><span>Geogrid</span><span>Geocells</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 07 · Bridges · Marine</div>
-        <h4>Scour Protection</h4>
-        <p>Articulated mattresses, gabion systems, geocell revetments for bridge piers, abutments and marine structures.</p>
-        <div class="meta"><span>Geocells</span><span>Gabions</span></div>
-        <div class="view">View application →</div>
-      </a>
-      <a class="app-router-card" href="#">
-        <div class="app-num">App 08 · Tunnels · Bridges · Decks</div>
-        <h4>Waterproofing Membranes</h4>
-        <p>HDPE and PVC membrane systems for tunnel waterproofing, bridge deck protection and below-grade structures.</p>
-        <div class="meta"><span>Geomembrane</span><span>Drainage</span></div>
-        <div class="view">View application →</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============ § 3 — CAPABILITIES MATRIX ============ -->
-  <section class="section anno" id="capabilities">
-    <span class="anno-tag derived">AUTO-DERIVED · matrix of applications × product families (this industry)</span>
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow"><span class="num">03</span>Capabilities Matrix</div>
-        <h2 class="section-title">What we deliver, <span class="red">at a glance.</span></h2>
-        <p class="section-intro">Every infrastructure application combines multiple product families. The matrix below shows which product lines we stock and install for each application type. Solid dots = primary product; ring = supporting product.</p>
-      </div>
-    </div>
-
-    <div class="matrix-wrapper">
-      <table class="capability-matrix">
-        <thead>
-          <tr>
-            <th>Application ↓ &nbsp;&nbsp;&nbsp; Product family →</th>
-            <th>Geogrids</th>
-            <th>Geotextiles</th>
-            <th>Geocells</th>
-            <th>Geomembranes</th>
-            <th>GCLs</th>
-            <th>Drainage Composites</th>
-            <th>RECPs</th>
-            <th>Accessories</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Subgrade Stabilisation</td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-          </tr>
-          <tr>
-            <td>Basal Reinforcement</td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-          </tr>
-          <tr>
-            <td>Reinforced Soil Walls</td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-          </tr>
-          <tr>
-            <td>Drainage Systems</td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-          </tr>
-          <tr>
-            <td>Erosion Control</td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-          </tr>
-          <tr>
-            <td>Working Platforms</td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-          </tr>
-          <tr>
-            <td>Scour Protection</td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot"></span></td>
-          </tr>
-          <tr>
-            <td>Waterproofing</td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot partial"></span></td>
-            <td><span class="cap-dot"></span></td>
-            <td><span class="cap-dot no"></span></td>
-            <td><span class="cap-dot"></span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="matrix-legend">
-        <span><span class="cap-dot"></span> Primary product</span>
-        <span><span class="cap-dot partial"></span> Supporting product</span>
-        <span><span class="cap-dot no"></span> Not required</span>
-        <span style="margin-left: auto;">All cells link to filtered product catalogue →</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ § 4 — SERVICES (sector-framed) ============ -->
-  <section class="section anno" id="services" style="padding: 0;">
-    <span class="anno-tag derived">AUTO-DERIVED · /services with Infrastructure-specific outputs</span>
-    <div class="services-flow">
-      <div class="section-eyebrow" style="color: var(--red); position: relative;"><span class="num" style="background: var(--red); color: white;">04</span>Our Infrastructure Delivery Model</div>
-      <div class="lead">Tender to <span class="accent">handover certificate.</span></div>
-      <p class="sub">Infrastructure programmes run on FIDIC contracts, MDB conditions and road agency frameworks. We work as a Sub-contractor or Direct Supplier under all three. The same five service stages, scaled and documented for civil works programmes.</p>
-
-      <div class="service-row">
-        <div class="service-step">
-          <div class="step-n">Stage 01</div>
-          <h4>Design</h4>
-          <p>Reinforced soil design (BS 8006, AASHTO LRFD), pavement structure with geosynthetic credit (TRH 4 / AASHTO 1993), drainage layout.</p>
-          <div class="out">→ Design submission</div>
-        </div>
-        <div class="service-step">
-          <div class="step-n">Stage 02</div>
-          <h4>Supply</h4>
-          <p>Mill certificates, batch numbering, just-in-time delivery to chainage, inspection at port of entry, customs clearance handled.</p>
-          <div class="out">→ Material register</div>
-        </div>
-        <div class="service-step">
-          <div class="step-n">Stage 03</div>
-          <h4>Install</h4>
-          <p>Trained installation teams, supervisor training for contractor's own labour, method statements aligned to road agency specifications.</p>
-          <div class="out">→ As-built record</div>
-        </div>
-        <div class="service-step">
-          <div class="step-n">Stage 04</div>
-          <h4>Test</h4>
-          <p>On-site CBR uplift testing, pull-out tests, sampling for laboratory verification, road agency witness testing.</p>
-          <div class="out">→ Test certificates</div>
-        </div>
-        <div class="service-step">
-          <div class="step-n">Stage 05</div>
-          <h4>Certify</h4>
-          <p>Materials traceability matrix, installation certification, contribution to engineer's completion certificate, warranty registration.</p>
-          <div class="out">→ Project pack</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ § 5 — STANDARDS (sector-specific) ============ -->
-  <section class="section anno" id="standards">
-    <span class="anno-tag fixed">INDUSTRY-FIXED · Infrastructure-applicable standards</span>
-    <div class="section-eyebrow"><span class="num">05</span>Standards &amp; Specifications</div>
-    <h2 class="section-title">Compliant by <span class="red">design.</span></h2>
-
-    <div class="standards-grid">
-      <table class="standards-table">
-        <thead>
-          <tr><th style="width:32%">Standard / Specification</th><th>Applies to</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="code">SANRAL TRH 4</td><td>Structural design of flexible pavements (South Africa) — geosynthetic credit</td></tr>
-          <tr><td class="code">COTO Standards</td><td>Committee of Transport Officials — road construction specifications (RSA)</td></tr>
-          <tr><td class="code">AASHTO LRFD</td><td>Bridge design specifications — reinforced soil and MSE walls</td></tr>
-          <tr><td class="code">AASHTO 1993</td><td>Guide for design of pavement structures — base course reinforcement</td></tr>
-          <tr><td class="code">BS 8006-1</td><td>Code of practice for strengthened/reinforced soils (UK / Africa default)</td></tr>
-          <tr><td class="code">FIDIC Yellow Book</td><td>Contract conditions — most African road agency procurement</td></tr>
-          <tr><td class="code">EN 13249</td><td>Geotextiles in road construction</td></tr>
-          <tr><td class="code">EN 13251</td><td>Geotextiles in earthworks, foundations and retaining structures</td></tr>
-          <tr><td class="code">EN 14475</td><td>Execution of reinforced fills</td></tr>
-          <tr><td class="code">ASTM D6637</td><td>Tensile properties of geogrids</td></tr>
-          <tr><td class="code">ASTM D6706</td><td>Pull-out resistance of geosynthetics in soil</td></tr>
-          <tr><td class="code">SATCC / EAC specs</td><td>SADC and East African Community road agency specifications</td></tr>
-        </tbody>
-      </table>
-
-      <aside class="standards-side">
-        <h3>Our Infrastructure pack</h3>
-        <p>Every project ships with documentation that the resident engineer, supervising consultant and road agency need to sign off the geosynthetic component of the works.</p>
-        <ul>
-          <li>Geosynthetic design report (signed)</li>
-          <li>Mill certificates per delivery</li>
-          <li>Method statement (per application)</li>
-          <li>Inspection &amp; Test Plan (ITP)</li>
-          <li>Daily installation diaries</li>
-          <li>Pull-out / CBR test results</li>
-          <li>As-built drawings</li>
-          <li>Material traceability matrix</li>
-          <li>Warranty registration</li>
-          <li>Operation &amp; Maintenance manual</li>
-        </ul>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ============ § 6 — CLIENT TYPES (specific to Industry pages) ============ -->
-  <section class="section anno" id="clients">
-    <span class="anno-tag fixed">INDUSTRY-FIXED · client archetypes in this sector</span>
-    <div class="section-eyebrow"><span class="num">06</span>Who we work with</div>
-    <h2 class="section-title">Built for the <span class="red">infrastructure delivery chain.</span></h2>
-    <p class="section-intro">Infrastructure projects are delivered by a tightly-defined ecosystem of road agencies, consulting engineers, EPCM contractors and civil specialists. We work directly with each, in the role that suits the procurement route.</p>
-
-    <div class="clients-grid">
-      <div class="client-card">
-        <div class="role">Public client</div>
-        <h4>Road Agencies</h4>
-        <p>National and provincial road agencies. We are listed on framework agreements and pre-qualified across multiple African jurisdictions.</p>
-        <div class="typical"><strong>Typical engagement</strong>Framework / DBOM contracts</div>
-      </div>
-      <div class="client-card">
-        <div class="role">Public client</div>
-        <h4>Rail Authorities</h4>
-        <p>Heavy haul and passenger rail operators. Track renewal and new alignment programmes — formation reinforcement and drainage.</p>
-        <div class="typical"><strong>Typical engagement</strong>Long-term supply contracts</div>
-      </div>
-      <div class="client-card">
-        <div class="role">Designer</div>
-        <h4>Consulting Engineers</h4>
-        <p>Pre-tender design support, specification clauses, design calculations under BS 8006 / AASHTO. Free service to specifiers.</p>
-        <div class="typical"><strong>Typical engagement</strong>Design partner</div>
-      </div>
-      <div class="client-card">
-        <div class="role">Contractor</div>
-        <h4>EPCM &amp; Civil Contractors</h4>
-        <p>Direct supply &amp; install sub-contract under main works. FIDIC sub-contract conditions, BoQ-priced, programme-linked delivery.</p>
-        <div class="typical"><strong>Typical engagement</strong>Sub-contract / Supply &amp; fix</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ § 7 — PROJECTS ============ -->
-  <section class="section anno" id="projects">
-    <span class="anno-tag derived">AUTO-DERIVED · /projects where industries[] contains "Infrastructure"</span>
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow"><span class="num">07</span>Projects</div>
-        <h2 class="section-title">340+ infrastructure projects <span class="red">across 17 countries.</span></h2>
-        <p class="section-intro">Selected references across the six sub-sectors. Full reference list available on request — most projects under signed confidentiality.</p>
-      </div>
-      <div class="right">
-        <a class="section-link" href="#">View all infrastructure projects</a>
-      </div>
-    </div>
-
-    <div class="project-grid">
-      <a class="project-card c1 feature" href="#">
-        <div class="img"></div>
-        <span class="subsec">Roads &amp; Highways</span>
-        <div class="scale">142 km · 2.1M m²</div>
-        <div class="body">
-          <div class="tag">National highway · TRH 4 design</div>
-          <h3>N1 Section 22 Pavement Reinforcement</h3>
-          <div class="loc">📍 Limpopo, South Africa · 2024</div>
-        </div>
-        <div class="arrow">→</div>
-      </a>
-      <a class="project-card c2" href="#">
-        <div class="img"></div>
-        <span class="subsec">Railways</span>
-        <div class="scale">38 km</div>
-        <div class="body">
-          <div class="tag">Heavy haul · subballast reinforcement</div>
-          <h3>Kitwe–Ndola Rail Renewal</h3>
-          <div class="loc">📍 Zambia · 2024</div>
-        </div>
-        <div class="arrow">→</div>
-      </a>
-      <a class="project-card c3" href="#">
-        <div class="img"></div>
-        <span class="subsec">Ports &amp; Harbours</span>
-        <div class="scale">180,000 m²</div>
-        <div class="body">
-          <div class="tag">Container yard reinforcement</div>
-          <h3>Port of Beira Terminal Expansion</h3>
-          <div class="loc">📍 Mozambique · 2023</div>
-        </div>
-        <div class="arrow">→</div>
-      </a>
-      <a class="project-card c4" href="#">
-        <div class="img"></div>
-        <span class="subsec">Bridges</span>
-        <div class="scale">11 m approach</div>
-        <div class="body">
-          <div class="tag">Reinforced soil abutment</div>
-          <h3>Kazungula Bridge Approaches</h3>
-          <div class="loc">📍 Botswana–Zambia · 2022</div>
-        </div>
-        <div class="arrow">→</div>
-      </a>
-      <a class="project-card c5" href="#">
-        <div class="img"></div>
-        <span class="subsec">Airports</span>
-        <div class="scale">68,000 m²</div>
-        <div class="body">
-          <div class="tag">Apron strengthening</div>
-          <h3>Kotoka Int'l Airport Apron Upgrade</h3>
-          <div class="loc">📍 Accra, Ghana · 2023</div>
-        </div>
-        <div class="arrow">→</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============ § 8 — KNOWLEDGE ============ -->
-  <section class="section anno" id="knowledge">
-    <span class="anno-tag derived">AUTO-DERIVED · /resources tagged Infrastructure</span>
-    <div class="section-head">
-      <div>
-        <div class="section-eyebrow"><span class="num">08</span>Knowledge &amp; Documents</div>
-        <h2 class="section-title">Design references for <span class="red">infrastructure engineers.</span></h2>
-        <p class="section-intro">Downloadable design guides, agency-aligned specifications, and case studies relevant to civil and transport works. Open access — no form gate.</p>
-      </div>
-      <div class="right">
-        <a class="section-link" href="#">Browse all resources</a>
-      </div>
-    </div>
-
-    <div class="knowledge-layout">
-      <div class="docs-list">
-        <a class="doc-row" href="#"><div class="doc-icon">PDF</div><div class="doc-body"><strong>Geosynthetic Pavement Design Guide (TRH-4 aligned)</strong><span>Design example · base course reduction · acceptance testing</span></div><div class="doc-arrow">↓</div></a>
-        <a class="doc-row" href="#"><div class="doc-icon">PDF</div><div class="doc-body"><strong>Reinforced Soil Wall Design Manual (BS 8006 / AASHTO)</strong><span>Worked examples · stability checks · facing systems</span></div><div class="doc-arrow">↓</div></a>
-        <a class="doc-row" href="#"><div class="doc-icon">PDF</div><div class="doc-body"><strong>Infrastructure Project Portfolio (2020–2024)</strong><span>340+ references across 17 African countries · scale, scope, agency</span></div><div class="doc-arrow">↓</div></a>
-        <a class="doc-row" href="#"><div class="doc-icon">PDF</div><div class="doc-body"><strong>Geogrid Selection Guide for African Subgrades</strong><span>Subgrade CBR ranges · product selection by application</span></div><div class="doc-arrow">↓</div></a>
-        <a class="doc-row" href="#"><div class="doc-icon">DOC</div><div class="doc-body"><strong>NBS / COTO Specification Clauses (paste-in)</strong><span>Per application, structured for direct insertion into project specs</span></div><div class="doc-arrow">↓</div></a>
-        <a class="doc-row" href="#"><div class="doc-icon">XLS</div><div class="doc-body"><strong>Pavement Design Calculator (Excel)</strong><span>Geosynthetic credit calculation · base course saving · cost-benefit</span></div><div class="doc-arrow">↓</div></a>
-      </div>
-
-      <aside class="articles-side">
-        <h3>Featured articles</h3>
-        <a class="article-item" href="#">
-          <div class="tag">Article · 10 min read</div>
-          <h4>What TRH 4's geosynthetic credit really means for your base course saving</h4>
-          <div class="meta">Published Apr 2026 · Engineering team</div>
-        </a>
-        <a class="article-item" href="#">
-          <div class="tag">Case study</div>
-          <h4>How a triaxial geogrid cut 80 mm off the base course on the N1 Section 22</h4>
-          <div class="meta">Published Feb 2026</div>
-        </a>
-        <a class="article-item" href="#">
-          <div class="tag">Technical note</div>
-          <h4>Designing reinforced soil walls for African seismic zones — BS 8006 vs AASHTO</h4>
-          <div class="meta">Published Dec 2025</div>
-        </a>
-        <a class="article-item" href="#">
-          <div class="tag">Article</div>
-          <h4>Working with road agencies: what gets a geosynthetic spec approved first time</h4>
-          <div class="meta">Published Oct 2025</div>
-        </a>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ============ § 9 — RELATED INDUSTRIES ============ -->
-  <section class="section anno" id="related">
-    <span class="anno-tag cross">CROSS-LINK · sibling industries</span>
-    <div class="section-eyebrow"><span class="num">09</span>Other industries we serve</div>
-    <h2 class="section-title">Same engineering. <span class="red">Different sector.</span></h2>
-    <p class="section-intro">The geosynthetic principles that work for highway and rail formations apply across every sector where ground performance matters. Browse adjacent industries below.</p>
-
-    <div class="related-industries">
-      <a class="related-industry" href="#">
-        <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v6c0 5 3.6 9.6 8.4 11.2L12 25l1.6-.8C18.4 22.6 22 18 22 13V7l-10-5z"/></svg>
-        <h4>Mining</h4>
-        <p>TSFs, heap leach pads, haul roads, closure. The continent's biggest geosynthetics consumer.</p>
-        <span class="view">View industry →</span>
-      </a>
-      <a class="related-industry" href="#">
-        <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6 8 4 12 4 16c0 4 4 6 8 6s8-2 8-6c0-4-2-8-8-14z"/></svg>
-        <h4>Water &amp; Wastewater</h4>
-        <p>Reservoirs, treatment ponds, canals, evaporation cells. Containment and lining.</p>
-        <span class="view">View industry →</span>
-      </a>
-      <a class="related-industry" href="#">
-        <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.4 0 .62.19.4.66C12.97 17.55 11 21 11 21z"/></svg>
-        <h4>Energy</h4>
-        <p>Coal ash storage, oil &amp; gas facilities, biofuel, solar farm ground prep.</p>
-        <span class="view">View industry →</span>
-      </a>
-      <a class="related-industry" href="#">
-        <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.2 3.5 22h2L8 16h13l-4-8zM6 18l1-2h2l-1 2H6z"/></svg>
-        <h4>Environmental</h4>
-        <p>Landfills, capping, remediation, closure works. Compliance-led containment.</p>
-        <span class="view">View industry →</span>
-      </a>
-      <a class="related-industry" href="#">
-        <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s8-4 8-12V4l-8-2-8 2v6c0 8 8 12 8 12z"/></svg>
-        <h4>Agriculture</h4>
-        <p>Irrigation canal lining, dam construction, livestock containment, slope protection.</p>
-        <span class="view">View industry →</span>
-      </a>
-    </div>
-  </section>
-
-</main>
-
-<!-- ============ BOQ CTA ============ -->
-<section class="boq-cta anno">
-  <span class="anno-tag global">GLOBAL</span>
-  <div class="boq-cta-inner">
-    <div>
-      <h2>Pricing an infrastructure tender?</h2>
-      <div class="lead">Get a designed geosynthetic component — not just a unit rate.</div>
-      <p>Upload tender documents, drawings, BoQ or the project memorandum. Our infrastructure team will return with a design proposal, product specification, installation methodology, indicative pricing and reference projects — within 5 working days.</p>
-    </div>
-    <div class="boq-cta-actions">
-      <a href="#" class="btn">↑ Upload Tender Pack</a>
-      <a href="#" class="btn">Book a Design Review</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="site-footer anno">
-  <span class="anno-tag global">GLOBAL</span>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
+    <!-- ============ MAIN HEADER ============ -->
+    <header class="main-header anno">
+      <span class="anno-tag global">GLOBAL</span>
+      <div class="header-inner">
         <a href="#" class="brand-logo">
-          <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626"><path d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"/></svg>
+          <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626">
+            <path
+              d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"
+            />
+          </svg>
           <div class="brand-text">
-            <span class="name" style="color:white">GEOSYNTHETICS</span>
+            <span class="name">GEOSYNTHETICS</span>
             <span class="sub">AFRICA</span>
           </div>
         </a>
-        <p>Africa's integrated geosynthetics platform — designed, supplied, installed, tested and certified across the continent.</p>
-        <div class="footer-socials"><a href="#">in</a><a href="#">f</a><a href="#">ig</a><a href="#">▶</a></div>
+        <nav class="primary">
+          <a href="#">Products <span class="caret">▾</span></a>
+          <a href="#" class="active">Solutions <span class="caret">▾</span></a>
+          <a href="#">Services <span class="caret">▾</span></a>
+          <a href="#">Projects</a>
+          <a href="#">Resources</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </nav>
       </div>
-      <div class="footer-col"><h4>Products</h4><ul><li><a href="#">Geomembranes</a></li><li><a href="#">Geotextiles</a></li><li><a href="#">Geogrids</a></li><li><a href="#">Geocells</a></li><li><a href="#">GCLs</a></li><li><a href="#">Drainage</a></li><li><a href="#">All Products</a></li></ul></div>
-      <div class="footer-col"><h4>Applications</h4><ul><li><a href="#">TSFs</a></li><li><a href="#">Heap Leach</a></li><li><a href="#">Reservoirs</a></li><li><a href="#">Landfills</a></li><li><a href="#">Roads</a></li><li><a href="#">Erosion</a></li></ul></div>
-      <div class="footer-col"><h4>Industries</h4><ul><li><a href="#">Mining</a></li><li><a href="#">Water</a></li><li><a href="#" style="color:var(--red)">Infrastructure ★</a></li><li><a href="#">Energy</a></li><li><a href="#">Environmental</a></li><li><a href="#">Agriculture</a></li></ul></div>
-      <div class="footer-col"><h4>Services</h4><ul><li><a href="#">Supply</a></li><li><a href="#">Installation</a></li><li><a href="#">QA / QC</a></li><li><a href="#">Design</a></li><li><a href="#">Logistics</a></li><li><a href="#">After Sales</a></li></ul></div>
-      <div class="footer-col"><h4>Resources</h4><ul><li><a href="#">Datasheets</a></li><li><a href="#">Install Guides</a></li><li><a href="#">QA Checklists</a></li><li><a href="#">Articles</a></li><li><a href="#">Videos</a></li><li><a href="#">FAQs</a></li></ul></div>
-      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">News</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Privacy</a></li><li><a href="#">Contact</a></li></ul></div>
-    </div>
-    <div class="footer-bottom">
-      <div class="badges"><span>IAGI Member — One of only 5 in Africa</span><span>B-BBEE Level 2</span><span>Pan-African Logistics</span><span>QA/QC Certified</span></div>
-      <div>© 2026 Geosynthetics Africa (Pty) Ltd. All Rights Reserved.</div>
-    </div>
-  </div>
-</footer>
+    </header>
 
-<script>
-  const facets = document.querySelectorAll('.facet-link');
-  const sections = document.querySelectorAll('.section');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        facets.forEach(f => f.classList.toggle('active', f.getAttribute('href') === '#' + id));
-      }
-    });
-  }, { rootMargin: '-30% 0px -60% 0px' });
-  sections.forEach(s => obs.observe(s));
-</script>
-</body>
+    <!-- ============ HERO ============ -->
+    <section class="hero anno">
+      <span class="anno-tag fixed"
+        >INDUSTRY-FIXED · sector identity, scale stats, primary subsectors</span
+      >
+      <div class="hero-inner">
+        <nav class="breadcrumb">
+          <a href="#">Home</a><span class="sep">›</span> <a href="#">Solutions</a
+          ><span class="sep">›</span> <a href="#">By Industry</a><span class="sep">›</span>
+          <span class="current">Infrastructure</span>
+        </nav>
+
+        <div class="hero-grid">
+          <div>
+            <div class="hero-meta">Industry · Civil &amp; Transport</div>
+            <h1>Infrastructure that <span class="accent">lasts.</span></h1>
+            <p class="hero-desc">
+              Geosynthetic systems for the roads, railways, bridges, airports and ports that carry
+              African economies. We design, supply, install, test and certify the unseen layers that
+              keep formations stable, embankments standing, surfaces draining and asset lives long —
+              to SANRAL TRH, COTO, AASHTO and FIDIC standards.
+            </p>
+
+            <!-- Sub-sector strip — the entry points for any infra visitor -->
+            <div class="subsector-strip">
+              <div class="subsector-pill active"><span class="dot"></span>Roads &amp; Highways</div>
+              <div class="subsector-pill"><span class="dot"></span>Railways</div>
+              <div class="subsector-pill"><span class="dot"></span>Bridges</div>
+              <div class="subsector-pill"><span class="dot"></span>Airports</div>
+              <div class="subsector-pill"><span class="dot"></span>Ports &amp; Harbours</div>
+              <div class="subsector-pill"><span class="dot"></span>Tunnels</div>
+            </div>
+
+            <div class="hero-ctas">
+              <a href="#" class="btn btn-red">↑ Upload Tender Documents</a>
+              <a href="#" class="btn btn-outline-light">Speak to an Infrastructure Specialist</a>
+            </div>
+          </div>
+
+          <div class="hero-scale">
+            <div class="hero-scale-label">Sector capability</div>
+            <div class="scale-row">
+              <div class="l">Road formation reinforced</div>
+              <div class="v">1,820 <span class="small">km</span></div>
+            </div>
+            <div class="scale-row">
+              <div class="l">Geogrid installed across Africa</div>
+              <div class="v">14.6M <span class="small">m²</span></div>
+            </div>
+            <div class="scale-row">
+              <div class="l">Infrastructure projects delivered</div>
+              <div class="v">340<span class="small">+</span></div>
+            </div>
+            <div class="scale-row">
+              <div class="l">Countries with active projects</div>
+              <div class="v">17</div>
+            </div>
+            <div class="scale-row">
+              <div class="l">Standards compliance</div>
+              <div class="v" style="font-size: 14px">SANRAL · AASHTO<br />COTO · FIDIC</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-deco-line"></div>
+    </section>
+
+    <!-- ============ FACET NAV ============ -->
+    <nav class="facet-nav anno">
+      <span class="anno-tag template">TEMPLATE · industry facets</span>
+      <div class="facet-nav-inner">
+        <div class="facet-label">On this page</div>
+        <a href="#subsectors" class="facet-link active"><span class="num">01</span>Sub-sectors</a>
+        <a href="#applications" class="facet-link"><span class="num">02</span>Applications</a>
+        <a href="#capabilities" class="facet-link"><span class="num">03</span>Capabilities</a>
+        <a href="#services" class="facet-link"><span class="num">04</span>Services</a>
+        <a href="#standards" class="facet-link"><span class="num">05</span>Standards</a>
+        <a href="#clients" class="facet-link"><span class="num">06</span>Who we serve</a>
+        <a href="#projects" class="facet-link"><span class="num">07</span>Projects</a>
+        <a href="#knowledge" class="facet-link"><span class="num">08</span>Knowledge</a>
+        <a href="#related" class="facet-link"><span class="num">09</span>Other industries</a>
+      </div>
+    </nav>
+
+    <main class="industry-page">
+      <!-- ============ § 1 — SUB-SECTORS (the heart of an industry page) ============ -->
+      <section class="section anno" id="subsectors">
+        <span class="anno-tag fixed"
+          >INDUSTRY-FIXED · 6 sub-sectors define the sector entry points</span
+        >
+        <div class="section-eyebrow"><span class="num">01</span>The Infrastructure Sector</div>
+        <h2 class="section-title">Six sub-sectors. <span class="red">One delivery model.</span></h2>
+        <p class="section-intro">
+          Infrastructure spans civil works that look very different at the surface — roads, rails,
+          runways, quay walls — but share a common engineering reality below grade. GSA delivers
+          integrated geosynthetic systems across all six. Click any sub-sector to explore the
+          relevant applications, products and references.
+        </p>
+
+        <div class="subsector-grid">
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M2 19h20l-6-12h-3l1 3-2 1-2-3H8L2 19zm5-3l3-6 2 3-2 4H7zm9 0l-2-4 2-3 3 6h-3z"
+              />
+            </svg>
+            <h3>Roads &amp; Highways</h3>
+            <p>
+              National highways, urban arterials, rural roads, haul roads. Subgrade stabilisation,
+              basal reinforcement, drainage, erosion protection from formation to verge.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">1,820 km</div>
+                <div class="stat-l">Formation</div>
+              </div>
+              <div>
+                <div class="stat-v">186</div>
+                <div class="stat-l">Projects</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M4 15.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V5c0-3.5-3.58-4-8-4s-8 .5-8 4v10.5zM12 17c-.83 0-1.5-.67-1.5-1.5S11.17 14 12 14s1.5.67 1.5 1.5S12.83 17 12 17zm6-7H6V5h12v5z"
+              />
+            </svg>
+            <h3>Railways</h3>
+            <p>
+              Heavy haul, passenger and freight rail formation. Subballast reinforcement, capping,
+              drainage and erosion control on rail embankments and cuttings.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">410 km</div>
+                <div class="stat-l">Formation</div>
+              </div>
+              <div>
+                <div class="stat-v">42</div>
+                <div class="stat-l">Projects</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M3 17h2v3H3v-3zm16 0h2v3h-2v-3zM3 10c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v6H3v-6zm-2 0h22v-1c0-3-4-6-11-6S1 6 1 9v1z"
+              />
+            </svg>
+            <h3>Bridges</h3>
+            <p>
+              Approach embankments, abutment backfill reinforcement, scour protection. The
+              geosynthetic work that makes the structure above possible.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">68</div>
+                <div class="stat-l">Bridges</div>
+              </div>
+              <div>
+                <div class="stat-v">14 m</div>
+                <div class="stat-l">Max approach</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+              />
+            </svg>
+            <h3>Airports</h3>
+            <p>
+              Runway and taxiway formations, apron paving, airside drainage. Tight tolerance, high
+              axle loads, no margin for differential settlement.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">12</div>
+                <div class="stat-l">Airports</div>
+              </div>
+              <div>
+                <div class="stat-v">285,000 m²</div>
+                <div class="stat-l">Apron / RW</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M3 20h18v2H3v-2zM2 5l10-3 10 3v3l-10-3-10 3V5zm5 13l5-1.5 5 1.5v-7l-5 1.5-5-1.5v7zM12 9.5l-3-1V11l3 1 3-1V8.5l-3 1z"
+              />
+            </svg>
+            <h3>Ports &amp; Harbours</h3>
+            <p>
+              Quay wall backfill, container yard reinforcement, marine erosion protection, dredging
+              containment. Saline and dynamic loading conditions.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">9</div>
+                <div class="stat-l">Ports</div>
+              </div>
+              <div>
+                <div class="stat-v">580,000 m²</div>
+                <div class="stat-l">Yard area</div>
+              </div>
+            </div>
+          </a>
+
+          <a class="subsector-card" href="#">
+            <div class="arrow">→</div>
+            <svg class="ico" width="44" height="44" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C7.58 2 4 5.58 4 10c0 .29.02.58.05.85L1 14h2v6h18v-6h2l-3.05-3.15c.03-.27.05-.56.05-.85 0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"
+              />
+            </svg>
+            <h3>Tunnels</h3>
+            <p>
+              Tunnel waterproofing membranes, drainage composites, segment protection.
+              Cut-and-cover, NATM and TBM-driven civil tunnels.
+            </p>
+            <div class="stats">
+              <div>
+                <div class="stat-v">23</div>
+                <div class="stat-l">Tunnels</div>
+              </div>
+              <div>
+                <div class="stat-v">11.4 km</div>
+                <div class="stat-l">Length</div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Accountability strip -->
+      <div class="accountability-strip anno">
+        <span class="anno-tag global">GLOBAL · GSA service promise</span>
+        <div class="lead">
+          One System. <span class="accent">One Partner.</span> Full Accountability.
+        </div>
+        <div class="steps">
+          <span>Designed</span><span>Supplied</span><span>Installed</span><span>Tested</span
+          ><span>Certified</span>
+        </div>
+      </div>
+
+      <!-- ============ § 2 — APPLICATIONS (THE ROUTER) ============ -->
+      <section class="section anno" id="applications">
+        <span class="anno-tag derived"
+          >AUTO-DERIVED · filters /solutions/by-application where industries[] contains
+          "Infrastructure"</span
+        >
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">
+              <span class="num">02</span>Applications in Infrastructure
+            </div>
+            <h2 class="section-title">Find your <span class="red">specific problem.</span></h2>
+            <p class="section-intro">
+              Eight engineered applications cut across the six sub-sectors above. Each application
+              has its own dedicated page with system build-up, products, design references and
+              projects. Choose the one closest to your scope.
+            </p>
+          </div>
+          <div class="right">
+            <a class="section-link" href="#">Browse all applications</a>
+          </div>
+        </div>
+
+        <div class="app-router-grid">
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 01 · Roads · Rail · Airports</div>
+            <h4>Subgrade Stabilisation</h4>
+            <p>
+              Mechanical stabilisation of weak subgrades using triaxial geogrids — extends pavement
+              life and reduces base course depth.
+            </p>
+            <div class="meta"><span>Geogrid</span><span>Geotextile</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 02 · Roads · Rail · Embankments</div>
+            <h4>Basal Reinforcement</h4>
+            <p>
+              High-strength geogrid layers beneath embankments on soft soils — controls settlement
+              and improves bearing capacity.
+            </p>
+            <div class="meta"><span>Geogrid</span><span>Geotextile</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 03 · Bridges · Ports · Walls</div>
+            <h4>Reinforced Soil Walls &amp; Slopes</h4>
+            <p>
+              MSE walls and reinforced soil slopes for bridge approaches, retaining structures and
+              steepened slope construction.
+            </p>
+            <div class="meta"><span>Geogrid</span><span>Facing systems</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 04 · All sub-sectors</div>
+            <h4>Drainage Systems</h4>
+            <p>
+              Subsoil drainage, edge drains, formation drainage. Drainage composites and filter
+              geotextiles for controlled water management.
+            </p>
+            <div class="meta"><span>Drainage</span><span>Geotextile</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 05 · Roads · Rail · Slopes</div>
+            <h4>Erosion Control</h4>
+            <p>
+              Permanent and temporary erosion blankets, vegetated systems, cellular confinement on
+              cuts, fills and verges.
+            </p>
+            <div class="meta"><span>RECPs</span><span>Geocells</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 06 · Ports · Roads · Yards</div>
+            <h4>Working Platforms</h4>
+            <p>
+              Temporary and permanent working platforms over soft ground for cranes, piling rigs and
+              heavy plant.
+            </p>
+            <div class="meta"><span>Geogrid</span><span>Geocells</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 07 · Bridges · Marine</div>
+            <h4>Scour Protection</h4>
+            <p>
+              Articulated mattresses, gabion systems, geocell revetments for bridge piers, abutments
+              and marine structures.
+            </p>
+            <div class="meta"><span>Geocells</span><span>Gabions</span></div>
+            <div class="view">View application →</div>
+          </a>
+          <a class="app-router-card" href="#">
+            <div class="app-num">App 08 · Tunnels · Bridges · Decks</div>
+            <h4>Waterproofing Membranes</h4>
+            <p>
+              HDPE and PVC membrane systems for tunnel waterproofing, bridge deck protection and
+              below-grade structures.
+            </p>
+            <div class="meta"><span>Geomembrane</span><span>Drainage</span></div>
+            <div class="view">View application →</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ============ § 3 — CAPABILITIES MATRIX ============ -->
+      <section class="section anno" id="capabilities">
+        <span class="anno-tag derived"
+          >AUTO-DERIVED · matrix of applications × product families (this industry)</span
+        >
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow"><span class="num">03</span>Capabilities Matrix</div>
+            <h2 class="section-title">What we deliver, <span class="red">at a glance.</span></h2>
+            <p class="section-intro">
+              Every infrastructure application combines multiple product families. The matrix below
+              shows which product lines we stock and install for each application type. Solid dots =
+              primary product; ring = supporting product.
+            </p>
+          </div>
+        </div>
+
+        <div class="matrix-wrapper">
+          <table class="capability-matrix">
+            <thead>
+              <tr>
+                <th>Application ↓ &nbsp;&nbsp;&nbsp; Product family →</th>
+                <th>Geogrids</th>
+                <th>Geotextiles</th>
+                <th>Geocells</th>
+                <th>Geomembranes</th>
+                <th>GCLs</th>
+                <th>Drainage Composites</th>
+                <th>RECPs</th>
+                <th>Accessories</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Subgrade Stabilisation</td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+              </tr>
+              <tr>
+                <td>Basal Reinforcement</td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+              </tr>
+              <tr>
+                <td>Reinforced Soil Walls</td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+              </tr>
+              <tr>
+                <td>Drainage Systems</td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+              </tr>
+              <tr>
+                <td>Erosion Control</td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+              </tr>
+              <tr>
+                <td>Working Platforms</td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+              </tr>
+              <tr>
+                <td>Scour Protection</td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot"></span></td>
+              </tr>
+              <tr>
+                <td>Waterproofing</td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot partial"></span></td>
+                <td><span class="cap-dot"></span></td>
+                <td><span class="cap-dot no"></span></td>
+                <td><span class="cap-dot"></span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="matrix-legend">
+            <span><span class="cap-dot"></span> Primary product</span>
+            <span><span class="cap-dot partial"></span> Supporting product</span>
+            <span><span class="cap-dot no"></span> Not required</span>
+            <span style="margin-left: auto">All cells link to filtered product catalogue →</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ § 4 — SERVICES (sector-framed) ============ -->
+      <section class="section anno" id="services" style="padding: 0">
+        <span class="anno-tag derived"
+          >AUTO-DERIVED · /services with Infrastructure-specific outputs</span
+        >
+        <div class="services-flow">
+          <div class="section-eyebrow" style="color: var(--red); position: relative">
+            <span class="num" style="background: var(--red); color: white">04</span>Our
+            Infrastructure Delivery Model
+          </div>
+          <div class="lead">Tender to <span class="accent">handover certificate.</span></div>
+          <p class="sub">
+            Infrastructure programmes run on FIDIC contracts, MDB conditions and road agency
+            frameworks. We work as a Sub-contractor or Direct Supplier under all three. The same
+            five service stages, scaled and documented for civil works programmes.
+          </p>
+
+          <div class="service-row">
+            <div class="service-step">
+              <div class="step-n">Stage 01</div>
+              <h4>Design</h4>
+              <p>
+                Reinforced soil design (BS 8006, AASHTO LRFD), pavement structure with geosynthetic
+                credit (TRH 4 / AASHTO 1993), drainage layout.
+              </p>
+              <div class="out">→ Design submission</div>
+            </div>
+            <div class="service-step">
+              <div class="step-n">Stage 02</div>
+              <h4>Supply</h4>
+              <p>
+                Mill certificates, batch numbering, just-in-time delivery to chainage, inspection at
+                port of entry, customs clearance handled.
+              </p>
+              <div class="out">→ Material register</div>
+            </div>
+            <div class="service-step">
+              <div class="step-n">Stage 03</div>
+              <h4>Install</h4>
+              <p>
+                Trained installation teams, supervisor training for contractor's own labour, method
+                statements aligned to road agency specifications.
+              </p>
+              <div class="out">→ As-built record</div>
+            </div>
+            <div class="service-step">
+              <div class="step-n">Stage 04</div>
+              <h4>Test</h4>
+              <p>
+                On-site CBR uplift testing, pull-out tests, sampling for laboratory verification,
+                road agency witness testing.
+              </p>
+              <div class="out">→ Test certificates</div>
+            </div>
+            <div class="service-step">
+              <div class="step-n">Stage 05</div>
+              <h4>Certify</h4>
+              <p>
+                Materials traceability matrix, installation certification, contribution to
+                engineer's completion certificate, warranty registration.
+              </p>
+              <div class="out">→ Project pack</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ § 5 — STANDARDS (sector-specific) ============ -->
+      <section class="section anno" id="standards">
+        <span class="anno-tag fixed">INDUSTRY-FIXED · Infrastructure-applicable standards</span>
+        <div class="section-eyebrow"><span class="num">05</span>Standards &amp; Specifications</div>
+        <h2 class="section-title">Compliant by <span class="red">design.</span></h2>
+
+        <div class="standards-grid">
+          <table class="standards-table">
+            <thead>
+              <tr>
+                <th style="width: 32%">Standard / Specification</th>
+                <th>Applies to</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="code">SANRAL TRH 4</td>
+                <td>
+                  Structural design of flexible pavements (South Africa) — geosynthetic credit
+                </td>
+              </tr>
+              <tr>
+                <td class="code">COTO Standards</td>
+                <td>Committee of Transport Officials — road construction specifications (RSA)</td>
+              </tr>
+              <tr>
+                <td class="code">AASHTO LRFD</td>
+                <td>Bridge design specifications — reinforced soil and MSE walls</td>
+              </tr>
+              <tr>
+                <td class="code">AASHTO 1993</td>
+                <td>Guide for design of pavement structures — base course reinforcement</td>
+              </tr>
+              <tr>
+                <td class="code">BS 8006-1</td>
+                <td>Code of practice for strengthened/reinforced soils (UK / Africa default)</td>
+              </tr>
+              <tr>
+                <td class="code">FIDIC Yellow Book</td>
+                <td>Contract conditions — most African road agency procurement</td>
+              </tr>
+              <tr>
+                <td class="code">EN 13249</td>
+                <td>Geotextiles in road construction</td>
+              </tr>
+              <tr>
+                <td class="code">EN 13251</td>
+                <td>Geotextiles in earthworks, foundations and retaining structures</td>
+              </tr>
+              <tr>
+                <td class="code">EN 14475</td>
+                <td>Execution of reinforced fills</td>
+              </tr>
+              <tr>
+                <td class="code">ASTM D6637</td>
+                <td>Tensile properties of geogrids</td>
+              </tr>
+              <tr>
+                <td class="code">ASTM D6706</td>
+                <td>Pull-out resistance of geosynthetics in soil</td>
+              </tr>
+              <tr>
+                <td class="code">SATCC / EAC specs</td>
+                <td>SADC and East African Community road agency specifications</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <aside class="standards-side">
+            <h3>Our Infrastructure pack</h3>
+            <p>
+              Every project ships with documentation that the resident engineer, supervising
+              consultant and road agency need to sign off the geosynthetic component of the works.
+            </p>
+            <ul>
+              <li>Geosynthetic design report (signed)</li>
+              <li>Mill certificates per delivery</li>
+              <li>Method statement (per application)</li>
+              <li>Inspection &amp; Test Plan (ITP)</li>
+              <li>Daily installation diaries</li>
+              <li>Pull-out / CBR test results</li>
+              <li>As-built drawings</li>
+              <li>Material traceability matrix</li>
+              <li>Warranty registration</li>
+              <li>Operation &amp; Maintenance manual</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ § 6 — CLIENT TYPES (specific to Industry pages) ============ -->
+      <section class="section anno" id="clients">
+        <span class="anno-tag fixed">INDUSTRY-FIXED · client archetypes in this sector</span>
+        <div class="section-eyebrow"><span class="num">06</span>Who we work with</div>
+        <h2 class="section-title">
+          Built for the <span class="red">infrastructure delivery chain.</span>
+        </h2>
+        <p class="section-intro">
+          Infrastructure projects are delivered by a tightly-defined ecosystem of road agencies,
+          consulting engineers, EPCM contractors and civil specialists. We work directly with each,
+          in the role that suits the procurement route.
+        </p>
+
+        <div class="clients-grid">
+          <div class="client-card">
+            <div class="role">Public client</div>
+            <h4>Road Agencies</h4>
+            <p>
+              National and provincial road agencies. We are listed on framework agreements and
+              pre-qualified across multiple African jurisdictions.
+            </p>
+            <div class="typical"><strong>Typical engagement</strong>Framework / DBOM contracts</div>
+          </div>
+          <div class="client-card">
+            <div class="role">Public client</div>
+            <h4>Rail Authorities</h4>
+            <p>
+              Heavy haul and passenger rail operators. Track renewal and new alignment programmes —
+              formation reinforcement and drainage.
+            </p>
+            <div class="typical"><strong>Typical engagement</strong>Long-term supply contracts</div>
+          </div>
+          <div class="client-card">
+            <div class="role">Designer</div>
+            <h4>Consulting Engineers</h4>
+            <p>
+              Pre-tender design support, specification clauses, design calculations under BS 8006 /
+              AASHTO. Free service to specifiers.
+            </p>
+            <div class="typical"><strong>Typical engagement</strong>Design partner</div>
+          </div>
+          <div class="client-card">
+            <div class="role">Contractor</div>
+            <h4>EPCM &amp; Civil Contractors</h4>
+            <p>
+              Direct supply &amp; install sub-contract under main works. FIDIC sub-contract
+              conditions, BoQ-priced, programme-linked delivery.
+            </p>
+            <div class="typical">
+              <strong>Typical engagement</strong>Sub-contract / Supply &amp; fix
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ § 7 — PROJECTS ============ -->
+      <section class="section anno" id="projects">
+        <span class="anno-tag derived"
+          >AUTO-DERIVED · /projects where industries[] contains "Infrastructure"</span
+        >
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow"><span class="num">07</span>Projects</div>
+            <h2 class="section-title">
+              340+ infrastructure projects <span class="red">across 17 countries.</span>
+            </h2>
+            <p class="section-intro">
+              Selected references across the six sub-sectors. Full reference list available on
+              request — most projects under signed confidentiality.
+            </p>
+          </div>
+          <div class="right">
+            <a class="section-link" href="#">View all infrastructure projects</a>
+          </div>
+        </div>
+
+        <div class="project-grid">
+          <a class="project-card c1 feature" href="#">
+            <div class="img"></div>
+            <span class="subsec">Roads &amp; Highways</span>
+            <div class="scale">142 km · 2.1M m²</div>
+            <div class="body">
+              <div class="tag">National highway · TRH 4 design</div>
+              <h3>N1 Section 22 Pavement Reinforcement</h3>
+              <div class="loc">📍 Limpopo, South Africa · 2024</div>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+          <a class="project-card c2" href="#">
+            <div class="img"></div>
+            <span class="subsec">Railways</span>
+            <div class="scale">38 km</div>
+            <div class="body">
+              <div class="tag">Heavy haul · subballast reinforcement</div>
+              <h3>Kitwe–Ndola Rail Renewal</h3>
+              <div class="loc">📍 Zambia · 2024</div>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+          <a class="project-card c3" href="#">
+            <div class="img"></div>
+            <span class="subsec">Ports &amp; Harbours</span>
+            <div class="scale">180,000 m²</div>
+            <div class="body">
+              <div class="tag">Container yard reinforcement</div>
+              <h3>Port of Beira Terminal Expansion</h3>
+              <div class="loc">📍 Mozambique · 2023</div>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+          <a class="project-card c4" href="#">
+            <div class="img"></div>
+            <span class="subsec">Bridges</span>
+            <div class="scale">11 m approach</div>
+            <div class="body">
+              <div class="tag">Reinforced soil abutment</div>
+              <h3>Kazungula Bridge Approaches</h3>
+              <div class="loc">📍 Botswana–Zambia · 2022</div>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+          <a class="project-card c5" href="#">
+            <div class="img"></div>
+            <span class="subsec">Airports</span>
+            <div class="scale">68,000 m²</div>
+            <div class="body">
+              <div class="tag">Apron strengthening</div>
+              <h3>Kotoka Int'l Airport Apron Upgrade</h3>
+              <div class="loc">📍 Accra, Ghana · 2023</div>
+            </div>
+            <div class="arrow">→</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ============ § 8 — KNOWLEDGE ============ -->
+      <section class="section anno" id="knowledge">
+        <span class="anno-tag derived">AUTO-DERIVED · /resources tagged Infrastructure</span>
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow"><span class="num">08</span>Knowledge &amp; Documents</div>
+            <h2 class="section-title">
+              Design references for <span class="red">infrastructure engineers.</span>
+            </h2>
+            <p class="section-intro">
+              Downloadable design guides, agency-aligned specifications, and case studies relevant
+              to civil and transport works. Open access — no form gate.
+            </p>
+          </div>
+          <div class="right">
+            <a class="section-link" href="#">Browse all resources</a>
+          </div>
+        </div>
+
+        <div class="knowledge-layout">
+          <div class="docs-list">
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">PDF</div>
+              <div class="doc-body">
+                <strong>Geosynthetic Pavement Design Guide (TRH-4 aligned)</strong
+                ><span>Design example · base course reduction · acceptance testing</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">PDF</div>
+              <div class="doc-body">
+                <strong>Reinforced Soil Wall Design Manual (BS 8006 / AASHTO)</strong
+                ><span>Worked examples · stability checks · facing systems</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">PDF</div>
+              <div class="doc-body">
+                <strong>Infrastructure Project Portfolio (2020–2024)</strong
+                ><span>340+ references across 17 African countries · scale, scope, agency</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">PDF</div>
+              <div class="doc-body">
+                <strong>Geogrid Selection Guide for African Subgrades</strong
+                ><span>Subgrade CBR ranges · product selection by application</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">DOC</div>
+              <div class="doc-body">
+                <strong>NBS / COTO Specification Clauses (paste-in)</strong
+                ><span>Per application, structured for direct insertion into project specs</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+            <a class="doc-row" href="#"
+              ><div class="doc-icon">XLS</div>
+              <div class="doc-body">
+                <strong>Pavement Design Calculator (Excel)</strong
+                ><span>Geosynthetic credit calculation · base course saving · cost-benefit</span>
+              </div>
+              <div class="doc-arrow">↓</div></a
+            >
+          </div>
+
+          <aside class="articles-side">
+            <h3>Featured articles</h3>
+            <a class="article-item" href="#">
+              <div class="tag">Article · 10 min read</div>
+              <h4>What TRH 4's geosynthetic credit really means for your base course saving</h4>
+              <div class="meta">Published Apr 2026 · Engineering team</div>
+            </a>
+            <a class="article-item" href="#">
+              <div class="tag">Case study</div>
+              <h4>How a triaxial geogrid cut 80 mm off the base course on the N1 Section 22</h4>
+              <div class="meta">Published Feb 2026</div>
+            </a>
+            <a class="article-item" href="#">
+              <div class="tag">Technical note</div>
+              <h4>Designing reinforced soil walls for African seismic zones — BS 8006 vs AASHTO</h4>
+              <div class="meta">Published Dec 2025</div>
+            </a>
+            <a class="article-item" href="#">
+              <div class="tag">Article</div>
+              <h4>Working with road agencies: what gets a geosynthetic spec approved first time</h4>
+              <div class="meta">Published Oct 2025</div>
+            </a>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ § 9 — RELATED INDUSTRIES ============ -->
+      <section class="section anno" id="related">
+        <span class="anno-tag cross">CROSS-LINK · sibling industries</span>
+        <div class="section-eyebrow"><span class="num">09</span>Other industries we serve</div>
+        <h2 class="section-title">Same engineering. <span class="red">Different sector.</span></h2>
+        <p class="section-intro">
+          The geosynthetic principles that work for highway and rail formations apply across every
+          sector where ground performance matters. Browse adjacent industries below.
+        </p>
+
+        <div class="related-industries">
+          <a class="related-industry" href="#">
+            <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2L2 7v6c0 5 3.6 9.6 8.4 11.2L12 25l1.6-.8C18.4 22.6 22 18 22 13V7l-10-5z"
+              />
+            </svg>
+            <h4>Mining</h4>
+            <p>
+              TSFs, heap leach pads, haul roads, closure. The continent's biggest geosynthetics
+              consumer.
+            </p>
+            <span class="view">View industry →</span>
+          </a>
+          <a class="related-industry" href="#">
+            <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6 8 4 12 4 16c0 4 4 6 8 6s8-2 8-6c0-4-2-8-8-14z" />
+            </svg>
+            <h4>Water &amp; Wastewater</h4>
+            <p>Reservoirs, treatment ponds, canals, evaporation cells. Containment and lining.</p>
+            <span class="view">View industry →</span>
+          </a>
+          <a class="related-industry" href="#">
+            <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.4 0 .62.19.4.66C12.97 17.55 11 21 11 21z"
+              />
+            </svg>
+            <h4>Energy</h4>
+            <p>Coal ash storage, oil &amp; gas facilities, biofuel, solar farm ground prep.</p>
+            <span class="view">View industry →</span>
+          </a>
+          <a class="related-industry" href="#">
+            <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 8C8 10 5.9 16.2 3.5 22h2L8 16h13l-4-8zM6 18l1-2h2l-1 2H6z" />
+            </svg>
+            <h4>Environmental</h4>
+            <p>Landfills, capping, remediation, closure works. Compliance-led containment.</p>
+            <span class="view">View industry →</span>
+          </a>
+          <a class="related-industry" href="#">
+            <svg class="ico" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 22s8-4 8-12V4l-8-2-8 2v6c0 8 8 12 8 12z" />
+            </svg>
+            <h4>Agriculture</h4>
+            <p>
+              Irrigation canal lining, dam construction, livestock containment, slope protection.
+            </p>
+            <span class="view">View industry →</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ BOQ CTA ============ -->
+    <section class="boq-cta anno">
+      <span class="anno-tag global">GLOBAL</span>
+      <div class="boq-cta-inner">
+        <div>
+          <h2>Pricing an infrastructure tender?</h2>
+          <div class="lead">Get a designed geosynthetic component — not just a unit rate.</div>
+          <p>
+            Upload tender documents, drawings, BoQ or the project memorandum. Our infrastructure
+            team will return with a design proposal, product specification, installation
+            methodology, indicative pricing and reference projects — within 5 working days.
+          </p>
+        </div>
+        <div class="boq-cta-actions">
+          <a href="#" class="btn">↑ Upload Tender Pack</a>
+          <a href="#" class="btn">Book a Design Review</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer anno">
+      <span class="anno-tag global">GLOBAL</span>
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="#" class="brand-logo">
+              <svg class="africa-icon" viewBox="0 0 32 36" fill="#DC2626">
+                <path
+                  d="M14.5 1.5c-2.5.5-5 2-6.5 4-2 2.5-3 5.5-2.5 8.5.5 2 2 4 3.5 5 1 1 1.5 2 1 3.5-.5 1.5-1 3.5 0 5 1 1.5 3 2 5 2.5 1.5.5 2.5 1 3 2.5.5 1.5 1.5 2 3 2 1.5 0 2.5-1 3-2.5.5-2.5 0-5-1-7-1-2.5-2-5-1.5-7.5.5-2.5 2-4.5 1.5-7.5-.5-3-3-5.5-6-6.5-1.5-.5-3-.5-4.5-.5z"
+                />
+              </svg>
+              <div class="brand-text">
+                <span class="name" style="color: white">GEOSYNTHETICS</span>
+                <span class="sub">AFRICA</span>
+              </div>
+            </a>
+            <p>
+              Africa's integrated geosynthetics platform — designed, supplied, installed, tested and
+              certified across the continent.
+            </p>
+            <div class="footer-socials">
+              <a href="#">in</a><a href="#">f</a><a href="#">ig</a><a href="#">▶</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Products</h4>
+            <ul>
+              <li><a href="#">Geomembranes</a></li>
+              <li><a href="#">Geotextiles</a></li>
+              <li><a href="#">Geogrids</a></li>
+              <li><a href="#">Geocells</a></li>
+              <li><a href="#">GCLs</a></li>
+              <li><a href="#">Drainage</a></li>
+              <li><a href="#">All Products</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Applications</h4>
+            <ul>
+              <li><a href="#">TSFs</a></li>
+              <li><a href="#">Heap Leach</a></li>
+              <li><a href="#">Reservoirs</a></li>
+              <li><a href="#">Landfills</a></li>
+              <li><a href="#">Roads</a></li>
+              <li><a href="#">Erosion</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Industries</h4>
+            <ul>
+              <li><a href="#">Mining</a></li>
+              <li><a href="#">Water</a></li>
+              <li><a href="#" style="color: var(--red)">Infrastructure ★</a></li>
+              <li><a href="#">Energy</a></li>
+              <li><a href="#">Environmental</a></li>
+              <li><a href="#">Agriculture</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <ul>
+              <li><a href="#">Supply</a></li>
+              <li><a href="#">Installation</a></li>
+              <li><a href="#">QA / QC</a></li>
+              <li><a href="#">Design</a></li>
+              <li><a href="#">Logistics</a></li>
+              <li><a href="#">After Sales</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Datasheets</a></li>
+              <li><a href="#">Install Guides</a></li>
+              <li><a href="#">QA Checklists</a></li>
+              <li><a href="#">Articles</a></li>
+              <li><a href="#">Videos</a></li>
+              <li><a href="#">FAQs</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">News</a></li>
+              <li><a href="#">Sustainability</a></li>
+              <li><a href="#">Privacy</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="badges">
+            <span>IAGI Member — One of only 5 in Africa</span><span>B-BBEE Level 2</span
+            ><span>Pan-African Logistics</span><span>QA/QC Certified</span>
+          </div>
+          <div>© 2026 Geosynthetics Africa (Pty) Ltd. All Rights Reserved.</div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const facets = document.querySelectorAll(".facet-link");
+      const sections = document.querySelectorAll(".section");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const id = e.target.id;
+              facets.forEach((f) =>
+                f.classList.toggle("active", f.getAttribute("href") === "#" + id),
+              );
+            }
+          });
+        },
+        { rootMargin: "-30% 0px -60% 0px" },
+      );
+      sections.forEach((s) => obs.observe(s));
+    </script>
+  </body>
 </html>

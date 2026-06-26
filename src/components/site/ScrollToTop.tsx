@@ -12,7 +12,8 @@ export function ScrollToTop() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const winScroll = window.scrollY;
-          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const height =
+            document.documentElement.scrollHeight - document.documentElement.clientHeight;
 
           if (height > 0) {
             const scrolled = Math.min(100, Math.max(0, (winScroll / height) * 100));
@@ -48,14 +49,17 @@ export function ScrollToTop() {
   const circumference = 2 * Math.PI * radius;
   // Prevent NaN when progress is 0/undefined
   const safeProgress = Number.isNaN(progress) ? 0 : progress;
-  const strokeDashoffset = Math.max(0, Math.min(circumference, circumference - (safeProgress / 100) * circumference));
+  const strokeDashoffset = Math.max(
+    0,
+    Math.min(circumference, circumference - (safeProgress / 100) * circumference),
+  );
 
   return (
     <button
       onClick={scrollToTop}
       className={cn(
         "fixed bottom-6 right-6 z-50 group flex items-center justify-center transition-all duration-500 ease-in-out hover:cursor-pointer",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none",
       )}
       aria-label="Back to top"
     >

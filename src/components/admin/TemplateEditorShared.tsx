@@ -15,11 +15,7 @@ import { ProductSelector } from "./ProductSelector";
 // Generic hook that provides add/update/remove helpers for any array field.
 // Eliminates the duplicated add/update/remove boilerplate across all sub-editors.
 
-export function useListEditor<T>(
-  items: T[],
-  onChange: (v: T[]) => void,
-  makeDefault: () => T,
-) {
+export function useListEditor<T>(items: T[], onChange: (v: T[]) => void, makeDefault: () => T) {
   const add = () => onChange([...items, makeDefault()]);
 
   const update = (index: number, key: keyof T, value: T[keyof T]) => {
@@ -92,21 +88,13 @@ export function ItemCard({
 // Shown inside a list editor when there are no items yet.
 
 export function EmptyState({ message }: { message: string }) {
-  return (
-    <p className="text-xs text-muted-foreground italic pl-1">{message}</p>
-  );
+  return <p className="text-xs text-muted-foreground italic pl-1">{message}</p>;
 }
 
 // ─── AddItemButton ────────────────────────────────────────────────────────────
 // The standard "add item" button at the bottom of list editors.
 
-export function AddItemButton({
-  onClick,
-  label,
-}: {
-  onClick: () => void;
-  label: string;
-}) {
+export function AddItemButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <Button
       variant="outline"
@@ -147,7 +135,6 @@ export function ListEditorHeader({
     </div>
   );
 }
-
 
 // ─── SectionHeading ───────────────────────────────────────────────────────────
 
@@ -274,11 +261,21 @@ export function PairsEditor<T extends Record<string, string>>({
   label: string;
   hint?: string;
   items: T[];
-  fields: { key: string; label: string; multiline?: boolean; type?: "image" | "text" | "textarea" | "icon" | "project" | "product"; placeholder?: string }[];
+  fields: {
+    key: string;
+    label: string;
+    multiline?: boolean;
+    type?: "image" | "text" | "textarea" | "icon" | "project" | "product";
+    placeholder?: string;
+  }[];
   onChange: (v: T[]) => void;
   newItem?: T;
 }) {
-  const add = () => onChange([...items, newItem ? { ...newItem } : (Object.fromEntries(fields.map(f => [f.key, ""])) as T)]);
+  const add = () =>
+    onChange([
+      ...items,
+      newItem ? { ...newItem } : (Object.fromEntries(fields.map((f) => [f.key, ""])) as T),
+    ]);
   const update = (i: number, key: string, val: string) => {
     const n = [...items];
     n[i] = { ...n[i], [key]: val };
@@ -316,13 +313,22 @@ export function PairsEditor<T extends Record<string, string>>({
             <div
               className={cn(
                 "grid gap-2",
-                fields.length >= 3
-                  ? "grid-cols-1"
-                  : "grid-cols-2 md:grid-cols-" + fields.length,
+                fields.length >= 3 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-" + fields.length,
               )}
             >
               {fields.map((f) => (
-                <div key={f.key} className={f.multiline || f.type === "image" || f.type === "icon" || f.type === "project" || f.type === "product" ? "col-span-full" : ""}>
+                <div
+                  key={f.key}
+                  className={
+                    f.multiline ||
+                    f.type === "image" ||
+                    f.type === "icon" ||
+                    f.type === "project" ||
+                    f.type === "product"
+                      ? "col-span-full"
+                      : ""
+                  }
+                >
                   <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
                     {f.label}
                   </label>
@@ -341,7 +347,11 @@ export function PairsEditor<T extends Record<string, string>>({
                   ) : f.type === "project" ? (
                     <ProjectSelector
                       className="w-full justify-between h-9 text-xs bg-surface border border-border hover:bg-accent/10 font-medium"
-                      placeholder={(item as any)[f.key] ? `Linked: ${(item as any)[f.key]}` : "Link to Case Study / Project..."}
+                      placeholder={
+                        (item as any)[f.key]
+                          ? `Linked: ${(item as any)[f.key]}`
+                          : "Link to Case Study / Project..."
+                      }
                       onSelect={(project) => {
                         const n = [...items];
                         const updatedItem = { ...n[i] };
@@ -355,7 +365,8 @@ export function PairsEditor<T extends Record<string, string>>({
                           updatedItem["location" as keyof T] = (project.country || "") as any;
                         }
                         if ("year" in updatedItem) {
-                          updatedItem["year" as keyof T] = (project.project_year?.toString() || "") as any;
+                          updatedItem["year" as keyof T] = (project.project_year?.toString() ||
+                            "") as any;
                         }
                         if ("image" in updatedItem) {
                           updatedItem["image" as keyof T] = (project.hero_image_url || "") as any;
@@ -440,12 +451,10 @@ export function PropertiesTableEditor({
 }) {
   const { headers, rows } = table;
 
-  const addRow = () =>
-    onChange({ headers, rows: [...rows, Array(headers.length).fill("")] });
+  const addRow = () => onChange({ headers, rows: [...rows, Array(headers.length).fill("")] });
   const addCol = () =>
     onChange({ headers: [...headers, "New Column"], rows: rows.map((r) => [...r, ""]) });
-  const removeRow = (i: number) =>
-    onChange({ headers, rows: rows.filter((_, idx) => idx !== i) });
+  const removeRow = (i: number) => onChange({ headers, rows: rows.filter((_, idx) => idx !== i) });
   const removeCol = (j: number) =>
     onChange({
       headers: headers.filter((_, idx) => idx !== j),
@@ -544,37 +553,69 @@ export function PropertiesTableEditor({
 
 // ─── FAQEditor ────────────────────────────────────────────────────────────────
 
-interface FAQ { question: string; answer: string; }
-interface FAQEditorProps { faqs: FAQ[]; onChange: (faqs: FAQ[]) => void; }
+interface FAQ {
+  question: string;
+  answer: string;
+}
+interface FAQEditorProps {
+  faqs: FAQ[];
+  onChange: (faqs: FAQ[]) => void;
+}
 
 export function FAQEditor({ faqs, onChange }: FAQEditorProps) {
   const add = () => onChange([...faqs, { question: "", answer: "" }]);
   const update = (i: number, field: keyof FAQ, val: string) => {
-    const n = [...faqs]; n[i] = { ...n[i], [field]: val }; onChange(n);
+    const n = [...faqs];
+    n[i] = { ...n[i], [field]: val };
+    onChange(n);
   };
   const remove = (i: number) => onChange(faqs.filter((_, idx) => idx !== i));
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-1">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">FAQs</label>
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          FAQs
+        </label>
         <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary">
           <Plus className="h-3 w-3 mr-1" /> Add FAQ
         </Button>
       </div>
       <div className="space-y-3">
         {faqs.map((faq, i) => (
-          <div key={i} className="border border-border rounded p-3 bg-surface/50 space-y-2 relative">
-            <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10" onClick={() => remove(i)}>
+          <div
+            key={i}
+            className="border border-border rounded p-3 bg-surface/50 space-y-2 relative"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
+              onClick={() => remove(i)}
+            >
               <Trash2 className="h-3 w-3" />
             </Button>
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground">Question</label>
-              <Input value={faq.question} onChange={e => update(i, "question", e.target.value)} className="mt-1 text-sm" placeholder="e.g. What is the lifespan?" />
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">
+                Question
+              </label>
+              <Input
+                value={faq.question}
+                onChange={(e) => update(i, "question", e.target.value)}
+                className="mt-1 text-sm"
+                placeholder="e.g. What is the lifespan?"
+              />
             </div>
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground">Answer</label>
-              <Textarea value={faq.answer} onChange={e => update(i, "answer", e.target.value)} className="mt-1 text-sm min-h-[80px]" placeholder="Detailed answer..." />
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">
+                Answer
+              </label>
+              <Textarea
+                value={faq.answer}
+                onChange={(e) => update(i, "answer", e.target.value)}
+                className="mt-1 text-sm min-h-[80px]"
+                placeholder="Detailed answer..."
+              />
             </div>
           </div>
         ))}
@@ -586,36 +627,83 @@ export function FAQEditor({ faqs, onChange }: FAQEditorProps) {
 
 // ─── QuickActionsEditor ───────────────────────────────────────────────────────
 
-interface QA { title: string; description: string; icon: string; to: string; }
+interface QA {
+  title: string;
+  description: string;
+  icon: string;
+  to: string;
+}
 
-export function QuickActionsEditor({ items, onChange }: { items: QA[]; onChange: (i: QA[]) => void }) {
+export function QuickActionsEditor({
+  items,
+  onChange,
+}: {
+  items: QA[];
+  onChange: (i: QA[]) => void;
+}) {
   const add = () => onChange([...items, { title: "", description: "", icon: "BookOpen", to: "/" }]);
   const update = (i: number, key: keyof QA, val: string) => {
-    const n = [...items]; n[i] = { ...n[i], [key]: val }; onChange(n);
+    const n = [...items];
+    n[i] = { ...n[i], [key]: val };
+    onChange(n);
   };
   const remove = (i: number) => onChange(items.filter((_, idx) => idx !== i));
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-1">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Quick Actions</label>
-        <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary"><Plus className="h-3 w-3 mr-1" />Add</Button>
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Quick Actions
+        </label>
+        <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary">
+          <Plus className="h-3 w-3 mr-1" />
+          Add
+        </Button>
       </div>
       <div className="grid md:grid-cols-2 gap-2">
         {items.map((qa, i) => (
-          <div key={i} className="border border-border rounded p-3 bg-surface/50 space-y-2 relative">
-            <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-6 w-6 text-destructive" onClick={() => remove(i)}>
+          <div
+            key={i}
+            className="border border-border rounded p-3 bg-surface/50 space-y-2 relative"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-6 w-6 text-destructive"
+              onClick={() => remove(i)}
+            >
               <Trash2 className="h-3 w-3" />
             </Button>
-            <Input placeholder="Title" value={qa.title} onChange={e => update(i, "title", e.target.value)} className="text-sm" />
-            <Input placeholder="Description" value={qa.description} onChange={e => update(i, "description", e.target.value)} className="text-sm" />
+            <Input
+              placeholder="Title"
+              value={qa.title}
+              onChange={(e) => update(i, "title", e.target.value)}
+              className="text-sm"
+            />
+            <Input
+              placeholder="Description"
+              value={qa.description}
+              onChange={(e) => update(i, "description", e.target.value)}
+              className="text-sm"
+            />
             <div className="grid grid-cols-2 gap-2">
-              <IconPicker placeholder="Select Icon" value={qa.icon} onChange={v => update(i, "icon", v)} />
-              <Input placeholder="/link-to" value={qa.to} onChange={e => update(i, "to", e.target.value)} className="text-sm" />
+              <IconPicker
+                placeholder="Select Icon"
+                value={qa.icon}
+                onChange={(v) => update(i, "icon", v)}
+              />
+              <Input
+                placeholder="/link-to"
+                value={qa.to}
+                onChange={(e) => update(i, "to", e.target.value)}
+                className="text-sm"
+              />
             </div>
           </div>
         ))}
-        {items.length === 0 && <p className="text-xs text-muted-foreground italic">No quick actions.</p>}
+        {items.length === 0 && (
+          <p className="text-xs text-muted-foreground italic">No quick actions.</p>
+        )}
       </div>
     </div>
   );
@@ -623,7 +711,10 @@ export function QuickActionsEditor({ items, onChange }: { items: QA[]; onChange:
 
 // ─── SectionsEditor ─────────────────────────────────────────────────────────
 
-interface ContentSection { title: string; body: string; }
+interface ContentSection {
+  title: string;
+  body: string;
+}
 interface SectionsEditorProps {
   sections: ContentSection[];
   onChange: (sections: ContentSection[]) => void;
@@ -641,28 +732,54 @@ export function SectionsEditor({ sections, onChange }: SectionsEditorProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between mb-1">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Custom Rich Text Sections</label>
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Custom Rich Text Sections
+        </label>
         <Button variant="ghost" size="sm" onClick={add} className="h-6 text-xs text-primary">
           <Plus className="h-3 w-3 mr-1" /> Add Section
         </Button>
       </div>
       <div className="space-y-4">
         {sections.map((section, i) => (
-          <div key={i} className="border border-border rounded p-3 bg-surface/50 space-y-2 relative">
-            <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10" onClick={() => remove(i)}>
+          <div
+            key={i}
+            className="border border-border rounded p-3 bg-surface/50 space-y-2 relative"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
+              onClick={() => remove(i)}
+            >
               <Trash2 className="h-3 w-3" />
             </Button>
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground">Section Title</label>
-              <Input value={section.title} onChange={e => update(i, "title", e.target.value)} className="mt-1 text-sm font-semibold" placeholder="e.g. Design Support Services" />
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">
+                Section Title
+              </label>
+              <Input
+                value={section.title}
+                onChange={(e) => update(i, "title", e.target.value)}
+                className="mt-1 text-sm font-semibold"
+                placeholder="e.g. Design Support Services"
+              />
             </div>
             <div>
-              <label className="text-[10px] font-bold uppercase text-muted-foreground">Section Body (Supports basic HTML/text formatting)</label>
-              <Textarea value={section.body} onChange={e => update(i, "body", e.target.value)} className="mt-1 text-sm min-h-[100px]" placeholder="<p>Our team works closely with engineers to...</p>" />
+              <label className="text-[10px] font-bold uppercase text-muted-foreground">
+                Section Body (Supports basic HTML/text formatting)
+              </label>
+              <Textarea
+                value={section.body}
+                onChange={(e) => update(i, "body", e.target.value)}
+                className="mt-1 text-sm min-h-[100px]"
+                placeholder="<p>Our team works closely with engineers to...</p>"
+              />
             </div>
           </div>
         ))}
-        {sections.length === 0 && <p className="text-xs text-muted-foreground italic">No custom sections yet.</p>}
+        {sections.length === 0 && (
+          <p className="text-xs text-muted-foreground italic">No custom sections yet.</p>
+        )}
       </div>
     </div>
   );
@@ -804,4 +921,3 @@ export function TemplatesEditorSkeleton() {
     </div>
   );
 }
-

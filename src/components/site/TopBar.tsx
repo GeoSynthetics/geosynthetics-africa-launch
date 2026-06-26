@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Award, ShieldCheck, Globe, Truck, ChevronDown, User as UserIcon, LogOut, Upload } from "lucide-react";
+import {
+  Award,
+  ShieldCheck,
+  Globe,
+  Truck,
+  ChevronDown,
+  User as UserIcon,
+  LogOut,
+  Upload,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
@@ -90,8 +99,9 @@ function MobilePerksSlider() {
 
   return (
     <div
-      className={`md:hidden flex items-center gap-2 opacity-90 transition-all duration-500 min-w-0 ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
-        }`}
+      className={`md:hidden flex items-center gap-2 opacity-90 transition-all duration-500 min-w-0 ${
+        fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+      }`}
     >
       <Icon className="h-3.5 w-3.5 text-primary flex-shrink-0" />
       <span className="truncate">{item.label}</span>
@@ -139,4 +149,3 @@ export function TopBar() {
     </div>
   );
 }
-

@@ -24,10 +24,10 @@ export function PartnerStrip({
       <div className="container-page py-10">
         <div className="flex flex-col lg:flex-row lg:items-center gap-6">
           <div className="lg:w-1/4">
-            <p className="text-xs font-bold uppercase tracking-wider text-primary">
-              {subtitle}
-            </p>
-            <p className={`mt-1 text-sm ${dark ? "text-surface-dark-foreground/70" : "text-muted-foreground"}`}>
+            <p className="text-xs font-bold uppercase tracking-wider text-primary">{subtitle}</p>
+            <p
+              className={`mt-1 text-sm ${dark ? "text-surface-dark-foreground/70" : "text-muted-foreground"}`}
+            >
               {description}
             </p>
           </div>

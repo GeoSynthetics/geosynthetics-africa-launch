@@ -6,14 +6,29 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
-  Plus, Trash2, Search, ChevronLeft
+  Save,
+  Loader2,
+  ExternalLink,
+  Eye,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Plus,
+  Trash2,
+  Search,
+  ChevronLeft,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
-import { SectionHeading, FieldLabel, StringListEditor, PairsEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
+import {
+  SectionHeading,
+  FieldLabel,
+  StringListEditor,
+  PairsEditor,
+  TemplatesEditorSkeleton,
+} from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
@@ -53,7 +68,7 @@ export interface ServiceTemplate {
   badge?: string;
   topSellingProductId?: string;
   topSellingProductIds?: string[];
-  
+
   // Left Column Content
   overviewParagraphs?: string[];
   whyChooseTitle?: string;
@@ -65,7 +80,7 @@ export interface ServiceTemplate {
   coverageBullets?: string[];
   coverageImage?: string;
   coverageCaption?: string;
-  
+
   // Right Column Sidebar Content
   sidebarImage?: string;
   sidebarCaption?: string;
@@ -80,18 +95,18 @@ export interface ServiceTemplate {
   afcftaItems?: string[];
   playbookTitle?: string;
   playbookItems?: BulletItem[];
-  
+
   // Bottom Stats Row
   statsTitle?: string;
   statsDescription?: string;
   stats?: StatItem[];
-  
+
   // Products & Downloads
   productsTitle?: string;
   products?: string[];
   downloadsTitle?: string;
   downloads?: DownloadItem[];
-  
+
   // Landing Page Specific Fields
   landingTitle?: string;
   landingSubtitle?: string;
@@ -102,9 +117,9 @@ export interface ServiceTemplate {
   ctaTitle?: string;
   ctaButtonText?: string;
   ctaButtonUrl?: string;
-  
+
   seo: ServiceSeo | null;
-  
+
   // Legacy fields
   content?: {
     features: string[];
@@ -126,7 +141,7 @@ function blankTemplate(): ServiceTemplate {
     badge: "Services",
     topSellingProductId: "",
     topSellingProductIds: [],
-    
+
     overviewParagraphs: [],
     whyChooseTitle: "Why Choose Geosynthetics Africa?",
     whyChoose: [],
@@ -137,7 +152,7 @@ function blankTemplate(): ServiceTemplate {
     coverageBullets: [],
     coverageImage: "",
     coverageCaption: "",
-    
+
     sidebarImage: "",
     sidebarCaption: "",
     directModelTitle: "Direct Model. Direct Support. No Distributors.",
@@ -151,21 +166,22 @@ function blankTemplate(): ServiceTemplate {
     afcftaItems: [],
     playbookTitle: "Logistics Playbook",
     playbookItems: [],
-    
+
     statsTitle: "Pan-African Delivery and Installation Support",
     statsDescription: "",
     stats: [
       { value: "2+", label: "Export Countries" },
-      { value: "19+", label: "Delivery Areas" }
+      { value: "19+", label: "Delivery Areas" },
     ],
-    
+
     productsTitle: "Products Supplied",
     products: [],
     downloadsTitle: "Technical Downloads & Guides",
     downloads: [],
-    
+
     landingTitle: "Pan-African Geosynthetics Delivery, Installation & Support",
-    landingSubtitle: "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
+    landingSubtitle:
+      "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
     landingHeroImage: "",
     capabilitiesTitle: "Our Logistics & Installation Capabilities",
     capabilities: [],
@@ -173,7 +189,7 @@ function blankTemplate(): ServiceTemplate {
     ctaTitle: "Let us help you!",
     ctaButtonText: "Contact Us",
     ctaButtonUrl: "/contacts",
-    
+
     seo: {
       title: "",
       description: "",
@@ -187,7 +203,9 @@ function blankTemplate(): ServiceTemplate {
 
 export function ServicesTemplatesEditor() {
   const [allData, setAllData] = useState<AllServiceTemplates>({});
-  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
+  const [hierarchyItems, setHierarchyItems] = useState<
+    { id: string; slug: string; label: string }[]
+  >([]);
   const [rawHierarchy, setRawHierarchy] = useState<any>(null);
   const [hierarchyDirty, setHierarchyDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("");
@@ -195,7 +213,9 @@ export function ServicesTemplatesEditor() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
-  const [serviceToDelete, setServiceToDelete] = useState<{ slug: string; label: string } | null>(null);
+  const [serviceToDelete, setServiceToDelete] = useState<{ slug: string; label: string } | null>(
+    null,
+  );
 
   // Search and Pagination states
   const [searchQuery, setSearchQuery] = useState("");
@@ -218,13 +238,18 @@ export function ServicesTemplatesEditor() {
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
     const list = hierarchyItems.map((item) => ({ slug: item.slug, label: item.label }));
-    
+
     // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
       if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
           slug,
-          label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          label:
+            allData[slug]?.title ||
+            slug
+              .split("-")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" "),
         });
       }
     });
@@ -236,7 +261,12 @@ export function ServicesTemplatesEditor() {
         if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
           fallbackList.push({
             slug,
-            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+            label:
+              allData[slug]?.title ||
+              slug
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" "),
           });
         }
       });
@@ -274,10 +304,7 @@ export function ServicesTemplatesEditor() {
   // Load products from DB
   useEffect(() => {
     async function fetchProducts() {
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, slug")
-        .order("name");
+      const { data } = await supabase.from("products").select("id, name, slug").order("name");
       if (data) setAllProducts(data);
     }
     fetchProducts();
@@ -293,10 +320,12 @@ export function ServicesTemplatesEditor() {
       .select("value")
       .eq("key", "hierarchy_services")
       .maybeSingle();
-    
+
     const defaults = getDefaultSections();
-    const defaultServices = defaults.find(d => d.key === "services")!;
-    const hierarchy = (hierarchyRow?.value as any)?.items ? (hierarchyRow?.value as any) : defaultServices;
+    const defaultServices = defaults.find((d) => d.key === "services")!;
+    const hierarchy = (hierarchyRow?.value as any)?.items
+      ? (hierarchyRow?.value as any)
+      : defaultServices;
     setRawHierarchy(hierarchy);
     const hItems = (hierarchy.items || []).map((item: any) => ({
       id: item.id,
@@ -317,11 +346,12 @@ export function ServicesTemplatesEditor() {
       const stored = (data?.value ?? {}) as AllServiceTemplates;
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllServiceTemplates = { ...stored };
-      
+
       // Use hierarchy items for seeding, fallback to static services if empty
-      const seedSource = hItems.length > 0
-        ? hItems.map((item: any) => ({ slug: item.slug, label: item.label }))
-        : SERVICES;
+      const seedSource =
+        hItems.length > 0
+          ? hItems.map((item: any) => ({ slug: item.slug, label: item.label }))
+          : SERVICES;
 
       for (const svc of seedSource) {
         if (!seeded[svc.slug]) {
@@ -335,7 +365,7 @@ export function ServicesTemplatesEditor() {
               title: seeded[svc.slug].seo?.title || "",
               description: seeded[svc.slug].seo?.description || "",
               keywords: seeded[svc.slug].seo?.keywords || "",
-            }
+            },
           };
         }
       }
@@ -344,12 +374,14 @@ export function ServicesTemplatesEditor() {
         seeded["__landing"] = {
           ...blankTemplate(),
           title: "Pan-African Geosynthetics Delivery, Installation & Support",
-          description: "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
+          description:
+            "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
           seo: {
             title: "Services — Geosynthetics Africa",
-            description: "Pan-African supply, installation and QA/QC of geosynthetics systems across mining, infrastructure and environmental projects.",
+            description:
+              "Pan-African supply, installation and QA/QC of geosynthetics systems across mining, infrastructure and environmental projects.",
             keywords: "geosynthetics installation, geomembrane welding, SANS 1526, leak detection",
-          }
+          },
         };
       } else {
         seeded["__landing"] = {
@@ -373,18 +405,25 @@ export function ServicesTemplatesEditor() {
 
   const handleAddNew = () => {
     if (!newSlug.trim()) return;
-    const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
-    
-    if (allData[slug] || hierarchyItems.some(item => item.slug === slug || item.id === slug)) {
+    const slug = newSlug
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-");
+
+    if (allData[slug] || hierarchyItems.some((item) => item.slug === slug || item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
 
-    const label = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-    
-    setAllData(prev => ({
+    const label = slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    setAllData((prev) => ({
       ...prev,
-      [slug]: { ...blankTemplate(), title: label }
+      [slug]: { ...blankTemplate(), title: label },
     }));
     setActiveSlug(slug);
     setNewSlug("");
@@ -399,7 +438,7 @@ export function ServicesTemplatesEditor() {
       return;
     }
 
-    setAllData(prev => {
+    setAllData((prev) => {
       const next = { ...prev };
       delete next[slug];
       return next;
@@ -407,7 +446,7 @@ export function ServicesTemplatesEditor() {
 
     if (rawHierarchy) {
       const updatedItems = (rawHierarchy.items || []).filter(
-        (item: any) => item.id !== slug && item.slug !== slug
+        (item: any) => item.id !== slug && item.slug !== slug,
       );
       const updatedHierarchy = { ...rawHierarchy, items: updatedItems };
       setRawHierarchy(updatedHierarchy);
@@ -416,7 +455,7 @@ export function ServicesTemplatesEditor() {
           id: item.id,
           slug: item.slug || item.id,
           label: item.label,
-        }))
+        })),
       );
       setHierarchyDirty(true);
     }
@@ -431,7 +470,7 @@ export function ServicesTemplatesEditor() {
   // ── Save to Supabase ──
   const handleSave = async () => {
     setSaving(true);
-    
+
     const { error: templateError } = await supabase
       .from("site_config")
       .upsert({ key: SUPABASE_KEY, value: allData as any }, { onConflict: "key" });
@@ -446,9 +485,9 @@ export function ServicesTemplatesEditor() {
 
     if (templateError || hierarchyError) {
       toast.error(
-        "Save failed: " + 
-        (templateError?.message || "") + 
-        (hierarchyError ? " | Hierarchy: " + hierarchyError.message : "")
+        "Save failed: " +
+          (templateError?.message || "") +
+          (hierarchyError ? " | Hierarchy: " + hierarchyError.message : ""),
       );
     } else {
       toast.success("Service templates and navigation saved successfully!");
@@ -535,25 +574,42 @@ export function ServicesTemplatesEditor() {
                 <Input
                   placeholder="e.g. customized-delivery"
                   value={newSlug}
-                  onChange={e => setNewSlug(formatSlugInput(e.target.value))}
-                  onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                  onChange={(e) => setNewSlug(formatSlugInput(e.target.value))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAddNew();
+                    if (e.key === "Escape") setShowNewSlug(false);
+                  }}
                   className="text-xs h-8"
                   autoFocus
                 />
                 <div className="flex gap-1">
-                  <Button size="sm" onClick={handleAddNew}
-                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer">
+                  <Button
+                    size="sm"
+                    onClick={handleAddNew}
+                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer"
+                  >
                     Create
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
-                    className="h-7 text-xs cursor-pointer">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowNewSlug(false);
+                      setNewSlug("");
+                    }}
+                    className="h-7 text-xs cursor-pointer"
+                  >
                     Cancel
                   </Button>
                 </div>
               </div>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
-                className="w-full h-8 text-xs gap-1.5 cursor-pointer">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowNewSlug(true)}
+                className="w-full h-8 text-xs gap-1.5 cursor-pointer"
+              >
                 <Plus className="h-3 w-3" /> New Template
               </Button>
             )}
@@ -593,9 +649,7 @@ export function ServicesTemplatesEditor() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-medium text-xs">Services Landing Page</div>
-                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
-                    /services
-                  </div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">/services</div>
                 </div>
                 {activeSlug === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
               </button>
@@ -604,7 +658,11 @@ export function ServicesTemplatesEditor() {
             {/* Categories Section */}
             <div className="space-y-1">
               <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Services Categories ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
+                Services Categories (
+                {filteredCategories.length !== categoriesList.length
+                  ? `${filteredCategories.length}/${categoriesList.length}`
+                  : categoriesList.length}
+                )
               </p>
               <div className="space-y-0.5">
                 {paginatedCategories.map((svc) => {
@@ -662,7 +720,7 @@ export function ServicesTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -674,7 +732,7 @@ export function ServicesTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -697,20 +755,33 @@ export function ServicesTemplatesEditor() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                 <div>
                   <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                    {activeSlug === "__landing" ? "Services Landing Page" : (active.title || activeSlug)}
+                    {activeSlug === "__landing"
+                      ? "Services Landing Page"
+                      : active.title || activeSlug}
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1">
                     <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
                       {activeSlug === "__landing" ? "/services" : `/${activeSlug}`}
                     </code>
                     {dirty && (
-                      <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
+                      <span className="text-[10px] text-amber-500 font-bold">
+                        ● Unsaved Changes
+                      </span>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
-                    <a href={activeSlug === "__landing" ? "/services" : `/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8 cursor-pointer"
+                  >
+                    <a
+                      href={activeSlug === "__landing" ? "/services" : `/${activeSlug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink className="h-3 w-3" /> Preview
                     </a>
                   </Button>
@@ -719,7 +790,11 @@ export function ServicesTemplatesEditor() {
                     disabled={saving || !dirty}
                     className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
                   >
-                    {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                    {saving ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Save className="h-3 w-3" />
+                    )}
                     {saving ? "Saving…" : "Save"}
                   </Button>
                 </div>
@@ -732,40 +807,38 @@ export function ServicesTemplatesEditor() {
                 className="flex-1 flex flex-col overflow-hidden"
               >
                 <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
-                  {activeSlug === "__landing" ? (
-                    // Landing page tabs
-                    [
-                      { id: "hero", label: "Hero" },
-                      { id: "capabilities", label: "Capabilities" },
-                      { id: "faq_cta", label: "FAQ & CTA" },
-                      { id: "seo", label: "SEO" },
-                    ].map((t) => (
-                      <TabsTrigger
-                        key={t.id}
-                        value={t.id}
-                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                      >
-                        {t.label}
-                      </TabsTrigger>
-                    ))
-                  ) : (
-                    // Child page tabs
-                    [
-                      { id: "hero", label: "Hero & Stats" },
-                      { id: "left_col", label: "Left Column" },
-                      { id: "sidebar", label: "Right Sidebar" },
-                      { id: "products_downloads", label: "Products & Downloads" },
-                      { id: "seo", label: "SEO" },
-                    ].map((t) => (
-                      <TabsTrigger
-                        key={t.id}
-                        value={t.id}
-                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                      >
-                        {t.label}
-                      </TabsTrigger>
-                    ))
-                  )}
+                  {activeSlug === "__landing"
+                    ? // Landing page tabs
+                      [
+                        { id: "hero", label: "Hero" },
+                        { id: "capabilities", label: "Capabilities" },
+                        { id: "faq_cta", label: "FAQ & CTA" },
+                        { id: "seo", label: "SEO" },
+                      ].map((t) => (
+                        <TabsTrigger
+                          key={t.id}
+                          value={t.id}
+                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                        >
+                          {t.label}
+                        </TabsTrigger>
+                      ))
+                    : // Child page tabs
+                      [
+                        { id: "hero", label: "Hero & Stats" },
+                        { id: "left_col", label: "Left Column" },
+                        { id: "sidebar", label: "Right Sidebar" },
+                        { id: "products_downloads", label: "Products & Downloads" },
+                        { id: "seo", label: "SEO" },
+                      ].map((t) => (
+                        <TabsTrigger
+                          key={t.id}
+                          value={t.id}
+                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                        >
+                          {t.label}
+                        </TabsTrigger>
+                      ))}
                 </TabsList>
 
                 <div className="flex-1 overflow-y-auto">
@@ -821,9 +894,23 @@ export function ServicesTemplatesEditor() {
                           hint="List of capabilities. Appears as a grid of cards on /services listing page."
                           items={(active.capabilities ?? []) as any[]}
                           fields={[
-                            { key: "icon", label: "Icon Name", placeholder: "e.g. Truck, HardHat, ClipboardCheck", type: "icon" },
-                            { key: "title", label: "Capability Title", placeholder: "e.g. HDPE Geomembrane Installation" },
-                            { key: "description", label: "Short Paragraph", placeholder: "e.g. Precision installation of HDPE liner...", multiline: true }
+                            {
+                              key: "icon",
+                              label: "Icon Name",
+                              placeholder: "e.g. Truck, HardHat, ClipboardCheck",
+                              type: "icon",
+                            },
+                            {
+                              key: "title",
+                              label: "Capability Title",
+                              placeholder: "e.g. HDPE Geomembrane Installation",
+                            },
+                            {
+                              key: "description",
+                              label: "Short Paragraph",
+                              placeholder: "e.g. Precision installation of HDPE liner...",
+                              multiline: true,
+                            },
                           ]}
                           onChange={(v) => setField("capabilities", v as any[])}
                           newItem={{ icon: "HardHat", title: "", description: "" }}
@@ -838,7 +925,7 @@ export function ServicesTemplatesEditor() {
                           items={(active.faqs ?? []) as any[]}
                           fields={[
                             { key: "question", label: "Question Text" },
-                            { key: "answer", label: "Answer Text", multiline: true }
+                            { key: "answer", label: "Answer Text", multiline: true },
                           ]}
                           onChange={(v) => setField("faqs", v as any[])}
                           newItem={{ question: "", answer: "" }}
@@ -894,7 +981,9 @@ export function ServicesTemplatesEditor() {
                             />
                           </div>
                           <div>
-                            <FieldLabel hint="E.g. Supplier of Geosynthetic Materials">Category Badge Text</FieldLabel>
+                            <FieldLabel hint="E.g. Supplier of Geosynthetic Materials">
+                              Category Badge Text
+                            </FieldLabel>
                             <Input
                               value={active.badge ?? ""}
                               onChange={(e) => setField("badge", e.target.value)}
@@ -946,7 +1035,11 @@ export function ServicesTemplatesEditor() {
                           items={(active.stats ?? []) as any[]}
                           fields={[
                             { key: "value", label: "Metric Value", placeholder: "e.g. 19+" },
-                            { key: "label", label: "Metric Label", placeholder: "e.g. Delivery Areas" }
+                            {
+                              key: "label",
+                              label: "Metric Label",
+                              placeholder: "e.g. Delivery Areas",
+                            },
                           ]}
                           onChange={(v) => setField("stats", v as any[])}
                           newItem={{ value: "", label: "" }}
@@ -978,8 +1071,17 @@ export function ServicesTemplatesEditor() {
                             label="Why Choose Bullet Points"
                             items={(active.whyChoose ?? []) as any[]}
                             fields={[
-                              { key: "title", label: "Bullet Title (bold text)", placeholder: "e.g. Direct-to-Customer Pricing" },
-                              { key: "description", label: "Bullet Detail Text", placeholder: "e.g. No distributors, no hidden agents.", multiline: true }
+                              {
+                                key: "title",
+                                label: "Bullet Title (bold text)",
+                                placeholder: "e.g. Direct-to-Customer Pricing",
+                              },
+                              {
+                                key: "description",
+                                label: "Bullet Detail Text",
+                                placeholder: "e.g. No distributors, no hidden agents.",
+                                multiline: true,
+                              },
                             ]}
                             onChange={(v) => setField("whyChoose", v as any[])}
                             newItem={{ title: "", description: "" }}
@@ -1001,8 +1103,17 @@ export function ServicesTemplatesEditor() {
                             label="What We Deliver Grid Items"
                             items={(active.whatWeDeliver ?? []) as any[]}
                             fields={[
-                              { key: "title", label: "Item Name", placeholder: "e.g. GSE HDPE Liners" },
-                              { key: "description", label: "Specifications Description", placeholder: "e.g. GM-13 compliant smooth & textured liners.", multiline: true }
+                              {
+                                key: "title",
+                                label: "Item Name",
+                                placeholder: "e.g. GSE HDPE Liners",
+                              },
+                              {
+                                key: "description",
+                                label: "Specifications Description",
+                                placeholder: "e.g. GM-13 compliant smooth & textured liners.",
+                                multiline: true,
+                              },
                             ]}
                             onChange={(v) => setField("whatWeDeliver", v as any[])}
                             newItem={{ title: "", description: "" }}
@@ -1101,7 +1212,11 @@ export function ServicesTemplatesEditor() {
                             items={(active.directModelItems ?? []) as any[]}
                             fields={[
                               { key: "title", label: "Point Name", placeholder: "e.g. One Team" },
-                              { key: "description", label: "Description detail", placeholder: "e.g. Sales, logistics, and technical support." }
+                              {
+                                key: "description",
+                                label: "Description detail",
+                                placeholder: "e.g. Sales, logistics, and technical support.",
+                              },
                             ]}
                             onChange={(v) => setField("directModelItems", v as any[])}
                             newItem={{ title: "", description: "" }}
@@ -1179,8 +1294,17 @@ export function ServicesTemplatesEditor() {
                             label="Playbook Rows"
                             items={(active.playbookItems ?? []) as any[]}
                             fields={[
-                              { key: "title", label: "Mode (e.g. Road, Rail/ICD, Sea)", placeholder: "e.g. Road" },
-                              { key: "description", label: "Details", placeholder: "e.g. Dedicated vehicles with border files pre-cleared." }
+                              {
+                                key: "title",
+                                label: "Mode (e.g. Road, Rail/ICD, Sea)",
+                                placeholder: "e.g. Road",
+                              },
+                              {
+                                key: "description",
+                                label: "Details",
+                                placeholder:
+                                  "e.g. Dedicated vehicles with border files pre-cleared.",
+                              },
                             ]}
                             onChange={(v) => setField("playbookItems", v as any[])}
                             newItem={{ title: "", description: "" }}
@@ -1205,15 +1329,23 @@ export function ServicesTemplatesEditor() {
                           </FieldLabel>
                           <div className="grid md:grid-cols-2 gap-2">
                             {(active.products ?? []).map((pId) => {
-                              const pData = allProducts.find(p => p.id === pId);
+                              const pData = allProducts.find((p) => p.id === pId);
                               return (
-                                <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                                <div
+                                  key={pId}
+                                  className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                                >
                                   <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                                   <Button
                                     variant="ghost"
                                     size="icon"
                                     className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                    onClick={() => setField("products", (active.products ?? []).filter(id => id !== pId))}
+                                    onClick={() =>
+                                      setField(
+                                        "products",
+                                        (active.products ?? []).filter((id) => id !== pId),
+                                      )
+                                    }
                                   >
                                     ✕
                                   </Button>
@@ -1224,7 +1356,9 @@ export function ServicesTemplatesEditor() {
                           <div className="pt-2">
                             <ProductSelector
                               excludeIds={active.products}
-                              onSelect={(prod) => setField("products", [...(active.products ?? []), prod.id])}
+                              onSelect={(prod) =>
+                                setField("products", [...(active.products ?? []), prod.id])
+                              }
                             />
                           </div>
                         </div>
@@ -1233,54 +1367,75 @@ export function ServicesTemplatesEditor() {
                           <FieldLabel hint="Select up to 5 top-selling products for this service to display as a slider in the mega menu">
                             Top Selling Products (Max 5)
                           </FieldLabel>
-                          
+
                           <div className="space-y-2 max-w-md">
                             {(active.topSellingProductIds ?? []).map((pId) => {
-                              const pData = allProducts.find(p => p.id === pId);
+                              const pData = allProducts.find((p) => p.id === pId);
                               return (
-                                <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                                <div
+                                  key={pId}
+                                  className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                                >
                                   <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                                   <Button
                                     variant="ghost"
                                     size="icon"
                                     className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                    onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                                    onClick={() =>
+                                      setField(
+                                        "topSellingProductIds",
+                                        (active.topSellingProductIds ?? []).filter(
+                                          (id) => id !== pId,
+                                        ),
+                                      )
+                                    }
                                   >
                                     ✕
                                   </Button>
                                 </div>
                               );
                             })}
-                            
-                            {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
-                              <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
-                            )}
+
+                            {(!active.topSellingProductIds ||
+                              active.topSellingProductIds.length === 0) &&
+                              !active.topSellingProductId && (
+                                <p className="text-xs text-muted-foreground italic">
+                                  No top selling products selected.
+                                </p>
+                              )}
 
                             {/* Show legacy single product if present but no array exists */}
-                            {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
-                              <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                                <span className="flex items-center gap-1.5">
-                                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                  {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
-                                </span>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                  onClick={() => setField("topSellingProductId", "")}
-                                >
-                                  ✕
-                                </Button>
-                              </div>
-                            )}
+                            {(!active.topSellingProductIds ||
+                              active.topSellingProductIds.length === 0) &&
+                              active.topSellingProductId && (
+                                <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                                  <span className="flex items-center gap-1.5">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                    {allProducts.find((p) => p.id === active.topSellingProductId)
+                                      ?.name || `Product ID: ${active.topSellingProductId}`}{" "}
+                                    (Legacy Single)
+                                  </span>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                    onClick={() => setField("topSellingProductId", "")}
+                                  >
+                                    ✕
+                                  </Button>
+                                </div>
+                              )}
                           </div>
 
-                          {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
+                          {(!active.topSellingProductIds ||
+                            active.topSellingProductIds.length < 5) && (
                             <div className="max-w-md pt-2">
                               <ProductSelector
                                 excludeIds={[
                                   ...(active.topSellingProductIds ?? []),
-                                  ...(active.topSellingProductId ? [active.topSellingProductId] : [])
+                                  ...(active.topSellingProductId
+                                    ? [active.topSellingProductId]
+                                    : []),
                                 ]}
                                 onSelect={(prod) => {
                                   let currentIds = [...(active.topSellingProductIds ?? [])];
@@ -1313,8 +1468,16 @@ export function ServicesTemplatesEditor() {
                             label="Downloadable Specifications (PDF)"
                             items={(active.downloads ?? []) as any[]}
                             fields={[
-                              { key: "label", label: "Document Name", placeholder: "e.g. logistics specsheet" },
-                              { key: "url", label: "File URL Path", placeholder: "e.g. /resources/docs/logistics.pdf" }
+                              {
+                                key: "label",
+                                label: "Document Name",
+                                placeholder: "e.g. logistics specsheet",
+                              },
+                              {
+                                key: "url",
+                                label: "File URL Path",
+                                placeholder: "e.g. /resources/docs/logistics.pdf",
+                              },
                             ]}
                             onChange={(v) => setField("downloads", v as any[])}
                             newItem={{ label: "", url: "" }}
@@ -1340,7 +1503,9 @@ export function ServicesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Recommended: 150–160 characters">Meta Description</FieldLabel>
+                      <FieldLabel hint="Recommended: 150–160 characters">
+                        Meta Description
+                      </FieldLabel>
                       <Textarea
                         value={active.seo?.description ?? ""}
                         onChange={(e) => setSeo({ description: e.target.value })}
@@ -1349,7 +1514,9 @@ export function ServicesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Comma-separated list of search keywords">Meta Keywords</FieldLabel>
+                      <FieldLabel hint="Comma-separated list of search keywords">
+                        Meta Keywords
+                      </FieldLabel>
                       <Input
                         value={active.seo?.keywords ?? ""}
                         onChange={(e) => setSeo({ keywords: e.target.value })}

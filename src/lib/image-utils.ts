@@ -5,7 +5,7 @@
 export async function compressImage(
   file: File,
   maxDim = 1600,
-  quality = 0.82
+  quality = 0.82,
 ): Promise<{ blob: Blob; ext: string; contentType: string }> {
   // SVGs and GIFs are uploaded exactly as-is to preserve vector scaling and animation loops
   if (file.type === "image/svg+xml" || file.type === "image/gif") {
@@ -47,8 +47,8 @@ export async function compressImage(
     canvas.toBlob(
       (b) => (b ? resolve(b) : reject(new Error("Canvas conversion to Blob failed"))),
       "image/webp",
-      quality
-    )
+      quality,
+    ),
   );
 
   // Fall back to original file if compression somehow makes it larger

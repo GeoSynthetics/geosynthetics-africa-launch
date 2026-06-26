@@ -45,7 +45,9 @@ function getEmbed(url: string): string | null {
       const id = u.pathname.split("/").filter(Boolean)[0];
       if (id) return `https://player.vimeo.com/video/${id}`;
     }
-  } catch { /* noop */ }
+  } catch {
+    /* noop */
+  }
   return null;
 }
 
@@ -60,7 +62,9 @@ function ResourceDetail() {
       setLoading(true);
       const { data, error } = await supabase
         .from("resources")
-        .select("id, slug, title, type, description, file_path, external_url, is_public, created_at")
+        .select(
+          "id, slug, title, type, description, file_path, external_url, is_public, created_at",
+        )
         .eq("slug", slug)
         .maybeSingle();
       if (error) toast.error(error.message);
@@ -72,7 +76,9 @@ function ResourceDetail() {
   const download = async () => {
     if (!row) return;
     if (row.file_path) {
-      const { data, error } = await supabase.storage.from("technical-docs").createSignedUrl(row.file_path, 60 * 5);
+      const { data, error } = await supabase.storage
+        .from("technical-docs")
+        .createSignedUrl(row.file_path, 60 * 5);
       if (error || !data) return toast.error(error?.message ?? "Cannot download");
       window.open(data.signedUrl, "_blank", "noopener,noreferrer");
     } else if (row.external_url) {
@@ -93,9 +99,13 @@ function ResourceDetail() {
       <section className="bg-background">
         <div className="container-page py-12 max-w-4xl">
           <div className="mb-6 text-sm text-muted-foreground">
-            <Link to="/resources" className="hover:text-primary">Resources</Link>
+            <Link to="/resources" className="hover:text-primary">
+              Resources
+            </Link>
             <span className="mx-2">/</span>
-            <Link to="/resources/$category" params={{ category }} className="hover:text-primary">{cat.title}</Link>
+            <Link to="/resources/$category" params={{ category }} className="hover:text-primary">
+              {cat.title}
+            </Link>
           </div>
 
           {loading ? (
@@ -113,7 +123,9 @@ function ResourceDetail() {
               {row.description && (
                 <div className="rounded border border-border bg-card p-6">
                   <h2 className="font-display text-lg font-bold uppercase mb-3">Overview</h2>
-                  <p className="text-sm text-muted-foreground whitespace-pre-line">{row.description}</p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    {row.description}
+                  </p>
                 </div>
               )}
 
@@ -134,18 +146,30 @@ function ResourceDetail() {
                   </div>
                   <div>
                     <dt className="text-muted-foreground">Published</dt>
-                    <dd className="font-semibold">{new Date(row.created_at).toLocaleDateString()}</dd>
+                    <dd className="font-semibold">
+                      {new Date(row.created_at).toLocaleDateString()}
+                    </dd>
                   </div>
                 </dl>
                 <div className="mt-6 flex flex-wrap gap-3">
                   {row.file_path && (
-                    <Button onClick={() => void download()} className="bg-primary hover:bg-primary/90">
+                    <Button
+                      onClick={() => void download()}
+                      className="bg-primary hover:bg-primary/90"
+                    >
                       <Download className="h-4 w-4" /> Download
                     </Button>
                   )}
                   {!row.file_path && row.external_url && (
-                    <Button onClick={() => void download()} className="bg-primary hover:bg-primary/90">
-                      {isVideo ? <PlayCircle className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
+                    <Button
+                      onClick={() => void download()}
+                      className="bg-primary hover:bg-primary/90"
+                    >
+                      {isVideo ? (
+                        <PlayCircle className="h-4 w-4" />
+                      ) : (
+                        <ExternalLink className="h-4 w-4" />
+                      )}
                       {isVideo ? "Watch" : "Open link"}
                     </Button>
                   )}

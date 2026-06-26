@@ -61,7 +61,7 @@ vi.mock("@/integrations/supabase/client", () => {
         return { data: { value: mockDb[key as keyof typeof mockDb] }, error: null };
       }
       if (this.table === "case_studies" && this.filters.slug) {
-        const found = mockDb.case_studies.find(cs => cs.slug === this.filters.slug);
+        const found = mockDb.case_studies.find((cs) => cs.slug === this.filters.slug);
         return { data: found || null, error: null };
       }
       return { data: null, error: null };
@@ -72,7 +72,7 @@ vi.mock("@/integrations/supabase/client", () => {
       if (this.table === "case_studies") {
         if (this.filters.sector) {
           data = mockDb.case_studies.filter(
-            (cs) => cs.sector === this.filters.sector && cs.status === "published"
+            (cs) => cs.sector === this.filters.sector && cs.status === "published",
           );
         } else if (this.filters.status === "published") {
           data = mockDb.case_studies.filter((cs) => cs.status === "published");
@@ -126,7 +126,7 @@ describe("Dynamic Route Loaders", () => {
           description: "Premium mining systems template details",
           heroImage: "mining-hero.jpg",
           products: ["p1"],
-        }
+        },
       };
 
       const result = await ApplicationsRoute.options.loader!({
@@ -145,8 +145,8 @@ describe("Dynamic Route Loaders", () => {
             id: "tailings-storage-facilities-tsfs",
             slug: "tailings-storage-facility-lining",
             label: "Tailings Custom Label",
-          }
-        ]
+          },
+        ],
       };
 
       mockDb.template_applications = {
@@ -154,7 +154,7 @@ describe("Dynamic Route Loaders", () => {
           title: "Tailings Storage Facility Lining",
           description: "Rich template content",
           heroImage: "tailings-hero.jpg",
-        }
+        },
       };
 
       const result = await ApplicationsRoute.options.loader!({
@@ -179,10 +179,10 @@ describe("Dynamic Route Loaders", () => {
               seo: {
                 title: "Custom SEO Title",
                 description: "Custom SEO Desc",
-              }
-            }
-          }
-        ]
+              },
+            },
+          },
+        ],
       };
 
       mockDb.template_applications = {
@@ -193,8 +193,8 @@ describe("Dynamic Route Loaders", () => {
           seo: {
             title: "Original SEO Title",
             description: "Original SEO Desc",
-          }
-        }
+          },
+        },
       };
 
       const result = await ApplicationsRoute.options.loader!({
@@ -218,8 +218,8 @@ describe("Dynamic Route Loaders", () => {
             id: "custom-supply-id",
             slug: "custom-supply-slug",
             label: "Custom Supply Label",
-          }
-        ]
+          },
+        ],
       };
 
       mockDb.template_services = {
@@ -227,7 +227,7 @@ describe("Dynamic Route Loaders", () => {
           title: "Supply Template Content",
           description: "Logistics supply template description",
           heroImage: "supply-hero.jpg",
-        }
+        },
       };
 
       const result = await ServicesRoute.options.loader!({
@@ -248,8 +248,8 @@ describe("Dynamic Route Loaders", () => {
             id: "custom-mining-id",
             slug: "custom-mining-slug",
             label: "Custom Mining Label",
-          }
-        ]
+          },
+        ],
       };
 
       mockDb.template_industries = {
@@ -257,7 +257,7 @@ describe("Dynamic Route Loaders", () => {
           title: "Mining Industry Template",
           description: "Custom mining industry desc",
           heroImage: "mining-ind.jpg",
-        }
+        },
       };
 
       mockDb.case_studies = [
@@ -266,7 +266,7 @@ describe("Dynamic Route Loaders", () => {
           title: "Tailing Storage Project",
           sector: "Custom Mining Label",
           status: "published",
-        }
+        },
       ];
 
       const result = await IndustriesRoute.options.loader!({

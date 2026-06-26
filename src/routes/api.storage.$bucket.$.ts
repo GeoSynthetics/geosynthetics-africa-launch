@@ -18,7 +18,9 @@ export const Route = createFileRoute("/api/storage/$bucket/$")({
           const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 
           if (!supabaseUrl) {
-            return new Response("Server configuration error: missing Supabase URL", { status: 500 });
+            return new Response("Server configuration error: missing Supabase URL", {
+              status: 500,
+            });
           }
 
           const targetUrl = `${supabaseUrl}/storage/v1/object/public/${relativePath}`;

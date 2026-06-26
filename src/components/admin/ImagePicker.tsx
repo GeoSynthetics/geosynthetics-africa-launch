@@ -4,21 +4,27 @@ import { compressImage } from "@/lib/image-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Upload, 
-  CloudUpload, 
-  Search, 
-  ArrowUpDown, 
-  Loader2, 
-  Check, 
+import {
+  Upload,
+  CloudUpload,
+  Search,
+  ArrowUpDown,
+  Loader2,
+  Check,
   Image as ImageIcon,
   AlertTriangle,
   X,
   FileText,
-  Play
+  Play,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -44,7 +50,7 @@ export function ImagePicker({
   onChange,
   label,
   hint,
-  placeholder = "https://..."
+  placeholder = "https://...",
 }: ImagePickerProps) {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("media-vault");
@@ -76,21 +82,24 @@ export function ImagePicker({
       });
 
       const allowedMimes = [
-        "image/png", 
-        "image/jpeg", 
-        "image/webp", 
-        "image/gif", 
-        "image/svg+xml", 
-        "application/pdf", 
-        "video/mp4", 
-        "video/webm", 
-        "video/ogg", 
-        "video/quicktime"
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "image/gif",
+        "image/svg+xml",
+        "application/pdf",
+        "video/mp4",
+        "video/webm",
+        "video/ogg",
+        "video/quicktime",
       ];
 
       if (error) {
-        console.warn("Could not access 'media-center' bucket, attempting creation...", error.message);
-        
+        console.warn(
+          "Could not access 'media-center' bucket, attempting creation...",
+          error.message,
+        );
+
         const { error: createError } = await supabase.storage.createBucket("media-center", {
           public: true,
           allowedMimeTypes: allowedMimes,
@@ -112,7 +121,7 @@ export function ImagePicker({
           console.warn("Could not update bucket permissions:", updateErr);
         }
       }
-      
+
       setFallbackMode(false);
       await loadFiles(false);
     } catch (e) {
@@ -130,18 +139,14 @@ export function ImagePicker({
 
       // Load both vaults in parallel
       const [vaultRes, prodRes] = await Promise.all([
-        supabase.storage
-          .from(vaultBucket)
-          .list(vaultPath, {
-            limit: 100,
-            sortBy: { column: "created_at", order: "desc" },
-          }),
-        supabase.storage
-          .from("product-images")
-          .list("", {
-            limit: 100,
-            sortBy: { column: "created_at", order: "desc" },
-          }),
+        supabase.storage.from(vaultBucket).list(vaultPath, {
+          limit: 100,
+          sortBy: { column: "created_at", order: "desc" },
+        }),
+        supabase.storage.from("product-images").list("", {
+          limit: 100,
+          sortBy: { column: "created_at", order: "desc" },
+        }),
       ]);
 
       const { data: vaultData, error: vaultError } = vaultRes;
@@ -151,8 +156,8 @@ export function ImagePicker({
         toast.error(`Failed to load Media Vault: ${vaultError.message}`);
       } else if (vaultData) {
         const formattedVault = vaultData
-          .filter(f => f.name !== ".emptyFolderPlaceholder" && f.name !== ".keep")
-          .map(f => {
+          .filter((f) => f.name !== ".emptyFolderPlaceholder" && f.name !== ".keep")
+          .map((f) => {
             const filePath = isFallback ? `media-center/${f.name}` : f.name;
             const origin = typeof window !== "undefined" ? window.location.origin : "";
             const proxyUrl = `${origin}/api/storage/${vaultBucket}/${filePath}`;
@@ -171,8 +176,13 @@ export function ImagePicker({
         toast.error(`Failed to load Product Images: ${prodError.message}`);
       } else if (prodData) {
         const formattedProd = prodData
-          .filter(f => f.name !== "media-center" && f.name !== ".emptyFolderPlaceholder" && f.name !== ".keep")
-          .map(f => {
+          .filter(
+            (f) =>
+              f.name !== "media-center" &&
+              f.name !== ".emptyFolderPlaceholder" &&
+              f.name !== ".keep",
+          )
+          .map((f) => {
             const origin = typeof window !== "undefined" ? window.location.origin : "";
             const proxyUrl = `${origin}/api/storage/product-images/${f.name}`;
             return {
@@ -201,7 +211,9 @@ export function ImagePicker({
       const file = files[0];
       const isImage = file.type.startsWith("image/");
       const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-      const isVideo = file.type.startsWith("video/") || file.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null;
+      const isVideo =
+        file.type.startsWith("video/") ||
+        file.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null;
 
       if (!isImage && !isPdf && !isVideo) {
         toast.error(`${file.name} is not a supported file type (Images, PDFs & Videos only).`);
@@ -213,7 +225,7 @@ export function ImagePicker({
       }
 
       const toastId = toast.loading(`Optimizing & uploading ${file.name}...`);
-      
+
       let blob: Blob = file;
       let ext = file.name.split(".").pop() || (isPdf ? "pdf" : "mp4");
       let contentType = file.type || (isPdf ? "application/pdf" : "video/mp4");
@@ -224,9 +236,11 @@ export function ImagePicker({
         ext = comp.ext;
         contentType = comp.contentType;
       }
-      
+
       const uniqueId = crypto.randomUUID();
-      const baseName = file.name.substring(0, file.name.lastIndexOf(".")).replace(/[^a-zA-Z0-9-_]/g, "_");
+      const baseName = file.name
+        .substring(0, file.name.lastIndexOf("."))
+        .replace(/[^a-zA-Z0-9-_]/g, "_");
       const fileName = `${baseName}_${uniqueId}.${ext}`;
       const filePath = fallbackMode ? `media-center/${fileName}` : fileName;
 
@@ -275,13 +289,15 @@ export function ImagePicker({
   };
 
   const activeFilesList = activeTab === "media-vault" ? vaultFiles : productFiles;
-  const filteredFiles = activeFilesList.filter(file => 
-    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFiles = activeFilesList.filter((file) =>
+    file.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const sortedFiles = [...filteredFiles].sort((a, b) => {
-    if (sortBy === "date-desc") return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    if (sortBy === "date-asc") return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    if (sortBy === "date-desc")
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    if (sortBy === "date-asc")
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
     if (sortBy === "name-asc") return a.name.localeCompare(b.name);
     if (sortBy === "name-desc") return b.name.localeCompare(a.name);
     if (sortBy === "size-desc") return b.size - a.size;
@@ -305,9 +321,13 @@ export function ImagePicker({
 
   return (
     <div className="space-y-2">
-      {label && <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{label}</Label>}
+      {label && (
+        <Label className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          {label}
+        </Label>
+      )}
       {hint && <p className="text-[10px] text-muted-foreground/70">{hint}</p>}
-      
+
       <div className="flex gap-2">
         <Input
           value={value}
@@ -369,7 +389,7 @@ export function ImagePicker({
             )}
 
             {/* Drag & Drop upload panel inside modal */}
-            <div 
+            <div
               onDragEnter={handleDrag}
               onDragOver={handleDrag}
               onDragLeave={handleDrag}
@@ -377,12 +397,12 @@ export function ImagePicker({
               onClick={() => fileInputRef.current?.click()}
               className={cn(
                 "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all duration-200 shrink-0",
-                isDragActive 
-                  ? "border-primary bg-primary/5 scale-[0.99]" 
-                  : "border-border hover:border-primary/50 hover:bg-accent/10"
+                isDragActive
+                  ? "border-primary bg-primary/5 scale-[0.99]"
+                  : "border-border hover:border-primary/50 hover:bg-accent/10",
               )}
             >
-              <input 
+              <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*,.pdf,video/*"
@@ -393,25 +413,41 @@ export function ImagePicker({
               {uploading ? (
                 <div className="flex items-center justify-center gap-2 py-2">
                   <Loader2 className="h-5 w-5 text-primary animate-spin" />
-                  <span className="text-xs font-bold text-primary uppercase">Uploading & Compressing...</span>
+                  <span className="text-xs font-bold text-primary uppercase">
+                    Uploading & Compressing...
+                  </span>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1.5">
                   <CloudUpload className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                  <p className="text-xs font-bold uppercase text-foreground">Drag & Drop to upload a new asset</p>
-                  <p className="text-[10px] text-muted-foreground">or click to browse local files (PNG, JPEG, WEBP, SVG, GIF up to 25MB)</p>
+                  <p className="text-xs font-bold uppercase text-foreground">
+                    Drag & Drop to upload a new asset
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    or click to browse local files (PNG, JPEG, WEBP, SVG, GIF up to 25MB)
+                  </p>
                 </div>
               )}
             </div>
 
             {/* Filter controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-border shrink-0">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="bg-muted/30 p-0.5 rounded-md self-start">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="bg-muted/30 p-0.5 rounded-md self-start"
+              >
                 <TabsList className="bg-transparent h-8 p-0">
-                  <TabsTrigger value="media-vault" className="text-[10px] font-bold uppercase tracking-wider px-3 h-7">
+                  <TabsTrigger
+                    value="media-vault"
+                    className="text-[10px] font-bold uppercase tracking-wider px-3 h-7"
+                  >
                     Media Vault ({vaultFiles.length})
                   </TabsTrigger>
-                  <TabsTrigger value="product-images" className="text-[10px] font-bold uppercase tracking-wider px-3 h-7">
+                  <TabsTrigger
+                    value="product-images"
+                    className="text-[10px] font-bold uppercase tracking-wider px-3 h-7"
+                  >
                     Product Images ({productFiles.length})
                   </TabsTrigger>
                 </TabsList>
@@ -420,7 +456,7 @@ export function ImagePicker({
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <div className="relative flex-1 sm:w-48">
                   <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
-                  <Input 
+                  <Input
                     placeholder="Search file..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -429,7 +465,7 @@ export function ImagePicker({
                 </div>
                 <div className="flex items-center gap-1">
                   <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  <select 
+                  <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className="bg-muted/40 border border-border rounded h-8 px-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground outline-none cursor-pointer"
@@ -456,8 +492,12 @@ export function ImagePicker({
               ) : sortedFiles.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-md">
                   <ImageIcon className="h-8 w-8 text-muted-foreground/40 mb-2" />
-                  <p className="text-xs font-bold uppercase text-muted-foreground">No assets found</p>
-                  <p className="text-[10px] text-muted-foreground/70 mt-0.5">Drag a file here or adjust search filters.</p>
+                  <p className="text-xs font-bold uppercase text-muted-foreground">
+                    No assets found
+                  </p>
+                  <p className="text-[10px] text-muted-foreground/70 mt-0.5">
+                    Drag a file here or adjust search filters.
+                  </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
@@ -467,14 +507,14 @@ export function ImagePicker({
                     const isVideo = file.name.toLowerCase().match(/\.(mp4|webm|ogg|mov)$/) !== null;
 
                     return (
-                      <div 
-                        key={file.id} 
+                      <div
+                        key={file.id}
                         onClick={() => setSelectedFileUrl(file.url)}
                         className={cn(
                           "group relative aspect-square rounded-md border overflow-hidden cursor-pointer shadow-sm transition-all duration-200 select-none flex flex-col bg-accent/5",
-                          isSelected 
-                            ? "border-primary ring-2 ring-primary bg-primary/5" 
-                            : "border-border hover:border-primary/50 hover:scale-[1.01]"
+                          isSelected
+                            ? "border-primary ring-2 ring-primary bg-primary/5"
+                            : "border-border hover:border-primary/50 hover:scale-[1.01]",
                         )}
                       >
                         {isPdf ? (
@@ -486,13 +526,18 @@ export function ImagePicker({
                           </div>
                         ) : isVideo ? (
                           <div className="flex-1 relative bg-black/10 flex items-center justify-center overflow-hidden">
-                            <video src={file.url} className="w-full h-full object-cover" preload="metadata" muted />
+                            <video
+                              src={file.url}
+                              className="w-full h-full object-cover"
+                              preload="metadata"
+                              muted
+                            />
                             <Play className="absolute h-6 w-6 text-white/80" />
                           </div>
                         ) : (
-                          <img 
-                            src={file.url} 
-                            alt={file.name} 
+                          <img
+                            src={file.url}
+                            alt={file.name}
                             className="w-full h-full object-cover flex-1"
                             loading="lazy"
                           />
@@ -527,14 +572,14 @@ export function ImagePicker({
               {selectedFileUrl ? `Selected URL: ${selectedFileUrl}` : "No image selected"}
             </span>
             <div className="flex gap-2 ml-auto">
-              <Button 
-                variant="ghost" 
-                onClick={() => setOpen(false)} 
+              <Button
+                variant="ghost"
+                onClick={() => setOpen(false)}
                 className="text-xs uppercase font-bold tracking-wider"
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleConfirmSelection}
                 disabled={!selectedFileUrl}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs uppercase font-bold tracking-wider px-4"

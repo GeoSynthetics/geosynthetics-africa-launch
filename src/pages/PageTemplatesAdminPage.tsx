@@ -25,8 +25,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Plus, Trash2, Save, Loader2, ExternalLink, Database,
-  AlertTriangle, CheckCircle2, ChevronRight, Eye, Copy, Search, ChevronLeft,
+  Plus,
+  Trash2,
+  Save,
+  Loader2,
+  ExternalLink,
+  Database,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Eye,
+  Copy,
+  Search,
+  ChevronLeft,
 } from "lucide-react";
 import { ProjectsTemplatesEditor } from "@/components/admin/ProjectsTemplatesEditor";
 import { QATemplatesEditor } from "@/components/admin/QATemplatesEditor";
@@ -54,7 +65,9 @@ const SUPABASE_KEY = "template_product_categories";
 // ─── Main Page Component ──────────────────────────────────────────────────────
 
 export function PageTemplatesAdminPage() {
-  const [editorType, setEditorType] = useState<"products" | "projects" | "quality-assurance" | "applications" | "services" | "industries">("products");
+  const [editorType, setEditorType] = useState<
+    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries"
+  >("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
   const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
@@ -89,7 +102,11 @@ export function PageTemplatesAdminPage() {
 
   const handleDuplicate = () => {
     if (!activeSlug || !active) return;
-    const cleanSlug = dupSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+    const cleanSlug = dupSlug
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-");
     if (!cleanSlug) {
       toast.error("Please enter a valid slug.");
       return;
@@ -106,7 +123,7 @@ export function PageTemplatesAdminPage() {
       category: active.category,
     };
 
-    setAllData(prev => ({
+    setAllData((prev) => ({
       ...prev,
       [cleanSlug]: duplicated,
     }));
@@ -121,10 +138,10 @@ export function PageTemplatesAdminPage() {
   const cleanHierarchy = (h: HierarchySection, slug: string): HierarchySection => {
     return {
       ...h,
-      items: h.items.map(item => ({
+      items: h.items.map((item) => ({
         ...item,
-        children: (item.children || []).filter(c => c.id !== slug && c.slug !== slug)
-      }))
+        children: (item.children || []).filter((c) => c.id !== slug && c.slug !== slug),
+      })),
     };
   };
 
@@ -134,16 +151,8 @@ export function PageTemplatesAdminPage() {
 
     // Load page templates and hierarchy products in parallel
     const [templatesRes, hierarchyRes] = await Promise.all([
-      supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", SUPABASE_KEY)
-        .maybeSingle(),
-      supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "hierarchy_products")
-        .maybeSingle(),
+      supabase.from("site_config").select("value").eq("key", SUPABASE_KEY).maybeSingle(),
+      supabase.from("site_config").select("value").eq("key", "hierarchy_products").maybeSingle(),
     ]);
 
     const { data, error } = templatesRes;
@@ -158,15 +167,17 @@ export function PageTemplatesAdminPage() {
           slug: "__landing",
           label: "Products Landing Page",
           heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
-          subtitle: "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
+          subtitle:
+            "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
           description: [],
           features: [],
           popularProducts: [],
           seo: {
             title: "Products — Geosynthetics Africa",
-            description: "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
-            keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl"
-          }
+            description:
+              "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
+            keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl",
+          },
         } as any;
       }
       setAllData(templates);
@@ -185,14 +196,16 @@ export function PageTemplatesAdminPage() {
       console.error("Failed to load mega menu configuration:", hierarchyError);
     } else {
       const defaults = getDefaultSections();
-      const defaultProducts = defaults.find(d => d.key === "products") || null;
+      const defaultProducts = defaults.find((d) => d.key === "products") || null;
       setHierarchyProducts((hierarchyData?.value as HierarchySection) ?? defaultProducts);
     }
 
     setLoading(false);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   // ── Seed defaults ──
   const handleSeedDefaults = async () => {
@@ -203,15 +216,17 @@ export function PageTemplatesAdminPage() {
         slug: "__landing",
         label: "Products Landing Page",
         heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
-        subtitle: "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
+        subtitle:
+          "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.",
         description: [],
         features: [],
         popularProducts: [],
         seo: {
           title: "Products — Geosynthetics Africa",
-          description: "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
-          keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl"
-        }
+          description:
+            "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.",
+          keywords: "geosynthetics, geomembranes, geotextiles, geogrids, geocells, gcl",
+        },
       };
     }
     const { error } = await supabase
@@ -245,10 +260,15 @@ export function PageTemplatesAdminPage() {
     if (hierarchyProducts && hierarchyDirty) {
       const { error: hierarchyError } = await supabase
         .from("site_config")
-        .upsert({ key: "hierarchy_products", value: hierarchyProducts as any }, { onConflict: "key" });
+        .upsert(
+          { key: "hierarchy_products", value: hierarchyProducts as any },
+          { onConflict: "key" },
+        );
 
       if (hierarchyError) {
-        toast.error("Warning: Templates saved, but failed to update mega menu: " + hierarchyError.message);
+        toast.error(
+          "Warning: Templates saved, but failed to update mega menu: " + hierarchyError.message,
+        );
       } else {
         setHierarchyDirty(false);
       }
@@ -264,7 +284,7 @@ export function PageTemplatesAdminPage() {
 
   const updateActive = (updater: (prev: ProductPageContent) => ProductPageContent) => {
     if (!activeSlug) return;
-    setAllData(prev => ({
+    setAllData((prev) => ({
       ...prev,
       [activeSlug]: updater(prev[activeSlug]),
     }));
@@ -272,13 +292,19 @@ export function PageTemplatesAdminPage() {
   };
 
   const set = <K extends keyof ProductPageContent>(key: K, value: ProductPageContent[K]) =>
-    updateActive(prev => ({ ...prev, [key]: value }));
+    updateActive((prev) => ({ ...prev, [key]: value }));
 
   // ── Add new category ──
   const handleAddNew = () => {
     if (!newSlug.trim()) return;
-    const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
-    if (allData[slug]) { toast.error("A template with that slug already exists."); return; }
+    const slug = newSlug
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-");
+    if (allData[slug]) {
+      toast.error("A template with that slug already exists.");
+      return;
+    }
     const parentCategories = [
       "geomembranes",
       "geotextiles",
@@ -287,15 +313,20 @@ export function PageTemplatesAdminPage() {
       "gcls",
       "drainage-composites",
       "erosion-control",
-      "accessories"
+      "accessories",
     ];
     if (parentCategories.includes(slug)) {
-      toast.error(`"${slug}" is a protected parent category landing page. Please customize it in the Site Builder under Page Content, or create subpage templates (e.g., hdpe-geomembranes) here.`);
+      toast.error(
+        `"${slug}" is a protected parent category landing page. Please customize it in the Site Builder under Page Content, or create subpage templates (e.g., hdpe-geomembranes) here.`,
+      );
       return;
     }
     const blank: ProductPageContent = {
       slug,
-      label: slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+      label: slug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
       heroImage: "",
       subtitle: "",
       description: [],
@@ -312,7 +343,7 @@ export function PageTemplatesAdminPage() {
       installationSpecs: [],
       projectReferences: [],
     };
-    setAllData(prev => ({ ...prev, [slug]: blank }));
+    setAllData((prev) => ({ ...prev, [slug]: blank }));
     setActiveSlug(slug);
     setNewSlug("");
     setShowNewSlug(false);
@@ -322,7 +353,7 @@ export function PageTemplatesAdminPage() {
 
   // ── Delete category ──
   const handleDelete = (slug: string) => {
-    setAllData(prev => {
+    setAllData((prev) => {
       const next = { ...prev };
       delete next[slug];
       return next;
@@ -341,17 +372,30 @@ export function PageTemplatesAdminPage() {
 
   // ── Megamenu Integration Handlers ──
   const getLinkageStatus = useCallback(() => {
-    if (!activeSlug || !hierarchyProducts) return { linked: false, parentName: null, parentId: null, parentSlug: null, type: null };
+    if (!activeSlug || !hierarchyProducts)
+      return { linked: false, parentName: null, parentId: null, parentSlug: null, type: null };
 
     for (const item of hierarchyProducts.items) {
       if (item.children && Array.isArray(item.children)) {
-        const foundChild = item.children.find(c => c.slug === activeSlug || c.id === activeSlug);
+        const foundChild = item.children.find((c) => c.slug === activeSlug || c.id === activeSlug);
         if (foundChild) {
-          return { linked: true, parentName: item.label, parentId: item.id, parentSlug: item.slug, type: "child" as const };
+          return {
+            linked: true,
+            parentName: item.label,
+            parentId: item.id,
+            parentSlug: item.slug,
+            type: "child" as const,
+          };
         }
       }
       if (item.slug === activeSlug || item.id === activeSlug) {
-        return { linked: true, parentName: null, parentId: item.id, parentSlug: item.slug, type: "item" as const };
+        return {
+          linked: true,
+          parentName: null,
+          parentId: item.id,
+          parentSlug: item.slug,
+          type: "item" as const,
+        };
       }
     }
     return { linked: false, parentName: null, parentId: null, parentSlug: null, type: null };
@@ -368,7 +412,7 @@ export function PageTemplatesAdminPage() {
     try {
       let updatedHierarchy = cleanHierarchy(hierarchyProducts, activeSlug);
 
-      const parentIdx = updatedHierarchy.items.findIndex(item => item.id === selectedParentId);
+      const parentIdx = updatedHierarchy.items.findIndex((item) => item.id === selectedParentId);
       if (parentIdx === -1) {
         toast.error("Parent category not found.");
         setLinkingMenu(false);
@@ -379,29 +423,37 @@ export function PageTemplatesAdminPage() {
       const newChild: HierarchyChild = {
         id: activeSlug,
         slug: activeSlug,
-        label: active?.label || activeSlug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+        label:
+          active?.label ||
+          activeSlug
+            .split("-")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" "),
         to: "/products/$category/$family",
         params: {
           category: parentItem.slug,
-          family: activeSlug
-        }
+          family: activeSlug,
+        },
       };
 
       const newItems = [...updatedHierarchy.items];
       newItems[parentIdx] = {
         ...parentItem,
-        children: [...(parentItem.children || []), newChild]
+        children: [...(parentItem.children || []), newChild],
       };
 
       updatedHierarchy = {
         ...updatedHierarchy,
-        items: newItems
+        items: newItems,
       };
 
       // Save hierarchy
       const { error } = await supabase
         .from("site_config")
-        .upsert({ key: "hierarchy_products", value: updatedHierarchy as any }, { onConflict: "key" });
+        .upsert(
+          { key: "hierarchy_products", value: updatedHierarchy as any },
+          { onConflict: "key" },
+        );
 
       if (error) {
         toast.error("Failed to link to mega menu: " + error.message);
@@ -416,9 +468,13 @@ export function PageTemplatesAdminPage() {
         .upsert({ key: SUPABASE_KEY, value: updatedAllData as any }, { onConflict: "key" });
 
       if (templateError) {
-        toast.error("Linked to menu, but failed to save category on template: " + templateError.message);
+        toast.error(
+          "Linked to menu, but failed to save category on template: " + templateError.message,
+        );
       } else {
-        toast.success(`Successfully linked "${active?.label || activeSlug}" under "${parentItem.label}"!`);
+        toast.success(
+          `Successfully linked "${active?.label || activeSlug}" under "${parentItem.label}"!`,
+        );
         setAllData(updatedAllData);
         setHierarchyProducts(updatedHierarchy);
         setDirty(false);
@@ -438,7 +494,10 @@ export function PageTemplatesAdminPage() {
       const updatedHierarchy = cleanHierarchy(hierarchyProducts, activeSlug);
       const { error } = await supabase
         .from("site_config")
-        .upsert({ key: "hierarchy_products", value: updatedHierarchy as any }, { onConflict: "key" });
+        .upsert(
+          { key: "hierarchy_products", value: updatedHierarchy as any },
+          { onConflict: "key" },
+        );
 
       if (error) {
         toast.error("Failed to unlink: " + error.message);
@@ -453,15 +512,18 @@ export function PageTemplatesAdminPage() {
     }
   };
 
-  const slugList = Object.keys(allData).filter(s => s !== "__landing");
+  const slugList = Object.keys(allData).filter((s) => s !== "__landing");
   const isEmpty = slugList.length === 0;
 
   // Filtered list based on search query
   const filteredSlugs = useMemo(() => {
-    return slugList.filter(slug => {
+    return slugList.filter((slug) => {
       const cat = allData[slug];
       const label = cat?.label || slug;
-      return label.toLowerCase().includes(searchQuery.toLowerCase()) || slug.toLowerCase().includes(searchQuery.toLowerCase());
+      return (
+        label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        slug.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     });
   }, [slugList, allData, searchQuery]);
 
@@ -516,7 +578,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "products"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Product Templates
@@ -527,7 +589,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "projects"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Project Templates
@@ -538,7 +600,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "quality-assurance"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Q & A Templates
@@ -549,7 +611,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "applications"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Application Templates
@@ -560,7 +622,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "services"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Service Templates
@@ -571,7 +633,7 @@ export function PageTemplatesAdminPage() {
             "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
             editorType === "industries"
               ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground",
           )}
         >
           Industry Templates
@@ -597,7 +659,8 @@ export function PageTemplatesAdminPage() {
                 Product Page Templates
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
-                Edit the page templates for product family sub-pages. Changes save to Supabase instantly.
+                Edit the page templates for product family sub-pages. Changes save to Supabase
+                instantly.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -612,7 +675,11 @@ export function PageTemplatesAdminPage() {
                 disabled={saving || !dirty}
                 className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2"
               >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {saving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
                 {saving ? "Saving…" : "Save All"}
               </Button>
             </div>
@@ -622,21 +689,28 @@ export function PageTemplatesAdminPage() {
           {isEmpty && (
             <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border rounded-xl bg-surface/30">
               <Database className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="font-display text-xl font-bold uppercase mb-2">No page templates yet</h3>
+              <h3 className="font-display text-xl font-bold uppercase mb-2">
+                No page templates yet
+              </h3>
               <p className="text-sm text-muted-foreground max-w-md mb-6">
-                Seed the default page templates for all 8 built-in geomembrane sub-pages with one click.
-                You can edit or delete any of them after seeding.
+                Seed the default page templates for all 8 built-in geomembrane sub-pages with one
+                click. You can edit or delete any of them after seeding.
               </p>
               <Button
                 onClick={handleSeedDefaults}
                 disabled={seeding}
                 className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider gap-2"
               >
-                {seeding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Database className="h-4 w-4" />}
+                {seeding ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Database className="h-4 w-4" />
+                )}
                 {seeding ? "Seeding…" : "Seed All Default Templates"}
               </Button>
               <p className="text-xs text-muted-foreground mt-3">
-                This will populate HDPE, LLDPE, PVC, EPDM, PP, Textured, Speciality & Floating Cover categories.
+                This will populate HDPE, LLDPE, PVC, EPDM, PP, Textured, Speciality & Floating Cover
+                categories.
               </p>
             </div>
           )}
@@ -648,7 +722,11 @@ export function PageTemplatesAdminPage() {
               <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
                 <div className="px-4 py-3 border-b border-border">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    Sub-Page Templates ({filteredSlugs.length !== slugList.length ? `${filteredSlugs.length}/${slugList.length}` : slugList.length})
+                    Sub-Page Templates (
+                    {filteredSlugs.length !== slugList.length
+                      ? `${filteredSlugs.length}/${slugList.length}`
+                      : slugList.length}
+                    )
                   </p>
                 </div>
 
@@ -659,25 +737,42 @@ export function PageTemplatesAdminPage() {
                       <Input
                         placeholder="e.g. hdpe-geomembranes"
                         value={newSlug}
-                        onChange={e => setNewSlug(formatSlugInput(e.target.value))}
-                        onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                        onChange={(e) => setNewSlug(formatSlugInput(e.target.value))}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleAddNew();
+                          if (e.key === "Escape") setShowNewSlug(false);
+                        }}
                         className="text-xs h-8"
                         autoFocus
                       />
                       <div className="flex gap-1">
-                        <Button size="sm" onClick={handleAddNew}
-                          className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover">
+                        <Button
+                          size="sm"
+                          onClick={handleAddNew}
+                          className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover"
+                        >
                           Create
                         </Button>
-                        <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
-                          className="h-7 text-xs">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setShowNewSlug(false);
+                            setNewSlug("");
+                          }}
+                          className="h-7 text-xs"
+                        >
                           Cancel
                         </Button>
                       </div>
                     </div>
                   ) : (
-                    <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
-                      className="w-full h-8 text-xs gap-1.5">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowNewSlug(true)}
+                      className="w-full h-8 text-xs gap-1.5"
+                    >
                       <Plus className="h-3 w-3" /> New Template
                     </Button>
                   )}
@@ -721,23 +816,32 @@ export function PageTemplatesAdminPage() {
                           /products
                         </div>
                       </div>
-                      {activeSlug === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
+                      {activeSlug === "__landing" && (
+                        <ChevronRight className="h-3 w-3 text-primary" />
+                      )}
                     </button>
                   </div>
 
                   {/* Sub-Page Templates Section */}
                   <div className="space-y-1">
                     <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                      Sub-Page Templates ({filteredSlugs.length !== slugList.length ? `${filteredSlugs.length}/${slugList.length}` : slugList.length})
+                      Sub-Page Templates (
+                      {filteredSlugs.length !== slugList.length
+                        ? `${filteredSlugs.length}/${slugList.length}`
+                        : slugList.length}
+                      )
                     </p>
                     <div className="space-y-0.5">
-                      {paginatedSlugs.map(slug => {
+                      {paginatedSlugs.map((slug) => {
                         const cat = allData[slug];
                         const isActive = slug === activeSlug;
                         return (
                           <button
                             key={slug}
-                            onClick={() => { setActiveSlug(slug); setActiveTab("hero"); }}
+                            onClick={() => {
+                              setActiveSlug(slug);
+                              setActiveTab("hero");
+                            }}
                             className={cn(
                               "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
                               isActive
@@ -746,8 +850,12 @@ export function PageTemplatesAdminPage() {
                             )}
                           >
                             <div className="min-w-0 flex-1">
-                              <div className="truncate font-medium text-xs">{cat?.label || slug}</div>
-                              <div className="truncate text-[10px] text-muted-foreground mt-0.5">{slug}</div>
+                              <div className="truncate font-medium text-xs">
+                                {cat?.label || slug}
+                              </div>
+                              <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                                {slug}
+                              </div>
                             </div>
                             <div className="flex items-center gap-1 ml-1 shrink-0">
                               {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
@@ -756,7 +864,7 @@ export function PageTemplatesAdminPage() {
                                   variant="ghost"
                                   size="icon"
                                   className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                                  onClick={e => {
+                                  onClick={(e) => {
                                     e.stopPropagation();
                                     setSlugToDelete(slug);
                                   }}
@@ -769,7 +877,9 @@ export function PageTemplatesAdminPage() {
                         );
                       })}
                       {filteredSlugs.length === 0 && (
-                        <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                        <p className="text-center text-[10px] text-muted-foreground py-4">
+                          No results
+                        </p>
                       )}
                     </div>
                   </div>
@@ -781,7 +891,7 @@ export function PageTemplatesAdminPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
                       className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                     >
@@ -793,7 +903,7 @@ export function PageTemplatesAdminPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
                       className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                     >
@@ -808,10 +918,13 @@ export function PageTemplatesAdminPage() {
                 {!active ? (
                   <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-3 p-8 text-center">
                     <Eye className="h-10 w-10 opacity-30" />
-                    <p className="text-sm font-medium">Select a template from the sidebar to edit its content</p>
+                    <p className="text-sm font-medium">
+                      Select a template from the sidebar to edit its content
+                    </p>
                     <p className="text-xs max-w-xs">
-                      Each template maps to a sub-page at <code className="bg-surface px-1 rounded">/products/[category]/[family]</code>.
-                      All sections here become the live content on that sub-page.
+                      Each template maps to a sub-page at{" "}
+                      <code className="bg-surface px-1 rounded">/products/[category]/[family]</code>
+                      . All sections here become the live content on that sub-page.
                     </p>
                   </div>
                 ) : (
@@ -820,7 +933,9 @@ export function PageTemplatesAdminPage() {
                     <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                       <div>
                         <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                          {activeSlug === "__landing" ? "Products Landing Page" : (active.label || activeSlug)}
+                          {activeSlug === "__landing"
+                            ? "Products Landing Page"
+                            : active.label || activeSlug}
                         </h3>
                         <div className="flex items-center gap-2 flex-wrap mt-1">
                           {activeSlug === "__landing" ? (
@@ -838,12 +953,13 @@ export function PageTemplatesAdminPage() {
                           )}
 
                           {/* Mega Menu Linkage Status Badge & Action */}
-                          {activeSlug !== "__landing" && (
-                            linkage.linked ? (
+                          {activeSlug !== "__landing" &&
+                            (linkage.linked ? (
                               <div className="flex items-center gap-1">
                                 <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                  Active in Navigation {linkage.parentName ? `(under ${linkage.parentName})` : ""}
+                                  Active in Navigation{" "}
+                                  {linkage.parentName ? `(under ${linkage.parentName})` : ""}
                                 </span>
                                 <Button
                                   variant="ghost"
@@ -862,7 +978,14 @@ export function PageTemplatesAdminPage() {
                                   Unlinked (Hidden from Nav Menu)
                                 </span>
 
-                                <Dialog open={linkDialogOpen} onOpenChange={(open) => { setLinkDialogOpen(open); if (open && !selectedParentId && hierarchyProducts?.items?.[0]) setSelectedParentId(hierarchyProducts.items[0].id); }}>
+                                <Dialog
+                                  open={linkDialogOpen}
+                                  onOpenChange={(open) => {
+                                    setLinkDialogOpen(open);
+                                    if (open && !selectedParentId && hierarchyProducts?.items?.[0])
+                                      setSelectedParentId(hierarchyProducts.items[0].id);
+                                  }}
+                                >
                                   <DialogTrigger asChild>
                                     <Button
                                       variant="outline"
@@ -874,9 +997,13 @@ export function PageTemplatesAdminPage() {
                                   </DialogTrigger>
                                   <DialogContent className="sm:max-w-[400px] bg-card border border-border">
                                     <DialogHeader>
-                                      <DialogTitle className="font-display uppercase text-base tracking-tight">Link Page to Mega Menu</DialogTitle>
+                                      <DialogTitle className="font-display uppercase text-base tracking-tight">
+                                        Link Page to Mega Menu
+                                      </DialogTitle>
                                       <DialogDescription className="text-xs text-muted-foreground mt-1">
-                                        Select the parent category in the Products Mega Menu where you want to place <strong>{active?.label || activeSlug}</strong>.
+                                        Select the parent category in the Products Mega Menu where
+                                        you want to place{" "}
+                                        <strong>{active?.label || activeSlug}</strong>.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <div className="py-4">
@@ -892,15 +1019,21 @@ export function PageTemplatesAdminPage() {
                                             <SelectValue placeholder="Select parent category..." />
                                           </SelectTrigger>
                                           <SelectContent>
-                                            {hierarchyProducts.items.map(item => (
-                                              <SelectItem key={item.id} value={item.id} className="text-sm">
+                                            {hierarchyProducts.items.map((item) => (
+                                              <SelectItem
+                                                key={item.id}
+                                                value={item.id}
+                                                className="text-sm"
+                                              >
                                                 {item.label}
                                               </SelectItem>
                                             ))}
                                           </SelectContent>
                                         </Select>
                                       ) : (
-                                        <p className="text-xs text-muted-foreground italic">Loading parent categories...</p>
+                                        <p className="text-xs text-muted-foreground italic">
+                                          Loading parent categories...
+                                        </p>
                                       )}
                                     </div>
                                     <DialogFooter className="gap-2 sm:gap-0">
@@ -922,51 +1055,80 @@ export function PageTemplatesAdminPage() {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                            )
-                          )}
+                            ))}
 
                           {dirty && (
-                            <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
+                            <span className="text-[10px] text-amber-500 font-bold">
+                              ● Unsaved Changes
+                            </span>
                           )}
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2">
                         {activeSlug === "__landing" ? (
-                          <Button asChild variant="outline" size="sm"
-                            className="gap-1.5 text-xs h-8">
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="sm"
+                            className="gap-1.5 text-xs h-8"
+                          >
                             <Link to="/products" target="_blank">
                               <ExternalLink className="h-3 w-3" /> Preview
                             </Link>
                           </Button>
                         ) : categorySlug ? (
-                          <Button asChild variant="outline" size="sm"
-                            className="gap-1.5 text-xs h-8">
-                            <Link to="/products/$category/$family" params={{ category: categorySlug, family: activeSlug } as any}
-                              target="_blank">
+                          <Button
+                            asChild
+                            variant="outline"
+                            size="sm"
+                            className="gap-1.5 text-xs h-8"
+                          >
+                            <Link
+                              to="/products/$category/$family"
+                              params={{ category: categorySlug, family: activeSlug } as any}
+                              target="_blank"
+                            >
                               <ExternalLink className="h-3 w-3" /> Preview
                             </Link>
                           </Button>
                         ) : (
-                          <Button variant="outline" size="sm" disabled
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled
                             className="gap-1.5 text-xs h-8 opacity-40"
-                            title="Link this template to a menu category first">
+                            title="Link this template to a menu category first"
+                          >
                             <ExternalLink className="h-3 w-3" /> Preview
                           </Button>
                         )}
 
                         {activeSlug !== "__landing" && (
-                          <Dialog open={duplicateDialogOpen} onOpenChange={(open) => { setDuplicateDialogOpen(open); if (open) setDupSlug(`${activeSlug}-copy`); }}>
+                          <Dialog
+                            open={duplicateDialogOpen}
+                            onOpenChange={(open) => {
+                              setDuplicateDialogOpen(open);
+                              if (open) setDupSlug(`${activeSlug}-copy`);
+                            }}
+                          >
                             <DialogTrigger asChild>
-                              <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 uppercase font-bold tracking-wider cursor-pointer">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="gap-1.5 text-xs h-8 uppercase font-bold tracking-wider cursor-pointer"
+                              >
                                 <Copy className="h-3 w-3" /> Duplicate
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[400px] bg-card border border-border">
                               <DialogHeader>
-                                <DialogTitle className="font-display uppercase text-base tracking-tight">Duplicate Template</DialogTitle>
+                                <DialogTitle className="font-display uppercase text-base tracking-tight">
+                                  Duplicate Template
+                                </DialogTitle>
                                 <DialogDescription className="text-xs text-muted-foreground mt-1">
-                                  Enter the new URL-friendly slug for the duplicated template of <strong>{active.label || activeSlug}</strong>.
+                                  Enter the new URL-friendly slug for the duplicated template of{" "}
+                                  <strong>{active.label || activeSlug}</strong>.
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="py-4">
@@ -999,60 +1161,85 @@ export function PageTemplatesAdminPage() {
                             </DialogContent>
                           </Dialog>
                         )}
-                        <Button onClick={handleSave} disabled={saving || !dirty}
-                          className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5">
-                          {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                        <Button
+                          onClick={handleSave}
+                          disabled={saving || !dirty}
+                          className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5"
+                        >
+                          {saving ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <Save className="h-3 w-3" />
+                          )}
                           {saving ? "Saving…" : "Save"}
                         </Button>
                       </div>
                     </div>
 
                     {/* Section tabs */}
-                    <Tabs value={activeTab} onValueChange={setActiveTab}
-                      className="flex-1 flex flex-col overflow-hidden">
-                      <TabsList
-                        className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap"
-                      >
-                        {TABS
-                          .filter((t) => !(activeSlug === "__landing" && t.id !== "hero" && t.id !== "seo"))
-                          .map(t => (
-                            <TabsTrigger key={t.id} value={t.id}
-                              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
-                            >
-                              {t.label}
-                            </TabsTrigger>
-                          ))}
+                    <Tabs
+                      value={activeTab}
+                      onValueChange={setActiveTab}
+                      className="flex-1 flex flex-col overflow-hidden"
+                    >
+                      <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
+                        {TABS.filter(
+                          (t) => !(activeSlug === "__landing" && t.id !== "hero" && t.id !== "seo"),
+                        ).map((t) => (
+                          <TabsTrigger
+                            key={t.id}
+                            value={t.id}
+                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-2 px-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap transition-colors hover:cursor-pointer"
+                          >
+                            {t.label}
+                          </TabsTrigger>
+                        ))}
                       </TabsList>
 
                       <div className="flex-1 overflow-y-auto">
-
                         {/* ── HERO ── */}
                         <TabsContent value="hero" className="p-6 space-y-5 m-0">
                           <SectionHeading>Hero Section</SectionHeading>
                           <div>
-                            <FieldLabel>{activeSlug === "__landing" ? "Hero Title" : "Page Title (H1)"}</FieldLabel>
-                            <Input value={active.label ?? ""}
-                              onChange={e => set("label", e.target.value)}
-                              placeholder={activeSlug === "__landing" ? "e.g. Engineered Materials for Every Application" : "e.g. HDPE Geomembranes"}
-                              className="text-sm" />
+                            <FieldLabel>
+                              {activeSlug === "__landing" ? "Hero Title" : "Page Title (H1)"}
+                            </FieldLabel>
+                            <Input
+                              value={active.label ?? ""}
+                              onChange={(e) => set("label", e.target.value)}
+                              placeholder={
+                                activeSlug === "__landing"
+                                  ? "e.g. Engineered Materials for Every Application"
+                                  : "e.g. HDPE Geomembranes"
+                              }
+                              className="text-sm"
+                            />
                           </div>
                           <div>
                             <ImagePicker
                               label="Hero Background Image"
                               hint="Full URL or Supabase storage path to the hero background image"
                               value={active.heroImage ?? ""}
-                              onChange={val => set("heroImage", val)}
+                              onChange={(val) => set("heroImage", val)}
                               placeholder="https://images.unsplash.com/..."
                             />
                           </div>
                           <div>
                             <FieldLabel hint="Short paragraph shown below the title in the hero">
-                              {activeSlug === "__landing" ? "Hero Subtitle / Description" : "Subtitle / Tagline"}
+                              {activeSlug === "__landing"
+                                ? "Hero Subtitle / Description"
+                                : "Subtitle / Tagline"}
                             </FieldLabel>
-                            <Textarea value={active.subtitle ?? ""}
-                              onChange={e => set("subtitle", e.target.value)}
-                              placeholder={activeSlug === "__landing" ? "Browse our full catalogue of geosynthetic products..." : "Engineered materials for critical infrastructure…"}
-                              className="text-sm min-h-[96px] resize-none" />
+                            <Textarea
+                              value={active.subtitle ?? ""}
+                              onChange={(e) => set("subtitle", e.target.value)}
+                              placeholder={
+                                activeSlug === "__landing"
+                                  ? "Browse our full catalogue of geosynthetic products..."
+                                  : "Engineered materials for critical infrastructure…"
+                              }
+                              className="text-sm min-h-[96px] resize-none"
+                            />
                           </div>
                         </TabsContent>
 
@@ -1060,24 +1247,26 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="description" className="p-6 m-0">
                           <SectionHeading>Description Paragraphs</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            These paragraphs appear in the "Technical Description" section of the page. Each entry is one paragraph.
+                            These paragraphs appear in the "Technical Description" section of the
+                            page. Each entry is one paragraph.
                           </p>
                           <StringListEditor
                             label="Paragraphs"
                             items={active.description ?? []}
-                            onChange={v => set("description", v)}
+                            onChange={(v) => set("description", v)}
                             multiline
                             placeholder="Describe the product in detail…"
                           />
                           <div className="mt-8 border-t border-border pt-6">
                             <SectionHeading>Key Features / Benefits Bullets</SectionHeading>
                             <p className="text-xs text-muted-foreground mb-4">
-                              Short bullet-point benefits that appear in the "Benefits of Choosing Our Products" checklist.
+                              Short bullet-point benefits that appear in the "Benefits of Choosing
+                              Our Products" checklist.
                             </p>
                             <StringListEditor
                               label="Feature bullets"
                               items={active.features ?? []}
-                              onChange={v => set("features", v)}
+                              onChange={(v) => set("features", v)}
                               placeholder="e.g. High resistance to UV and chemical degradation"
                             />
                           </div>
@@ -1087,7 +1276,8 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="highlights" className="p-6 m-0">
                           <SectionHeading>Technical Highlights</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            These appear as badge-style callouts in the hero section (e.g. "Thickness: 1mm – 3mm").
+                            These appear as badge-style callouts in the hero section (e.g.
+                            "Thickness: 1mm – 3mm").
                           </p>
                           <PairsEditor
                             label="Highlight badges"
@@ -1096,7 +1286,7 @@ export function PageTemplatesAdminPage() {
                               { key: "label", label: "Label", placeholder: "e.g. Thickness" },
                               { key: "value", label: "Value", placeholder: "e.g. 1mm – 3mm" },
                             ]}
-                            onChange={v => set("technicalHighlights", v as any)}
+                            onChange={(v) => set("technicalHighlights", v as any)}
                             newItem={{ label: "", value: "" } as any}
                           />
                         </TabsContent>
@@ -1105,11 +1295,22 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="table" className="p-6 m-0">
                           <SectionHeading>Properties & Specifications Table</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Add columns and rows to build the technical data table. The first column is typically the property name.
+                            Add columns and rows to build the technical data table. The first column
+                            is typically the property name.
                           </p>
                           <PropertiesTableEditor
-                            table={active.propertiesTable ?? { headers: ["Property", "Test Method", "Value (Metric)", "Value (Imperial)"], rows: [] }}
-                            onChange={v => set("propertiesTable", v)}
+                            table={
+                              active.propertiesTable ?? {
+                                headers: [
+                                  "Property",
+                                  "Test Method",
+                                  "Value (Metric)",
+                                  "Value (Imperial)",
+                                ],
+                                rows: [],
+                              }
+                            }
+                            onChange={(v) => set("propertiesTable", v)}
                           />
                         </TabsContent>
 
@@ -1117,16 +1318,26 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="types" className="p-6 m-0">
                           <SectionHeading>Types of {active.label || "this product"}</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Cards shown in the "Types" section. Each card has a name and a short description.
+                            Cards shown in the "Types" section. Each card has a name and a short
+                            description.
                           </p>
                           <PairsEditor
                             label="Product types"
                             items={(active.types ?? []) as any}
                             fields={[
-                              { key: "name", label: "Type Name", placeholder: "e.g. Smooth Geomembrane" },
-                              { key: "description", label: "Description", placeholder: "Short description of this type…", multiline: true },
+                              {
+                                key: "name",
+                                label: "Type Name",
+                                placeholder: "e.g. Smooth Geomembrane",
+                              },
+                              {
+                                key: "description",
+                                label: "Description",
+                                placeholder: "Short description of this type…",
+                                multiline: true,
+                              },
                             ]}
-                            onChange={v => set("types", v as any)}
+                            onChange={(v) => set("types", v as any)}
                             newItem={{ name: "", description: "" } as any}
                           />
                         </TabsContent>
@@ -1141,10 +1352,19 @@ export function PageTemplatesAdminPage() {
                             label="Benefits"
                             items={(active.benefits ?? []) as any}
                             fields={[
-                              { key: "title", label: "Benefit Title", placeholder: "e.g. High Durability" },
-                              { key: "description", label: "Description", placeholder: "Explain why this is a benefit…", multiline: true },
+                              {
+                                key: "title",
+                                label: "Benefit Title",
+                                placeholder: "e.g. High Durability",
+                              },
+                              {
+                                key: "description",
+                                label: "Description",
+                                placeholder: "Explain why this is a benefit…",
+                                multiline: true,
+                              },
                             ]}
-                            onChange={v => set("benefits", v as any)}
+                            onChange={(v) => set("benefits", v as any)}
                             newItem={{ title: "", description: "" } as any}
                           />
                         </TabsContent>
@@ -1153,16 +1373,26 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="faqs" className="p-6 m-0">
                           <SectionHeading>Frequently Asked Questions</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            These appear in the FAQ accordion section on the page. Write clear, helpful answers.
+                            These appear in the FAQ accordion section on the page. Write clear,
+                            helpful answers.
                           </p>
                           <PairsEditor
                             label="FAQs"
                             items={(active.faqs ?? []) as any}
                             fields={[
-                              { key: "question", label: "Question", placeholder: "e.g. What is the typical lifespan?" },
-                              { key: "answer", label: "Answer", placeholder: "Provide a thorough, helpful answer…", multiline: true },
+                              {
+                                key: "question",
+                                label: "Question",
+                                placeholder: "e.g. What is the typical lifespan?",
+                              },
+                              {
+                                key: "answer",
+                                label: "Answer",
+                                placeholder: "Provide a thorough, helpful answer…",
+                                multiline: true,
+                              },
                             ]}
-                            onChange={v => set("faqs", v as any)}
+                            onChange={(v) => set("faqs", v as any)}
                             newItem={{ question: "", answer: "" } as any}
                           />
                         </TabsContent>
@@ -1171,12 +1401,13 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="installation" className="p-6 m-0">
                           <SectionHeading>Installation Specifications</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Detailed installation guidance shown in a highlighted block on the page. Each entry is one paragraph.
+                            Detailed installation guidance shown in a highlighted block on the page.
+                            Each entry is one paragraph.
                           </p>
                           <StringListEditor
                             label="Installation spec paragraphs"
                             items={active.installationSpecs ?? []}
-                            onChange={v => set("installationSpecs", v)}
+                            onChange={(v) => set("installationSpecs", v)}
                             multiline
                             placeholder="Describe installation requirements in detail…"
                           />
@@ -1186,20 +1417,38 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="products" className="p-6 m-0">
                           <SectionHeading>Popular Products in Catalogue</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            These cards appear in the "Popular Products" section linking to the catalogue.
-                            Include up to 6 for best layout.
+                            These cards appear in the "Popular Products" section linking to the
+                            catalogue. Include up to 6 for best layout.
                           </p>
                           <PairsEditor
                             label="Popular products"
                             items={(active.popularProducts ?? []) as any}
                             fields={[
                               { key: "slug", label: "Select Product", type: "product" },
-                              { key: "name", label: "Product Name", placeholder: "e.g. GSE HDPE Smooth" },
-                              { key: "spec", label: "Specification Range", placeholder: "e.g. 1.0mm – 3.0mm" },
-                              { key: "desc", label: "Short Description", placeholder: "One line description…", multiline: true },
-                              { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
+                              {
+                                key: "name",
+                                label: "Product Name",
+                                placeholder: "e.g. GSE HDPE Smooth",
+                              },
+                              {
+                                key: "spec",
+                                label: "Specification Range",
+                                placeholder: "e.g. 1.0mm – 3.0mm",
+                              },
+                              {
+                                key: "desc",
+                                label: "Short Description",
+                                placeholder: "One line description…",
+                                multiline: true,
+                              },
+                              {
+                                key: "image",
+                                label: "Image URL",
+                                placeholder: "https://…",
+                                type: "image",
+                              },
                             ]}
-                            onChange={v => set("popularProducts", v as any)}
+                            onChange={(v) => set("popularProducts", v as any)}
                             newItem={{ slug: "", name: "", spec: "", desc: "", image: "" } as any}
                           />
                         </TabsContent>
@@ -1215,13 +1464,34 @@ export function PageTemplatesAdminPage() {
                             items={(active.projectReferences ?? []) as any}
                             fields={[
                               { key: "project_slug", label: "Link to Case Study", type: "project" },
-                              { key: "name", label: "Project Name", placeholder: "e.g. Mining Tailings Dam" },
-                              { key: "location", label: "Location / Country", placeholder: "e.g. South Africa" },
+                              {
+                                key: "name",
+                                label: "Project Name",
+                                placeholder: "e.g. Mining Tailings Dam",
+                              },
+                              {
+                                key: "location",
+                                label: "Location / Country",
+                                placeholder: "e.g. South Africa",
+                              },
                               { key: "year", label: "Year Completed", placeholder: "e.g. 2023" },
-                              { key: "image", label: "Image URL", placeholder: "https://…", type: "image" },
+                              {
+                                key: "image",
+                                label: "Image URL",
+                                placeholder: "https://…",
+                                type: "image",
+                              },
                             ]}
-                            onChange={v => set("projectReferences", v as any)}
-                            newItem={{ project_slug: "", name: "", location: "", year: "", image: "" } as any}
+                            onChange={(v) => set("projectReferences", v as any)}
+                            newItem={
+                              {
+                                project_slug: "",
+                                name: "",
+                                location: "",
+                                year: "",
+                                image: "",
+                              } as any
+                            }
                           />
                         </TabsContent>
 
@@ -1229,17 +1499,32 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="apps" className="p-6 m-0">
                           <SectionHeading>Applications & Engineering Use Cases</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Application cards shown in the "Common Applications" section. The slug links to <code className="bg-surface px-1 rounded">/applications/[slug]</code>.
+                            Application cards shown in the "Common Applications" section. The slug
+                            links to{" "}
+                            <code className="bg-surface px-1 rounded">/applications/[slug]</code>.
                           </p>
                           <PairsEditor
                             label="Applications"
                             items={(active.applications ?? []) as any}
                             fields={[
-                              { key: "label", label: "Application Name", placeholder: "e.g. Mining Facilities" },
-                              { key: "slug", label: "Application Slug", placeholder: "e.g. mining" },
-                              { key: "description", label: "Short Description", placeholder: "How this product is used here…", multiline: true },
+                              {
+                                key: "label",
+                                label: "Application Name",
+                                placeholder: "e.g. Mining Facilities",
+                              },
+                              {
+                                key: "slug",
+                                label: "Application Slug",
+                                placeholder: "e.g. mining",
+                              },
+                              {
+                                key: "description",
+                                label: "Short Description",
+                                placeholder: "How this product is used here…",
+                                multiline: true,
+                              },
                             ]}
-                            onChange={v => set("applications", v as any)}
+                            onChange={(v) => set("applications", v as any)}
                             newItem={{ label: "", slug: "", description: "" } as any}
                           />
                         </TabsContent>
@@ -1248,7 +1533,8 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="industries" className="p-6 m-0">
                           <SectionHeading>Industries That Use This Product</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Industry icons shown in the "Industries" grid. The slug links to <code className="bg-surface px-1 rounded">/applications/[slug]</code>.
+                            Industry icons shown in the "Industries" grid. The slug links to{" "}
+                            <code className="bg-surface px-1 rounded">/applications/[slug]</code>.
                           </p>
                           <PairsEditor
                             label="Industries"
@@ -1257,7 +1543,7 @@ export function PageTemplatesAdminPage() {
                               { key: "label", label: "Industry Name", placeholder: "e.g. Mining" },
                               { key: "slug", label: "Industry Slug", placeholder: "e.g. mining" },
                             ]}
-                            onChange={v => set("industries", v as any)}
+                            onChange={(v) => set("industries", v as any)}
                             newItem={{ label: "", slug: "" } as any}
                           />
                         </TabsContent>
@@ -1266,17 +1552,29 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="related" className="p-6 m-0">
                           <SectionHeading>Related Product Groups</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Links shown in the "Related Product Groups" section on the sub-family page.
-                            Each entry needs a display name and the full path (e.g. <code className="bg-surface px-1 rounded">/products/geomembranes/lldpe-geomembranes</code>).
+                            Links shown in the "Related Product Groups" section on the sub-family
+                            page. Each entry needs a display name and the full path (e.g.{" "}
+                            <code className="bg-surface px-1 rounded">
+                              /products/geomembranes/lldpe-geomembranes
+                            </code>
+                            ).
                           </p>
                           <PairsEditor
                             label="Related product groups"
                             items={((active as any).relatedProductGroups ?? []) as any}
                             fields={[
-                              { key: "name", label: "Group Name", placeholder: "e.g. LLDPE Geomembranes" },
-                              { key: "link", label: "Link Path", placeholder: "e.g. /products/geomembranes/lldpe-geomembranes" },
+                              {
+                                key: "name",
+                                label: "Group Name",
+                                placeholder: "e.g. LLDPE Geomembranes",
+                              },
+                              {
+                                key: "link",
+                                label: "Link Path",
+                                placeholder: "e.g. /products/geomembranes/lldpe-geomembranes",
+                              },
                             ]}
-                            onChange={v => set("relatedProductGroups" as any, v as any)}
+                            onChange={(v) => set("relatedProductGroups" as any, v as any)}
                             newItem={{ name: "", link: "" } as any}
                           />
                         </TabsContent>
@@ -1285,7 +1583,8 @@ export function PageTemplatesAdminPage() {
                         <TabsContent value="seo" className="p-6 space-y-5 m-0">
                           <SectionHeading>SEO / Meta Tags</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
-                            Configure the search engine optimization tags for this product family sub-page.
+                            Configure the search engine optimization tags for this product family
+                            sub-page.
                           </p>
                           <div>
                             <FieldLabel hint="The title displayed in browser tabs and search engine results. Recommended: 50-60 characters.">
@@ -1339,7 +1638,6 @@ export function PageTemplatesAdminPage() {
                             />
                           </div>
                         </TabsContent>
-
                       </div>
                     </Tabs>
                   </>

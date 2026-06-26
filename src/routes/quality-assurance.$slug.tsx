@@ -78,7 +78,9 @@ export const Route = createFileRoute("/quality-assurance/$slug")({
     const title = doc
       ? `${doc.category_name} — Quality Assurance | Geosynthetics Africa`
       : "Quality Assurance — Geosynthetics Africa";
-    const desc = doc?.short_description || "Manufacturer-aligned quality assurance for geosynthetics installations across Africa.";
+    const desc =
+      doc?.short_description ||
+      "Manufacturer-aligned quality assurance for geosynthetics installations across Africa.";
     return {
       meta: [
         { title },

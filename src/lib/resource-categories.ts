@@ -59,5 +59,4 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
 
 export const VIDEO_HOST_RE = /(youtube\.com|youtu\.be|vimeo\.com|wistia\.com)/i;
 
-export const getCategory = (slug: string) =>
-  RESOURCE_CATEGORIES.find((c) => c.slug === slug);
+export const getCategory = (slug: string) => RESOURCE_CATEGORIES.find((c) => c.slug === slug);

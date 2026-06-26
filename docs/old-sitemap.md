@@ -3,6 +3,7 @@
 This document categorizes all existing WordPress URLs to assist in React application routing and SEO preservation.
 
 ## Core Pages
+
 - [geosynthetics.co.za](https://geosynthetics.co.za/)
 - [brochures-downloadable-pdfs](https://geosynthetics.co.za/brochures-downloadable-pdfs/)
 - [contact](https://geosynthetics.co.za/contact/)
@@ -17,6 +18,7 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [sabs-damp-proof-membrane](https://geosynthetics.co.za/sabs-damp-proof-membrane/)
 
 ## Products (Overview)
+
 - [biaxial-geogrids-supplier-africa](https://geosynthetics.co.za/biaxial-geogrids-supplier-africa/)
 - [botswana-geomembranes-hdpe-geotextiles-geogrids-supplier](https://geosynthetics.co.za/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier/)
 - [corrugated-hdpe-drainage-pipe-supplier](https://geosynthetics.co.za/corrugated-hdpe-drainage-pipe-supplier/)
@@ -39,6 +41,7 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier](https://geosynthetics.co.za/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier/)
 
 ## Specific Product Details
+
 - [coconut-fibre-erosion-control-blankets](https://geosynthetics.co.za/coconut-fibre-erosion-control-blankets/)
 - [eva-liner-south-africa](https://geosynthetics.co.za/eva-liner-south-africa/)
 - [geo-hdpe-liner-textured](https://geosynthetics.co.za/geo-hdpe-liner-textured/)
@@ -60,6 +63,7 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [woven-geotextiles](https://geosynthetics.co.za/woven-geotextiles/)
 
 ## Services & Installation
+
 - [channel-lining-gccm-installation-africa](https://geosynthetics.co.za/channel-lining-gccm-installation-africa/)
 - [gabion-basket-installation](https://geosynthetics.co.za/gabion-basket-installation/)
 - [gcl-liner-installation-contractors-africa](https://geosynthetics.co.za/gcl-liner-installation-contractors-africa/)
@@ -72,12 +76,14 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [eurobent-gcl-installation-quality-assurance](https://geosynthetics.co.za/quality-assurance/eurobent-gcl-installation-quality-assurance/)
 
 ## Applications & Case Studies
+
 - [applications](https://geosynthetics.co.za/applications/)
 - [gse-hdpe-liners-supply-mcc-copper-mining-project-tanzania](https://geosynthetics.co.za/gse-hdpe-liners-supply-mcc-copper-mining-project-tanzania/)
 - [tensar-biaxial-geogrids-reinforcement-project-africa](https://geosynthetics.co.za/tensar-biaxial-geogrids-reinforcement-project-africa/)
 - [west-wits-mining-rom-pad-hdpe-liner-case-study](https://geosynthetics.co.za/west-wits-mining-rom-pad-hdpe-liner-case-study/)
 
 ## Regional Supplying
+
 - [abrasion-resistant-bidim-supplier-africa](https://geosynthetics.co.za/abrasion-resistant-bidim-supplier-africa/)
 - [bera-grass-fix-africa](https://geosynthetics.co.za/bera-grass-fix-africa/)
 - [bera-gravel-fix-africa](https://geosynthetics.co.za/bera-gravel-fix-africa/)
@@ -103,6 +109,7 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control](https://geosynthetics.co.za/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control/)
 
 ## Quality & Resources
+
 - [literature-usage-guides-downloadable-pdfs](https://geosynthetics.co.za/literature-usage-guides-downloadable-pdfs/)
 - [our-resources](https://geosynthetics.co.za/our-resources/)
 - [quality-assurance](https://geosynthetics.co.za/quality-assurance/)
@@ -111,6 +118,7 @@ This document categorizes all existing WordPress URLs to assist in React applica
 - [technical-data-sheets-downloadable-pdfs](https://geosynthetics.co.za/technical-data-sheets-downloadable-pdfs/)
 
 ## Media & Assets (PDFs)
+
 - [1085280-HDPE-7000-2.00-mm-Black-Smooth-TDS-GSE-HDPE.pdf](https://geosynthetics.co.za/wp-content/uploads/2025/12/1085280-HDPE-7000-2.00-mm-Black-Smooth-TDS-GSE-HDPE.pdf)
 - [1114938-HDPE-7000-1.00-mm-Black-Smooth-TDS-GSE-HDPE.pdf](https://geosynthetics.co.za/wp-content/uploads/2025/12/1114938-HDPE-7000-1.00-mm-Black-Smooth-TDS-GSE-HDPE.pdf)
 - [1120116-HDPE-7000-1.50-mm-Black-Smooth-TDS-GSE-HDPE.pdf](https://geosynthetics.co.za/wp-content/uploads/2025/12/1120116-HDPE-7000-1.50-mm-Black-Smooth-TDS-GSE-HDPE.pdf)

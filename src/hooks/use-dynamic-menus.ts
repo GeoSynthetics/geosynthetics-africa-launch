@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { megaMenus, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "@/components/site/mega-menu-data";
+import {
+  megaMenus,
+  type MegaMenuConfig,
+  type MegaProductItem,
+  type MegaFeatureItem,
+} from "@/components/site/mega-menu-data";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 
 // Module-level in-memory cache to keep data across route transitions / remounts
@@ -14,7 +19,7 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
   _fetchPromise = (async () => {
     const SECTION_KEYS = ["applications", "products", "services", "industries"] as const;
     const keysToFetch = [
-      ...SECTION_KEYS.map(k => `hierarchy_${k}`),
+      ...SECTION_KEYS.map((k) => `hierarchy_${k}`),
       "template_services",
       "template_applications",
       "template_industries",
@@ -32,8 +37,8 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       }
 
       const defaults = getDefaultSections();
-      const sections = SECTION_KEYS.map(key => {
-        const row = data.find(d => d.key === `hierarchy_${key}`);
+      const sections = SECTION_KEYS.map((key) => {
+        const row = data.find((d) => d.key === `hierarchy_${key}`);
         const dbVal = row?.value as any;
         if (dbVal && Array.isArray(dbVal.items)) {
           return dbVal;
@@ -49,15 +54,25 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       let builtMenus = buildMegaMenuFromHierarchy(sections);
 
       // Fetch templates map
-      const servicesTemplates = (data.find(d => d.key === "template_services")?.value ?? {}) as Record<string, any>;
-      const applicationsTemplates = (data.find(d => d.key === "template_applications")?.value ?? {}) as Record<string, any>;
-      const industriesTemplates = (data.find(d => d.key === "template_industries")?.value ?? {}) as Record<string, any>;
+      const servicesTemplates = (data.find((d) => d.key === "template_services")?.value ??
+        {}) as Record<string, any>;
+      const applicationsTemplates = (data.find((d) => d.key === "template_applications")?.value ??
+        {}) as Record<string, any>;
+      const industriesTemplates = (data.find((d) => d.key === "template_industries")?.value ??
+        {}) as Record<string, any>;
 
       // Collect all topSellingProductId values
       const topSellingProductIds = new Set<string>();
 
-      const getTemplateTopSellingIds = (menuKey: string, slug: string, itemMegaContent?: any): string[] => {
-        if (itemMegaContent?.topSellingProductIds && itemMegaContent.topSellingProductIds.length > 0) {
+      const getTemplateTopSellingIds = (
+        menuKey: string,
+        slug: string,
+        itemMegaContent?: any,
+      ): string[] => {
+        if (
+          itemMegaContent?.topSellingProductIds &&
+          itemMegaContent.topSellingProductIds.length > 0
+        ) {
           return itemMegaContent.topSellingProductIds;
         }
         if (itemMegaContent?.topSellingProductId) {
@@ -101,7 +116,10 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       }
 
       // Fetch products by id for top selling product highlight
-      const topSellingMap = new Map<string, { id: string; name: string; slug: string; image: string; short_description: string }>();
+      const topSellingMap = new Map<
+        string,
+        { id: string; name: string; slug: string; image: string; short_description: string }
+      >();
       if (topSellingProductIds.size > 0) {
         const { data: dbProducts } = await supabase
           .from("products_public")
@@ -174,7 +192,7 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       }
 
       const hydrateFeatured = (featured: any[]) =>
-        featured.map(item => {
+        featured.map((item) => {
           const slug = getProductSlug(item);
           const dbProduct = slug ? productMap.get(slug) : undefined;
           if (dbProduct) {
@@ -190,8 +208,9 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
           return item;
         });
 
-      builtMenus = builtMenus.map(menu => {
-        const isTargetMenu = menu.key === "services" || menu.key === "applications" || menu.key === "industries";
+      builtMenus = builtMenus.map((menu) => {
+        const isTargetMenu =
+          menu.key === "services" || menu.key === "applications" || menu.key === "industries";
 
         return {
           ...menu,
@@ -201,11 +220,11 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
               menu.columns.featuredKind === "product" && menu.columns.featured
                 ? (hydrateFeatured(menu.columns.featured as any[]) as any)
                 : menu.columns.featured,
-            primary: menu.columns.primary.map(p => {
+            primary: menu.columns.primary.map((p) => {
               const slug = p.slug || p.params?.slug || p.params?.category;
               const pIds = slug ? getTemplateTopSellingIds(menu.key, slug, p.content) : [];
               const topProds = pIds
-                .map(id => topSellingMap.get(id))
+                .map((id) => topSellingMap.get(id))
                 .filter((item): item is NonNullable<typeof item> => !!item);
 
               const content = p.content

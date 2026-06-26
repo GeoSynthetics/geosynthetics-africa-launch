@@ -12,8 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 let trackingConfigCache: { googleAnalyticsId?: string; googleTagManagerId?: string } | null = null;
 
 export function TrackingBuilderTab() {
-  const [googleAnalyticsId, setGoogleAnalyticsId] = useState(() => trackingConfigCache?.googleAnalyticsId || "");
-  const [googleTagManagerId, setGoogleTagManagerId] = useState(() => trackingConfigCache?.googleTagManagerId || "");
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState(
+    () => trackingConfigCache?.googleAnalyticsId || "",
+  );
+  const [googleTagManagerId, setGoogleTagManagerId] = useState(
+    () => trackingConfigCache?.googleTagManagerId || "",
+  );
   const [loading, setLoading] = useState(!trackingConfigCache);
   const [saving, setSaving] = useState(false);
 
@@ -56,10 +60,7 @@ export function TrackingBuilderTab() {
 
       const { error } = await supabase
         .from("site_config")
-        .upsert(
-          { key: "tracking_config", value: configValue },
-          { onConflict: "key" }
-        );
+        .upsert({ key: "tracking_config", value: configValue }, { onConflict: "key" });
 
       if (error) throw error;
       trackingConfigCache = configValue; // Update the cache
@@ -141,7 +142,8 @@ export function TrackingBuilderTab() {
           Tracking & Cookies Integration
         </h3>
         <p className="text-sm text-muted-foreground">
-          Manage your Google Analytics and Google Tag Manager credentials. These tracking platforms will be loaded dynamically in compliance with visitors' selected cookie preferences.
+          Manage your Google Analytics and Google Tag Manager credentials. These tracking platforms
+          will be loaded dynamically in compliance with visitors' selected cookie preferences.
         </p>
       </div>
 
@@ -160,12 +162,16 @@ export function TrackingBuilderTab() {
                 </CardTitle>
               </div>
               <CardDescription className="text-xs leading-relaxed">
-                Connect your GA4 account to measure user engagement, traffic trends, and conversion metrics on the platform.
+                Connect your GA4 account to measure user engagement, traffic trends, and conversion
+                metrics on the platform.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="ga-id" className="text-xs uppercase font-bold tracking-wider text-muted-foreground">
+                <Label
+                  htmlFor="ga-id"
+                  className="text-xs uppercase font-bold tracking-wider text-muted-foreground"
+                >
                   GA4 Measurement ID
                 </Label>
                 <Input
@@ -176,7 +182,9 @@ export function TrackingBuilderTab() {
                   className="bg-background/80 border-border focus:border-primary focus:ring-1 focus:ring-primary/20 font-mono text-sm"
                 />
                 <p className="text-[10px] text-muted-foreground leading-normal">
-                  Found in your GA4 Admin panel under <span className="font-semibold text-foreground">Data Streams</span> &gt; <span className="font-semibold text-foreground">Web Stream Details</span>.
+                  Found in your GA4 Admin panel under{" "}
+                  <span className="font-semibold text-foreground">Data Streams</span> &gt;{" "}
+                  <span className="font-semibold text-foreground">Web Stream Details</span>.
                 </p>
               </div>
             </CardContent>
@@ -195,12 +203,16 @@ export function TrackingBuilderTab() {
                 </CardTitle>
               </div>
               <CardDescription className="text-xs leading-relaxed">
-                Inject a container to load tag deployments, custom tracking codes, and pixel management without changing code.
+                Inject a container to load tag deployments, custom tracking codes, and pixel
+                management without changing code.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="gtm-id" className="text-xs uppercase font-bold tracking-wider text-muted-foreground">
+                <Label
+                  htmlFor="gtm-id"
+                  className="text-xs uppercase font-bold tracking-wider text-muted-foreground"
+                >
                   GTM Container ID
                 </Label>
                 <Input
@@ -211,7 +223,8 @@ export function TrackingBuilderTab() {
                   className="bg-background/80 border-border focus:border-primary focus:ring-1 focus:ring-primary/20 font-mono text-sm"
                 />
                 <p className="text-[10px] text-muted-foreground leading-normal">
-                  Found at the top of your Google Tag Manager dashboard, starting with <span className="font-semibold text-foreground">GTM-</span>.
+                  Found at the top of your Google Tag Manager dashboard, starting with{" "}
+                  <span className="font-semibold text-foreground">GTM-</span>.
                 </p>
               </div>
             </CardContent>
@@ -228,7 +241,11 @@ export function TrackingBuilderTab() {
                 Privacy Consent Compliance Note
               </h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                By default, this site enforces strict GDPR and POPIA standards. These tracking scripts will **only** load if a visitor explicitly enables <span className="font-semibold text-foreground">"Analytical Trackers"</span> in the cookie consent preference panel. If left blank, no integration scripts will be generated.
+                By default, this site enforces strict GDPR and POPIA standards. These tracking
+                scripts will **only** load if a visitor explicitly enables{" "}
+                <span className="font-semibold text-foreground">"Analytical Trackers"</span> in the
+                cookie consent preference panel. If left blank, no integration scripts will be
+                generated.
               </p>
             </div>
           </CardContent>

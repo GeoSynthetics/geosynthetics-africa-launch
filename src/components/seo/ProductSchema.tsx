@@ -70,9 +70,7 @@ export function ProductSchema({
   const offers: Record<string, unknown> = {
     "@type": "Offer",
     url: productUrl,
-    availability: inStock
-      ? "https://schema.org/InStock"
-      : "https://schema.org/PreOrder",
+    availability: inStock ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
     priceCurrency: "ZAR",
     seller: {
       "@type": "Organization",
@@ -86,9 +84,7 @@ export function ProductSchema({
   } else {
     // Use 0 to indicate "contact for price" — required by Google if Offer is present
     offers.price = "0";
-    offers.priceValidUntil = new Date(
-      Date.now() + 365 * 24 * 60 * 60 * 1000,
-    )
+    offers.priceValidUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
       .toISOString()
       .split("T")[0];
   }

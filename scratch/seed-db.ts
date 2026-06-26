@@ -1,5 +1,5 @@
-import fs from 'fs';
-import { createClient } from '@supabase/supabase-js';
+import fs from "fs";
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -10,12 +10,12 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
-const data = JSON.parse(fs.readFileSync('scratch/mega_menu.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync("scratch/mega_menu.json", "utf8"));
 
 async function seed() {
   const { error } = await supabase
-    .from('site_config')
-    .upsert({ key: 'mega_menu', value: data }, { onConflict: 'key' });
+    .from("site_config")
+    .upsert({ key: "mega_menu", value: data }, { onConflict: "key" });
 
   if (error) {
     console.error("Error inserting data:", error);

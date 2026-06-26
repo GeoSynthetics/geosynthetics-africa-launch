@@ -76,7 +76,7 @@ export function TrackingLoader() {
     if (googleAnalyticsId && googleAnalyticsId.trim() !== "") {
       const gaId = googleAnalyticsId.trim();
       const scriptId = "gsa-google-analytics";
-      
+
       if (!document.getElementById(scriptId)) {
         // Create GA external script
         const scriptEl = document.createElement("script");

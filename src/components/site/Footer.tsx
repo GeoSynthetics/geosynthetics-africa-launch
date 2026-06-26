@@ -23,7 +23,12 @@ const COMPANY = [
   { label: "Terms & Conditions", to: "/" },
 ];
 
-const CERTIFICATIONS = ["IAGI Member - One of only 5 in Africa", "B-BBEE Level 2", "Pan-African Logistics", "QA/QC Certified"];
+const CERTIFICATIONS = [
+  "IAGI Member - One of only 5 in Africa",
+  "B-BBEE Level 2",
+  "Pan-African Logistics",
+  "QA/QC Certified",
+];
 
 const SOCIAL_LINKS = [
   { Icon: Linkedin, label: "LinkedIn", href: "#" },
@@ -32,10 +37,19 @@ const SOCIAL_LINKS = [
   { Icon: Youtube, label: "YouTube", href: "#" },
 ];
 
-type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
+  to: string;
+  params?: Record<string, string>;
+};
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
-function FooterCol({ title, items }: { title: string; items: { label: string; to: string; params?: Record<string, string> }[] }) {
+function FooterCol({
+  title,
+  items,
+}: {
+  title: string;
+  items: { label: string; to: string; params?: Record<string, string> }[];
+}) {
   return (
     <div className="min-w-0">
       <h4 className="text-[10px] font-bold uppercase tracking-widest text-surface-dark-foreground mb-3">
@@ -126,13 +140,12 @@ export function Footer() {
       {/* Main footer grid */}
       <div className="w-full px-6 lg:px-10 xl:px-16 py-10">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-x-6 gap-y-8">
-
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
-              Africa's integrated geosynthetics platform delivering quality products, expert services
-              and technical solutions.
+              Africa's integrated geosynthetics platform delivering quality products, expert
+              services and technical solutions.
             </p>
             <div className="mt-5 flex items-center gap-2">
               {SOCIAL_LINKS.map(({ Icon, label, href }) => (
@@ -191,7 +204,6 @@ export function Footer() {
               </button>
             </form>
           </div>
-
         </div>
       </div>
 
@@ -199,7 +211,17 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            © {new Date().getFullYear()} Geosynthetics Africa (Pty) Ltd. All Rights Reserved. <span className="hidden md:inline">|</span><br className="md:hidden" /> <a className="text-primary-foreground hover:text-primary transition whitespace-nowrap" href="https://kavaradigital.online" target="_blank" rel="noopener noreferrer">Site by Kavara Digital</a>
+            © {new Date().getFullYear()} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.{" "}
+            <span className="hidden md:inline">|</span>
+            <br className="md:hidden" />{" "}
+            <a
+              className="text-primary-foreground hover:text-primary transition whitespace-nowrap"
+              href="https://kavaradigital.online"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Site by Kavara Digital
+            </a>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-y-2 md:gap-y-0">
             {CERTIFICATIONS.map((cert, idx) => (

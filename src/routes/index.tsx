@@ -17,8 +17,11 @@ export const Route = createFileRoute("/")({
   },
   head: ({ loaderData }) => {
     const seo = loaderData?.seo;
-    const title = seo?.title || "Geosynthetics Africa — Africa's Integrated Geosynthetics Execution Platform";
-    const desc = seo?.description || "Designed. Supplied. Installed. Tested. Certified. Complete engineered geosynthetic systems delivered across Africa with global best-in-class materials.";
+    const title =
+      seo?.title || "Geosynthetics Africa — Africa's Integrated Geosynthetics Execution Platform";
+    const desc =
+      seo?.description ||
+      "Designed. Supplied. Installed. Tested. Certified. Complete engineered geosynthetic systems delivered across Africa with global best-in-class materials.";
     const meta = [
       { title },
       { name: "description", content: desc },
@@ -32,4 +35,3 @@ export const Route = createFileRoute("/")({
   },
   component: HomePage,
 });
-

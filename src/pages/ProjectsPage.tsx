@@ -1,14 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/projects.index";
-import {
-  MapPin,
-  ChevronRight,
-  Grid,
-  List,
-  ArrowUpDown,
-  ArrowRight,
-} from "lucide-react";
+import { MapPin, ChevronRight, Grid, List, ArrowUpDown, ArrowRight } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { Button } from "@/components/ui/button";
@@ -59,7 +52,9 @@ export function ProjectsPage() {
 
   const landing = landingContent || {};
   const heroTitle = landing.title || "340+ projects.\n17 countries.\nOne partner.";
-  const heroDescription = landing.description || "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.";
+  const heroDescription =
+    landing.description ||
+    "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.";
   const heroImage = landing.heroImage || "";
 
   // --- Display States ---
@@ -99,7 +94,9 @@ export function ProjectsPage() {
       <section
         className={cn(
           "relative text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
-          heroImage ? "bg-surface-dark" : "bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111]"
+          heroImage
+            ? "bg-surface-dark"
+            : "bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111]",
         )}
         style={
           heroImage
@@ -120,13 +117,7 @@ export function ProjectsPage() {
         )}
 
         <div className="container-page relative z-10">
-          <Breadcrumbs
-            items={[
-              { label: "Home", to: "/" },
-              { label: "Projects" },
-            ]}
-            variant="tiny"
-          />
+          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Projects" }]} variant="tiny" />
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3 flex items-center gap-2">
             <span className="w-6 h-[1.5px] bg-primary" />
             Project Portfolio

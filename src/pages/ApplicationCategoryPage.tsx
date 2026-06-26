@@ -30,8 +30,12 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
 
   // ─── Visual Fields Fallbacks & Mapping ──────────────────────────────────────
   const title = templateData?.title || category.label;
-  const description = templateData?.description || "Complete engineered system — design, supply, install, test and certify.";
-  const heroImage = templateData?.heroImage || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
+  const description =
+    templateData?.description ||
+    "Complete engineered system — design, supply, install, test and certify.";
+  const heroImage =
+    templateData?.heroImage ||
+    "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
   const quoteLink = templateData?.quoteLink || "#quote";
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
@@ -42,9 +46,10 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
     { icon: "CheckCircle2", label: "Certified Installers" },
   ];
 
-  const overviewParagraphs = templateData?.overviewParagraphs && templateData.overviewParagraphs.length > 0
-    ? templateData.overviewParagraphs
-    : [description];
+  const overviewParagraphs =
+    templateData?.overviewParagraphs && templateData.overviewParagraphs.length > 0
+      ? templateData.overviewParagraphs
+      : [description];
 
   const keyBenefits = templateData?.keyBenefits || [
     "High performance containment barrier",
@@ -52,12 +57,15 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
     "Standardized QA / QC protocols",
   ];
 
-  const suitableFor = templateData?.suitableFor && templateData.suitableFor.length > 0
-    ? templateData.suitableFor
-    : (templateData?.content?.subsystems || ["Lining Systems", "Leak Detection", "Drainage"]).map((s: string) => ({
-      icon: "Droplets",
-      label: s,
-    }));
+  const suitableFor =
+    templateData?.suitableFor && templateData.suitableFor.length > 0
+      ? templateData.suitableFor
+      : (templateData?.content?.subsystems || ["Lining Systems", "Leak Detection", "Drainage"]).map(
+          (s: string) => ({
+            icon: "Droplets",
+            label: s,
+          }),
+        );
 
   const assistancePhone = templateData?.assistancePhone || "+27 11 794 0974";
   const assistanceEmail = templateData?.assistanceEmail || "sales@geosynthetics.co.za";
@@ -169,7 +177,9 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                   <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0 border border-primary/20">
                     <IconRenderer name={hl.icon} className="h-4.5 w-4.5" />
                   </div>
-                  <span className="text-xs font-semibold text-white/95 leading-tight">{hl.label}</span>
+                  <span className="text-xs font-semibold text-white/95 leading-tight">
+                    {hl.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -179,7 +189,9 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
             <Button
               className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide text-white border-0 cursor-pointer"
               onClick={() => {
-                document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                document
+                  .getElementById("quote")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             >
               Request A Quote
@@ -208,7 +220,11 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
               { id: "overview", label: "Overview" },
               { id: "components", label: "System Components", show: !!componentsImage },
               { id: "design", label: "Design Considerations", show: designParagraphs.length > 0 },
-              { id: "installation", label: "Installation Guidelines", show: installationParagraphs.length > 0 },
+              {
+                id: "installation",
+                label: "Installation Guidelines",
+                show: installationParagraphs.length > 0,
+              },
               { id: "qa", label: "QA & Testing", show: qaItems.length > 0 },
               { id: "products", label: "Products Used", show: linkedProducts.length > 0 },
               { id: "projects", label: "Case Studies", show: caseStudies.length > 0 },
@@ -240,7 +256,6 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
       <div className="container-page py-16 grid lg:grid-cols-12 gap-16">
         {/* Left column */}
         <div className="lg:col-span-8 space-y-20">
-
           {/* Section: Overview */}
           <section id="overview" className="scroll-mt-32">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
@@ -264,10 +279,18 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
               <div className="grid lg:grid-cols-12 gap-8 items-start">
                 <div className="lg:col-span-7 space-y-4">
                   <div className="border border-border rounded-xl p-4 bg-surface/30">
-                    <img src={componentsImage} alt={componentsTitle} className="w-full h-auto rounded-lg object-contain bg-white mx-auto" />
+                    <img
+                      src={componentsImage}
+                      alt={componentsTitle}
+                      className="w-full h-auto rounded-lg object-contain bg-white mx-auto"
+                    />
                   </div>
                   {componentsDrawingLink && (
-                    <Button asChild variant="outline" className="uppercase font-bold tracking-wider text-xs cursor-pointer">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="uppercase font-bold tracking-wider text-xs cursor-pointer"
+                    >
                       <a href={componentsDrawingLink} target="_blank" rel="noopener noreferrer">
                         View Detailed Drawing <Icons.ChevronRight className="h-4 w-4 ml-1" />
                       </a>
@@ -275,7 +298,9 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                   )}
                 </div>
                 <div className="lg:col-span-5 space-y-3">
-                  <h3 className="font-display text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Components Legend</h3>
+                  <h3 className="font-display text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
+                    Components Legend
+                  </h3>
                   <div className="space-y-4">
                     {componentsCallouts.map((item: any, idx: number) => (
                       <div key={idx} className="flex gap-4 items-start">
@@ -283,8 +308,12 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                           {item.number}
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold uppercase tracking-tight text-foreground leading-tight">{item.label}</h4>
-                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.description}</p>
+                          <h4 className="text-sm font-bold uppercase tracking-tight text-foreground leading-tight">
+                            {item.label}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -333,10 +362,17 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
               </h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {qaItems.map((item: any, idx: number) => (
-                  <div key={idx} className="border border-border bg-card p-5 rounded-lg hover:border-primary transition">
+                  <div
+                    key={idx}
+                    className="border border-border bg-card p-5 rounded-lg hover:border-primary transition"
+                  >
                     <IconRenderer name={item.icon} className="h-6 w-6 text-primary mb-3" />
-                    <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground leading-tight">{item.title}</h4>
-                    <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{item.description}</p>
+                    <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground leading-tight">
+                      {item.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -355,16 +391,32 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                   <Link
                     key={idx}
                     to="/products/$category/$family"
-                    params={{ category: prod.product_categories?.slug || "geomembranes", family: prod.slug }}
+                    params={{
+                      category: prod.product_categories?.slug || "geomembranes",
+                      family: prod.slug,
+                    }}
                     className="group border border-border bg-card rounded-lg overflow-hidden flex flex-col hover:border-primary transition"
                   >
                     <div className="aspect-square bg-surface-dark overflow-hidden relative">
-                      <img src={prod.image_url || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"} alt={prod.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                      <img
+                        src={
+                          prod.image_url ||
+                          "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+                        }
+                        alt={prod.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                      />
                     </div>
                     <div className="p-4 flex flex-col flex-1 justify-between">
                       <div>
-                        <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">{prod.name}</h4>
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider leading-none">{prod.thickness_mm ? `${prod.thickness_mm}mm thickness` : (prod.short_description || "")}</span>
+                        <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">
+                          {prod.name}
+                        </h4>
+                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider leading-none">
+                          {prod.thickness_mm
+                            ? `${prod.thickness_mm}mm thickness`
+                            : prod.short_description || ""}
+                        </span>
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition mt-4 inline-flex items-center gap-1">
                         View Product <Icons.ArrowRight className="h-3 w-3" />
@@ -391,11 +443,18 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                     params={{ slug: cs.slug }}
                     className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-foreground transition duration-200"
                   >
-                    <div className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${cs.hero_image_url})` }}>
+                    <div
+                      className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
+                      style={{ backgroundImage: `url(${cs.hero_image_url})` }}
+                    >
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                       <div className="absolute top-4 left-4 z-10">
                         <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded border-0">
-                          {cs.service_type === "supply_install" ? "Supply & Install" : cs.service_type === "supply_only" ? "Supply Only" : "Services Only"}
+                          {cs.service_type === "supply_install"
+                            ? "Supply & Install"
+                            : cs.service_type === "supply_only"
+                              ? "Supply Only"
+                              : "Services Only"}
                         </span>
                       </div>
                     </div>
@@ -456,13 +515,11 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
               </div>
             </section>
           )}
-
         </div>
 
         {/* Right column - Sidebar */}
         <aside className="lg:col-span-4 space-y-8">
           <div className="space-y-6 sticky top-[160px]">
-
             {/* Sidebar element: Key Benefits */}
             {keyBenefits.length > 0 && (
               <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">
@@ -472,7 +529,10 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 </h3>
                 <ul className="space-y-3">
                   {keyBenefits.map((kb: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed"
+                    >
                       <Icons.CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span>{kb}</span>
                     </li>
@@ -490,9 +550,14 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 </h3>
                 <div className="grid grid-cols-2 gap-2.5">
                   {suitableFor.map((sf: any, idx: number) => (
-                    <div key={idx} className="flex flex-col items-center justify-center p-3 rounded-lg border border-border bg-surface/50 hover:border-primary/50 transition text-center min-h-[90px] shadow-sm">
+                    <div
+                      key={idx}
+                      className="flex flex-col items-center justify-center p-3 rounded-lg border border-border bg-surface/50 hover:border-primary/50 transition text-center min-h-[90px] shadow-sm"
+                    >
                       <IconRenderer name={sf.icon} className="h-5 w-5 text-primary mb-2" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider leading-tight text-foreground">{sf.label}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider leading-tight text-foreground">
+                        {sf.label}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -506,24 +571,41 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 Need Assistance?
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Our team can help you design and specify the right containment and engineering cover solutions.
+                Our team can help you design and specify the right containment and engineering cover
+                solutions.
               </p>
               <div className="space-y-3 pt-1 border-t border-border/60">
                 {assistancePhone && (
-                  <a href={`tel:${assistancePhone}`} className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition">
+                  <a
+                    href={`tel:${assistancePhone}`}
+                    className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition"
+                  >
                     <Icons.Phone className="h-4 w-4 text-primary shrink-0" />
                     <span>{assistancePhone}</span>
                   </a>
                 )}
                 {assistanceEmail && (
-                  <a href={`mailto:${assistanceEmail}`} className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition truncate">
+                  <a
+                    href={`mailto:${assistanceEmail}`}
+                    className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition truncate"
+                  >
                     <Icons.Mail className="h-4 w-4 text-primary shrink-0" />
                     <span className="truncate">{assistanceEmail}</span>
                   </a>
                 )}
               </div>
-              <Button asChild variant="outline" className="w-full text-xs font-bold uppercase tracking-wider h-9 mt-2 cursor-pointer">
-                <a href="#quote" onClick={(e) => { e.preventDefault(); document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" }); }}>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full text-xs font-bold uppercase tracking-wider h-9 mt-2 cursor-pointer"
+              >
+                <a
+                  href="#quote"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
                   Contact Our Team <Icons.ChevronRight className="ml-1 h-3.5 w-3.5" />
                 </a>
               </Button>
@@ -532,18 +614,29 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
             {/* Sidebar element: Featured Case Study */}
             {featuredCaseStudy && (
               <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm flex flex-col">
-                <div className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${featuredCaseStudy.hero_image_url})` }}>
+                <div
+                  className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: `url(${featuredCaseStudy.hero_image_url})` }}
+                >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-3 left-4 text-white">
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-primary">{featuredCaseStudy.project_year || "FEATURED CASE STUDY"}</span>
-                    <h4 className="text-xs font-bold uppercase tracking-tight text-white line-clamp-1 mt-0.5">{featuredCaseStudy.title}</h4>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-primary">
+                      {featuredCaseStudy.project_year || "FEATURED CASE STUDY"}
+                    </span>
+                    <h4 className="text-xs font-bold uppercase tracking-tight text-white line-clamp-1 mt-0.5">
+                      {featuredCaseStudy.title}
+                    </h4>
                   </div>
                 </div>
                 <div className="p-4 flex flex-col flex-1 bg-card justify-between">
                   <div className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed mb-3">
                     {featuredCaseStudy.summary}
                   </div>
-                  <Link to="/projects/$slug" params={{ slug: featuredCaseStudy.slug }} className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 cursor-pointer">
+                  <Link
+                    to="/projects/$slug"
+                    params={{ slug: featuredCaseStudy.slug }}
+                    className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
                     View Case Study <Icons.ChevronRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -558,7 +651,6 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 description="Describe your application requirements and our engineers will specify the right geosynthetics system."
               />
             </div>
-
           </div>
         </aside>
       </div>

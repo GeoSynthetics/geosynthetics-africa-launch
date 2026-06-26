@@ -16,16 +16,14 @@ describe("DeleteConfirmationDialog Component", () => {
         description="Are you sure you want to delete this test item?"
         itemName="Test Item 123"
         idPrefix="test-delete"
-      />
+      />,
     );
 
     // Verify Title
     expect(screen.getByText("Delete Test Item")).toBeInTheDocument();
 
     // Verify Description
-    expect(
-      screen.getByText("Are you sure you want to delete this test item?")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Are you sure you want to delete this test item?")).toBeInTheDocument();
 
     // Verify Item Name
     expect(screen.getByText("Test Item 123")).toBeInTheDocument();
@@ -51,7 +49,7 @@ describe("DeleteConfirmationDialog Component", () => {
         onConfirm={onConfirm}
         title="Delete Test Item"
         idPrefix="test-delete"
-      />
+      />,
     );
 
     expect(screen.queryByText("Delete Test Item")).not.toBeInTheDocument();
@@ -68,7 +66,7 @@ describe("DeleteConfirmationDialog Component", () => {
         onConfirm={onConfirm}
         title="Delete Test Item"
         idPrefix="test-delete"
-      />
+      />,
     );
 
     const confirmBtn = screen.getByRole("button", { name: /confirm delete/i });
@@ -89,7 +87,7 @@ describe("DeleteConfirmationDialog Component", () => {
         title="Delete Test Item"
         isLoading={true}
         idPrefix="test-delete"
-      />
+      />,
     );
 
     const cancelBtn = screen.getByRole("button", { name: /cancel/i });

@@ -15,10 +15,14 @@ type SectionKey = "products" | "applications" | "services" | "industries";
 // Derive the canonical route template for each section's top-level items
 function itemRoute(sectionKey: SectionKey): string {
   switch (sectionKey) {
-    case "products": return "/products/$category";
-    case "applications": return "/$slug";
-    case "services": return "/$slug";
-    case "industries": return "/$slug";
+    case "products":
+      return "/products/$category";
+    case "applications":
+      return "/$slug";
+    case "services":
+      return "/$slug";
+    case "industries":
+      return "/$slug";
   }
 }
 
@@ -31,7 +35,7 @@ function itemParamKey(sectionKey: SectionKey): string {
 function generateUniqueSlugAndLabel(
   existingSlugs: Set<string>,
   baseSlug: string,
-  baseLabel: string
+  baseLabel: string,
 ): { slug: string; label: string } {
   let targetSlug = `${baseSlug}-copy`;
   let targetLabel = `${baseLabel} (Copy)`;
@@ -47,11 +51,15 @@ function generateUniqueSlugAndLabel(
 }
 
 function getUniqueItemSlugAndLabel(items: HierarchyItem[], baseSlug: string, baseLabel: string) {
-  return generateUniqueSlugAndLabel(new Set(items.map(i => i.slug)), baseSlug, baseLabel);
+  return generateUniqueSlugAndLabel(new Set(items.map((i) => i.slug)), baseSlug, baseLabel);
 }
 
-function getUniqueChildSlugAndLabel(children: HierarchyChild[], baseSlug: string, baseLabel: string) {
-  return generateUniqueSlugAndLabel(new Set(children.map(c => c.slug)), baseSlug, baseLabel);
+function getUniqueChildSlugAndLabel(
+  children: HierarchyChild[],
+  baseSlug: string,
+  baseLabel: string,
+) {
+  return generateUniqueSlugAndLabel(new Set(children.map((c) => c.slug)), baseSlug, baseLabel);
 }
 
 interface HierarchyTreeProps {
@@ -62,7 +70,13 @@ interface HierarchyTreeProps {
   selected: SelectedNode | null;
 }
 
-export function HierarchyTree({ section, sectionKey, onChange, onSelect, selected }: HierarchyTreeProps) {
+export function HierarchyTree({
+  section,
+  sectionKey,
+  onChange,
+  onSelect,
+  selected,
+}: HierarchyTreeProps) {
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set([0]));
   const [newItemLabel, setNewItemLabel] = useState("");
   const [addingChildToIdx, setAddingChildToIdx] = useState<number | null>(null);
@@ -84,7 +98,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
   };
 
   const toggleExpand = (i: number) =>
-    setExpandedItems(prev => {
+    setExpandedItems((prev) => {
       const next = new Set(prev);
       next.has(i) ? next.delete(i) : next.add(i);
       return next;
@@ -92,10 +106,15 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
 
   const addItem = () => {
     if (!newItemLabel.trim()) return;
-    const slug = newItemLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = newItemLabel
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     const paramKey = itemParamKey(sectionKey);
     const newItem: HierarchyItem = {
-      id: slug, slug, label: newItemLabel,
+      id: slug,
+      slug,
+      label: newItemLabel,
       to: itemRoute(sectionKey),
       params: { [paramKey]: slug },
       children: [],
@@ -106,23 +125,26 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
 
   const addChild = (itemIdx: number) => {
     if (!newChildLabel.trim()) return;
-    const slug = newChildLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const slug = newChildLabel
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     const parent = section.items[itemIdx];
     // Products have two-level routes; all others use a single param on the parent's route
-    const childTo = sectionKey === "products"
-      ? "/products/$category/$family"
-      : itemRoute(sectionKey);
+    const childTo =
+      sectionKey === "products" ? "/products/$category/$family" : itemRoute(sectionKey);
     const paramKey = itemParamKey(sectionKey);
-    const childParams = sectionKey === "products"
-      ? { category: parent.slug, family: slug }
-      : { [paramKey]: slug };
+    const childParams =
+      sectionKey === "products" ? { category: parent.slug, family: slug } : { [paramKey]: slug };
     const child: HierarchyChild = {
-      id: slug, slug, label: newChildLabel,
+      id: slug,
+      slug,
+      label: newChildLabel,
       to: childTo,
       params: childParams,
     };
     const items = section.items.map((item, i) =>
-      i === itemIdx ? { ...item, children: [...item.children, child] } : item
+      i === itemIdx ? { ...item, children: [...item.children, child] } : item,
     );
     onChange({ ...section, items });
     setNewChildLabel("");
@@ -134,7 +156,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
 
   const removeChild = (itemIdx: number, childIdx: number) => {
     const items = section.items.map((item, i) =>
-      i !== itemIdx ? item : { ...item, children: item.children.filter((_, j) => j !== childIdx) }
+      i !== itemIdx ? item : { ...item, children: item.children.filter((_, j) => j !== childIdx) },
     );
     onChange({ ...section, items });
   };
@@ -146,7 +168,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     const { slug: newSlug, label: newLabel } = getUniqueItemSlugAndLabel(
       section.items,
       originalItem.slug,
-      originalItem.label
+      originalItem.label,
     );
 
     const paramKey = itemParamKey(sectionKey);
@@ -162,9 +184,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     if (newItem.pageContent && newItem.pageContent.seo) {
       newItem.pageContent.seo = {
         ...newItem.pageContent.seo,
-        title: newItem.pageContent.seo.title
-          ? `${newItem.pageContent.seo.title} (Copy)`
-          : "",
+        title: newItem.pageContent.seo.title ? `${newItem.pageContent.seo.title} (Copy)` : "",
       };
     }
 
@@ -217,7 +237,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     const { slug: newSlug, label: newLabel } = getUniqueChildSlugAndLabel(
       parent.children,
       originalChild.slug,
-      originalChild.label
+      originalChild.label,
     );
 
     const newChild: HierarchyChild = JSON.parse(JSON.stringify(originalChild));
@@ -240,9 +260,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     if (newChild.pageContent && newChild.pageContent.seo) {
       newChild.pageContent.seo = {
         ...newChild.pageContent.seo,
-        title: newChild.pageContent.seo.title
-          ? `${newChild.pageContent.seo.title} (Copy)`
-          : "",
+        title: newChild.pageContent.seo.title ? `${newChild.pageContent.seo.title} (Copy)` : "",
       };
     }
 
@@ -250,7 +268,7 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
     newChildren.splice(childIdx + 1, 0, newChild);
 
     const newItems = section.items.map((item, i) =>
-      i === itemIdx ? { ...item, children: newChildren } : item
+      i === itemIdx ? { ...item, children: newChildren } : item,
     );
     onChange({ ...section, items: newItems });
   };
@@ -294,7 +312,11 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="items" type="ITEM">
           {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps} className="flex-1 overflow-y-auto p-2 space-y-1">
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="flex-1 overflow-y-auto p-2 space-y-1"
+            >
               {section.items.map((item, itemIdx) => {
                 const expanded = expandedItems.has(itemIdx);
                 return (
@@ -302,25 +324,56 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                     {(drag) => (
                       <div ref={drag.innerRef} {...drag.draggableProps}>
                         {/* Item row */}
-                        <div className={`flex items-center gap-1 rounded px-2 py-1.5 group cursor-pointer transition-colors ${isSelectedItem(itemIdx) ? "bg-primary/10 text-primary" : "hover:bg-accent"}`}>
-                          <span {...drag.dragHandleProps} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition">
+                        <div
+                          className={`flex items-center gap-1 rounded px-2 py-1.5 group cursor-pointer transition-colors ${isSelectedItem(itemIdx) ? "bg-primary/10 text-primary" : "hover:bg-accent"}`}
+                        >
+                          <span
+                            {...drag.dragHandleProps}
+                            className="text-muted-foreground opacity-0 group-hover:opacity-100 transition"
+                          >
                             <GripVertical className="h-3.5 w-3.5" />
                           </span>
-                          <button onClick={() => toggleExpand(itemIdx)} className="text-muted-foreground">
-                            {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                          <button
+                            onClick={() => toggleExpand(itemIdx)}
+                            className="text-muted-foreground"
+                          >
+                            {expanded ? (
+                              <ChevronDown className="h-3.5 w-3.5" />
+                            ) : (
+                              <ChevronRight className="h-3.5 w-3.5" />
+                            )}
                           </button>
-                          <button className="flex-1 text-left text-sm font-semibold truncate" onClick={() => onSelect({ type: "item", itemIdx })}>
+                          <button
+                            className="flex-1 text-left text-sm font-semibold truncate"
+                            onClick={() => onSelect({ type: "item", itemIdx })}
+                          >
                             {item.label}
-                            <span className="ml-1.5 text-[10px] text-muted-foreground font-normal">{item.children.length} sub</span>
+                            <span className="ml-1.5 text-[10px] text-muted-foreground font-normal">
+                              {item.children.length} sub
+                            </span>
                           </button>
-                          <button onClick={() => { setAddingChildToIdx(itemIdx); setExpandedItems(p => new Set([...p, itemIdx])); }}
-                            className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Add child">
+                          <button
+                            onClick={() => {
+                              setAddingChildToIdx(itemIdx);
+                              setExpandedItems((p) => new Set([...p, itemIdx]));
+                            }}
+                            className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition"
+                            title="Add child"
+                          >
                             <Plus className="h-3.5 w-3.5" />
                           </button>
-                          <button onClick={() => duplicateItem(itemIdx)} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
+                          <button
+                            onClick={() => duplicateItem(itemIdx)}
+                            className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition"
+                            title="Duplicate"
+                          >
                             <Copy className="h-3.5 w-3.5" />
                           </button>
-                          <button onClick={() => setDeleteTarget({ type: "item", itemIdx })} className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
+                          <button
+                            onClick={() => setDeleteTarget({ type: "item", itemIdx })}
+                            className=" hover:cursor-pointer opacity-0 group-hover:opacity-100 text-destructive"
+                            title="Delete"
+                          >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
@@ -329,22 +382,51 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                         {expanded && (
                           <Droppable droppableId={`children-${itemIdx}`} type="CHILD">
                             {(childProvided) => (
-                              <div ref={childProvided.innerRef} {...childProvided.droppableProps} className="ml-7 mt-0.5 space-y-0.5">
+                              <div
+                                ref={childProvided.innerRef}
+                                {...childProvided.droppableProps}
+                                className="ml-7 mt-0.5 space-y-0.5"
+                              >
                                 {item.children.map((child, childIdx) => (
-                                  <Draggable key={child.id} draggableId={`child-${child.id}`} index={childIdx}>
+                                  <Draggable
+                                    key={child.id}
+                                    draggableId={`child-${child.id}`}
+                                    index={childIdx}
+                                  >
                                     {(childDrag) => (
-                                      <div ref={childDrag.innerRef} {...childDrag.draggableProps}
-                                        className={`flex items-center gap-1 rounded px-2 py-1 group cursor-pointer transition-colors text-sm ${isSelectedChild(itemIdx, childIdx) ? "bg-primary/10 text-primary" : "hover:bg-accent text-muted-foreground"}`}>
-                                        <span {...childDrag.dragHandleProps} className="opacity-0 group-hover:opacity-100">
+                                      <div
+                                        ref={childDrag.innerRef}
+                                        {...childDrag.draggableProps}
+                                        className={`flex items-center gap-1 rounded px-2 py-1 group cursor-pointer transition-colors text-sm ${isSelectedChild(itemIdx, childIdx) ? "bg-primary/10 text-primary" : "hover:bg-accent text-muted-foreground"}`}
+                                      >
+                                        <span
+                                          {...childDrag.dragHandleProps}
+                                          className="opacity-0 group-hover:opacity-100"
+                                        >
                                           <GripVertical className="h-3 w-3" />
                                         </span>
-                                        <button className="flex-1 text-left truncate" onClick={() => onSelect({ type: "child", itemIdx, childIdx })}>
+                                        <button
+                                          className="flex-1 text-left truncate"
+                                          onClick={() =>
+                                            onSelect({ type: "child", itemIdx, childIdx })
+                                          }
+                                        >
                                           {child.label}
                                         </button>
-                                        <button onClick={() => duplicateChild(itemIdx, childIdx)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition" title="Duplicate">
+                                        <button
+                                          onClick={() => duplicateChild(itemIdx, childIdx)}
+                                          className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary transition"
+                                          title="Duplicate"
+                                        >
                                           <Copy className="h-3 w-3" />
                                         </button>
-                                        <button onClick={() => setDeleteTarget({ type: "child", itemIdx, childIdx })} className="opacity-0 group-hover:opacity-100 text-destructive" title="Delete">
+                                        <button
+                                          onClick={() =>
+                                            setDeleteTarget({ type: "child", itemIdx, childIdx })
+                                          }
+                                          className="opacity-0 group-hover:opacity-100 text-destructive"
+                                          title="Delete"
+                                        >
                                           <Trash2 className="h-3 w-3" />
                                         </button>
                                       </div>
@@ -357,14 +439,31 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
                                 {addingChildToIdx === itemIdx && (
                                   <div className="flex gap-1 mt-1 pr-1">
                                     <Input
-                                      autoFocus value={newChildLabel}
-                                      onChange={e => setNewChildLabel(e.target.value)}
-                                      onKeyDown={e => { if (e.key === "Enter") addChild(itemIdx); if (e.key === "Escape") setAddingChildToIdx(null); }}
+                                      autoFocus
+                                      value={newChildLabel}
+                                      onChange={(e) => setNewChildLabel(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") addChild(itemIdx);
+                                        if (e.key === "Escape") setAddingChildToIdx(null);
+                                      }}
                                       placeholder="Child label..."
                                       className="h-7 text-xs flex-1"
                                     />
-                                    <Button size="sm" className="h-7 px-2 text-xs" onClick={() => addChild(itemIdx)}>Add</Button>
-                                    <Button size="sm" variant="ghost" className="h-7 px-2 text-xs" onClick={() => setAddingChildToIdx(null)}>✕</Button>
+                                    <Button
+                                      size="sm"
+                                      className="h-7 px-2 text-xs"
+                                      onClick={() => addChild(itemIdx)}
+                                    >
+                                      Add
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="h-7 px-2 text-xs"
+                                      onClick={() => setAddingChildToIdx(null)}
+                                    >
+                                      ✕
+                                    </Button>
                                   </div>
                                 )}
                               </div>
@@ -386,18 +485,24 @@ export function HierarchyTree({ section, sectionKey, onChange, onSelect, selecte
       <div className="p-3 border-t border-border flex gap-2">
         <Input
           value={newItemLabel}
-          onChange={e => setNewItemLabel(e.target.value)}
-          onKeyDown={e => { if (e.key === "Enter") addItem(); }}
+          onChange={(e) => setNewItemLabel(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") addItem();
+          }}
           placeholder="New item label..."
           className="text-sm h-8"
         />
-        <Button size="sm" className="h-8 shrink-0" onClick={addItem}><Plus className="h-3.5 w-3.5" /></Button>
+        <Button size="sm" className="h-8 shrink-0" onClick={addItem}>
+          <Plus className="h-3.5 w-3.5" />
+        </Button>
       </div>
       <DeleteConfirmationDialog
         isOpen={!!deleteTarget}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
-        title={deleteTarget?.type === "item" ? "Delete Navigation Item?" : "Delete Navigation Sub-item?"}
+        title={
+          deleteTarget?.type === "item" ? "Delete Navigation Item?" : "Delete Navigation Sub-item?"
+        }
         description="This will remove the item from the navigation hierarchy tree. You still need to click Save to persist this change."
         itemName={
           deleteTarget

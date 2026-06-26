@@ -3,10 +3,7 @@ import { TrackingAdminPage } from "@/pages/TrackingAdminPage";
 
 export const Route = createFileRoute("/admin/tracking")({
   head: () => ({
-    meta: [
-      { title: "Tracking & Cookies — Admin" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Tracking & Cookies — Admin" }, { name: "robots", content: "noindex" }],
   }),
   component: TrackingAdminPage,
 });

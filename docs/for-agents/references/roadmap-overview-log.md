@@ -56,7 +56,6 @@ src/                                # Principal application source code
 
 ## 2026-06-10 — Implement Lucide Icon Picker
 
-
 **Scope:** Admin / UI / UX / Lucide Icons
 **Summary:** Replaced error-prone manual text inputs for Lucide icon selection with an interactive visual **IconPicker** popover component. The picker dynamically reads and filters all available Lucide icons from the `lucide-react` library, offering real-time search, hover previews, lazy loading grids of up to 100 matching entries (for performance), and a single-click selection/clear mechanism. Integrated this component across three admin editors: navigation nodes (Site Builder Identity tab), Quality Assurance document pillars (QA Templates editor), and navigation quick actions (Site Builder Megamenu).
 **Files touched:** `src/components/admin/IconPicker.tsx` (new), `src/components/admin/ContentEditorPanel.tsx`, `src/components/admin/QATemplatesEditor.tsx`, `src/components/admin/TemplateEditorShared.tsx`, `docs/index.html`, `docs/lovable-docs.md`
@@ -109,7 +108,6 @@ src/                                # Principal application source code
 
 ---
 
-
 ## 2026-05-22 — Implement Dynamic Homepage Builder & Image Optimization
 
 **Scope:** Admin / Homepage / Site Builder / Media
@@ -118,7 +116,6 @@ src/                                # Principal application source code
 **Notes / follow-ups:** Registered the full admin operations manual and user guide in `docs/index.html`.
 
 ---
-
 
 ## 2026-05-05 — Fix /resources and /resources/$category rendering identical pages
 
@@ -152,13 +149,16 @@ src/                                # Principal application source code
 **Scope:** Routing / Bundle Optimization
 
 **Problem:** Running `bun dev` produced repeated `[tanstack-router]` warnings for every core page route:
+
 ```
 [tanstack-router] These exports from ".../src/routes/products.tsx" will not be code-split
 and will increase your bundle size: - ProductsLanding
 ```
+
 TanStack Router's file-based routing relies on code-splitting each route file into its own chunk. When a route file has **named exports** (beyond the mandatory `export const Route`), the router cannot tree-shake or lazy-load those exports — they get bundled into the main chunk instead. The named exports existed because `$slug.tsx` (the dynamic SEO slug catch-all route) needed to `lazy(() => import("./about").then(m => ({ default: m.AboutPage })))` to render the correct page under a custom URL slug. This affected 8 route files: `about`, `products`, `projects`, `contacts`, `quality-assurance`, `applications`, `services`, and `resources.index`.
 
 **Solution:** Separated page component code from route configuration:
+
 1. Created `src/pages/` directory with standalone page component files (`AboutPage.tsx`, `ProductsLanding.tsx`, `ProjectsPage.tsx`, `ContactsPage.tsx`, `QAPage.tsx`, `ApplicationsLanding.tsx`, `ServicesPage.tsx`, `ResourcesIndexPage.tsx`) — each exports its component function.
 2. Slimmed each route file in `src/routes/` down to **only** route configuration (`createFileRoute` with `head`, `loader`, and `component`) — importing the component from `@/pages/`.
 3. Updated `$slug.tsx` to lazy-import from `@/pages/` files instead of route files.
@@ -166,6 +166,7 @@ TanStack Router's file-based routing relies on code-splitting each route file in
 This ensures route files only export `Route`, allowing TanStack Router to fully code-split them.
 
 **Architecture pattern (for future reference):**
+
 ```
 src/routes/about.tsx        → Route config only, imports AboutPage from @/pages/
 src/pages/AboutPage.tsx     → All JSX/component code lives here
@@ -197,6 +198,7 @@ src/routes/$slug.tsx        → lazy(() => import("@/pages/AboutPage"))
 4. **BreadcrumbList schema** — Renders on each `/catalogue/$slug` page with a proper breadcrumb trail (Home → Catalogue → Category → Product).
 
 All schemas are built with reusable components in `src/components/seo/`:
+
 - `JsonLd.tsx` — Base component that renders `<script type="application/ld+json">`
 - `OrganizationSchema.tsx` — Global company info
 - `ProductSchema.tsx` — Individual product data
@@ -207,6 +209,7 @@ All schemas are built with reusable components in `src/components/seo/`:
 **Developer: How to update the sitemap**
 
 The sitemap at `/sitemap.xml` is generated dynamically on each request (cached for 1 hour via `Cache-Control`). It automatically picks up:
+
 - New products added in Supabase → appear immediately
 - New static routes → add them to the `staticPages` array in `src/routes/sitemap[.]xml.ts`
 - Custom SEO slugs → read from `site_config.seo_pages` in Supabase
@@ -302,30 +305,33 @@ Entry template — copy when adding a new entry:
 
 # Admin Guide: Managing Application Categories & Sub-pages in Site Builder
 
-This guide explains how administrators can customize, create, reorder, and configure **Application Categories** (e.g. *Containment & Lining*) and their **Sub-pages** (e.g. *Mining TSF Lining*) in the Geosynthetics Africa Admin Control Panel.
+This guide explains how administrators can customize, create, reorder, and configure **Application Categories** (e.g. _Containment & Lining_) and their **Sub-pages** (e.g. _Mining TSF Lining_) in the Geosynthetics Africa Admin Control Panel.
 
 ## 1. Accessing the Site Builder
+
 1. Log in to the application.
 2. Click your account menu in the top right of the navigation header and select **Admin** (or go directly to `/admin`).
 3. Click **Site Builder** in the left admin sidebar navigation (or go directly to `/admin/site-builder`).
 
 ## 2. Managing the Applications Navigation Hierarchy
+
 1. Within the Site Builder screen, select the **Applications** tab in the main tab menu.
 2. The left panel shows the dynamic **Application Categories** tree. From here you can perform the following actions:
-   * **Reorder categories or sub-pages:** Click and hold the vertical drag grip (`⋮⋮`) next to any item, then drag it up/down to change its position, or drag sub-pages to move them under a different parent category.
-   * **Add a new top-level category:** Enter a label in the input field at the bottom of the tree panel and click the `+` button.
-   * **Add a new sub-page:** Hover over any parent category item in the tree list and click the `+` icon that appears on the right edge of the item. Enter the name and press Enter.
-   * **Delete an item:** Hover over any item (category or sub-page) and click the red trash can icon to remove it.
-   * **Rename or edit configuration:** Click on any category or sub-page item in the tree. This opens its details in the **Content Editor Panel** on the right side.
+   - **Reorder categories or sub-pages:** Click and hold the vertical drag grip (`⋮⋮`) next to any item, then drag it up/down to change its position, or drag sub-pages to move them under a different parent category.
+   - **Add a new top-level category:** Enter a label in the input field at the bottom of the tree panel and click the `+` button.
+   - **Add a new sub-page:** Hover over any parent category item in the tree list and click the `+` icon that appears on the right edge of the item. Enter the name and press Enter.
+   - **Delete an item:** Hover over any item (category or sub-page) and click the red trash can icon to remove it.
+   - **Rename or edit configuration:** Click on any category or sub-page item in the tree. This opens its details in the **Content Editor Panel** on the right side.
 3. Click the **Save Applications** button in the top-right corner to persist all changes to Supabase.
 
 ## 3. Configuring Category Page Content & Templates
+
 If you want to customize the page template content (e.g. Hero title, images, specifications, features, or search metadata):
+
 1. Navigate to the **Page Templates** section from the left admin sidebar (or go to `/admin/page-templates`).
 2. Click the **Application Templates** sub-tab.
 3. Select the category page on the left sidebar to edit:
-   * **Hero Tab:** Edit the main H1 Page Title, Hero Background Image, and Description.
-   * **Content Tab:** Manage the sub-systems checklist (each entry appears as a descriptive card on the category page).
-   * **SEO Tab:** Update the Google-compliant Meta Title, Description, and Keywords.
+   - **Hero Tab:** Edit the main H1 Page Title, Hero Background Image, and Description.
+   - **Content Tab:** Manage the sub-systems checklist (each entry appears as a descriptive card on the category page).
+   - **SEO Tab:** Update the Google-compliant Meta Title, Description, and Keywords.
 4. Click **Save** (or **Save All**) to persist your changes to the database.
-

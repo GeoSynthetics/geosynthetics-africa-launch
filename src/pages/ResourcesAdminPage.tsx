@@ -85,7 +85,9 @@ export function ResourcesAdminPage() {
     setLoading(true);
     const { data, error } = await supabase
       .from("resources")
-      .select("id, slug, title, type, description, file_path, external_url, is_public, status, created_at")
+      .select(
+        "id, slug, title, type, description, file_path, external_url, is_public, status, created_at",
+      )
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) toast.error(error.message);
@@ -98,10 +100,7 @@ export function ResourcesAdminPage() {
   }, []);
 
   const filtered = useMemo(
-    () =>
-      q.trim()
-        ? rows.filter((r) => r.title.toLowerCase().includes(q.toLowerCase()))
-        : rows,
+    () => (q.trim() ? rows.filter((r) => r.title.toLowerCase().includes(q.toLowerCase())) : rows),
     [rows, q],
   );
 
@@ -194,7 +193,12 @@ export function ResourcesAdminPage() {
       <div className="mb-4 flex items-center gap-3">
         <div className="relative w-72">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search by title" value={q} onChange={(e) => setQ(e.target.value)} className="pl-8" />
+          <Input
+            placeholder="Search by title"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="pl-8"
+          />
         </div>
         <div className="ml-auto">
           <Dialog open={open} onOpenChange={setOpen}>
@@ -256,10 +260,13 @@ export function ResourcesAdminPage() {
                     className="mt-1.5"
                   />
                   {editing.file_path && !file && (
-                    <p className="mt-1 text-xs text-muted-foreground">Current: {editing.file_path}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Current: {editing.file_path}
+                    </p>
                   )}
                   <p className="mt-1 text-xs text-muted-foreground">
-                    For datasheets, guides, case studies and brochures upload a file. For videos, leave file empty and paste a YouTube/Vimeo URL below.
+                    For datasheets, guides, case studies and brochures upload a file. For videos,
+                    leave file empty and paste a YouTube/Vimeo URL below.
                   </p>
                 </div>
                 <div>
@@ -285,7 +292,9 @@ export function ResourcesAdminPage() {
                     <Switch
                       id="r-pub"
                       checked={(editing.status ?? "published") === "published"}
-                      onCheckedChange={(v) => setEditing((s) => ({ ...s, status: v ? "published" : "draft" }))}
+                      onCheckedChange={(v) =>
+                        setEditing((s) => ({ ...s, status: v ? "published" : "draft" }))
+                      }
                     />
                     <Label htmlFor="r-pub">Published</Label>
                   </div>
@@ -295,8 +304,16 @@ export function ResourcesAdminPage() {
                 <Button variant="outline" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
-                <Button onClick={() => void save()} disabled={saving} className="bg-primary hover:bg-primary/90">
-                  {saving ? "Saving…" : editing.file_path || file ? "Save" : (
+                <Button
+                  onClick={() => void save()}
+                  disabled={saving}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  {saving ? (
+                    "Saving…"
+                  ) : editing.file_path || file ? (
+                    "Save"
+                  ) : (
                     <>
                       <Upload className="h-4 w-4" /> Save
                     </>
@@ -345,15 +362,20 @@ export function ResourcesAdminPage() {
                   </TableCell>
                   <TableCell className="text-sm">
                     {r.file_path ? (
-                      <Button size="sm" variant="link" className="h-auto p-0" onClick={() => void preview(r.file_path!)}>
+                      <Button
+                        size="sm"
+                        variant="link"
+                        className="h-auto p-0"
+                        onClick={() => void preview(r.file_path!)}
+                      >
                         File
                       </Button>
                     ) : r.external_url ? (
                       <a
-                         href={r.external_url}
-                         target="_blank"
-                         rel="noopener noreferrer"
-                         className="text-primary hover:underline inline-flex items-center gap-1"
+                        href={r.external_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline inline-flex items-center gap-1"
                       >
                         Link <ExternalLink className="h-3 w-3" />
                       </a>
@@ -371,7 +393,8 @@ export function ResourcesAdminPage() {
                       disabled={!r.file_path && !r.external_url}
                       onClick={() => {
                         if (r.file_path) void preview(r.file_path);
-                        else if (r.external_url) window.open(r.external_url, "_blank", "noopener,noreferrer");
+                        else if (r.external_url)
+                          window.open(r.external_url, "_blank", "noopener,noreferrer");
                       }}
                     >
                       <Eye className="h-4 w-4" />

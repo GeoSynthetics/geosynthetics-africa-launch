@@ -95,11 +95,11 @@ export interface MegaContent {
 
 /** A child/family item (e.g. HDPE Geomembranes under Geomembranes) */
 export interface HierarchyChild {
-  id: string;          // unique id, e.g. "hdpe-geomembranes"
-  slug: string;        // URL slug
+  id: string; // unique id, e.g. "hdpe-geomembranes"
+  slug: string; // URL slug
   label: string;
   icon?: string;
-  to: string;          // route path pattern e.g. "/products/$category/$family"
+  to: string; // route path pattern e.g. "/products/$category/$family"
   params?: Record<string, string>;
   pageContent?: PageContent;
   megaContent?: MegaContent;
@@ -111,7 +111,7 @@ export interface HierarchyItem {
   slug: string;
   label: string;
   icon?: string;
-  to: string;          // route path pattern
+  to: string; // route path pattern
   params?: Record<string, string>;
   children: HierarchyChild[];
   pageContent?: PageContent;

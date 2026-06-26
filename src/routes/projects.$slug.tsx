@@ -62,7 +62,10 @@ function ProjectDetailSkeleton() {
             <Skeleton className="h-5 w-32" />
             <div className="space-y-3 pt-3 border-t border-border">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex justify-between py-1 border-b border-border/50 last:border-0">
+                <div
+                  key={i}
+                  className="flex justify-between py-1 border-b border-border/50 last:border-0"
+                >
                   <Skeleton className="h-4 w-20" />
                   <Skeleton className="h-4 w-28" />
                 </div>
@@ -81,8 +84,13 @@ export const Route = createFileRoute("/projects/$slug")({
   pendingMs: 0,
   head: ({ loaderData }) => {
     const p = loaderData?.project;
-    const title = p ? `${p.title} — Case Study | Geosynthetics Africa` : "Case Study — Geosynthetics Africa";
-    const desc = p?.meta_description || p?.summary || "Engineered geosynthetic case study by Geosynthetics Africa.";
+    const title = p
+      ? `${p.title} — Case Study | Geosynthetics Africa`
+      : "Case Study — Geosynthetics Africa";
+    const desc =
+      p?.meta_description ||
+      p?.summary ||
+      "Engineered geosynthetic case study by Geosynthetics Africa.";
     return {
       meta: [
         { title },

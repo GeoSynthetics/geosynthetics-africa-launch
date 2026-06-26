@@ -13,14 +13,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
-  Plus, Trash2, Search, ChevronLeft
+  Save,
+  Loader2,
+  ExternalLink,
+  Eye,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Plus,
+  Trash2,
+  Search,
+  ChevronLeft,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
-import { SectionHeading, FieldLabel, StringListEditor, PairsEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
+import {
+  SectionHeading,
+  FieldLabel,
+  StringListEditor,
+  PairsEditor,
+  TemplatesEditorSkeleton,
+} from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
@@ -69,7 +84,7 @@ export interface ApplicationTemplate {
   heroHighlights?: HighlightItem[];
   topSellingProductId?: string;
   topSellingProductIds?: string[];
-  
+
   // Overview Tab
   overviewParagraphs?: string[];
   keyBenefits?: string[];
@@ -77,32 +92,32 @@ export interface ApplicationTemplate {
   assistancePhone?: string;
   assistanceEmail?: string;
   featuredCaseStudySlug?: string;
-  
+
   // System Components Tab
   componentsTitle?: string;
   componentsImage?: string;
   componentsDrawingLink?: string;
   componentsCallouts?: CalloutItem[];
-  
+
   // Design & Installation Tabs
   designTitle?: string;
   designParagraphs?: string[];
   installationTitle?: string;
   installationParagraphs?: string[];
-  
+
   // QA & Testing Tab
   qaTitle?: string;
   qaItems?: QaItem[];
-  
+
   // Products & Downloads
   productsTitle?: string;
   products?: string[];
   downloadsTitle?: string;
   downloads?: DownloadItem[];
-  
+
   // SEO
   seo: ApplicationSeo | null;
-  
+
   // Legacy fields
   content?: {
     subsystems: string[];
@@ -194,7 +209,9 @@ function blankTemplate(): ApplicationTemplate {
 
 export function ApplicationsTemplatesEditor() {
   const [allData, setAllData] = useState<AllApplicationTemplates>({});
-  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
+  const [hierarchyItems, setHierarchyItems] = useState<
+    { id: string; slug: string; label: string }[]
+  >([]);
   const [rawHierarchy, setRawHierarchy] = useState<any>(null);
   const [hierarchyDirty, setHierarchyDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("");
@@ -226,13 +243,18 @@ export function ApplicationsTemplatesEditor() {
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
     const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
-    
+
     // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
       if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
           slug,
-          label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          label:
+            allData[slug]?.title ||
+            slug
+              .split("-")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" "),
         });
       }
     });
@@ -244,7 +266,12 @@ export function ApplicationsTemplatesEditor() {
         if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
           fallbackList.push({
             slug,
-            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+            label:
+              allData[slug]?.title ||
+              slug
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" "),
           });
         }
       });
@@ -308,10 +335,12 @@ export function ApplicationsTemplatesEditor() {
       .select("value")
       .eq("key", "hierarchy_applications")
       .maybeSingle();
-    
+
     const defaults = getDefaultSections();
-    const defaultApps = defaults.find(d => d.key === "applications")!;
-    const hierarchy = (hierarchyRow?.value as any)?.items ? (hierarchyRow?.value as any) : defaultApps;
+    const defaultApps = defaults.find((d) => d.key === "applications")!;
+    const hierarchy = (hierarchyRow?.value as any)?.items
+      ? (hierarchyRow?.value as any)
+      : defaultApps;
     setRawHierarchy(hierarchy);
     const hItems = (hierarchy.items || []).map((item: any) => ({
       id: item.id,
@@ -334,9 +363,10 @@ export function ApplicationsTemplatesEditor() {
       const seeded: AllApplicationTemplates = { ...stored };
 
       // Use hierarchy items for seeding, fallback to static categories if empty
-      const seedSource = hItems.length > 0
-        ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
-        : APPLICATION_CATEGORIES;
+      const seedSource =
+        hItems.length > 0
+          ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
+          : APPLICATION_CATEGORIES;
 
       for (const cat of seedSource) {
         if (!seeded[cat.slug]) {
@@ -350,7 +380,7 @@ export function ApplicationsTemplatesEditor() {
               title: seeded[cat.slug].seo?.title || "",
               description: seeded[cat.slug].seo?.description || "",
               keywords: seeded[cat.slug].seo?.keywords || "",
-            }
+            },
           };
         }
       }
@@ -358,13 +388,16 @@ export function ApplicationsTemplatesEditor() {
         seeded["__landing"] = {
           ...blankTemplate(),
           title: "Engineered Systems for Every Application",
-          description: "From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions.",
+          description:
+            "From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions.",
           heroImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
           seo: {
             title: "Applications — Geosynthetics Africa",
-            description: "Engineered geosynthetic systems for mining, water containment, waste, roads, erosion control and more.",
-            keywords: "geosynthetics, applications, mining, water containment, waste landfills, roads, erosion control, drainage, agriculture",
-          }
+            description:
+              "Engineered geosynthetic systems for mining, water containment, waste, roads, erosion control and more.",
+            keywords:
+              "geosynthetics, applications, mining, water containment, waste landfills, roads, erosion control, drainage, agriculture",
+          },
         };
       } else {
         seeded["__landing"] = {
@@ -387,18 +420,25 @@ export function ApplicationsTemplatesEditor() {
 
   const handleAddNew = () => {
     if (!newSlug.trim()) return;
-    const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
-    
-    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
+    const slug = newSlug
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-");
+
+    if (allData[slug] || hierarchyItems.some((item) => item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
 
-    const label = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-    
-    setAllData(prev => ({
+    const label = slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    setAllData((prev) => ({
       ...prev,
-      [slug]: { ...blankTemplate(), title: label }
+      [slug]: { ...blankTemplate(), title: label },
     }));
     setActiveSlug(slug);
     setNewSlug("");
@@ -413,7 +453,7 @@ export function ApplicationsTemplatesEditor() {
       return;
     }
 
-    setAllData(prev => {
+    setAllData((prev) => {
       const next = { ...prev };
       delete next[slug];
       return next;
@@ -421,7 +461,7 @@ export function ApplicationsTemplatesEditor() {
 
     if (rawHierarchy) {
       const updatedItems = (rawHierarchy.items || []).filter(
-        (item: any) => item.id !== slug && item.slug !== slug
+        (item: any) => item.id !== slug && item.slug !== slug,
       );
       const updatedHierarchy = { ...rawHierarchy, items: updatedItems };
       setRawHierarchy(updatedHierarchy);
@@ -430,7 +470,7 @@ export function ApplicationsTemplatesEditor() {
           id: item.id,
           slug: item.slug || item.id,
           label: item.label,
-        }))
+        })),
       );
       setHierarchyDirty(true);
     }
@@ -445,7 +485,7 @@ export function ApplicationsTemplatesEditor() {
   // ── Save to Supabase ──
   const handleSave = async () => {
     setSaving(true);
-    
+
     const { error: templateError } = await supabase
       .from("site_config")
       .upsert({ key: SUPABASE_KEY, value: allData as any }, { onConflict: "key" });
@@ -460,9 +500,9 @@ export function ApplicationsTemplatesEditor() {
 
     if (templateError || hierarchyError) {
       toast.error(
-        "Save failed: " + 
-        (templateError?.message || "") + 
-        (hierarchyError ? " | Hierarchy: " + hierarchyError.message : "")
+        "Save failed: " +
+          (templateError?.message || "") +
+          (hierarchyError ? " | Hierarchy: " + hierarchyError.message : ""),
       );
     } else {
       toast.success("Application templates and navigation saved successfully!");
@@ -484,10 +524,8 @@ export function ApplicationsTemplatesEditor() {
     setDirty(true);
   };
 
-  const setField = <K extends keyof ApplicationTemplate>(
-    key: K,
-    value: ApplicationTemplate[K],
-  ) => updateActive((prev) => ({ ...prev, [key]: value }));
+  const setField = <K extends keyof ApplicationTemplate>(key: K, value: ApplicationTemplate[K]) =>
+    updateActive((prev) => ({ ...prev, [key]: value }));
 
   const setSeo = (patch: Partial<ApplicationSeo>) =>
     updateActive((prev) => ({
@@ -540,7 +578,11 @@ export function ApplicationsTemplatesEditor() {
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Application Categories ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
+              Application Categories (
+              {filteredCategories.length !== categoriesList.length
+                ? `${filteredCategories.length}/${categoriesList.length}`
+                : categoriesList.length}
+              )
             </p>
           </div>
 
@@ -551,25 +593,42 @@ export function ApplicationsTemplatesEditor() {
                 <Input
                   placeholder="e.g. mining-systems"
                   value={newSlug}
-                  onChange={e => setNewSlug(formatSlugInput(e.target.value))}
-                  onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                  onChange={(e) => setNewSlug(formatSlugInput(e.target.value))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAddNew();
+                    if (e.key === "Escape") setShowNewSlug(false);
+                  }}
                   className="text-xs h-8"
                   autoFocus
                 />
                 <div className="flex gap-1">
-                  <Button size="sm" onClick={handleAddNew}
-                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer">
+                  <Button
+                    size="sm"
+                    onClick={handleAddNew}
+                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer"
+                  >
                     Create
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
-                    className="h-7 text-xs cursor-pointer">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowNewSlug(false);
+                      setNewSlug("");
+                    }}
+                    className="h-7 text-xs cursor-pointer"
+                  >
                     Cancel
                   </Button>
                 </div>
               </div>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
-                className="w-full h-8 text-xs gap-1.5 cursor-pointer">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowNewSlug(true)}
+                className="w-full h-8 text-xs gap-1.5 cursor-pointer"
+              >
                 <Plus className="h-3 w-3" /> New Template
               </Button>
             )}
@@ -620,7 +679,11 @@ export function ApplicationsTemplatesEditor() {
             {/* Categories Section */}
             <div className="space-y-1">
               <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Application Categories ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
+                Application Categories (
+                {filteredCategories.length !== categoriesList.length
+                  ? `${filteredCategories.length}/${categoriesList.length}`
+                  : categoriesList.length}
+                )
               </p>
               <div className="space-y-0.5">
                 {paginatedCategories.map((cat) => {
@@ -678,7 +741,7 @@ export function ApplicationsTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -690,7 +753,7 @@ export function ApplicationsTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -713,20 +776,33 @@ export function ApplicationsTemplatesEditor() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                 <div>
                   <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                    {activeSlug === "__landing" ? "Applications Landing Page" : (active.title || activeSlug)}
+                    {activeSlug === "__landing"
+                      ? "Applications Landing Page"
+                      : active.title || activeSlug}
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1">
                     <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
                       {activeSlug === "__landing" ? "/applications" : `/${activeSlug}`}
                     </code>
                     {dirty && (
-                      <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
+                      <span className="text-[10px] text-amber-500 font-bold">
+                        ● Unsaved Changes
+                      </span>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8 cursor-pointer">
-                    <a href={activeSlug === "__landing" ? "/applications" : `/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8 cursor-pointer"
+                  >
+                    <a
+                      href={activeSlug === "__landing" ? "/applications" : `/${activeSlug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink className="h-3 w-3" /> Preview
                     </a>
                   </Button>
@@ -735,7 +811,11 @@ export function ApplicationsTemplatesEditor() {
                     disabled={saving || !dirty}
                     className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
                   >
-                    {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                    {saving ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Save className="h-3 w-3" />
+                    )}
                     {saving ? "Saving…" : "Save"}
                   </Button>
                 </div>
@@ -757,7 +837,9 @@ export function ApplicationsTemplatesEditor() {
                     { id: "products_downloads", label: "Products & Downloads" },
                     { id: "seo", label: "SEO" },
                   ]
-                    .filter((t) => !(activeSlug === "__landing" && t.id !== "hero" && t.id !== "seo"))
+                    .filter(
+                      (t) => !(activeSlug === "__landing" && t.id !== "hero" && t.id !== "seo"),
+                    )
                     .map((t) => (
                       <TabsTrigger
                         key={t.id}
@@ -845,13 +927,13 @@ export function ApplicationsTemplatesEditor() {
                                 key: "icon",
                                 label: "Icon Name",
                                 placeholder: "e.g. Shield, Droplets, Wind, Leaf",
-                                type: "icon"
+                                type: "icon",
                               },
                               {
                                 key: "label",
                                 label: "Highlight Text",
-                                placeholder: "e.g. Evaporation Minimisation"
-                              }
+                                placeholder: "e.g. Evaporation Minimisation",
+                              },
                             ]}
                             onChange={(v) => setField("heroHighlights", v as any[])}
                             newItem={{ icon: "Shield", label: "" }}
@@ -891,13 +973,13 @@ export function ApplicationsTemplatesEditor() {
                             key: "icon",
                             label: "Icon (e.g. Droplets, Layers, Trash2, Sprout)",
                             placeholder: "Icon name",
-                            type: "icon"
+                            type: "icon",
                           },
                           {
                             key: "label",
                             label: "Sub-Application Name",
-                            placeholder: "e.g. Wastewater Lagoons"
-                          }
+                            placeholder: "e.g. Wastewater Lagoons",
+                          },
                         ]}
                         onChange={(v) => setField("suitableFor", v as any[])}
                         newItem={{ icon: "Droplets", label: "" }}
@@ -929,7 +1011,9 @@ export function ApplicationsTemplatesEditor() {
                         </FieldLabel>
                         <Select
                           value={active.featuredCaseStudySlug ?? "none_selected"}
-                          onValueChange={(val) => setField("featuredCaseStudySlug", val === "none_selected" ? "" : val)}
+                          onValueChange={(val) =>
+                            setField("featuredCaseStudySlug", val === "none_selected" ? "" : val)
+                          }
                         >
                           <SelectTrigger className="w-full text-xs h-8 bg-surface">
                             <SelectValue placeholder="Select featured case study..." />
@@ -993,7 +1077,12 @@ export function ApplicationsTemplatesEditor() {
                         fields={[
                           { key: "number", label: "Callout Number / Tag", placeholder: "e.g. 1" },
                           { key: "label", label: "Part Label", placeholder: "e.g. HDPE Top Cover" },
-                          { key: "description", label: "Short Technical Spec", placeholder: "e.g. UV stabilised HDPE geomembrane", multiline: true }
+                          {
+                            key: "description",
+                            label: "Short Technical Spec",
+                            placeholder: "e.g. UV stabilised HDPE geomembrane",
+                            multiline: true,
+                          },
                         ]}
                         onChange={(v) => setField("componentsCallouts", v as any[])}
                         newItem={{ number: "1", label: "", description: "" }}
@@ -1062,9 +1151,19 @@ export function ApplicationsTemplatesEditor() {
                       hint="A grid of quality checklist cards (e.g. Material Testing, Seam testing, etc.)."
                       items={(active.qaItems ?? []) as any[]}
                       fields={[
-                        { key: "icon", label: "Icon Name", placeholder: "e.g. ClipboardCheck, Gauge, Wrench", type: "icon" },
+                        {
+                          key: "icon",
+                          label: "Icon Name",
+                          placeholder: "e.g. ClipboardCheck, Gauge, Wrench",
+                          type: "icon",
+                        },
                         { key: "title", label: "Procedure Name", placeholder: "e.g. Seam Testing" },
-                        { key: "description", label: "Description / Specs", placeholder: "e.g. Extrusion & welding quality checks", multiline: true }
+                        {
+                          key: "description",
+                          label: "Description / Specs",
+                          placeholder: "e.g. Extrusion & welding quality checks",
+                          multiline: true,
+                        },
                       ]}
                       onChange={(v) => setField("qaItems", v as any[])}
                       newItem={{ icon: "ClipboardCheck", title: "", description: "" }}
@@ -1091,15 +1190,23 @@ export function ApplicationsTemplatesEditor() {
                         </FieldLabel>
                         <div className="grid md:grid-cols-2 gap-2">
                           {(active.products ?? []).map((pId) => {
-                            const pData = allProducts.find(p => p.id === pId);
+                            const pData = allProducts.find((p) => p.id === pId);
                             return (
-                              <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                              <div
+                                key={pId}
+                                className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                              >
                                 <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                                 <Button
                                   variant="ghost"
                                   size="icon"
                                   className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                  onClick={() => setField("products", (active.products ?? []).filter(id => id !== pId))}
+                                  onClick={() =>
+                                    setField(
+                                      "products",
+                                      (active.products ?? []).filter((id) => id !== pId),
+                                    )
+                                  }
                                 >
                                   ✕
                                 </Button>
@@ -1110,7 +1217,9 @@ export function ApplicationsTemplatesEditor() {
                         <div className="pt-2">
                           <ProductSelector
                             excludeIds={active.products}
-                            onSelect={(prod) => setField("products", [...(active.products ?? []), prod.id])}
+                            onSelect={(prod) =>
+                              setField("products", [...(active.products ?? []), prod.id])
+                            }
                           />
                         </div>
                       </div>
@@ -1119,54 +1228,73 @@ export function ApplicationsTemplatesEditor() {
                         <FieldLabel hint="Select up to 5 top-selling products for this application to display as a slider in the mega menu">
                           Top Selling Products (Max 5)
                         </FieldLabel>
-                        
+
                         <div className="space-y-2 max-w-md">
                           {(active.topSellingProductIds ?? []).map((pId) => {
-                            const pData = allProducts.find(p => p.id === pId);
+                            const pData = allProducts.find((p) => p.id === pId);
                             return (
-                              <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                              <div
+                                key={pId}
+                                className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                              >
                                 <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                                 <Button
                                   variant="ghost"
                                   size="icon"
                                   className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                  onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                                  onClick={() =>
+                                    setField(
+                                      "topSellingProductIds",
+                                      (active.topSellingProductIds ?? []).filter(
+                                        (id) => id !== pId,
+                                      ),
+                                    )
+                                  }
                                 >
                                   ✕
                                 </Button>
                               </div>
                             );
                           })}
-                          
-                          {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
-                            <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
-                          )}
+
+                          {(!active.topSellingProductIds ||
+                            active.topSellingProductIds.length === 0) &&
+                            !active.topSellingProductId && (
+                              <p className="text-xs text-muted-foreground italic">
+                                No top selling products selected.
+                              </p>
+                            )}
 
                           {/* Show legacy single product if present but no array exists */}
-                          {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
-                            <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                              <span className="flex items-center gap-1.5">
+                          {(!active.topSellingProductIds ||
+                            active.topSellingProductIds.length === 0) &&
+                            active.topSellingProductId && (
+                              <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                                <span className="flex items-center gap-1.5">
                                   <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
-                              </span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                onClick={() => setField("topSellingProductId", "")}
-                              >
-                                ✕
-                              </Button>
-                            </div>
-                          )}
+                                  {allProducts.find((p) => p.id === active.topSellingProductId)
+                                    ?.name || `Product ID: ${active.topSellingProductId}`}{" "}
+                                  (Legacy Single)
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => setField("topSellingProductId", "")}
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            )}
                         </div>
 
-                        {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
+                        {(!active.topSellingProductIds ||
+                          active.topSellingProductIds.length < 5) && (
                           <div className="max-w-md pt-2">
                             <ProductSelector
                               excludeIds={[
                                 ...(active.topSellingProductIds ?? []),
-                                ...(active.topSellingProductId ? [active.topSellingProductId] : [])
+                                ...(active.topSellingProductId ? [active.topSellingProductId] : []),
                               ]}
                               onSelect={(prod) => {
                                 let currentIds = [...(active.topSellingProductIds ?? [])];
@@ -1202,8 +1330,16 @@ export function ApplicationsTemplatesEditor() {
                         label="Downloadable PDF Specifications & Brochures"
                         items={(active.downloads ?? []) as any[]}
                         fields={[
-                          { key: "label", label: "Document Name", placeholder: "e.g. GSE Smooth HDPE Datasheet" },
-                          { key: "url", label: "File URL Path", placeholder: "e.g. /resources/docs/gse-hdpe.pdf" }
+                          {
+                            key: "label",
+                            label: "Document Name",
+                            placeholder: "e.g. GSE Smooth HDPE Datasheet",
+                          },
+                          {
+                            key: "url",
+                            label: "File URL Path",
+                            placeholder: "e.g. /resources/docs/gse-hdpe.pdf",
+                          },
                         ]}
                         onChange={(v) => setField("downloads", v as any[])}
                         newItem={{ label: "", url: "" }}
@@ -1227,7 +1363,9 @@ export function ApplicationsTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Recommended: 150–160 characters">Meta Description</FieldLabel>
+                      <FieldLabel hint="Recommended: 150–160 characters">
+                        Meta Description
+                      </FieldLabel>
                       <Textarea
                         value={active.seo?.description ?? ""}
                         onChange={(e) => setSeo({ description: e.target.value })}
@@ -1236,7 +1374,9 @@ export function ApplicationsTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Comma-separated list of search keywords">Meta Keywords</FieldLabel>
+                      <FieldLabel hint="Comma-separated list of search keywords">
+                        Meta Keywords
+                      </FieldLabel>
                       <Input
                         value={active.seo?.keywords ?? ""}
                         onChange={(e) => setSeo({ keywords: e.target.value })}

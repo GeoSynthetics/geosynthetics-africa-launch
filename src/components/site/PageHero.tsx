@@ -25,7 +25,9 @@ export function PageHero({
       <div className="container-page py-20 md:py-28">
         <div className="max-w-3xl">
           {eyebrow && (
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">{eyebrow}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
+              {eyebrow}
+            </p>
           )}
           <h1 className="font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">
             {title}

@@ -7,7 +7,13 @@ interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement
   placeholderClassName?: string;
 }
 
-export function ProgressiveImage({ src, className, placeholderClassName, alt, ...props }: ProgressiveImageProps) {
+export function ProgressiveImage({
+  src,
+  className,
+  placeholderClassName,
+  alt,
+  ...props
+}: ProgressiveImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string>("");
 
@@ -19,7 +25,7 @@ export function ProgressiveImage({ src, className, placeholderClassName, alt, ..
     }
 
     setIsLoaded(false);
-    
+
     const img = new Image();
     img.src = src;
     img.onload = () => {
@@ -32,11 +38,14 @@ export function ProgressiveImage({ src, className, placeholderClassName, alt, ..
     <div className="relative w-full h-full overflow-hidden bg-stone-950">
       {/* Skeleton Pulse Placeholder */}
       {!isLoaded && (
-        <Skeleton 
-          className={cn("absolute inset-0 w-full h-full bg-stone-900/80 animate-pulse rounded-none", placeholderClassName)} 
+        <Skeleton
+          className={cn(
+            "absolute inset-0 w-full h-full bg-stone-900/80 animate-pulse rounded-none",
+            placeholderClassName,
+          )}
         />
       )}
-      
+
       {/* Real Image loaded asynchronously */}
       {currentSrc && (
         <img
@@ -44,8 +53,10 @@ export function ProgressiveImage({ src, className, placeholderClassName, alt, ..
           alt={alt}
           className={cn(
             "transition-all duration-700 ease-out",
-            isLoaded ? "opacity-75 group-hover:opacity-85 blur-0 scale-100" : "opacity-0 blur-lg scale-105",
-            className
+            isLoaded
+              ? "opacity-75 group-hover:opacity-85 blur-0 scale-100"
+              : "opacity-0 blur-lg scale-105",
+            className,
           )}
           {...props}
         />

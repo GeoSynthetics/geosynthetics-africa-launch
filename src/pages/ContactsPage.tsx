@@ -36,49 +36,243 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
-type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
+  to: string;
+  params?: Record<string, string>;
+};
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
-const HERO_IMG =
-  "/src/assets/contact-page-hero.png";
+import {
+  type ContactsPageContent,
+  type ContactHero,
+  type ContactHeadOffice,
+  type ContactOfficeService,
+  DEFAULT_CONTACTS_PAGE_CONTENT,
+} from "@/types/contacts";
+import * as LucideIcons from "lucide-react";
 
-const HEAD_OFFICE = {
-  company: "Geosynthetics Africa (Pty) Ltd",
-  address: ["7 Tamar Avenue, Lea Glen", "Randburg, Johannesburg, 2191", "South Africa"],
-  contactPerson: "James Chabata",
-  contactRole: "Sales Admin Manager",
-  phone: "+27 78 1355 926",
-  email: "sales@geosynthetics.co.za",
-  hours: ["Mon - Fri: 08:00 - 17:00", "Saturday: Closed", "Sunday: Closed"],
+const getIconComponent = (
+  name: string | undefined,
+  fallback: React.ComponentType<{ className?: string }> = BookOpen,
+): React.ComponentType<{ className?: string }> => {
+  if (!name) return fallback;
+  return (LucideIcons as any)[name] || fallback;
 };
 
-const HERO_BADGES = [
-  { icon: Target, title: "Expert Technical", subtitle: "Support" },
-  { icon: ShieldCheck, title: "Quality Products", subtitle: "& Services" },
-  { icon: Truck, title: "Reliable Regional", subtitle: "Logistics" },
-];
-
-const OFFICE_SERVICES = [
-  { icon: Layers, label: "Material Supply" },
-  { icon: HardHat, label: "HDPE Liner Installation" },
-  { icon: Waves, label: "Floating Cover Installation" },
-  { icon: ClipboardCheck, label: "QA/QC Testing" },
-  { icon: Truck, label: "Logistics & Export" },
-  { icon: Wrench, label: "Technical Support" },
-];
-
-const REGIONAL_COVERAGE = [
-  "South Africa",
-  "Botswana",
-  "Namibia",
-  "Zimbabwe",
-  "Mozambique",
-  "Zambia",
-  "Democratic Republic of Congo (DRC)",
-  "Tanzania",
-  "Kenya",
-  "Ghana",
-  "Côte d'Ivoire"
+const DEFAULT_REGIONAL_COVERAGE = [
+  {
+    country: "South Africa",
+    flag: "🇿🇦",
+    code: "RSA",
+    hub: "Johannesburg (HQ)",
+    coords: [-26.2041, 28.0473],
+    title: "Johannesburg Head Office",
+    subtitle: "Southern Africa Regional Hub",
+    address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191",
+    phone: "+27 78 1355 926",
+    email: "sales@geosynthetics.co.za",
+    services: "Full Supply, Installation & QA/QC Hub",
+    transit: "Same day / Next day dispatch",
+    routes: "Direct distribution across all 9 provinces.",
+    description:
+      "Our primary manufacturing, warehousing, and QA/QC hub. We manage large-scale manufacturing, custom lining fabrication, and coordinate all cross-border engineering teams.",
+    capabilities: [
+      "Material Supply",
+      "HDPE Liner Installation",
+      "QA/QC Testing",
+      "Technical Support",
+    ],
+  },
+  {
+    country: "Botswana",
+    flag: "🇧🇼",
+    code: "BWA",
+    hub: "Gaborone Logistics Hub",
+    coords: [-24.6282, 25.9231],
+    title: "Botswana Logistics Hub",
+    subtitle: "Gaborone Distribution Center",
+    address: "Plot 22017, Gaborone West Industrial, Gaborone",
+    phone: "+27 78 1355 926",
+    email: "botswana@geosynthetics.co.za",
+    services: "Material Supply & Cross-Border Logistics",
+    transit: "2 - 3 Days (Road Freight)",
+    routes: "Johannesburg → Pioneer Gate / Tlokweng → Gaborone",
+    description:
+      "Supporting major diamond, copper, and iron ore mining operations. We handle advance customs clearances (SAD500) to ensure seamless material deliveries via Tlokweng/Pioneer Gate.",
+    capabilities: [
+      "Material Supply",
+      "Cross-Border Logistics",
+      "HDPE Liner Installation",
+      "On-site QA/QC",
+    ],
+  },
+  {
+    country: "Namibia",
+    flag: "🇳🇦",
+    code: "NAM",
+    hub: "Windhoek Hub",
+    coords: [-22.5609, 17.0658],
+    title: "Namibia Logistics Hub",
+    subtitle: "Windhoek Distribution Center",
+    address: "12 Edison Street, Southern Industrial Area, Windhoek",
+    phone: "+27 78 1355 926",
+    email: "namibia@geosynthetics.co.za",
+    services: "Material Supply & QA/QC Support",
+    transit: "3 - 4 Days (Road Freight)",
+    routes: "Johannesburg → Trans-Kalahari Corridor → Windhoek",
+    description:
+      "Key supply route for uranium mines, marine civil works, and water conservation reservoirs. Logistics managed via the Trans-Kalahari Corridor.",
+    capabilities: ["Material Supply", "Logistics & Customs", "QA/QC Testing"],
+  },
+  {
+    country: "Zimbabwe",
+    flag: "🇿🇼",
+    code: "ZWE",
+    hub: "Harare Hub",
+    coords: [-17.8252, 31.0335],
+    title: "Zimbabwe Operations Hub",
+    subtitle: "Harare Office",
+    address: "55 Coventry Road, Workington, Harare",
+    phone: "+27 78 1355 926",
+    email: "zimbabwe@geosynthetics.co.za",
+    services: "Lining Installation & Technical Support",
+    transit: "3 - 5 Days (Road Freight)",
+    routes: "Johannesburg → Beitbridge → Harare / Bulawayo",
+    description:
+      "Serving agriculture, gold mining, and waste water treatment facilities. Full logistics support through Beitbridge border clearance with pre-scanned digital customs packs.",
+    capabilities: ["Material Supply", "HDPE Liner Installation", "Technical Support"],
+  },
+  {
+    country: "Mozambique",
+    flag: "🇲🇿",
+    code: "MOZ",
+    hub: "Maputo Hub",
+    coords: [-25.9692, 32.5732],
+    title: "Mozambique Regional Hub",
+    subtitle: "Maputo Office",
+    address: "Avenida de Moçambique, Bairro do Jardim, Maputo",
+    phone: "+27 78 1355 926",
+    email: "mozambique@geosynthetics.co.za",
+    services: "Coastal Works Supply & Installation QA/QC",
+    transit: "2 - 3 Days (Road Freight)",
+    routes: "Johannesburg → Lebombo / Ressano Garcia → Maputo",
+    description:
+      "Critical support for port infrastructure, coal mining, and coastal containment barriers. Specialized GCL (Geosynthetic Clay Liner) and geotextile supply for erosion control.",
+    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
+  },
+  {
+    country: "Zambia",
+    flag: "🇿🇲",
+    code: "ZMB",
+    hub: "Lusaka Hub",
+    coords: [-15.3875, 28.3228],
+    title: "Zambia & DRC Hub",
+    subtitle: "Lusaka Office",
+    address: "Stand 10432, Katanga Road, Industrial Area, Lusaka",
+    phone: "+27 78 1355 926",
+    email: "zambia@geosynthetics.co.za",
+    services: "Mining TSF Lining & Cross-Border Cleared Supply",
+    transit: "4 - 6 Days (Road Freight)",
+    routes: "Johannesburg → Martins Drift (Botswana) → Kazungula / Chirundu → Lusaka",
+    description:
+      "Serving the Copperbelt mining sector and large-scale agricultural projects. Coordinates cross-border transit towards DRC (Kolwezi) with full COMESA documentation.",
+    capabilities: ["Material Supply", "HDPE Liner Installation", "Logistics & Export"],
+  },
+  {
+    country: "Democratic Republic of Congo (DRC)",
+    flag: "🇨🇩",
+    code: "COD",
+    hub: "Kolwezi / Lubumbashi Hub",
+    coords: [-10.7222, 25.4678],
+    title: "Kolwezi Office",
+    subtitle: "Central Africa Mining Hub",
+    address: "Avenue de la Métallurgie, Zone Industrielle, Kolwezi",
+    phone: "+27 78 1355 926",
+    email: "drc@geosynthetics.co.za",
+    services: "Mining TSF Lining & Heavy Confinement Supply",
+    transit: "5 - 7 Days (Road Freight)",
+    routes: "Johannesburg → Zambia (transit) → Kasumbalesa → Kolwezi / Lubumbashi",
+    description:
+      "Supporting major cobalt and copper mining operations in the Katanga Province. We handle complex customs clearances at Kasumbalesa and coordinate local installation crews.",
+    capabilities: ["Material Supply", "HDPE Liner Installation", "Cross-Border Logistics"],
+  },
+  {
+    country: "Tanzania",
+    flag: "🇹🇿",
+    code: "TZA",
+    hub: "East Africa Regional Hub",
+    coords: [-6.7924, 39.2083],
+    title: "Tanzania Operations",
+    subtitle: "East Africa Hub",
+    address: "Plot 45, Mandela Road, Industrial Area, Dar es Salaam",
+    phone: "+27 78 1355 926",
+    email: "tanzania@geosynthetics.co.za",
+    services: "Material Supply & Technical Supervision",
+    transit: "6 - 8 Days (Road Freight / Sea)",
+    routes: "Durban / JHB → Zimbabwe / Zambia (transit) → Tunduma → Dar es Salaam",
+    description:
+      "Serving gold mining, infrastructure, and agricultural developments. Coordination of customs clearance via Dar es Salaam port and Tunduma border post.",
+    capabilities: ["Material Supply", "HDPE Liner Installation", "Technical Support"],
+  },
+  {
+    country: "Kenya",
+    flag: "🇰🇪",
+    code: "KEN",
+    hub: "Nairobi Office",
+    coords: [-1.2921, 36.8219],
+    title: "Nairobi Office",
+    subtitle: "East Africa Hub",
+    address: "Mombasa Road, Syokimau, Nairobi",
+    phone: "+27 78 1355 926",
+    email: "kenya@geosynthetics.co.za",
+    services: "Agricultural & Municipal Water Containment Supply",
+    transit: "7 - 9 Days (Sea / Road)",
+    routes: "Port of Durban → Port of Mombasa → Nairobi",
+    description:
+      "Serving East African agriculture, water containment, and infrastructure projects. Stock management and technical specifications support.",
+    capabilities: ["Material Supply", "Design Support", "Logistics & Customs"],
+  },
+  {
+    country: "Ghana",
+    flag: "🇬🇭",
+    code: "GHA",
+    hub: "West Africa Mining Hub",
+    coords: [5.6037, -0.187],
+    title: "West Africa Regional Hub",
+    subtitle: "Accra Office",
+    address: "14 Spintex Road, Accra",
+    phone: "+27 78 1355 926",
+    email: "ghana@geosynthetics.co.za",
+    services: "West Africa Mining Supply & Certified Installation",
+    transit: "14 - 18 Days (Sea Freight)",
+    routes: "Port of Durban / Cape Town → Port of Tema → Accra / Tarkwa",
+    description:
+      "Headed by our West African regional office in Accra, serving gold mining and environmental containment projects across Ghana, Mali, and Burkina Faso.",
+    capabilities: [
+      "Material Supply",
+      "HDPE Liner Installation",
+      "QA/QC Testing",
+      "Logistics & Export",
+    ],
+  },
+  {
+    country: "Côte d'Ivoire",
+    flag: "🇨🇮",
+    code: "CIV",
+    hub: "West Africa Hub",
+    coords: [5.36, -4.0083],
+    title: "Abidjan Hub",
+    subtitle: "West Africa Office",
+    address: "Zone 4C, Rue des Carrossiers, Abidjan",
+    phone: "+27 78 1355 926",
+    email: "civ@geosynthetics.co.za",
+    services: "Port Infrastructure & Shoreline Erosion Supply",
+    transit: "16 - 20 Days (Sea Freight)",
+    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
+    description:
+      "Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
+    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
+  },
 ];
 
 const CASE_STUDIES = [
@@ -107,9 +301,24 @@ const CASE_STUDIES = [
 
 const RESOURCE_STRIP = [
   { icon: Package, title: "VIEW PRODUCTS", subtitle: "Explore our range", to: "/products" },
-  { icon: AppWindow, title: "VIEW APPLICATIONS", subtitle: "Find your solution", to: "/applications" },
-  { icon: ClipboardCheck, title: "QA & TESTING", subtitle: "Quality assurance", to: "/quality-assurance" },
-  { icon: FileText, title: "VIEW CASE STUDIES", subtitle: "Real project success", to: "/resources" },
+  {
+    icon: AppWindow,
+    title: "VIEW APPLICATIONS",
+    subtitle: "Find your solution",
+    to: "/applications",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "QA & TESTING",
+    subtitle: "Quality assurance",
+    to: "/quality-assurance",
+  },
+  {
+    icon: FileText,
+    title: "VIEW CASE STUDIES",
+    subtitle: "Real project success",
+    to: "/resources",
+  },
   { icon: BookOpen, title: "RESOURCES", subtitle: "Technical library", to: "/resources" },
 ];
 
@@ -137,242 +346,19 @@ const quickSchema = z.object({
   message: z.string().trim().min(5, "How can we help?").max(2000),
 });
 
-const REGIONAL_LOCATIONS = [
-  {
-    country: "South Africa",
-    title: "Johannesburg Head Office",
-    subtitle: "Southern Africa Regional Hub",
-    coords: [-26.2041, 28.0473] as [number, number],
-    address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191",
-    phone: "+27 78 1355 926",
-    email: "sales@geosynthetics.co.za",
-    services: "Full Supply, Installation & QA/QC Hub",
-  },
-  {
-    country: "Botswana",
-    title: "Botswana Logistics Hub",
-    subtitle: "Gaborone Distribution Center",
-    coords: [-24.6282, 25.9231] as [number, number],
-    address: "Plot 22017, Gaborone West Industrial, Gaborone",
-    phone: "+27 78 1355 926",
-    email: "botswana@geosynthetics.co.za",
-    services: "Material Supply & Cross-Border Logistics",
-  },
-  {
-    country: "Namibia",
-    title: "Namibia Logistics Hub",
-    subtitle: "Windhoek Distribution Center",
-    coords: [-22.5609, 17.0658] as [number, number],
-    address: "12 Edison Street, Southern Industrial Area, Windhoek",
-    phone: "+27 78 1355 926",
-    email: "namibia@geosynthetics.co.za",
-    services: "Material Supply & QA/QC Support",
-  },
-  {
-    country: "Zimbabwe",
-    title: "Zimbabwe Operations Hub",
-    subtitle: "Harare Office",
-    coords: [-17.8252, 31.0335] as [number, number],
-    address: "55 Coventry Road, Workington, Harare",
-    phone: "+27 78 1355 926",
-    email: "zimbabwe@geosynthetics.co.za",
-    services: "Lining Installation & Technical Support",
-  },
-  {
-    country: "Mozambique",
-    title: "Mozambique Regional Hub",
-    subtitle: "Maputo Office",
-    coords: [-25.9692, 32.5732] as [number, number],
-    address: "Avenida de Moçambique, Bairro do Jardim, Maputo",
-    phone: "+27 78 1355 926",
-    email: "mozambique@geosynthetics.co.za",
-    services: "Coastal Works Supply & Installation QA/QC",
-  },
-  {
-    country: "Zambia",
-    title: "Zambia & DRC Hub",
-    subtitle: "Lusaka Office",
-    coords: [-15.3875, 28.3228] as [number, number],
-    address: "Stand 10432, Katanga Road, Industrial Area, Lusaka",
-    phone: "+27 78 1355 926",
-    email: "zambia@geosynthetics.co.za",
-    services: "Mining TSF Lining & Cross-Border Cleared Supply",
-  },
-  {
-    country: "Democratic Republic of Congo (DRC)",
-    title: "Kolwezi Office",
-    subtitle: "Central Africa Mining Hub",
-    coords: [-10.7222, 25.4678] as [number, number],
-    address: "Avenue de la Métallurgie, Zone Industrielle, Kolwezi",
-    phone: "+27 78 1355 926",
-    email: "drc@geosynthetics.co.za",
-    services: "Mining TSF Lining & Heavy Confinement Supply",
-  },
-  {
-    country: "Tanzania",
-    title: "Tanzania Operations",
-    subtitle: "East Africa Hub",
-    coords: [-6.7924, 39.2083] as [number, number],
-    address: "Plot 45, Mandela Road, Industrial Area, Dar es Salaam",
-    phone: "+27 78 1355 926",
-    email: "tanzania@geosynthetics.co.za",
-    services: "Material Supply & Technical Supervision",
-  },
-  {
-    country: "Kenya",
-    title: "Nairobi Office",
-    subtitle: "East Africa Hub",
-    coords: [-1.2921, 36.8219] as [number, number],
-    address: "Mombasa Road, Syokimau, Nairobi",
-    phone: "+27 78 1355 926",
-    email: "kenya@geosynthetics.co.za",
-    services: "Agricultural & Municipal Water Containment Supply",
-  },
-  {
-    country: "Ghana",
-    title: "West Africa Regional Hub",
-    subtitle: "Accra Office",
-    coords: [5.6037, -0.1870] as [number, number],
-    address: "14 Spintex Road, Accra",
-    phone: "+27 78 1355 926",
-    email: "ghana@geosynthetics.co.za",
-    services: "West Africa Mining Supply & Certified Installation",
-  },
-  {
-    country: "Côte d'Ivoire",
-    title: "Abidjan Hub",
-    subtitle: "West Africa Office",
-    coords: [5.3600, -4.0083] as [number, number],
-    address: "Zone 4C, Rue des Carrossiers, Abidjan",
-    phone: "+27 78 1355 926",
-    email: "civ@geosynthetics.co.za",
-    services: "Port Infrastructure & Shoreline Erosion Supply",
-  },
-];
-
-const REGIONAL_DETAILS = {
-  "South Africa": {
-    flag: "🇿🇦",
-    code: "RSA",
-    hub: "Johannesburg (HQ)",
-    transit: "Same day / Next day dispatch",
-    description: "Our primary manufacturing, warehousing, and QA/QC hub. We manage large-scale manufacturing, custom lining fabrication, and coordinate all cross-border engineering teams.",
-    routes: "Direct distribution across all 9 provinces.",
-    stats: "500K+ m² installed · ISO 9001 QA/QC",
-    services: ["Material Supply", "HDPE Liner Installation", "QA/QC Testing", "Technical Support"]
-  },
-  "Botswana": {
-    flag: "🇧🇼",
-    code: "BWA",
-    hub: "Gaborone Logistics Hub",
-    transit: "2 - 3 Days (Road Freight)",
-    description: "Supporting major diamond, copper, and iron ore mining operations. We handle advance customs clearances (SAD500) to ensure seamless material deliveries via Tlokweng/Pioneer Gate.",
-    routes: "Johannesburg → Pioneer Gate / Tlokweng → Gaborone",
-    stats: "Ikongwe Iron Ore & Lucara Diamond projects",
-    services: ["Material Supply", "Cross-Border Logistics", "HDPE Liner Installation", "On-site QA/QC"]
-  },
-  "Namibia": {
-    flag: "🇳🇦",
-    code: "NAM",
-    hub: "Windhoek Hub",
-    transit: "3 - 4 Days (Road Freight)",
-    description: "Key supply route for uranium mines, marine civil works, and water conservation reservoirs. Logistics managed via the Trans-Kalahari Corridor.",
-    routes: "Johannesburg → Trans-Kalahari Corridor → Windhoek",
-    stats: "Husab Uranium & Swakopmund water projects",
-    services: ["Material Supply", "Logistics & Customs", "QA/QC Testing"]
-  },
-  "Zimbabwe": {
-    flag: "🇿🇼",
-    code: "ZWE",
-    hub: "Harare Hub",
-    transit: "3 - 5 Days (Road Freight)",
-    description: "Serving agriculture, gold mining, and waste water treatment facilities. Full logistics support through Beitbridge border clearance with pre-scanned digital customs packs.",
-    routes: "Johannesburg → Beitbridge → Harare / Bulawayo",
-    stats: "Great Dyke platinum and agricultural reservoirs",
-    services: ["Material Supply", "HDPE Liner Installation", "Technical Support"]
-  },
-  "Mozambique": {
-    flag: "🇲🇿",
-    code: "MOZ",
-    hub: "Maputo Hub",
-    transit: "2 - 3 Days (Road Freight)",
-    description: "Critical support for port infrastructure, coal mining, and coastal containment barriers. Specialized GCL (Geosynthetic Clay Liner) and geotextile supply for erosion control.",
-    routes: "Johannesburg → Lebombo / Ressano Garcia → Maputo",
-    stats: "Nacala Corridor and Maputo Port projects",
-    services: ["Material Supply", "Logistics & Export", "QA/QC Support"]
-  },
-  "Zambia": {
-    flag: "🇿🇲",
-    code: "ZMB",
-    hub: "Lusaka Hub",
-    transit: "4 - 6 Days (Road Freight)",
-    description: "Serving the Copperbelt mining sector and large-scale agricultural projects. Coordinates cross-border transit towards DRC (Kolwezi) with full COMESA documentation.",
-    routes: "Johannesburg → Martins Drift (Botswana) → Kazungula / Chirundu → Lusaka",
-    stats: "Copperbelt TSF lining & Kazungula bridge routes",
-    services: ["Material Supply", "HDPE Liner Installation", "Logistics & Export"]
-  },
-  "Democratic Republic of Congo (DRC)": {
-    flag: "🇨🇩",
-    code: "COD",
-    hub: "Kolwezi / Lubumbashi Hub",
-    transit: "5 - 7 Days (Road Freight)",
-    description: "Supporting major cobalt and copper mining operations in the Katanga Province. We handle complex customs clearances at Kasumbalesa and coordinate local installation crews.",
-    routes: "Johannesburg → Zambia (transit) → Kasumbalesa → Kolwezi / Lubumbashi",
-    stats: "Kamoa-Kakula & Mutanda copper/cobalt projects",
-    services: ["Material Supply", "HDPE Liner Installation", "Cross-Border Logistics"]
-  },
-  "Tanzania": {
-    flag: "🇹🇿",
-    code: "TZA",
-    hub: "East Africa Regional Hub",
-    transit: "6 - 8 Days (Road Freight / Sea)",
-    description: "Serving gold mining, infrastructure, and agricultural developments. Coordination of customs clearance via Dar es Salaam port and Tunduma border post.",
-    routes: "Durban / JHB → Zimbabwe / Zambia (transit) → Tunduma → Dar es Salaam",
-    stats: "Geita Gold Mine & North Mara TSF projects",
-    services: ["Material Supply", "HDPE Liner Installation", "Technical Support"]
-  },
-  "Kenya": {
-    flag: "🇰🇪",
-    code: "KEN",
-    hub: "Nairobi Office",
-    transit: "7 - 9 Days (Sea / Road)",
-    description: "Serving East African agriculture, water containment, and infrastructure projects. Stock management and technical specifications support.",
-    routes: "Port of Durban → Port of Mombasa → Nairobi",
-    stats: "Rift Valley agricultural & municipal water reservoirs",
-    services: ["Material Supply", "Design Support", "Logistics & Customs"]
-  },
-  "Ghana": {
-    flag: "🇬🇭",
-    code: "GHA",
-    hub: "West Africa Mining Hub",
-    transit: "14 - 18 Days (Sea Freight)",
-    description: "Headed by our West African regional office in Accra, serving gold mining and environmental containment projects across Ghana, Mali, and Burkina Faso.",
-    routes: "Port of Durban / Cape Town → Port of Tema → Accra / Tarkwa",
-    stats: "Tarkwa & Obuasi Gold Mine TSF lining projects",
-    services: ["Material Supply", "HDPE Liner Installation", "QA/QC Testing", "Logistics & Export"]
-  },
-  "Côte d'Ivoire": {
-    flag: "🇨🇮",
-    code: "CIV",
-    hub: "West Africa Hub",
-    transit: "16 - 20 Days (Sea Freight)",
-    description: "Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
-    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
-    stats: "Yaouré Gold Mine and coastal erosion control structures",
-    services: ["Material Supply", "Logistics & Export", "QA/QC Support"]
-  }
-};
+// Static constants REGIONAL_LOCATIONS and REGIONAL_DETAILS are replaced by database configuration.
 
 function RegionalMap({
   selectedCountry,
   onSelectCountry,
+  locations,
 }: {
   selectedCountry: string;
   onSelectCountry: (country: string) => void;
+  locations: any[];
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletInstanceRef = useRef<any>(null);
-  const markersRef = useRef<Record<string, any>>({});
   const [L, setL] = useState<any>(null);
 
   useEffect(() => {
@@ -445,18 +431,6 @@ function RegionalMap({
         0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
         100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
       }
-      .custom-leaflet-popup .leaflet-popup-content-wrapper {
-        background: oklch(1 0 0);
-        color: oklch(0.18 0.01 260);
-        border: 1px solid oklch(0.91 0.005 260);
-        border-radius: 6px;
-        padding: 4px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      }
-      .custom-leaflet-popup .leaflet-popup-tip {
-        background: oklch(1 0 0);
-        border: 1px solid oklch(0.91 0.005 260);
-      }
     `;
     document.head.appendChild(styleEl);
 
@@ -468,59 +442,40 @@ function RegionalMap({
       popupAnchor: [0, -15],
     });
 
-    REGIONAL_LOCATIONS.forEach((loc) => {
+    locations.forEach((loc) => {
+      if (!loc.coords || loc.coords.length !== 2) return;
       const marker = L.marker(loc.coords, { icon: customMarkerIcon }).addTo(map);
-
-      const popupContent = `
-        <div style="font-family: sans-serif; width: 220px; text-transform: none;">
-          <div style="font-size: 11px; font-weight: bold; color: ${pinColor}; text-transform: uppercase; letter-spacing: 0.05em;">${loc.country}</div>
-          <div style="font-size: 14px; font-weight: 800; text-transform: uppercase; margin-top: 2px; line-height: 1.2;">${loc.title}</div>
-          <div style="font-size: 11px; color: #6b7280; margin-top: 1px; font-style: italic;">${loc.subtitle}</div>
-          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 8px 0;" />
-          <div style="font-size: 11px; line-height: 1.4; color: #374151;">
-            <strong>Services:</strong> ${loc.services}<br/>
-            <strong>Address:</strong> ${loc.address}<br/>
-            <strong>Phone:</strong> <a href="tel:${loc.phone.replace(/\s+/g, "")}" style="color: ${pinColor}; text-decoration: none; font-weight: bold;">${loc.phone}</a>
-          </div>
-        </div>
-      `;
-
-      marker.bindPopup(popupContent, {
-        className: "custom-leaflet-popup",
-        closeButton: false,
-      });
 
       marker.on("click", () => {
         onSelectCountry(loc.country);
       });
 
-      markersRef.current[loc.country] = marker;
     });
 
     return () => {
       map.remove();
       document.head.removeChild(styleEl);
     };
-  }, [L]);
+  }, [L, locations]);
 
   useEffect(() => {
     const map = leafletInstanceRef.current;
     if (!map || !L || !selectedCountry) return;
 
-    const loc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry);
-    const marker = markersRef.current[selectedCountry];
+    const loc = locations.find((l) => l.country === selectedCountry);
 
-    if (loc && marker) {
+    if (loc && loc.coords && loc.coords.length === 2) {
       map.setView(loc.coords, 6, { animate: true, duration: 1 });
-      marker.openPopup();
     }
-  }, [selectedCountry, L]);
+  }, [selectedCountry, L, locations]);
 
   if (!L) {
     return (
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/20 text-muted-foreground gap-3">
         <MapPin className="h-8 w-8 text-primary animate-pulse" />
-        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Loading Regional Map...</div>
+        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Loading Regional Map...
+        </div>
       </div>
     );
   }
@@ -529,45 +484,48 @@ function RegionalMap({
 }
 
 export function ContactsPage() {
-  const [selectedCountry, setSelectedCountry] = useState<string>("South Africa");
+  const search = useSearch({ strict: false }) as Record<string, unknown>;
+  const loaderData = useLoaderData({ strict: false }) as Record<string, unknown>;
+
+  const locations = (loaderData?.regionalCoverage || DEFAULT_REGIONAL_COVERAGE) as Array<{
+    country: string;
+  }>;
+  const regionalCountries = locations.map((loc: { country: string }) => loc.country);
+
+  const contentData = loaderData?.content || null;
+  const content = { ...DEFAULT_CONTACTS_PAGE_CONTENT, ...contentData } as ContactsPageContent;
+  const hero = { ...DEFAULT_CONTACTS_PAGE_CONTENT.hero, ...content.hero };
+  const headOffice = { ...DEFAULT_CONTACTS_PAGE_CONTENT.headOffice, ...content.headOffice };
+  const officeServices = content.officeServices || DEFAULT_CONTACTS_PAGE_CONTENT.officeServices;
+
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    locations[0]?.country || "South Africa",
+  );
 
   // Safely read search params or loader data to pre-select country
   useEffect(() => {
-    let initialCountry = "";
-
-    // 1. Try reading from contacts search param
-    try {
-      const search = useSearch({ from: "/contacts", strict: false }) as any;
-      if (search?.country) {
-        initialCountry = search.country;
-      }
-    } catch {}
-
-    // 2. Try reading from $slug loader data
-    try {
-      const loader = useLoaderData({ from: "/$slug", strict: false }) as any;
-      if (loader?.country) {
-        initialCountry = loader.country;
-      }
-    } catch {}
-
+    const initialCountry = (search?.country || loaderData?.country || "") as string;
     if (initialCountry) {
-      // Find matching country in REGIONAL_COVERAGE (case-insensitive)
-      const matched = REGIONAL_COVERAGE.find(
-        (c) => c.toLowerCase() === initialCountry.toLowerCase()
+      // Find matching country in regionalCountries (case-insensitive)
+      const matched = regionalCountries.find(
+        (c: string) => c.toLowerCase() === initialCountry.toLowerCase(),
       );
       if (matched) {
         setSelectedCountry(matched);
       }
     }
-  }, []);
+  }, [search?.country, loaderData?.country, regionalCountries]);
 
   return (
     <>
-      <ContactsHero />
-      <OfficeDetailsAndServices />
-      <MapAndCoverage selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
-      <FormsBlock />
+      <ContactsHero hero={hero} headOffice={headOffice} />
+      <OfficeDetailsAndServices headOffice={headOffice} officeServices={officeServices} />
+      <MapAndCoverage
+        selectedCountry={selectedCountry}
+        onSelectCountry={setSelectedCountry}
+        locations={locations}
+      />
+      <FormsBlock headOffice={headOffice} />
       <ResourceStrip />
       <CountrySeoLinks />
     </>
@@ -581,7 +539,10 @@ function CountrySeoLinks() {
     { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
     { name: "Zimbabwe", slug: "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
     { name: "Zambia", slug: "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
-    { name: "Democratic Republic of Congo (DRC)", slug: "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier" },
+    {
+      name: "Democratic Republic of Congo (DRC)",
+      slug: "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+    },
     { name: "Kenya", slug: "kenya-geosynthetics-supplier-contact" },
     { name: "Côte d'Ivoire", slug: "cote-divoire-geosynthetics-supplier-contact" },
     { name: "Mozambique", slug: "mozambique-geosynthetics-supplier-contact" },
@@ -614,7 +575,7 @@ function CountrySeoLinks() {
 }
 
 /* -------------------- Hero -------------------- */
-function ContactsHero() {
+function ContactsHero({ hero, headOffice }: { hero: ContactHero; headOffice: ContactHeadOffice }) {
   return (
     <section
       className="relative overflow-hidden bg-surface-dark text-surface-dark-foreground"
@@ -624,12 +585,12 @@ function ContactsHero() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(${HERO_IMG})`,
+          backgroundImage: `url(${hero.bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center top",
         }}
       />
-      {/* Gradient overlay ΓÇö strong on the left, fades out right so building shows clearly */}
+      {/* Gradient overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -646,26 +607,24 @@ function ContactsHero() {
             { label: "Home", to: "/" },
             { label: "Contact Us", to: "/contacts" },
             { label: "Southern Africa" },
-            { label: "Johannesburg Head Office" },
+            { label: headOffice.company },
           ]}
           variant="contacts"
         />
 
-        {/* Left-side content ΓÇö constrained to ~55% so building photo shows on right */}
+        {/* Left-side content */}
         <div className="max-w-[58%] md:max-w-[52%]">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-3">
             Contact Us
           </p>
-          <h1 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.92] tracking-tight">
-            Johannesburg
-            <br />
-            Head Office
+          <h1 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.92] tracking-tight whitespace-pre-line">
+            {hero.title}
           </h1>
           <p className="mt-3 font-display text-lg md:text-xl uppercase tracking-wide text-surface-dark-foreground/90">
-            Southern Africa Regional Hub
+            {hero.subtitle}
           </p>
           <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-surface-dark-foreground/80">
-            {["Supply", "Installation", "QA/QC", "Logistics"].map((s, i) => (
+            {hero.tags.map((s, i) => (
               <span key={s} className="flex items-center gap-2">
                 {i > 0 && <span className="h-1 w-1 rounded-full bg-primary" />}
                 {s}
@@ -673,24 +632,27 @@ function ContactsHero() {
             ))}
           </p>
           <p className="mt-2 text-sm text-surface-dark-foreground/75 max-w-sm">
-            Proudly serving Southern Africa and cross-border projects.
+            {hero.description}
           </p>
 
           <div className="mt-6 grid sm:grid-cols-3 gap-3 max-w-xl">
-            {HERO_BADGES.map(({ icon: Icon, title, subtitle }) => (
-              <div
-                key={title}
-                className="flex items-center gap-2.5 rounded border border-surface-dark-foreground/15 bg-surface-dark-foreground/8 backdrop-blur-sm p-2.5"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 text-primary">
-                  <Icon className="h-4 w-4" />
-                </span>
-                <div className="text-[11px] leading-tight">
-                  <div className="font-semibold text-surface-dark-foreground">{title}</div>
-                  <div className="text-surface-dark-foreground/65">{subtitle}</div>
+            {hero.badges.map(({ icon: iconName, title, subtitle }) => {
+              const Icon = getIconComponent(iconName);
+              return (
+                <div
+                  key={title}
+                  className="flex items-center gap-2.5 rounded border border-surface-dark-foreground/15 bg-surface-dark-foreground/8 backdrop-blur-sm p-2.5"
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 text-primary">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <div className="text-[11px] leading-tight">
+                    <div className="font-semibold text-surface-dark-foreground">{title}</div>
+                    <div className="text-surface-dark-foreground/65">{subtitle}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2.5">
@@ -701,7 +663,7 @@ function ContactsHero() {
               <Upload className="h-3.5 w-3.5" /> Upload Project BOQ
             </a>
             <a
-              href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
+              href={`tel:${headOffice.phone.replace(/\s+/g, "")}`}
               className="inline-flex items-center gap-2 rounded border border-surface-dark-foreground/30 bg-surface-dark-foreground/5 px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
             >
               <MessageCircle className="h-3.5 w-3.5" /> Speak to Technical Team
@@ -716,27 +678,33 @@ function ContactsHero() {
         </div>
       </div>
 
-      {/* Map card ΓÇö absolute, bottom-right, overlapping the building. Hidden on mobile. */}
-      <div className="hidden lg:block absolute bottom-0 right-6 xl:right-12 w-64 shadow-2xl rounded-t-md overflow-hidden border border-surface-dark-foreground/15">
-        <div className="relative h-44">
-          <iframe
-            title="Johannesburg Head Office map preview"
-            src={MAP_EMBED}
-            className="absolute inset-0 h-full w-full"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-        <div className="bg-card text-card-foreground px-4 py-3 flex items-center gap-3">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <MapPin className="h-3.5 w-3.5" />
-          </span>
-          <div className="text-xs">
-            <div className="font-display font-bold uppercase tracking-wide">Johannesburg</div>
-            <div className="text-muted-foreground">Head Office</div>
+      {/* Map card */}
+      {headOffice.mapEmbedUrl && (
+        <div className="hidden lg:block absolute bottom-0 right-6 xl:right-12 w-64 shadow-2xl rounded-t-md overflow-hidden border border-surface-dark-foreground/15">
+          <div className="relative h-44">
+            <iframe
+              title="Head Office map preview"
+              src={headOffice.mapEmbedUrl}
+              className="absolute inset-0 h-full w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="bg-card text-card-foreground px-4 py-3 flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <MapPin className="h-3.5 w-3.5" />
+            </span>
+            <div className="text-xs truncate flex-1">
+              <div className="font-display font-bold uppercase tracking-wide truncate">
+                {headOffice.company}
+              </div>
+              <div className="text-muted-foreground truncate">
+                {headOffice.contactRole || "Head Office"}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
@@ -766,7 +734,13 @@ function DetailRow({
 }
 
 /* -------------------- Office details + Services -------------------- */
-function OfficeDetailsAndServices() {
+function OfficeDetailsAndServices({
+  headOffice,
+  officeServices,
+}: {
+  headOffice: ContactHeadOffice;
+  officeServices: ContactOfficeService[];
+}) {
   return (
     <section className="bg-background">
       <div className="container-page py-14 grid lg:grid-cols-12 gap-8">
@@ -778,28 +752,34 @@ function OfficeDetailsAndServices() {
           <div className="grid sm:grid-cols-2 gap-0 rounded border border-border bg-card overflow-hidden">
             <div className="p-5 space-y-5 sm:border-r border-border">
               <DetailRow icon={Building2} label="Company">
-                <div className="text-sm">{HEAD_OFFICE.company}</div>
+                <div className="text-sm">{headOffice.company}</div>
               </DetailRow>
               <DetailRow icon={MapPin} label="Address">
                 <div className="text-sm space-y-0.5">
-                  {HEAD_OFFICE.address.map((l) => (
+                  {headOffice.address.map((l) => (
                     <div key={l}>{l}</div>
                   ))}
                 </div>
               </DetailRow>
               <DetailRow icon={Phone} label="Phone">
-                <a href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`} className="text-sm hover:text-primary">
-                  {HEAD_OFFICE.phone}
+                <a
+                  href={`tel:${headOffice.phone.replace(/\s+/g, "")}`}
+                  className="text-sm hover:text-primary"
+                >
+                  {headOffice.phone}
                 </a>
               </DetailRow>
               <DetailRow icon={Mail} label="Email">
-                <a href={`mailto:${HEAD_OFFICE.email}`} className="text-sm hover:text-primary break-all">
-                  {HEAD_OFFICE.email}
+                <a
+                  href={`mailto:${headOffice.email}`}
+                  className="text-sm hover:text-primary break-all"
+                >
+                  {headOffice.email}
                 </a>
               </DetailRow>
               <DetailRow icon={Clock} label="Office Hours">
                 <div className="text-sm space-y-0.5">
-                  {HEAD_OFFICE.hours.map((h) => (
+                  {headOffice.hours.map((h) => (
                     <div key={h}>{h}</div>
                   ))}
                 </div>
@@ -814,21 +794,21 @@ function OfficeDetailsAndServices() {
                 Contact Person
               </div>
               <div className="mt-1 font-display text-lg font-bold uppercase">
-                {HEAD_OFFICE.contactPerson}
+                {headOffice.contactPerson}
               </div>
-              <div className="text-xs text-muted-foreground">{HEAD_OFFICE.contactRole}</div>
+              <div className="text-xs text-muted-foreground">{headOffice.contactRole}</div>
               <div className="mt-5 space-y-2 text-sm">
                 <a
-                  href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
+                  href={`tel:${headOffice.phone.replace(/\s+/g, "")}`}
                   className="flex items-center justify-center gap-2 text-foreground/80 hover:text-primary"
                 >
-                  <Phone className="h-3.5 w-3.5 text-primary" /> {HEAD_OFFICE.phone}
+                  <Phone className="h-3.5 w-3.5 text-primary" /> {headOffice.phone}
                 </a>
                 <a
-                  href={`mailto:${HEAD_OFFICE.email}`}
+                  href={`mailto:${headOffice.email}`}
                   className="flex items-center justify-center gap-2 text-foreground/80 hover:text-primary break-all"
                 >
-                  <Mail className="h-3.5 w-3.5 text-primary" /> {HEAD_OFFICE.email}
+                  <Mail className="h-3.5 w-3.5 text-primary" /> {headOffice.email}
                 </a>
               </div>
             </div>
@@ -841,19 +821,22 @@ function OfficeDetailsAndServices() {
             Services Available From This Office
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {OFFICE_SERVICES.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="rounded border border-border bg-card p-4 flex flex-col items-center text-center hover:border-primary transition"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <div className="mt-3 text-xs font-display font-bold uppercase tracking-wide leading-snug">
-                  {label}
+            {officeServices.map((service, index) => {
+              const Icon = getIconComponent(service.icon);
+              return (
+                <div
+                  key={`${service.label}-${index}`}
+                  className="rounded border border-border bg-card p-4 flex flex-col items-center text-center hover:border-primary transition"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div className="mt-3 text-xs font-display font-bold uppercase tracking-wide leading-snug">
+                    {service.label}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -865,12 +848,17 @@ function OfficeDetailsAndServices() {
 function MapAndCoverage({
   selectedCountry,
   onSelectCountry,
+  locations,
 }: {
   selectedCountry: string;
   onSelectCountry: (country: string) => void;
+  locations: any[];
 }) {
-  const activeLoc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry) || REGIONAL_LOCATIONS[0];
-  const activeDetails = REGIONAL_DETAILS[selectedCountry as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+  const activeLoc =
+    locations.find((l) => l.country === selectedCountry) ||
+    locations[0] ||
+    DEFAULT_REGIONAL_COVERAGE[0];
+  const activeDetails = activeLoc;
 
   return (
     <section className="bg-surface">
@@ -882,11 +870,12 @@ function MapAndCoverage({
               Regional Coverage & Presence
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Select a country below or click a map pin to explore our offices and logistics routes across Africa.
+              Select a country below or click a map pin to explore our offices and logistics routes
+              across Africa.
             </p>
           </div>
           <button
-            onClick={() => onSelectCountry("South Africa")}
+            onClick={() => onSelectCountry(locations[0]?.country || "South Africa")}
             className="inline-flex items-center gap-2 rounded border border-primary text-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition cursor-pointer self-start md:self-auto"
           >
             <MapPin className="h-3.5 w-3.5" /> Reset View (HQ)
@@ -898,21 +887,37 @@ function MapAndCoverage({
           {/* Map wrapper */}
           <div className="lg:col-span-6 flex flex-col">
             <div className="rounded border border-border overflow-hidden bg-card relative flex-1 min-h-[450px] lg:min-h-0">
-              <RegionalMap selectedCountry={selectedCountry} onSelectCountry={onSelectCountry} />
-              
+              <RegionalMap
+                selectedCountry={selectedCountry}
+                onSelectCountry={onSelectCountry}
+                locations={locations}
+              />
+
               {/* Dynamic floating detail card */}
               <div className="absolute top-4 left-4 bg-card/95 backdrop-blur-sm text-card-foreground rounded border border-border shadow-lg p-3.5 max-w-[260px] text-xs z-[1000] pointer-events-auto transition-all duration-300">
-                <div className="text-[10px] font-bold text-primary uppercase tracking-wider">{activeLoc.country} Presence</div>
-                <div className="font-display font-bold text-sm uppercase mt-0.5 leading-snug">{activeLoc.title}</div>
+                <div className="text-[10px] font-bold text-primary uppercase tracking-wider">
+                  {activeLoc.country} Presence
+                </div>
+                <div className="font-display font-bold text-sm uppercase mt-0.5 leading-snug">
+                  {activeLoc.title}
+                </div>
                 <div className="mt-1.5 text-muted-foreground">
                   <div>{activeLoc.address}</div>
                 </div>
                 <div className="mt-2.5 space-y-1 pt-2 border-t border-border/60 text-[11px]">
-                  <div className="font-semibold text-foreground leading-snug">{activeLoc.services}</div>
-                  <a href={`tel:${activeLoc.phone.replace(/\s+/g, "")}`} className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1">
+                  <div className="font-semibold text-foreground leading-snug">
+                    {activeLoc.services}
+                  </div>
+                  <a
+                    href={`tel:${(activeLoc.phone || "").replace(/\s+/g, "")}`}
+                    className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1"
+                  >
                     <Phone className="h-3 w-3 shrink-0" /> {activeLoc.phone}
                   </a>
-                  <a href={`mailto:${activeLoc.email}`} className="flex items-center gap-1.5 text-primary hover:underline font-medium break-all">
+                  <a
+                    href={`mailto:${activeLoc.email}`}
+                    className="flex items-center gap-1.5 text-primary hover:underline font-medium break-all"
+                  >
                     <Mail className="h-3 w-3 shrink-0" /> {activeLoc.email}
                   </a>
                 </div>
@@ -927,7 +932,11 @@ function MapAndCoverage({
               <div className="md:col-span-7 flex flex-col justify-between bg-surface border border-border rounded p-5">
                 <div>
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl animate-bounce-subtle" role="img" aria-label={selectedCountry}>
+                    <span
+                      className="text-3xl animate-bounce-subtle"
+                      role="img"
+                      aria-label={selectedCountry}
+                    >
                       {activeDetails.flag}
                     </span>
                     <div>
@@ -965,8 +974,11 @@ function MapAndCoverage({
                     Core Capabilities
                   </span>
                   <div className="flex flex-wrap gap-1">
-                    {activeDetails.services.map((svc) => (
-                      <span key={svc} className="text-[10px] bg-card border border-border px-2 py-0.5 rounded font-medium text-foreground/80">
+                    {activeDetails.capabilities?.map((svc: string) => (
+                      <span
+                        key={svc}
+                        className="text-[10px] bg-card border border-border px-2 py-0.5 rounded font-medium text-foreground/80"
+                      >
                         {svc}
                       </span>
                     ))}
@@ -980,13 +992,12 @@ function MapAndCoverage({
                   <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-2">
                     Select a Region
                   </span>
-                  {REGIONAL_COVERAGE.map((c) => {
-                    const isSelected = c === selectedCountry;
-                    const details = REGIONAL_DETAILS[c as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+                  {locations.map((loc) => {
+                    const isSelected = loc.country === selectedCountry;
                     return (
                       <button
-                        key={c}
-                        onClick={() => onSelectCountry(c)}
+                        key={loc.country}
+                        onClick={() => onSelectCountry(loc.country)}
                         className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${
                           isSelected
                             ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
@@ -994,10 +1005,12 @@ function MapAndCoverage({
                         }`}
                       >
                         <span className="flex items-center gap-2">
-                          <span>{details.flag}</span>
-                          <span>{c}</span>
+                          <span>{loc.flag}</span>
+                          <span>{loc.country}</span>
                         </span>
-                        <CheckCircle2 className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary-foreground" : "text-primary opacity-60"}`} />
+                        <CheckCircle2
+                          className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary-foreground" : "text-primary opacity-60"}`}
+                        />
                       </button>
                     );
                   })}
@@ -1020,42 +1033,38 @@ function MapAndCoverage({
   );
 }
 
-
 /* -------------------- Forms (BOQ + Quick contact) -------------------- */
-function FormsBlock() {
+function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const { user } = useAuth();
   const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [boqSubmitting, setBoqSubmitting] = useState(false);
   const [quickSubmitting, setQuickSubmitting] = useState(false);
 
-  // Safely extract case studies from either /contacts loader or /$slug loader
-  let caseStudies: any[] = [];
-  try {
-    const contactsData = useLoaderData({ from: "/contacts", strict: false }) as any;
-    if (contactsData?.caseStudies) {
-      caseStudies = contactsData.caseStudies;
-    }
-  } catch {}
-  if (!caseStudies || caseStudies.length === 0) {
-    try {
-      const slugData = useLoaderData({ from: "/$slug", strict: false }) as any;
-      if (slugData?.caseStudies) {
-        caseStudies = slugData.caseStudies;
-      }
-    } catch {}
-  }
+  const loaderData = useLoaderData({ strict: false }) as Record<string, unknown>;
+  const caseStudies = (loaderData?.caseStudies || []) as Array<{
+    title: string;
+    location?: string;
+    country?: string;
+    summary?: string;
+    hero_image_url?: string;
+    slug?: string;
+  }>;
 
   // Map database projects if available, otherwise fall back to static CASE_STUDIES
-  const projectExperience = caseStudies.length > 0
-    ? caseStudies.map((cs) => ({
-        name: cs.title,
-        location: cs.location && cs.country ? `${cs.location}, ${cs.country}` : (cs.location || cs.country || ""),
-        description: cs.summary || "",
-        image: cs.hero_image_url || "",
-        slug: cs.slug,
-      }))
-    : CASE_STUDIES;
+  const projectExperience =
+    caseStudies.length > 0
+      ? caseStudies.map((cs) => ({
+          name: cs.title,
+          location:
+            cs.location && cs.country
+              ? `${cs.location}, ${cs.country}`
+              : cs.location || cs.country || "",
+          description: cs.summary || "",
+          image: cs.hero_image_url || "",
+          slug: cs.slug,
+        }))
+      : CASE_STUDIES;
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = Array.from(e.target.files ?? []);
@@ -1176,7 +1185,6 @@ function FormsBlock() {
       <div className="container-page py-12">
         {/* 3-column layout: Case Studies | BOQ Form | Quick Contact */}
         <div className="grid lg:grid-cols-12 gap-8">
-
           {/* LEFT: Project Experience / Case Studies ΓÇö compact horizontal cards */}
           <div className="lg:col-span-4 order-2 lg:order-1">
             <h2 className="font-display text-base font-bold uppercase tracking-wide mb-4">
@@ -1198,12 +1206,16 @@ function FormsBlock() {
                   {/* Content */}
                   <div className="p-3 flex flex-col justify-between min-w-0">
                     <div>
-                      <div className="font-display text-sm font-bold uppercase leading-tight">{c.name}</div>
+                      <div className="font-display text-sm font-bold uppercase leading-tight">
+                        {c.name}
+                      </div>
                       <div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
                         <MapPin className="h-2.5 w-2.5 text-primary shrink-0" />
                         <span className="truncate">{c.location}</span>
                       </div>
-                      <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">{c.description}</p>
+                      <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">
+                        {c.description}
+                      </p>
                     </div>
                     {c.slug ? (
                       <Link
@@ -1230,7 +1242,6 @@ function FormsBlock() {
           {/* RIGHT: 2-column sub-grid ΓÇö BOQ Form + Quick Contact side-by-side */}
           <div className="lg:col-span-8 order-1 lg:order-2">
             <div className="grid lg:grid-cols-2 gap-6 items-start">
-
               {/* RIGHT-LEFT: BOQ Upload Form */}
               <div id="boq-form">
                 <div className="rounded border border-border bg-card p-5 md:p-6">
@@ -1262,7 +1273,12 @@ function FormsBlock() {
                       </Field>
                     </div>
                     <Field id="country" label="Project Location / Country">
-                      <Input id="country" name="country" maxLength={120} placeholder="Select country" />
+                      <Input
+                        id="country"
+                        name="country"
+                        maxLength={120}
+                        placeholder="Select country"
+                      />
                     </Field>
                     <Field id="message" label="Message / Project Description">
                       <Textarea
@@ -1385,10 +1401,10 @@ function FormsBlock() {
                         <Phone className="h-4 w-4" />
                       </span>
                       <a
-                        href={`tel:${HEAD_OFFICE.phone.replace(/\s+/g, "")}`}
+                        href={`tel:${headOffice.phone.replace(/\s+/g, "")}`}
                         className="hover:text-primary"
                       >
-                        {HEAD_OFFICE.phone}
+                        {headOffice.phone}
                       </a>
                     </li>
                     <li className="flex items-center gap-3">
@@ -1396,7 +1412,7 @@ function FormsBlock() {
                         <MessageCircle className="h-4 w-4" />
                       </span>
                       <a
-                        href={`https://wa.me/${HEAD_OFFICE.phone.replace(/\D/g, "")}`}
+                        href={`https://wa.me/${headOffice.phone.replace(/\D/g, "")}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-primary"
@@ -1408,17 +1424,18 @@ function FormsBlock() {
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
                         <Mail className="h-4 w-4" />
                       </span>
-                      <a href={`mailto:${HEAD_OFFICE.email}`} className="hover:text-primary break-all">
-                        {HEAD_OFFICE.email}
+                      <a
+                        href={`mailto:${headOffice.email}`}
+                        className="hover:text-primary break-all"
+                      >
+                        {headOffice.email}
                       </a>
                     </li>
                   </ul>
                 </div>
               </aside>
-
             </div>
           </div>
-
         </div>
       </div>
     </section>

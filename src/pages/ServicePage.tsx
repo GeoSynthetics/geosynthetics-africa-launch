@@ -42,105 +42,162 @@ export function ServicePage({ data }: { data?: any } = {}) {
 
   // General details
   const title = templateData?.title || service.label;
-  const description = templateData?.description || "High-performance geosynthetic solutions for African environmental, civil, and mining projects.";
+  const description =
+    templateData?.description ||
+    "High-performance geosynthetic solutions for African environmental, civil, and mining projects.";
   const heroImage = templateData?.heroImage || FALLBACK_HEROES[service.slug] || DEFAULT_HERO;
   const badgeText = templateData?.badge || `Geosynthetics Africa ${service.label}`;
 
   // Left Column Content & Fallbacks
-  const overviewParagraphs = templateData?.overviewParagraphs && templateData.overviewParagraphs.length > 0
-    ? templateData.overviewParagraphs
-    : [description];
+  const overviewParagraphs =
+    templateData?.overviewParagraphs && templateData.overviewParagraphs.length > 0
+      ? templateData.overviewParagraphs
+      : [description];
 
   const whyChooseTitle = templateData?.whyChooseTitle || "Why Choose Geosynthetics Africa?";
-  const whyChooseItems: BulletItem[] = templateData?.whyChoose && templateData.whyChoose.length > 0
-    ? templateData.whyChoose
-    : [
-        { title: "Direct Manufacturer Sourcing", description: "No distributor markup. Container-direct supply from global brands." },
-        { title: "SANS-Compliant Operations", description: "Full quality control reports matching regional regulatory frameworks." },
-        { title: "Single-Point Accountability", description: "Procurement, logistics, and installation managed under one contract." }
-      ];
+  const whyChooseItems: BulletItem[] =
+    templateData?.whyChoose && templateData.whyChoose.length > 0
+      ? templateData.whyChoose
+      : [
+          {
+            title: "Direct Manufacturer Sourcing",
+            description: "No distributor markup. Container-direct supply from global brands.",
+          },
+          {
+            title: "SANS-Compliant Operations",
+            description: "Full quality control reports matching regional regulatory frameworks.",
+          },
+          {
+            title: "Single-Point Accountability",
+            description: "Procurement, logistics, and installation managed under one contract.",
+          },
+        ];
 
   const whatWeDeliverTitle = templateData?.whatWeDeliverTitle || "What We Deliver — At Speed";
-  const whatWeDeliverItems: BulletItem[] = templateData?.whatWeDeliver && templateData.whatWeDeliver.length > 0
-    ? templateData.whatWeDeliver
-    : [
-        { title: "Resin-to-Roll Traceability", description: "Complete documentation, laboratory tests, and roll data sheets." },
-        { title: "Custom Seam Layout Maps", description: "Pre-installation design and post-handover as-built seaming layout plans." },
-        { title: "Comprehensive QA Test Logs", description: "Vacuum box, air pressure, and destructive tensiometer test records." }
-      ];
+  const whatWeDeliverItems: BulletItem[] =
+    templateData?.whatWeDeliver && templateData.whatWeDeliver.length > 0
+      ? templateData.whatWeDeliver
+      : [
+          {
+            title: "Resin-to-Roll Traceability",
+            description: "Complete documentation, laboratory tests, and roll data sheets.",
+          },
+          {
+            title: "Custom Seam Layout Maps",
+            description: "Pre-installation design and post-handover as-built seaming layout plans.",
+          },
+          {
+            title: "Comprehensive QA Test Logs",
+            description: "Vacuum box, air pressure, and destructive tensiometer test records.",
+          },
+        ];
 
   const coverageTitle = templateData?.coverageTitle || "Pan-African Coverage & Stock Hubs";
-  const coverageText = templateData?.coverageText || "We maintain material stockpiles and logistics corridors to serve projects in remote mining and infrastructure centers across the continent. We manage the entire border clearance workflow, ensuring readiness upon arrival.";
-  const coverageBullets = templateData?.coverageBullets && templateData.coverageBullets.length > 0
-    ? templateData.coverageBullets
-    : [
-        "Core distribution yards in South Africa for regional dispatch",
-        "SADC Certificates of Origin issued to minimize import duties",
-        "Pre-cleared border files to eliminate customs delays"
-      ];
-  const coverageImage = templateData?.coverageImage || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80";
-  const coverageCaption = templateData?.coverageCaption || "Consignment flatbed shipping for remote African sites.";
+  const coverageText =
+    templateData?.coverageText ||
+    "We maintain material stockpiles and logistics corridors to serve projects in remote mining and infrastructure centers across the continent. We manage the entire border clearance workflow, ensuring readiness upon arrival.";
+  const coverageBullets =
+    templateData?.coverageBullets && templateData.coverageBullets.length > 0
+      ? templateData.coverageBullets
+      : [
+          "Core distribution yards in South Africa for regional dispatch",
+          "SADC Certificates of Origin issued to minimize import duties",
+          "Pre-cleared border files to eliminate customs delays",
+        ];
+  const coverageImage =
+    templateData?.coverageImage ||
+    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80";
+  const coverageCaption =
+    templateData?.coverageCaption || "Consignment flatbed shipping for remote African sites.";
 
   // Right Column Sidebar Content & Fallbacks
   const sidebarImage = templateData?.sidebarImage || FALLBACK_HEROES[service.slug] || DEFAULT_HERO;
-  const sidebarCaption = templateData?.sidebarCaption || `${service.label} operations in sub-Saharan Africa.`;
+  const sidebarCaption =
+    templateData?.sidebarCaption || `${service.label} operations in sub-Saharan Africa.`;
 
-  const directModelTitle = templateData?.directModelTitle || "Direct Model. Direct Support. No Distributors.";
-  const directModelText = templateData?.directModelText || "We keep the communication chain short. You work directly with the logistics and technical team executing your project.";
-  const directModelItems: BulletItem[] = templateData?.directModelItems && templateData.directModelItems.length > 0
-    ? templateData.directModelItems
-    : [
-        { title: "Direct Contact", description: "Access to the logistics manager and site engineer directly." },
-        { title: "Transparent Pricing", description: "No distributor markup. Exact manufacturer costing." }
-      ];
+  const directModelTitle =
+    templateData?.directModelTitle || "Direct Model. Direct Support. No Distributors.";
+  const directModelText =
+    templateData?.directModelText ||
+    "We keep the communication chain short. You work directly with the logistics and technical team executing your project.";
+  const directModelItems: BulletItem[] =
+    templateData?.directModelItems && templateData.directModelItems.length > 0
+      ? templateData.directModelItems
+      : [
+          {
+            title: "Direct Contact",
+            description: "Access to the logistics manager and site engineer directly.",
+          },
+          {
+            title: "Transparent Pricing",
+            description: "No distributor markup. Exact manufacturer costing.",
+          },
+        ];
 
   const packagingTitle = templateData?.packagingTitle || "Packaging & Transport Optimization";
-  const packagingText = templateData?.packagingText || "We adjust packing methods to ensure zero damage during long-haul transit to remote locations:";
-  const packagingItems: string[] = templateData?.packagingItems && templateData.packagingItems.length > 0
-    ? templateData.packagingItems
-    : [
-        "Heavy-duty end caps to protect roll cores from impact",
-        "Extra-wrap UV protection layer for outdoor seaport storage",
-        "Container stuffing blueprints (20' / 40' / HC) to optimize volume"
-      ];
+  const packagingText =
+    templateData?.packagingText ||
+    "We adjust packing methods to ensure zero damage during long-haul transit to remote locations:";
+  const packagingItems: string[] =
+    templateData?.packagingItems && templateData.packagingItems.length > 0
+      ? templateData.packagingItems
+      : [
+          "Heavy-duty end caps to protect roll cores from impact",
+          "Extra-wrap UV protection layer for outdoor seaport storage",
+          "Container stuffing blueprints (20' / 40' / HC) to optimize volume",
+        ];
 
   const afcftaTitle = templateData?.afcftaTitle || "AfCFTA & SADC: Smarter Cross-Border Moves";
-  const afcftaText = templateData?.afcftaText || "We provide complete trade support to avoid project delays and reduce import tax burdens:";
-  const afcftaItems: string[] = templateData?.afcftaItems && templateData.afcftaItems.length > 0
-    ? templateData.afcftaItems
-    : [
-        "Registered exporter SADC Certificates of Origin",
-        "HS-code alignment on commercial invoices",
-        "Pre-alert clearances with border clearing agents"
-      ];
+  const afcftaText =
+    templateData?.afcftaText ||
+    "We provide complete trade support to avoid project delays and reduce import tax burdens:";
+  const afcftaItems: string[] =
+    templateData?.afcftaItems && templateData.afcftaItems.length > 0
+      ? templateData.afcftaItems
+      : [
+          "Registered exporter SADC Certificates of Origin",
+          "HS-code alignment on commercial invoices",
+          "Pre-alert clearances with border clearing agents",
+        ];
 
   const playbookTitle = templateData?.playbookTitle || "Logistics Playbook";
-  const playbookItems: BulletItem[] = templateData?.playbookItems && templateData.playbookItems.length > 0
-    ? templateData.playbookItems
-    : [
-        { title: "Road Transit", description: "Dedicated flatbeds and tri-axles moving along regional African corridors." },
-        { title: "Ocean Transit", description: "Direct shipment configurations into major ocean ports (Durban, Beira, Dar es Salaam)." }
-      ];
+  const playbookItems: BulletItem[] =
+    templateData?.playbookItems && templateData.playbookItems.length > 0
+      ? templateData.playbookItems
+      : [
+          {
+            title: "Road Transit",
+            description:
+              "Dedicated flatbeds and tri-axles moving along regional African corridors.",
+          },
+          {
+            title: "Ocean Transit",
+            description:
+              "Direct shipment configurations into major ocean ports (Durban, Beira, Dar es Salaam).",
+          },
+        ];
 
   // Stats Bar Content & Fallbacks
   const statsTitle = templateData?.statsTitle || "Pan-African Supply & Installation Support";
-  const statsDescription = templateData?.statsDescription || "Operating across 15+ African countries, managing full system performance.";
-  const statsList: StatItem[] = templateData?.stats && templateData.stats.length > 0
-    ? templateData.stats
-    : [
-        { value: "15+", label: "African Countries Delivered" },
-        { value: "100%", label: "Traceability Reports" },
-        { value: "SANS 1526", label: "Installation Standards" }
-      ];
+  const statsDescription =
+    templateData?.statsDescription ||
+    "Operating across 15+ African countries, managing full system performance.";
+  const statsList: StatItem[] =
+    templateData?.stats && templateData.stats.length > 0
+      ? templateData.stats
+      : [
+          { value: "15+", label: "African Countries Delivered" },
+          { value: "100%", label: "Traceability Reports" },
+          { value: "SANS 1526", label: "Installation Standards" },
+        ];
 
   // Products & Downloads
   const productsTitle = templateData?.productsTitle || "Products Supplied";
   const downloadsTitle = templateData?.downloadsTitle || "Technical Downloads & Guides";
-  const downloadsList: DownloadItem[] = templateData?.downloads && templateData.downloads.length > 0
-    ? templateData.downloads
-    : [
-        { label: "Geosynthetics Africa Service Capability Statement", url: "/resources" }
-      ];
+  const downloadsList: DownloadItem[] =
+    templateData?.downloads && templateData.downloads.length > 0
+      ? templateData.downloads
+      : [{ label: "Geosynthetics Africa Service Capability Statement", url: "/resources" }];
 
   // Helpers
   const renderIcon = (iconName: string) => {
@@ -185,7 +242,9 @@ export function ServicePage({ data }: { data?: any } = {}) {
             <Button
               className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wider text-white border-0 cursor-pointer shadow-lg px-6"
               onClick={() => {
-                document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                document
+                  .getElementById("quote")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             >
               Get Technical Pricing
@@ -196,10 +255,8 @@ export function ServicePage({ data }: { data?: any } = {}) {
 
       {/* ─── Main Content Split Layout ─────────────────────────────────────────── */}
       <div className="container-page py-16 md:py-24 grid lg:grid-cols-12 gap-12 xl:gap-16">
-        
         {/* Left Column (Main Content) */}
         <div className="lg:col-span-8 space-y-16">
-          
           {/* Section: Overview */}
           <section className="space-y-6">
             <h2 className="font-display text-2xl font-bold uppercase tracking-wide text-foreground flex items-center">
@@ -248,7 +305,10 @@ export function ServicePage({ data }: { data?: any } = {}) {
             </h2>
             <div className="grid sm:grid-cols-2 gap-5 mt-4">
               {whatWeDeliverItems.map((item, idx) => (
-                <div key={idx} className="bg-card border border-border rounded-xl p-6 hover:border-primary/30 transition duration-300 shadow-sm flex flex-col justify-between">
+                <div
+                  key={idx}
+                  className="bg-card border border-border rounded-xl p-6 hover:border-primary/30 transition duration-300 shadow-sm flex flex-col justify-between"
+                >
                   <div>
                     <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
                       <Icons.Shield className="h-5 w-5" />
@@ -275,12 +335,13 @@ export function ServicePage({ data }: { data?: any } = {}) {
             </h2>
             <div className="grid md:grid-cols-12 gap-8 items-start">
               <div className="md:col-span-7 space-y-4">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {coverageText}
-                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{coverageText}</p>
                 <ul className="space-y-3">
                   {coverageBullets.map((bullet, idx) => (
-                    <li key={idx} className="flex gap-2.5 items-start text-xs text-muted-foreground leading-relaxed">
+                    <li
+                      key={idx}
+                      className="flex gap-2.5 items-start text-xs text-muted-foreground leading-relaxed"
+                    >
                       <Icons.CheckCircle2 className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                       <span>{bullet}</span>
                     </li>
@@ -316,12 +377,18 @@ export function ServicePage({ data }: { data?: any } = {}) {
                   <Link
                     key={idx}
                     to="/products/$category/$family"
-                    params={{ category: prod.product_categories?.slug || "geomembranes", family: prod.slug }}
+                    params={{
+                      category: prod.product_categories?.slug || "geomembranes",
+                      family: prod.slug,
+                    }}
                     className="group border border-border bg-card rounded-xl overflow-hidden flex hover:border-primary transition duration-300 shadow-sm"
                   >
                     <div className="w-24 bg-surface-dark overflow-hidden relative shrink-0">
                       <img
-                        src={prod.image_url || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"}
+                        src={
+                          prod.image_url ||
+                          "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+                        }
                         alt={prod.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
@@ -380,20 +447,14 @@ export function ServicePage({ data }: { data?: any } = {}) {
               </div>
             </section>
           )}
-
         </div>
 
         {/* Right Column (Sidebar) */}
         <aside className="lg:col-span-4 space-y-8">
           <div className="space-y-6 sticky top-[100px]">
-            
             {/* Sidebar Image */}
             <div className="border border-border rounded-xl p-3 bg-card shadow-sm space-y-3">
-              <img
-                src={sidebarImage}
-                alt={title}
-                className="w-full h-48 object-cover rounded-lg"
-              />
+              <img src={sidebarImage} alt={title} className="w-full h-48 object-cover rounded-lg" />
               {sidebarCaption && (
                 <p className="text-[10px] text-muted-foreground text-center italic leading-none">
                   {sidebarCaption}
@@ -407,16 +468,20 @@ export function ServicePage({ data }: { data?: any } = {}) {
                 <span className="w-1 h-3.5 bg-primary rounded-full mr-2" />
                 {directModelTitle}
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {directModelText}
-              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{directModelText}</p>
               <div className="space-y-3 pt-2">
                 {directModelItems.map((item, idx) => (
                   <div key={idx} className="flex gap-2.5 items-start">
                     <Icons.ShieldAlert className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="text-xs font-bold uppercase tracking-tight text-foreground leading-none">{item.title}</h4>
-                      {item.description && <p className="text-[10px] text-muted-foreground mt-1 leading-normal">{item.description}</p>}
+                      <h4 className="text-xs font-bold uppercase tracking-tight text-foreground leading-none">
+                        {item.title}
+                      </h4>
+                      {item.description && (
+                        <p className="text-[10px] text-muted-foreground mt-1 leading-normal">
+                          {item.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -429,12 +494,13 @@ export function ServicePage({ data }: { data?: any } = {}) {
                 <span className="w-1 h-3 bg-primary rounded-full mr-2" />
                 {packagingTitle}
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {packagingText}
-              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{packagingText}</p>
               <ul className="space-y-2.5">
                 {packagingItems.map((item, idx) => (
-                  <li key={idx} className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed">
+                  <li
+                    key={idx}
+                    className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed"
+                  >
                     <Icons.Box className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -448,12 +514,13 @@ export function ServicePage({ data }: { data?: any } = {}) {
                 <span className="w-1 h-3 bg-primary rounded-full mr-2" />
                 {afcftaTitle}
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {afcftaText}
-              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{afcftaText}</p>
               <ul className="space-y-2.5">
                 {afcftaItems.map((item, idx) => (
-                  <li key={idx} className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed">
+                  <li
+                    key={idx}
+                    className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed"
+                  >
                     <Icons.Scale className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -491,7 +558,6 @@ export function ServicePage({ data }: { data?: any } = {}) {
                 description={`Get pricing, technical details, or dispatch logistics estimates for ${title.toLowerCase()}.`}
               />
             </div>
-
           </div>
         </aside>
       </div>
@@ -500,7 +566,7 @@ export function ServicePage({ data }: { data?: any } = {}) {
       <section className="bg-[#4D3626] text-white py-16 relative overflow-hidden">
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:24px_24px]" />
-        
+
         <div className="container-page relative z-10 text-center max-w-4xl mx-auto">
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/20 px-3 py-1 rounded-full border border-primary/20">
             Performance Index
@@ -514,7 +580,10 @@ export function ServicePage({ data }: { data?: any } = {}) {
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8">
             {statsList.map((stat, idx) => (
-              <div key={idx} className="p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm shadow-sm flex flex-col justify-center min-h-[120px]">
+              <div
+                key={idx}
+                className="p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm shadow-sm flex flex-col justify-center min-h-[120px]"
+              >
                 <div className="text-4xl md:text-5xl font-extrabold font-display tracking-tight text-white">
                   {stat.value}
                 </div>

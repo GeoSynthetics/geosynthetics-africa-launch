@@ -16,7 +16,7 @@ async function loadProductFamily(category: string, family: string) {
   }
 
   // The value is expected to be a map of familySlug -> templateData
-  const templates = data?.value as Record<string, any> || {};
+  const templates = (data?.value as Record<string, any>) || {};
   const familyData = templates[family] || null;
 
   // Fetch dynamic case studies that are linked to products belonging to this product family
@@ -24,7 +24,9 @@ async function loadProductFamily(category: string, family: string) {
   try {
     const { data: casesData } = await supabase
       .from("case_study_products")
-      .select("case_studies(id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year), products!inner(family_slug)")
+      .select(
+        "case_studies(id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year), products!inner(family_slug)",
+      )
       .eq("products.family_slug", family);
 
     if (casesData) {
@@ -46,7 +48,7 @@ async function loadProductFamily(category: string, family: string) {
     category,
     family,
     familyData,
-    dynamicCaseStudies
+    dynamicCaseStudies,
   };
 }
 
@@ -94,7 +96,14 @@ function ProductFamilySkeleton() {
       {/* Sticky Tab Navigation */}
       <div className="border-b border-border bg-surface py-4 sticky z-40 top-[80px]">
         <div className="container-page flex gap-8 overflow-x-auto no-scrollbar">
-          {["Description", "Specifications", "Documents", "Applications & Industries", "Projects", "FAQs"].map((label, i) => (
+          {[
+            "Description",
+            "Specifications",
+            "Documents",
+            "Applications & Industries",
+            "Projects",
+            "FAQs",
+          ].map((label, i) => (
             <Skeleton key={i} className="h-4 w-24 shrink-0" />
           ))}
         </div>
@@ -116,7 +125,10 @@ function ProductFamilySkeleton() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
               {Array.from({ length: 4 }).map((_, idx) => (
-                <div key={idx} className="bg-surface border border-border p-5 rounded text-center space-y-2">
+                <div
+                  key={idx}
+                  className="bg-surface border border-border p-5 rounded text-center space-y-2"
+                >
                   <Skeleton className="h-3 w-16 mx-auto" />
                   <Skeleton className="h-6 w-20 mx-auto" />
                 </div>
@@ -155,14 +167,27 @@ export const Route = createFileRoute("/products/$category/$family")({
   pendingComponent: ProductFamilySkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
-    const { category, family, familyData } = loaderData || { category: "", family: "", familyData: null };
-    const familyLabel = family.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    const categoryLabel = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-    
-    const title = familyData?.seo?.title || `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
-    const description = familyData?.seo?.description || `Explore our premium ${familyLabel}, fully specified for African projects.`;
+    const { category, family, familyData } = loaderData || {
+      category: "",
+      family: "",
+      familyData: null,
+    };
+    const familyLabel = family
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+    const categoryLabel = category
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    const title =
+      familyData?.seo?.title || `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
+    const description =
+      familyData?.seo?.description ||
+      `Explore our premium ${familyLabel}, fully specified for African projects.`;
     const keywords = familyData?.seo?.keywords;
-    
+
     return {
       meta: [
         { title },

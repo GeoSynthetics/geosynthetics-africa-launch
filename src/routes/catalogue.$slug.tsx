@@ -4,9 +4,21 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductDetailPage } from "@/pages";
 
-interface KeyFeature { label: string; icon?: string }
-interface SpecRow { property: string; test_method?: string; unit?: string; typical_value?: string }
-interface StripItem { title: string; subtitle?: string; image_url?: string }
+interface KeyFeature {
+  label: string;
+  icon?: string;
+}
+interface SpecRow {
+  property: string;
+  test_method?: string;
+  unit?: string;
+  typical_value?: string;
+}
+interface StripItem {
+  title: string;
+  subtitle?: string;
+  image_url?: string;
+}
 
 interface ProductRow {
   id: string;
@@ -39,7 +51,12 @@ interface ProductRow {
   meta_title: string | null;
   meta_description: string | null;
   seo_keywords: string | null;
-  product_categories: { id: string; name: string; slug: string | null; selection_guide_url?: string | null } | null;
+  product_categories: {
+    id: string;
+    name: string;
+    slug: string | null;
+    selection_guide_url?: string | null;
+  } | null;
   manufacturers: { id: string; name: string } | null;
   alternative_ids?: string[] | null;
   system_component_ids?: string[] | null;
@@ -125,7 +142,7 @@ async function loadProduct(slug: string) {
       .select("value")
       .eq("key", "template_product_categories")
       .maybeSingle();
-    const templates = templateRes?.value as Record<string, any> || {};
+    const templates = (templateRes?.value as Record<string, any>) || {};
     familyData = templates[product.family_slug] || null;
   }
 
@@ -135,11 +152,9 @@ async function loadProduct(slug: string) {
     .from("case_study_products")
     .select("case_studies(id, title, slug, summary, location, country, hero_image_url)")
     .eq("product_id", product.id);
-  
+
   if (casesData) {
-    caseStudies = casesData
-      .map((item: any) => item.case_studies)
-      .filter(Boolean);
+    caseStudies = casesData.map((item: any) => item.case_studies).filter(Boolean);
   }
 
   return { product, alternatives, systemComponents, familyData, caseStudies };
@@ -162,10 +177,10 @@ function ProductDetailSkeleton() {
           <div className="max-w-2xl">
             {/* Category skeleton */}
             <Skeleton className="h-4 w-32 bg-primary/30 mb-4" />
-            
+
             {/* Title skeleton */}
             <Skeleton className="h-12 md:h-16 w-3/4 bg-white/20 mb-6" />
-            
+
             {/* Short description skeleton */}
             <div className="space-y-2 mb-8">
               <Skeleton className="h-4 w-full bg-white/20" />
@@ -218,7 +233,10 @@ function ProductDetailSkeleton() {
                 </div>
                 <div className="rounded border border-border p-4 space-y-3">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="flex justify-between py-1 border-b border-border/50 last:border-0">
+                    <div
+                      key={i}
+                      className="flex justify-between py-1 border-b border-border/50 last:border-0"
+                    >
                       <Skeleton className="h-4 w-16" />
                       <Skeleton className="h-4 w-24" />
                     </div>
@@ -283,8 +301,13 @@ export const Route = createFileRoute("/catalogue/$slug")({
   pendingMs: 0,
   head: ({ loaderData }) => {
     const p = loaderData?.product;
-    const title = p ? (p.meta_title?.trim() || `${p.name} — Geosynthetics Africa`) : "Product — Geosynthetics Africa";
-    const desc = p?.meta_description?.trim() || p?.short_description || "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
+    const title = p
+      ? p.meta_title?.trim() || `${p.name} — Geosynthetics Africa`
+      : "Product — Geosynthetics Africa";
+    const desc =
+      p?.meta_description?.trim() ||
+      p?.short_description ||
+      "Engineered geosynthetic product specified, supplied and certified by Geosynthetics Africa.";
     const keywords = p?.seo_keywords?.trim();
     const img = p?.image_url || p?.images?.[0] || undefined;
     return {
@@ -298,18 +321,27 @@ export const Route = createFileRoute("/catalogue/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: desc },
-        ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
+        ...(img
+          ? [
+              { property: "og:image", content: img },
+              { name: "twitter:image", content: img },
+            ]
+          : []),
       ],
-      links: p ? [
-        { rel: "canonical", href: `https://geosynthetics.co.za/catalogue/${p.slug}` }
-      ] : [],
+      links: p
+        ? [{ rel: "canonical", href: `https://geosynthetics.co.za/catalogue/${p.slug}` }]
+        : [],
     };
   },
   errorComponent: ({ error }) => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-2xl font-bold uppercase">Something went wrong</h1>
       <p className="mt-2 text-muted-foreground">{error.message}</p>
-      <Button asChild className="mt-6"><Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>Back to catalogue</Link></Button>
+      <Button asChild className="mt-6">
+        <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>
+          Back to catalogue
+        </Link>
+      </Button>
     </div>
   ),
   notFoundComponent: () => (
@@ -317,7 +349,9 @@ export const Route = createFileRoute("/catalogue/$slug")({
       <h1 className="font-display text-3xl font-bold uppercase">Product not found</h1>
       <p className="mt-2 text-muted-foreground">That product isn't in our catalogue.</p>
       <Button asChild className="mt-6 bg-primary hover:bg-primary-hover">
-        <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>Back to catalogue</Link>
+        <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>
+          Back to catalogue
+        </Link>
       </Button>
     </div>
   ),

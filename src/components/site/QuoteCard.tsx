@@ -7,7 +7,20 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
 
-const ALLOWED_TYPES = [".pdf", ".dwg", ".dxf", ".doc", ".docx", ".xls", ".xlsx", ".csv", ".zip", ".png", ".jpg", ".jpeg"];
+const ALLOWED_TYPES = [
+  ".pdf",
+  ".dwg",
+  ".dxf",
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".csv",
+  ".zip",
+  ".png",
+  ".jpg",
+  ".jpeg",
+];
 const MAX_BYTES = 20 * 1024 * 1024;
 const MAX_FILES = 8;
 
@@ -100,7 +113,8 @@ export function QuoteCard({
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id ?? null;
 
-      const baseDescription = message.trim() || `Quote request${contextLabel ? ` for ${contextLabel}` : ""}`;
+      const baseDescription =
+        message.trim() || `Quote request${contextLabel ? ` for ${contextLabel}` : ""}`;
       const descriptionWithPaths =
         attachment_paths.length > 1
           ? `${baseDescription}\n\n[attachments]\n${attachment_paths.join("\n")}`
@@ -120,12 +134,21 @@ export function QuoteCard({
       };
 
       // Graceful fallback: strip optional columns one-by-one if schema is missing them
-      const optionalKeys = ["product_name", "attachment_paths", "boq_file_path", "user_id", "contact_phone"];
+      const optionalKeys = [
+        "product_name",
+        "attachment_paths",
+        "boq_file_path",
+        "user_id",
+        "contact_phone",
+      ];
       let payload = { ...basePayload };
       let lastError: { message: string } | null = null;
       for (let attempt = 0; attempt < optionalKeys.length + 1; attempt += 1) {
         const { error } = await supabase.from("quote_requests").insert(payload);
-        if (!error) { lastError = null; break; }
+        if (!error) {
+          lastError = null;
+          break;
+        }
         lastError = error;
         const match =
           /column ['"]?(\w+)['"]? .* (does not exist|not found)/i.exec(error.message) ??
@@ -140,7 +163,12 @@ export function QuoteCard({
       if (lastError) throw new Error(lastError.message);
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
-      setName(""); setCompany(""); setEmail(""); setPhone(""); setMessage(""); setFiles([]);
+      setName("");
+      setCompany("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+      setFiles([]);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unable to submit quote request.";
       toast.error(msg);
@@ -156,11 +184,7 @@ export function QuoteCard({
 
       <div className="mt-4 space-y-3">
         <div className="grid grid-cols-2 gap-3">
-          <Input
-            placeholder="Your name *"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <Input placeholder="Your name *" value={name} onChange={(e) => setName(e.target.value)} />
           <Input
             placeholder="Company name"
             value={company}
@@ -180,7 +204,9 @@ export function QuoteCard({
           onChange={(e) => setPhone(e.target.value)}
         />
         <Textarea
-          placeholder={contextLabel ? `Message about ${contextLabel}…` : "Tell us about your project…"}
+          placeholder={
+            contextLabel ? `Message about ${contextLabel}…` : "Tell us about your project…"
+          }
           rows={3}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -189,7 +215,10 @@ export function QuoteCard({
 
         {/* File drop zone */}
         <div
-          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragging(true);
+          }}
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}

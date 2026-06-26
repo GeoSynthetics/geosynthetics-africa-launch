@@ -10,8 +10,23 @@ const contactsSearchSchema = z.object({
 export const Route = createFileRoute("/contacts")({
   validateSearch: (search) => contactsSearchSchema.parse(search),
   loader: async () => {
-    const { data: seoData } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const { data: seoData } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "seo_pages")
+      .maybeSingle();
     const seoMap = (seoData?.value as Record<string, any>) || {};
+
+    const { data: contentData } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "contacts_page_content")
+      .maybeSingle();
+    const { data: regionalData } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "regional_coverage")
+      .maybeSingle();
 
     const { data: caseStudies, error } = await supabase
       .from("case_studies")
@@ -27,13 +42,17 @@ export const Route = createFileRoute("/contacts")({
 
     return {
       seo: seoMap["/contacts"] || null,
+      content: contentData?.value || null,
+      regionalCoverage: regionalData?.value || null,
       caseStudies: caseStudies || [],
     };
   },
   head: ({ loaderData }) => {
     const seo = loaderData?.seo;
     const title = seo?.title || "Contact — Johannesburg Head Office | Geosynthetics Africa";
-    const desc = seo?.description || "Geosynthetics Africa Johannesburg Head Office — Southern Africa regional hub for supply, installation, QA/QC and logistics. Upload your BOQ or speak to the technical team.";
+    const desc =
+      seo?.description ||
+      "Geosynthetics Africa Johannesburg Head Office — Southern Africa regional hub for supply, installation, QA/QC and logistics. Upload your BOQ or speak to the technical team.";
     const meta = [
       { title },
       { name: "description", content: desc },

@@ -29,17 +29,23 @@ describe("Route SEO Metadata generation", () => {
           seo: {
             title: "Custom Title",
             description: "Custom Description",
-            keywords: "geomembrane, liner, pond"
-          }
-        }
+            keywords: "geomembrane, liner, pond",
+          },
+        },
       };
 
       const headResult = CategoryRoute.options.head!({ loaderData: mockLoaderData } as any);
       expect(headResult).toBeDefined();
       expect(headResult.meta).toBeDefined();
       expect(headResult.meta).toContainEqual({ title: "Custom Title" });
-      expect(headResult.meta).toContainEqual({ name: "description", content: "Custom Description" });
-      expect(headResult.meta).toContainEqual({ name: "keywords", content: "geomembrane, liner, pond" });
+      expect(headResult.meta).toContainEqual({
+        name: "description",
+        content: "Custom Description",
+      });
+      expect(headResult.meta).toContainEqual({
+        name: "keywords",
+        content: "geomembrane, liner, pond",
+      });
     });
 
     it("should NOT include keywords tag if keywords are not present in SEO", () => {
@@ -49,9 +55,9 @@ describe("Route SEO Metadata generation", () => {
           label: "Geomembranes",
           seo: {
             title: "Custom Title",
-            description: "Custom Description"
-          }
-        }
+            description: "Custom Description",
+          },
+        },
       };
 
       const headResult = CategoryRoute.options.head!({ loaderData: mockLoaderData } as any);
@@ -66,13 +72,15 @@ describe("Route SEO Metadata generation", () => {
         family: "hdpe-geomembranes",
         familyData: {
           label: "HDPE Geomembranes",
-          subtitle: "Standard liners"
-        }
+          subtitle: "Standard liners",
+        },
       };
 
       const headResult = FamilyRoute.options.head!({ loaderData: mockLoaderData } as any);
       expect(headResult).toBeDefined();
-      expect(headResult.meta).toContainEqual({ title: "Hdpe Geomembranes | Geomembranes — Geosynthetics Africa" });
+      expect(headResult.meta).toContainEqual({
+        title: "Hdpe Geomembranes | Geomembranes — Geosynthetics Africa",
+      });
       expect(headResult.meta).not.toContainEqual(expect.objectContaining({ name: "keywords" }));
     });
 
@@ -85,14 +93,17 @@ describe("Route SEO Metadata generation", () => {
           seo: {
             title: "HDPE Liners - Premium Quality",
             description: "Premium HDPE liners specified for mining and waste",
-            keywords: "hdpe, geomembrane, mining liner, containment"
-          }
-        }
+            keywords: "hdpe, geomembrane, mining liner, containment",
+          },
+        },
       };
 
       const headResult = FamilyRoute.options.head!({ loaderData: mockLoaderData } as any);
       expect(headResult.meta).toContainEqual({ title: "HDPE Liners - Premium Quality" });
-      expect(headResult.meta).toContainEqual({ name: "keywords", content: "hdpe, geomembrane, mining liner, containment" });
+      expect(headResult.meta).toContainEqual({
+        name: "keywords",
+        content: "hdpe, geomembrane, mining liner, containment",
+      });
     });
   });
 });

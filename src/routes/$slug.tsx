@@ -14,84 +14,126 @@ import { supabase } from "@/integrations/supabase/client";
  */
 const PAGE_COMPONENTS: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
   "/about": lazy(() => import("@/pages/AboutPage").then((m) => ({ default: m.AboutPage }))),
-  "/contacts": lazy(() => import("@/pages/ContactsPage").then((m) => ({ default: m.ContactsPage }))),
-  "/services": lazy(() => import("@/pages/ServicesPage").then((m) => ({ default: m.ServicesPage }))),
-  "/products": lazy(() => import("@/pages/ProductsLanding").then((m) => ({ default: m.ProductsLanding }))),
-  "/applications": lazy(() => import("@/pages/ApplicationsLanding").then((m) => ({ default: m.ApplicationsLanding }))),
-  "/resources": lazy(() => import("@/pages/ResourcesIndexPage").then((m) => ({ default: m.ResourcesIndexPage }))),
+  "/contacts": lazy(() =>
+    import("@/pages/ContactsPage").then((m) => ({ default: m.ContactsPage })),
+  ),
+  "/services": lazy(() =>
+    import("@/pages/ServicesPage").then((m) => ({ default: m.ServicesPage })),
+  ),
+  "/products": lazy(() =>
+    import("@/pages/ProductsLanding").then((m) => ({ default: m.ProductsLanding })),
+  ),
+  "/applications": lazy(() =>
+    import("@/pages/ApplicationsLanding").then((m) => ({ default: m.ApplicationsLanding })),
+  ),
+  "/resources": lazy(() =>
+    import("@/pages/ResourcesIndexPage").then((m) => ({ default: m.ResourcesIndexPage })),
+  ),
   "/quality-assurance": lazy(() => import("@/pages/QAPage").then((m) => ({ default: m.QAPage }))),
-  "/projects": lazy(() => import("@/pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage }))),
+  "/projects": lazy(() =>
+    import("@/pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage })),
+  ),
 };
 
-const ServicePageLazy = lazy(() => import("@/pages/ServicePage").then((m) => ({ default: m.ServicePage })));
-const IndustryPageLazy = lazy(() => import("@/pages/IndustryPage").then((m) => ({ default: m.IndustryPage })));
-const ApplicationCategoryPageLazy = lazy(() => import("@/pages/ApplicationCategoryPage").then((m) => ({ default: m.ApplicationCategoryPage })));
+const ServicePageLazy = lazy(() =>
+  import("@/pages/ServicePage").then((m) => ({ default: m.ServicePage })),
+);
+const IndustryPageLazy = lazy(() =>
+  import("@/pages/IndustryPage").then((m) => ({ default: m.IndustryPage })),
+);
+const ApplicationCategoryPageLazy = lazy(() =>
+  import("@/pages/ApplicationCategoryPage").then((m) => ({ default: m.ApplicationCategoryPage })),
+);
 
-const COUNTRY_SEO_MAP: Record<string, { country: string; title: string; description: string; keywords: string }> = {
+const COUNTRY_SEO_MAP: Record<
+  string,
+  { country: string; title: string; description: string; keywords: string }
+> = {
   "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa": {
     country: "South Africa",
     title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa | Geosynthetics Africa",
-    description: "Geosynthetics Africa is a leading supplier and IAGI-certified installer of GSE HDPE liners and smooth geomembranes in South Africa. Contact our Johannesburg head office.",
-    keywords: "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
+    description:
+      "Geosynthetics Africa is a leading supplier and IAGI-certified installer of GSE HDPE liners and smooth geomembranes in South Africa. Contact our Johannesburg head office.",
+    keywords:
+      "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
   },
   "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier": {
     country: "Botswana",
     title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier | Geosynthetics Africa",
-    description: "Leading supplier of HDPE geomembranes, geotextiles, and geogrids for mining and infrastructure projects in Botswana. Reliable cross-border logistics to Gaborone.",
-    keywords: "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
+    description:
+      "Leading supplier of HDPE geomembranes, geotextiles, and geogrids for mining and infrastructure projects in Botswana. Reliable cross-border logistics to Gaborone.",
+    keywords:
+      "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
   },
   "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids": {
     country: "Tanzania",
-    title: "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
-    description: "High-quality HDPE liners, geotextiles, and geogrids for mining TSF and water containment projects in Tanzania. East Africa operations hub.",
-    keywords: "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
+    title:
+      "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
+    description:
+      "High-quality HDPE liners, geotextiles, and geogrids for mining TSF and water containment projects in Tanzania. East Africa operations hub.",
+    keywords:
+      "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
   },
   "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control": {
     country: "Zimbabwe",
-    title: "Zimbabwe River Rehabilitation & JuteSoilLock 292 Erosion Control | Geosynthetics Africa",
-    description: "Erosion control, river rehabilitation, and JuteSoilLock 292 supply and installation in Zimbabwe. Technical support and logistics cleared to Harare.",
-    keywords: "Zimbabwe river rehabilitation, JuteSoilLock 292, erosion control Zimbabwe, Harare geosynthetics",
+    title:
+      "Zimbabwe River Rehabilitation & JuteSoilLock 292 Erosion Control | Geosynthetics Africa",
+    description:
+      "Erosion control, river rehabilitation, and JuteSoilLock 292 supply and installation in Zimbabwe. Technical support and logistics cleared to Harare.",
+    keywords:
+      "Zimbabwe river rehabilitation, JuteSoilLock 292, erosion control Zimbabwe, Harare geosynthetics",
   },
   "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier": {
     country: "Zambia",
     title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier | Geosynthetics Africa",
-    description: "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
+    description:
+      "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
     keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
   },
   "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier": {
     country: "Democratic Republic of Congo (DRC)",
     title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier | Geosynthetics Africa",
-    description: "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
+    description:
+      "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
     keywords: "DRC geosynthetics, Bidim Congo, HDPE geomembranes DRC, Kolwezi mining lining",
   },
   "kenya-geosynthetics-supplier-contact": {
     country: "Kenya",
     title: "Kenya Geosynthetics Supplier — Contact & Technical Support | Geosynthetics Africa",
-    description: "Contact Geosynthetics Africa for premium agricultural and municipal water containment supply and lining installations in Kenya.",
-    keywords: "Kenya geosynthetics, geomembrane supplier Kenya, Nairobi lining installations, water containment Kenya",
+    description:
+      "Contact Geosynthetics Africa for premium agricultural and municipal water containment supply and lining installations in Kenya.",
+    keywords:
+      "Kenya geosynthetics, geomembrane supplier Kenya, Nairobi lining installations, water containment Kenya",
   },
   "cote-divoire-geosynthetics-supplier-contact": {
     country: "Côte d'Ivoire",
     title: "Côte d'Ivoire Geosynthetics Supplier — Contact & Supply | Geosynthetics Africa",
-    description: "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, and port infrastructure projects in Côte d'Ivoire.",
-    keywords: "Côte d'Ivoire geosynthetics, Abidjan geomembrane supplier, coastal erosion Côte d'Ivoire",
+    description:
+      "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, and port infrastructure projects in Côte d'Ivoire.",
+    keywords:
+      "Côte d'Ivoire geosynthetics, Abidjan geomembrane supplier, coastal erosion Côte d'Ivoire",
   },
   "mozambique-geosynthetics-supplier-contact": {
     country: "Mozambique",
     title: "Mozambique Geosynthetics Supplier — Maputo Regional Office | Geosynthetics Africa",
-    description: "Contact our Maputo regional hub for coastal works supply, geosynthetic clay liners (GCL), and geomembrane installation QA/QC in Mozambique.",
-    keywords: "Mozambique geosynthetics, Maputo geomembrane, GCL Mozambique, coastal works Mozambique",
+    description:
+      "Contact our Maputo regional hub for coastal works supply, geosynthetic clay liners (GCL), and geomembrane installation QA/QC in Mozambique.",
+    keywords:
+      "Mozambique geosynthetics, Maputo geomembrane, GCL Mozambique, coastal works Mozambique",
   },
   "ghana-geosynthetics-supplier-contact": {
     country: "Ghana",
     title: "Ghana Geosynthetics Supplier — West Africa Mining Hub | Geosynthetics Africa",
-    description: "Contact Geosynthetics Africa in Accra for West African gold mining TSF lining projects, geosynthetics supply, and IAGI-certified installations.",
-    keywords: "Ghana geosynthetics, Accra geomembrane supplier, gold mining TSF Ghana, geosynthetics West Africa",
+    description:
+      "Contact Geosynthetics Africa in Accra for West African gold mining TSF lining projects, geosynthetics supply, and IAGI-certified installations.",
+    keywords:
+      "Ghana geosynthetics, Accra geomembrane supplier, gold mining TSF Ghana, geosynthetics West Africa",
   },
   "namibia-geosynthetics-supplier-contact": {
     country: "Namibia",
     title: "Namibia Geosynthetics Supplier — Windhoek Logistics Hub | Geosynthetics Africa",
-    description: "Contact our Windhoek office for uranium mining lining, water conservation reservoirs, and geosynthetics supply across Namibia.",
+    description:
+      "Contact our Windhoek office for uranium mining lining, water conservation reservoirs, and geosynthetics supply across Namibia.",
     keywords: "Namibia geosynthetics, Windhoek geomembrane supplier, uranium mining lining Namibia",
   },
 };
@@ -108,7 +150,18 @@ export const Route = createFileRoute("/$slug")({
     if (COUNTRY_SEO_MAP[customSlug]) {
       const countryData = COUNTRY_SEO_MAP[customSlug];
       const originalPath = "/contacts";
-      
+
+      const { data: contentData } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "contacts_page_content")
+        .maybeSingle();
+      const { data: regionalData } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "regional_coverage")
+        .maybeSingle();
+
       const { data: caseStudies } = await supabase
         .from("case_studies")
         .select("id, title, slug, summary, location, country, hero_image_url")
@@ -127,6 +180,8 @@ export const Route = createFileRoute("/$slug")({
           pageLabel: `Contact — ${countryData.country}`,
         },
         country: countryData.country,
+        content: contentData?.value || null,
+        regionalCoverage: regionalData?.value || null,
         caseStudies: caseStudies || [],
       };
     }
@@ -136,7 +191,31 @@ export const Route = createFileRoute("/$slug")({
     if (originalPath && PAGE_COMPONENTS[originalPath]) {
       const seoMap = await fetchSeoPages();
       const seo = seoMap[originalPath] || null;
-      return { type: "core" as const, originalPath, seo };
+      const extraData: any = {};
+      if (originalPath === "/contacts") {
+        const { data: contentData } = await supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "contacts_page_content")
+          .maybeSingle();
+        const { data: regionalData } = await supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "regional_coverage")
+          .maybeSingle();
+        extraData.content = contentData?.value || null;
+        extraData.regionalCoverage = regionalData?.value || null;
+
+        const { data: caseStudies } = await supabase
+          .from("case_studies")
+          .select("id, title, slug, summary, location, country, hero_image_url")
+          .eq("status", "published")
+          .order("project_year", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(3);
+        extraData.caseStudies = caseStudies || [];
+      }
+      return { type: "core" as const, originalPath, seo, ...extraData };
     }
 
     // 2. Check if it's a Service subpage (static fallback or dynamic CMS)
@@ -149,7 +228,9 @@ export const Route = createFileRoute("/$slug")({
         .eq("key", "hierarchy_services")
         .maybeSingle();
       const items = (data?.value as any)?.items || [];
-      isDynamicService = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
+      isDynamicService = items.some(
+        (item: any) => item.slug === customSlug || item.id === customSlug,
+      );
 
       if (!isDynamicService) {
         const { data: templatesData } = await supabase
@@ -157,7 +238,7 @@ export const Route = createFileRoute("/$slug")({
           .select("value")
           .eq("key", "template_services")
           .maybeSingle();
-        const templates = templatesData?.value as Record<string, any> || {};
+        const templates = (templatesData?.value as Record<string, any>) || {};
         isDynamicService = !!templates[customSlug];
       }
     } catch (err) {
@@ -179,7 +260,9 @@ export const Route = createFileRoute("/$slug")({
         .eq("key", "hierarchy_industries")
         .maybeSingle();
       const items = (data?.value as any)?.items || [];
-      isDynamicIndustry = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
+      isDynamicIndustry = items.some(
+        (item: any) => item.slug === customSlug || item.id === customSlug,
+      );
 
       if (!isDynamicIndustry) {
         const { data: templatesData } = await supabase
@@ -187,7 +270,7 @@ export const Route = createFileRoute("/$slug")({
           .select("value")
           .eq("key", "template_industries")
           .maybeSingle();
-        const templates = templatesData?.value as Record<string, any> || {};
+        const templates = (templatesData?.value as Record<string, any>) || {};
         isDynamicIndustry = !!templates[customSlug];
       }
     } catch (err) {
@@ -217,7 +300,7 @@ export const Route = createFileRoute("/$slug")({
           .select("value")
           .eq("key", "template_applications")
           .maybeSingle();
-        const templates = templatesData?.value as Record<string, any> || {};
+        const templates = (templatesData?.value as Record<string, any>) || {};
         isDynamicApp = !!templates[customSlug];
       }
     } catch (err) {
@@ -238,7 +321,9 @@ export const Route = createFileRoute("/$slug")({
       const { service, templateData } = loaderData.loaderData;
       const label = service.label;
       const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description = templateData?.seo?.description || `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
+      const description =
+        templateData?.seo?.description ||
+        `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
       return {
         meta: [
           { title },
@@ -253,7 +338,9 @@ export const Route = createFileRoute("/$slug")({
       const { industry, templateData } = loaderData.loaderData;
       const label = industry.label;
       const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description = templateData?.seo?.description || `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
+      const description =
+        templateData?.seo?.description ||
+        `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
       return {
         meta: [
           { title },
@@ -268,7 +355,9 @@ export const Route = createFileRoute("/$slug")({
       const { category, templateData } = loaderData.loaderData;
       const label = category.label;
       const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description = templateData?.seo?.description || `Explore our advanced ${label.toLowerCase()} applications and projects.`;
+      const description =
+        templateData?.seo?.description ||
+        `Explore our advanced ${label.toLowerCase()} applications and projects.`;
       return {
         meta: [
           { title },

@@ -102,14 +102,17 @@ export const SERVICES = [
 ];
 
 export const INDUSTRIES = [
-  { slug: "construction-infrastructure", label: "Construction & Infrastructure", icon: "Building2" },
+  {
+    slug: "construction-infrastructure",
+    label: "Construction & Infrastructure",
+    icon: "Building2",
+  },
   { slug: "mining", label: "Mining", icon: "Pickaxe" },
   { slug: "environmental-waste", label: "Environmental & Waste", icon: "Trash2" },
   { slug: "water-management", label: "Water Management", icon: "Droplets" },
   { slug: "agriculture-aquaculture", label: "Agriculture & Aquaculture", icon: "Sprout" },
   { slug: "energy", label: "Energy", icon: "Zap" },
 ];
-
 
 const productLink = (slug: string): NavTarget => ({
   to: "/products/$category",
@@ -138,10 +141,30 @@ const industryLink = (slug: string): NavTarget => ({
 
 function generateProductContent(categorySlug: string, categoryLabel: string) {
   const quickActions = [
-    { title: `All ${categoryLabel}`, description: `Explore all ${categoryLabel}`, to: "/catalogue", icon: "Layers" },
-    { title: "Download Data Sheets", description: "Technical documents", to: "/resources", icon: "Download" },
-    { title: "Installation Guides", description: "Step-by-step guides", to: "/resources", icon: "FileText" },
-    { title: "Speak to Expert", description: "Get technical advice", to: "/contacts", icon: "MessageCircle" },
+    {
+      title: `All ${categoryLabel}`,
+      description: `Explore all ${categoryLabel}`,
+      to: "/catalogue",
+      icon: "Layers",
+    },
+    {
+      title: "Download Data Sheets",
+      description: "Technical documents",
+      to: "/resources",
+      icon: "Download",
+    },
+    {
+      title: "Installation Guides",
+      description: "Step-by-step guides",
+      to: "/resources",
+      icon: "FileText",
+    },
+    {
+      title: "Speak to Expert",
+      description: "Get technical advice",
+      to: "/contacts",
+      icon: "MessageCircle",
+    },
   ] as MegaQuickAction[];
 
   switch (categorySlug) {
@@ -150,22 +173,50 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         secondaryTitle: "Geomembranes",
         secondary: [
           { label: "HDPE Geomembranes", ...productFamilyLink("geomembranes", "hdpe-geomembranes") },
-          { label: "LLDPE Geomembranes", ...productFamilyLink("geomembranes", "lldpe-geomembranes") },
+          {
+            label: "LLDPE Geomembranes",
+            ...productFamilyLink("geomembranes", "lldpe-geomembranes"),
+          },
           { label: "PVC Geomembranes", ...productFamilyLink("geomembranes", "pvc-geomembranes") },
           { label: "EPDM Geomembranes", ...productFamilyLink("geomembranes", "epdm-geomembranes") },
           { label: "PP Geomembranes", ...productFamilyLink("geomembranes", "pp-geomembranes") },
-          { label: "Textured Geomembranes", ...productFamilyLink("geomembranes", "textured-geomembranes") },
-          { label: "Speciality Geomembranes", ...productFamilyLink("geomembranes", "speciality-geomembranes") },
-          { label: "Floating Cover Geomembranes", ...productFamilyLink("geomembranes", "floating-cover-geomembranes") },
+          {
+            label: "Textured Geomembranes",
+            ...productFamilyLink("geomembranes", "textured-geomembranes"),
+          },
+          {
+            label: "Speciality Geomembranes",
+            ...productFamilyLink("geomembranes", "speciality-geomembranes"),
+          },
+          {
+            label: "Floating Cover Geomembranes",
+            ...productFamilyLink("geomembranes", "floating-cover-geomembranes"),
+          },
           { label: "All Geomembranes", ...productLink("geomembranes") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "HDPE Smooth Geomembrane", spec: "0.5mm – 3.0mm", ...productFamilyLink("geomembranes", "hdpe-smooth-geomembrane") },
-          { label: "HDPE Textured Geomembrane", spec: "0.5mm – 3.0mm", ...productFamilyLink("geomembranes", "hdpe-textured-geomembrane") },
-          { label: "LLDPE Geomembrane", spec: "0.5mm – 2.0mm", ...productFamilyLink("geomembranes", "lldpe-geomembrane") },
-          { label: "PVC Geomembrane", spec: "0.5mm – 2.0mm", ...productFamilyLink("geomembranes", "pvc-geomembrane") },
+          {
+            label: "HDPE Smooth Geomembrane",
+            spec: "0.5mm – 3.0mm",
+            ...productFamilyLink("geomembranes", "hdpe-smooth-geomembrane"),
+          },
+          {
+            label: "HDPE Textured Geomembrane",
+            spec: "0.5mm – 3.0mm",
+            ...productFamilyLink("geomembranes", "hdpe-textured-geomembrane"),
+          },
+          {
+            label: "LLDPE Geomembrane",
+            spec: "0.5mm – 2.0mm",
+            ...productFamilyLink("geomembranes", "lldpe-geomembrane"),
+          },
+          {
+            label: "PVC Geomembrane",
+            spec: "0.5mm – 2.0mm",
+            ...productFamilyLink("geomembranes", "pvc-geomembrane"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -175,21 +226,46 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
       return {
         secondaryTitle: "Geotextiles",
         secondary: [
-          { label: "Non-Woven Geotextiles", ...productFamilyLink("geotextiles", "non-woven-geotextiles") },
+          {
+            label: "Non-Woven Geotextiles",
+            ...productFamilyLink("geotextiles", "non-woven-geotextiles"),
+          },
           { label: "Woven Geotextiles", ...productFamilyLink("geotextiles", "woven-geotextiles") },
-          { label: "High-Strength Geotextiles", ...productFamilyLink("geotextiles", "high-strength-geotextiles") },
+          {
+            label: "High-Strength Geotextiles",
+            ...productFamilyLink("geotextiles", "high-strength-geotextiles"),
+          },
           { label: "Geotextile Tubes", ...productFamilyLink("geotextiles", "geotextile-tubes") },
           { label: "Paving Fabrics", ...productFamilyLink("geotextiles", "paving-fabrics") },
-          { label: "Filtration Geotextiles", ...productFamilyLink("geotextiles", "filtration-geotextiles") },
+          {
+            label: "Filtration Geotextiles",
+            ...productFamilyLink("geotextiles", "filtration-geotextiles"),
+          },
           { label: "All Geotextiles", ...productLink("geotextiles") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "Non-Woven PET Geotextile", spec: "100g – 1200g/m²", ...productFamilyLink("geotextiles", "non-woven-pet-geotextile") },
-          { label: "Woven PP Geotextile", spec: "15kN – 100kN", ...productFamilyLink("geotextiles", "woven-pp-geotextile") },
-          { label: "High-Strength Woven PET", spec: "100kN – 1000kN", ...productFamilyLink("geotextiles", "high-strength-woven-pet") },
-          { label: "Geotextile Sand Containers", spec: "Custom Sizes", ...productFamilyLink("geotextiles", "geotextile-sand-containers") },
+          {
+            label: "Non-Woven PET Geotextile",
+            spec: "100g – 1200g/m²",
+            ...productFamilyLink("geotextiles", "non-woven-pet-geotextile"),
+          },
+          {
+            label: "Woven PP Geotextile",
+            spec: "15kN – 100kN",
+            ...productFamilyLink("geotextiles", "woven-pp-geotextile"),
+          },
+          {
+            label: "High-Strength Woven PET",
+            spec: "100kN – 1000kN",
+            ...productFamilyLink("geotextiles", "high-strength-woven-pet"),
+          },
+          {
+            label: "Geotextile Sand Containers",
+            spec: "Custom Sizes",
+            ...productFamilyLink("geotextiles", "geotextile-sand-containers"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -210,10 +286,26 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "Extruded Biaxial PP Geogrid", spec: "20kN – 40kN", ...productFamilyLink("geogrids", "extruded-biaxial-pp-geogrid") },
-          { label: "Uniaxial HDPE Geogrid", spec: "50kN – 200kN", ...productFamilyLink("geogrids", "uniaxial-hdpe-geogrid") },
-          { label: "Asphalt Reinforcement Fiberglass", spec: "50kN – 100kN", ...productFamilyLink("geogrids", "asphalt-reinforcement-fiberglass") },
-          { label: "Geogrid-Geotextile Composite", spec: "High Performance", ...productFamilyLink("geogrids", "geogrid-geotextile-composite") },
+          {
+            label: "Extruded Biaxial PP Geogrid",
+            spec: "20kN – 40kN",
+            ...productFamilyLink("geogrids", "extruded-biaxial-pp-geogrid"),
+          },
+          {
+            label: "Uniaxial HDPE Geogrid",
+            spec: "50kN – 200kN",
+            ...productFamilyLink("geogrids", "uniaxial-hdpe-geogrid"),
+          },
+          {
+            label: "Asphalt Reinforcement Fiberglass",
+            spec: "50kN – 100kN",
+            ...productFamilyLink("geogrids", "asphalt-reinforcement-fiberglass"),
+          },
+          {
+            label: "Geogrid-Geotextile Composite",
+            spec: "High Performance",
+            ...productFamilyLink("geogrids", "geogrid-geotextile-composite"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -226,17 +318,39 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
           { label: "Standard Geocells", ...productFamilyLink("geocells", "standard-geocells") },
           { label: "Textured Geocells", ...productFamilyLink("geocells", "textured-geocells") },
           { label: "Perforated Geocells", ...productFamilyLink("geocells", "perforated-geocells") },
-          { label: "High-Density Geocells", ...productFamilyLink("geocells", "high-density-geocells") },
-          { label: "Slope Protection Geocells", ...productFamilyLink("geocells", "slope-protection-geocells") },
+          {
+            label: "High-Density Geocells",
+            ...productFamilyLink("geocells", "high-density-geocells"),
+          },
+          {
+            label: "Slope Protection Geocells",
+            ...productFamilyLink("geocells", "slope-protection-geocells"),
+          },
           { label: "All Geocells", ...productLink("geocells") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "HDPE Textured & Perforated Geocell", spec: "75mm – 200mm", ...productFamilyLink("geocells", "hdpe-textured-perforated-geocell") },
-          { label: "Heavy Duty Load Support Geocell", spec: "High Density", ...productFamilyLink("geocells", "heavy-duty-load-support-geocell") },
-          { label: "Slope Protection Geocell System", spec: "UV Stabilized", ...productFamilyLink("geocells", "slope-protection-geocell-system") },
-          { label: "Channel Protection Geocell", spec: "Flow Resistant", ...productFamilyLink("geocells", "channel-protection-geocell") },
+          {
+            label: "HDPE Textured & Perforated Geocell",
+            spec: "75mm – 200mm",
+            ...productFamilyLink("geocells", "hdpe-textured-perforated-geocell"),
+          },
+          {
+            label: "Heavy Duty Load Support Geocell",
+            spec: "High Density",
+            ...productFamilyLink("geocells", "heavy-duty-load-support-geocell"),
+          },
+          {
+            label: "Slope Protection Geocell System",
+            spec: "UV Stabilized",
+            ...productFamilyLink("geocells", "slope-protection-geocell-system"),
+          },
+          {
+            label: "Channel Protection Geocell",
+            spec: "Flow Resistant",
+            ...productFamilyLink("geocells", "channel-protection-geocell"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -256,10 +370,26 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "Reinforced Needle-Punched GCL", spec: "4.5kg – 5.5kg/m²", ...productFamilyLink("gcls", "reinforced-needle-punched-gcl") },
-          { label: "PE Laminated GCL", spec: "Extra Protection", ...productFamilyLink("gcls", "pe-laminated-gcl") },
-          { label: "Double Non-Woven GCL", spec: "High Filtration", ...productFamilyLink("gcls", "double-non-woven-gcl") },
-          { label: "High Swell Sodium Bentonite", spec: "Premium Grade", ...productFamilyLink("gcls", "high-swell-sodium-bentonite") },
+          {
+            label: "Reinforced Needle-Punched GCL",
+            spec: "4.5kg – 5.5kg/m²",
+            ...productFamilyLink("gcls", "reinforced-needle-punched-gcl"),
+          },
+          {
+            label: "PE Laminated GCL",
+            spec: "Extra Protection",
+            ...productFamilyLink("gcls", "pe-laminated-gcl"),
+          },
+          {
+            label: "Double Non-Woven GCL",
+            spec: "High Filtration",
+            ...productFamilyLink("gcls", "double-non-woven-gcl"),
+          },
+          {
+            label: "High Swell Sodium Bentonite",
+            spec: "Premium Grade",
+            ...productFamilyLink("gcls", "high-swell-sodium-bentonite"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -270,19 +400,44 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         secondaryTitle: "Drainage Composites",
         secondary: [
           { label: "Geonets", ...productFamilyLink("drainage-composites", "geonets") },
-          { label: "Geocomposite Drains", ...productFamilyLink("drainage-composites", "geocomposite-drains") },
+          {
+            label: "Geocomposite Drains",
+            ...productFamilyLink("drainage-composites", "geocomposite-drains"),
+          },
           { label: "Strip Drains", ...productFamilyLink("drainage-composites", "strip-drains") },
-          { label: "Prefabricated Vertical Drains", ...productFamilyLink("drainage-composites", "prefabricated-vertical-drains") },
-          { label: "Drainage Boards", ...productFamilyLink("drainage-composites", "drainage-boards") },
+          {
+            label: "Prefabricated Vertical Drains",
+            ...productFamilyLink("drainage-composites", "prefabricated-vertical-drains"),
+          },
+          {
+            label: "Drainage Boards",
+            ...productFamilyLink("drainage-composites", "drainage-boards"),
+          },
           { label: "All Drainage Composites", ...productLink("drainage-composites") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "Tri-Planar Geocomposite Drain", spec: "High Transmissivity", ...productFamilyLink("drainage-composites", "tri-planar-geocomposite-drain") },
-          { label: "Bi-Planar Geonet Composite", spec: "5mm – 8mm", ...productFamilyLink("drainage-composites", "bi-planar-geonet-composite") },
-          { label: "Prefabricated Vertical Drain (PVD)", spec: "Soil Consolidation", ...productFamilyLink("drainage-composites", "prefabricated-vertical-drain-pvd") },
-          { label: "Dimple Drainage Board", spec: "Wall Drainage", ...productFamilyLink("drainage-composites", "dimple-drainage-board") },
+          {
+            label: "Tri-Planar Geocomposite Drain",
+            spec: "High Transmissivity",
+            ...productFamilyLink("drainage-composites", "tri-planar-geocomposite-drain"),
+          },
+          {
+            label: "Bi-Planar Geonet Composite",
+            spec: "5mm – 8mm",
+            ...productFamilyLink("drainage-composites", "bi-planar-geonet-composite"),
+          },
+          {
+            label: "Prefabricated Vertical Drain (PVD)",
+            spec: "Soil Consolidation",
+            ...productFamilyLink("drainage-composites", "prefabricated-vertical-drain-pvd"),
+          },
+          {
+            label: "Dimple Drainage Board",
+            spec: "Wall Drainage",
+            ...productFamilyLink("drainage-composites", "dimple-drainage-board"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -292,20 +447,45 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
       return {
         secondaryTitle: "Erosion Control",
         secondary: [
-          { label: "Erosion Control Blankets", ...productFamilyLink("erosion-control", "erosion-control-blankets") },
-          { label: "Turf Reinforcement Mats", ...productFamilyLink("erosion-control", "turf-reinforcement-mats") },
+          {
+            label: "Erosion Control Blankets",
+            ...productFamilyLink("erosion-control", "erosion-control-blankets"),
+          },
+          {
+            label: "Turf Reinforcement Mats",
+            ...productFamilyLink("erosion-control", "turf-reinforcement-mats"),
+          },
           { label: "Coir Logs", ...productFamilyLink("erosion-control", "coir-logs") },
           { label: "Silt Fences", ...productFamilyLink("erosion-control", "silt-fences") },
-          { label: "Gabions & Mattresses", ...productFamilyLink("erosion-control", "gabions-and-mattresses") },
+          {
+            label: "Gabions & Mattresses",
+            ...productFamilyLink("erosion-control", "gabions-and-mattresses"),
+          },
           { label: "All Erosion Control", ...productLink("erosion-control") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "3D Turf Reinforcement Mat", spec: "Heavy Duty", ...productFamilyLink("erosion-control", "3d-turf-reinforcement-mat") },
-          { label: "Biodegradable Coir Blanket", spec: "100% Natural", ...productFamilyLink("erosion-control", "biodegradable-coir-blanket") },
-          { label: "Woven Silt Fence", spec: "Premium Grade", ...productFamilyLink("erosion-control", "woven-silt-fence") },
-          { label: "Woven Gabion Baskets", spec: "Zinc/PVC Coated", ...productFamilyLink("erosion-control", "woven-gabion-baskets") },
+          {
+            label: "3D Turf Reinforcement Mat",
+            spec: "Heavy Duty",
+            ...productFamilyLink("erosion-control", "3d-turf-reinforcement-mat"),
+          },
+          {
+            label: "Biodegradable Coir Blanket",
+            spec: "100% Natural",
+            ...productFamilyLink("erosion-control", "biodegradable-coir-blanket"),
+          },
+          {
+            label: "Woven Silt Fence",
+            spec: "Premium Grade",
+            ...productFamilyLink("erosion-control", "woven-silt-fence"),
+          },
+          {
+            label: "Woven Gabion Baskets",
+            spec: "Zinc/PVC Coated",
+            ...productFamilyLink("erosion-control", "woven-gabion-baskets"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -326,10 +506,26 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
         featured: [
-          { label: "HDPE/LLDPE Welding Rods", spec: "4mm – 5mm", ...productFamilyLink("accessories", "hdpe-lldpe-welding-rods") },
-          { label: "Sodium Bentonite Paste", spec: "Waterproofing", ...productFamilyLink("accessories", "sodium-bentonite-paste") },
-          { label: "Steel J-Pins & Fixing Pegs", spec: "Corrosion Resistant", ...productFamilyLink("accessories", "steel-j-pins-fixing-pegs") },
-          { label: "Geotextile Joining Tape", spec: "High Tack", ...productFamilyLink("accessories", "geotextile-joining-tape") },
+          {
+            label: "HDPE/LLDPE Welding Rods",
+            spec: "4mm – 5mm",
+            ...productFamilyLink("accessories", "hdpe-lldpe-welding-rods"),
+          },
+          {
+            label: "Sodium Bentonite Paste",
+            spec: "Waterproofing",
+            ...productFamilyLink("accessories", "sodium-bentonite-paste"),
+          },
+          {
+            label: "Steel J-Pins & Fixing Pegs",
+            spec: "Corrosion Resistant",
+            ...productFamilyLink("accessories", "steel-j-pins-fixing-pegs"),
+          },
+          {
+            label: "Geotextile Joining Tape",
+            spec: "High Tack",
+            ...productFamilyLink("accessories", "geotextile-joining-tape"),
+          },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
         quickActions,
@@ -347,8 +543,16 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         featuredTitle: `Popular ${categoryLabel}`,
         featuredKind: "product" as const,
         featured: [
-          { label: `Top ${categoryLabel} A`, spec: "High Performance", ...productLink(categorySlug) },
-          { label: `Top ${categoryLabel} B`, spec: "Durable & Reliable", ...productLink(categorySlug) },
+          {
+            label: `Top ${categoryLabel} A`,
+            spec: "High Performance",
+            ...productLink(categorySlug),
+          },
+          {
+            label: `Top ${categoryLabel} B`,
+            spec: "Durable & Reliable",
+            ...productLink(categorySlug),
+          },
           { label: `Top ${categoryLabel} C`, spec: "Cost Effective", ...productLink(categorySlug) },
         ] as MegaProductItem[],
         quickActionsTitle: "Quick Actions",
@@ -359,9 +563,24 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
 
 function generateApplicationContent(categorySlug: string, categoryLabel: string) {
   const quickActions = [
-    { title: "Application Guides", description: "Solutions by application", to: "/resources", icon: "BookOpen" },
-    { title: "Design Support", description: "Get engineering assistance", to: "/services", icon: "PencilRuler" },
-    { title: "Case Studies", description: "View completed projects", to: "/resources", icon: "FileCheck" },
+    {
+      title: "Application Guides",
+      description: "Solutions by application",
+      to: "/resources",
+      icon: "BookOpen",
+    },
+    {
+      title: "Design Support",
+      description: "Get engineering assistance",
+      to: "/services",
+      icon: "PencilRuler",
+    },
+    {
+      title: "Case Studies",
+      description: "View completed projects",
+      to: "/resources",
+      icon: "FileCheck",
+    },
     { title: "Brochures", description: "Download brochures", to: "/resources", icon: "Download" },
   ] as MegaQuickAction[];
 
@@ -515,10 +734,30 @@ function generateApplicationContent(categorySlug: string, categoryLabel: string)
 
 function generateServiceContent(categorySlug: string, categoryLabel: string) {
   const quickActions = [
-    { title: "Upload Project BOQ", description: "Submit your requirements", to: "/contacts", icon: "Upload" },
-    { title: "Speak to an Expert", description: "Talk to specialists", to: "/contacts", icon: "MessageCircle" },
-    { title: "Service Brochure", description: "Download overview", to: "/resources", icon: "Download" },
-    { title: "Request a Quote", description: "Get a customised quote", to: "/contacts", icon: "FileText" },
+    {
+      title: "Upload Project BOQ",
+      description: "Submit your requirements",
+      to: "/contacts",
+      icon: "Upload",
+    },
+    {
+      title: "Speak to an Expert",
+      description: "Talk to specialists",
+      to: "/contacts",
+      icon: "MessageCircle",
+    },
+    {
+      title: "Service Brochure",
+      description: "Download overview",
+      to: "/resources",
+      icon: "Download",
+    },
+    {
+      title: "Request a Quote",
+      description: "Get a customised quote",
+      to: "/contacts",
+      icon: "FileText",
+    },
   ] as MegaQuickAction[];
 
   switch (categorySlug) {
@@ -672,10 +911,30 @@ function generateServiceContent(categorySlug: string, categoryLabel: string) {
 
 function generateIndustryContent(categorySlug: string, categoryLabel: string) {
   const quickActions = [
-    { title: "Case Studies", description: "Projects by industry", to: "/resources", icon: "FileCheck" },
-    { title: "Speak to Expert", description: "Get industry advice", to: "/contacts", icon: "MessageCircle" },
-    { title: "Technical Articles", description: "Industry insights", to: "/resources", icon: "BookOpen" },
-    { title: "Design Support", description: "Engineering assistance", to: "/services", icon: "PencilRuler" },
+    {
+      title: "Case Studies",
+      description: "Projects by industry",
+      to: "/resources",
+      icon: "FileCheck",
+    },
+    {
+      title: "Speak to Expert",
+      description: "Get industry advice",
+      to: "/contacts",
+      icon: "MessageCircle",
+    },
+    {
+      title: "Technical Articles",
+      description: "Industry insights",
+      to: "/resources",
+      icon: "BookOpen",
+    },
+    {
+      title: "Design Support",
+      description: "Engineering assistance",
+      to: "/services",
+      icon: "PencilRuler",
+    },
   ] as MegaQuickAction[];
 
   switch (categorySlug) {
@@ -838,9 +1097,12 @@ export const megaMenus: MegaMenuConfig[] = [
         icon: c.icon,
         slug: c.slug,
         ...applicationLink(c.slug),
-        content: generateApplicationContent(c.slug, c.label)
+        content: generateApplicationContent(c.slug, c.label),
       })),
-      ...generateApplicationContent(APPLICATION_CATEGORIES[0].slug, APPLICATION_CATEGORIES[0].label),
+      ...generateApplicationContent(
+        APPLICATION_CATEGORIES[0].slug,
+        APPLICATION_CATEGORIES[0].label,
+      ),
     },
   },
   {
@@ -854,7 +1116,7 @@ export const megaMenus: MegaMenuConfig[] = [
         icon: c.icon,
         slug: c.slug,
         ...productLink(c.slug),
-        content: generateProductContent(c.slug, c.label)
+        content: generateProductContent(c.slug, c.label),
       })),
       ...generateProductContent(PRODUCT_CATEGORIES[0].slug, PRODUCT_CATEGORIES[0].label),
     },
@@ -870,7 +1132,7 @@ export const megaMenus: MegaMenuConfig[] = [
         icon: s.icon,
         slug: s.slug,
         ...serviceLink(s.slug),
-        content: generateServiceContent(s.slug, s.label)
+        content: generateServiceContent(s.slug, s.label),
       })),
       ...generateServiceContent(SERVICES[0].slug, SERVICES[0].label),
     },
@@ -886,7 +1148,7 @@ export const megaMenus: MegaMenuConfig[] = [
         icon: c.icon,
         slug: c.slug,
         ...industryLink(c.slug),
-        content: generateIndustryContent(c.slug, c.label)
+        content: generateIndustryContent(c.slug, c.label),
       })),
       ...generateIndustryContent(INDUSTRIES[0].slug, INDUSTRIES[0].label),
     },

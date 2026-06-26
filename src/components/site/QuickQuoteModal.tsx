@@ -15,7 +15,20 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
 
-const ALLOWED_TYPES = [".pdf", ".dwg", ".dxf", ".doc", ".docx", ".xls", ".xlsx", ".csv", ".zip", ".png", ".jpg", ".jpeg"];
+const ALLOWED_TYPES = [
+  ".pdf",
+  ".dwg",
+  ".dxf",
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".csv",
+  ".zip",
+  ".png",
+  ".jpg",
+  ".jpeg",
+];
 const MAX_BYTES = 20 * 1024 * 1024;
 const MAX_FILES = 8;
 
@@ -38,7 +51,7 @@ const COUNTRIES = [
   "Egypt",
   "United Kingdom",
   "United States",
-  "Other"
+  "Other",
 ];
 
 export function QuickQuoteModal() {
@@ -131,9 +144,10 @@ export function QuickQuoteModal() {
       const userId = sessionData.session?.user.id ?? null;
 
       const baseDescription = message.trim() || `Quote request via global BOQ uploader`;
-      const descriptionWithPaths = attachment_paths.length > 1
-        ? `${baseDescription}\n\n[attachments]\n${attachment_paths.join("\n")}`
-        : baseDescription;
+      const descriptionWithPaths =
+        attachment_paths.length > 1
+          ? `${baseDescription}\n\n[attachments]\n${attachment_paths.join("\n")}`
+          : baseDescription;
 
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
@@ -151,7 +165,15 @@ export function QuickQuoteModal() {
         source: "quick_quote_modal",
       };
 
-      const optionalKeys = ["product_id", "product_name", "attachment_paths", "boq_file_path", "user_id", "source", "country"];
+      const optionalKeys = [
+        "product_id",
+        "product_name",
+        "attachment_paths",
+        "boq_file_path",
+        "user_id",
+        "source",
+        "country",
+      ];
       let payload = { ...basePayload };
       let lastError: { message: string } | null = null;
       for (let attempt = 0; attempt < optionalKeys.length + 1; attempt += 1) {
@@ -161,8 +183,9 @@ export function QuickQuoteModal() {
           break;
         }
         lastError = error;
-        const match = /column ['"]?(\w+)['"]? .* (does not exist|not found)/i.exec(error.message)
-          ?? /Could not find the ['"]?(\w+)['"]? column/i.exec(error.message);
+        const match =
+          /column ['"]?(\w+)['"]? .* (does not exist|not found)/i.exec(error.message) ??
+          /Could not find the ['"]?(\w+)['"]? column/i.exec(error.message);
         const missing = match?.[1];
         if (missing && missing in payload) {
           delete (payload as Record<string, unknown>)[missing];
@@ -190,7 +213,8 @@ export function QuickQuoteModal() {
             ADD TO PROJECT BOQ
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-normal mt-1.5">
-            Submit your project details and files. Our technical sales team will review your requirements and provide a customised proposal.
+            Submit your project details and files. Our technical sales team will review your
+            requirements and provide a customised proposal.
           </DialogDescription>
         </DialogHeader>
 
@@ -198,8 +222,12 @@ export function QuickQuoteModal() {
           <div className="flex items-center gap-2.5 rounded-xl border border-primary/30 bg-primary/10 px-3.5 py-2.5 mt-1 min-w-0">
             <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
             <div className="flex-1 min-w-0">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Product</span>
-              <p className="text-sm font-semibold text-foreground truncate leading-snug">{productName}</p>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                Product
+              </span>
+              <p className="text-sm font-semibold text-foreground truncate leading-snug">
+                {productName}
+              </p>
             </div>
           </div>
         )}
@@ -266,9 +294,13 @@ export function QuickQuoteModal() {
               onChange={(e) => setCountry(e.target.value)}
               className="w-full bg-background border border-input rounded-xl px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-11 transition shadow-sm"
             >
-              <option value="" disabled>Select country</option>
+              <option value="" disabled>
+                Select country
+              </option>
               {COUNTRIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
           </div>
@@ -289,18 +321,25 @@ export function QuickQuoteModal() {
           {/* File Drag and Drop */}
           <div className="space-y-1">
             <div
-              onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragging(true);
+              }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
               onClick={() => inputRef.current?.click()}
               className={cn(
                 "rounded-xl border-2 border-dashed p-5 text-center cursor-pointer transition duration-200",
-                dragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/60 bg-slate-50 dark:bg-slate-900/50",
+                dragging
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:border-primary/60 bg-slate-50 dark:bg-slate-900/50",
               )}
             >
               <CloudUpload className="h-8 w-8 mx-auto text-primary" />
               <div className="mt-2 text-xs">
-                <span className="font-semibold text-foreground">Drag & drop your BOQ or drawings here</span>
+                <span className="font-semibold text-foreground">
+                  Drag & drop your BOQ or drawings here
+                </span>
                 <span className="text-muted-foreground"> or </span>
                 <span className="text-primary font-semibold underline">click to browse files</span>
               </div>
@@ -324,12 +363,17 @@ export function QuickQuoteModal() {
           {files.length > 0 && (
             <ul className="space-y-2 max-h-32 overflow-y-auto">
               {files.map((f, i) => (
-                <li key={`${f.name}-${i}`} className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface p-2.5">
+                <li
+                  key={`${f.name}-${i}`}
+                  className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface p-2.5"
+                >
                   <div className="flex items-center gap-2 min-w-0">
                     <FileText className="h-4 w-4 text-primary shrink-0" />
                     <div className="min-w-0">
                       <div className="text-xs font-semibold truncate text-foreground">{f.name}</div>
-                      <div className="text-[10px] text-muted-foreground">{(f.size / 1024 / 1024).toFixed(2)} MB</div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {(f.size / 1024 / 1024).toFixed(2)} MB
+                      </div>
                     </div>
                   </div>
                   <button

@@ -17,7 +17,9 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
   const { open } = useQuickQuote();
   const title = data?.title ?? "Submit your BOQ.";
   const subtitle = data?.subtitle ?? "Get a quote – not just a price.";
-  const paragraph = data?.paragraph ?? "Upload your BOQ or speak to our technical team for expert recommendations and support.";
+  const paragraph =
+    data?.paragraph ??
+    "Upload your BOQ or speak to our technical team for expert recommendations and support.";
   const btn1Text = data?.btn1Text ?? "Upload Project BOQ";
   const btn2Text = data?.btn2Text ?? "Quick Contact";
   const btn2Url = data?.btn2Url ?? "/contacts";
@@ -32,9 +34,7 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
           <p className="mt-2 text-base font-display uppercase tracking-wide opacity-90">
             {subtitle}
           </p>
-          <p className="mt-2 text-sm opacity-90 max-w-xl">
-            {paragraph}
-          </p>
+          <p className="mt-2 text-sm opacity-90 max-w-xl">{paragraph}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 lg:justify-end">
           <Button
@@ -45,7 +45,12 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
             <Upload className="mr-2 h-4 w-4" />
             {btn1Text}
           </Button>
-          <Button asChild size="lg" variant="outline" className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground hover:text-primary uppercase font-bold tracking-wide">
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-primary-foreground text-primary-foreground bg-transparent hover:bg-primary-foreground hover:text-primary uppercase font-bold tracking-wide"
+          >
             <Link to={btn2Url as any}>
               <Phone className="mr-2 h-4 w-4" />
               {btn2Text}

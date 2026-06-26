@@ -13,11 +13,7 @@ describe("splitIntoParagraphs utility function", () => {
   });
 
   it("should handle array of strings and split each item correctly", () => {
-    const input = [
-      "Para 1.\n\nPara 2.",
-      "Para 3.",
-      "Para 4.\r\n\r\nPara 5."
-    ];
+    const input = ["Para 1.\n\nPara 2.", "Para 3.", "Para 4.\r\n\r\nPara 5."];
     const result = splitIntoParagraphs(input);
 
     expect(result).toHaveLength(5);

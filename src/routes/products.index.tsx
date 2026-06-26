@@ -9,11 +9,7 @@ async function loadProductsLandingData() {
       .select("value")
       .eq("key", "template_product_categories")
       .maybeSingle(),
-    supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "hierarchy_products")
-      .maybeSingle(),
+    supabase.from("site_config").select("value").eq("key", "hierarchy_products").maybeSingle(),
   ]);
 
   const templates = (templatesRes.data?.value as Record<string, any>) || {};
@@ -30,13 +26,20 @@ export const Route = createFileRoute("/products/")({
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};
     const title = landing.seo?.title || "Products — Geosynthetics Africa";
-    const description = landing.seo?.description || "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.";
+    const description =
+      landing.seo?.description ||
+      "Browse 200+ geosynthetic products: HDPE Geomembranes, Geotextiles, Geogrids, Geocells, GCLs, Drainage Composites and more.";
     return {
       meta: [
         { title },
         { name: "description", content: description },
         { property: "og:title", content: title },
-        { property: "og:description", content: landing.seo?.description || "Global best-in-class materials, integrated into engineered systems." },
+        {
+          property: "og:description",
+          content:
+            landing.seo?.description ||
+            "Global best-in-class materials, integrated into engineered systems.",
+        },
       ],
     };
   },

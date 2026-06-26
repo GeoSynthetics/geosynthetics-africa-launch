@@ -22,10 +22,18 @@ const CORE_PAGES = [
 ];
 
 // Module-level in-memory cache to keep data across route transitions / remounts
-let pagesSeoCache: Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }> | null = null;
+let pagesSeoCache: Record<
+  string,
+  { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }
+> | null = null;
 
 export function PagesSeoAdminPage() {
-  const [pageSeo, setPageSeo] = useState<Record<string, { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }>>(() => {
+  const [pageSeo, setPageSeo] = useState<
+    Record<
+      string,
+      { title: string; description: string; keywords: string; urlSlug: string; pageLabel: string }
+    >
+  >(() => {
     return pagesSeoCache ?? {};
   });
   const [loading, setLoading] = useState(!pagesSeoCache);
@@ -39,7 +47,7 @@ export function PagesSeoAdminPage() {
       .eq("key", "seo_pages")
       .maybeSingle()
       .then(({ data, error }) => {
-        if (error && error.code !== 'PGRST116') {
+        if (error && error.code !== "PGRST116") {
           console.error("Error fetching seo_pages:", error);
           toast.error("Failed to load SEO config.");
         }
@@ -50,7 +58,16 @@ export function PagesSeoAdminPage() {
         } else if (!pagesSeoCache) {
           // initialize empty
           const init: Record<string, any> = {};
-          CORE_PAGES.forEach(p => init[p.path] = { title: "", description: "", keywords: "", urlSlug: p.path === "/" ? "" : p.path.substring(1), pageLabel: p.label });
+          CORE_PAGES.forEach(
+            (p) =>
+              (init[p.path] = {
+                title: "",
+                description: "",
+                keywords: "",
+                urlSlug: p.path === "/" ? "" : p.path.substring(1),
+                pageLabel: p.label,
+              }),
+          );
           setPageSeo(init);
           pagesSeoCache = init;
         }
@@ -65,9 +82,9 @@ export function PagesSeoAdminPage() {
         {
           key: "seo_pages",
           value: pageSeo,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         },
-        { onConflict: "key" }
+        { onConflict: "key" },
       );
       if (error) throw error;
       pagesSeoCache = pageSeo; // Update the cache
@@ -81,7 +98,7 @@ export function PagesSeoAdminPage() {
     }
   };
 
-  const currentLabel = CORE_PAGES.find(p => p.path === selectedPath)?.label || "";
+  const currentLabel = CORE_PAGES.find((p) => p.path === selectedPath)?.label || "";
 
   // Merge loaded data with defaults for new fields that may not exist in older saved data
   const raw = pageSeo[selectedPath];
@@ -93,7 +110,13 @@ export function PagesSeoAdminPage() {
         urlSlug: raw.urlSlug ?? (selectedPath === "/" ? "" : selectedPath.substring(1)),
         pageLabel: raw.pageLabel ?? currentLabel,
       }
-    : { title: "", description: "", keywords: "", urlSlug: selectedPath === "/" ? "" : selectedPath.substring(1), pageLabel: currentLabel };
+    : {
+        title: "",
+        description: "",
+        keywords: "",
+        urlSlug: selectedPath === "/" ? "" : selectedPath.substring(1),
+        pageLabel: currentLabel,
+      };
 
   if (loading) {
     return (
@@ -184,10 +207,18 @@ export function PagesSeoAdminPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold uppercase tracking-tight">Core Pages SEO</h2>
-          <p className="text-sm text-muted-foreground mt-1">Manage meta titles, descriptions, and keywords for static pages.</p>
+          <h2 className="font-display text-xl font-bold uppercase tracking-tight">
+            Core Pages SEO
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage meta titles, descriptions, and keywords for static pages.
+          </p>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="bg-primary hover:bg-primary-hover text-primary-foreground">
+        <Button
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-primary hover:bg-primary-hover text-primary-foreground"
+        >
           <Save className="h-4 w-4 mr-2" />
           {saving ? "Saving..." : "Save All Changes"}
         </Button>
@@ -198,21 +229,25 @@ export function PagesSeoAdminPage() {
         <div className="lg:col-span-3">
           <div className="rounded border border-border bg-card overflow-hidden">
             <div className="p-3 border-b border-border bg-muted/30">
-              <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Select Page</div>
+              <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                Select Page
+              </div>
             </div>
             <ul className="divide-y divide-border">
               {CORE_PAGES.map((page) => (
                 <li key={page.path}>
                   <button
                     className={`w-full text-left px-4 py-3 text-sm transition-colors ${
-                      selectedPath === page.path 
-                        ? "bg-primary/10 text-primary font-bold border-l-2 border-primary" 
+                      selectedPath === page.path
+                        ? "bg-primary/10 text-primary font-bold border-l-2 border-primary"
                         : "hover:bg-muted text-foreground"
                     }`}
                     onClick={() => setSelectedPath(page.path)}
                   >
                     <div className="truncate">{page.label}</div>
-                    <div className="text-[10px] text-muted-foreground font-mono mt-0.5 truncate">{page.path}</div>
+                    <div className="text-[10px] text-muted-foreground font-mono mt-0.5 truncate">
+                      {page.path}
+                    </div>
                   </button>
                 </li>
               ))}
@@ -242,18 +277,28 @@ export function PagesSeoAdminPage() {
                     </span>
                     <Input
                       id="seo-url-slug"
-                      placeholder={selectedPath === "/" ? "(home — root)" : selectedPath.substring(1)}
+                      placeholder={
+                        selectedPath === "/" ? "(home — root)" : selectedPath.substring(1)
+                      }
                       value={currentData.urlSlug ?? ""}
                       disabled={selectedPath === "/"}
                       onChange={(e) => {
-                        const val = e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-/]/g, "");
-                        setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, urlSlug: val } });
+                        const val = e.target.value
+                          .toLowerCase()
+                          .replace(/\s+/g, "-")
+                          .replace(/[^a-z0-9-/]/g, "");
+                        setPageSeo({
+                          ...pageSeo,
+                          [selectedPath]: { ...currentData, urlSlug: val },
+                        });
                       }}
                       className="rounded-l-none font-mono"
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {selectedPath === "/" ? "Home page uses the root URL." : "The URL path for Google & server routing. Lowercase, dashes only."}
+                    {selectedPath === "/"
+                      ? "Home page uses the root URL."
+                      : "The URL path for Google & server routing. Lowercase, dashes only."}
                   </p>
                 </div>
 
@@ -263,9 +308,16 @@ export function PagesSeoAdminPage() {
                     id="seo-page-label"
                     placeholder={currentLabel}
                     value={currentData.pageLabel ?? ""}
-                    onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, pageLabel: e.target.value } })}
+                    onChange={(e) =>
+                      setPageSeo({
+                        ...pageSeo,
+                        [selectedPath]: { ...currentData, pageLabel: e.target.value },
+                      })
+                    }
                   />
-                  <p className="text-xs text-muted-foreground">Display name shown in navigation, breadcrumbs & frontend. Does not affect SEO.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Display name shown in navigation, breadcrumbs & frontend. Does not affect SEO.
+                  </p>
                 </div>
               </div>
 
@@ -275,9 +327,16 @@ export function PagesSeoAdminPage() {
                   id="seo-title"
                   placeholder={`${currentData.pageLabel || currentLabel} — Geosynthetics Africa`}
                   value={currentData.title}
-                  onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, title: e.target.value } })}
+                  onChange={(e) =>
+                    setPageSeo({
+                      ...pageSeo,
+                      [selectedPath]: { ...currentData, title: e.target.value },
+                    })
+                  }
                 />
-                <p className="text-xs text-muted-foreground">Aim for 40-60 characters. Recommended format: Page Name — Brand Name.</p>
+                <p className="text-xs text-muted-foreground">
+                  Aim for 40-60 characters. Recommended format: Page Name — Brand Name.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -286,9 +345,16 @@ export function PagesSeoAdminPage() {
                   id="seo-keywords"
                   placeholder="e.g. geosynthetics, hdpe liner, installation"
                   value={currentData.keywords}
-                  onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, keywords: e.target.value } })}
+                  onChange={(e) =>
+                    setPageSeo({
+                      ...pageSeo,
+                      [selectedPath]: { ...currentData, keywords: e.target.value },
+                    })
+                  }
                 />
-                <p className="text-xs text-muted-foreground">Comma-separated. The first keyword is treated as the primary focus keyword.</p>
+                <p className="text-xs text-muted-foreground">
+                  Comma-separated. The first keyword is treated as the primary focus keyword.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -298,9 +364,16 @@ export function PagesSeoAdminPage() {
                   rows={4}
                   placeholder="Summarize the page content for search engines..."
                   value={currentData.description}
-                  onChange={(e) => setPageSeo({ ...pageSeo, [selectedPath]: { ...currentData, description: e.target.value } })}
+                  onChange={(e) =>
+                    setPageSeo({
+                      ...pageSeo,
+                      [selectedPath]: { ...currentData, description: e.target.value },
+                    })
+                  }
                 />
-                <p className="text-xs text-muted-foreground">Aim for 120-160 characters. Include your focus keyword.</p>
+                <p className="text-xs text-muted-foreground">
+                  Aim for 120-160 characters. Include your focus keyword.
+                </p>
               </div>
             </div>
           </div>
@@ -313,14 +386,14 @@ export function PagesSeoAdminPage() {
               input={{
                 type: "page",
                 name: currentLabel,
-                slug: selectedPath === "/" ? "" : (currentData.urlSlug || selectedPath.substring(1)),
+                slug: selectedPath === "/" ? "" : currentData.urlSlug || selectedPath.substring(1),
                 urlSlug: currentData.urlSlug,
                 pageLabel: currentData.pageLabel || currentLabel,
                 metaTitle: currentData.title,
                 metaDescription: currentData.description,
                 keywords: currentData.keywords,
                 shortDescription: currentData.description, // Use meta desc as short desc for pages
-                siteHost: "geosynthetics.co.za"
+                siteHost: "geosynthetics.co.za",
               }}
             />
           </div>

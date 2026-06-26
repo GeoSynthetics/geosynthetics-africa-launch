@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { Link, useRouter, type LinkComponentProps } from "@tanstack/react-router";
 import * as LucideIcons from "lucide-react";
 
-type AnyLinkProps = Omit<LinkComponentProps, "to" | "params"> & { to: string; params?: Record<string, string> };
+type AnyLinkProps = Omit<LinkComponentProps, "to" | "params"> & {
+  to: string;
+  params?: Record<string, string>;
+};
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 function closeMenus() {
@@ -12,18 +15,49 @@ function closeMenus() {
 }
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import {
-  ChevronRight, BookOpen, Download, FileText, MessageCircle, PencilRuler, FileCheck, Upload,
-  Layers, Grid3x3, Grid2x2, Hexagon, Sheet, Waves, Mountain, Wrench,
-  Pickaxe, Droplets, Trash2, Construction, Sprout,
-  Truck, HardHat, ClipboardCheck, Ship, LifeBuoy, Building2, Zap,
-  Package, Globe, ShieldCheck,
+  ChevronRight,
+  BookOpen,
+  Download,
+  FileText,
+  MessageCircle,
+  PencilRuler,
+  FileCheck,
+  Upload,
+  Layers,
+  Grid3x3,
+  Grid2x2,
+  Hexagon,
+  Sheet,
+  Waves,
+  Mountain,
+  Wrench,
+  Pickaxe,
+  Droplets,
+  Trash2,
+  Construction,
+  Sprout,
+  Truck,
+  HardHat,
+  ClipboardCheck,
+  Ship,
+  LifeBuoy,
+  Building2,
+  Zap,
+  Package,
+  Globe,
+  ShieldCheck,
 } from "lucide-react";
-import { megaMenus, type MegaMenuConfig, type MegaProductItem, type MegaFeatureItem } from "./mega-menu-data";
+import {
+  megaMenus,
+  type MegaMenuConfig,
+  type MegaProductItem,
+  type MegaFeatureItem,
+} from "./mega-menu-data";
 import { ProgressiveImage } from "@/components/ui/ProgressiveImage";
 
 const getIconComponent = (
   name: string | undefined,
-  fallback: React.ComponentType<{ className?: string }> = BookOpen
+  fallback: React.ComponentType<{ className?: string }> = BookOpen,
 ): React.ComponentType<{ className?: string }> => {
   if (!name) return fallback;
   return (LucideIcons as any)[name] || fallback;
@@ -38,12 +72,18 @@ interface SliderProduct {
   short_description: string;
 }
 
-export function TopSellingProductsSlider({ products, isLoading }: { products: SliderProduct[]; isLoading?: boolean }) {
+export function TopSellingProductsSlider({
+  products,
+  isLoading,
+}: {
+  products: SliderProduct[];
+  isLoading?: boolean;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
   const router = useRouter();
-  
+
   // Track loaded state of each product image by index to avoid re-showing skeleton when sliding back
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
 
@@ -96,15 +136,17 @@ export function TopSellingProductsSlider({ products, isLoading }: { products: Sl
   // Prefetch the active slide product detail page content to speed up transition on click
   useEffect(() => {
     if (!isFirstImageLoaded || !products || products.length === 0) return;
-    
+
     const activeProduct = products[currentIndex];
     if (activeProduct?.slug) {
-      router.preloadRoute({
-        to: "/catalogue/$slug",
-        params: { slug: activeProduct.slug }
-      }).catch(err => {
-        console.warn("Failed to prefetch route for product:", activeProduct.slug, err);
-      });
+      router
+        .preloadRoute({
+          to: "/catalogue/$slug",
+          params: { slug: activeProduct.slug },
+        })
+        .catch((err) => {
+          console.warn("Failed to prefetch route for product:", activeProduct.slug, err);
+        });
     }
   }, [currentIndex, products, isFirstImageLoaded, router]);
 
@@ -120,7 +162,7 @@ export function TopSellingProductsSlider({ products, isLoading }: { products: Sl
   const showSkeleton = isLoading || !isFirstImageLoaded;
 
   return (
-    <div 
+    <div
       className="relative w-full max-w-[250px] aspect-[4/3]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -137,7 +179,9 @@ export function TopSellingProductsSlider({ products, isLoading }: { products: Sl
         </div>
       )}
 
-      <div className={`w-full h-full relative ${showSkeleton ? "opacity-0" : "opacity-100 transition-opacity duration-300"}`}>
+      <div
+        className={`w-full h-full relative ${showSkeleton ? "opacity-0" : "opacity-100 transition-opacity duration-300"}`}
+      >
         {products.map((product, idx) => {
           const isActive = idx === currentIndex;
           return (
@@ -242,17 +286,20 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
     featuredTitle: activeItem?.content?.featuredTitle || columns.featuredTitle,
     featuredKind: activeItem?.content?.featuredKind || columns.featuredKind,
     featured: activeItem?.content?.featured || columns.featured,
-    quickActionsTitle: (activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0)
-      ? activeItem.content.quickActionsTitle
-      : columns.quickActionsTitle,
-    quickActions: (activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0)
-      ? activeItem.content.quickActions
-      : columns.quickActions,
+    quickActionsTitle:
+      activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0
+        ? activeItem.content.quickActionsTitle
+        : columns.quickActionsTitle,
+    quickActions:
+      activeItem?.content?.quickActions && activeItem.content.quickActions.length > 0
+        ? activeItem.content.quickActions
+        : columns.quickActions,
     topSellingProduct: activeItem?.content?.topSellingProduct,
     topSellingProducts: activeItem?.content?.topSellingProducts,
   };
 
-  const isServiceOrAppOrIndustry = config.key === "services" || config.key === "applications" || config.key === "industries";
+  const isServiceOrAppOrIndustry =
+    config.key === "services" || config.key === "applications" || config.key === "industries";
 
   return (
     <div
@@ -285,12 +332,23 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                       to={item.to}
                       params={item.params}
                       onClick={closeMenus}
-                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${isActive ? "bg-accent text-primary translate-x-1.5" : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
-                        }`}
+                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${
+                        isActive
+                          ? "bg-accent text-primary translate-x-1.5"
+                          : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
+                      }`}
                     >
-                      {Icon && <Icon className={`h-4 w-4 transition-all duration-300 ${isActive ? "text-primary scale-110" : "text-muted-foreground group-hover:text-primary group-hover:scale-110"}`} />}
-                      <span className="font-medium flex-1 transition-colors duration-300">{item.label}</span>
-                      <ChevronRight className={`h-4 w-4 transition-all duration-300 ${isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"}`} />
+                      {Icon && (
+                        <Icon
+                          className={`h-4 w-4 transition-all duration-300 ${isActive ? "text-primary scale-110" : "text-muted-foreground group-hover:text-primary group-hover:scale-110"}`}
+                        />
+                      )}
+                      <span className="font-medium flex-1 transition-colors duration-300">
+                        {item.label}
+                      </span>
+                      <ChevronRight
+                        className={`h-4 w-4 transition-all duration-300 ${isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"}`}
+                      />
                     </RLink>
                   </li>
                 );
@@ -305,8 +363,11 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {isServiceOrAppOrIndustry ? "Top Selling Products" : displayData.secondaryTitle}
           </h4>
           {isServiceOrAppOrIndustry ? (
-            <TopSellingProductsSlider 
-              products={displayData.topSellingProducts || (displayData.topSellingProduct ? [displayData.topSellingProduct] : [])} 
+            <TopSellingProductsSlider
+              products={
+                displayData.topSellingProducts ||
+                (displayData.topSellingProduct ? [displayData.topSellingProduct] : [])
+              }
               isLoading={isLoading}
             />
           ) : isLoading ? (
@@ -377,16 +438,33 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                     className="flex items-center gap-3 rounded-md p-2 hover:bg-accent transition-all duration-300 group hover:translate-x-1.5"
                   >
                     {p.image ? (
-                      <img src={p.image} alt={p.label} className="h-12 w-12 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <img
+                        src={p.image}
+                        alt={p.label}
+                        className="h-12 w-12 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     ) : (
                       <div className="h-12 w-12 flex-shrink-0 rounded bg-surface flex items-center justify-center border border-border">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-foreground/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-muted-foreground/40"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                          />
                         </svg>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-foreground truncate transition-colors duration-300 group-hover:text-primary">{p.label}</div>
+                      <div className="text-sm font-semibold text-foreground truncate transition-colors duration-300 group-hover:text-primary">
+                        {p.label}
+                      </div>
                       <div className="text-xs text-muted-foreground line-clamp-2">{p.spec}</div>
                     </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground transition-all duration-300 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-primary" />
@@ -398,7 +476,12 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             <ul className="space-y-3">
               {(displayData.featured as MegaFeatureItem[]).map((f) => (
                 <li key={f.title}>
-                  <RLink to={f.to} params={f.params} onClick={closeMenus} className="flex gap-3 group transition-all duration-300 hover:translate-x-1.5">
+                  <RLink
+                    to={f.to}
+                    params={f.params}
+                    onClick={closeMenus}
+                    className="flex gap-3 group transition-all duration-300 hover:translate-x-1.5"
+                  >
                     <img
                       src={f.image}
                       alt=""
@@ -409,7 +492,9 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                       <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
                         {f.title}
                       </div>
-                      <div className="text-xs text-muted-foreground line-clamp-2">{f.description}</div>
+                      <div className="text-xs text-muted-foreground line-clamp-2">
+                        {f.description}
+                      </div>
                     </div>
                   </RLink>
                 </li>
@@ -426,7 +511,10 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
           {isLoading ? (
             <ul className="space-y-2">
               {[1, 2, 3, 4].map((i) => (
-                <li key={i} className="flex items-center gap-3 rounded-md border border-border/40 p-3">
+                <li
+                  key={i}
+                  className="flex items-center gap-3 rounded-md border border-border/40 p-3"
+                >
                   <Skeleton className="h-9 w-9 flex-shrink-0 rounded bg-muted/60 animate-pulse" />
                   <div className="flex-1 min-w-0 space-y-2">
                     <Skeleton className="h-4 w-2/3 bg-muted animate-pulse" />
@@ -447,7 +535,9 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                       <Icon className="h-4 w-4" />
                     </div>
                     <div className="flex-1 min-w-0 text-left">
-                      <div className="text-sm font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">{qa.title}</div>
+                      <div className="text-sm font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">
+                        {qa.title}
+                      </div>
                       <div className="text-xs text-muted-foreground truncate">{qa.description}</div>
                     </div>
                   </>

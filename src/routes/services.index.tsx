@@ -9,8 +9,9 @@ async function loadServicesLandingData() {
     .select("key, value")
     .in("key", ["template_services", "hierarchy_services"]);
 
-  const templates = (rows?.find(r => r.key === "template_services")?.value as Record<string, any>) || {};
-  const hierarchy = (rows?.find(r => r.key === "hierarchy_services")?.value as any) || null;
+  const templates =
+    (rows?.find((r) => r.key === "template_services")?.value as Record<string, any>) || {};
+  const hierarchy = (rows?.find((r) => r.key === "hierarchy_services")?.value as any) || null;
 
   return {
     templates,
@@ -57,7 +58,9 @@ export const Route = createFileRoute("/services/")({
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};
     const title = landing.seo?.title || "Services — Geosynthetics Africa";
-    const description = landing.seo?.description || "Supply, Installation, QA/QC, Design Support, Logistics & After Sales — one partner, full accountability.";
+    const description =
+      landing.seo?.description ||
+      "Supply, Installation, QA/QC, Design Support, Logistics & After Sales — one partner, full accountability.";
     return {
       meta: [
         { title },

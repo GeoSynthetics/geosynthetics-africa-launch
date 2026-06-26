@@ -8,9 +8,11 @@ describe("analyzeSeo core logic", () => {
       name: "Premium HDPE Geomembrane Liner",
       slug: "premium-hdpe-geomembrane-liner",
       metaTitle: "Premium HDPE Geomembrane Liner — Geosynthetics Africa", // 52 chars (perfect 40-60 range)
-      metaDescription: "Purchase high quality Premium HDPE Geomembrane Liner. Designed for mining reservoirs, waste containment, and water management systems in Africa.", // 142 chars (perfect 120-160 range)
+      metaDescription:
+        "Purchase high quality Premium HDPE Geomembrane Liner. Designed for mining reservoirs, waste containment, and water management systems in Africa.", // 142 chars (perfect 120-160 range)
       keywords: "Premium HDPE Geomembrane, Geomembrane",
-      shortDescription: "Premium HDPE Geomembrane Liner is a highly robust containment barrier engineered for mining and industrial applications in Africa.", // >80 chars and contains focus keyword
+      shortDescription:
+        "Premium HDPE Geomembrane Liner is a highly robust containment barrier engineered for mining and industrial applications in Africa.", // >80 chars and contains focus keyword
       imageUrl: "https://example.com/hdpe.jpg",
     };
 
@@ -18,16 +20,16 @@ describe("analyzeSeo core logic", () => {
 
     expect(score).toBeGreaterThanOrEqual(90);
 
-    const titleLenCheck = checks.find(c => c.id === "title-len");
+    const titleLenCheck = checks.find((c) => c.id === "title-len");
     expect(titleLenCheck?.status).toBe("good");
 
-    const descLenCheck = checks.find(c => c.id === "desc-len");
+    const descLenCheck = checks.find((c) => c.id === "desc-len");
     expect(descLenCheck?.status).toBe("good");
 
-    const kwTitleCheck = checks.find(c => c.id === "kw-title");
+    const kwTitleCheck = checks.find((c) => c.id === "kw-title");
     expect(kwTitleCheck?.status).toBe("good");
 
-    const kwDescCheck = checks.find(c => c.id === "kw-desc");
+    const kwDescCheck = checks.find((c) => c.id === "kw-desc");
     expect(kwDescCheck?.status).toBe("good");
   });
 
@@ -47,16 +49,16 @@ describe("analyzeSeo core logic", () => {
 
     expect(score).toBeLessThan(40);
 
-    const kwSetCheck = checks.find(c => c.id === "kw-set");
+    const kwSetCheck = checks.find((c) => c.id === "kw-set");
     expect(kwSetCheck?.status).toBe("bad");
 
-    const titleLenCheck = checks.find(c => c.id === "title-len");
+    const titleLenCheck = checks.find((c) => c.id === "title-len");
     expect(titleLenCheck?.status).toBe("warn");
 
-    const descLenCheck = checks.find(c => c.id === "desc-len");
+    const descLenCheck = checks.find((c) => c.id === "desc-len");
     expect(descLenCheck?.status).toBe("bad");
 
-    const imageCheck = checks.find(c => c.id === "image");
+    const imageCheck = checks.find((c) => c.id === "image");
     expect(imageCheck?.status).toBe("bad");
   });
 
@@ -72,11 +74,11 @@ describe("analyzeSeo core logic", () => {
     const { checks } = analyzeSeo(input);
 
     // Keyword in URL slug check for page
-    const kwSlugCheck = checks.find(c => c.id === "kw-slug");
+    const kwSlugCheck = checks.find((c) => c.id === "kw-slug");
     expect(kwSlugCheck?.status).toBe("good"); // "about-us" contains "about-us" (spaces replaced by dashes)
 
     // Checks exclusive to products should NOT be present
-    expect(checks.find(c => c.id === "kw-name")).toBeUndefined();
-    expect(checks.find(c => c.id === "body")).toBeUndefined();
+    expect(checks.find((c) => c.id === "kw-name")).toBeUndefined();
+    expect(checks.find((c) => c.id === "body")).toBeUndefined();
   });
 });

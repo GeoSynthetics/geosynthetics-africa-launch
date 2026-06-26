@@ -233,7 +233,8 @@ export function UsersAdminPage() {
       </div>
 
       <p className="mt-4 text-xs text-muted-foreground">
-        Note: Only signed-up users with profile records appear here. Users authenticate via the signup page; granting them a role takes effect immediately on their next page load.
+        Note: Only signed-up users with profile records appear here. Users authenticate via the
+        signup page; granting them a role takes effect immediately on their next page load.
       </p>
     </div>
   );

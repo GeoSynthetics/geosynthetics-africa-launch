@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
 
   if (!supabaseUrl || !supabasePublishableKey) {
     throw new Error(
-      "Missing required environment variables: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Please check your .env file."
+      "Missing required environment variables: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Please check your .env file.",
     );
   }
 
@@ -35,16 +35,10 @@ export default defineConfig(({ mode }) => {
     define: {
       ...envDefine,
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
-      "import.meta.env.VITE_SUPABASE_PROJECT_URL":
-        JSON.stringify(supabaseUrl),
-      "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(
-        supabasePublishableKey,
-      ),
-      "import.meta.env.VITE_SUPABASE_PUBLISABLE_KEY": JSON.stringify(
-        supabasePublishableKey,
-      ),
-      "import.meta.env.VITE_SUPABASE_PROJECT_ID":
-        JSON.stringify(supabaseProjectId || ""),
+      "import.meta.env.VITE_SUPABASE_PROJECT_URL": JSON.stringify(supabaseUrl),
+      "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(supabasePublishableKey),
+      "import.meta.env.VITE_SUPABASE_PUBLISABLE_KEY": JSON.stringify(supabasePublishableKey),
+      "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(supabaseProjectId || ""),
     },
     resolve: {
       alias: {

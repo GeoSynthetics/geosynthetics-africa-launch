@@ -1,11 +1,30 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, type LinkComponentProps, useLocation, useNavigate, useRouter, useMatches } from "@tanstack/react-router";
+import {
+  Link,
+  type LinkComponentProps,
+  useLocation,
+  useNavigate,
+  useRouter,
+  useMatches,
+} from "@tanstack/react-router";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetDescription } from "@/components/ui/sheet";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetHeader,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,7 +48,10 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
-type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
+  to: string;
+  params?: Record<string, string>;
+};
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
 const MEGAMENU_CLOSE_DELAY = 150000; // milliseconds delay before closing the mega menu
@@ -233,10 +255,11 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                       navigate({ to: m.to });
                     }
                   }}
-                  className={`bg-transparent px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${active
-                    ? "text-primary border-primary"
-                    : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"
-                    }`}
+                  className={`bg-transparent px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${
+                    active
+                      ? "text-primary border-primary"
+                      : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"
+                  }`}
                 >
                   {m.label}
                 </NavigationMenuTrigger>
@@ -254,10 +277,9 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                   <RLink
                     to={item.to}
                     params={item.params}
-                    className={`inline-flex h-full items-center justify-center whitespace-nowrap px-2 2xl:px-3 text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:text-primary ${active
-                      ? "text-primary border-primary"
-                      : "text-foreground border-transparent"
-                      }`}
+                    className={`inline-flex h-full items-center justify-center whitespace-nowrap px-2 2xl:px-3 text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:text-primary ${
+                      active ? "text-primary border-primary" : "text-foreground border-transparent"
+                    }`}
                   >
                     {item.label}
                   </RLink>
@@ -327,7 +349,11 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
               const active = isActiveRoute(m.to);
               return (
                 <AccordionItem value={m.key} key={m.key}>
-                  <AccordionTrigger className={`text-sm font-bold uppercase tracking-wide transition-colors ${active ? "text-primary" : "text-foreground"}`}>{m.label}</AccordionTrigger>
+                  <AccordionTrigger
+                    className={`text-sm font-bold uppercase tracking-wide transition-colors ${active ? "text-primary" : "text-foreground"}`}
+                  >
+                    {m.label}
+                  </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-1 pl-2">
                       <li>
@@ -438,14 +464,15 @@ export function Header() {
     <>
       <div className="w-full relative z-40">
         <TopBar />
-        <header className="bg-background border-b border-border">
-          {headerContent}
-        </header>
+        <header className="bg-background border-b border-border">{headerContent}</header>
       </div>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${isScrolled ? "translate-y-0 opacity-100" : "-translate-y-[100%] opacity-0 pointer-events-none"
-          }`}
+        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${
+          isScrolled
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-[100%] opacity-0 pointer-events-none"
+        }`}
       >
         {headerContent}
       </header>

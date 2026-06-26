@@ -21,17 +21,17 @@ Core capabilities:
 
 ## 2. Tech Stack
 
-| Layer | Choice |
-|---|---|
-| Framework | **TanStack Start v1** (React 19, SSR + server functions) |
-| Build / dev | **Vite 7** |
-| Runtime target | **Cloudflare Workers** (via `@cloudflare/vite-plugin`) |
-| Styling | **Tailwind CSS v4** (tokens in `src/styles.css`, `oklch` colour space) |
-| UI primitives | **shadcn/ui** + Radix UI |
-| Forms | react-hook-form + zod |
-| Backend | **Supabase** (Postgres, Auth, Storage, RLS) — self-managed project |
-| Icons | lucide-react |
-| Package manager | **bun** |
+| Layer           | Choice                                                                 |
+| --------------- | ---------------------------------------------------------------------- |
+| Framework       | **TanStack Start v1** (React 19, SSR + server functions)               |
+| Build / dev     | **Vite 7**                                                             |
+| Runtime target  | **Cloudflare Workers** (via `@cloudflare/vite-plugin`)                 |
+| Styling         | **Tailwind CSS v4** (tokens in `src/styles.css`, `oklch` colour space) |
+| UI primitives   | **shadcn/ui** + Radix UI                                               |
+| Forms           | react-hook-form + zod                                                  |
+| Backend         | **Supabase** (Postgres, Auth, Storage, RLS) — self-managed project     |
+| Icons           | lucide-react                                                           |
+| Package manager | **bun**                                                                |
 
 > Note: this project uses a self-managed Supabase instance (not Lovable Cloud). Schema changes are applied as SQL migrations directly in the Supabase dashboard.
 

@@ -132,10 +132,7 @@ export function LinkTargetPicker({
 
   // Build a readable display of the current link
   const displayPath = params
-    ? Object.entries(params).reduce(
-        (path, [key, value]) => path.replace(`$${key}`, value),
-        to,
-      )
+    ? Object.entries(params).reduce((path, [key, value]) => path.replace(`$${key}`, value), to)
     : to;
 
   // Group templates by section, prioritizing the current context
@@ -151,9 +148,7 @@ export function LinkTargetPicker({
   return (
     <div className="space-y-1.5">
       {!compact && (
-        <label className="text-xs font-bold uppercase text-muted-foreground block">
-          Link Path
-        </label>
+        <label className="text-xs font-bold uppercase text-muted-foreground block">Link Path</label>
       )}
 
       <Input

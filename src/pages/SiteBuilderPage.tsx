@@ -11,10 +11,11 @@ import { HierarchyTree } from "@/components/admin/HierarchyTree";
 import { ContentEditorPanel } from "@/components/admin/ContentEditorPanel";
 import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
 import { MegaMenuBuilderTab } from "@/components/admin/MegaMenuBuilderTab";
-
+import { RegionalCoverageBuilderTab } from "@/components/admin/RegionalCoverageBuilderTab";
+import { ContactsBuilderTab } from "@/components/admin/ContactsBuilderTab";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | "megamenu" | SectionKey;
+type TopLevelTab = "homepage" | "megamenu" | "regional" | "contacts" | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -25,7 +26,10 @@ const CONFIG_KEY = (k: SectionKey) => `hierarchy_${k}`;
 
 export function SiteBuilderPage() {
   const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>({
-    products: null, applications: null, services: null, industries: null,
+    products: null,
+    applications: null,
+    services: null,
+    industries: null,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -44,12 +48,12 @@ export function SiteBuilderPage() {
         const defaults = getDefaultSections();
         const result: Record<SectionKey, HierarchySection> = {} as any;
         for (const key of SECTION_KEYS) {
-          const row = data?.find(d => d.key === CONFIG_KEY(key));
+          const row = data?.find((d) => d.key === CONFIG_KEY(key));
           const val = row?.value as HierarchySection | undefined;
           if (val && Array.isArray(val.items)) {
             result[key] = val;
           } else {
-            result[key] = defaults.find(d => d.key === key)!;
+            result[key] = defaults.find((d) => d.key === key)!;
           }
         }
         setSections(result);
@@ -66,7 +70,7 @@ export function SiteBuilderPage() {
     SECTION_KEYS.includes(key as SectionKey);
 
   const updateSection = async (key: SectionKey, updated: HierarchySection) => {
-    setSections(prev => {
+    setSections((prev) => {
       const next = { ...prev, [key]: updated };
       return next;
     });
@@ -91,21 +95,21 @@ export function SiteBuilderPage() {
     if (!selected || !isHierarchySection(activeSection)) return;
     const section = sections[activeSection];
     if (!section) return;
-    let newItems = [...section.items];
+    const newItems = [...section.items];
     if (selected.type === "item") {
       newItems[selected.itemIdx] = updatedNode as HierarchyItem;
     } else {
       newItems[selected.itemIdx] = {
         ...newItems[selected.itemIdx],
         children: newItems[selected.itemIdx].children.map((c, j) =>
-          j === selected.childIdx ? (updatedNode as HierarchyChild) : c
+          j === selected.childIdx ? (updatedNode as HierarchyChild) : c,
         ),
       };
     }
     const updatedSection = { ...section, items: newItems };
-    
+
     // Update local state
-    setSections(prev => {
+    setSections((prev) => {
       const next = { ...prev, [activeSection]: updatedSection };
       return next;
     });
@@ -115,7 +119,10 @@ export function SiteBuilderPage() {
     try {
       const { error } = await supabase
         .from("site_config")
-        .upsert({ key: CONFIG_KEY(activeSection), value: updatedSection as any }, { onConflict: "key" });
+        .upsert(
+          { key: CONFIG_KEY(activeSection), value: updatedSection as any },
+          { onConflict: "key" },
+        );
       if (error) {
         toast.error("Failed to save changes: " + error.message);
       } else {
@@ -129,11 +136,12 @@ export function SiteBuilderPage() {
   };
 
   const currentSection = isHierarchySection(activeSection) ? sections[activeSection] : null;
-  const selectedNode = selected && currentSection
-    ? selected.type === "item"
-      ? currentSection.items[selected.itemIdx]
-      : currentSection.items[selected.itemIdx]?.children[selected.childIdx]
-    : null;
+  const selectedNode =
+    selected && currentSection
+      ? selected.type === "item"
+        ? currentSection.items[selected.itemIdx]
+        : currentSection.items[selected.itemIdx]?.children[selected.childIdx]
+      : null;
 
   if (loading) {
     return (
@@ -196,12 +204,21 @@ export function SiteBuilderPage() {
       <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0">
         <div>
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">Site Builder</h2>
-          <p className="text-sm text-muted-foreground">Manage navigation hierarchy, homepage content, and page sections from one place.</p>
+          <p className="text-sm text-muted-foreground">
+            Manage navigation hierarchy, homepage content, and page sections from one place.
+          </p>
         </div>
       </div>
 
       {/* Section Tabs */}
-      <Tabs value={activeSection} onValueChange={v => { setActiveSection(v as TopLevelTab); setSelected(null); }} className="flex-1 flex flex-col overflow-hidden">
+      <Tabs
+        value={activeSection}
+        onValueChange={(v) => {
+          setActiveSection(v as TopLevelTab);
+          setSelected(null);
+        }}
+        className="flex-1 flex flex-col overflow-hidden"
+      >
         <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto gap-0 shrink-0">
           {/* Homepage tab — always first */}
           <TabsTrigger
@@ -216,7 +233,19 @@ export function SiteBuilderPage() {
           >
             Mega Menu
           </TabsTrigger>
-          {SECTION_KEYS.map(key => (
+          <TabsTrigger
+            value="regional"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Regional Coverage
+          </TabsTrigger>
+          <TabsTrigger
+            value="contacts"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Contact Page
+          </TabsTrigger>
+          {SECTION_KEYS.map((key) => (
             <TabsTrigger
               key={key}
               value={key}
@@ -225,7 +254,6 @@ export function SiteBuilderPage() {
               {sections[key]?.label ?? key}
             </TabsTrigger>
           ))}
-
         </TabsList>
 
         {/* Homepage tab content */}
@@ -243,8 +271,18 @@ export function SiteBuilderPage() {
           />
         </TabsContent>
 
+        {/* Regional Coverage tab content */}
+        <TabsContent value="regional" className="flex-1 overflow-hidden m-0">
+          <RegionalCoverageBuilderTab />
+        </TabsContent>
+
+        {/* Contact Page tab content */}
+        <TabsContent value="contacts" className="flex-1 overflow-hidden m-0">
+          <ContactsBuilderTab />
+        </TabsContent>
+
         {/* Navigation hierarchy tabs */}
-        {SECTION_KEYS.map(key => (
+        {SECTION_KEYS.map((key) => (
           <TabsContent key={key} value={key} className="flex-1 overflow-hidden m-0">
             <div className="flex h-full">
               {/* LEFT: Tree */}
@@ -258,9 +296,11 @@ export function SiteBuilderPage() {
                   <HierarchyTree
                     section={sections[key]!}
                     sectionKey={key}
-                    onChange={updated => updateSection(key, updated)}
-                    onSelect={node => setSelected(node)}
-                    selected={isHierarchySection(activeSection) && activeSection === key ? selected : null}
+                    onChange={(updated) => updateSection(key, updated)}
+                    onSelect={(node) => setSelected(node)}
+                    selected={
+                      isHierarchySection(activeSection) && activeSection === key ? selected : null
+                    }
                   />
                 )}
               </div>
@@ -281,7 +321,8 @@ export function SiteBuilderPage() {
                     <div className="text-4xl">←</div>
                     <p className="text-sm font-medium">Select an item from the tree to edit it</p>
                     <p className="text-xs max-w-xs text-center">
-                      Click any category or sub-item on the left to edit its page content, SEO, and mega menu appearance simultaneously.
+                      Click any category or sub-item on the left to edit its page content, SEO, and
+                      mega menu appearance simultaneously.
                     </p>
                   </div>
                 )}
@@ -289,8 +330,6 @@ export function SiteBuilderPage() {
             </div>
           </TabsContent>
         ))}
-
-
       </Tabs>
     </div>
   );

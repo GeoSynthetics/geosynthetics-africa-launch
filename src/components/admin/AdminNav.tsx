@@ -65,25 +65,40 @@ export function AdminNav() {
             <Shield className="h-4.5 w-4.5" />
           </div>
           <div>
-            <div className="text-[9px] font-bold uppercase tracking-wider text-primary leading-none">Admin</div>
-            <h1 className="font-display text-base font-bold uppercase tracking-tight text-foreground leading-tight mt-0.5">Control Panel</h1>
+            <div className="text-[9px] font-bold uppercase tracking-wider text-primary leading-none">
+              Admin
+            </div>
+            <h1 className="font-display text-base font-bold uppercase tracking-tight text-foreground leading-tight mt-0.5">
+              Control Panel
+            </h1>
           </div>
         </div>
 
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-border/50 hover:bg-muted/50">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 rounded-lg border-border/50 hover:bg-muted/50"
+            >
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[280px] p-6 bg-card border-r border-border/50 flex flex-col h-full">
+          <SheetContent
+            side="left"
+            className="w-[280px] p-6 bg-card border-r border-border/50 flex flex-col h-full"
+          >
             <SheetHeader className="mb-6 flex flex-row items-center gap-3 text-left">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Shield className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-primary block leading-none">Admin</span>
-                <SheetTitle className="font-display text-lg font-extrabold uppercase tracking-tight text-foreground mt-0.5">Control Panel</SheetTitle>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-primary block leading-none">
+                  Admin
+                </span>
+                <SheetTitle className="font-display text-lg font-extrabold uppercase tracking-tight text-foreground mt-0.5">
+                  Control Panel
+                </SheetTitle>
               </div>
             </SheetHeader>
 
@@ -98,10 +113,17 @@ export function AdminNav() {
                       "relative flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group/item",
                       active
                         ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                     )}
                   >
-                    <it.icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover/item:scale-105", active ? "text-primary" : "text-muted-foreground group-hover/item:text-foreground")} />
+                    <it.icon
+                      className={cn(
+                        "h-5 w-5 shrink-0 transition-transform duration-200 group-hover/item:scale-105",
+                        active
+                          ? "text-primary"
+                          : "text-muted-foreground group-hover/item:text-foreground",
+                      )}
+                    />
                     <span className="uppercase font-display tracking-wider text-xs font-bold">
                       {it.label}
                     </span>
@@ -120,18 +142,27 @@ export function AdminNav() {
       <aside
         className={cn(
           "hidden lg:flex flex-col shrink-0 sticky top-6 bg-card/85 backdrop-blur-md border border-border/50 rounded-2xl shadow-lg transition-all duration-300 ease-in-out select-none overflow-hidden p-4 h-[calc(100vh-8rem)] min-h-[600px]",
-          isCollapsed ? "w-20" : "w-64"
+          isCollapsed ? "w-20" : "w-64",
         )}
       >
         {/* Brand Header */}
-        <div className={cn("flex items-center gap-3 px-2 py-3 border-b border-border/50 mb-6 shrink-0", isCollapsed ? "justify-center" : "")}>
+        <div
+          className={cn(
+            "flex items-center gap-3 px-2 py-3 border-b border-border/50 mb-6 shrink-0",
+            isCollapsed ? "justify-center" : "",
+          )}
+        >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Shield className="h-5 w-5" />
           </div>
           {!isCollapsed && (
             <div className="flex flex-col min-w-0 animate-in fade-in duration-300">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary leading-none">Admin</span>
-              <span className="font-display text-lg font-extrabold uppercase tracking-tight text-foreground leading-tight mt-0.5">Control Panel</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary leading-none">
+                Admin
+              </span>
+              <span className="font-display text-lg font-extrabold uppercase tracking-tight text-foreground leading-tight mt-0.5">
+                Control Panel
+              </span>
             </div>
           )}
         </div>
@@ -141,7 +172,7 @@ export function AdminNav() {
           <nav className="flex-1 flex flex-col gap-1.5 overflow-y-auto pr-1">
             {ITEMS.map((it) => {
               const active = it.exact ? pathname === it.to : pathname.startsWith(it.to);
-              
+
               const content = (
                 <Link
                   key={it.to}
@@ -151,10 +182,17 @@ export function AdminNav() {
                     active
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                    isCollapsed ? "justify-center" : ""
+                    isCollapsed ? "justify-center" : "",
                   )}
                 >
-                  <it.icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover/item:scale-105", active ? "text-primary" : "text-muted-foreground group-hover/item:text-foreground")} />
+                  <it.icon
+                    className={cn(
+                      "h-5 w-5 shrink-0 transition-transform duration-200 group-hover/item:scale-105",
+                      active
+                        ? "text-primary"
+                        : "text-muted-foreground group-hover/item:text-foreground",
+                    )}
+                  />
                   {!isCollapsed && (
                     <span className="truncate uppercase font-display tracking-wider text-xs font-bold animate-in fade-in duration-200">
                       {it.label}
@@ -169,10 +207,12 @@ export function AdminNav() {
               if (isCollapsed) {
                 return (
                   <Tooltip key={it.to}>
-                    <TooltipTrigger asChild>
-                      {content}
-                    </TooltipTrigger>
-                    <TooltipContent side="right" sideOffset={12} className="font-bold text-xs uppercase bg-foreground text-background">
+                    <TooltipTrigger asChild>{content}</TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      sideOffset={12}
+                      className="font-bold text-xs uppercase bg-foreground text-background"
+                    >
                       {it.label}
                     </TooltipContent>
                   </Tooltip>
@@ -190,7 +230,7 @@ export function AdminNav() {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className={cn(
               "flex items-center gap-3.5 px-3.5 py-3 w-full rounded-xl text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer",
-              isCollapsed ? "justify-center" : ""
+              isCollapsed ? "justify-center" : "",
             )}
           >
             {isCollapsed ? (
@@ -198,7 +238,9 @@ export function AdminNav() {
             ) : (
               <>
                 <ChevronLeft className="h-5 w-5" />
-                <span className="uppercase font-display tracking-wider text-xs font-bold animate-in fade-in duration-200">Collapse Menu</span>
+                <span className="uppercase font-display tracking-wider text-xs font-bold animate-in fade-in duration-200">
+                  Collapse Menu
+                </span>
               </>
             )}
           </button>

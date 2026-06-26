@@ -25,15 +25,47 @@ interface Check {
 }
 
 const STOP = new Set([
-  "the", "a", "an", "and", "or", "of", "for", "to", "in", "on", "with", "by", "is", "are", "at", "from", "as", "be", "this", "that", "it", "its", "your", "you", "our",
+  "the",
+  "a",
+  "an",
+  "and",
+  "or",
+  "of",
+  "for",
+  "to",
+  "in",
+  "on",
+  "with",
+  "by",
+  "is",
+  "are",
+  "at",
+  "from",
+  "as",
+  "be",
+  "this",
+  "that",
+  "it",
+  "its",
+  "your",
+  "you",
+  "our",
 ]);
 
 function tokenize(s: string): string[] {
-  return s.toLowerCase().replace(/[^a-z0-9\s-]/g, " ").split(/\s+/).filter((w) => w && !STOP.has(w));
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w && !STOP.has(w));
 }
 
 function primaryKeyword(keywords: string | null | undefined): string {
-  const first = (keywords ?? "").split(",").map((k) => k.trim()).filter(Boolean)[0] ?? "";
+  const first =
+    (keywords ?? "")
+      .split(",")
+      .map((k) => k.trim())
+      .filter(Boolean)[0] ?? "";
   return first.toLowerCase();
 }
 
@@ -142,11 +174,7 @@ export function analyzeSeo(input: SeoInput): { score: number; checks: Check[] } 
       id: "slug-shape",
       label: "URL slug is short and clean",
       status:
-        slug && slug.length <= 75 && /^[a-z0-9-]+$/.test(slug)
-          ? "good"
-          : slug
-            ? "warn"
-            : "bad",
+        slug && slug.length <= 75 && /^[a-z0-9-]+$/.test(slug) ? "good" : slug ? "warn" : "bad",
       weight: 5,
       hint: "Use lowercase letters, numbers and dashes. Keep under 75 chars.",
     });
@@ -256,14 +284,21 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
   const c = scoreColor(score);
 
   const isPage = input.type === "page";
-  const fallbackTitle = isPage ? (input.pageLabel || input.name || "Untitled page") : (input.name || "Untitled product");
+  const fallbackTitle = isPage
+    ? input.pageLabel || input.name || "Untitled page"
+    : input.name || "Untitled product";
   const previewTitle = (input.metaTitle?.trim() || fallbackTitle).slice(0, 60);
-  const previewDesc =
-    (input.metaDescription?.trim() || input.shortDescription?.trim() || "—").slice(0, 160);
+  const previewDesc = (
+    input.metaDescription?.trim() ||
+    input.shortDescription?.trim() ||
+    "—"
+  ).slice(0, 160);
   const host = input.siteHost ?? "geosynthetics.co.za";
   const slug = input.slug?.trim() || (isPage ? "page" : "product-slug");
   const url = isPage
-    ? (slug === "" ? `https://${host}` : `https://${host}/${slug}`)
+    ? slug === ""
+      ? `https://${host}`
+      : `https://${host}/${slug}`
     : `https://${host}/catalogue/${slug}`;
 
   const passed = checks.filter((x) => x.status === "good").length;
@@ -275,7 +310,9 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
       <div className="flex items-center gap-4">
         <ScoreRing score={score} />
         <div className="min-w-0">
-          <div className={`text-sm font-bold uppercase tracking-wide ${c.text}`}>SEO score: {c.label}</div>
+          <div className={`text-sm font-bold uppercase tracking-wide ${c.text}`}>
+            SEO score: {c.label}
+          </div>
           <div className="text-xs text-muted-foreground mt-0.5">
             {passed} passed · {warned} to improve · {failed} issues
           </div>
@@ -299,7 +336,9 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
       </div>
 
       <div>
-        <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-2">Checks</div>
+        <div className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground mb-2">
+          Checks
+        </div>
         <ul className="space-y-1.5">
           {checks.map((chk) => (
             <li key={chk.id} className="flex items-start gap-2 text-sm">

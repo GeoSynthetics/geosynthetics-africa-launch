@@ -78,7 +78,7 @@ export function DeleteConfirmationDialog({
             onClick={handleConfirm}
             className={cn(
               buttonVariants({ variant: "destructive" }),
-              "flex-1 sm:flex-none uppercase font-bold tracking-wider text-[10px] h-9 bg-destructive hover:bg-destructive/90 text-white cursor-pointer border-0 transition-all gap-1.5"
+              "flex-1 sm:flex-none uppercase font-bold tracking-wider text-[10px] h-9 bg-destructive hover:bg-destructive/90 text-white cursor-pointer border-0 transition-all gap-1.5",
             )}
           >
             {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}

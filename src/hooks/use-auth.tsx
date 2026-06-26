@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useState, useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  type ReactNode,
+} from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -21,10 +29,7 @@ interface AuthState {
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
 async function fetchRoles(userId: string): Promise<AppRole[]> {
-  const { data, error } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId);
+  const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", userId);
   if (error || !data) return [];
   return data.map((r) => r.role as AppRole);
 }

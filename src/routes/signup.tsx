@@ -73,9 +73,7 @@ function SignupPage() {
     <AuthLayout>
       {/* Heading */}
       <div className="mb-8">
-        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">
-          Create Account
-        </h1>
+        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">Create Account</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Save quotes, track BOQs, and access gated technical resources.
         </p>
@@ -153,9 +151,7 @@ function SignupPage() {
               required
             />
           </div>
-          <p className="mt-1.5 text-xs text-muted-foreground">
-            Minimum 8 characters.
-          </p>
+          <p className="mt-1.5 text-xs text-muted-foreground">Minimum 8 characters.</p>
         </div>
 
         <Button
@@ -180,9 +176,7 @@ function SignupPage() {
           <span className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-3 text-muted-foreground tracking-wider">
-            or
-          </span>
+          <span className="bg-background px-3 text-muted-foreground tracking-wider">or</span>
         </div>
       </div>
 

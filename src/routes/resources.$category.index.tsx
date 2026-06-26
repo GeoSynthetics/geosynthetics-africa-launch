@@ -57,7 +57,8 @@ function CategoryPage() {
       const { data, error } = await query.limit(500);
       if (error) toast.error(error.message);
       let list = (data ?? []) as Row[];
-      if (cat.videoOnly) list = list.filter((r) => r.external_url && VIDEO_HOST_RE.test(r.external_url));
+      if (cat.videoOnly)
+        list = list.filter((r) => r.external_url && VIDEO_HOST_RE.test(r.external_url));
       setRows(list);
       setLoading(false);
     })();
@@ -70,7 +71,9 @@ function CategoryPage() {
 
   const download = async (r: Row) => {
     if (r.file_path) {
-      const { data, error } = await supabase.storage.from("technical-docs").createSignedUrl(r.file_path, 60 * 5);
+      const { data, error } = await supabase.storage
+        .from("technical-docs")
+        .createSignedUrl(r.file_path, 60 * 5);
       if (error || !data) return toast.error(error?.message ?? "Cannot download");
       window.open(data.signedUrl, "_blank", "noopener,noreferrer");
     } else if (r.external_url) {
@@ -89,24 +92,39 @@ function CategoryPage() {
             </Link>
             <div className="ml-auto relative w-72">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder={`Search ${cat.title.toLowerCase()}`} value={q} onChange={(e) => setQ(e.target.value)} className="pl-8" />
+              <Input
+                placeholder={`Search ${cat.title.toLowerCase()}`}
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="pl-8"
+              />
             </div>
           </div>
 
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-44 w-full" />)}
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-44 w-full" />
+              ))}
             </div>
           ) : filtered.length === 0 ? (
-            <p className="text-center text-muted-foreground py-16">No {cat.title.toLowerCase()} available yet.</p>
+            <p className="text-center text-muted-foreground py-16">
+              No {cat.title.toLowerCase()} available yet.
+            </p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filtered.map((r) => {
-                const isVideo = cat.videoOnly || (r.external_url && VIDEO_HOST_RE.test(r.external_url));
+                const isVideo =
+                  cat.videoOnly || (r.external_url && VIDEO_HOST_RE.test(r.external_url));
                 return (
-                  <article key={r.id} className="rounded border border-border bg-card p-5 flex flex-col hover:border-primary transition">
+                  <article
+                    key={r.id}
+                    className="rounded border border-border bg-card p-5 flex flex-col hover:border-primary transition"
+                  >
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="font-display text-base font-bold uppercase leading-snug">{r.title}</h3>
+                      <h3 className="font-display text-base font-bold uppercase leading-snug">
+                        {r.title}
+                      </h3>
                       {isVideo ? (
                         <PlayCircle className="h-5 w-5 text-primary shrink-0" />
                       ) : r.file_path ? (
@@ -116,7 +134,9 @@ function CategoryPage() {
                       )}
                     </div>
                     {r.description && (
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{r.description}</p>
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
+                        {r.description}
+                      </p>
                     )}
                     <div className="mt-4 pt-4 border-t border-border flex items-center gap-2">
                       <Button
@@ -126,7 +146,13 @@ function CategoryPage() {
                         disabled={!r.file_path && !r.external_url}
                       >
                         {isVideo ? "Watch" : r.file_path ? "Download" : "Open"}
-                        {isVideo ? <PlayCircle className="h-4 w-4" /> : r.file_path ? <Download className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}
+                        {isVideo ? (
+                          <PlayCircle className="h-4 w-4" />
+                        ) : r.file_path ? (
+                          <Download className="h-4 w-4" />
+                        ) : (
+                          <ExternalLink className="h-4 w-4" />
+                        )}
                       </Button>
                       <Link
                         to="/resources/$category/$slug"

@@ -14,7 +14,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
     if (isChunkError) {
       const lastReload = sessionStorage.getItem("gsa-chunk-reload-time");
       const now = Date.now();
-      
+
       if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
         sessionStorage.setItem("gsa-chunk-reload-time", now.toString());
         window.location.reload();

@@ -4,16 +4,16 @@ trigger: manual
 
 TanStack Router: Route / Page Separation Pattern
 Rule
-In this project, route files (src/routes/*.tsx) must only export Route (via createFileRoute). All page component JSX must live in src/pages/*.tsx.
+In this project, route files (src/routes/_.tsx) must only export Route (via createFileRoute). All page component JSX must live in src/pages/_.tsx.
 
 Why
 TanStack Router's file-based routing code-splits each route file into its own lazy-loaded chunk. If a route file has any named export beyond export const Route, the router cannot code-split it — everything in that file gets bundled into the main chunk, increasing bundle size and producing console warnings.
 
 Architecture
-src/routes/about.tsx            → Route config ONLY (createFileRoute, head, loader, component)
-                                   imports AboutPage from @/pages/AboutPage
-src/pages/AboutPage.tsx         → Full page component JSX, all sub-components, data, etc.
-                                   exports: AboutPage
+src/routes/about.tsx → Route config ONLY (createFileRoute, head, loader, component)
+imports AboutPage from @/pages/AboutPage
+src/pages/AboutPage.tsx → Full page component JSX, all sub-components, data, etc.
+exports: AboutPage
 src/routes/$slug.tsx            → Dynamic SEO slug catch-all route
                                    lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })))
 src/pages/index.ts              → Barrel re-export of all page components
@@ -48,15 +48,15 @@ Add a lazy entry in $slug.tsx:
 tsx
 "/new-page": lazy(() => import("@/pages/NewPage").then(m => ({ default: m.NewPage }))),
 Current Page Components (as of 2026-05-13)
-Route File	Page Component File	Export Name
-routes/about.tsx	pages/AboutPage.tsx	AboutPage
-routes/products.tsx	pages/ProductsLanding.tsx	ProductsLanding
-routes/projects.tsx	pages/ProjectsPage.tsx	ProjectsPage
-routes/contacts.tsx	pages/ContactsPage.tsx	ContactsPage
-routes/quality-assurance.tsx	pages/QAPage.tsx	QAPage
-routes/applications.tsx	pages/ApplicationsLanding.tsx	ApplicationsLanding
-routes/services.tsx	pages/ServicesPage.tsx	ServicesPage
-routes/resources.index.tsx	pages/ResourcesIndexPage.tsx	ResourcesIndexPage
+Route File Page Component File Export Name
+routes/about.tsx pages/AboutPage.tsx AboutPage
+routes/products.tsx pages/ProductsLanding.tsx ProductsLanding
+routes/projects.tsx pages/ProjectsPage.tsx ProjectsPage
+routes/contacts.tsx pages/ContactsPage.tsx ContactsPage
+routes/quality-assurance.tsx pages/QAPage.tsx QAPage
+routes/applications.tsx pages/ApplicationsLanding.tsx ApplicationsLanding
+routes/services.tsx pages/ServicesPage.tsx ServicesPage
+routes/resources.index.tsx pages/ResourcesIndexPage.tsx ResourcesIndexPage
 Common Mistake to Avoid
 tsx
 // ❌ BAD — exporting component from route file breaks code-splitting

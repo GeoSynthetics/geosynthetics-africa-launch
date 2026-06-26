@@ -71,12 +71,12 @@ export function CookieConsent() {
       } else {
         migratedPrefs = { necessary: true, analytics: false, marketing: false };
       }
-      
+
       localStorage.setItem("gsa-cookie-preferences", JSON.stringify(migratedPrefs));
       setPreferences(migratedPrefs);
       setTempPreferences(migratedPrefs);
       setIsVisible(false);
-      
+
       // Dispatch event to inform loaders
       window.dispatchEvent(new Event("gsa-cookie-preferences-changed"));
       return;
@@ -118,7 +118,7 @@ export function CookieConsent() {
     setTempPreferences(newPrefs);
     setIsVisible(false);
     setIsPreferencesOpen(false);
-    
+
     // Dispatch event so TrackingLoader and other listeners instantly pick up the state
     window.dispatchEvent(new Event("gsa-cookie-preferences-changed"));
   };
@@ -174,7 +174,6 @@ export function CookieConsent() {
         <div className="fixed bottom-0 left-0 right-0 z-[100] px-4 pb-4 md:pb-6 animate-in slide-in-from-bottom duration-500">
           <div className="container mx-auto max-w-7xl">
             <div className="relative overflow-hidden rounded-xl border border-border bg-background/95 backdrop-blur-md p-5 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-5 md:gap-8">
-              
               {/* Soft subtle primary brand red/orange gradient glow in the corners */}
               <div className="absolute -left-12 -top-12 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
               <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
@@ -189,10 +188,19 @@ export function CookieConsent() {
                     Cookie Preferences Notice
                   </h4>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-4xl">
-                    We use cookies to optimize site functionality, analyze web traffic, and improve your overall browsing experience. By continuing your visit to this site or clicking <span className="font-semibold text-foreground">"Accept All"</span>, you consent to our use of cookies. You can selectively manage your tracking options via <span className="font-semibold text-foreground">"Settings"</span>. For further details, view our{" "}
-                    <a href="#privacy-policy" className="underline text-primary hover:text-primary-hover font-medium transition-colors">
+                    We use cookies to optimize site functionality, analyze web traffic, and improve
+                    your overall browsing experience. By continuing your visit to this site or
+                    clicking <span className="font-semibold text-foreground">"Accept All"</span>,
+                    you consent to our use of cookies. You can selectively manage your tracking
+                    options via <span className="font-semibold text-foreground">"Settings"</span>.
+                    For further details, view our{" "}
+                    <a
+                      href="#privacy-policy"
+                      className="underline text-primary hover:text-primary-hover font-medium transition-colors"
+                    >
                       Privacy Policy & Terms
-                    </a>.
+                    </a>
+                    .
                   </p>
                 </div>
               </div>
@@ -224,7 +232,7 @@ export function CookieConsent() {
                 >
                   Accept All
                 </Button>
-                
+
                 {/* Direct Close Icon (Dismisses the notification for the next 3 hours) */}
                 <button
                   onClick={handleDismiss}
@@ -242,23 +250,22 @@ export function CookieConsent() {
       {/* 2. Premium Detailed Settings Dialog */}
       <Dialog open={isPreferencesOpen} onOpenChange={setIsPreferencesOpen}>
         <DialogContent className="max-w-xl border-border bg-background/98 backdrop-blur-md shadow-2xl p-6 rounded-xl animate-in zoom-in-95 duration-200">
-          
           {/* Subtle decoration glow inside the preferences dialog */}
           <div className="absolute -left-16 -top-16 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-          
+
           <DialogHeader className="space-y-1.5">
             <DialogTitle className="font-display text-lg font-bold uppercase tracking-wide text-foreground flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
               Cookie Preferences Manager
             </DialogTitle>
             <DialogDescription className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-              We respect your privacy rights. You can adjust your consent options below for different types of cookies and tracking technologies.
+              We respect your privacy rights. You can adjust your consent options below for
+              different types of cookies and tracking technologies.
             </DialogDescription>
           </DialogHeader>
 
           {/* Core Categories list */}
           <div className="space-y-4 py-4 my-2 border-y border-border max-h-[350px] overflow-y-auto pr-1">
-            
             {/* Category: Necessary */}
             <div className="p-3.5 rounded-lg border border-border bg-surface/10 hover:bg-surface/20 transition-all duration-200 flex items-start gap-4">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground border border-border">
@@ -277,7 +284,8 @@ export function CookieConsent() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground leading-normal">
-                  Required for core platform activities, secure logins, routing sessions, and keeping track of your visual preferences. They cannot be turned off.
+                  Required for core platform activities, secure logins, routing sessions, and
+                  keeping track of your visual preferences. They cannot be turned off.
                 </p>
               </div>
             </div>
@@ -301,7 +309,8 @@ export function CookieConsent() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-normal">
-                  Helps us understand visitor metrics, bounce rates, referral sources, and platform usage using anonymized Google Analytics & Tag Manager.
+                  Helps us understand visitor metrics, bounce rates, referral sources, and platform
+                  usage using anonymized Google Analytics & Tag Manager.
                 </p>
               </div>
             </div>
@@ -325,11 +334,11 @@ export function CookieConsent() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-normal">
-                  Supports campaign performance metrics, custom audience mapping, and displaying tailored information aligned with your interests on social media networks.
+                  Supports campaign performance metrics, custom audience mapping, and displaying
+                  tailored information aligned with your interests on social media networks.
                 </p>
               </div>
             </div>
-
           </div>
 
           {/* Dialog Footer Actions */}
@@ -361,7 +370,6 @@ export function CookieConsent() {
               </Button>
             </div>
           </DialogFooter>
-
         </DialogContent>
       </Dialog>
     </>

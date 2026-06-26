@@ -4,7 +4,11 @@ import { AboutPage } from "@/pages/AboutPage";
 
 export const Route = createFileRoute("/about")({
   loader: async () => {
-    const { data } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const { data } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "seo_pages")
+      .maybeSingle();
     const seoMap = (data?.value as Record<string, any>) || {};
     return { seo: seoMap["/about"] || null };
   },

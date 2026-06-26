@@ -8,11 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 export async function loadServiceData(slug: string) {
   // Per-slug fallback hero images — kept in sync with the static SERVICE_CONTENT map in ServicePage.tsx
   const FALLBACK_HEROES: Record<string, string> = {
-    "supply": "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
-    "installation": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
+    supply: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    installation: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
     "qa-qc": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&q=80",
     "design-support": "https://images.unsplash.com/photo-1503694978374-8a2fa68f5981?w=1920&q=80",
-    "logistics": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
+    logistics: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
     "after-sales": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80",
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
@@ -23,7 +23,7 @@ export async function loadServiceData(slug: string) {
     .select("value")
     .eq("key", "template_services")
     .maybeSingle();
-  const templates = templateRow?.value as Record<string, any> || {};
+  const templates = (templateRow?.value as Record<string, any>) || {};
 
   // Try loading from hierarchy
   const { data: hierarchyRow, error: hierarchyError } = await supabase
@@ -36,10 +36,8 @@ export async function loadServiceData(slug: string) {
     console.error("Failed to load hierarchy_services:", hierarchyError);
   }
 
-  const hierarchy = hierarchyRow?.value as any || {};
-  const matchedItem = hierarchy.items?.find(
-    (item: any) => item.slug === slug || item.id === slug
-  );
+  const hierarchy = (hierarchyRow?.value as any) || {};
+  const matchedItem = hierarchy.items?.find((item: any) => item.slug === slug || item.id === slug);
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then slug)
   let tmpl = null;
@@ -92,7 +90,13 @@ export async function loadServiceData(slug: string) {
   }
 
   const staticSvc = SERVICES.find((s) => s.slug === slug);
-  const label = matchedItem?.label ?? staticSvc?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label =
+    matchedItem?.label ??
+    staticSvc?.label ??
+    slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
   // Load selected products from Supabase
   let linkedProducts: any[] = [];
@@ -100,12 +104,16 @@ export async function loadServiceData(slug: string) {
     try {
       const { data: prodsData, error: prodsError } = await supabase
         .from("products_public")
-        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .select(
+          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
+        )
         .in("id", templateData.products);
       if (!prodsError && prodsData) {
         linkedProducts = prodsData.map((d: any) => ({
           ...d,
-          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+          product_categories: Array.isArray(d.product_categories)
+            ? d.product_categories[0]
+            : d.product_categories,
         }));
       }
     } catch (e) {
@@ -116,7 +124,7 @@ export async function loadServiceData(slug: string) {
   return {
     service: { slug, label, icon: staticSvc?.icon || "CheckCircle" },
     templateData,
-    linkedProducts
+    linkedProducts,
   };
 }
 
@@ -208,11 +216,16 @@ export const Route = createFileRoute("/services/$slug")({
   pendingComponent: ServiceDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
-    const { service, templateData } = loaderData || { service: { slug: "", label: "", icon: "" }, templateData: null };
+    const { service, templateData } = loaderData || {
+      service: { slug: "", label: "", icon: "" },
+      templateData: null,
+    };
     const label = service.label;
 
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-    const description = templateData?.seo?.description || `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
+    const description =
+      templateData?.seo?.description ||
+      `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
 
     return {
       meta: [

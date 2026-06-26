@@ -5,7 +5,12 @@ import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 interface CapabilityItem {
@@ -20,56 +25,112 @@ interface FaqItem {
 }
 
 const DEFAULT_CAPABILITIES: CapabilityItem[] = [
-  { icon: "Truck", title: "HDPE & LLDPE Lining", description: "Precision welding and installation of geomembranes for containment systems." },
-  { icon: "Grid3x3", title: "Geotextile Cushions & Filters", description: "Non-woven and woven geotextile deployment for protection and filtration." },
-  { icon: "Sheet", title: "GCL Barrier Systems", description: "Installing Geosynthetic Clay Liners as high-performance composite barriers." },
-  { icon: "Grid2x2", title: "Geogrid Soil Reinforcement", description: "Basal and pavement reinforcement using biaxial/uniaxial geogrids." },
-  { icon: "Hexagon", title: "Geocell Slope Stabilization", description: "Cellular confinement systems for erosion control and load support." },
-  { icon: "ShieldCheck", title: "QA/QC Non-Destructive Testing", description: "Vacuum box, air-pressure, and spark testing of welded seams." },
-  { icon: "ClipboardCheck", title: "Destructive Weld Testing", description: "Tensiometer peel and shear testing of liner welds to SANS 1526." },
-  { icon: "Ship", title: "Logistics & Border Clearance", description: "Cross-border delivery management with SADC Certificates of Origin." },
-  { icon: "Boxes", title: "Logistics Container Optimization", description: "Maximizing transport efficiency with customized packing plans." },
-  { icon: "PencilRuler", title: "Engineering Design Support", description: "CAD detailing and value-engineering optimization for bill of quantities (BOQ)." },
-  { icon: "HardHat", title: "On-Site Installation Supervision", description: "Certified QA/QC technicians managing local subcontractor performance." },
-  { icon: "FileText", title: "CQA Certification Reporting", description: "Comprehensive handover packages compiling all test results and panel layouts." },
+  {
+    icon: "Truck",
+    title: "HDPE & LLDPE Lining",
+    description: "Precision welding and installation of geomembranes for containment systems.",
+  },
+  {
+    icon: "Grid3x3",
+    title: "Geotextile Cushions & Filters",
+    description: "Non-woven and woven geotextile deployment for protection and filtration.",
+  },
+  {
+    icon: "Sheet",
+    title: "GCL Barrier Systems",
+    description: "Installing Geosynthetic Clay Liners as high-performance composite barriers.",
+  },
+  {
+    icon: "Grid2x2",
+    title: "Geogrid Soil Reinforcement",
+    description: "Basal and pavement reinforcement using biaxial/uniaxial geogrids.",
+  },
+  {
+    icon: "Hexagon",
+    title: "Geocell Slope Stabilization",
+    description: "Cellular confinement systems for erosion control and load support.",
+  },
+  {
+    icon: "ShieldCheck",
+    title: "QA/QC Non-Destructive Testing",
+    description: "Vacuum box, air-pressure, and spark testing of welded seams.",
+  },
+  {
+    icon: "ClipboardCheck",
+    title: "Destructive Weld Testing",
+    description: "Tensiometer peel and shear testing of liner welds to SANS 1526.",
+  },
+  {
+    icon: "Ship",
+    title: "Logistics & Border Clearance",
+    description: "Cross-border delivery management with SADC Certificates of Origin.",
+  },
+  {
+    icon: "Boxes",
+    title: "Logistics Container Optimization",
+    description: "Maximizing transport efficiency with customized packing plans.",
+  },
+  {
+    icon: "PencilRuler",
+    title: "Engineering Design Support",
+    description: "CAD detailing and value-engineering optimization for bill of quantities (BOQ).",
+  },
+  {
+    icon: "HardHat",
+    title: "On-Site Installation Supervision",
+    description: "Certified QA/QC technicians managing local subcontractor performance.",
+  },
+  {
+    icon: "FileText",
+    title: "CQA Certification Reporting",
+    description: "Comprehensive handover packages compiling all test results and panel layouts.",
+  },
 ];
 
 const DEFAULT_FAQS: FaqItem[] = [
   {
     question: "Do you supply and install, or can we purchase materials only?",
-    answer: "We offer complete flexibility. We can supply materials directly to your site, provide installation services with our certified crews, or deliver a fully integrated supply-and-install package with full system certification."
+    answer:
+      "We offer complete flexibility. We can supply materials directly to your site, provide installation services with our certified crews, or deliver a fully integrated supply-and-install package with full system certification.",
   },
   {
     question: "What international standards do your installation crews follow?",
-    answer: "Our installation teams are trained and certified. We adhere to GRI-GM13/17 standards for geomembranes and perform QA/QC testing in accordance with ASTM and SANS 1526 requirements."
+    answer:
+      "Our installation teams are trained and certified. We adhere to GRI-GM13/17 standards for geomembranes and perform QA/QC testing in accordance with ASTM and SANS 1526 requirements.",
   },
   {
     question: "Can you issue SADC Certificates of Origin for cross-border shipments?",
-    answer: "Yes. As a registered exporter, we handle all customs clearance, HS-code classification, and provide SADC and AfCFTA Certificates of Origin to minimize duties for client projects across Africa."
+    answer:
+      "Yes. As a registered exporter, we handle all customs clearance, HS-code classification, and provide SADC and AfCFTA Certificates of Origin to minimize duties for client projects across Africa.",
   },
   {
     question: "What quality documentation do we receive at project completion?",
-    answer: "We provide a comprehensive Construction Quality Assurance (CQA) handover package. This includes panel layout drawings, seam weld test logs (destructive and non-destructive), material data sheets, and official warranty certificates."
-  }
+    answer:
+      "We provide a comprehensive Construction Quality Assurance (CQA) handover package. This includes panel layout drawings, seam weld test logs (destructive and non-destructive), material data sheets, and official warranty certificates.",
+  },
 ];
 
 const WHY_WORK_WITH_US = [
   {
     title: "Single-Point Accountability",
-    description: "We eliminate fingers-pointing between manufacturer, logistics provider, and installer. We own the entire chain."
+    description:
+      "We eliminate fingers-pointing between manufacturer, logistics provider, and installer. We own the entire chain.",
   },
   {
     title: "100% QA/QC Traceability",
-    description: "From resin to roll to welded seam, we track and document everything. You receive complete CQA packages."
+    description:
+      "From resin to roll to welded seam, we track and document everything. You receive complete CQA packages.",
   },
   {
     title: "Pan-African Compliance",
-    description: "We clear customs smoothly, issue SADC Certificates of Origin, and comply with local content rules."
+    description:
+      "We clear customs smoothly, issue SADC Certificates of Origin, and comply with local content rules.",
   },
   {
     title: "Proven Under Pressure",
-    description: "Our containment systems are deployed in major mines and infrastructure projects across the continent."
-  }
+    description:
+      "Our containment systems are deployed in major mines and infrastructure projects across the continent.",
+  },
 ];
 
 export function ServicesPage() {
@@ -80,11 +141,17 @@ export function ServicesPage() {
 
   const landing = templates?.["__landing"] || {};
   const heroTitle = landing.landingTitle || "One Partner. Full Accountability.";
-  const heroDescription = landing.landingSubtitle || "From design through certification, our integrated services ensure system performance — not just material delivery.";
-  const heroImage = landing.landingHeroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
+  const heroDescription =
+    landing.landingSubtitle ||
+    "From design through certification, our integrated services ensure system performance — not just material delivery.";
+  const heroImage =
+    landing.landingHeroImage ||
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
 
-  const capabilitiesTitle = landing.capabilitiesTitle || "Our Logistics & Installation Capabilities";
-  const capabilitiesList: CapabilityItem[] = landing.capabilities?.length > 0 ? landing.capabilities : DEFAULT_CAPABILITIES;
+  const capabilitiesTitle =
+    landing.capabilitiesTitle || "Our Logistics & Installation Capabilities";
+  const capabilitiesList: CapabilityItem[] =
+    landing.capabilities?.length > 0 ? landing.capabilities : DEFAULT_CAPABILITIES;
   const faqsList: FaqItem[] = landing.faqs?.length > 0 ? landing.faqs : DEFAULT_FAQS;
 
   const ctaTitle = landing.ctaTitle || "Need a custom supply, installation, or logistics package?";
@@ -110,13 +177,18 @@ export function ServicesPage() {
     const t = templates?.[slug] || {};
     return {
       title: t.title || fallbackLabel,
-      description: t.description || "Professional supply and quality-controlled installation services across Africa.",
+      description:
+        t.description ||
+        "Professional supply and quality-controlled installation services across Africa.",
     };
   };
 
   const resolveIcon = (iconName: string) => {
     const IconComp = (Icons as any)[iconName];
-    if (IconComp) return <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />;
+    if (IconComp)
+      return (
+        <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
+      );
     return <Icons.CheckCircle2 className="h-6 w-6 text-primary" />;
   };
 
@@ -128,7 +200,11 @@ export function ServicesPage() {
         description={heroDescription}
         image={heroImage}
       >
-        <Button asChild size="lg" className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider cursor-pointer border-0">
+        <Button
+          asChild
+          size="lg"
+          className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wider cursor-pointer border-0"
+        >
           <Link to="/contacts">Speak to Technical Team</Link>
         </Button>
       </PageHero>
@@ -145,7 +221,8 @@ export function ServicesPage() {
             </h2>
             <div className="h-1.5 w-20 bg-primary mx-auto mt-4 rounded-full" />
             <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-              From high-integrity geomembrane welding to modular concrete channel lining, we manage procurement, logistics, and SANS-compliant installation.
+              From high-integrity geomembrane welding to modular concrete channel lining, we manage
+              procurement, logistics, and SANS-compliant installation.
             </p>
           </div>
 
@@ -172,7 +249,8 @@ export function ServicesPage() {
                     </p>
                   </div>
                   <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
-                    Explore Service <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                    Explore Service{" "}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
               );
@@ -190,7 +268,8 @@ export function ServicesPage() {
             </h2>
             <div className="h-1.5 w-20 bg-primary mx-auto mt-4 rounded-full" />
             <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-              We provide full-spectrum engineering, supply chain, and quality control support across sub-Saharan Africa.
+              We provide full-spectrum engineering, supply chain, and quality control support across
+              sub-Saharan Africa.
             </p>
           </div>
 
@@ -230,20 +309,29 @@ export function ServicesPage() {
                 Why work with us?
               </h2>
               <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-                Geosynthetics Africa manages the entire containment system workflow. We take full responsibility for materials specification, import clearance, site delivery, and precision installation.
+                Geosynthetics Africa manages the entire containment system workflow. We take full
+                responsibility for materials specification, import clearance, site delivery, and
+                precision installation.
               </p>
               <div className="mt-8">
-                <Button asChild variant="outline" className="border-border hover:border-primary/50 hover:bg-transparent font-bold uppercase tracking-wider text-xs gap-2 cursor-pointer">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-border hover:border-primary/50 hover:bg-transparent font-bold uppercase tracking-wider text-xs gap-2 cursor-pointer"
+                >
                   <Link to="/about">
                     About Our Approach <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>
             </div>
-            
+
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
               {WHY_WORK_WITH_US.map((item, i) => (
-                <div key={i} className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition">
+                <div
+                  key={i}
+                  className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition"
+                >
                   <div className="flex items-center gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
                     <h3 className="font-display font-bold uppercase text-sm tracking-wider text-foreground">
@@ -300,10 +388,15 @@ export function ServicesPage() {
               {ctaTitle}
             </h2>
             <p className="mt-2 text-sm md:text-base text-white/80 max-w-xl">
-              Tell us your project specifications, and we will tailor a single-contract solution covering supply, logistics, and SANS-compliant QA/QC installation.
+              Tell us your project specifications, and we will tailor a single-contract solution
+              covering supply, logistics, and SANS-compliant QA/QC installation.
             </p>
           </div>
-          <Button asChild size="lg" className="bg-white hover:bg-neutral-100 text-primary font-bold uppercase tracking-wider cursor-pointer border-0 shrink-0 shadow-lg">
+          <Button
+            asChild
+            size="lg"
+            className="bg-white hover:bg-neutral-100 text-primary font-bold uppercase tracking-wider cursor-pointer border-0 shrink-0 shadow-lg"
+          >
             <Link to={ctaButtonUrl}>{ctaButtonText}</Link>
           </Button>
         </div>

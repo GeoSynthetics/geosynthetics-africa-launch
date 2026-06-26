@@ -40,12 +40,12 @@ describe("getProductPageContent data resolver", () => {
             seo: {
               title: "Custom SEO Title",
               description: "Custom SEO Description",
-              keywords: "custom, geomembranes, liners"
-            }
-          }
-        }
+              keywords: "custom, geomembranes, liners",
+            },
+          },
+        },
       },
-      error: null
+      error: null,
     });
 
     const eqMock = vi.fn().mockReturnValue({ maybeSingle: mockMaybeSingle });
@@ -76,6 +76,6 @@ describe("getProductPageContent data resolver", () => {
     expect(content?.slug).toBe("geomembranes");
     expect(content?.label).toBe("Geomembranes");
     // geomembranes default seed doesn't have keywords set by default
-    expect(content?.seo).toBeUndefined(); 
+    expect(content?.seo).toBeUndefined();
   });
 });

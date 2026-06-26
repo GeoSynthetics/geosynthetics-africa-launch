@@ -13,9 +13,13 @@ export function IndustriesLanding() {
   };
 
   const landing = templates?.["__landing"] || {};
-  const heroTitle = landing.title || "High-Performance Geosynthetic Solutions for African Industries";
-  const heroDescription = landing.description || "Tailored containment, stabilisation, and erosion control systems engineered for the environmental and operational demands of Africa's key industrial sectors.";
-  const heroImage = landing.heroImage || "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
+  const heroTitle =
+    landing.title || "High-Performance Geosynthetic Solutions for African Industries";
+  const heroDescription =
+    landing.description ||
+    "Tailored containment, stabilisation, and erosion control systems engineered for the environmental and operational demands of Africa's key industrial sectors.";
+  const heroImage =
+    landing.heroImage || "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
 
   const industriesItems = useMemo(() => {
     if (hierarchy?.items && hierarchy.items.length > 0) {
@@ -38,13 +42,18 @@ export function IndustriesLanding() {
     const t = templates?.[id] || {};
     return {
       title: t.title || fallbackLabel,
-      description: t.description || "Engineered geosynthetic containment, reinforcement, and drainage solutions for African projects.",
+      description:
+        t.description ||
+        "Engineered geosynthetic containment, reinforcement, and drainage solutions for African projects.",
     };
   };
 
   const resolveIcon = (iconName: string) => {
     const IconComp = (Icons as any)[iconName];
-    if (IconComp) return <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />;
+    if (IconComp)
+      return (
+        <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
+      );
     return <Icons.CheckCircle2 className="h-6 w-6 text-primary" />;
   };
 
@@ -81,7 +90,8 @@ export function IndustriesLanding() {
                     </p>
                   </div>
                   <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
-                    Explore Industry <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                    Explore Industry{" "}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
               );

@@ -39,8 +39,6 @@ import {
 
 const SUPABASE_KEY = "homepage_content";
 
-
-
 // ─── Reusable sub-components ─────────────────────────────────────────────────
 
 function FormField({
@@ -137,10 +135,8 @@ function HeroEditor({
   data: HomepageContent["hero"];
   onChange: (v: HomepageContent["hero"]) => void;
 }) {
-  const set = <K extends keyof HomepageContent["hero"]>(
-    key: K,
-    val: HomepageContent["hero"][K],
-  ) => onChange({ ...data, [key]: val });
+  const set = <K extends keyof HomepageContent["hero"]>(key: K, val: HomepageContent["hero"][K]) =>
+    onChange({ ...data, [key]: val });
 
   return (
     <div className="space-y-6">
@@ -481,12 +477,7 @@ function TrustBadgesEditor({
       {badges.length === 0 && (
         <p className="text-xs text-muted-foreground italic">No badges yet — click Add.</p>
       )}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={add}
-        className="gap-1.5 text-xs"
-      >
+      <Button variant="outline" size="sm" onClick={add} className="gap-1.5 text-xs">
         <Plus className="h-3 w-3" /> Add Badge
       </Button>
     </div>
@@ -515,7 +506,11 @@ function EngineeredSystemsEditor({
         linkUrl: "",
       },
     ]);
-  const removeCard = (i: number) => set("cards", data.cards.filter((_, idx) => idx !== i));
+  const removeCard = (i: number) =>
+    set(
+      "cards",
+      data.cards.filter((_, idx) => idx !== i),
+    );
   const updateCard = (i: number, patch: Partial<ApplicationCard>) => {
     const n = [...data.cards];
     n[i] = { ...n[i], ...patch };
@@ -567,7 +562,12 @@ function EngineeredSystemsEditor({
         </div>
         <div className="space-y-3">
           {data.cards.map((card, i) => (
-            <CollapsibleCard key={card.id} index={i} title={card.title} onRemove={() => removeCard(i)}>
+            <CollapsibleCard
+              key={card.id}
+              index={i}
+              title={card.title}
+              onRemove={() => removeCard(i)}
+            >
               <div>
                 <FieldLabel>Card Title</FieldLabel>
                 <Input
@@ -583,7 +583,9 @@ function EngineeredSystemsEditor({
                 onChange={(v) => updateCard(i, { image: v })}
               />
               <div>
-                <FieldLabel hint="Path or URL — e.g. /applications/mining-systems">Card Link URL</FieldLabel>
+                <FieldLabel hint="Path or URL — e.g. /applications/mining-systems">
+                  Card Link URL
+                </FieldLabel>
                 <Input
                   value={card.linkUrl}
                   onChange={(e) => updateCard(i, { linkUrl: e.target.value })}
@@ -614,9 +616,12 @@ function PartnersEditor({
     val: HomepageContent["partners"][K],
   ) => onChange({ ...data, [key]: val });
 
-  const addLogo = () =>
-    set("logos", [...data.logos, { name: "", logo: "" }]);
-  const removeLogo = (i: number) => set("logos", data.logos.filter((_, idx) => idx !== i));
+  const addLogo = () => set("logos", [...data.logos, { name: "", logo: "" }]);
+  const removeLogo = (i: number) =>
+    set(
+      "logos",
+      data.logos.filter((_, idx) => idx !== i),
+    );
   const updateLogo = (i: number, patch: Partial<PartnerLogo>) => {
     const n = [...data.logos];
     n[i] = { ...n[i], ...patch };
@@ -628,7 +633,9 @@ function PartnersEditor({
       <SectionHeading>Global Partners / Logo Carousel</SectionHeading>
       <div className="space-y-3">
         <div>
-          <FieldLabel hint='Shown in red above the logos, e.g. "GLOBAL BEST-IN-CLASS MATERIALS"'>Section Subtitle</FieldLabel>
+          <FieldLabel hint='Shown in red above the logos, e.g. "GLOBAL BEST-IN-CLASS MATERIALS"'>
+            Section Subtitle
+          </FieldLabel>
           <Input
             value={data.subtitle}
             onChange={(e) => set("subtitle", e.target.value)}
@@ -699,7 +706,11 @@ function ServicesEditor({
       ...data.cards,
       { id: `svc-${Date.now()}`, icon: "", title: "", description: "" },
     ]);
-  const removeCard = (i: number) => set("cards", data.cards.filter((_, idx) => idx !== i));
+  const removeCard = (i: number) =>
+    set(
+      "cards",
+      data.cards.filter((_, idx) => idx !== i),
+    );
   const updateCard = (i: number, patch: Partial<ServiceCard>) => {
     const n = [...data.cards];
     n[i] = { ...n[i], ...patch };
@@ -708,7 +719,10 @@ function ServicesEditor({
 
   const addChecklistItem = () => set("qualityChecklist", [...data.qualityChecklist, ""]);
   const removeChecklistItem = (i: number) =>
-    set("qualityChecklist", data.qualityChecklist.filter((_, idx) => idx !== i));
+    set(
+      "qualityChecklist",
+      data.qualityChecklist.filter((_, idx) => idx !== i),
+    );
   const updateChecklistItem = (i: number, v: string) => {
     const n = [...data.qualityChecklist];
     n[i] = v;
@@ -760,7 +774,12 @@ function ServicesEditor({
         </div>
         <div className="space-y-3">
           {data.cards.map((card, i) => (
-            <CollapsibleCard key={card.id} index={i} title={card.title} onRemove={() => removeCard(i)}>
+            <CollapsibleCard
+              key={card.id}
+              index={i}
+              title={card.title}
+              onRemove={() => removeCard(i)}
+            >
               <ImageUploadField
                 label="Card Icon"
                 hint="Small icon image (optional)"
@@ -878,7 +897,11 @@ function PresenceEditor({
 
   const addStat = () =>
     set("stats", [...data.stats, { id: `stat-${Date.now()}`, value: "", label: "" }]);
-  const removeStat = (i: number) => set("stats", data.stats.filter((_, idx) => idx !== i));
+  const removeStat = (i: number) =>
+    set(
+      "stats",
+      data.stats.filter((_, idx) => idx !== i),
+    );
   const updateStat = (i: number, patch: Partial<StatCounter>) => {
     const n = [...data.stats];
     n[i] = { ...n[i], ...patch };
@@ -887,7 +910,11 @@ function PresenceEditor({
 
   const addOffice = () =>
     set("offices", [...data.offices, { id: `office-${Date.now()}`, name: "", type: "" }]);
-  const removeOffice = (i: number) => set("offices", data.offices.filter((_, idx) => idx !== i));
+  const removeOffice = (i: number) =>
+    set(
+      "offices",
+      data.offices.filter((_, idx) => idx !== i),
+    );
   const updateOffice = (i: number, patch: Partial<OfficeLocation>) => {
     const n = [...data.offices];
     n[i] = { ...n[i], ...patch };
@@ -908,7 +935,12 @@ function PresenceEditor({
         </div>
         <div className="space-y-3">
           {data.stats.map((stat, i) => (
-            <CollapsibleCard key={stat.id} index={i} title={`${stat.value} — ${stat.label}`} onRemove={() => removeStat(i)}>
+            <CollapsibleCard
+              key={stat.id}
+              index={i}
+              title={`${stat.value} — ${stat.label}`}
+              onRemove={() => removeStat(i)}
+            >
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <FieldLabel>Stat Number / Value</FieldLabel>
@@ -971,7 +1003,9 @@ function PresenceEditor({
             >
               <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
                 <div>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Country Name</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">
+                    Country Name
+                  </span>
                   <Input
                     value={office.name}
                     onChange={(e) => updateOffice(i, { name: e.target.value })}
@@ -980,7 +1014,9 @@ function PresenceEditor({
                   />
                 </div>
                 <div>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Office Type / Hub</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">
+                    Office Type / Hub
+                  </span>
                   <Input
                     value={office.type}
                     onChange={(e) => updateOffice(i, { type: e.target.value })}
@@ -989,7 +1025,9 @@ function PresenceEditor({
                   />
                 </div>
                 <div>
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">Link URL (Optional)</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold block mb-1 md:hidden">
+                    Link URL (Optional)
+                  </span>
                   <Input
                     value={office.linkUrl || ""}
                     onChange={(e) => updateOffice(i, { linkUrl: e.target.value })}
@@ -1030,7 +1068,11 @@ function ProjectsEditor({
       ...data.cards,
       { id: `proj-${Date.now()}`, image: "", tag: "", title: "", location: "", systemDetails: "" },
     ]);
-  const removeCard = (i: number) => set("cards", data.cards.filter((_, idx) => idx !== i));
+  const removeCard = (i: number) =>
+    set(
+      "cards",
+      data.cards.filter((_, idx) => idx !== i),
+    );
   const updateCard = (i: number, patch: Partial<ProjectCard>) => {
     const n = [...data.cards];
     n[i] = { ...n[i], ...patch };
@@ -1082,7 +1124,12 @@ function ProjectsEditor({
         </div>
         <div className="space-y-3">
           {data.cards.map((card, i) => (
-            <CollapsibleCard key={card.id} index={i} title={card.title} onRemove={() => removeCard(i)}>
+            <CollapsibleCard
+              key={card.id}
+              index={i}
+              title={card.title}
+              onRemove={() => removeCard(i)}
+            >
               <ImageUploadField
                 label="Project Cover Photo"
                 value={card.image}
@@ -1129,7 +1176,9 @@ function ProjectsEditor({
             </CollapsibleCard>
           ))}
           {data.cards.length === 0 && (
-            <p className="text-xs text-muted-foreground italic">No project cards yet — click Add Project.</p>
+            <p className="text-xs text-muted-foreground italic">
+              No project cards yet — click Add Project.
+            </p>
           )}
         </div>
       </div>
@@ -1424,10 +1473,7 @@ export function HomepageBuilderTab() {
 
         <div className="flex-1 overflow-y-auto">
           <TabsContent value="hero" className="p-6 m-0">
-            <HeroEditor
-              data={content.hero}
-              onChange={(v) => update({ hero: v })}
-            />
+            <HeroEditor data={content.hero} onChange={(v) => update({ hero: v })} />
           </TabsContent>
 
           <TabsContent value="gsaDifference" className="p-6 m-0">
@@ -1452,38 +1498,23 @@ export function HomepageBuilderTab() {
           </TabsContent>
 
           <TabsContent value="partners" className="p-6 m-0">
-            <PartnersEditor
-              data={content.partners}
-              onChange={(v) => update({ partners: v })}
-            />
+            <PartnersEditor data={content.partners} onChange={(v) => update({ partners: v })} />
           </TabsContent>
 
           <TabsContent value="services" className="p-6 m-0">
-            <ServicesEditor
-              data={content.services}
-              onChange={(v) => update({ services: v })}
-            />
+            <ServicesEditor data={content.services} onChange={(v) => update({ services: v })} />
           </TabsContent>
 
           <TabsContent value="presence" className="p-6 m-0">
-            <PresenceEditor
-              data={content.presence}
-              onChange={(v) => update({ presence: v })}
-            />
+            <PresenceEditor data={content.presence} onChange={(v) => update({ presence: v })} />
           </TabsContent>
 
           <TabsContent value="projects" className="p-6 m-0">
-            <ProjectsEditor
-              data={content.projects}
-              onChange={(v) => update({ projects: v })}
-            />
+            <ProjectsEditor data={content.projects} onChange={(v) => update({ projects: v })} />
           </TabsContent>
 
           <TabsContent value="boq" className="p-6 m-0">
-            <BoqBannerEditor
-              data={content.boqBanner}
-              onChange={(v) => update({ boqBanner: v })}
-            />
+            <BoqBannerEditor data={content.boqBanner} onChange={(v) => update({ boqBanner: v })} />
           </TabsContent>
         </div>
       </Tabs>

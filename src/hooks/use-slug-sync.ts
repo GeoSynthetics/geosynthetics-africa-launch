@@ -12,12 +12,7 @@ interface UseSlugSyncProps {
  * Custom React hook to sync and format a slug field from a title/label field.
  * Handles auto-syncing, manual overrides, real-time typing formatting, and blur cleanup.
  */
-export function useSlugSync({
-  title,
-  slug,
-  onSlugChange,
-  entityId,
-}: UseSlugSyncProps) {
+export function useSlugSync({ title, slug, onSlugChange, entityId }: UseSlugSyncProps) {
   const [isManual, setIsManual] = useState(false);
 
   // When switching entities or loading a new record, determine if slug was manual

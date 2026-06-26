@@ -11,7 +11,6 @@ function AdminLayoutSkeleton() {
     <section className="bg-surface min-h-[70vh] animate-pulse">
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 py-6 lg:py-10">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
-          
           {/* Nav Skeleton (Desktop) */}
           <aside className="hidden lg:flex flex-col shrink-0 w-64 bg-card/85 border border-border/50 rounded-2xl p-4 h-[calc(100vh-8rem)] min-h-[600px] space-y-6">
             <div className="flex items-center gap-3 px-2 py-3 border-b border-border/50 pb-4">
@@ -69,7 +68,6 @@ function AdminLayoutSkeleton() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -78,10 +76,7 @@ function AdminLayoutSkeleton() {
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
-    meta: [
-      { title: "Admin — Geosynthetics Africa" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Admin — Geosynthetics Africa" }, { name: "robots", content: "noindex" }],
   }),
   pendingComponent: AdminLayoutSkeleton,
   pendingMs: 0,

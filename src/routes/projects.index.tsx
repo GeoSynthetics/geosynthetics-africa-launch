@@ -75,8 +75,12 @@ export const Route = createFileRoute("/projects/")({
   pendingMs: 0,
   head: ({ loaderData }) => {
     const landing = (loaderData?.landingContent as any) || {};
-    const title = landing.seo?.title || "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa";
-    const description = landing.seo?.description || "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.";
+    const title =
+      landing.seo?.title ||
+      "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa";
+    const description =
+      landing.seo?.description ||
+      "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.";
     const keywords = landing.seo?.keywords || "";
     return {
       meta: [

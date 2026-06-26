@@ -30,67 +30,17 @@
       }
     ],
     "propertiesTable": {
-      "headers": [
-        "Testing Properties",
-        "Test Method",
-        "Value (Metric)",
-        "Value (Imperial)"
-      ],
+      "headers": ["Testing Properties", "Test Method", "Value (Metric)", "Value (Imperial)"],
       "rows": [
-        [
-          "Thickness",
-          "ASTM D5199",
-          "1.5 mm",
-          "60 mil"
-        ],
-        [
-          "Density",
-          "ASTM D792",
-          "0.94 g/cc",
-          "0.94 g/cc"
-        ],
-        [
-          "Tensile Strength at Yield",
-          "ASTM D6693",
-          "22 kN/m",
-          "126 ppi"
-        ],
-        [
-          "Tensile Strength at Break",
-          "ASTM D6693",
-          "40 kN/m",
-          "228 ppi"
-        ],
-        [
-          "Elongation at Yield",
-          "ASTM D6693",
-          "12%",
-          "12%"
-        ],
-        [
-          "Elongation at Break",
-          "ASTM D6693",
-          "700%",
-          "700%"
-        ],
-        [
-          "Tear Resistance",
-          "ASTM D1004",
-          "187 N",
-          "42 lbs"
-        ],
-        [
-          "Puncture Resistance",
-          "ASTM D4833",
-          "530 N",
-          "120 lbs"
-        ],
-        [
-          "Carbon Black Content",
-          "ASTM D1603",
-          "2.0 - 3.0%",
-          "2.0 - 3.0%"
-        ]
+        ["Thickness", "ASTM D5199", "1.5 mm", "60 mil"],
+        ["Density", "ASTM D792", "0.94 g/cc", "0.94 g/cc"],
+        ["Tensile Strength at Yield", "ASTM D6693", "22 kN/m", "126 ppi"],
+        ["Tensile Strength at Break", "ASTM D6693", "40 kN/m", "228 ppi"],
+        ["Elongation at Yield", "ASTM D6693", "12%", "12%"],
+        ["Elongation at Break", "ASTM D6693", "700%", "700%"],
+        ["Tear Resistance", "ASTM D1004", "187 N", "42 lbs"],
+        ["Puncture Resistance", "ASTM D4833", "530 N", "120 lbs"],
+        ["Carbon Black Content", "ASTM D1603", "2.0 - 3.0%", "2.0 - 3.0%"]
       ]
     },
     "types": [

@@ -1,16 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl =
-  (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ??
-  process.env.SUPABASE_URL;
+  (import.meta.env?.VITE_SUPABASE_URL as string | undefined) ?? process.env.SUPABASE_URL;
 const supabasePublishableKey =
   (import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ??
   process.env.SUPABASE_PUBLISHABLE_KEY;
 
 if (!supabaseUrl || !supabasePublishableKey) {
-  throw new Error(
-    "Missing Supabase env vars: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY",
-  );
+  throw new Error("Missing Supabase env vars: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY");
 }
 
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {

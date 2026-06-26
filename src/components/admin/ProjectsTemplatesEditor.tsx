@@ -13,8 +13,17 @@ import {
 } from "@/components/ui/select";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import {
-  Plus, Trash2, Save, Loader2, Compass, ChevronRight, PlusCircle, X, Layers,
-  Search, ChevronLeft,
+  Plus,
+  Trash2,
+  Save,
+  Loader2,
+  Compass,
+  ChevronRight,
+  PlusCircle,
+  X,
+  Layers,
+  Search,
+  ChevronLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -22,10 +31,16 @@ import { ProductSelector, type ProductData } from "./ProductSelector";
 import { useSlugSync } from "@/hooks/use-slug-sync";
 import { ImagePicker } from "./ImagePicker";
 import {
-  SectionHeading, FieldLabel,
-  useListEditor, ItemCard, ItemDeleteButton, MicroLabel, EmptyState, AddItemButton, ListEditorHeader,
+  SectionHeading,
+  FieldLabel,
+  useListEditor,
+  ItemCard,
+  ItemDeleteButton,
+  MicroLabel,
+  EmptyState,
+  AddItemButton,
+  ListEditorHeader,
 } from "./TemplateEditorShared";
-
 
 // Reusable Sub-components for Form Layouts
 
@@ -42,13 +57,15 @@ interface ProjectsLandingContent {
 
 const defaultLandingContent = (): ProjectsLandingContent => ({
   title: "340+ projects.\n17 countries.\nOne partner.",
-  description: "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.",
+  description:
+    "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.",
   heroImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
   seo: {
     title: "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa",
-    description: "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.",
-    keywords: "geosynthetics, projects, case studies, africa, geomembrane, installation"
-  }
+    description:
+      "Explore our successful geosynthetic installations across Africa. Filter by industry, application, and service type.",
+    keywords: "geosynthetics, projects, case studies, africa, geomembrane, installation",
+  },
 });
 
 export function ProjectsTemplatesEditor() {
@@ -61,7 +78,9 @@ export function ProjectsTemplatesEditor() {
 
   const [newTitle, setNewTitle] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
-  const [projectToDelete, setProjectToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<{ id: string; title: string } | null>(
+    null,
+  );
 
   // Search and Pagination states
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,8 +88,10 @@ export function ProjectsTemplatesEditor() {
   const itemsPerPage = 10;
 
   // Projects Landing Content states
-  const [landingContent, setLandingContent] = useState<ProjectsLandingContent>(defaultLandingContent());
-  const [editingLanding, setEditingLanding] = useState<ProjectsLandingContent>(defaultLandingContent());
+  const [landingContent, setLandingContent] =
+    useState<ProjectsLandingContent>(defaultLandingContent());
+  const [editingLanding, setEditingLanding] =
+    useState<ProjectsLandingContent>(defaultLandingContent());
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -115,7 +136,7 @@ export function ProjectsTemplatesEditor() {
         seo: {
           ...defaultLandingContent().seo,
           ...(landingContent?.seo || {}),
-        }
+        },
       });
       setDirty(false);
     }
@@ -144,8 +165,8 @@ export function ProjectsTemplatesEditor() {
       ...prev,
       seo: {
         ...prev.seo,
-        [key]: value
-      }
+        [key]: value,
+      },
     }));
     setDirty(true);
   };
@@ -199,9 +220,7 @@ export function ProjectsTemplatesEditor() {
 
   const updateActive = (updater: (prev: any) => any) => {
     if (!activeId) return;
-    setProjects((prev) =>
-      prev.map((p) => (p.id === activeId ? updater(p) : p))
-    );
+    setProjects((prev) => prev.map((p) => (p.id === activeId ? updater(p) : p)));
     setDirty(true);
   };
 
@@ -305,7 +324,10 @@ export function ProjectsTemplatesEditor() {
     if (activeId === "__landing") {
       const { error } = await supabase
         .from("site_config")
-        .upsert({ key: "projects_landing_content", value: editingLanding as any }, { onConflict: "key" });
+        .upsert(
+          { key: "projects_landing_content", value: editingLanding as any },
+          { onConflict: "key" },
+        );
 
       if (error) {
         toast.error("Save failed: " + error.message);
@@ -320,9 +342,7 @@ export function ProjectsTemplatesEditor() {
         return;
       }
 
-      const { error } = await supabase
-        .from("case_studies")
-        .upsert(active, { onConflict: "id" });
+      const { error } = await supabase.from("case_studies").upsert(active, { onConflict: "id" });
 
       if (error) {
         toast.error("Save failed: " + error.message);
@@ -341,7 +361,9 @@ export function ProjectsTemplatesEditor() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-border">
         <div>
           <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
-            {activeId === "__landing" ? "Projects Landing Page" : "Project Templates (Case Studies)"}
+            {activeId === "__landing"
+              ? "Projects Landing Page"
+              : "Project Templates (Case Studies)"}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
             {activeId === "__landing"
@@ -370,7 +392,9 @@ export function ProjectsTemplatesEditor() {
       {projects.length === 0 && !loading ? (
         <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border rounded-xl bg-surface/30">
           <Compass className="h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="font-display text-xl font-bold uppercase mb-2">No projects templates found</h3>
+          <h3 className="font-display text-xl font-bold uppercase mb-2">
+            No projects templates found
+          </h3>
           <p className="text-sm text-muted-foreground max-w-md mb-6">
             Click the button below to add your first case study template.
           </p>
@@ -381,7 +405,10 @@ export function ProjectsTemplatesEditor() {
               onChange={(e) => setNewTitle(e.target.value)}
               className="text-sm"
             />
-            <Button onClick={handleAddNew} className="bg-primary text-white border-0 cursor-pointer">
+            <Button
+              onClick={handleAddNew}
+              className="bg-primary text-white border-0 cursor-pointer"
+            >
               Add
             </Button>
           </div>
@@ -408,9 +435,7 @@ export function ProjectsTemplatesEditor() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-medium text-xs">Projects Landing Page</div>
-                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
-                    /projects
-                  </div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">/projects</div>
                 </div>
                 {activeId === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
               </button>
@@ -418,7 +443,11 @@ export function ProjectsTemplatesEditor() {
 
             <div className="px-4 py-3 border-b border-border flex items-center justify-between">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Project Templates ({filteredProjects.length !== projects.length ? `${filteredProjects.length}/${projects.length}` : projects.length})
+                Project Templates (
+                {filteredProjects.length !== projects.length
+                  ? `${filteredProjects.length}/${projects.length}`
+                  : projects.length}
+                )
               </p>
             </div>
 
@@ -498,7 +527,7 @@ export function ProjectsTemplatesEditor() {
                       "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
                       isActive
                         ? "bg-primary/10 text-primary font-semibold"
-                        : "hover:bg-accent text-foreground"
+                        : "hover:bg-accent text-foreground",
                     )}
                   >
                     <div className="min-w-0 flex-1">
@@ -541,7 +570,7 @@ export function ProjectsTemplatesEditor() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
                   className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                 >
@@ -553,7 +582,7 @@ export function ProjectsTemplatesEditor() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
                   className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
                 >
@@ -579,7 +608,10 @@ export function ProjectsTemplatesEditor() {
                       Projects Landing Page
                     </h3>
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      Route: <code className="bg-surface px-1.5 py-0.5 rounded font-mono text-primary font-bold">/projects</code>
+                      Route:{" "}
+                      <code className="bg-surface px-1.5 py-0.5 rounded font-mono text-primary font-bold">
+                        /projects
+                      </code>
                     </p>
                   </div>
                 </div>
@@ -587,11 +619,7 @@ export function ProjectsTemplatesEditor() {
                 {/* Landing page editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
                   <div className="px-6 border-b border-border bg-surface/10 shrink-0">
-                    <Tabs
-                      value={activeTab}
-                      onValueChange={setActiveTab}
-                      className="w-full"
-                    >
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                       <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
                         <TabsTrigger
                           value="landing"
@@ -612,11 +640,16 @@ export function ProjectsTemplatesEditor() {
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
                       {/* LANDING TAB */}
-                      <TabsContent value="landing" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="landing"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <SectionHeading>Hero Details</SectionHeading>
                         <div className="space-y-4">
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Hero title displayed in bold display font (e.g. 340+ projects. 17 countries.)">Hero Title (H1)</FieldLabel>
+                            <FieldLabel hint="Hero title displayed in bold display font (e.g. 340+ projects. 17 countries.)">
+                              Hero Title (H1)
+                            </FieldLabel>
                             <Input
                               value={editingLanding.title ?? ""}
                               onChange={(e) => setLandingField("title", e.target.value)}
@@ -624,7 +657,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Descriptive text paragraph displayed below the H1 title">Description</FieldLabel>
+                            <FieldLabel hint="Descriptive text paragraph displayed below the H1 title">
+                              Description
+                            </FieldLabel>
                             <Textarea
                               value={editingLanding.description ?? ""}
                               onChange={(e) => setLandingField("description", e.target.value)}
@@ -647,7 +682,9 @@ export function ProjectsTemplatesEditor() {
                         <SectionHeading>SEO Meta Tags</SectionHeading>
                         <div className="space-y-4">
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Browser tab title and Google search snippet header">Meta Title</FieldLabel>
+                            <FieldLabel hint="Browser tab title and Google search snippet header">
+                              Meta Title
+                            </FieldLabel>
                             <Input
                               value={editingLanding.seo?.title ?? ""}
                               onChange={(e) => setLandingSeoField("title", e.target.value)}
@@ -655,7 +692,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Brief summary shown in Google search results below the title link">Meta Description</FieldLabel>
+                            <FieldLabel hint="Brief summary shown in Google search results below the title link">
+                              Meta Description
+                            </FieldLabel>
                             <Textarea
                               value={editingLanding.seo?.description ?? ""}
                               onChange={(e) => setLandingSeoField("description", e.target.value)}
@@ -663,7 +702,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Comma-separated keywords for legacy search engine signals">SEO Keywords</FieldLabel>
+                            <FieldLabel hint="Comma-separated keywords for legacy search engine signals">
+                              SEO Keywords
+                            </FieldLabel>
                             <Input
                               value={editingLanding.seo?.keywords ?? ""}
                               onChange={(e) => setLandingSeoField("keywords", e.target.value)}
@@ -685,11 +726,16 @@ export function ProjectsTemplatesEditor() {
                       {active.title}
                     </h3>
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      Slug: <code className="bg-surface px-1.5 py-0.5 rounded font-mono text-primary font-bold">/projects/{active.slug}</code>
+                      Slug:{" "}
+                      <code className="bg-surface px-1.5 py-0.5 rounded font-mono text-primary font-bold">
+                        /projects/{active.slug}
+                      </code>
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground font-semibold">Service Type:</span>
+                    <span className="text-xs text-muted-foreground font-semibold">
+                      Service Type:
+                    </span>
                     <Select
                       value={active.service_type}
                       onValueChange={(v) => setField("service_type", v)}
@@ -709,11 +755,7 @@ export function ProjectsTemplatesEditor() {
                 {/* Subpage editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
                   <div className="px-6 border-b border-border bg-surface/10 shrink-0">
-                    <Tabs
-                      value={activeTab}
-                      onValueChange={setActiveTab}
-                      className="w-full"
-                    >
+                    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                       <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
                         <TabsTrigger
                           value="hero"
@@ -758,11 +800,16 @@ export function ProjectsTemplatesEditor() {
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
                       {/* HERO TAB */}
-                      <TabsContent value="hero" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="hero"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <SectionHeading>Hero Section & Page Identity</SectionHeading>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Project title displayed in bold display font">Title</FieldLabel>
+                            <FieldLabel hint="Project title displayed in bold display font">
+                              Title
+                            </FieldLabel>
                             <Input
                               value={active.title}
                               onChange={(e) => setField("title", e.target.value)}
@@ -770,7 +817,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="URL-friendly slug (e.g. zimbabwe-river-rehab)">Slug</FieldLabel>
+                            <FieldLabel hint="URL-friendly slug (e.g. zimbabwe-river-rehab)">
+                              Slug
+                            </FieldLabel>
                             <Input
                               value={active.slug}
                               onChange={(e) => handleSlugChange(e.target.value)}
@@ -779,7 +828,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="The brand/operator name for the project">Client Operator</FieldLabel>
+                            <FieldLabel hint="The brand/operator name for the project">
+                              Client Operator
+                            </FieldLabel>
                             <Input
                               value={active.client_name || ""}
                               onChange={(e) => setField("client_name", e.target.value)}
@@ -787,7 +838,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="District/Region (e.g., Lualaba, Kenieba)">Location/Region</FieldLabel>
+                            <FieldLabel hint="District/Region (e.g., Lualaba, Kenieba)">
+                              Location/Region
+                            </FieldLabel>
                             <Input
                               value={active.location || ""}
                               onChange={(e) => setField("location", e.target.value)}
@@ -795,7 +848,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Sovereign state (e.g., South Africa, DRC, Mali)">Country</FieldLabel>
+                            <FieldLabel hint="Sovereign state (e.g., South Africa, DRC, Mali)">
+                              Country
+                            </FieldLabel>
                             <Input
                               value={active.country || ""}
                               onChange={(e) => setField("country", e.target.value)}
@@ -803,16 +858,25 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Year commissioned (e.g., 2024)">Commissioned Year</FieldLabel>
+                            <FieldLabel hint="Year commissioned (e.g., 2024)">
+                              Commissioned Year
+                            </FieldLabel>
                             <Input
                               type="number"
                               value={active.project_year || ""}
-                              onChange={(e) => setField("project_year", parseInt(e.target.value) || new Date().getFullYear())}
+                              onChange={(e) =>
+                                setField(
+                                  "project_year",
+                                  parseInt(e.target.value) || new Date().getFullYear(),
+                                )
+                              }
                               className="text-sm"
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Industrial sector (e.g., Mining, Agriculture, Infrastructure)">Sector</FieldLabel>
+                            <FieldLabel hint="Industrial sector (e.g., Mining, Agriculture, Infrastructure)">
+                              Sector
+                            </FieldLabel>
                             <Input
                               value={active.sector || ""}
                               onChange={(e) => setField("sector", e.target.value)}
@@ -820,7 +884,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Physical size of layout scope (e.g. 210,000 mÂ²)">Scale</FieldLabel>
+                            <FieldLabel hint="Physical size of layout scope (e.g. 210,000 mÂ²)">
+                              Scale
+                            </FieldLabel>
                             <Input
                               value={active.scale || ""}
                               onChange={(e) => setField("scale", e.target.value)}
@@ -837,7 +903,9 @@ export function ProjectsTemplatesEditor() {
                             />
                           </div>
                           <div className="col-span-2 space-y-1.5">
-                            <FieldLabel hint="Status defines if public users can see the project">Publishing Status</FieldLabel>
+                            <FieldLabel hint="Status defines if public users can see the project">
+                              Publishing Status
+                            </FieldLabel>
                             <Select
                               value={active.status || "draft"}
                               onValueChange={(v) => setField("status", v)}
@@ -855,7 +923,10 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* BRIEF & BODY TAB */}
-                      <TabsContent value="brief" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="brief"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <SectionHeading>Case Study Narrative</SectionHeading>
                         <div className="space-y-4">
                           <div className="space-y-1.5">
@@ -882,7 +953,10 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* PRODUCTS USED TAB */}
-                      <TabsContent value="products" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="products"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <SectionHeading>Catalogue Products Supplied & Deployed</SectionHeading>
                         <ProductsEditor
                           items={active.products_used || []}
@@ -891,8 +965,13 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* SPEC CONFORMITY TAB */}
-                      <TabsContent value="compliance" className="space-y-6 m-0 focus-visible:outline-none">
-                        <SectionHeading>Laboratory Verification & Specification conformity</SectionHeading>
+                      <TabsContent
+                        value="compliance"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>
+                          Laboratory Verification & Specification conformity
+                        </SectionHeading>
                         <SpecComplianceEditor
                           items={active.spec_compliance || []}
                           onChange={(items) => setField("spec_compliance", items)}
@@ -900,11 +979,16 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* TESTIMONIAL TAB */}
-                      <TabsContent value="testimonial" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="testimonial"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <SectionHeading>Client Testimonial & Endorsement</SectionHeading>
                         <div className="border border-border rounded-xl p-5 bg-surface/30 space-y-4">
                           <div className="space-y-1.5">
-                            <FieldLabel hint="Direct quote endorsement from client engineer">Testimonial Quote</FieldLabel>
+                            <FieldLabel hint="Direct quote endorsement from client engineer">
+                              Testimonial Quote
+                            </FieldLabel>
                             <Textarea
                               value={active.testimonial?.quote || ""}
                               onChange={(e) =>
@@ -918,7 +1002,9 @@ export function ProjectsTemplatesEditor() {
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
-                              <FieldLabel hint="Name of the person who gave the testimonial">Name</FieldLabel>
+                              <FieldLabel hint="Name of the person who gave the testimonial">
+                                Name
+                              </FieldLabel>
                               <Input
                                 value={active.testimonial?.name || ""}
                                 onChange={(e) =>
@@ -957,7 +1043,9 @@ export function ProjectsTemplatesEditor() {
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <FieldLabel hint="2-letter initials shown in testimonial circle">Avatar Initials</FieldLabel>
+                              <FieldLabel hint="2-letter initials shown in testimonial circle">
+                                Avatar Initials
+                              </FieldLabel>
                               <Input
                                 maxLength={2}
                                 value={active.testimonial?.avatar || ""}
@@ -975,13 +1063,15 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* TECHNICAL SCOPE TAB */}
-                      <TabsContent value="scopedetails" className="space-y-6 m-0 focus-visible:outline-none">
+                      <TabsContent
+                        value="scopedetails"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
                         <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
-                          <SectionHeading>
-                            Dynamic Service-specific Details
-                          </SectionHeading>
+                          <SectionHeading>Dynamic Service-specific Details</SectionHeading>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded">
-                            {active.service_type === "supply_install" && "Supply & Install Template"}
+                            {active.service_type === "supply_install" &&
+                              "Supply & Install Template"}
                             {active.service_type === "supply_only" && "Supply Only Template"}
                             {active.service_type === "services_only" && "Services Only Template"}
                           </span>
@@ -992,7 +1082,9 @@ export function ProjectsTemplatesEditor() {
                           <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Welders count/crews (e.g. '14 Certified')">Field Welders</FieldLabel>
+                                <FieldLabel hint="Welders count/crews (e.g. '14 Certified')">
+                                  Field Welders
+                                </FieldLabel>
                                 <Input
                                   value={active.qa_details?.welders || ""}
                                   onChange={(e) =>
@@ -1005,7 +1097,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Standard regulatory compliance (e.g., SANS 1526, GRI GM13)">CQA Standards</FieldLabel>
+                                <FieldLabel hint="Standard regulatory compliance (e.g., SANS 1526, GRI GM13)">
+                                  CQA Standards
+                                </FieldLabel>
                                 <Input
                                   value={active.qa_details?.compliance || ""}
                                   onChange={(e) =>
@@ -1021,7 +1115,9 @@ export function ProjectsTemplatesEditor() {
 
                             <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
                               <div className="space-y-1.5 col-span-2">
-                                <FieldLabel hint="The specific installation / CQA challenge details">Installation Challenge Description</FieldLabel>
+                                <FieldLabel hint="The specific installation / CQA challenge details">
+                                  Installation Challenge Description
+                                </FieldLabel>
                                 <Textarea
                                   value={active.qa_details?.challenge_description || ""}
                                   onChange={(e) =>
@@ -1035,7 +1131,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2">
-                                <FieldLabel hint="Our approach and sequence methodology to solve it">Installation Solution / Approach</FieldLabel>
+                                <FieldLabel hint="Our approach and sequence methodology to solve it">
+                                  Installation Solution / Approach
+                                </FieldLabel>
                                 <Textarea
                                   value={active.qa_details?.challenge_approach || ""}
                                   onChange={(e) =>
@@ -1087,7 +1185,9 @@ export function ProjectsTemplatesEditor() {
                           <div className="space-y-6">
                             <div className="grid grid-cols-4 gap-4">
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Logistics Tonnage (e.g. '340 t')">Logistics Tonnage</FieldLabel>
+                                <FieldLabel hint="Logistics Tonnage (e.g. '340 t')">
+                                  Logistics Tonnage
+                                </FieldLabel>
                                 <Input
                                   value={active.logistics_details?.tonnage || ""}
                                   onChange={(e) =>
@@ -1100,7 +1200,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Total road distance (e.g., '3,420 km')">Distance Route</FieldLabel>
+                                <FieldLabel hint="Total road distance (e.g., '3,420 km')">
+                                  Distance Route
+                                </FieldLabel>
                                 <Input
                                   value={active.logistics_details?.route || ""}
                                   onChange={(e) =>
@@ -1113,7 +1215,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Borders crossed (e.g. '4 borders')">Borders Crossed</FieldLabel>
+                                <FieldLabel hint="Borders crossed (e.g. '4 borders')">
+                                  Borders Crossed
+                                </FieldLabel>
                                 <Input
                                   value={active.logistics_details?.borders || ""}
                                   onChange={(e) =>
@@ -1126,7 +1230,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="On-time delivery index (e.g., '100%')">On-Time delivery</FieldLabel>
+                                <FieldLabel hint="On-time delivery index (e.g., '100%')">
+                                  On-Time delivery
+                                </FieldLabel>
                                 <Input
                                   value={active.logistics_details?.ontime || ""}
                                   onChange={(e) =>
@@ -1142,7 +1248,9 @@ export function ProjectsTemplatesEditor() {
 
                             <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
                               <div className="space-y-1.5 col-span-2">
-                                <FieldLabel hint="The logistics and shipping constraints details">Logistics Challenge Description</FieldLabel>
+                                <FieldLabel hint="The logistics and shipping constraints details">
+                                  Logistics Challenge Description
+                                </FieldLabel>
                                 <Textarea
                                   value={active.logistics_details?.challenge_description || ""}
                                   onChange={(e) =>
@@ -1156,7 +1264,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Logistics callout panel heading">Challenge Callout Heading</FieldLabel>
+                                <FieldLabel hint="Logistics callout panel heading">
+                                  Challenge Callout Heading
+                                </FieldLabel>
                                 <Input
                                   value={active.logistics_details?.challenge_callout_title || ""}
                                   onChange={(e) =>
@@ -1170,7 +1280,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Logistics callout panel details">Challenge Callout Body</FieldLabel>
+                                <FieldLabel hint="Logistics callout panel details">
+                                  Challenge Callout Body
+                                </FieldLabel>
                                 <Textarea
                                   value={active.logistics_details?.challenge_callout_body || ""}
                                   onChange={(e) =>
@@ -1222,7 +1334,9 @@ export function ProjectsTemplatesEditor() {
                           <div className="space-y-6">
                             <div className="grid grid-cols-4 gap-4">
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Programme timeline (e.g., '5 weeks')">Programme duration</FieldLabel>
+                                <FieldLabel hint="Programme timeline (e.g., '5 weeks')">
+                                  Programme duration
+                                </FieldLabel>
                                 <Input
                                   value={active.service_details?.duration || ""}
                                   onChange={(e) =>
@@ -1235,7 +1349,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Tests Streams run (e.g., '6 streams')">Forensic Streams</FieldLabel>
+                                <FieldLabel hint="Tests Streams run (e.g., '6 streams')">
+                                  Forensic Streams
+                                </FieldLabel>
                                 <Input
                                   value={active.service_details?.tests || ""}
                                   onChange={(e) =>
@@ -1248,7 +1364,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Coupons extracted (e.g. '94 coupons')">Samples Extracted</FieldLabel>
+                                <FieldLabel hint="Coupons extracted (e.g. '94 coupons')">
+                                  Samples Extracted
+                                </FieldLabel>
                                 <Input
                                   value={active.service_details?.samples || ""}
                                   onChange={(e) =>
@@ -1261,7 +1379,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                                <FieldLabel hint="Deliverable Dossier (e.g., 'CQA Report')">Audit Deliverable</FieldLabel>
+                                <FieldLabel hint="Deliverable Dossier (e.g., 'CQA Report')">
+                                  Audit Deliverable
+                                </FieldLabel>
                                 <Input
                                   value={active.service_details?.deliverable || ""}
                                   onChange={(e) =>
@@ -1277,7 +1397,9 @@ export function ProjectsTemplatesEditor() {
 
                             <div className="grid grid-cols-3 gap-4 border-t border-border pt-4">
                               <div className="space-y-1.5 col-span-3">
-                                <FieldLabel hint="Audit and review methodology challenges details">Audit Challenge / Methodology Intro</FieldLabel>
+                                <FieldLabel hint="Audit and review methodology challenges details">
+                                  Audit Challenge / Methodology Intro
+                                </FieldLabel>
                                 <Textarea
                                   value={active.service_details?.challenge_description || ""}
                                   onChange={(e) =>
@@ -1291,7 +1413,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-3 md:col-span-1.5">
-                                <FieldLabel hint="Laboratory testing programme details">Laboratory Testing Description</FieldLabel>
+                                <FieldLabel hint="Laboratory testing programme details">
+                                  Laboratory Testing Description
+                                </FieldLabel>
                                 <Textarea
                                   value={active.service_details?.testing_description || ""}
                                   onChange={(e) =>
@@ -1305,7 +1429,9 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                               <div className="space-y-1.5 col-span-3 md:col-span-1.5">
-                                <FieldLabel hint="Forensic coupon findings registers explanation">Findings Register Description</FieldLabel>
+                                <FieldLabel hint="Forensic coupon findings registers explanation">
+                                  Findings Register Description
+                                </FieldLabel>
                                 <Textarea
                                   value={active.service_details?.findings_description || ""}
                                   onChange={(e) =>
@@ -1406,7 +1532,12 @@ function ProductsEditor({ items, onChange }: { items: any[]; onChange: (items: a
         <span className="text-xs font-bold text-muted-foreground uppercase">
           Products list ({items.length})
         </span>
-        <Button variant="ghost" size="sm" onClick={add} className="h-7 text-xs text-primary gap-1 cursor-pointer">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={add}
+          className="h-7 text-xs text-primary gap-1 cursor-pointer"
+        >
           <Plus className="h-3.5 w-3.5" /> Add Product
         </Button>
       </div>
@@ -1418,9 +1549,14 @@ function ProductsEditor({ items, onChange }: { items: any[]; onChange: (items: a
             <div className="space-y-3.5">
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <label className="text-[9px] font-bold uppercase text-primary block">Link Database Product</label>
+                  <label className="text-[9px] font-bold uppercase text-primary block">
+                    Link Database Product
+                  </label>
                   {it.productId && (
-                    <Button variant="ghost" size="icon" className="h-4.5 w-4.5 text-destructive hover:bg-destructive/10 rounded cursor-pointer"
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-4.5 w-4.5 text-destructive hover:bg-destructive/10 rounded cursor-pointer"
                       onClick={() => {
                         const next = [...items];
                         delete next[idx].productId;
@@ -1429,37 +1565,50 @@ function ProductsEditor({ items, onChange }: { items: any[]; onChange: (items: a
                         delete next[idx].short_description;
                         onChange(next);
                         toast.info("Database product link removed.");
-                      }} title="Clear product link">
+                      }}
+                      title="Clear product link"
+                    >
                       <X className="h-3 w-3" strokeWidth={3} />
                     </Button>
                   )}
                 </div>
-                <ProductSelector excludeIds={excludeIds} onSelect={(prod) => {
-                  const next = [...items];
-                  next[idx] = {
-                    ...next[idx],
-                    productId: prod.id,
-                    productSlug: prod.slug,
-                    name: prod.name,
-                    category: prod.product_categories?.name || next[idx].category || "",
-                    image_url: prod.image_url,
-                    short_description: prod.short_description,
-                  };
-                  onChange(next);
-                }} />
+                <ProductSelector
+                  excludeIds={excludeIds}
+                  onSelect={(prod) => {
+                    const next = [...items];
+                    next[idx] = {
+                      ...next[idx],
+                      productId: prod.id,
+                      productSlug: prod.slug,
+                      name: prod.name,
+                      category: prod.product_categories?.name || next[idx].category || "",
+                      image_url: prod.image_url,
+                      short_description: prod.short_description,
+                    };
+                    onChange(next);
+                  }}
+                />
               </div>
 
               {it.productId && (
                 <div className="flex gap-2.5 p-2.5 rounded-lg border border-border bg-surface/50 text-[11px] animate-in fade-in duration-200">
                   <div className="h-10 w-10 shrink-0 rounded border border-border bg-card flex items-center justify-center text-primary overflow-hidden">
-                    {it.image_url
-                      ? <img src={it.image_url} alt={it.name} className="h-full w-full object-cover" />
-                      : <Layers className="h-4 w-4 opacity-40" />}
+                    {it.image_url ? (
+                      <img
+                        src={it.image_url}
+                        alt={it.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <Layers className="h-4 w-4 opacity-40" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold text-foreground truncate">{it.name}</div>
                     {it.short_description && (
-                      <p className="text-[10px] text-muted-foreground leading-normal mt-0.5 line-clamp-2">{it.short_description}</p>
+                      <p className="text-[10px] text-muted-foreground leading-normal mt-0.5 line-clamp-2">
+                        {it.short_description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -1469,42 +1618,81 @@ function ProductsEditor({ items, onChange }: { items: any[]; onChange: (items: a
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <MicroLabel>Category</MicroLabel>
-                    <Input value={it.category || ""} onChange={(e) => updateByKey(idx, "category", e.target.value)} className="h-7 text-xs" placeholder="e.g. Geomembrane" />
+                    <Input
+                      value={it.category || ""}
+                      onChange={(e) => updateByKey(idx, "category", e.target.value)}
+                      className="h-7 text-xs"
+                      placeholder="e.g. Geomembrane"
+                    />
                   </div>
                   <div>
                     <MicroLabel>Quantity</MicroLabel>
-                    <Input value={it.qty || ""} onChange={(e) => updateByKey(idx, "qty", e.target.value)} className="h-7 text-xs" placeholder="e.g. 240,000 mÂ²" />
+                    <Input
+                      value={it.qty || ""}
+                      onChange={(e) => updateByKey(idx, "qty", e.target.value)}
+                      className="h-7 text-xs"
+                      placeholder="e.g. 240,000 mÂ²"
+                    />
                   </div>
                 </div>
                 <div>
                   <MicroLabel>Product Name (Override)</MicroLabel>
-                  <Input value={it.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. GSEÂ® Smooth HDPE 2.0 mm" />
+                  <Input
+                    value={it.name || ""}
+                    onChange={(e) => updateByKey(idx, "name", e.target.value)}
+                    className="h-7 text-xs font-semibold"
+                    placeholder="e.g. GSEÂ® Smooth HDPE 2.0 mm"
+                  />
                 </div>
                 <div>
                   <MicroLabel>Mill Origin</MicroLabel>
-                  <Input value={it.origin || ""} onChange={(e) => updateByKey(idx, "origin", e.target.value)} className="h-7 text-xs" placeholder="e.g. EU (Netherlands) or South Africa" />
+                  <Input
+                    value={it.origin || ""}
+                    onChange={(e) => updateByKey(idx, "origin", e.target.value)}
+                    className="h-7 text-xs"
+                    placeholder="e.g. EU (Netherlands) or South Africa"
+                  />
                 </div>
               </div>
             </div>
           </ItemCard>
         ))}
       </div>
-      {items.length === 0 && <EmptyState message='No products associated yet. Click "Add Product".' />}
+      {items.length === 0 && (
+        <EmptyState message='No products associated yet. Click "Add Product".' />
+      )}
     </div>
   );
 }
 
 // â”€â”€â”€ Spec Compliance Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function SpecComplianceEditor({ items, onChange }: { items: any[]; onChange: (items: any[]) => void }) {
+function SpecComplianceEditor({
+  items,
+  onChange,
+}: {
+  items: any[];
+  onChange: (items: any[]) => void;
+}) {
   const { add, updateByKey, remove } = useListEditor(items, onChange, () => ({
-    property: "Thickness", method: "ASTM D5199", spec: "2.00 mm", delivered: "2.06 mm", margin: "+3.0%",
+    property: "Thickness",
+    method: "ASTM D5199",
+    spec: "2.00 mm",
+    delivered: "2.06 mm",
+    margin: "+3.0%",
   }));
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-muted-foreground uppercase">Specifications comparison matrix ({items.length})</span>
-        <Button variant="ghost" size="sm" onClick={add} className="h-7 text-xs text-primary gap-1 cursor-pointer">
+        <span className="text-xs font-bold text-muted-foreground uppercase">
+          Specifications comparison matrix ({items.length})
+        </span>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={add}
+          className="h-7 text-xs text-primary gap-1 cursor-pointer"
+        >
           <Plus className="h-3.5 w-3.5" /> Add Conformity
         </Button>
       </div>
@@ -1513,20 +1701,62 @@ function SpecComplianceEditor({ items, onChange }: { items: any[]; onChange: (it
           <thead className="bg-[#1A1A1A] text-white uppercase font-bold text-[10px]">
             <tr>
               {["Property", "Test Method", "Spec Min", "Delivered", "Margin", ""].map((h) => (
-                <th key={h} className="px-3 py-2 text-left">{h}</th>
+                <th key={h} className="px-3 py-2 text-left">
+                  {h}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-border font-medium">
             {items.map((it, idx) => (
               <tr key={idx} className="hover:bg-surface/30 transition">
-                <td className="p-1 min-w-[120px]"><Input value={it.property || ""} onChange={(e) => updateByKey(idx, "property", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-semibold" placeholder="Thickness" /></td>
-                <td className="p-1 min-w-[100px]"><Input value={it.method || ""} onChange={(e) => updateByKey(idx, "method", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-mono text-muted-foreground" placeholder="ASTM D5199" /></td>
-                <td className="p-1 min-w-[90px]"><Input value={it.spec || ""} onChange={(e) => updateByKey(idx, "spec", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0" placeholder="2.00 mm" /></td>
-                <td className="p-1 min-w-[90px]"><Input value={it.delivered || ""} onChange={(e) => updateByKey(idx, "delivered", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0" placeholder="2.06 mm" /></td>
-                <td className="p-1 min-w-[90px]"><Input value={it.margin || ""} onChange={(e) => updateByKey(idx, "margin", e.target.value)} className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-bold text-emerald-600" placeholder="+3.0% or PASS" /></td>
+                <td className="p-1 min-w-[120px]">
+                  <Input
+                    value={it.property || ""}
+                    onChange={(e) => updateByKey(idx, "property", e.target.value)}
+                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-semibold"
+                    placeholder="Thickness"
+                  />
+                </td>
+                <td className="p-1 min-w-[100px]">
+                  <Input
+                    value={it.method || ""}
+                    onChange={(e) => updateByKey(idx, "method", e.target.value)}
+                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-mono text-muted-foreground"
+                    placeholder="ASTM D5199"
+                  />
+                </td>
+                <td className="p-1 min-w-[90px]">
+                  <Input
+                    value={it.spec || ""}
+                    onChange={(e) => updateByKey(idx, "spec", e.target.value)}
+                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0"
+                    placeholder="2.00 mm"
+                  />
+                </td>
+                <td className="p-1 min-w-[90px]">
+                  <Input
+                    value={it.delivered || ""}
+                    onChange={(e) => updateByKey(idx, "delivered", e.target.value)}
+                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0"
+                    placeholder="2.06 mm"
+                  />
+                </td>
+                <td className="p-1 min-w-[90px]">
+                  <Input
+                    value={it.margin || ""}
+                    onChange={(e) => updateByKey(idx, "margin", e.target.value)}
+                    className="h-7 text-xs border-0 bg-transparent focus-visible:ring-0 font-bold text-emerald-600"
+                    placeholder="+3.0% or PASS"
+                  />
+                </td>
                 <td className="p-1 text-center shrink-0">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => remove(idx)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                    onClick={() => remove(idx)}
+                  >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </td>
@@ -1535,24 +1765,48 @@ function SpecComplianceEditor({ items, onChange }: { items: any[]; onChange: (it
           </tbody>
         </table>
       </div>
-      {items.length === 0 && <EmptyState message='No specifications conformity data. Click "Add Conformity".' />}
+      {items.length === 0 && (
+        <EmptyState message='No specifications conformity data. Click "Add Conformity".' />
+      )}
     </div>
   );
 }
 
 // â”€â”€â”€ QA Checklist Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function ChecklistEditor({ list, onChange }: { list: string[]; onChange: (list: string[]) => void }) {
+function ChecklistEditor({
+  list,
+  onChange,
+}: {
+  list: string[];
+  onChange: (list: string[]) => void;
+}) {
   const add = () => onChange([...list, "New signed CQA item checklist description..."]);
-  const update = (idx: number, val: string) => { const next = [...list]; next[idx] = val; onChange(next); };
+  const update = (idx: number, val: string) => {
+    const next = [...list];
+    next[idx] = val;
+    onChange(next);
+  };
   const remove = (idx: number) => onChange(list.filter((_, i) => i !== idx));
 
   return (
     <div className="space-y-2">
       <div className="space-y-2">
         {list.map((item, idx) => (
-          <div key={idx} className="flex gap-2 items-start bg-surface/50 border border-border rounded-lg p-2 relative group">
-            <Input value={item} onChange={(e) => update(idx, e.target.value)} className="text-xs border-0 bg-transparent focus-visible:ring-0 flex-1 leading-normal py-1" />
-            <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0 cursor-pointer" onClick={() => remove(idx)}>
+          <div
+            key={idx}
+            className="flex gap-2 items-start bg-surface/50 border border-border rounded-lg p-2 relative group"
+          >
+            <Input
+              value={item}
+              onChange={(e) => update(idx, e.target.value)}
+              className="text-xs border-0 bg-transparent focus-visible:ring-0 flex-1 leading-normal py-1"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0 cursor-pointer"
+              onClick={() => remove(idx)}
+            >
               <Trash2 className="h-3.5 w-3.5" />
             </Button>
           </div>
@@ -1577,15 +1831,30 @@ function PhotosEditor({ photos, onChange }: { photos: any[]; onChange: (photos: 
         {photos.map((ph, idx) => (
           <ItemCard key={idx} className="flex flex-col group">
             <ItemDeleteButton onClick={() => remove(idx)} />
-            {ph.url && <div className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border" style={{ backgroundImage: `url(${ph.url})` }} />}
+            {ph.url && (
+              <div
+                className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border"
+                style={{ backgroundImage: `url(${ph.url})` }}
+              />
+            )}
             <div className="space-y-2 flex-grow">
               <div>
                 <MicroLabel>Photo URL</MicroLabel>
-                <Input value={ph.url || ""} onChange={(e) => updateByKey(idx, "url", e.target.value)} className="h-7 text-xs font-mono" placeholder="https://images.unsplash.com/..." />
+                <Input
+                  value={ph.url || ""}
+                  onChange={(e) => updateByKey(idx, "url", e.target.value)}
+                  className="h-7 text-xs font-mono"
+                  placeholder="https://images.unsplash.com/..."
+                />
               </div>
               <div>
                 <MicroLabel>Caption</MicroLabel>
-                <Input value={ph.caption || ""} onChange={(e) => updateByKey(idx, "caption", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. Subgrade compaction acceptance test" />
+                <Input
+                  value={ph.caption || ""}
+                  onChange={(e) => updateByKey(idx, "caption", e.target.value)}
+                  className="h-7 text-xs font-semibold"
+                  placeholder="e.g. Subgrade compaction acceptance test"
+                />
               </div>
             </div>
           </ItemCard>
@@ -1600,7 +1869,10 @@ function PhotosEditor({ photos, onChange }: { photos: any[]; onChange: (photos: 
 // â”€â”€â”€ Route Steps Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function RouteStepsEditor({ steps, onChange }: { steps: any[]; onChange: (steps: any[]) => void }) {
   const { add, updateByKey, remove } = useListEditor(steps, onChange, () => ({
-    stage: "Stage 01", name: "Heerenveen Mill", desc: "Manufactured on spec and sealed.", duration: "D0 - D+3",
+    stage: "Stage 01",
+    name: "Heerenveen Mill",
+    desc: "Manufactured on spec and sealed.",
+    duration: "D0 - D+3",
   }));
 
   return (
@@ -1611,19 +1883,39 @@ function RouteStepsEditor({ steps, onChange }: { steps: any[]; onChange: (steps:
           <div className="grid grid-cols-3 gap-3">
             <div>
               <MicroLabel>Stage Tag</MicroLabel>
-              <Input value={st.stage || ""} onChange={(e) => updateByKey(idx, "stage", e.target.value)} className="h-7 text-xs font-semibold uppercase text-primary" placeholder="e.g. Stage 01" />
+              <Input
+                value={st.stage || ""}
+                onChange={(e) => updateByKey(idx, "stage", e.target.value)}
+                className="h-7 text-xs font-semibold uppercase text-primary"
+                placeholder="e.g. Stage 01"
+              />
             </div>
             <div className="col-span-2">
               <MicroLabel>Name/Checkpoint</MicroLabel>
-              <Input value={st.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. Rotterdam Port or Durban Custom" />
+              <Input
+                value={st.name || ""}
+                onChange={(e) => updateByKey(idx, "name", e.target.value)}
+                className="h-7 text-xs font-bold"
+                placeholder="e.g. Rotterdam Port or Durban Custom"
+              />
             </div>
             <div className="col-span-2">
               <MicroLabel>Description details</MicroLabel>
-              <Input value={st.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="h-7 text-xs" placeholder="e.g. Sealed and packed containers logged." />
+              <Input
+                value={st.desc || ""}
+                onChange={(e) => updateByKey(idx, "desc", e.target.value)}
+                className="h-7 text-xs"
+                placeholder="e.g. Sealed and packed containers logged."
+              />
             </div>
             <div>
               <MicroLabel>Duration</MicroLabel>
-              <Input value={st.duration || ""} onChange={(e) => updateByKey(idx, "duration", e.target.value)} className="h-7 text-xs font-mono font-bold" placeholder="e.g. D+3 - D+24" />
+              <Input
+                value={st.duration || ""}
+                onChange={(e) => updateByKey(idx, "duration", e.target.value)}
+                className="h-7 text-xs font-mono font-bold"
+                placeholder="e.g. D+3 - D+24"
+              />
             </div>
           </div>
         </ItemCard>
@@ -1635,9 +1927,17 @@ function RouteStepsEditor({ steps, onChange }: { steps: any[]; onChange: (steps:
 }
 
 // â”€â”€â”€ Logistics Documents Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function DocumentChecklistEditor({ docs, onChange }: { docs: any[]; onChange: (docs: any[]) => void }) {
+function DocumentChecklistEditor({
+  docs,
+  onChange,
+}: {
+  docs: any[];
+  onChange: (docs: any[]) => void;
+}) {
   const { add, updateByKey, remove } = useListEditor(docs, onChange, () => ({
-    title: "SADC Certificate", desc: "Preferential custom duties Form CO clearance.", status: "Issued",
+    title: "SADC Certificate",
+    desc: "Preferential custom duties Form CO clearance.",
+    status: "Issued",
   }));
 
   return (
@@ -1650,16 +1950,31 @@ function DocumentChecklistEditor({ docs, onChange }: { docs: any[]; onChange: (d
               <div className="flex gap-2">
                 <div className="flex-1">
                   <MicroLabel>Document Title</MicroLabel>
-                  <Input value={doc.title || ""} onChange={(e) => updateByKey(idx, "title", e.target.value)} className="h-7 text-xs font-bold font-display" placeholder="e.g. SADC Certificate of Origin" />
+                  <Input
+                    value={doc.title || ""}
+                    onChange={(e) => updateByKey(idx, "title", e.target.value)}
+                    className="h-7 text-xs font-bold font-display"
+                    placeholder="e.g. SADC Certificate of Origin"
+                  />
                 </div>
                 <div>
                   <MicroLabel>Status</MicroLabel>
-                  <Input value={doc.status || ""} onChange={(e) => updateByKey(idx, "status", e.target.value)} className="h-7 text-xs w-20 font-bold text-center text-primary uppercase" placeholder="Issued" />
+                  <Input
+                    value={doc.status || ""}
+                    onChange={(e) => updateByKey(idx, "status", e.target.value)}
+                    className="h-7 text-xs w-20 font-bold text-center text-primary uppercase"
+                    placeholder="Issued"
+                  />
                 </div>
               </div>
               <div>
                 <MicroLabel>Summary / Requirements</MicroLabel>
-                <Textarea value={doc.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="min-h-[50px] text-xs resize-none leading-normal" placeholder="e.g. Issued per extrusion batch to secure customs pref rates." />
+                <Textarea
+                  value={doc.desc || ""}
+                  onChange={(e) => updateByKey(idx, "desc", e.target.value)}
+                  className="min-h-[50px] text-xs resize-none leading-normal"
+                  placeholder="e.g. Issued per extrusion batch to secure customs pref rates."
+                />
               </div>
             </div>
           </ItemCard>
@@ -1672,9 +1987,18 @@ function DocumentChecklistEditor({ docs, onChange }: { docs: any[]; onChange: (d
 }
 
 // â”€â”€â”€ Forensic Protocol Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function ForensicProtocolEditor({ protocols, onChange }: { protocols: any[]; onChange: (protocols: any[]) => void }) {
+function ForensicProtocolEditor({
+  protocols,
+  onChange,
+}: {
+  protocols: any[];
+  onChange: (protocols: any[]) => void;
+}) {
   const { add, updateByKey, remove } = useListEditor(protocols, onChange, () => ({
-    step: "01", name: "Visual Review", desc: "Walkover photo mapping log.", output: "Defects list log",
+    step: "01",
+    name: "Visual Review",
+    desc: "Walkover photo mapping log.",
+    output: "Defects list log",
   }));
 
   return (
@@ -1685,19 +2009,40 @@ function ForensicProtocolEditor({ protocols, onChange }: { protocols: any[]; onC
           <div className="grid grid-cols-3 gap-3">
             <div>
               <MicroLabel>Step Index</MicroLabel>
-              <Input maxLength={2} value={pr.step || ""} onChange={(e) => updateByKey(idx, "step", e.target.value)} className="h-7 text-xs font-mono font-bold text-center w-16 text-primary" placeholder="01" />
+              <Input
+                maxLength={2}
+                value={pr.step || ""}
+                onChange={(e) => updateByKey(idx, "step", e.target.value)}
+                className="h-7 text-xs font-mono font-bold text-center w-16 text-primary"
+                placeholder="01"
+              />
             </div>
             <div className="col-span-2">
               <MicroLabel>Protocol Stage Name</MicroLabel>
-              <Input value={pr.name || ""} onChange={(e) => updateByKey(idx, "name", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. Visual Embankment Audit" />
+              <Input
+                value={pr.name || ""}
+                onChange={(e) => updateByKey(idx, "name", e.target.value)}
+                className="h-7 text-xs font-bold"
+                placeholder="e.g. Visual Embankment Audit"
+              />
             </div>
             <div className="col-span-2">
               <MicroLabel>Detailed description</MicroLabel>
-              <Input value={pr.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="h-7 text-xs leading-relaxed" placeholder="Detail visual walks, GPS maps check..." />
+              <Input
+                value={pr.desc || ""}
+                onChange={(e) => updateByKey(idx, "desc", e.target.value)}
+                className="h-7 text-xs leading-relaxed"
+                placeholder="Detail visual walks, GPS maps check..."
+              />
             </div>
             <div>
               <MicroLabel>Deliverable Output</MicroLabel>
-              <Input value={pr.output || ""} onChange={(e) => updateByKey(idx, "output", e.target.value)} className="h-7 text-xs font-bold text-primary" placeholder="e.g. Visual defects logs" />
+              <Input
+                value={pr.output || ""}
+                onChange={(e) => updateByKey(idx, "output", e.target.value)}
+                className="h-7 text-xs font-bold text-primary"
+                placeholder="e.g. Visual defects logs"
+              />
             </div>
           </div>
         </ItemCard>
@@ -1709,9 +2054,18 @@ function ForensicProtocolEditor({ protocols, onChange }: { protocols: any[]; onC
 }
 
 // â”€â”€â”€ Forensic Findings Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function FindingsRegisterEditor({ findings, onChange }: { findings: any[]; onChange: (findings: any[]) => void }) {
+function FindingsRegisterEditor({
+  findings,
+  onChange,
+}: {
+  findings: any[];
+  onChange: (findings: any[]) => void;
+}) {
   const { add, updateByKey, remove } = useListEditor(findings, onChange, () => ({
-    area: "Main Pad", title: "UV Degradation Check", desc: "Antioxidants Standard OIT exceeds limits.", status: "PASS",
+    area: "Main Pad",
+    title: "UV Degradation Check",
+    desc: "Antioxidants Standard OIT exceeds limits.",
+    status: "PASS",
   }));
 
   return (
@@ -1724,12 +2078,22 @@ function FindingsRegisterEditor({ findings, onChange }: { findings: any[]; onCha
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <MicroLabel>Physical Area</MicroLabel>
-                  <Input value={fn.area || ""} onChange={(e) => updateByKey(idx, "area", e.target.value)} className="h-7 text-xs font-semibold" placeholder="e.g. Embankment Sump" />
+                  <Input
+                    value={fn.area || ""}
+                    onChange={(e) => updateByKey(idx, "area", e.target.value)}
+                    className="h-7 text-xs font-semibold"
+                    placeholder="e.g. Embankment Sump"
+                  />
                 </div>
                 <div>
                   <MicroLabel>Status Audit</MicroLabel>
-                  <Select value={fn.status || "PASS"} onValueChange={(v) => updateByKey(idx, "status", v)}>
-                    <SelectTrigger className="h-7 text-[10px] font-bold"><SelectValue /></SelectTrigger>
+                  <Select
+                    value={fn.status || "PASS"}
+                    onValueChange={(v) => updateByKey(idx, "status", v)}
+                  >
+                    <SelectTrigger className="h-7 text-[10px] font-bold">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="PASS">PASS (Green)</SelectItem>
                       <SelectItem value="ATTENTION">ATTENTION (Orange)</SelectItem>
@@ -1740,11 +2104,21 @@ function FindingsRegisterEditor({ findings, onChange }: { findings: any[]; onCha
               </div>
               <div>
                 <MicroLabel>Audit Title</MicroLabel>
-                <Input value={fn.title || ""} onChange={(e) => updateByKey(idx, "title", e.target.value)} className="h-7 text-xs font-bold" placeholder="e.g. UV Aging & Standard OIT" />
+                <Input
+                  value={fn.title || ""}
+                  onChange={(e) => updateByKey(idx, "title", e.target.value)}
+                  className="h-7 text-xs font-bold"
+                  placeholder="e.g. UV Aging & Standard OIT"
+                />
               </div>
               <div>
                 <MicroLabel>Findings Details</MicroLabel>
-                <Textarea value={fn.desc || ""} onChange={(e) => updateByKey(idx, "desc", e.target.value)} className="min-h-[60px] text-xs leading-normal resize-none" placeholder="Detail the audit checks results..." />
+                <Textarea
+                  value={fn.desc || ""}
+                  onChange={(e) => updateByKey(idx, "desc", e.target.value)}
+                  className="min-h-[60px] text-xs leading-normal resize-none"
+                  placeholder="Detail the audit checks results..."
+                />
               </div>
             </div>
           </ItemCard>

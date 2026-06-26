@@ -25,34 +25,26 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
       "text-[10px] font-bold uppercase tracking-widest text-white/50 mb-6": variant === "tiny",
       "text-xs text-surface-dark-foreground/70 mb-5 gap-1.5": variant === "contacts",
     },
-    className
+    className,
   );
 
-  const linkClasses = cn(
-    "transition-colors",
-    {
-      "hover:text-primary": variant === "default" || variant === "contacts" || variant === "tiny",
-      "hover:text-white": variant === "primary-bold",
-    }
-  );
+  const linkClasses = cn("transition-colors", {
+    "hover:text-primary": variant === "default" || variant === "contacts" || variant === "tiny",
+    "hover:text-white": variant === "primary-bold",
+  });
 
-  const chevronClasses = cn(
-    "h-3 w-3 shrink-0",
-    {
-      "text-surface-dark-foreground/50": variant === "default",
-      "text-white/50": variant === "primary-bold",
-      "text-white/30": variant === "tiny",
-      "text-surface-dark-foreground/50 h-3 w-3": variant === "contacts",
-    }
-  );
+  const chevronClasses = cn("h-3 w-3 shrink-0", {
+    "text-surface-dark-foreground/50": variant === "default",
+    "text-white/50": variant === "primary-bold",
+    "text-white/30": variant === "tiny",
+    "text-surface-dark-foreground/50 h-3 w-3": variant === "contacts",
+  });
 
-  const currentItemClasses = cn(
-    {
-      "text-primary": variant === "default" || variant === "tiny",
-      "text-white": variant === "primary-bold",
-      "text-surface-dark-foreground": variant === "contacts",
-    }
-  );
+  const currentItemClasses = cn({
+    "text-primary": variant === "default" || variant === "tiny",
+    "text-white": variant === "primary-bold",
+    "text-surface-dark-foreground": variant === "contacts",
+  });
 
   return (
     <nav className={containerClasses} aria-label="breadcrumb">
@@ -63,9 +55,7 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
           <Fragment key={idx}>
             {idx > 0 && <ChevronRight className={chevronClasses} />}
             {isLast || !item.to ? (
-              <span className={isLast ? currentItemClasses : linkClasses}>
-                {item.label}
-              </span>
+              <span className={isLast ? currentItemClasses : linkClasses}>{item.label}</span>
             ) : (
               <Link
                 to={item.to as any}

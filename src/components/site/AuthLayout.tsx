@@ -51,9 +51,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
         {/* Form content */}
         <div className="flex flex-1 items-center justify-center px-6 py-12 sm:px-10 lg:px-16">
-          <div className="w-full max-w-md animate-auth-fade-in">
-            {children}
-          </div>
+          <div className="w-full max-w-md animate-auth-fade-in">{children}</div>
         </div>
       </div>
     </section>

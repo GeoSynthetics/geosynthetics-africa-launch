@@ -58,7 +58,10 @@ function parseList(v: unknown): string[] {
 
 export const Route = createFileRoute("/catalogue/")({
   validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
-    const sort = typeof raw.sort === "string" && VALID_SORTS.has(raw.sort) ? (raw.sort as SortValue) : "relevant";
+    const sort =
+      typeof raw.sort === "string" && VALID_SORTS.has(raw.sort)
+        ? (raw.sort as SortValue)
+        : "relevant";
     return {
       q: typeof raw.q === "string" ? raw.q : "",
       cats: parseList(raw.cats),
@@ -71,7 +74,11 @@ export const Route = createFileRoute("/catalogue/")({
   head: () => ({
     meta: [
       { title: "Catalogue — Geosynthetics Africa" },
-      { name: "description", content: "Search and filter our full catalogue of engineered geosynthetic materials by category, manufacturer and technical specification." },
+      {
+        name: "description",
+        content:
+          "Search and filter our full catalogue of engineered geosynthetic materials by category, manufacturer and technical specification.",
+      },
       { property: "og:title", content: "Catalogue — Geosynthetics Africa" },
     ],
   }),
@@ -103,7 +110,11 @@ interface FilterOption {
 }
 
 function formatZAR(n: number) {
-  return new Intl.NumberFormat("en-ZA", { style: "currency", currency: "ZAR", maximumFractionDigits: 0 }).format(n);
+  return new Intl.NumberFormat("en-ZA", {
+    style: "currency",
+    currency: "ZAR",
+    maximumFractionDigits: 0,
+  }).format(n);
 }
 
 function CataloguePage() {
@@ -152,10 +163,11 @@ function CataloguePage() {
       const trimmed = searchInput.trim();
       if (trimmed === q) return;
       void navigate({
-        search: (prev: Record<string, unknown>) => (({
-          ...prev,
-          q: trimmed || undefined
-        }) as never),
+        search: (prev: Record<string, unknown>) =>
+          ({
+            ...prev,
+            q: trimmed || undefined,
+          }) as never,
         replace: true,
       });
     }, 300);
@@ -307,11 +319,7 @@ function CataloguePage() {
   };
 
   const activeFilterCount =
-    selectedCats.length +
-    selectedMans.length +
-    (q ? 1 : 0) +
-    (instock ? 1 : 0) +
-    (onsale ? 1 : 0);
+    selectedCats.length + selectedMans.length + (q ? 1 : 0) + (instock ? 1 : 0) + (onsale ? 1 : 0);
 
   return (
     <>
@@ -350,7 +358,11 @@ function CataloguePage() {
                 </button>
               )}
             </div>
-            <Button type="submit" size="lg" className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide h-12">
+            <Button
+              type="submit"
+              size="lg"
+              className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide h-12"
+            >
               Search
             </Button>
           </form>
@@ -389,7 +401,11 @@ function CataloguePage() {
                 )}
               </div>
 
-              <Accordion type="multiple" defaultValue={["category", "manufacturer", "status"]} className="w-full space-y-1">
+              <Accordion
+                type="multiple"
+                defaultValue={["category", "manufacturer", "status"]}
+                className="w-full space-y-1"
+              >
                 {/* Status / Quick Toggles */}
                 <AccordionItem value="status" className="border-b border-border">
                   <AccordionTrigger className="hover:no-underline py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
@@ -399,7 +415,10 @@ function CataloguePage() {
                     <div className="space-y-4">
                       {/* In Stock Toggle */}
                       <div className="flex items-center justify-between">
-                        <label htmlFor="instock-toggle" className="text-sm cursor-pointer select-none text-muted-foreground hover:text-foreground font-medium transition-colors">
+                        <label
+                          htmlFor="instock-toggle"
+                          className="text-sm cursor-pointer select-none text-muted-foreground hover:text-foreground font-medium transition-colors"
+                        >
                           In Stock Only
                         </label>
                         <Switch
@@ -412,11 +431,13 @@ function CataloguePage() {
                       {/* On Sale Toggle */}
                       <div className="flex items-center justify-between">
                         <div className="flex flex-col gap-0.5">
-                          <label 
-                            htmlFor="onsale-toggle" 
+                          <label
+                            htmlFor="onsale-toggle"
                             className={cn(
                               "text-sm select-none font-medium transition-colors",
-                              isAuthenticated ? "text-muted-foreground hover:text-foreground cursor-pointer" : "text-muted-foreground/50 cursor-not-allowed"
+                              isAuthenticated
+                                ? "text-muted-foreground hover:text-foreground cursor-pointer"
+                                : "text-muted-foreground/50 cursor-not-allowed",
                             )}
                           >
                             On Sale Only
@@ -478,9 +499,12 @@ function CataloguePage() {
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-1">
                   Active Filters:
                 </span>
-                
+
                 {q && (
-                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                  <Badge
+                    variant="secondary"
+                    className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
+                  >
                     Search: "{q}"
                     <button
                       type="button"
@@ -498,7 +522,11 @@ function CataloguePage() {
                 {selectedCats.map((catId) => {
                   const catName = categories.find((c) => c.id === catId)?.name || "Category";
                   return (
-                    <Badge key={catId} variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                    <Badge
+                      key={catId}
+                      variant="secondary"
+                      className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
+                    >
                       {catName}
                       <button
                         type="button"
@@ -514,7 +542,11 @@ function CataloguePage() {
                 {selectedMans.map((manId) => {
                   const manName = manufacturers.find((m) => m.id === manId)?.name || "Manufacturer";
                   return (
-                    <Badge key={manId} variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                    <Badge
+                      key={manId}
+                      variant="secondary"
+                      className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
+                    >
                       {manName}
                       <button
                         type="button"
@@ -528,7 +560,10 @@ function CataloguePage() {
                 })}
 
                 {instock && (
-                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                  <Badge
+                    variant="secondary"
+                    className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
+                  >
                     In Stock Only
                     <button
                       type="button"
@@ -541,7 +576,10 @@ function CataloguePage() {
                 )}
 
                 {onsale && (
-                  <Badge variant="secondary" className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border">
+                  <Badge
+                    variant="secondary"
+                    className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
+                  >
                     On Sale Only
                     <button
                       type="button"
@@ -566,22 +604,22 @@ function CataloguePage() {
 
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div className="text-xs text-muted-foreground">
-                {initialLoad ? "Loading…" : `Showing ${products.length} product${products.length === 1 ? "" : "s"}`}
+                {initialLoad
+                  ? "Loading…"
+                  : `Showing ${products.length} product${products.length === 1 ? "" : "s"}`}
               </div>
               <div className="flex items-center gap-2">
                 <label className="text-xs uppercase tracking-wider text-muted-foreground">
                   Sort by
                 </label>
-                <Select
-                  value={sort}
-                  onValueChange={(v) => updateSearch({ sort: v as SortValue })}
-                >
+                <Select value={sort} onValueChange={(v) => updateSearch({ sort: v as SortValue })}>
                   <SelectTrigger className="h-9 w-[200px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {SORT_OPTIONS.filter(
-                      (o) => isAuthenticated || (o.value !== "price_asc" && o.value !== "price_desc"),
+                      (o) =>
+                        isAuthenticated || (o.value !== "price_asc" && o.value !== "price_desc"),
                     ).map((o) => (
                       <SelectItem key={o.value} value={o.value}>
                         {o.label}
@@ -655,7 +693,7 @@ function FilterGroup({
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredOptions = options.filter((o) =>
-    o.name.toLowerCase().includes(searchQuery.toLowerCase())
+    o.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const visible = expanded ? filteredOptions : filteredOptions.slice(0, 8);
@@ -702,7 +740,7 @@ function FilterGroup({
                 htmlFor={`filter-${o.id}`}
                 className={cn(
                   "text-sm font-medium leading-none cursor-pointer select-none transition-colors hover:text-primary-hover flex-1",
-                  selected.has(o.id) ? "text-foreground font-bold" : "text-muted-foreground"
+                  selected.has(o.id) ? "text-foreground font-bold" : "text-muted-foreground",
                 )}
               >
                 {o.name}
@@ -755,7 +793,10 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
           </Badge>
         )}
         {!inStock && (
-          <Badge variant="secondary" className="absolute top-2.5 right-2.5 font-bold uppercase tracking-wider text-[10px] shadow-sm">
+          <Badge
+            variant="secondary"
+            className="absolute top-2.5 right-2.5 font-bold uppercase tracking-wider text-[10px] shadow-sm"
+          >
             Out of stock
           </Badge>
         )}
@@ -774,15 +815,21 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
           {p.name}
         </h3>
         {p.short_description && (
-          <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed">{p.short_description}</p>
+          <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed">
+            {p.short_description}
+          </p>
         )}
-        {p.sku && <div className="text-[10px] text-muted-foreground/60 mt-auto font-mono">SKU: {p.sku}</div>}
+        {p.sku && (
+          <div className="text-[10px] text-muted-foreground/60 mt-auto font-mono">SKU: {p.sku}</div>
+        )}
         {isAuthenticated ? (
           (p.price !== null || p.sale_price !== null) && (
             <div className="flex items-baseline gap-2 mt-1">
               {onSale ? (
                 <>
-                  <span className="font-bold text-primary text-base">{formatZAR(p.sale_price!)}</span>
+                  <span className="font-bold text-primary text-base">
+                    {formatZAR(p.sale_price!)}
+                  </span>
                   <span className="text-xs text-muted-foreground/60 line-through">
                     {formatZAR(p.price!)}
                   </span>
@@ -796,7 +843,10 @@ function ProductCard({ p, isAuthenticated }: { p: CatalogueProduct; isAuthentica
           )
         ) : (
           <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/75">
-            <Link to="/login" className="text-primary hover:text-primary-hover hover:underline">Sign in</Link> to view pricing
+            <Link to="/login" className="text-primary hover:text-primary-hover hover:underline">
+              Sign in
+            </Link>{" "}
+            to view pricing
           </div>
         )}
       </div>

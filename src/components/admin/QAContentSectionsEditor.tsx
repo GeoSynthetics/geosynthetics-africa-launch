@@ -2,8 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Plus, Trash2, GripVertical, ChevronUp, ChevronDown,
-  CheckCircle, FileText, List, MessageSquare, Table,
+  Plus,
+  Trash2,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
+  CheckCircle,
+  FileText,
+  List,
+  MessageSquare,
+  Table,
 } from "lucide-react";
 import { FieldLabel } from "./TemplateEditorShared";
 
@@ -23,11 +31,36 @@ export type ContentSection = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SECTION_TYPES = [
-  { value: "text",      label: "Text Block",     icon: FileText,      hint: "A heading with a paragraph of body text." },
-  { value: "checklist", label: "Checklist",       icon: CheckCircle,   hint: "A bulleted list of items with checkmarks." },
-  { value: "numbered",  label: "Numbered Steps",  icon: List,          hint: "A numbered list with title + description per item." },
-  { value: "callout",   label: "Callout Box",     icon: MessageSquare, hint: "A dark highlighted callout panel with heading + body." },
-  { value: "table",     label: "Data Table",      icon: Table,         hint: "A table with custom column headers and rows." },
+  {
+    value: "text",
+    label: "Text Block",
+    icon: FileText,
+    hint: "A heading with a paragraph of body text.",
+  },
+  {
+    value: "checklist",
+    label: "Checklist",
+    icon: CheckCircle,
+    hint: "A bulleted list of items with checkmarks.",
+  },
+  {
+    value: "numbered",
+    label: "Numbered Steps",
+    icon: List,
+    hint: "A numbered list with title + description per item.",
+  },
+  {
+    value: "callout",
+    label: "Callout Box",
+    icon: MessageSquare,
+    hint: "A dark highlighted callout panel with heading + body.",
+  },
+  {
+    value: "table",
+    label: "Data Table",
+    icon: Table,
+    hint: "A table with custom column headers and rows.",
+  },
 ] as const;
 
 // ─── Section-level helpers ────────────────────────────────────────────────────
@@ -50,27 +83,45 @@ function ChecklistSectionBody({
     next[iIdx] = val;
     onUpdate(sIdx, { items: next });
   };
-  const remove = (iIdx: number) =>
-    onUpdate(sIdx, { items: items.filter((_, i) => i !== iIdx) });
+  const remove = (iIdx: number) => onUpdate(sIdx, { items: items.filter((_, i) => i !== iIdx) });
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-[10px] font-bold uppercase text-muted-foreground">Checklist Items</label>
-        <Button variant="ghost" size="sm" className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer" onClick={add}>
+        <label className="text-[10px] font-bold uppercase text-muted-foreground">
+          Checklist Items
+        </label>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer"
+          onClick={add}
+        >
           <Plus className="h-2.5 w-2.5" /> Add Item
         </Button>
       </div>
       {items.map((item, iIdx) => (
         <div key={iIdx} className="flex gap-2 items-center">
           <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-          <Input value={item} onChange={(e) => update(iIdx, e.target.value)} className="text-sm h-7 flex-1" placeholder="Checklist item..." />
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => remove(iIdx)}>
+          <Input
+            value={item}
+            onChange={(e) => update(iIdx, e.target.value)}
+            className="text-sm h-7 flex-1"
+            placeholder="Checklist item..."
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer"
+            onClick={() => remove(iIdx)}
+          >
             <Trash2 className="h-3 w-3" />
           </Button>
         </div>
       ))}
-      {items.length === 0 && <p className="text-xs text-muted-foreground italic">No items — click Add Item.</p>}
+      {items.length === 0 && (
+        <p className="text-xs text-muted-foreground italic">No items — click Add Item.</p>
+      )}
     </div>
   );
 }
@@ -93,21 +144,28 @@ function NumberedSectionBody({
     next[iIdx] = { ...next[iIdx], [key]: val };
     onUpdate(sIdx, { items: next });
   };
-  const remove = (iIdx: number) =>
-    onUpdate(sIdx, { items: items.filter((_, i) => i !== iIdx) });
+  const remove = (iIdx: number) => onUpdate(sIdx, { items: items.filter((_, i) => i !== iIdx) });
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-[10px] font-bold uppercase text-muted-foreground">Steps / Items</label>
-        <Button variant="ghost" size="sm" className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer" onClick={add}>
+        <label className="text-[10px] font-bold uppercase text-muted-foreground">
+          Steps / Items
+        </label>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-5 text-[10px] text-primary gap-0.5 cursor-pointer"
+          onClick={add}
+        >
           <Plus className="h-2.5 w-2.5" /> Add Step
         </Button>
       </div>
       {items.map((item, iIdx) => (
         <div key={iIdx} className="border border-border rounded p-2 bg-card space-y-1.5 relative">
           <Button
-            variant="ghost" size="icon"
+            variant="ghost"
+            size="icon"
             className="absolute top-1 right-1 h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
             onClick={() => remove(iIdx)}
           >
@@ -132,7 +190,9 @@ function NumberedSectionBody({
           />
         </div>
       ))}
-      {items.length === 0 && <p className="text-xs text-muted-foreground italic">No steps — click Add Step.</p>}
+      {items.length === 0 && (
+        <p className="text-xs text-muted-foreground italic">No steps — click Add Step.</p>
+      )}
     </div>
   );
 }
@@ -152,8 +212,7 @@ function TableSectionBody({
   const addRow = () => onUpdate(sIdx, { rows: [...rows, Array(headers.length).fill("")] });
   const addCol = () =>
     onUpdate(sIdx, { headers: [...headers, "New Col"], rows: rows.map((r) => [...r, ""]) });
-  const removeRow = (i: number) =>
-    onUpdate(sIdx, { rows: rows.filter((_, idx) => idx !== i) });
+  const removeRow = (i: number) => onUpdate(sIdx, { rows: rows.filter((_, idx) => idx !== i) });
   const removeCol = (j: number) =>
     onUpdate(sIdx, {
       headers: headers.filter((_, idx) => idx !== j),
@@ -176,10 +235,20 @@ function TableSectionBody({
       <div className="flex items-center justify-between">
         <label className="text-[10px] font-bold uppercase text-muted-foreground">Table Data</label>
         <div className="flex gap-1">
-          <Button variant="outline" size="sm" className="h-5 text-[10px] gap-0.5 cursor-pointer" onClick={addCol}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-5 text-[10px] gap-0.5 cursor-pointer"
+            onClick={addCol}
+          >
             <Plus className="h-2.5 w-2.5" /> Column
           </Button>
-          <Button variant="outline" size="sm" className="h-5 text-[10px] gap-0.5 cursor-pointer" onClick={addRow}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-5 text-[10px] gap-0.5 cursor-pointer"
+            onClick={addRow}
+          >
             <Plus className="h-2.5 w-2.5" /> Row
           </Button>
         </div>
@@ -189,14 +258,22 @@ function TableSectionBody({
           <thead>
             <tr className="bg-surface-dark/90">
               {headers.map((h, j) => (
-                <th key={j} className="p-1.5 border-r border-border/50 last:border-r-0 min-w-[100px]">
+                <th
+                  key={j}
+                  className="p-1.5 border-r border-border/50 last:border-r-0 min-w-[100px]"
+                >
                   <div className="flex items-center gap-1">
                     <Input
                       value={h}
                       onChange={(e) => updateHeader(j, e.target.value)}
                       className="h-5 text-xs border-0 bg-transparent font-bold p-0 text-foreground focus-visible:ring-0"
                     />
-                    <Button variant="ghost" size="icon" className="h-4 w-4 text-destructive/70 hover:text-destructive shrink-0 cursor-pointer" onClick={() => removeCol(j)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-4 w-4 text-destructive/70 hover:text-destructive shrink-0 cursor-pointer"
+                      onClick={() => removeCol(j)}
+                    >
                       <Trash2 className="h-2.5 w-2.5" />
                     </Button>
                   </div>
@@ -217,7 +294,12 @@ function TableSectionBody({
                   </td>
                 ))}
                 <td className="p-1 w-6">
-                  <Button variant="ghost" size="icon" className="h-5 w-5 text-destructive/70 opacity-0 group-hover:opacity-100 cursor-pointer" onClick={() => removeRow(i)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 text-destructive/70 opacity-0 group-hover:opacity-100 cursor-pointer"
+                    onClick={() => removeRow(i)}
+                  >
                     <Trash2 className="h-2.5 w-2.5" />
                   </Button>
                 </td>
@@ -225,7 +307,10 @@ function TableSectionBody({
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={headers.length + 1} className="p-2 text-[10px] text-muted-foreground italic text-center">
+                <td
+                  colSpan={headers.length + 1}
+                  className="p-2 text-[10px] text-muted-foreground italic text-center"
+                >
                   No rows — click + Row to add data.
                 </td>
               </tr>
@@ -310,17 +395,36 @@ export function ContentSectionsEditor({ sections, onChange }: ContentSectionsEdi
                   {typeMeta?.label || section.type}
                 </span>
                 {section.heading && (
-                  <span className="text-[10px] text-muted-foreground truncate">— {section.heading}</span>
+                  <span className="text-[10px] text-muted-foreground truncate">
+                    — {section.heading}
+                  </span>
                 )}
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <Button variant="ghost" size="icon" className="h-5 w-5 cursor-pointer" onClick={() => moveSection(sIdx, -1)} disabled={sIdx === 0}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 cursor-pointer"
+                  onClick={() => moveSection(sIdx, -1)}
+                  disabled={sIdx === 0}
+                >
                   <ChevronUp className="h-3 w-3" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-5 w-5 cursor-pointer" onClick={() => moveSection(sIdx, 1)} disabled={sIdx === sections.length - 1}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 cursor-pointer"
+                  onClick={() => moveSection(sIdx, 1)}
+                  disabled={sIdx === sections.length - 1}
+                >
                   <ChevronDown className="h-3 w-3" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => removeSection(sIdx)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                  onClick={() => removeSection(sIdx)}
+                >
                   <Trash2 className="h-3 w-3" />
                 </Button>
               </div>
@@ -330,7 +434,9 @@ export function ContentSectionsEditor({ sections, onChange }: ContentSectionsEdi
             <div className="p-3 space-y-3">
               {/* Heading field — shared by all section types */}
               <div>
-                <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">Section Heading</label>
+                <label className="text-[10px] font-bold uppercase text-muted-foreground block mb-1">
+                  Section Heading
+                </label>
                 <Input
                   value={section.heading}
                   onChange={(e) => updateSection(sIdx, { heading: e.target.value })}
@@ -379,7 +485,9 @@ export function ContentSectionsEditor({ sections, onChange }: ContentSectionsEdi
 
       {sections.length === 0 && (
         <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-          <p className="text-xs text-muted-foreground">No content sections yet. Use the buttons above to add sections.</p>
+          <p className="text-xs text-muted-foreground">
+            No content sections yet. Use the buttons above to add sections.
+          </p>
         </div>
       )}
     </div>

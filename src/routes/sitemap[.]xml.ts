@@ -20,8 +20,7 @@ function urlEntry(
 ): string {
   const parts = [`    <loc>${escapeXml(loc)}</loc>`];
   if (opts?.lastmod) parts.push(`    <lastmod>${opts.lastmod}</lastmod>`);
-  if (opts?.changefreq)
-    parts.push(`    <changefreq>${opts.changefreq}</changefreq>`);
+  if (opts?.changefreq) parts.push(`    <changefreq>${opts.changefreq}</changefreq>`);
   if (opts?.priority !== undefined)
     parts.push(`    <priority>${opts.priority.toFixed(1)}</priority>`);
   return `  <url>\n${parts.join("\n")}\n  </url>`;
@@ -167,10 +166,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             .maybeSingle();
 
           if (seoConfig?.value) {
-            const seoMap = seoConfig.value as Record<
-              string,
-              { urlSlug?: string }
-            >;
+            const seoMap = seoConfig.value as Record<string, { urlSlug?: string }>;
             for (const entry of Object.values(seoMap)) {
               if (entry.urlSlug) {
                 urls.push(

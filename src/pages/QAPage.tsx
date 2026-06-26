@@ -63,46 +63,69 @@ export function QAPage() {
 
   // Custom Hero section
   const heroTitle = landing.heroTitle || "No System Leaves\nSite Unverified.";
-  const heroSubtitle = landing.heroSubtitle || "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.";
+  const heroSubtitle =
+    landing.heroSubtitle ||
+    "Geosynthetics Africa delivers documented quality assurance and QA/QC for geosynthetics installation across Africa, aligned with IAGI best practice and manufacturer requirements.";
   const heroImage = landing.heroImage || "";
-  const heroChecklist = landing.heroChecklist && landing.heroChecklist.length > 0 ? landing.heroChecklist : [
-    "Material Verification — every product verified before installation",
-    "Installation Procedures — IAGI-certified methods on every project",
-    "On-Site Quality Control — field inspections throughout installation",
-    "Documentation & Compliance — full traceability and handover dossier",
-  ];
+  const heroChecklist =
+    landing.heroChecklist && landing.heroChecklist.length > 0
+      ? landing.heroChecklist
+      : [
+          "Material Verification — every product verified before installation",
+          "Installation Procedures — IAGI-certified methods on every project",
+          "On-Site Quality Control — field inspections throughout installation",
+          "Documentation & Compliance — full traceability and handover dossier",
+        ];
 
   // Custom framework section
-  const frameworkTitle = landing.frameworkTitle || "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa";
+  const frameworkTitle =
+    landing.frameworkTitle ||
+    "Manufacturer-Aligned Quality Assurance\nfor Geosynthetics Installations Across Africa";
   const frameworkEyebrow = landing.frameworkEyebrow || "Our QA/QC Framework";
 
   // Custom pillars section
   const pillars = landing.pillars && landing.pillars.length > 0 ? landing.pillars : QA_PILLARS;
 
   // Custom hero stats
-  const heroStats = landing.heroStats && landing.heroStats.length > 0 ? landing.heroStats : [
-    { value: "340+", label: "Projects QA'd", accent: true },
-    { value: "17", label: "African Countries" },
-    { value: "100%", label: "Welds Tested" },
-    { value: "IAGI", label: "International Standard" },
-  ];
+  const heroStats =
+    landing.heroStats && landing.heroStats.length > 0
+      ? landing.heroStats
+      : [
+          { value: "340+", label: "Projects QA'd", accent: true },
+          { value: "17", label: "African Countries" },
+          { value: "100%", label: "Welds Tested" },
+          { value: "IAGI", label: "International Standard" },
+        ];
 
   // Custom IAGI section
   const iagiTitle = landing.iagiTitle || "International Standards.\nAfrican Execution.";
-  const iagiDescription = landing.iagiDescription || "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.";
-  const iagiStats = landing.iagiStats && landing.iagiStats.length > 0 ? landing.iagiStats : [
-    { value: "17", label: "African Countries Covered" },
-    { value: "100%", label: "QA/QC Performed On All Installations" },
-    { value: "340+", label: "Projects Delivered" },
-    { value: "One of 5", label: "IAGI Members in Africa" },
-  ];
+  const iagiDescription =
+    landing.iagiDescription ||
+    "Geosynthetics Africa is a recognised IAGI Installer Member, adhering to international best-practice standards for geosynthetic installation quality assurance and project execution across Africa's mining, water, and civil infrastructure sectors.";
+  const iagiStats =
+    landing.iagiStats && landing.iagiStats.length > 0
+      ? landing.iagiStats
+      : [
+          { value: "17", label: "African Countries Covered" },
+          { value: "100%", label: "QA/QC Performed On All Installations" },
+          { value: "340+", label: "Projects Delivered" },
+          { value: "One of 5", label: "IAGI Members in Africa" },
+        ];
 
   return (
     <>
       {/* ============ HERO SECTION ============ */}
-      <section 
+      <section
         className="relative bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-14 overflow-hidden border-b border-[#2A2A2A]"
-        style={heroImage ? { backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+        style={
+          heroImage
+            ? {
+                backgroundImage: `url(${heroImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : undefined
+        }
       >
         {heroImage && <div className="absolute inset-0 bg-black/75 pointer-events-none" />}
         {/* Decorative top line */}
@@ -111,10 +134,7 @@ export function QAPage() {
 
         <div className="container-page relative z-10">
           <Breadcrumbs
-            items={[
-              { label: "Home", to: "/" },
-              { label: "Quality Assurance" },
-            ]}
+            items={[{ label: "Home", to: "/" }, { label: "Quality Assurance" }]}
             variant="tiny"
           />
 
@@ -142,7 +162,11 @@ export function QAPage() {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide border-0 cursor-pointer text-white">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide border-0 cursor-pointer text-white"
+                >
                   <Link to="/contacts">Request QA/QC Documentation</Link>
                 </Button>
               </div>
@@ -153,10 +177,17 @@ export function QAPage() {
               <div className="grid grid-cols-2 gap-[1px] bg-white/10 border border-white/10 rounded-lg overflow-hidden">
                 {heroStats.map((s: any) => (
                   <div key={s.label} className="bg-[#0D0D0E] p-6 flex flex-col justify-center">
-                    <div className={cn("font-display font-black text-3xl leading-none mb-1", s.accent ? "text-primary" : "text-white")}>
+                    <div
+                      className={cn(
+                        "font-display font-black text-3xl leading-none mb-1",
+                        s.accent ? "text-primary" : "text-white",
+                      )}
+                    >
                       {s.value}
                     </div>
-                    <div className="text-[9px] font-bold uppercase tracking-wider text-white/50">{s.label}</div>
+                    <div className="text-[9px] font-bold uppercase tracking-wider text-white/50">
+                      {s.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -179,13 +210,19 @@ export function QAPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {pillars.map((pillar: any, i: number) => {
-              const IconComp = typeof pillar.icon === "string" ? getIconComp(pillar.icon) : pillar.icon;
+              const IconComp =
+                typeof pillar.icon === "string" ? getIconComp(pillar.icon) : pillar.icon;
               return (
-                <div key={i} className="rounded border border-border bg-card p-6 hover:border-foreground/30 transition-colors group">
+                <div
+                  key={i}
+                  className="rounded border border-border bg-card p-6 hover:border-foreground/30 transition-colors group"
+                >
                   <div className="h-10 w-10 rounded bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary/20 transition-colors">
                     <IconComp className="h-5 w-5" />
                   </div>
-                  <h3 className="font-display text-base font-bold uppercase tracking-wide text-foreground mb-2">{pillar.title}</h3>
+                  <h3 className="font-display text-base font-bold uppercase tracking-wide text-foreground mb-2">
+                    {pillar.title}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{pillar.desc}</p>
                 </div>
               );
@@ -199,16 +236,25 @@ export function QAPage() {
         <div className="container-page py-16 md:py-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">QA Documentation</div>
+              <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                QA Documentation
+              </div>
               <h2 className="font-display text-3xl font-extrabold uppercase tracking-tight text-foreground">
                 QA by Product &amp; System
               </h2>
               <p className="text-sm text-muted-foreground mt-2 max-w-xl">
-                Select a product line or programme to explore the specific quality assurance documentation, standards, and processes we apply.
+                Select a product line or programme to explore the specific quality assurance
+                documentation, standards, and processes we apply.
               </p>
             </div>
-            <Button asChild variant="outline" className="shrink-0 font-bold uppercase tracking-wide cursor-pointer">
-              <Link to="/contacts">Request Full QA Dossier <ArrowRight className="h-4 w-4 ml-2" /></Link>
+            <Button
+              asChild
+              variant="outline"
+              className="shrink-0 font-bold uppercase tracking-wide cursor-pointer"
+            >
+              <Link to="/contacts">
+                Request Full QA Dossier <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
             </Button>
           </div>
 
@@ -273,8 +319,14 @@ export function QAPage() {
               {[
                 { name: "GSE® / Solmax Quality Assurance", slug: "gse-solmax-quality-assurance" },
                 { name: "Eurobent® GCL Quality Assurance", slug: "eurobent-gcl-quality-assurance" },
-                { name: "Tensar® Geogrids Quality Assurance", slug: "tensar-geogrids-quality-assurance" },
-                { name: "Geosynthetics Africa QA Framework", slug: "geosynthetics-africa-quality-assurance" },
+                {
+                  name: "Tensar® Geogrids Quality Assurance",
+                  slug: "tensar-geogrids-quality-assurance",
+                },
+                {
+                  name: "Geosynthetics Africa QA Framework",
+                  slug: "geosynthetics-africa-quality-assurance",
+                },
                 { name: "IAGI Membership", slug: "iagi-membership" },
               ].map((item) => (
                 <Link
@@ -310,17 +362,22 @@ export function QAPage() {
             <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase leading-none text-white mb-4 whitespace-pre-line">
               {iagiTitle}
             </h2>
-            <p className="text-xs text-white/70 leading-relaxed mb-6 max-w-md">
-              {iagiDescription}
-            </p>
+            <p className="text-xs text-white/70 leading-relaxed mb-6 max-w-md">{iagiDescription}</p>
           </div>
 
           <div className="lg:col-span-7">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-[1px] bg-white/10 rounded border border-white/5 overflow-hidden">
               {iagiStats.map((s: any) => (
-                <div key={s.label} className="bg-foreground p-5 flex flex-col hover:bg-white/5 transition">
-                  <div className="font-display font-black text-2xl text-primary leading-none mb-1">{s.value}</div>
-                  <div className="text-[9px] font-bold uppercase tracking-wide text-white/60 leading-tight">{s.label}</div>
+                <div
+                  key={s.label}
+                  className="bg-foreground p-5 flex flex-col hover:bg-white/5 transition"
+                >
+                  <div className="font-display font-black text-2xl text-primary leading-none mb-1">
+                    {s.value}
+                  </div>
+                  <div className="text-[9px] font-bold uppercase tracking-wide text-white/60 leading-tight">
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>

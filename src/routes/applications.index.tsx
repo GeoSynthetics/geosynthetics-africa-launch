@@ -8,8 +8,9 @@ async function loadApplicationsLandingData() {
     .select("key, value")
     .in("key", ["template_applications", "hierarchy_applications"]);
 
-  const templates = (rows?.find(r => r.key === "template_applications")?.value as Record<string, any>) || {};
-  const hierarchy = (rows?.find(r => r.key === "hierarchy_applications")?.value as any) || null;
+  const templates =
+    (rows?.find((r) => r.key === "template_applications")?.value as Record<string, any>) || {};
+  const hierarchy = (rows?.find((r) => r.key === "hierarchy_applications")?.value as any) || null;
 
   return {
     templates,
@@ -22,7 +23,9 @@ export const Route = createFileRoute("/applications/")({
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};
     const title = landing.seo?.title || "Applications — Geosynthetics Africa";
-    const description = landing.seo?.description || "Engineered geosynthetic systems for mining, water containment, waste, roads, erosion control and more.";
+    const description =
+      landing.seo?.description ||
+      "Engineered geosynthetic systems for mining, water containment, waste, roads, erosion control and more.";
     return {
       meta: [
         { title },

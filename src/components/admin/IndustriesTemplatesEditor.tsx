@@ -6,14 +6,28 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Save, Loader2, ExternalLink, Eye, AlertTriangle, CheckCircle2, ChevronRight,
-  Plus, Trash2, Search, ChevronLeft
+  Save,
+  Loader2,
+  ExternalLink,
+  Eye,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronRight,
+  Plus,
+  Trash2,
+  Search,
+  ChevronLeft,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
 import { getDefaultSections } from "@/lib/hierarchy-utils";
-import { SectionHeading, FieldLabel, StringListEditor, TemplatesEditorSkeleton } from "./TemplateEditorShared";
+import {
+  SectionHeading,
+  FieldLabel,
+  StringListEditor,
+  TemplatesEditorSkeleton,
+} from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
@@ -65,7 +79,9 @@ function blankTemplate(): IndustryTemplate {
 
 export function IndustriesTemplatesEditor() {
   const [allData, setAllData] = useState<AllIndustryTemplates>({});
-  const [hierarchyItems, setHierarchyItems] = useState<{ id: string; slug: string; label: string }[]>([]);
+  const [hierarchyItems, setHierarchyItems] = useState<
+    { id: string; slug: string; label: string }[]
+  >([]);
   const [rawHierarchy, setRawHierarchy] = useState<any>(null);
   const [hierarchyDirty, setHierarchyDirty] = useState(false);
   const [activeSlug, setActiveSlug] = useState<string>("");
@@ -73,7 +89,9 @@ export function IndustriesTemplatesEditor() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [activeTab, setActiveTab] = useState("hero");
-  const [industryToDelete, setIndustryToDelete] = useState<{ slug: string; label: string } | null>(null);
+  const [industryToDelete, setIndustryToDelete] = useState<{ slug: string; label: string } | null>(
+    null,
+  );
 
   // Search and Pagination states
   const [searchQuery, setSearchQuery] = useState("");
@@ -90,15 +108,14 @@ export function IndustriesTemplatesEditor() {
   const [newSlug, setNewSlug] = useState("");
   const [showNewSlug, setShowNewSlug] = useState(false);
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
-  const [allCaseStudies, setAllCaseStudies] = useState<{ id: string; title: string; slug: string }[]>([]);
+  const [allCaseStudies, setAllCaseStudies] = useState<
+    { id: string; title: string; slug: string }[]
+  >([]);
 
   // Load products from DB
   useEffect(() => {
     async function fetchProducts() {
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, slug")
-        .order("name");
+      const { data } = await supabase.from("products").select("id, name, slug").order("name");
       if (data) setAllProducts(data);
     }
     fetchProducts();
@@ -107,10 +124,7 @@ export function IndustriesTemplatesEditor() {
   // Load case studies from DB
   useEffect(() => {
     async function fetchCaseStudies() {
-      const { data } = await supabase
-        .from("case_studies")
-        .select("id, title, slug")
-        .order("title");
+      const { data } = await supabase.from("case_studies").select("id, title, slug").order("title");
       if (data) setAllCaseStudies(data);
     }
     fetchCaseStudies();
@@ -120,13 +134,18 @@ export function IndustriesTemplatesEditor() {
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
     const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
-    
+
     // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
       if (slug !== "__landing" && !list.some((item) => item.slug === slug)) {
         list.push({
           slug,
-          label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          label:
+            allData[slug]?.title ||
+            slug
+              .split("-")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(" "),
         });
       }
     });
@@ -138,7 +157,12 @@ export function IndustriesTemplatesEditor() {
         if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
           fallbackList.push({
             slug,
-            label: allData[slug]?.title || slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+            label:
+              allData[slug]?.title ||
+              slug
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" "),
           });
         }
       });
@@ -184,10 +208,12 @@ export function IndustriesTemplatesEditor() {
       .select("value")
       .eq("key", "hierarchy_industries")
       .maybeSingle();
-    
+
     const defaults = getDefaultSections();
-    const defaultIndustries = defaults.find(d => d.key === "industries")!;
-    const hierarchy = (hierarchyRow?.value as any)?.items ? (hierarchyRow?.value as any) : defaultIndustries;
+    const defaultIndustries = defaults.find((d) => d.key === "industries")!;
+    const hierarchy = (hierarchyRow?.value as any)?.items
+      ? (hierarchyRow?.value as any)
+      : defaultIndustries;
     setRawHierarchy(hierarchy);
     const hItems = (hierarchy.items || []).map((item: any) => ({
       id: item.id,
@@ -208,11 +234,12 @@ export function IndustriesTemplatesEditor() {
       const stored = (data?.value ?? {}) as AllIndustryTemplates;
       // Pre-seed blank records for any slug not yet in the store
       const seeded: AllIndustryTemplates = { ...stored };
-      
+
       // Use hierarchy items for seeding, fallback to static industries if empty
-      const seedSource = hItems.length > 0
-        ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
-        : INDUSTRIES;
+      const seedSource =
+        hItems.length > 0
+          ? hItems.map((item: any) => ({ slug: item.id, label: item.label }))
+          : INDUSTRIES;
 
       for (const ind of seedSource) {
         if (!seeded[ind.slug]) {
@@ -240,18 +267,25 @@ export function IndustriesTemplatesEditor() {
 
   const handleAddNew = () => {
     if (!newSlug.trim()) return;
-    const slug = newSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
-    
-    if (allData[slug] || hierarchyItems.some(item => item.id === slug)) {
+    const slug = newSlug
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-");
+
+    if (allData[slug] || hierarchyItems.some((item) => item.id === slug)) {
       toast.error("A template with that slug already exists.");
       return;
     }
 
-    const label = slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-    
-    setAllData(prev => ({
+    const label = slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    setAllData((prev) => ({
       ...prev,
-      [slug]: { ...blankTemplate(), title: label }
+      [slug]: { ...blankTemplate(), title: label },
     }));
     setActiveSlug(slug);
     setNewSlug("");
@@ -266,7 +300,7 @@ export function IndustriesTemplatesEditor() {
       return;
     }
 
-    setAllData(prev => {
+    setAllData((prev) => {
       const next = { ...prev };
       delete next[slug];
       return next;
@@ -274,7 +308,7 @@ export function IndustriesTemplatesEditor() {
 
     if (rawHierarchy) {
       const updatedItems = (rawHierarchy.items || []).filter(
-        (item: any) => item.id !== slug && item.slug !== slug
+        (item: any) => item.id !== slug && item.slug !== slug,
       );
       const updatedHierarchy = { ...rawHierarchy, items: updatedItems };
       setRawHierarchy(updatedHierarchy);
@@ -283,13 +317,13 @@ export function IndustriesTemplatesEditor() {
           id: item.id,
           slug: item.slug || item.id,
           label: item.label,
-        }))
+        })),
       );
       setHierarchyDirty(true);
     }
 
     if (activeSlug === slug) {
-      const nextActive = categoriesList.find(c => c.slug !== slug)?.slug ?? "";
+      const nextActive = categoriesList.find((c) => c.slug !== slug)?.slug ?? "";
       setActiveSlug(nextActive);
     }
     setDirty(true);
@@ -299,7 +333,7 @@ export function IndustriesTemplatesEditor() {
   // ── Save to Supabase ──
   const handleSave = async () => {
     setSaving(true);
-    
+
     const { error: templateError } = await supabase
       .from("site_config")
       .upsert({ key: SUPABASE_KEY, value: allData as any }, { onConflict: "key" });
@@ -314,9 +348,9 @@ export function IndustriesTemplatesEditor() {
 
     if (templateError || hierarchyError) {
       toast.error(
-        "Save failed: " + 
-        (templateError?.message || "") + 
-        (hierarchyError ? " | Hierarchy: " + hierarchyError.message : "")
+        "Save failed: " +
+          (templateError?.message || "") +
+          (hierarchyError ? " | Hierarchy: " + hierarchyError.message : ""),
       );
     } else {
       toast.success("Industry templates and navigation saved successfully!");
@@ -404,7 +438,11 @@ export function IndustriesTemplatesEditor() {
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Industries ({filteredCategories.length !== categoriesList.length ? `${filteredCategories.length}/${categoriesList.length}` : categoriesList.length})
+              Industries (
+              {filteredCategories.length !== categoriesList.length
+                ? `${filteredCategories.length}/${categoriesList.length}`
+                : categoriesList.length}
+              )
             </p>
           </div>
 
@@ -415,25 +453,42 @@ export function IndustriesTemplatesEditor() {
                 <Input
                   placeholder="e.g. defense-aerospace"
                   value={newSlug}
-                  onChange={e => setNewSlug(formatSlugInput(e.target.value))}
-                  onKeyDown={e => { if (e.key === "Enter") handleAddNew(); if (e.key === "Escape") setShowNewSlug(false); }}
+                  onChange={(e) => setNewSlug(formatSlugInput(e.target.value))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAddNew();
+                    if (e.key === "Escape") setShowNewSlug(false);
+                  }}
                   className="text-xs h-8"
                   autoFocus
                 />
                 <div className="flex gap-1">
-                  <Button size="sm" onClick={handleAddNew}
-                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer">
+                  <Button
+                    size="sm"
+                    onClick={handleAddNew}
+                    className="flex-1 h-7 text-xs bg-primary hover:bg-primary-hover text-white border-0 cursor-pointer"
+                  >
                     Create
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => { setShowNewSlug(false); setNewSlug(""); }}
-                    className="h-7 text-xs cursor-pointer">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowNewSlug(false);
+                      setNewSlug("");
+                    }}
+                    className="h-7 text-xs cursor-pointer"
+                  >
                     Cancel
                   </Button>
                 </div>
               </div>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => setShowNewSlug(true)}
-                className="w-full h-8 text-xs gap-1.5 cursor-pointer">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowNewSlug(true)}
+                className="w-full h-8 text-xs gap-1.5 cursor-pointer"
+              >
                 <Plus className="h-3 w-3" /> New Template
               </Button>
             )}
@@ -480,17 +535,17 @@ export function IndustriesTemplatesEditor() {
                   <div className="flex items-center gap-1 ml-1 shrink-0">
                     {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
                     {!isStatic && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIndustryToDelete({ slug: ind.slug, label: ind.label });
-                            }}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIndustryToDelete({ slug: ind.slug, label: ind.label });
+                        }}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
                     )}
                   </div>
                 </button>
@@ -507,7 +562,7 @@ export function IndustriesTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -519,7 +574,7 @@ export function IndustriesTemplatesEditor() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
                 className="h-7 px-2 text-[10px] font-bold uppercase tracking-wider cursor-pointer"
               >
@@ -549,7 +604,9 @@ export function IndustriesTemplatesEditor() {
                       /{activeSlug}
                     </code>
                     {dirty && (
-                      <span className="text-[10px] text-amber-500 font-bold">● Unsaved Changes</span>
+                      <span className="text-[10px] text-amber-500 font-bold">
+                        ● Unsaved Changes
+                      </span>
                     )}
                   </div>
                 </div>
@@ -564,7 +621,11 @@ export function IndustriesTemplatesEditor() {
                     disabled={saving || !dirty}
                     className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5"
                   >
-                    {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                    {saving ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Save className="h-3 w-3" />
+                    )}
                     {saving ? "Saving…" : "Save"}
                   </Button>
                 </div>
@@ -661,7 +722,10 @@ export function IndustriesTemplatesEditor() {
                         };
                       });
 
-                      const updateApp = (index: number, patch: Partial<{ heading: string; description: string; link: string }>) => {
+                      const updateApp = (
+                        index: number,
+                        patch: Partial<{ heading: string; description: string; link: string }>,
+                      ) => {
                         const next = normalizedApps.map((app, idx) => {
                           if (idx === index) return { ...app, ...patch };
                           return app;
@@ -670,7 +734,10 @@ export function IndustriesTemplatesEditor() {
                       };
 
                       const addApp = () => {
-                        setApplications([...normalizedApps, { heading: "", description: "", link: "" }]);
+                        setApplications([
+                          ...normalizedApps,
+                          { heading: "", description: "", link: "" },
+                        ]);
                       };
 
                       const removeApp = (index: number) => {
@@ -683,17 +750,26 @@ export function IndustriesTemplatesEditor() {
                             <div>
                               <SectionHeading>Key Applications</SectionHeading>
                               <p className="text-xs text-muted-foreground">
-                                Configure structured key applications for this industry (heading, description, and link path).
+                                Configure structured key applications for this industry (heading,
+                                description, and link path).
                               </p>
                             </div>
-                            <Button size="sm" variant="outline" onClick={addApp} className="gap-1 text-xs shrink-0 cursor-pointer">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={addApp}
+                              className="gap-1 text-xs shrink-0 cursor-pointer"
+                            >
                               <Plus className="h-3.5 w-3.5" /> Add Application
                             </Button>
                           </div>
 
                           <div className="space-y-4 max-w-2xl">
                             {normalizedApps.map((app, idx) => (
-                              <div key={idx} className="border border-border rounded-lg p-4 bg-background space-y-3 relative group">
+                              <div
+                                key={idx}
+                                className="border border-border rounded-lg p-4 bg-background space-y-3 relative group"
+                              >
                                 <Button
                                   variant="ghost"
                                   size="icon"
@@ -707,7 +783,7 @@ export function IndustriesTemplatesEditor() {
                                     <FieldLabel>Heading</FieldLabel>
                                     <Input
                                       value={app.heading}
-                                      onChange={e => updateApp(idx, { heading: e.target.value })}
+                                      onChange={(e) => updateApp(idx, { heading: e.target.value })}
                                       placeholder="e.g. Heap Leach Pad Lining"
                                       className="text-xs h-8"
                                     />
@@ -716,7 +792,7 @@ export function IndustriesTemplatesEditor() {
                                     <FieldLabel>Link Path (optional)</FieldLabel>
                                     <Input
                                       value={app.link}
-                                      onChange={e => updateApp(idx, { link: e.target.value })}
+                                      onChange={(e) => updateApp(idx, { link: e.target.value })}
                                       placeholder="e.g. /applications/mining-systems"
                                       className="text-xs h-8"
                                     />
@@ -726,7 +802,9 @@ export function IndustriesTemplatesEditor() {
                                   <FieldLabel>Description</FieldLabel>
                                   <Textarea
                                     value={app.description}
-                                    onChange={e => updateApp(idx, { description: e.target.value })}
+                                    onChange={(e) =>
+                                      updateApp(idx, { description: e.target.value })
+                                    }
                                     placeholder="Provide a detailed description of this key application..."
                                     className="text-xs min-h-[60px] resize-none"
                                   />
@@ -735,7 +813,9 @@ export function IndustriesTemplatesEditor() {
                             ))}
 
                             {normalizedApps.length === 0 && (
-                              <p className="text-xs text-muted-foreground italic py-4">No key applications configured.</p>
+                              <p className="text-xs text-muted-foreground italic py-4">
+                                No key applications configured.
+                              </p>
                             )}
                           </div>
                         </>
@@ -747,29 +827,42 @@ export function IndustriesTemplatesEditor() {
                   <TabsContent value="case-studies" className="p-6 space-y-5 m-0">
                     <SectionHeading>Featured Case Studies (Nominated)</SectionHeading>
                     <p className="text-xs text-muted-foreground mb-4">
-                      Select and order specific case studies to feature on this industry page. If none are selected, the system will fall back to automatically matching by sector.
+                      Select and order specific case studies to feature on this industry page. If
+                      none are selected, the system will fall back to automatically matching by
+                      sector.
                     </p>
-                    
+
                     <div className="space-y-2 max-w-md mb-4">
                       {(active.caseStudies ?? []).map((csId) => {
-                        const csData = allCaseStudies.find(c => c.id === csId);
+                        const csData = allCaseStudies.find((c) => c.id === csId);
                         return (
-                          <div key={csId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                          <div
+                            key={csId}
+                            className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                          >
                             <span>{csData ? csData.title : `Case Study ID: ${csId}`}</span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => setField("caseStudies", (active.caseStudies ?? []).filter(id => id !== csId))}
+                              onClick={() =>
+                                setField(
+                                  "caseStudies",
+                                  (active.caseStudies ?? []).filter((id) => id !== csId),
+                                )
+                              }
                             >
                               ✕
                             </Button>
                           </div>
                         );
                       })}
-                      
+
                       {(!active.caseStudies || active.caseStudies.length === 0) && (
-                        <p className="text-xs text-muted-foreground italic">No specific case studies nominated (falling back to auto-matching by sector).</p>
+                        <p className="text-xs text-muted-foreground italic">
+                          No specific case studies nominated (falling back to auto-matching by
+                          sector).
+                        </p>
                       )}
                     </div>
 
@@ -788,13 +881,16 @@ export function IndustriesTemplatesEditor() {
                           }
                         }}
                       >
-                        <option value="" disabled>-- Select a case study to nominate --</option>
+                        <option value="" disabled>
+                          -- Select a case study to nominate --
+                        </option>
                         {allCaseStudies
-                          .filter(cs => !(active.caseStudies ?? []).includes(cs.id))
-                          .map(cs => (
-                            <option key={cs.id} value={cs.id}>{cs.title}</option>
-                          ))
-                        }
+                          .filter((cs) => !(active.caseStudies ?? []).includes(cs.id))
+                          .map((cs) => (
+                            <option key={cs.id} value={cs.id}>
+                              {cs.title}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </TabsContent>
@@ -804,47 +900,64 @@ export function IndustriesTemplatesEditor() {
                     <div>
                       <SectionHeading>Mega Menu Top Selling Products (Max 5)</SectionHeading>
                       <p className="text-xs text-muted-foreground mb-4">
-                        Select up to 5 top-selling products for this industry to show as a slider in the mega menu dropdown.
+                        Select up to 5 top-selling products for this industry to show as a slider in
+                        the mega menu dropdown.
                       </p>
-                      
+
                       <div className="space-y-2 max-w-md mb-4">
                         {(active.topSellingProductIds ?? []).map((pId) => {
-                          const pData = allProducts.find(p => p.id === pId);
+                          const pData = allProducts.find((p) => p.id === pId);
                           return (
-                            <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                            <div
+                              key={pId}
+                              className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                            >
                               <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                onClick={() => setField("topSellingProductIds", (active.topSellingProductIds ?? []).filter(id => id !== pId))}
+                                onClick={() =>
+                                  setField(
+                                    "topSellingProductIds",
+                                    (active.topSellingProductIds ?? []).filter((id) => id !== pId),
+                                  )
+                                }
                               >
                                 ✕
                               </Button>
                             </div>
                           );
                         })}
-                        
-                        {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && !active.topSellingProductId && (
-                          <p className="text-xs text-muted-foreground italic">No top selling products selected.</p>
-                        )}
 
-                        {(!active.topSellingProductIds || active.topSellingProductIds.length === 0) && active.topSellingProductId && (
-                          <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                            <span className="flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                              {allProducts.find(p => p.id === active.topSellingProductId)?.name || `Product ID: ${active.topSellingProductId}`} (Legacy Single)
-                            </span>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() => setField("topSellingProductId", "")}
-                            >
-                              ✕
-                            </Button>
-                          </div>
-                        )}
+                        {(!active.topSellingProductIds ||
+                          active.topSellingProductIds.length === 0) &&
+                          !active.topSellingProductId && (
+                            <p className="text-xs text-muted-foreground italic">
+                              No top selling products selected.
+                            </p>
+                          )}
+
+                        {(!active.topSellingProductIds ||
+                          active.topSellingProductIds.length === 0) &&
+                          active.topSellingProductId && (
+                            <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                              <span className="flex items-center gap-1.5">
+                                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                {allProducts.find((p) => p.id === active.topSellingProductId)
+                                  ?.name || `Product ID: ${active.topSellingProductId}`}{" "}
+                                (Legacy Single)
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                onClick={() => setField("topSellingProductId", "")}
+                              >
+                                ✕
+                              </Button>
+                            </div>
+                          )}
                       </div>
 
                       {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
@@ -852,7 +965,7 @@ export function IndustriesTemplatesEditor() {
                           <ProductSelector
                             excludeIds={[
                               ...(active.topSellingProductIds ?? []),
-                              ...(active.topSellingProductId ? [active.topSellingProductId] : [])
+                              ...(active.topSellingProductId ? [active.topSellingProductId] : []),
                             ]}
                             onSelect={(prod) => {
                               let currentIds = [...(active.topSellingProductIds ?? [])];
@@ -872,29 +985,40 @@ export function IndustriesTemplatesEditor() {
                     <div className="border-t border-border pt-6 mt-6">
                       <SectionHeading>Industry Page Featured Products (3 to 5)</SectionHeading>
                       <p className="text-xs text-muted-foreground mb-4">
-                        Nominate 3 to 5 products to display as a featured products block on the industry detail page.
+                        Nominate 3 to 5 products to display as a featured products block on the
+                        industry detail page.
                       </p>
-                      
+
                       <div className="space-y-2 max-w-md mb-4">
                         {(active.keyProducts ?? []).map((pId) => {
-                          const pData = allProducts.find(p => p.id === pId);
+                          const pData = allProducts.find((p) => p.id === pId);
                           return (
-                            <div key={pId} className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm">
+                            <div
+                              key={pId}
+                              className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                            >
                               <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                onClick={() => setField("keyProducts", (active.keyProducts ?? []).filter(id => id !== pId))}
+                                onClick={() =>
+                                  setField(
+                                    "keyProducts",
+                                    (active.keyProducts ?? []).filter((id) => id !== pId),
+                                  )
+                                }
                               >
                                 ✕
                               </Button>
                             </div>
                           );
                         })}
-                        
+
                         {(!active.keyProducts || active.keyProducts.length === 0) && (
-                          <p className="text-xs text-muted-foreground italic">No featured products selected.</p>
+                          <p className="text-xs text-muted-foreground italic">
+                            No featured products selected.
+                          </p>
                         )}
                       </div>
 
@@ -928,7 +1052,9 @@ export function IndustriesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Recommended: 150–160 characters">Meta Description</FieldLabel>
+                      <FieldLabel hint="Recommended: 150–160 characters">
+                        Meta Description
+                      </FieldLabel>
                       <Textarea
                         value={active.seo?.description ?? ""}
                         onChange={(e) => setSeo({ description: e.target.value })}
@@ -937,7 +1063,9 @@ export function IndustriesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Comma-separated list of search keywords">Meta Keywords</FieldLabel>
+                      <FieldLabel hint="Comma-separated list of search keywords">
+                        Meta Keywords
+                      </FieldLabel>
                       <Input
                         value={active.seo?.keywords ?? ""}
                         onChange={(e) => setSeo({ keywords: e.target.value })}

@@ -5,7 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   Save,
@@ -32,7 +38,15 @@ import { ImagePicker } from "./ImagePicker";
 import { LinkTargetPicker } from "./LinkTargetPicker";
 import { ProductSelector, type ProductData } from "./ProductSelector";
 import { QuickActionsEditor } from "./TemplateEditorShared";
-import type { HierarchySection, HierarchyItem, HierarchyChild, MegaContent, QuickAction, FeaturedProduct, FeaturedImage } from "@/types/hierarchy";
+import type {
+  HierarchySection,
+  HierarchyItem,
+  HierarchyChild,
+  MegaContent,
+  QuickAction,
+  FeaturedProduct,
+  FeaturedImage,
+} from "@/types/hierarchy";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 
@@ -45,15 +59,20 @@ interface MegaMenuBuilderTabProps {
   onSectionsChange?: (sections: Record<SectionKey, HierarchySection | null>) => void;
 }
 
-export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMenuBuilderTabProps = {}) {
+export function MegaMenuBuilderTab({
+  initialSections,
+  onSectionsChange,
+}: MegaMenuBuilderTabProps = {}) {
   const [activeSection, setActiveSection] = useState<SectionKey>("products");
   const [sections, setSections] = useState<Record<SectionKey, HierarchySection | null>>(() => {
-    return initialSections ?? {
-      products: null,
-      applications: null,
-      services: null,
-      industries: null,
-    };
+    return (
+      initialSections ?? {
+        products: null,
+        applications: null,
+        services: null,
+        industries: null,
+      }
+    );
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -74,7 +93,8 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
     async function loadData() {
       setLoading(true);
       try {
-        const needToLoadSections = !initialSections || Object.values(initialSections).some(v => v === null);
+        const needToLoadSections =
+          !initialSections || Object.values(initialSections).some((v) => v === null);
         if (needToLoadSections) {
           // Load sections
           const { data: configData, error: configError } = await supabase
@@ -111,13 +131,17 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
         // Load database products
         const { data: prodData } = await supabase
           .from("products")
-          .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+          .select(
+            "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
+          )
           .order("name");
 
         if (prodData) {
           const mapped: ProductData[] = prodData.map((d: any) => ({
             ...d,
-            product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+            product_categories: Array.isArray(d.product_categories)
+              ? d.product_categories[0]
+              : d.product_categories,
           }));
           setAllProducts(mapped);
         }
@@ -206,7 +230,10 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
 
       const { error } = await supabase
         .from("site_config")
-        .upsert({ key: CONFIG_KEY(activeSection), value: updatedSection as any }, { onConflict: "key" });
+        .upsert(
+          { key: CONFIG_KEY(activeSection), value: updatedSection as any },
+          { onConflict: "key" },
+        );
 
       if (error) throw error;
       toast.success(`${currentSection.label} Mega Menu saved successfully.`);
@@ -363,11 +390,11 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
             onClick={handleSaveSection}
             className={cn(
               "font-bold uppercase tracking-widest text-xs h-9 px-5 gap-2 shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:cursor-pointer",
-              saveSuccess 
-                ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20" 
-                : dirty 
+              saveSuccess
+                ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20"
+                : dirty
                   ? "bg-amber-600 hover:bg-amber-700 text-white shadow-amber-600/20"
-                  : "bg-primary hover:bg-primary-hover text-white shadow-primary/20"
+                  : "bg-primary hover:bg-primary-hover text-white shadow-primary/20",
             )}
           >
             {saving ? (
@@ -377,7 +404,11 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {saving ? "Saving Changes..." : saveSuccess ? "Saved!" : `Save ${currentSection?.label || activeSection} Menu`}
+            {saving
+              ? "Saving Changes..."
+              : saveSuccess
+                ? "Saved!"
+                : `Save ${currentSection?.label || activeSection} Menu`}
           </Button>
         </div>
       </div>
@@ -386,7 +417,6 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
       <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden min-h-0">
         {/* LEFT COLUMN: Sidebar list of Primary Items & Section Settings */}
         <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-border/60 bg-surface/30 flex flex-col shrink-0 p-4 space-y-5 lg:overflow-y-auto">
-          
           {/* Section Fallback Settings (quick actions, fallback layout title) */}
           {currentSection && (
             <Card className="border-border bg-card rounded-xl overflow-hidden hover:border-primary/20 transition-all duration-300">
@@ -464,7 +494,7 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                       "group flex items-center justify-between rounded-xl p-2.5 text-xs font-semibold cursor-pointer border transition-all duration-300",
                       isSelected
                         ? "bg-primary/10 text-primary border-primary shadow-sm shadow-primary/5 translate-x-1"
-                        : "bg-surface/30 text-foreground hover:bg-accent/40 border-border/40 hover:border-primary/30"
+                        : "bg-surface/30 text-foreground hover:bg-accent/40 border-border/40 hover:border-primary/30",
                     )}
                   >
                     <div className="flex items-center gap-2 min-w-0">
@@ -532,12 +562,16 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                   <h3 className="text-base font-black uppercase tracking-tight text-foreground">
                     Configure: {activeItem.label}
                   </h3>
-                  <p className="text-xs text-muted-foreground font-mono mt-0.5">{activeItem.slug}</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-0.5">
+                    {activeItem.slug}
+                  </p>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => selectedItemIdx !== null && handleDeletePrimaryItem(selectedItemIdx)}
+                  onClick={() =>
+                    selectedItemIdx !== null && handleDeletePrimaryItem(selectedItemIdx)
+                  }
                   className="border-destructive/30 hover:border-destructive hover:bg-destructive/10 text-destructive font-bold uppercase tracking-wider text-[10px] h-8 hover:cursor-pointer"
                 >
                   <Trash2 className="h-3.5 w-3.5 mr-1" /> Delete Item
@@ -585,7 +619,8 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                       params={activeItem.params}
                       onChange={(to, params) =>
                         updateActiveItem((item) => {
-                          const slug = params?.slug || params?.category || to.split("/").pop() || "";
+                          const slug =
+                            params?.slug || params?.category || to.split("/").pop() || "";
                           return {
                             ...item,
                             to,
@@ -699,7 +734,8 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                                 to={child.to}
                                 params={child.params}
                                 onChange={(to, params) => {
-                                  const slug = params?.slug || params?.family || to.split("/").pop() || "";
+                                  const slug =
+                                    params?.slug || params?.family || to.split("/").pop() || "";
                                   handleUpdateChildItem(idx, {
                                     to,
                                     params,
@@ -728,25 +764,29 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                           Top Selling Products Slider (Max 5)
                         </h4>
                         <p className="text-[10px] text-muted-foreground">
-                          Select products to display as sliding catalog best-sellers for this category
+                          Select products to display as sliding catalog best-sellers for this
+                          category
                         </p>
                       </div>
 
                       <div className="space-y-2 max-w-md">
-                        {((activeItem.megaFallback?.topSellingProductIds) || []).map((pId) => {
+                        {(activeItem.megaFallback?.topSellingProductIds || []).map((pId) => {
                           const product = allProducts.find((p) => p.id === pId);
                           return (
                             <div
                               key={pId}
                               className="flex items-center justify-between p-2.5 bg-background border border-border rounded-xl text-xs font-semibold shadow-sm"
                             >
-                              <span className="truncate">{product ? product.name : `Product ID: ${pId}`}</span>
+                              <span className="truncate">
+                                {product ? product.name : `Product ID: ${pId}`}
+                              </span>
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-5 w-5 text-destructive hover:bg-destructive/10"
                                 onClick={() => {
-                                  const oldIds = activeItem.megaFallback?.topSellingProductIds || [];
+                                  const oldIds =
+                                    activeItem.megaFallback?.topSellingProductIds || [];
                                   updateActiveItem((item) => ({
                                     ...item,
                                     megaFallback: {
@@ -762,7 +802,7 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                           );
                         })}
 
-                        {(!(activeItem.megaFallback?.topSellingProductIds) ||
+                        {(!activeItem.megaFallback?.topSellingProductIds ||
                           activeItem.megaFallback?.topSellingProductIds.length === 0) && (
                           <p className="text-xs text-muted-foreground italic">
                             No top selling products selected.
@@ -770,7 +810,7 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                         )}
                       </div>
 
-                      {((activeItem.megaFallback?.topSellingProductIds) || []).length < 5 && (
+                      {(activeItem.megaFallback?.topSellingProductIds || []).length < 5 && (
                         <div className="max-w-md pt-1">
                           <ProductSelector
                             excludeIds={activeItem.megaFallback?.topSellingProductIds || []}
@@ -817,8 +857,12 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-popover border border-border">
-                        <SelectItem value="product" className="text-xs">Featured Products</SelectItem>
-                        <SelectItem value="image" className="text-xs">Featured Cards</SelectItem>
+                        <SelectItem value="product" className="text-xs">
+                          Featured Products
+                        </SelectItem>
+                        <SelectItem value="image" className="text-xs">
+                          Featured Cards
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -854,7 +898,7 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                         <Button
                           variant="outline"
                           size="sm"
-                          disabled={((activeItem.megaFallback?.featured) || []).length >= 4}
+                          disabled={(activeItem.megaFallback?.featured || []).length >= 4}
                           onClick={() => {
                             const oldFeatured = activeItem.megaFallback?.featured || [];
                             updateActiveItem((item) => ({
@@ -875,103 +919,125 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {((activeItem.megaFallback?.featured as FeaturedImage[]) || []).map((card, i) => (
-                          <div
-                            key={i}
-                            className="border border-border bg-surface/50 p-4 rounded-xl space-y-3 relative"
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
-                              onClick={() => {
-                                const oldFeatured = activeItem.megaFallback?.featured || [];
-                                updateActiveItem((item) => ({
-                                  ...item,
-                                  megaFallback: {
-                                    ...(item.megaFallback || {}),
-                                    featured: oldFeatured.filter((_, idx) => idx !== i) as any[],
-                                  },
-                                }));
-                              }}
+                        {((activeItem.megaFallback?.featured as FeaturedImage[]) || []).map(
+                          (card, i) => (
+                            <div
+                              key={i}
+                              className="border border-border bg-surface/50 p-4 rounded-xl space-y-3 relative"
                             >
-                              ✕
-                            </Button>
-
-                            <div>
-                              <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                                Card Title
-                              </label>
-                              <Input
-                                value={card.title}
-                                onChange={(e) => {
-                                  const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedImage[];
-                                  list[i] = { ...list[i], title: e.target.value };
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
+                                onClick={() => {
+                                  const oldFeatured = activeItem.megaFallback?.featured || [];
                                   updateActiveItem((item) => ({
                                     ...item,
-                                    megaFallback: { ...(item.megaFallback || {}), featured: list },
+                                    megaFallback: {
+                                      ...(item.megaFallback || {}),
+                                      featured: oldFeatured.filter((_, idx) => idx !== i) as any[],
+                                    },
                                   }));
                                 }}
-                                className="text-xs bg-background h-8"
-                                placeholder="E.g. GeoSynthetics Africa member"
-                              />
-                            </div>
+                              >
+                                ✕
+                              </Button>
 
-                            <div>
-                              <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                                Card Description
-                              </label>
-                              <Textarea
-                                value={card.description}
-                                onChange={(e) => {
-                                  const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedImage[];
-                                  list[i] = { ...list[i], description: e.target.value };
-                                  updateActiveItem((item) => ({
-                                    ...item,
-                                    megaFallback: { ...(item.megaFallback || {}), featured: list },
-                                  }));
-                                }}
-                                className="text-xs bg-background min-h-[60px] resize-none"
-                                placeholder="Short promotional subtitle..."
-                              />
-                            </div>
+                              <div>
+                                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
+                                  Card Title
+                                </label>
+                                <Input
+                                  value={card.title}
+                                  onChange={(e) => {
+                                    const list = [
+                                      ...(activeItem.megaFallback?.featured || []),
+                                    ] as FeaturedImage[];
+                                    list[i] = { ...list[i], title: e.target.value };
+                                    updateActiveItem((item) => ({
+                                      ...item,
+                                      megaFallback: {
+                                        ...(item.megaFallback || {}),
+                                        featured: list,
+                                      },
+                                    }));
+                                  }}
+                                  className="text-xs bg-background h-8"
+                                  placeholder="E.g. GeoSynthetics Africa member"
+                                />
+                              </div>
 
-                            <div>
-                              <ImagePicker
-                                label="Card Banner Image"
-                                value={card.image}
-                                onChange={(url) => {
-                                  const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedImage[];
-                                  list[i] = { ...list[i], image: url };
-                                  updateActiveItem((item) => ({
-                                    ...item,
-                                    megaFallback: { ...(item.megaFallback || {}), featured: list },
-                                  }));
-                                }}
-                                placeholder="Choose background image..."
-                              />
-                            </div>
+                              <div>
+                                <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
+                                  Card Description
+                                </label>
+                                <Textarea
+                                  value={card.description}
+                                  onChange={(e) => {
+                                    const list = [
+                                      ...(activeItem.megaFallback?.featured || []),
+                                    ] as FeaturedImage[];
+                                    list[i] = { ...list[i], description: e.target.value };
+                                    updateActiveItem((item) => ({
+                                      ...item,
+                                      megaFallback: {
+                                        ...(item.megaFallback || {}),
+                                        featured: list,
+                                      },
+                                    }));
+                                  }}
+                                  className="text-xs bg-background min-h-[60px] resize-none"
+                                  placeholder="Short promotional subtitle..."
+                                />
+                              </div>
 
-                            <div className="pt-1">
-                              <LinkTargetPicker
-                                to={card.to}
-                                params={card.params}
-                                onChange={(to, params) => {
-                                  const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedImage[];
-                                  list[i] = { ...list[i], to, params };
-                                  updateActiveItem((item) => ({
-                                    ...item,
-                                    megaFallback: { ...(item.megaFallback || {}), featured: list },
-                                  }));
-                                }}
-                                sectionContext={activeSection}
-                                compact
-                              />
-                            </div>
-                          </div>
-                        ))}
+                              <div>
+                                <ImagePicker
+                                  label="Card Banner Image"
+                                  value={card.image}
+                                  onChange={(url) => {
+                                    const list = [
+                                      ...(activeItem.megaFallback?.featured || []),
+                                    ] as FeaturedImage[];
+                                    list[i] = { ...list[i], image: url };
+                                    updateActiveItem((item) => ({
+                                      ...item,
+                                      megaFallback: {
+                                        ...(item.megaFallback || {}),
+                                        featured: list,
+                                      },
+                                    }));
+                                  }}
+                                  placeholder="Choose background image..."
+                                />
+                              </div>
 
-                        {((activeItem.megaFallback?.featured) || []).length === 0 && (
+                              <div className="pt-1">
+                                <LinkTargetPicker
+                                  to={card.to}
+                                  params={card.params}
+                                  onChange={(to, params) => {
+                                    const list = [
+                                      ...(activeItem.megaFallback?.featured || []),
+                                    ] as FeaturedImage[];
+                                    list[i] = { ...list[i], to, params };
+                                    updateActiveItem((item) => ({
+                                      ...item,
+                                      megaFallback: {
+                                        ...(item.megaFallback || {}),
+                                        featured: list,
+                                      },
+                                    }));
+                                  }}
+                                  sectionContext={activeSection}
+                                  compact
+                                />
+                              </div>
+                            </div>
+                          ),
+                        )}
+
+                        {(activeItem.megaFallback?.featured || []).length === 0 && (
                           <p className="text-xs text-muted-foreground italic py-6 border border-dashed border-border/40 rounded-xl col-span-1 md:col-span-2 text-center">
                             No featured cards added yet.
                           </p>
@@ -991,120 +1057,145 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {((activeItem.megaFallback?.featured as FeaturedProduct[]) || []).slice(0, 4).map((fProd, i) => (
-                          <div
-                            key={i}
-                            className="border border-border bg-surface/50 p-4 rounded-xl space-y-3 relative"
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
-                              onClick={() => {
-                                const oldFeatured = activeItem.megaFallback?.featured || [];
-                                updateActiveItem((item) => ({
-                                  ...item,
-                                  megaFallback: {
-                                    ...(item.megaFallback || {}),
-                                    featured: oldFeatured.filter((_, idx) => idx !== i) as any[],
-                                  },
-                                }));
-                              }}
+                        {((activeItem.megaFallback?.featured as FeaturedProduct[]) || [])
+                          .slice(0, 4)
+                          .map((fProd, i) => (
+                            <div
+                              key={i}
+                              className="border border-border bg-surface/50 p-4 rounded-xl space-y-3 relative"
                             >
-                              ✕
-                            </Button>
-
-                            <div className="pt-2">
-                              <ProductSelector
-                                onSelect={(prod) => {
-                                  const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedProduct[];
-                                  const rawDesc = prod.short_description || prod.product_categories?.name || "";
-                                  const cleanDesc = stripHtml(rawDesc);
-                                  const baseSpec = prod.thickness_mm ? `${prod.thickness_mm}mm` : cleanDesc;
-
-                                  list[i] = {
-                                    label: prod.name,
-                                    spec: truncateSpec(baseSpec),
-                                    to: "/catalogue/$slug",
-                                    params: {
-                                      slug: prod.slug,
-                                    },
-                                    image: prod.image_url || "",
-                                  };
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10"
+                                onClick={() => {
+                                  const oldFeatured = activeItem.megaFallback?.featured || [];
                                   updateActiveItem((item) => ({
                                     ...item,
                                     megaFallback: {
                                       ...(item.megaFallback || {}),
-                                      featured: list,
+                                      featured: oldFeatured.filter((_, idx) => idx !== i) as any[],
                                     },
                                   }));
                                 }}
-                              />
-                            </div>
+                              >
+                                ✕
+                              </Button>
 
-                            {fProd.label && (
-                              <div className="space-y-3 border-t border-border/40 pt-2.5">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
-                                    Display Title Override
-                                  </label>
-                                  <Input
-                                    value={fProd.label}
-                                    onChange={(e) => {
-                                      const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedProduct[];
-                                      list[i] = { ...list[i], label: e.target.value };
-                                      updateActiveItem((item) => ({
-                                        ...item,
-                                        megaFallback: { ...(item.megaFallback || {}), featured: list },
-                                      }));
-                                    }}
-                                    className="text-xs bg-background h-8"
-                                  />
-                                </div>
+                              <div className="pt-2">
+                                <ProductSelector
+                                  onSelect={(prod) => {
+                                    const list = [
+                                      ...(activeItem.megaFallback?.featured || []),
+                                    ] as FeaturedProduct[];
+                                    const rawDesc =
+                                      prod.short_description || prod.product_categories?.name || "";
+                                    const cleanDesc = stripHtml(rawDesc);
+                                    const baseSpec = prod.thickness_mm
+                                      ? `${prod.thickness_mm}mm`
+                                      : cleanDesc;
 
-                                <div>
-                                  <div className="flex justify-between items-center mb-0.5">
-                                    <label className="text-[9px] font-bold uppercase text-muted-foreground">
-                                      Display Spec / Preview text (max 62 chars)
-                                    </label>
-                                    <span className="text-[8px] text-muted-foreground font-mono">
-                                      {(fProd.spec || "").length}/62
-                                    </span>
-                                  </div>
-                                  <Textarea
-                                    value={fProd.spec}
-                                    maxLength={62}
-                                    onChange={(e) => {
-                                      const list = [...(activeItem.megaFallback?.featured || [])] as FeaturedProduct[];
-                                      list[i] = { ...list[i], spec: truncateSpec(e.target.value) };
-                                      updateActiveItem((item) => ({
-                                        ...item,
-                                        megaFallback: { ...(item.megaFallback || {}), featured: list },
-                                      }));
-                                    }}
-                                    className="text-xs bg-background min-h-[50px] resize-none"
-                                  />
-                                </div>
-
-                                <div className="flex items-center gap-2.5 p-2 bg-surface/60 rounded-lg border border-border">
-                                  {fProd.image && (
-                                    <img src={fProd.image} className="h-8 w-8 rounded object-cover border border-border shrink-0" />
-                                  )}
-                                  <div className="flex-1 min-w-0">
-                                    <span className="text-[8px] font-bold uppercase text-primary block">
-                                      DB Slug Link
-                                    </span>
-                                    <span className="text-[9px] text-muted-foreground block truncate">
-                                      {fProd.params?.slug ? `/catalogue/${fProd.params.slug}` : fProd.to}
-                                    </span>
-                                  </div>
-                                </div>
+                                    list[i] = {
+                                      label: prod.name,
+                                      spec: truncateSpec(baseSpec),
+                                      to: "/catalogue/$slug",
+                                      params: {
+                                        slug: prod.slug,
+                                      },
+                                      image: prod.image_url || "",
+                                    };
+                                    updateActiveItem((item) => ({
+                                      ...item,
+                                      megaFallback: {
+                                        ...(item.megaFallback || {}),
+                                        featured: list,
+                                      },
+                                    }));
+                                  }}
+                                />
                               </div>
-                            )}
-                          </div>
-                        ))}
 
-                        {((activeItem.megaFallback?.featured) || []).length < 4 && (
+                              {fProd.label && (
+                                <div className="space-y-3 border-t border-border/40 pt-2.5">
+                                  <div>
+                                    <label className="text-[9px] font-bold uppercase text-muted-foreground block mb-0.5">
+                                      Display Title Override
+                                    </label>
+                                    <Input
+                                      value={fProd.label}
+                                      onChange={(e) => {
+                                        const list = [
+                                          ...(activeItem.megaFallback?.featured || []),
+                                        ] as FeaturedProduct[];
+                                        list[i] = { ...list[i], label: e.target.value };
+                                        updateActiveItem((item) => ({
+                                          ...item,
+                                          megaFallback: {
+                                            ...(item.megaFallback || {}),
+                                            featured: list,
+                                          },
+                                        }));
+                                      }}
+                                      className="text-xs bg-background h-8"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <div className="flex justify-between items-center mb-0.5">
+                                      <label className="text-[9px] font-bold uppercase text-muted-foreground">
+                                        Display Spec / Preview text (max 62 chars)
+                                      </label>
+                                      <span className="text-[8px] text-muted-foreground font-mono">
+                                        {(fProd.spec || "").length}/62
+                                      </span>
+                                    </div>
+                                    <Textarea
+                                      value={fProd.spec}
+                                      maxLength={62}
+                                      onChange={(e) => {
+                                        const list = [
+                                          ...(activeItem.megaFallback?.featured || []),
+                                        ] as FeaturedProduct[];
+                                        list[i] = {
+                                          ...list[i],
+                                          spec: truncateSpec(e.target.value),
+                                        };
+                                        updateActiveItem((item) => ({
+                                          ...item,
+                                          megaFallback: {
+                                            ...(item.megaFallback || {}),
+                                            featured: list,
+                                          },
+                                        }));
+                                      }}
+                                      className="text-xs bg-background min-h-[50px] resize-none"
+                                    />
+                                  </div>
+
+                                  <div className="flex items-center gap-2.5 p-2 bg-surface/60 rounded-lg border border-border">
+                                    {fProd.image && (
+                                      <img
+                                        src={fProd.image}
+                                        className="h-8 w-8 rounded object-cover border border-border shrink-0"
+                                      />
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <span className="text-[8px] font-bold uppercase text-primary block">
+                                        DB Slug Link
+                                      </span>
+                                      <span className="text-[9px] text-muted-foreground block truncate">
+                                        {fProd.params?.slug
+                                          ? `/catalogue/${fProd.params.slug}`
+                                          : fProd.to}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+
+                        {(activeItem.megaFallback?.featured || []).length < 4 && (
                           <Button
                             variant="outline"
                             onClick={() => {
@@ -1134,9 +1225,12 @@ export function MegaMenuBuilderTab({ initialSections, onSectionsChange }: MegaMe
           ) : (
             <div className="h-[400px] flex flex-col items-center justify-center text-muted-foreground gap-3">
               <Compass className="h-10 w-10 text-muted-foreground/30" />
-              <p className="text-sm font-medium">Select a navigation item on the left to configure columns</p>
+              <p className="text-sm font-medium">
+                Select a navigation item on the left to configure columns
+              </p>
               <p className="text-xs max-w-xs text-center">
-                Selecting an item allows you to edit its Identity, Column 2 (Sublinks/Slider), and Column 3 (Featured Highlights).
+                Selecting an item allows you to edit its Identity, Column 2 (Sublinks/Slider), and
+                Column 3 (Featured Highlights).
               </p>
             </div>
           )}

@@ -8,12 +8,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 export async function loadIndustryData(slug: string) {
   // Per-slug fallback hero images so every industry page looks great before James configures them
   const FALLBACK_HEROES: Record<string, string> = {
-    "construction-infrastructure": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
-    "mining": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
-    "environmental-waste": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80",
+    "construction-infrastructure":
+      "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    mining: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
+    "environmental-waste":
+      "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80",
     "water-management": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80",
-    "agriculture-aquaculture": "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
-    "energy": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
+    "agriculture-aquaculture":
+      "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
+    energy: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
@@ -23,7 +26,7 @@ export async function loadIndustryData(slug: string) {
     .select("value")
     .eq("key", "template_industries")
     .maybeSingle();
-  const templates = templateRow?.value as Record<string, any> || {};
+  const templates = (templateRow?.value as Record<string, any>) || {};
 
   // Try loading from hierarchy
   const { data: hierarchyRow, error: hierarchyError } = await supabase
@@ -36,10 +39,8 @@ export async function loadIndustryData(slug: string) {
     console.error("Failed to load hierarchy_industries:", hierarchyError);
   }
 
-  const hierarchy = hierarchyRow?.value as any || {};
-  const matchedItem = hierarchy.items?.find(
-    (item: any) => item.slug === slug || item.id === slug
-  );
+  const hierarchy = (hierarchyRow?.value as any) || {};
+  const matchedItem = hierarchy.items?.find((item: any) => item.slug === slug || item.id === slug);
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then slug)
   let tmpl = null;
@@ -93,7 +94,13 @@ export async function loadIndustryData(slug: string) {
   }
 
   const staticInd = INDUSTRIES.find((i) => i.slug === slug);
-  const label = matchedItem?.label ?? staticInd?.label ?? slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label =
+    matchedItem?.label ??
+    staticInd?.label ??
+    slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
   // Fetch dynamic Case Studies (prioritize nominated, fallback to sector matching)
   let caseStudies: any[] = [];
@@ -101,7 +108,9 @@ export async function loadIndustryData(slug: string) {
     try {
       const { data: casesData } = await supabase
         .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .select(
+          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+        )
         .in("id", templateData.caseStudies)
         .eq("status", "published");
 
@@ -119,7 +128,9 @@ export async function loadIndustryData(slug: string) {
     try {
       const { data: casesData } = await supabase
         .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .select(
+          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+        )
         .eq("sector", label)
         .eq("status", "published")
         .order("project_year", { ascending: false });
@@ -138,7 +149,9 @@ export async function loadIndustryData(slug: string) {
     try {
       const { data: prodsData } = await supabase
         .from("products_public")
-        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .select(
+          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
+        )
         .in("id", templateData.keyProducts);
 
       if (prodsData) {
@@ -148,7 +161,9 @@ export async function loadIndustryData(slug: string) {
           .filter(Boolean);
         keyProducts = ordered.map((d: any) => ({
           ...d,
-          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+          product_categories: Array.isArray(d.product_categories)
+            ? d.product_categories[0]
+            : d.product_categories,
         }));
       }
     } catch (e) {
@@ -160,7 +175,7 @@ export async function loadIndustryData(slug: string) {
     industry: { slug, label, icon: staticInd?.icon || "Factory" },
     templateData,
     caseStudies,
-    keyProducts
+    keyProducts,
   };
 }
 
@@ -252,11 +267,16 @@ export const Route = createFileRoute("/industries/$slug")({
   pendingComponent: IndustryDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
-    const { industry, templateData } = loaderData || { industry: { slug: "", label: "", icon: "" }, templateData: null };
+    const { industry, templateData } = loaderData || {
+      industry: { slug: "", label: "", icon: "" },
+      templateData: null,
+    };
     const label = industry.label;
 
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-    const description = templateData?.seo?.description || `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
+    const description =
+      templateData?.seo?.description ||
+      `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
 
     return {
       meta: [

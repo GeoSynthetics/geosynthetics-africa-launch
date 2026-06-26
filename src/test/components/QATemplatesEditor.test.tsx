@@ -21,7 +21,7 @@ const mockDocs = [
     cta_label: "Request Info",
     sort_order: 1,
     status: "published",
-  }
+  },
 ];
 
 const mockLanding = {
@@ -40,7 +40,7 @@ const mockLanding = {
     title: "SEO Title",
     description: "SEO Desc",
     keywords: "QA, QC",
-  }
+  },
 };
 
 vi.mock("@/integrations/supabase/client", () => {
@@ -51,9 +51,13 @@ vi.mock("@/integrations/supabase/client", () => {
           const limitMock = vi.fn().mockResolvedValue({ data: mockDocs, error: null });
           const orderMock = vi.fn().mockReturnValue({ limit: limitMock });
           const selectMock = vi.fn().mockReturnValue({ order: orderMock });
-          const updateMock = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) });
+          const updateMock = vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) });
           const insertMock = vi.fn().mockResolvedValue({ data: null, error: null });
-          const deleteMock = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) });
+          const deleteMock = vi
+            .fn()
+            .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) });
           return {
             select: selectMock,
             update: updateMock,
@@ -62,7 +66,9 @@ vi.mock("@/integrations/supabase/client", () => {
           };
         }
         if (table === "site_config") {
-          const maybeSingleMock = vi.fn().mockResolvedValue({ data: { value: mockLanding }, error: null });
+          const maybeSingleMock = vi
+            .fn()
+            .mockResolvedValue({ data: { value: mockLanding }, error: null });
           const eqMock = vi.fn().mockReturnValue({ maybeSingle: maybeSingleMock });
           const selectMock = vi.fn().mockReturnValue({ eq: eqMock });
           const upsertMock = vi.fn().mockResolvedValue({ data: null, error: null });
@@ -160,9 +166,11 @@ describe("QATemplatesEditor Component", () => {
 
     // Verify right panel updates to New QA Document form
     expect(screen.getByRole("heading", { name: "New QA Document" })).toBeInTheDocument();
-    
+
     // Check that inputs are empty/default
-    const catInput = screen.getByPlaceholderText("e.g. GSE® / Solmax Quality Assurance") as HTMLInputElement;
+    const catInput = screen.getByPlaceholderText(
+      "e.g. GSE® / Solmax Quality Assurance",
+    ) as HTMLInputElement;
     expect(catInput).toBeInTheDocument();
     expect(catInput.value).toBe("");
   });

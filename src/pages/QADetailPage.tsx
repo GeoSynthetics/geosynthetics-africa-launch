@@ -121,13 +121,18 @@ export function QADetailPage() {
     return () => window.removeEventListener("scroll", handler);
   }, [headerH, ANCHORS]);
 
-  const heroImg = doc.hero_image_url || "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80";
+  const heroImg =
+    doc.hero_image_url ||
+    "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80";
 
   return (
     <>
       {/* ============ HERO ============ */}
       <section className="relative min-h-[420px] flex items-end overflow-hidden bg-[#0B0B0C]">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroImg})` }} />
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroImg})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
 
@@ -162,9 +167,14 @@ export function QADetailPage() {
               {keyPillars.map((pillar) => {
                 const IconComp = getIconComp(pillar.icon);
                 return (
-                  <div key={pillar.title} className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded px-2.5 py-1.5">
+                  <div
+                    key={pillar.title}
+                    className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded px-2.5 py-1.5"
+                  >
                     <IconComp className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-white/90">{pillar.title}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white/90">
+                      {pillar.title}
+                    </span>
                   </div>
                 );
               })}
@@ -190,7 +200,7 @@ export function QADetailPage() {
       </section>
 
       {/* ============ STICKY SUBNAV ============ */}
-      <nav 
+      <nav
         className="sticky z-20 bg-background border-b border-border shadow-sm"
         style={{ top: `${headerH}px` }}
       >
@@ -226,7 +236,6 @@ export function QADetailPage() {
         <div className="container-page py-12 grid lg:grid-cols-12 gap-10">
           {/* Left: Main Content */}
           <article className="lg:col-span-8 space-y-14">
-
             {/* Overview section */}
             <section id="overview" className="scroll-mt-28">
               <h2 className="font-display text-2xl font-bold uppercase mb-4 text-foreground flex items-center gap-2">
@@ -243,13 +252,20 @@ export function QADetailPage() {
                   {keyPillars.map((pillar) => {
                     const IconComp = getIconComp(pillar.icon);
                     return (
-                      <div key={pillar.title} className="border border-border bg-card rounded-lg p-4 flex items-start gap-3">
+                      <div
+                        key={pillar.title}
+                        className="border border-border bg-card rounded-lg p-4 flex items-start gap-3"
+                      >
                         <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
                           <IconComp className="h-4 w-4" />
                         </div>
                         <div>
-                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">{pillar.title}</h4>
-                          <p className="text-xs text-muted-foreground leading-relaxed">{pillar.desc}</p>
+                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
+                            {pillar.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            {pillar.desc}
+                          </p>
                         </div>
                       </div>
                     );
@@ -277,7 +293,9 @@ export function QADetailPage() {
                           </h3>
                         )}
                         {section.body && (
-                          <p className="text-sm text-muted-foreground leading-relaxed">{section.body}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {section.body}
+                          </p>
                         )}
                       </>
                     )}
@@ -294,7 +312,9 @@ export function QADetailPage() {
                           {(section.items as string[]).map((item, i) => (
                             <div key={i} className="flex items-start gap-3">
                               <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                              <span className="text-sm text-foreground leading-relaxed">{item}</span>
+                              <span className="text-sm text-foreground leading-relaxed">
+                                {item}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -310,19 +330,26 @@ export function QADetailPage() {
                           </h3>
                         )}
                         <div className="border border-border rounded-xl overflow-hidden divide-y divide-border bg-card shadow-sm">
-                          {(section.items as Array<{ title: string; desc: string }>).map((item, i) => (
-                            <div key={i} className="p-5 flex items-start gap-5 group hover:bg-surface/30 transition">
-                              <span className="font-display font-black text-3xl text-primary leading-none shrink-0 mt-0.5">
-                                {String(i + 1).padStart(2, "0")}
-                              </span>
-                              <div>
-                                <h4 className="font-display text-sm font-extrabold uppercase text-foreground mb-1">
-                                  {item.title}
-                                </h4>
-                                <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                          {(section.items as Array<{ title: string; desc: string }>).map(
+                            (item, i) => (
+                              <div
+                                key={i}
+                                className="p-5 flex items-start gap-5 group hover:bg-surface/30 transition"
+                              >
+                                <span className="font-display font-black text-3xl text-primary leading-none shrink-0 mt-0.5">
+                                  {String(i + 1).padStart(2, "0")}
+                                </span>
+                                <div>
+                                  <h4 className="font-display text-sm font-extrabold uppercase text-foreground mb-1">
+                                    {item.title}
+                                  </h4>
+                                  <p className="text-xs text-muted-foreground leading-relaxed">
+                                    {item.desc}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ),
+                          )}
                         </div>
                       </>
                     )}
@@ -338,7 +365,9 @@ export function QADetailPage() {
                           </h4>
                         )}
                         {section.body && (
-                          <p className="text-xs text-white/80 leading-relaxed max-w-2xl">{section.body}</p>
+                          <p className="text-xs text-white/80 leading-relaxed max-w-2xl">
+                            {section.body}
+                          </p>
                         )}
                       </div>
                     )}
@@ -346,14 +375,18 @@ export function QADetailPage() {
                     {section.type === "table" && section.headers && section.rows && (
                       <>
                         {section.heading && (
-                          <h3 className="font-display text-lg font-bold uppercase text-foreground">{section.heading}</h3>
+                          <h3 className="font-display text-lg font-bold uppercase text-foreground">
+                            {section.heading}
+                          </h3>
                         )}
                         <div className="overflow-x-auto rounded-xl border border-border bg-card">
                           <table className="w-full text-xs">
                             <thead className="bg-[#1A1A1A] text-white font-bold uppercase">
                               <tr>
                                 {section.headers.map((h, j) => (
-                                  <th key={j} className="px-4 py-3 text-left">{h}</th>
+                                  <th key={j} className="px-4 py-3 text-left">
+                                    {h}
+                                  </th>
                                 ))}
                               </tr>
                             </thead>
@@ -361,7 +394,9 @@ export function QADetailPage() {
                               {section.rows.map((row, i) => (
                                 <tr key={i} className="hover:bg-surface/50 transition">
                                   {row.map((cell, j) => (
-                                    <td key={j} className="px-4 py-3 text-muted-foreground">{cell}</td>
+                                    <td key={j} className="px-4 py-3 text-muted-foreground">
+                                      {cell}
+                                    </td>
                                   ))}
                                 </tr>
                               ))}
@@ -383,7 +418,8 @@ export function QADetailPage() {
                   Industries Served
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  These QA standards and procedures have been successfully applied across the following industries:
+                  These QA standards and procedures have been successfully applied across the
+                  following industries:
                 </p>
                 <div className="flex flex-wrap gap-2.5">
                   {industries.map((industry) => (
@@ -403,7 +439,10 @@ export function QADetailPage() {
           <aside className="lg:col-span-4 space-y-6">
             {/* Stats card */}
             {stats.length > 0 && (
-              <div id="performance" className="scroll-mt-28 bg-foreground text-background rounded-lg border border-[#2A2A2A] overflow-hidden p-6">
+              <div
+                id="performance"
+                className="scroll-mt-28 bg-foreground text-background rounded-lg border border-[#2A2A2A] overflow-hidden p-6"
+              >
                 <h3 className="font-display text-xs font-extrabold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4 text-primary" />
                   QA Performance Metrics
@@ -411,8 +450,12 @@ export function QADetailPage() {
                 <div className="divide-y divide-white/10">
                   {stats.map((s) => (
                     <div key={s.label} className="py-3 flex items-baseline justify-between gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-white/60 leading-tight">{s.label}</span>
-                      <span className="font-display font-black text-lg text-primary shrink-0">{s.value}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-white/60 leading-tight">
+                        {s.label}
+                      </span>
+                      <span className="font-display font-black text-lg text-primary shrink-0">
+                        {s.value}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -428,9 +471,13 @@ export function QADetailPage() {
                 Request QA Documentation
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-                Get the full QA dossier, method statements, test certificates, and as-built documentation for your project.
+                Get the full QA dossier, method statements, test certificates, and as-built
+                documentation for your project.
               </p>
-              <Button asChild className="w-full bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide text-xs">
+              <Button
+                asChild
+                className="w-full bg-primary hover:bg-primary/90 uppercase font-bold tracking-wide text-xs"
+              >
                 <Link to="/contacts">{doc.cta_label || "Request QA Documentation"}</Link>
               </Button>
             </div>
@@ -443,13 +490,15 @@ export function QADetailPage() {
                 </h3>
                 <div className="space-y-3">
                   {keyPillars.map((pillar) => {
-                        const IconComp = getIconComp(pillar.icon);
+                    const IconComp = getIconComp(pillar.icon);
                     return (
                       <div key={pillar.title} className="flex items-center gap-2.5">
                         <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0">
                           <IconComp className="h-3 w-3" />
                         </div>
-                        <span className="text-xs font-semibold text-foreground">{pillar.title}</span>
+                        <span className="text-xs font-semibold text-foreground">
+                          {pillar.title}
+                        </span>
                       </div>
                     );
                   })}
@@ -478,8 +527,12 @@ export function QADetailPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-white/10">
               {stats.map((s) => (
                 <div key={s.label} className="bg-foreground p-6 hover:bg-white/5 transition">
-                  <div className="font-display font-black text-3xl text-primary leading-none mb-1">{s.value}</div>
-                  <div className="text-[9px] font-bold uppercase tracking-wide text-white/60 leading-tight">{s.label}</div>
+                  <div className="font-display font-black text-3xl text-primary leading-none mb-1">
+                    {s.value}
+                  </div>
+                  <div className="text-[9px] font-bold uppercase tracking-wide text-white/60 leading-tight">
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>

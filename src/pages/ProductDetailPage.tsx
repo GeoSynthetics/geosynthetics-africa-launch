@@ -33,9 +33,21 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/catalogue.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
-interface KeyFeature { label: string; icon?: string }
-interface SpecRow { property: string; test_method?: string; unit?: string; typical_value?: string }
-interface StripItem { title: string; subtitle?: string; image_url?: string }
+interface KeyFeature {
+  label: string;
+  icon?: string;
+}
+interface SpecRow {
+  property: string;
+  test_method?: string;
+  unit?: string;
+  typical_value?: string;
+}
+interface StripItem {
+  title: string;
+  subtitle?: string;
+  image_url?: string;
+}
 
 const FEATURE_ICONS = {
   filter: Droplets,
@@ -65,7 +77,8 @@ const TABS = [
 ];
 
 export function ProductDetailPage() {
-  const { product, alternatives, systemComponents, familyData, caseStudies } = Route.useLoaderData();
+  const { product, alternatives, systemComponents, familyData, caseStudies } =
+    Route.useLoaderData();
   const { open } = useQuickQuote();
   const [activeTab, setActiveTab] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
@@ -94,20 +107,52 @@ export function ProductDetailPage() {
     return DEFAULT_FEATURES;
   }, [product.key_features, familyData?.features]);
 
-  const downloads = useMemo(() => ([
-    { label: "Datasheet", url: product.datasheet_url, size: "PDF" },
-    { label: "Installation Guide", url: product.installation_guide_url || (familyData?.installationSpecs ? "#installation" : null), size: "PDF" },
-    { label: "QA/QC Checklist", url: product.qa_checklist_url, size: "PDF" },
-    { label: "Chemical Resistance Guide", url: product.chemical_resistance_url, size: "PDF" },
-  ].filter((d) => d.url)), [product, familyData]);
+  const downloads = useMemo(
+    () =>
+      [
+        { label: "Datasheet", url: product.datasheet_url, size: "PDF" },
+        {
+          label: "Installation Guide",
+          url:
+            product.installation_guide_url ||
+            (familyData?.installationSpecs ? "#installation" : null),
+          size: "PDF",
+        },
+        { label: "QA/QC Checklist", url: product.qa_checklist_url, size: "PDF" },
+        { label: "Chemical Resistance Guide", url: product.chemical_resistance_url, size: "PDF" },
+      ].filter((d) => d.url),
+    [product, familyData],
+  );
 
   const ataGlance = [
     { icon: Package, label: "Material", value: product.material },
     { icon: Layers, label: "Structure", value: product.structure },
     { icon: Palette, label: "Colour", value: product.colour },
-    { icon: ShieldCheck, label: "Standard", value: product.standard || (familyData?.technicalHighlights?.[0]?.value) },
-    { icon: Ruler, label: "Roll Width", value: product.roll_width || (familyData?.technicalHighlights?.[1]?.value && familyData.technicalHighlights[1].label.toLowerCase().includes("width") ? familyData.technicalHighlights[1].value : null) },
-    { icon: Scroll, label: "Roll Length", value: product.roll_length || (familyData?.technicalHighlights?.[2]?.value && familyData.technicalHighlights[2].label.toLowerCase().includes("length") ? familyData.technicalHighlights[2].value : null) },
+    {
+      icon: ShieldCheck,
+      label: "Standard",
+      value: product.standard || familyData?.technicalHighlights?.[0]?.value,
+    },
+    {
+      icon: Ruler,
+      label: "Roll Width",
+      value:
+        product.roll_width ||
+        (familyData?.technicalHighlights?.[1]?.value &&
+        familyData.technicalHighlights[1].label.toLowerCase().includes("width")
+          ? familyData.technicalHighlights[1].value
+          : null),
+    },
+    {
+      icon: Scroll,
+      label: "Roll Length",
+      value:
+        product.roll_length ||
+        (familyData?.technicalHighlights?.[2]?.value &&
+        familyData.technicalHighlights[2].label.toLowerCase().includes("length")
+          ? familyData.technicalHighlights[2].value
+          : null),
+    },
   ].filter((r) => r.value);
 
   const applicationsList = useMemo(() => {
@@ -143,33 +188,36 @@ export function ProductDetailPage() {
         label: "Product Selection Guide",
         desc: "Compare performance properties across the entire category hierarchy before specifying.",
         url: product.product_categories?.selection_guide_url || null,
-        tag: "CATEGORY GUIDE"
+        tag: "CATEGORY GUIDE",
       },
       {
         label: "Installation & Method Statement",
         desc: "Standard procedures, wedge welding temperatures, and panel deployment guidance.",
         url: product.installation_guide_url || null,
         tag: "INSTALLATION",
-        isAnchor: !product.installation_guide_url && familyData?.installationSpecs ? "#installation" : false
+        isAnchor:
+          !product.installation_guide_url && familyData?.installationSpecs
+            ? "#installation"
+            : false,
       },
       {
         label: "QA/QC Site Checklist",
         desc: "Field testing procedures, pressure test logs, and seam verification guidelines.",
         url: product.qa_checklist_url || null,
-        tag: "QUALITY CHECKLIST"
+        tag: "QUALITY CHECKLIST",
       },
       {
         label: "Technical Data Sheet (TDS)",
         desc: "Guaranteed minimum average roll values (MARV) and material testing properties.",
         url: product.datasheet_url || null,
-        tag: "TECHNICAL SPEC"
+        tag: "TECHNICAL SPEC",
       },
       {
         label: "Chemical Resistance / Accessories Guide",
         desc: "Chemical compatibility matrix and list of accessories needed for seam connection.",
         url: product.chemical_resistance_url || null,
-        tag: "ACCESSORIES GUIDE"
-      }
+        tag: "ACCESSORIES GUIDE",
+      },
     ];
   }, [product, familyData]);
 
@@ -233,7 +281,11 @@ export function ProductDetailPage() {
       {/* Structured data for search engines */}
       <ProductSchema
         name={product.name}
-        description={product.meta_description || product.short_description || `${product.name} — engineered geosynthetic product by Geosynthetics Africa.`}
+        description={
+          product.meta_description ||
+          product.short_description ||
+          `${product.name} — engineered geosynthetic product by Geosynthetics Africa.`
+        }
         slug={product.slug}
         image={heroImg}
         sku={product.sku}
@@ -248,19 +300,19 @@ export function ProductDetailPage() {
           { name: "Home", url: "https://geosynthetics.co.za/" },
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
           ...(product.product_categories?.name
-            ? [{
-              name: product.product_categories.name,
-              url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
-            }]
+            ? [
+                {
+                  name: product.product_categories.name,
+                  url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+                },
+              ]
             : []),
           { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
         ]}
       />
 
       {/* Breadcrumb + Hero with product image as background (landscape, left-dark fade) */}
-      <section
-        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
-      >
+      <section className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden">
         {/* Background image */}
         {heroImg && (
           <img
@@ -340,7 +392,8 @@ export function ProductDetailPage() {
             {/* Key features */}
             <div className="mt-7 grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-2xl">
               {features.slice(0, 5).map((f: KeyFeature, i: number) => {
-                const Icon = (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
+                const Icon =
+                  (f.icon && FEATURE_ICONS[f.icon as keyof typeof FEATURE_ICONS]) || CheckCircle2;
                 return (
                   <div key={i} className="text-center">
                     <div className="mx-auto h-12 w-12 rounded-full border border-surface-dark-foreground/20 bg-surface-dark/40 backdrop-blur-sm flex items-center justify-center text-primary">
@@ -398,7 +451,9 @@ export function ProductDetailPage() {
       <div
         className={cn(
           "sticky z-30 bg-background border-b border-border shadow-sm transition-all duration-300",
-          tabsVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none",
+          tabsVisible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-full pointer-events-none",
         )}
         style={{ top: headerH }}
       >
@@ -443,9 +498,11 @@ export function ProductDetailPage() {
               <h2 className="font-display text-2xl font-bold uppercase mb-5">Overview</h2>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 space-y-4 text-sm leading-relaxed text-foreground/85">
-                  {(product.long_description ?? product.short_description ?? "").split(/\n\n+/).map((para: string, i: number) => (
-                    <p key={i}>{para}</p>
-                  ))}
+                  {(product.long_description ?? product.short_description ?? "")
+                    .split(/\n\n+/)
+                    .map((para: string, i: number) => (
+                      <p key={i}>{para}</p>
+                    ))}
                   {!product.long_description && !product.short_description && (
                     <p className="text-muted-foreground italic">Detailed overview coming soon.</p>
                   )}
@@ -485,7 +542,9 @@ export function ProductDetailPage() {
                         {product.specifications.map((s: SpecRow, i: number) => (
                           <tr key={i} className="hover:bg-surface/60">
                             <td className="px-4 py-3 font-medium">{s.property}</td>
-                            <td className="px-4 py-3 text-muted-foreground">{s.test_method ?? "—"}</td>
+                            <td className="px-4 py-3 text-muted-foreground">
+                              {s.test_method ?? "—"}
+                            </td>
                             <td className="px-4 py-3 text-muted-foreground">{s.unit ?? "—"}</td>
                             <td className="px-4 py-3">{s.typical_value ?? "—"}</td>
                           </tr>
@@ -494,17 +553,21 @@ export function ProductDetailPage() {
                     </table>
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">
-                    Note: The above values are typical and not intended for specification purposes. Please refer to the product datasheet for full details.
+                    Note: The above values are typical and not intended for specification purposes.
+                    Please refer to the product datasheet for full details.
                   </p>
                 </>
-              ) : familyData?.propertiesTable?.rows && familyData.propertiesTable.rows.length > 0 ? (
+              ) : familyData?.propertiesTable?.rows &&
+                familyData.propertiesTable.rows.length > 0 ? (
                 <>
                   <div className="overflow-x-auto rounded border border-border">
                     <table className="w-full text-sm">
                       <thead className="bg-surface text-left text-xs uppercase tracking-wider text-muted-foreground">
                         <tr>
                           {familyData.propertiesTable.headers.map((h: string, idx: number) => (
-                            <th key={idx} className="px-4 py-3 font-semibold">{h}</th>
+                            <th key={idx} className="px-4 py-3 font-semibold">
+                              {h}
+                            </th>
                           ))}
                         </tr>
                       </thead>
@@ -512,7 +575,15 @@ export function ProductDetailPage() {
                         {familyData.propertiesTable.rows.map((row: string[], i: number) => (
                           <tr key={i} className="hover:bg-surface/60">
                             {row.map((cell: string, idx: number) => (
-                              <td key={idx} className={cn("px-4 py-3", idx === 0 ? "font-medium" : "text-muted-foreground")}>{cell}</td>
+                              <td
+                                key={idx}
+                                className={cn(
+                                  "px-4 py-3",
+                                  idx === 0 ? "font-medium" : "text-muted-foreground",
+                                )}
+                              >
+                                {cell}
+                              </td>
                             ))}
                           </tr>
                         ))}
@@ -520,11 +591,15 @@ export function ProductDetailPage() {
                     </table>
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">
-                    Note: The above specifications represent the product family properties. Please refer to the product datasheet for individual SKU values.
+                    Note: The above specifications represent the product family properties. Please
+                    refer to the product datasheet for individual SKU values.
                   </p>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground italic">Technical specifications will be published shortly. Request the datasheet for full property values.</p>
+                <p className="text-sm text-muted-foreground italic">
+                  Technical specifications will be published shortly. Request the datasheet for full
+                  property values.
+                </p>
               )}
             </div>
 
@@ -546,63 +621,96 @@ export function ProductDetailPage() {
 
             {/* Installation Guidance */}
             <div id="installation">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">Installation Guidance</h2>
+              <h2 className="font-display text-2xl font-bold uppercase mb-5">
+                Installation Guidance
+              </h2>
               {familyData?.installationSpecs && familyData.installationSpecs.length > 0 ? (
                 <div className="space-y-6">
                   <div className="rounded-xl border border-border bg-card p-6">
                     <div className="flex items-center gap-3 text-primary mb-4">
                       <Wrench className="h-6 w-6" />
-                      <h3 className="font-display text-lg font-bold uppercase">Standard Method Statement</h3>
+                      <h3 className="font-display text-lg font-bold uppercase">
+                        Standard Method Statement
+                      </h3>
                     </div>
                     <div className="space-y-4 text-sm leading-relaxed text-foreground/80">
-                      {splitIntoParagraphs(familyData.installationSpecs).map((spec: string, i: number) => (
-                        <p key={i}>{spec}</p>
-                      ))}
+                      {splitIntoParagraphs(familyData.installationSpecs).map(
+                        (spec: string, i: number) => (
+                          <p key={i}>{spec}</p>
+                        ),
+                      )}
                     </div>
                   </div>
                   {product.installation_guide_url && (
-                    <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary/5 cursor-pointer uppercase font-bold tracking-wider text-[11px] h-9">
-                      <a href={product.installation_guide_url} target="_blank" rel="noopener noreferrer">
-                        <Download className="mr-1.5 h-3.5 w-3.5" /> Download Complete Installation Guide (PDF)
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="border-primary text-primary hover:bg-primary/5 cursor-pointer uppercase font-bold tracking-wider text-[11px] h-9"
+                    >
+                      <a
+                        href={product.installation_guide_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Download className="mr-1.5 h-3.5 w-3.5" /> Download Complete Installation
+                        Guide (PDF)
                       </a>
                     </Button>
                   )}
                 </div>
               ) : (
                 <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
-                  Installation guides and method statements available on request. Download our installation guide above or speak to our technical team.
+                  Installation guides and method statements available on request. Download our
+                  installation guide above or speak to our technical team.
                 </div>
               )}
             </div>
 
             {/* QA & Testing */}
             <div id="qa">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">Quality Assurance & Testing</h2>
+              <h2 className="font-display text-2xl font-bold uppercase mb-5">
+                Quality Assurance & Testing
+              </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="rounded-xl border border-border bg-card p-6 space-y-4">
                   <div className="flex items-center gap-3 text-primary">
                     <ShieldCheck className="h-6 w-6" />
-                    <h3 className="font-display text-lg font-bold uppercase">Field QA/QC Checklist</h3>
+                    <h3 className="font-display text-lg font-bold uppercase">
+                      Field QA/QC Checklist
+                    </h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    To ensure certified waterproof integrity, the following field quality control procedures must be completed by the contractor:
+                    To ensure certified waterproof integrity, the following field quality control
+                    procedures must be completed by the contractor:
                   </p>
                   <ul className="space-y-2.5 text-xs text-foreground/85">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span><strong>Subgrade Acceptance:</strong> Smooth, compacted, free of sharp stone protrusions (&gt;10mm) and standing water.</span>
+                      <span>
+                        <strong>Subgrade Acceptance:</strong> Smooth, compacted, free of sharp stone
+                        protrusions (&gt;10mm) and standing water.
+                      </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span><strong>Trial Welds:</strong> Mandatory trial seams completed at start of shift and after breaks to calibrate welding wedges.</span>
+                      <span>
+                        <strong>Trial Welds:</strong> Mandatory trial seams completed at start of
+                        shift and after breaks to calibrate welding wedges.
+                      </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span><strong>Non-Destructive Testing:</strong> 100% of double-track fusion seams tested via air channel pressure testing.</span>
+                      <span>
+                        <strong>Non-Destructive Testing:</strong> 100% of double-track fusion seams
+                        tested via air channel pressure testing.
+                      </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span><strong>Destructive Shear & Peel:</strong> Coupons cut and tested on-site using a calibrated tensiometer.</span>
+                      <span>
+                        <strong>Destructive Shear & Peel:</strong> Coupons cut and tested on-site
+                        using a calibrated tensiometer.
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -611,17 +719,26 @@ export function ProductDetailPage() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-primary">
                       <Scroll className="h-6 w-6" />
-                      <h3 className="font-display text-lg font-bold uppercase">Manufacturing Standards</h3>
+                      <h3 className="font-display text-lg font-bold uppercase">
+                        Manufacturing Standards
+                      </h3>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      This product is supplied with full Mill Test Certificates (MTC) proving compliance to strict international specifications (ASTM, ISO, and GRI).
+                      This product is supplied with full Mill Test Certificates (MTC) proving
+                      compliance to strict international specifications (ASTM, ISO, and GRI).
                     </p>
                     <div className="bg-surface border border-border rounded-lg p-3 text-xs leading-normal">
-                      <strong>Standard Conformance:</strong> {product.standard || familyData?.technicalHighlights?.[0]?.value || "ASTM & ISO Standard Compliant"}
+                      <strong>Standard Conformance:</strong>{" "}
+                      {product.standard ||
+                        familyData?.technicalHighlights?.[0]?.value ||
+                        "ASTM & ISO Standard Compliant"}
                     </div>
                   </div>
                   {product.qa_checklist_url && (
-                    <Button asChild className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9">
+                    <Button
+                      asChild
+                      className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9"
+                    >
                       <a href={product.qa_checklist_url} target="_blank" rel="noopener noreferrer">
                         <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist (PDF)
                       </a>
@@ -642,7 +759,9 @@ export function ProductDetailPage() {
                       key={idx}
                       className={cn(
                         "flex flex-col justify-between rounded-xl border p-4 bg-card transition duration-200",
-                        hasUrl ? "border-border hover:border-primary/50" : "border-border/60 opacity-80"
+                        hasUrl
+                          ? "border-border hover:border-primary/50"
+                          : "border-border/60 opacity-80",
                       )}
                     >
                       <div>
@@ -654,8 +773,12 @@ export function ProductDetailPage() {
                             {hasUrl ? "PDF DOCUMENT" : "REQUEST ON DEMAND"}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">{doc.label}</h3>
-                        <p className="text-xs text-muted-foreground leading-normal mb-4">{doc.desc}</p>
+                        <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">
+                          {doc.label}
+                        </h3>
+                        <p className="text-xs text-muted-foreground leading-normal mb-4">
+                          {doc.desc}
+                        </p>
                       </div>
 
                       {doc.url ? (
@@ -680,10 +803,12 @@ export function ProductDetailPage() {
                           type="button"
                           onClick={() => {
                             const quoteMessage = `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`;
-                            const messageEl = document.querySelector('textarea[placeholder*="Message"]') as HTMLTextAreaElement;
+                            const messageEl = document.querySelector(
+                              'textarea[placeholder*="Message"]',
+                            ) as HTMLTextAreaElement;
                             if (messageEl) {
                               messageEl.value = quoteMessage;
-                              messageEl.dispatchEvent(new Event('input', { bubbles: true }));
+                              messageEl.dispatchEvent(new Event("input", { bubbles: true }));
                             }
                             scrollTo("quote");
                           }}
@@ -706,11 +831,18 @@ export function ProductDetailPage() {
               {caseStudies && caseStudies.length > 0 ? (
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {caseStudies.map((cs: any) => (
-                    <div key={cs.id} className="rounded-xl border border-border bg-card overflow-hidden hover:border-primary transition group flex flex-col justify-between">
+                    <div
+                      key={cs.id}
+                      className="rounded-xl border border-border bg-card overflow-hidden hover:border-primary transition group flex flex-col justify-between"
+                    >
                       <div>
                         <div className="aspect-[4/3] bg-surface overflow-hidden relative">
                           {cs.hero_image_url ? (
-                            <img src={cs.hero_image_url} alt={cs.title} className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+                            <img
+                              src={cs.hero_image_url}
+                              alt={cs.title}
+                              className="h-full w-full object-cover group-hover:scale-105 transition duration-300"
+                            />
                           ) : (
                             <div className="h-full w-full bg-surface" />
                           )}
@@ -719,12 +851,19 @@ export function ProductDetailPage() {
                           </div>
                         </div>
                         <div className="p-4">
-                          <div className="font-display text-xs font-bold uppercase tracking-wide leading-snug line-clamp-2 mb-1">{cs.title}</div>
-                          <p className="text-[11px] text-muted-foreground leading-normal line-clamp-2">{cs.summary}</p>
+                          <div className="font-display text-xs font-bold uppercase tracking-wide leading-snug line-clamp-2 mb-1">
+                            {cs.title}
+                          </div>
+                          <p className="text-[11px] text-muted-foreground leading-normal line-clamp-2">
+                            {cs.summary}
+                          </p>
                         </div>
                       </div>
                       <div className="px-4 pb-4">
-                        <Link to="/resources" className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary group-hover:text-primary-hover transition">
+                        <Link
+                          to="/resources"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary group-hover:text-primary-hover transition"
+                        >
                           View Case Study <ChevronRight className="h-3 w-3" />
                         </Link>
                       </div>
@@ -733,7 +872,8 @@ export function ProductDetailPage() {
                 </div>
               ) : (
                 <div className="rounded border border-border bg-card p-6 text-sm text-muted-foreground">
-                  Case studies and reference projects for {product.name} will be published shortly. Contact our technical team for reference projects across Africa.
+                  Case studies and reference projects for {product.name} will be published shortly.
+                  Contact our technical team for reference projects across Africa.
                 </div>
               )}
             </div>
@@ -742,7 +882,6 @@ export function ProductDetailPage() {
           {/* Sidebar */}
           <aside className="lg:col-span-4 space-y-6">
             <div className="lg:sticky lg:top-24 space-y-6">
-
               {/* Add to Project BOQ */}
               <div className="rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 p-5 shadow-sm">
                 <div className="flex items-center gap-2.5 mb-3">
@@ -758,7 +897,8 @@ export function ProductDetailPage() {
                 </div>
 
                 <p className="text-[11px] text-muted-foreground leading-relaxed mb-4">
-                  Add this product to your BOQ request. Upload drawings, fill in your project details and our technical team will respond with a proposal.
+                  Add this product to your BOQ request. Upload drawings, fill in your project
+                  details and our technical team will respond with a proposal.
                 </p>
                 <Button
                   id="add-to-project-boq-btn"
@@ -772,21 +912,33 @@ export function ProductDetailPage() {
 
               {/* Need help */}
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-                <h3 className="font-display text-base font-bold uppercase text-foreground">Need Help?</h3>
+                <h3 className="font-display text-base font-bold uppercase text-foreground">
+                  Need Help?
+                </h3>
                 <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
                   Our technical team is ready to support your project.
                 </p>
                 <div className="mt-4 space-y-3 text-xs font-medium">
-                  <a href="tel:+27117940974" className="flex items-center gap-2.5 text-foreground hover:text-primary transition">
+                  <a
+                    href="tel:+27117940974"
+                    className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
+                  >
                     <Phone className="h-4 w-4 text-primary shrink-0" />
                     +27 11 794 0974
                   </a>
-                  <a href="mailto:sales@geosynthetics.co.za" className="flex items-center gap-2.5 text-foreground hover:text-primary transition">
+                  <a
+                    href="mailto:sales@geosynthetics.co.za"
+                    className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
+                  >
                     <Mail className="h-4 w-4 text-primary shrink-0" />
                     sales@geosynthetics.co.za
                   </a>
                 </div>
-                <Button asChild variant="outline" className="w-full mt-4 uppercase font-bold tracking-wider text-[11px] h-9">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full mt-4 uppercase font-bold tracking-wider text-[11px] h-9"
+                >
                   <Link to="/contacts">Contact our team</Link>
                 </Button>
               </div>
@@ -794,7 +946,9 @@ export function ProductDetailPage() {
               {/* Quick downloads */}
               {downloads.length > 0 && (
                 <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-                  <h3 className="font-display text-base font-bold uppercase mb-3 text-foreground">Quick Downloads</h3>
+                  <h3 className="font-display text-base font-bold uppercase mb-3 text-foreground">
+                    Quick Downloads
+                  </h3>
                   <ul className="space-y-1.5">
                     {downloads.map((d) => (
                       <li key={d.label}>
@@ -806,7 +960,9 @@ export function ProductDetailPage() {
                         >
                           <FileText className="h-4 w-4 text-primary shrink-0 group-hover:scale-105 transition" />
                           <div className="flex-1 min-w-0">
-                            <div className="text-xs font-semibold truncate text-foreground group-hover:text-primary transition">{d.label}</div>
+                            <div className="text-xs font-semibold truncate text-foreground group-hover:text-primary transition">
+                              {d.label}
+                            </div>
                             <div className="text-[10px] text-muted-foreground">{d.size}</div>
                           </div>
                           <Download className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition" />
@@ -818,10 +974,7 @@ export function ProductDetailPage() {
               )}
 
               {/* Quote form */}
-              <QuoteCard
-                contextId={product.id}
-                contextLabel={product.name}
-              />
+              <QuoteCard contextId={product.id} contextLabel={product.name} />
 
               {/* Alternative Solutions */}
               {alternatives.length > 0 && (
@@ -833,7 +986,8 @@ export function ProductDetailPage() {
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
-                    Other {product.product_categories?.name?.toLowerCase() || "products"} in this category. See our Product Selection Guide before specifying.
+                    Other {product.product_categories?.name?.toLowerCase() || "products"} in this
+                    category. See our Product Selection Guide before specifying.
                   </p>
                   <ul className="space-y-2.5">
                     {alternatives.map((alt) => {
@@ -847,14 +1001,22 @@ export function ProductDetailPage() {
                           >
                             <div className="h-11 w-11 shrink-0 rounded-lg bg-surface border border-border flex items-center justify-center text-primary overflow-hidden transition duration-200 group-hover:scale-105">
                               {altImg ? (
-                                <img src={altImg} alt={alt.name} className="h-full w-full object-cover" />
+                                <img
+                                  src={altImg}
+                                  alt={alt.name}
+                                  className="h-full w-full object-cover"
+                                />
                               ) : (
                                 <Layers className="h-5 w-5" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold leading-snug text-foreground group-hover:text-primary transition truncate">{alt.name}</div>
-                              <div className="text-[10px] text-muted-foreground mt-0.5">{alt.product_categories?.name || "Containment Solution"}</div>
+                              <div className="text-xs font-bold leading-snug text-foreground group-hover:text-primary transition truncate">
+                                {alt.name}
+                              </div>
+                              <div className="text-[10px] text-muted-foreground mt-0.5">
+                                {alt.product_categories?.name || "Containment Solution"}
+                              </div>
                             </div>
                             <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition shrink-0" />
                           </Link>
@@ -872,7 +1034,11 @@ export function ProductDetailPage() {
                         size="sm"
                         className="w-full bg-background border-border text-foreground hover:bg-surface hover:text-primary font-bold uppercase tracking-wider text-[11px] h-9 transition-all duration-200 shadow-sm"
                       >
-                        <a href={product.product_categories.selection_guide_url} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={product.product_categories.selection_guide_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
                           View Product Selection Guide
                         </a>
@@ -888,11 +1054,13 @@ export function ProductDetailPage() {
                   <div className="flex items-center gap-2.5 mb-1.5 text-emerald-800 dark:text-emerald-500">
                     <Puzzle className="h-4.5 w-4.5 shrink-0" />
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Complete the {product.product_categories?.name?.replace(/s$/, "") || "Lining"} System
+                      Complete the {product.product_categories?.name?.replace(/s$/, "") || "Lining"}{" "}
+                      System
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
-                    Components and services typically specified to successfully install this {product.product_categories?.name?.toLowerCase().replace(/s$/, "") || "liner"}.
+                    Components and services typically specified to successfully install this{" "}
+                    {product.product_categories?.name?.toLowerCase().replace(/s$/, "") || "liner"}.
                   </p>
                   <ul className="space-y-2.5">
                     {systemComponents.map((sys) => {
@@ -906,14 +1074,22 @@ export function ProductDetailPage() {
                           >
                             <div className="h-11 w-11 shrink-0 rounded-lg bg-surface border border-border flex items-center justify-center text-emerald-700 dark:text-emerald-400 overflow-hidden transition duration-200 group-hover:scale-105">
                               {sysImg ? (
-                                <img src={sysImg} alt={sys.name} className="h-full w-full object-cover" />
+                                <img
+                                  src={sysImg}
+                                  alt={sys.name}
+                                  className="h-full w-full object-cover"
+                                />
                               ) : (
                                 <Wrench className="h-5 w-5" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold leading-snug text-foreground group-hover:text-emerald-800 dark:group-hover:text-emerald-500 transition truncate">{sys.name}</div>
-                              <div className="text-[10px] text-muted-foreground mt-0.5">{sys.product_categories?.name || "System Component"}</div>
+                              <div className="text-xs font-bold leading-snug text-foreground group-hover:text-emerald-800 dark:group-hover:text-emerald-500 transition truncate">
+                                {sys.name}
+                              </div>
+                              <div className="text-[10px] text-muted-foreground mt-0.5">
+                                {sys.product_categories?.name || "System Component"}
+                              </div>
                             </div>
                             <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-emerald-800 dark:group-hover:text-emerald-500 transition shrink-0" />
                           </Link>
@@ -933,12 +1109,25 @@ export function ProductDetailPage() {
   );
 }
 
-function Strip({ id, title, cta, items }: { id: string; title: string; cta: { label: string; to: string }; items: StripItem[] }) {
+function Strip({
+  id,
+  title,
+  cta,
+  items,
+}: {
+  id: string;
+  title: string;
+  cta: { label: string; to: string };
+  items: StripItem[];
+}) {
   return (
     <div id={id}>
       <div className="flex items-end justify-between mb-5">
         <h2 className="font-display text-2xl font-bold uppercase">{title}</h2>
-        <Link to={cta.to as never} className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-1">
+        <Link
+          to={cta.to as never}
+          className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-1"
+        >
           {cta.label} <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
@@ -949,14 +1138,19 @@ function Strip({ id, title, cta, items }: { id: string; title: string; cta: { la
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {items.slice(0, 5).map((it, i) => (
-            <div key={i} className="rounded border border-border bg-card overflow-hidden hover:border-primary transition">
+            <div
+              key={i}
+              className="rounded border border-border bg-card overflow-hidden hover:border-primary transition"
+            >
               <div className="aspect-[4/3] bg-surface overflow-hidden">
                 {it.image_url ? (
                   <img src={it.image_url} alt={it.title} className="h-full w-full object-cover" />
                 ) : null}
               </div>
               <div className="p-3">
-                <div className="font-display text-xs font-bold uppercase leading-tight">{it.title}</div>
+                <div className="font-display text-xs font-bold uppercase leading-tight">
+                  {it.title}
+                </div>
                 {it.subtitle && (
                   <div className="text-[11px] text-muted-foreground mt-1">{it.subtitle}</div>
                 )}

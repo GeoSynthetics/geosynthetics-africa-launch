@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { Upload, Phone, FileText, ArrowRight, CircleCheck, Award, ShieldCheck, Globe } from "lucide-react";
+import {
+  Upload,
+  Phone,
+  FileText,
+  ArrowRight,
+  CircleCheck,
+  Award,
+  ShieldCheck,
+  Globe,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
@@ -11,14 +20,17 @@ import { useQuickQuote } from "@/hooks/use-quick-quote";
 export function HomePage() {
   const loaderData = Route.useLoaderData();
   const { open } = useQuickQuote();
-  
+
   // Cast content safely, merging with defaults
   const content = { ...DEFAULT_HOMEPAGE_CONTENT, ...loaderData?.hp } as HomepageContent;
 
   const hero = { ...DEFAULT_HOMEPAGE_CONTENT.hero, ...content.hero };
   const gsaDifference = { ...DEFAULT_HOMEPAGE_CONTENT.gsaDifference, ...content.gsaDifference };
   const trustBadges = content.trustBadges || DEFAULT_HOMEPAGE_CONTENT.trustBadges;
-  const engineeredSystems = { ...DEFAULT_HOMEPAGE_CONTENT.engineeredSystems, ...content.engineeredSystems };
+  const engineeredSystems = {
+    ...DEFAULT_HOMEPAGE_CONTENT.engineeredSystems,
+    ...content.engineeredSystems,
+  };
   const partners = { ...DEFAULT_HOMEPAGE_CONTENT.partners, ...content.partners };
   const services = { ...DEFAULT_HOMEPAGE_CONTENT.services, ...content.services };
   const presence = { ...DEFAULT_HOMEPAGE_CONTENT.presence, ...content.presence };
@@ -61,12 +73,22 @@ export function HomePage() {
                 </Button>
               )}
               {hero.btn2Text && (
-                <Button asChild size="lg" variant="outline" className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+                >
                   <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
                 </Button>
               )}
               {hero.btn3Text && (
-                <Button asChild size="lg" variant="outline" className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+                >
                   <Link to={hero.btn3Url as any}>
                     <Phone className="mr-2 h-4 w-4" />
                     {hero.btn3Text}
@@ -118,30 +140,49 @@ export function HomePage() {
               {gsaDifference.title}
             </h2>
             <div className="mt-4 h-1 w-16 bg-primary" />
-            <p className="mt-5 text-sm text-muted-foreground">
-              {gsaDifference.description}
-            </p>
-            <Link to={gsaDifference.ctaUrl as any} className="mt-6 inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:gap-3 gap-2 transition-all">
+            <p className="mt-5 text-sm text-muted-foreground">{gsaDifference.description}</p>
+            <Link
+              to={gsaDifference.ctaUrl as any}
+              className="mt-6 inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:gap-3 gap-2 transition-all"
+            >
               {gsaDifference.ctaText} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="lg:col-span-8">
-            <div className={`grid grid-cols-2 gap-3 ${
-              gsaDifference.steps.length === 1 ? "md:grid-cols-1" :
-              gsaDifference.steps.length === 2 ? "md:grid-cols-2" :
-              gsaDifference.steps.length === 3 ? "md:grid-cols-3" :
-              gsaDifference.steps.length === 4 ? "md:grid-cols-4" :
-              gsaDifference.steps.length === 5 ? "md:grid-cols-5" :
-              gsaDifference.steps.length === 6 ? "md:grid-cols-6" : "md:grid-cols-5"
-            }`}>
+            <div
+              className={`grid grid-cols-2 gap-3 ${
+                gsaDifference.steps.length === 1
+                  ? "md:grid-cols-1"
+                  : gsaDifference.steps.length === 2
+                    ? "md:grid-cols-2"
+                    : gsaDifference.steps.length === 3
+                      ? "md:grid-cols-3"
+                      : gsaDifference.steps.length === 4
+                        ? "md:grid-cols-4"
+                        : gsaDifference.steps.length === 5
+                          ? "md:grid-cols-5"
+                          : gsaDifference.steps.length === 6
+                            ? "md:grid-cols-6"
+                            : "md:grid-cols-5"
+              }`}
+            >
               {gsaDifference.steps.map((s, i) => (
                 <div key={s.num || i} className="relative">
                   <div className="aspect-[3/4] overflow-hidden rounded">
-                    <img src={s.img} alt={s.title} className="h-full w-full object-cover" loading="lazy" />
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="mt-3 flex items-center gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">{s.num}</span>
-                    <span className="font-display text-sm font-bold uppercase tracking-wide">{s.title}</span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                      {s.num}
+                    </span>
+                    <span className="font-display text-sm font-bold uppercase tracking-wide">
+                      {s.title}
+                    </span>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
                   {i < gsaDifference.steps.length - 1 && (
@@ -161,7 +202,10 @@ export function HomePage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {engineeredSystems.sectionTitle}
             </h2>
-            <Link to={engineeredSystems.ctaUrl as any} className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2 hover:gap-3 transition-all">
+            <Link
+              to={engineeredSystems.ctaUrl as any}
+              className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2 hover:gap-3 transition-all"
+            >
               {engineeredSystems.ctaText} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -173,15 +217,22 @@ export function HomePage() {
                 className="group relative aspect-[3/4] overflow-hidden rounded"
               >
                 <img
-                  src={card.image || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80"}
+                  src={
+                    card.image ||
+                    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80"
+                  }
                   alt={card.title}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-4 text-surface-dark-foreground">
-                  <div className="font-display text-base font-bold uppercase leading-tight">{card.title}</div>
-                  <div className="mt-1 text-[10px] uppercase tracking-wider opacity-80">View System →</div>
+                  <div className="font-display text-base font-bold uppercase leading-tight">
+                    {card.title}
+                  </div>
+                  <div className="mt-1 text-[10px] uppercase tracking-wider opacity-80">
+                    View System →
+                  </div>
                 </div>
               </Link>
             ))}
@@ -204,14 +255,21 @@ export function HomePage() {
               <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
                 {services.sectionTitle}
               </h2>
-              <Link to={services.ctaUrl as any} className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2">
+              <Link
+                to={services.ctaUrl as any}
+                className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2"
+              >
                 {services.ctaText} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {services.cards.map((s, idx) => {
                 return (
-                  <Link key={s.id || idx} to="/services" className="group rounded border border-border bg-background p-5 hover:border-primary transition">
+                  <Link
+                    key={s.id || idx}
+                    to="/services"
+                    className="group rounded border border-border bg-background p-5 hover:border-primary transition"
+                  >
                     <div className="flex h-10 w-10 items-center justify-center rounded bg-accent text-primary group-hover:bg-primary group-hover:text-primary-foreground transition">
                       {s.icon ? (
                         <img src={s.icon} alt="" className="h-5 w-5 object-contain" />
@@ -246,7 +304,10 @@ export function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-6 bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide">
+              <Button
+                asChild
+                className="mt-6 bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide"
+              >
                 <Link to={services.qualityCtaUrl as any}>
                   {services.qualityCtaText} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -263,29 +324,41 @@ export function HomePage() {
           <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             {presence.stats.map((s, idx) => (
               <div key={s.id || idx}>
-                <div className="font-display text-4xl md:text-5xl font-bold text-surface-dark-foreground">{s.value}</div>
-                <div className="mt-1 text-xs font-bold uppercase tracking-wider text-primary">{s.label.split(" ")[0]}</div>
-                <div className="text-xs text-surface-dark-foreground/70">{s.label.split(" ").slice(1).join(" ")}</div>
+                <div className="font-display text-4xl md:text-5xl font-bold text-surface-dark-foreground">
+                  {s.value}
+                </div>
+                <div className="mt-1 text-xs font-bold uppercase tracking-wider text-primary">
+                  {s.label.split(" ")[0]}
+                </div>
+                <div className="text-xs text-surface-dark-foreground/70">
+                  {s.label.split(" ").slice(1).join(" ")}
+                </div>
               </div>
             ))}
           </div>
 
           {/* Right country cluster grid column — spans 8 on large screens */}
           <div className="lg:col-span-8">
-            <h3 className="font-display text-2xl font-bold uppercase tracking-tight">{presence.presenceTitle}</h3>
-            <p className="mt-1 text-sm text-surface-dark-foreground/70">{presence.presenceSubtitle}</p>
-            
+            <h3 className="font-display text-2xl font-bold uppercase tracking-tight">
+              {presence.presenceTitle}
+            </h3>
+            <p className="mt-1 text-sm text-surface-dark-foreground/70">
+              {presence.presenceSubtitle}
+            </p>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-6">
               {presence.offices.map((o, idx) => {
                 const hasOffice = o.type && o.type.trim().length > 0;
                 const isLink = o.linkUrl && o.linkUrl.trim().length > 0;
-                
+
                 const cardContent = (
-                  <div className={`flex flex-col justify-between p-3.5 rounded border transition-all h-full min-h-[72px] ${
-                    isLink 
-                      ? "bg-surface-dark-foreground/5 border-surface-dark-foreground/10 hover:border-primary hover:bg-surface-dark-foreground/10 cursor-pointer group" 
-                      : "bg-surface-dark-foreground/2 border-surface-dark-foreground/5"
-                  }`}>
+                  <div
+                    className={`flex flex-col justify-between p-3.5 rounded border transition-all h-full min-h-[72px] ${
+                      isLink
+                        ? "bg-surface-dark-foreground/5 border-surface-dark-foreground/10 hover:border-primary hover:bg-surface-dark-foreground/10 cursor-pointer group"
+                        : "bg-surface-dark-foreground/2 border-surface-dark-foreground/5"
+                    }`}
+                  >
                     <div className="flex items-start gap-2.5">
                       {hasOffice ? (
                         <div className="relative flex h-2 w-2 mt-1.5 shrink-0">
@@ -314,13 +387,23 @@ export function HomePage() {
 
                 if (isLink) {
                   return (
-                    <a key={o.id || idx} href={o.linkUrl} target="_blank" rel="noopener noreferrer" className="block h-full">
+                    <a
+                      key={o.id || idx}
+                      href={o.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block h-full"
+                    >
                       {cardContent}
                     </a>
                   );
                 }
 
-                return <div key={o.id || idx} className="h-full">{cardContent}</div>;
+                return (
+                  <div key={o.id || idx} className="h-full">
+                    {cardContent}
+                  </div>
+                );
               })}
             </div>
           </div>
@@ -334,16 +417,32 @@ export function HomePage() {
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {projects.sectionTitle}
             </h2>
-            <Link to={projects.ctaUrl as any} className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2">
+            <Link
+              to={projects.ctaUrl as any}
+              className="text-xs font-bold uppercase tracking-wider text-primary inline-flex items-center gap-2"
+            >
               {projects.ctaText} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid lg:grid-cols-4 gap-5">
             {projects.cards.map((c, idx) => (
-              <article key={c.id || idx} className="group rounded overflow-hidden border border-border bg-card lg:col-span-1">
+              <article
+                key={c.id || idx}
+                className="group rounded overflow-hidden border border-border bg-card lg:col-span-1"
+              >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={c.image || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"} alt={c.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">{c.tag}</span>
+                  <img
+                    src={
+                      c.image ||
+                      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+                    }
+                    alt={c.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                    {c.tag}
+                  </span>
                 </div>
                 <div className="p-4">
                   <div className="font-display text-base font-bold uppercase">{c.title}</div>
@@ -353,7 +452,9 @@ export function HomePage() {
               </article>
             ))}
             <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 lg:col-span-1 flex flex-col">
-              <h3 className="font-display text-lg font-bold uppercase">{projects.catalogueBoxHeading}</h3>
+              <h3 className="font-display text-lg font-bold uppercase">
+                {projects.catalogueBoxHeading}
+              </h3>
               <p className="mt-2 text-sm text-surface-dark-foreground/75">
                 {projects.catalogueBoxContent}
               </p>
@@ -361,8 +462,14 @@ export function HomePage() {
                 <FileText className="h-4 w-4 opacity-60" />
                 <span className="opacity-60">{projects.catalogueSearchPlaceholder}</span>
               </div>
-              <Button asChild className="mt-auto pt-4 bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide">
-                <Link to={projects.catalogueCtaUrl as any} search={{ q: "", cats: [], mans: [], sort: "newest" } as any}>
+              <Button
+                asChild
+                className="mt-auto pt-4 bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide"
+              >
+                <Link
+                  to={projects.catalogueCtaUrl as any}
+                  search={{ q: "", cats: [], mans: [], sort: "newest" } as any}
+                >
                   {projects.catalogueCtaText} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

@@ -2,16 +2,33 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/site/PageHero";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { HelpCircle } from "lucide-react";
 import { RESOURCE_CATEGORIES, VIDEO_HOST_RE } from "@/lib/resource-categories";
 
 const FAQ = [
-  { q: "How long do HDPE geomembranes last?", a: "Properly installed HDPE liners deliver 50+ year service life under typical containment conditions." },
-  { q: "Do you supply outside South Africa?", a: "Yes — Pan-African logistics with regional offices in Ghana, Tanzania and Zimbabwe." },
-  { q: "Can you handle BOQ-based bulk supply?", a: "Yes. Upload your BOQ and we'll respond with a complete system quote." },
-  { q: "Do you provide third-party testing?", a: "All projects include in-house QA/QC; independent third-party testing is available on request." },
+  {
+    q: "How long do HDPE geomembranes last?",
+    a: "Properly installed HDPE liners deliver 50+ year service life under typical containment conditions.",
+  },
+  {
+    q: "Do you supply outside South Africa?",
+    a: "Yes — Pan-African logistics with regional offices in Ghana, Tanzania and Zimbabwe.",
+  },
+  {
+    q: "Can you handle BOQ-based bulk supply?",
+    a: "Yes. Upload your BOQ and we'll respond with a complete system quote.",
+  },
+  {
+    q: "Do you provide third-party testing?",
+    a: "All projects include in-house QA/QC; independent third-party testing is available on request.",
+  },
 ];
 
 export function ResourcesIndexPage() {
@@ -61,20 +78,26 @@ export function ResourcesIndexPage() {
                   {counts[c.slug] ?? 0} {counts[c.slug] === 1 ? "item" : "items"}
                 </span>
               </div>
-              <h3 className="mt-4 font-display text-lg font-bold uppercase group-hover:text-primary transition">{c.title}</h3>
+              <h3 className="mt-4 font-display text-lg font-bold uppercase group-hover:text-primary transition">
+                {c.title}
+              </h3>
               <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
             </Link>
           ))}
           <div className="rounded border border-border bg-card p-6">
             <HelpCircle className="h-7 w-7 text-primary" />
             <h3 className="mt-4 font-display text-lg font-bold uppercase">FAQ</h3>
-            <p className="mt-2 text-sm text-muted-foreground">Common questions, answered by our experts.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Common questions, answered by our experts.
+            </p>
           </div>
         </div>
       </section>
       <section className="bg-surface">
         <div className="container-page py-16 max-w-3xl">
-          <h2 className="font-display text-2xl md:text-3xl font-bold uppercase mb-6">Frequently Asked Questions</h2>
+          <h2 className="font-display text-2xl md:text-3xl font-bold uppercase mb-6">
+            Frequently Asked Questions
+          </h2>
           <Accordion type="single" collapsible className="bg-card rounded border border-border">
             {FAQ.map((f, i) => (
               <AccordionItem key={i} value={`f${i}`} className="px-5">

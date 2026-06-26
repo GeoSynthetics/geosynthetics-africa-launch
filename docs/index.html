@@ -1,841 +1,1710 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Developer & Admin Documentation — Geosynthetics Africa</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="https://lovable.dev/favicon.ico" type="image/x-icon">
-</head>
-<body>
-  <div class="app-container">
-    
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar">
-      <div class="logo-container">
-        <div class="logo-icon">G</div>
-        <span class="logo-text">Geosynthetics</span>
-      </div>
-      
-      <nav class="nav-menu">
-        <div class="nav-category">Documentation</div>
-        <li class="nav-item active" data-section="overview">
-          <a href="#overview">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer & Admin Documentation — Geosynthetics Africa</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="https://lovable.dev/favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
+        <div class="logo-container">
+          <div class="logo-icon">G</div>
+          <span class="logo-text">Geosynthetics</span>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-category">Documentation</div>
+          <li class="nav-item active" data-section="overview">
+            <a href="#overview">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              Overview & Architecture
+            </a>
+          </li>
+          <li class="nav-item" data-section="explorer">
+            <a href="#explorer">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+              Field Mapping Explorer
+            </a>
+          </li>
+
+          <div class="nav-category">Admin Guides</div>
+          <li class="nav-item" data-section="create-page">
+            <a href="#create-page">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Creating a Page Template
+            </a>
+          </li>
+          <li class="nav-item" data-section="edit-page">
+            <a href="#edit-page">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+              Editing Page Contents
+            </a>
+          </li>
+          <li class="nav-item" data-section="delete-page">
+            <a href="#delete-page">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+              Deleting a Template Page
+            </a>
+          </li>
+          <li class="nav-item" data-section="link-megamenu">
+            <a href="#link-megamenu">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                ></path>
+              </svg>
+              Linking to Mega Menu
+            </a>
+          </li>
+          <li class="nav-item" data-section="homepage-builder">
+            <a href="#homepage-builder">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                ></path>
+              </svg>
+              Managing Homepage Content
+            </a>
+          </li>
+          <li class="nav-item" data-section="applications-builder">
+            <a href="#applications-builder">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                ></path>
+              </svg>
+              Managing Application Categories
+            </a>
+          </li>
+          <li class="nav-item" data-section="tracking-cookies">
+            <a href="#tracking-cookies">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                ></path>
+              </svg>
+              Tracking & Cookie Flow
+            </a>
+          </li>
+          <li class="nav-item" data-section="media-center">
+            <a href="#media-center">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
+              </svg>
+              Media Center Operations
+            </a>
+          </li>
+
+          <div class="nav-category">Developer Reference</div>
+          <li class="nav-item" data-section="tech-ref">
+            <a href="#tech-ref">
+              <svg
+                class="nav-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                ></path>
+              </svg>
+              Technical & Architecture
+            </a>
+          </li>
+        </nav>
+      </aside>
+
+      <!-- RIGHT MAIN CONTENT -->
+      <main class="main-content">
+        <!-- HEADER -->
+        <header class="doc-header">
+          <span class="badge badge-primary">Platform Manual</span>
+          <h1 class="doc-title">Dynamic Page Templates & Admin Integration</h1>
+          <p class="doc-subtitle">
+            A comprehensive manual on creating, editing, deleting dynamic product category pages and
+            linking them to the recursive site megamenu.
+          </p>
+        </header>
+
+        <!-- OVERVIEW SECTION -->
+        <section id="overview" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
             Overview & Architecture
-          </a>
-        </li>
-        <li class="nav-item" data-section="explorer">
-          <a href="#explorer">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </h2>
+          <p class="paragraph">
+            The Geosynthetics Africa platform employs a highly flexible, data-driven approach to
+            product page creation. Rather than hardcoding structural pages, administrators can
+            visually build and update product categories directly from the admin panel.
+          </p>
+          <p class="paragraph">
+            The connection is fully unified: when an admin modifies values in the 12-tab
+            <strong>Page Templates</strong> visual builder, changes are saved to Supabase and
+            immediately pushed to the public website, rendering custom titles, specifications
+            tables, FAQs, highlight badges, and installation warnings in real-time.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                  ></path>
+                </svg>
+                Supabase Config Backing
+              </h3>
+              <p class="card-desc">
+                All template configurations live in the <code>site_config</code> table under the key
+                <code>template_product_categories</code> as a single JSON object. This eliminates
+                complex schema migrations while keeping data atomic and highly cached.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                  ></path>
+                </svg>
+                Zero-Downtime Seeding
+              </h3>
+              <p class="card-desc">
+                If the database is clean, visiting the admin template page prompts the user to "Seed
+                Defaults" which populates all 8 canonical geomembrane types (HDPE, LLDPE, PVC, EPDM,
+                PP, Textured, Speciality, and Floating Covers).
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  ></path>
+                </svg>
+                Category Alignment
+              </h3>
+              <p class="card-desc">
+                Protects parent categories (e.g. <code>Geomembranes</code>) by blocking them in Page
+                Templates. Instead, editing their layout content is done directly in the
+                <strong>Site Builder</strong>, where custom inputs dynamically merge onto premium
+                fallback layouts.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-note">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Administrator Notice
+            </div>
+            <div class="callout-content">
+              Access to both <strong>Page Templates</strong> and <strong>Site Builder</strong> is
+              restricted to verified administrators and staff. Attempting to access these pages
+              without appropriate session roles will redirect to the secure login gateway.
+            </div>
+          </div>
+        </section>
+
+        <!-- INTERACTIVE EXPLORER SECTION -->
+        <section id="explorer" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+              ></path>
+            </svg>
             Field Mapping Explorer
-          </a>
-        </li>
-        
-        <div class="nav-category">Admin Guides</div>
-        <li class="nav-item" data-section="create-page">
-          <a href="#create-page">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </h2>
+          <p class="paragraph">
+            Use the interactive inspector below to understand exactly how each visual input field in
+            the admin panel maps directly to corresponding structures, components, and templates on
+            the live client website.
+          </p>
+
+          <!-- EXPLORER COMPONENT -->
+          <div class="explorer-container">
+            <!-- Explorer Sidebar -->
+            <div class="explorer-sidebar">
+              <div class="explorer-sidebar-title">Admin Fields</div>
+
+              <div class="explorer-list-item active" data-element="hero-title">
+                <span class="explorer-item-name">Page Title (H1)</span>
+                <span class="explorer-item-tab">Hero Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="hero-subtitle">
+                <span class="explorer-item-name">Subtitle / Tagline</span>
+                <span class="explorer-item-tab">Hero Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="hero-bg">
+                <span class="explorer-item-name">Hero Image URL</span>
+                <span class="explorer-item-tab">Hero Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="highlights">
+                <span class="explorer-item-name">Technical Highlights</span>
+                <span class="explorer-item-tab">Highlights Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="desc">
+                <span class="explorer-item-name">Description Paragraphs</span>
+                <span class="explorer-item-tab">Description Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="features">
+                <span class="explorer-item-name">Key Feature Bullets</span>
+                <span class="explorer-item-tab">Description Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="table">
+                <span class="explorer-item-name">Properties & Specs Table</span>
+                <span class="explorer-item-tab">Properties Table Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="types">
+                <span class="explorer-item-name">Product Types Grid</span>
+                <span class="explorer-item-tab">Types Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="benefits">
+                <span class="explorer-item-name">Value Benefits Cards</span>
+                <span class="explorer-item-tab">Benefits Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="faqs">
+                <span class="explorer-item-name">FAQs Accordion</span>
+                <span class="explorer-item-tab">FAQs Tab</span>
+              </div>
+              <div class="explorer-list-item" data-element="install">
+                <span class="explorer-item-name">Installation Specs</span>
+                <span class="explorer-item-tab">Installation Tab</span>
+              </div>
+            </div>
+
+            <!-- Explorer Display Panel -->
+            <div class="explorer-display">
+              <div class="explorer-display-header">
+                <span class="explorer-display-title" id="display-title">Page Title (H1)</span>
+                <span class="badge badge-secondary" id="display-tab">Hero Tab</span>
+              </div>
+
+              <div class="explorer-content-split">
+                <!-- Left side: text -->
+                <div class="explorer-description-panel">
+                  <span class="explorer-desc-title">Description</span>
+                  <p class="explorer-desc-text" id="display-desc">
+                    This field defines the main uppercase display heading (H1) shown in the top hero
+                    banner of the category page. It is highly optimized for H1 SEO crawlers and
+                    clearly introduces the product category (e.g. "HDPE Geomembranes").
+                  </p>
+                  <div style="margin-top: auto">
+                    <span class="explorer-desc-title">Database Field</span>
+                    <code
+                      style="
+                        display: block;
+                        margin-top: 0.25rem;
+                        background: #1e293b;
+                        padding: 0.4rem;
+                        border-radius: 4px;
+                        font-size: 0.75rem;
+                      "
+                      id="display-db"
+                    >
+                      value.label: string
+                    </code>
+                  </div>
+                </div>
+
+                <!-- Right side: Visual mock webpage preview -->
+                <div class="explorer-preview-panel">
+                  <div class="mock-webpage" id="mock-webpage">
+                    <!-- Top nav bar mockup -->
+                    <div class="mock-header">
+                      <span style="font-weight: 800; color: var(--accent-red)">GEOSYNTHETICS</span>
+                      <div style="display: flex; gap: 4px">
+                        <div class="mock-nav-item"></div>
+                        <div class="mock-nav-item"></div>
+                        <div class="mock-nav-item"></div>
+                      </div>
+                    </div>
+
+                    <!-- Hero banner -->
+                    <div
+                      class="mock-element highlighted mock-hero"
+                      id="mock-hero"
+                      data-label="Hero Container"
+                      style="
+                        background-image:
+                          linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                          url(&quot;https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=500&q=80&quot;);
+                      "
+                    >
+                      <!-- Highlights badges -->
+                      <div
+                        style="display: flex; gap: 4px; margin-bottom: 0.25rem"
+                        class="mock-element"
+                        id="el-highlights"
+                        data-label="Highlights Badges"
+                      >
+                        <span
+                          style="
+                            background: var(--accent-red);
+                            color: white;
+                            padding: 1px 3px;
+                            border-radius: 2px;
+                            font-size: 0.4rem;
+                          "
+                          >Thickness: 1.5mm</span
+                        >
+                        <span
+                          style="
+                            background: rgba(255, 255, 255, 0.2);
+                            padding: 1px 3px;
+                            border-radius: 2px;
+                            font-size: 0.4rem;
+                          "
+                          >Width: 7m</span
+                        >
+                      </div>
+
+                      <span
+                        class="mock-hero-title mock-element"
+                        id="el-hero-title"
+                        data-label="H1 Title"
+                        >PP GEOMEMBRANES</span
+                      >
+                      <span
+                        class="mock-hero-subtitle mock-element"
+                        id="el-hero-subtitle"
+                        data-label="Hero Subtitle"
+                        >Engineered flexible polypropylene materials for critical containment and
+                        water protection.</span
+                      >
+                    </div>
+
+                    <!-- Detailed description and bullets -->
+                    <div style="display: flex; flex-direction: column; gap: 6px; padding: 0.25rem">
+                      <div class="mock-element" id="el-desc" data-label="Description Paragraphs">
+                        <p
+                          style="
+                            color: var(--text-secondary);
+                            font-size: 0.55rem;
+                            margin-bottom: 4px;
+                          "
+                        >
+                          Flexible Polypropylene (fPP) Geomembranes provide a unique combination of
+                          high flexibility, dimensional stability, and excellent resistance to a
+                          wide range of chemicals.
+                        </p>
+                        <p style="color: var(--text-secondary); font-size: 0.55rem">
+                          Unlike PVC, fPP does not contain plasticisers, meaning it will not
+                          embrittle over time. It offers superior weldability and requires less
+                          maintenance than many traditional liner systems.
+                        </p>
+                      </div>
+
+                      <div
+                        class="mock-element"
+                        id="el-features"
+                        data-label="Feature Checklist Bullets"
+                      >
+                        <span style="font-weight: 700; display: block; margin-bottom: 2px"
+                          >Key Features</span
+                        >
+                        <div
+                          style="display: flex; align-items: center; gap: 3px; margin-bottom: 2px"
+                        >
+                          <span style="color: var(--accent-red)">✓</span> Highly resistant to UV and
+                          ozone degradation
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 3px">
+                          <span style="color: var(--accent-red)">✓</span> Excellent weldability and
+                          seam strength
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Specifications Table -->
+                    <div class="mock-element" id="el-table" data-label="Specs Table">
+                      <span style="font-weight: 700; display: block; margin-bottom: 3px"
+                        >Technical Specifications</span
+                      >
+                      <div class="mock-table">
+                        <div class="mock-table-header">
+                          <span>Property</span>
+                          <span>Test Method</span>
+                          <span>Value</span>
+                        </div>
+                        <div class="mock-table-row">
+                          <span>Thickness</span>
+                          <span>ASTM D5199</span>
+                          <span>1.5 mm</span>
+                        </div>
+                        <div class="mock-table-row">
+                          <span>Density</span>
+                          <span>ASTM D792</span>
+                          <span>0.94 g/cc</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Types Grid -->
+                    <div class="mock-element" id="el-types" data-label="Types Grid">
+                      <span style="font-weight: 700; display: block; margin-bottom: 3px"
+                        >Available Types</span
+                      >
+                      <div class="mock-grid">
+                        <div class="mock-box">
+                          <span style="font-weight: 700">Smooth PP</span>
+                          <span style="font-size: 0.45rem; color: var(--text-secondary)"
+                            >Standard flexible lining barrier</span
+                          >
+                        </div>
+                        <div class="mock-box">
+                          <span style="font-weight: 700">Textured PP</span>
+                          <span style="font-size: 0.45rem; color: var(--text-secondary)"
+                            >Enhanced friction on steep slopes</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Benefits Cards -->
+                    <div class="mock-element" id="el-benefits" data-label="Benefits Cards">
+                      <span style="font-weight: 700; display: block; margin-bottom: 3px"
+                        >Core Benefits</span
+                      >
+                      <div class="mock-grid">
+                        <div class="mock-box" style="border-left: 2px solid var(--accent-red)">
+                          <span style="font-weight: 700; color: var(--text-primary)"
+                            >No Plasticisers</span
+                          >
+                          <span style="font-size: 0.45rem; color: var(--text-secondary)"
+                            >Will not embrittle or crack over years</span
+                          >
+                        </div>
+                        <div class="mock-box" style="border-left: 2px solid var(--accent-red)">
+                          <span style="font-weight: 700; color: var(--text-primary)"
+                            >Flexibility</span
+                          >
+                          <span style="font-size: 0.45rem; color: var(--text-secondary)"
+                            >Excellent multi-axial strain resilience</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Installation Specification block -->
+                    <div
+                      class="mock-element mock-installation"
+                      id="el-install"
+                      data-label="Installation Specs Block"
+                    >
+                      <span
+                        style="
+                          font-weight: 700;
+                          display: block;
+                          margin-bottom: 2px;
+                          color: var(--accent-red);
+                        "
+                        >Installation Guidelines</span
+                      >
+                      <p style="font-size: 0.5rem; color: var(--text-secondary)">
+                        Installation must be done by certified technicians. Prep subgrade to be
+                        completely free of sharp rocks. Test all wedge welds under GRI-GM19 rules.
+                      </p>
+                    </div>
+
+                    <!-- FAQs accordion -->
+                    <div class="mock-element" id="el-faqs" data-label="FAQs Accordion">
+                      <span style="font-weight: 700; display: block; margin-bottom: 3px"
+                        >Frequently Asked Questions</span
+                      >
+                      <div class="mock-accordion" style="margin-bottom: 3px">
+                        <span>How long does fPP geomembrane last?</span>
+                        <div class="mock-accordion-arrow"></div>
+                      </div>
+                      <div class="mock-accordion">
+                        <span>Is fPP certified for drinking water?</span>
+                        <div class="mock-accordion-arrow"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CREATION GUIDE SECTION -->
+        <section id="create-page" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              ></path>
+            </svg>
             Creating a Page Template
-          </a>
-        </li>
-        <li class="nav-item" data-section="edit-page">
-          <a href="#edit-page">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-            Editing Page Contents
-          </a>
-        </li>
-        <li class="nav-item" data-section="delete-page">
-          <a href="#delete-page">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            Deleting a Template Page
-          </a>
-        </li>
-        <li class="nav-item" data-section="link-megamenu">
-          <a href="#link-megamenu">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-            Linking to Mega Menu
-          </a>
-        </li>
-        <li class="nav-item" data-section="homepage-builder">
-          <a href="#homepage-builder">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-            Managing Homepage Content
-          </a>
-        </li>
-        <li class="nav-item" data-section="applications-builder">
-          <a href="#applications-builder">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-            Managing Application Categories
-          </a>
-        </li>
-        <li class="nav-item" data-section="tracking-cookies">
-          <a href="#tracking-cookies">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            Tracking & Cookie Flow
-          </a>
-        </li>
-        <li class="nav-item" data-section="media-center">
-          <a href="#media-center">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            Media Center Operations
-          </a>
-        </li>
-        
-        <div class="nav-category">Developer Reference</div>
-        <li class="nav-item" data-section="tech-ref">
-          <a href="#tech-ref">
-            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-            Technical & Architecture
-          </a>
-        </li>
-      </nav>
-    </aside>
-    
-    <!-- RIGHT MAIN CONTENT -->
-    <main class="main-content">
-      
-      <!-- HEADER -->
-      <header class="doc-header">
-        <span class="badge badge-primary">Platform Manual</span>
-        <h1 class="doc-title">Dynamic Page Templates & Admin Integration</h1>
-        <p class="doc-subtitle">A comprehensive manual on creating, editing, deleting dynamic product category pages and linking them to the recursive site megamenu.</p>
-      </header>
-      
-      <!-- OVERVIEW SECTION -->
-      <section id="overview" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          Overview & Architecture
-        </h2>
-        <p class="paragraph">
-          The Geosynthetics Africa platform employs a highly flexible, data-driven approach to product page creation. Rather than hardcoding structural pages, administrators can visually build and update product categories directly from the admin panel. 
-        </p>
-        <p class="paragraph">
-          The connection is fully unified: when an admin modifies values in the 12-tab <strong>Page Templates</strong> visual builder, changes are saved to Supabase and immediately pushed to the public website, rendering custom titles, specifications tables, FAQs, highlight badges, and installation warnings in real-time.
-        </p>
-        
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="card-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
-              Supabase Config Backing
-            </h3>
-            <p class="card-desc">
-              All template configurations live in the <code>site_config</code> table under the key <code>template_product_categories</code> as a single JSON object. This eliminates complex schema migrations while keeping data atomic and highly cached.
-            </p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-              Zero-Downtime Seeding
-            </h3>
-            <p class="card-desc">
-              If the database is clean, visiting the admin template page prompts the user to "Seed Defaults" which populates all 8 canonical geomembrane types (HDPE, LLDPE, PVC, EPDM, PP, Textured, Speciality, and Floating Covers).
-            </p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-              Category Alignment
-            </h3>
-            <p class="card-desc">
-              Protects parent categories (e.g. <code>Geomembranes</code>) by blocking them in Page Templates. Instead, editing their layout content is done directly in the <strong>Site Builder</strong>, where custom inputs dynamically merge onto premium fallback layouts.
-            </p>
-          </div>
-        </div>
-        
-        <div class="callout callout-note">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Administrator Notice
-          </div>
-          <div class="callout-content">
-            Access to both <strong>Page Templates</strong> and <strong>Site Builder</strong> is restricted to verified administrators and staff. Attempting to access these pages without appropriate session roles will redirect to the secure login gateway.
-          </div>
-        </div>
-      </section>
-      
-      <!-- INTERACTIVE EXPLORER SECTION -->
-      <section id="explorer" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
-          Field Mapping Explorer
-        </h2>
-        <p class="paragraph">
-          Use the interactive inspector below to understand exactly how each visual input field in the admin panel maps directly to corresponding structures, components, and templates on the live client website.
-        </p>
-        
-        <!-- EXPLORER COMPONENT -->
-        <div class="explorer-container">
-          <!-- Explorer Sidebar -->
-          <div class="explorer-sidebar">
-            <div class="explorer-sidebar-title">Admin Fields</div>
-            
-            <div class="explorer-list-item active" data-element="hero-title">
-              <span class="explorer-item-name">Page Title (H1)</span>
-              <span class="explorer-item-tab">Hero Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="hero-subtitle">
-              <span class="explorer-item-name">Subtitle / Tagline</span>
-              <span class="explorer-item-tab">Hero Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="hero-bg">
-              <span class="explorer-item-name">Hero Image URL</span>
-              <span class="explorer-item-tab">Hero Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="highlights">
-              <span class="explorer-item-name">Technical Highlights</span>
-              <span class="explorer-item-tab">Highlights Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="desc">
-              <span class="explorer-item-name">Description Paragraphs</span>
-              <span class="explorer-item-tab">Description Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="features">
-              <span class="explorer-item-name">Key Feature Bullets</span>
-              <span class="explorer-item-tab">Description Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="table">
-              <span class="explorer-item-name">Properties & Specs Table</span>
-              <span class="explorer-item-tab">Properties Table Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="types">
-              <span class="explorer-item-name">Product Types Grid</span>
-              <span class="explorer-item-tab">Types Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="benefits">
-              <span class="explorer-item-name">Value Benefits Cards</span>
-              <span class="explorer-item-tab">Benefits Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="faqs">
-              <span class="explorer-item-name">FAQs Accordion</span>
-              <span class="explorer-item-tab">FAQs Tab</span>
-            </div>
-            <div class="explorer-list-item" data-element="install">
-              <span class="explorer-item-name">Installation Specs</span>
-              <span class="explorer-item-tab">Installation Tab</span>
-            </div>
-          </div>
-          
-          <!-- Explorer Display Panel -->
-          <div class="explorer-display">
-            <div class="explorer-display-header">
-              <span class="explorer-display-title" id="display-title">Page Title (H1)</span>
-              <span class="badge badge-secondary" id="display-tab">Hero Tab</span>
-            </div>
-            
-            <div class="explorer-content-split">
-              <!-- Left side: text -->
-              <div class="explorer-description-panel">
-                <span class="explorer-desc-title">Description</span>
-                <p class="explorer-desc-text" id="display-desc">
-                  This field defines the main uppercase display heading (H1) shown in the top hero banner of the category page. It is highly optimized for H1 SEO crawlers and clearly introduces the product category (e.g. "HDPE Geomembranes").
+          </h2>
+          <p class="paragraph">
+            Adding a brand-new dynamic sub-category is fully streamlined. Follow this step-by-step
+            procedure to add a page correctly:
+          </p>
+
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Access Page Templates</h4>
+                <p class="paragraph">
+                  Log into the admin portal using your credential console. Once inside, locate and
+                  click the <strong>Product Page Templates</strong> item from the administration
+                  navigation menu or visit <code>/admin/page-templates</code>.
                 </p>
-                <div style="margin-top: auto;">
-                  <span class="explorer-desc-title">Database Field</span>
-                  <code style="display:block;margin-top:0.25rem;background:#1e293b;padding:0.4rem;border-radius:4px;font-size:0.75rem" id="display-db">
-                    value.label: string
-                  </code>
-                </div>
               </div>
-              
-              <!-- Right side: Visual mock webpage preview -->
-              <div class="explorer-preview-panel">
-                <div class="mock-webpage" id="mock-webpage">
-                  
-                  <!-- Top nav bar mockup -->
-                  <div class="mock-header">
-                    <span style="font-weight:800;color:var(--accent-red)">GEOSYNTHETICS</span>
-                    <div style="display:flex;gap:4px">
-                      <div class="mock-nav-item"></div>
-                      <div class="mock-nav-item"></div>
-                      <div class="mock-nav-item"></div>
-                    </div>
-                  </div>
-                  
-                  <!-- Hero banner -->
-                  <div class="mock-element highlighted mock-hero" id="mock-hero" data-label="Hero Container" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=500&q=80')">
-                    
-                    <!-- Highlights badges -->
-                    <div style="display:flex;gap:4px;margin-bottom:0.25rem" class="mock-element" id="el-highlights" data-label="Highlights Badges">
-                      <span style="background:var(--accent-red);color:white;padding:1px 3px;border-radius:2px;font-size:0.4rem">Thickness: 1.5mm</span>
-                      <span style="background:rgba(255,255,255,0.2);padding:1px 3px;border-radius:2px;font-size:0.4rem">Width: 7m</span>
-                    </div>
-                    
-                    <span class="mock-hero-title mock-element" id="el-hero-title" data-label="H1 Title">PP GEOMEMBRANES</span>
-                    <span class="mock-hero-subtitle mock-element" id="el-hero-subtitle" data-label="Hero Subtitle">Engineered flexible polypropylene materials for critical containment and water protection.</span>
-                  </div>
-                  
-                  <!-- Detailed description and bullets -->
-                  <div style="display:flex;flex-direction:column;gap:6px;padding:0.25rem">
-                    <div class="mock-element" id="el-desc" data-label="Description Paragraphs">
-                      <p style="color:var(--text-secondary);font-size:0.55rem;margin-bottom:4px">Flexible Polypropylene (fPP) Geomembranes provide a unique combination of high flexibility, dimensional stability, and excellent resistance to a wide range of chemicals.</p>
-                      <p style="color:var(--text-secondary);font-size:0.55rem">Unlike PVC, fPP does not contain plasticisers, meaning it will not embrittle over time. It offers superior weldability and requires less maintenance than many traditional liner systems.</p>
-                    </div>
-                    
-                    <div class="mock-element" id="el-features" data-label="Feature Checklist Bullets">
-                      <span style="font-weight:700;display:block;margin-bottom:2px">Key Features</span>
-                      <div style="display:flex;align-items:center;gap:3px;margin-bottom:2px"><span style="color:var(--accent-red)">✓</span> Highly resistant to UV and ozone degradation</div>
-                      <div style="display:flex;align-items:center;gap:3px"><span style="color:var(--accent-red)">✓</span> Excellent weldability and seam strength</div>
-                    </div>
-                  </div>
-                  
-                  <!-- Specifications Table -->
-                  <div class="mock-element" id="el-table" data-label="Specs Table">
-                    <span style="font-weight:700;display:block;margin-bottom:3px">Technical Specifications</span>
-                    <div class="mock-table">
-                      <div class="mock-table-header">
-                        <span>Property</span>
-                        <span>Test Method</span>
-                        <span>Value</span>
-                      </div>
-                      <div class="mock-table-row">
-                        <span>Thickness</span>
-                        <span>ASTM D5199</span>
-                        <span>1.5 mm</span>
-                      </div>
-                      <div class="mock-table-row">
-                        <span>Density</span>
-                        <span>ASTM D792</span>
-                        <span>0.94 g/cc</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- Types Grid -->
-                  <div class="mock-element" id="el-types" data-label="Types Grid">
-                    <span style="font-weight:700;display:block;margin-bottom:3px">Available Types</span>
-                    <div class="mock-grid">
-                      <div class="mock-box">
-                        <span style="font-weight:700">Smooth PP</span>
-                        <span style="font-size:0.45rem;color:var(--text-secondary)">Standard flexible lining barrier</span>
-                      </div>
-                      <div class="mock-box">
-                        <span style="font-weight:700">Textured PP</span>
-                        <span style="font-size:0.45rem;color:var(--text-secondary)">Enhanced friction on steep slopes</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- Benefits Cards -->
-                  <div class="mock-element" id="el-benefits" data-label="Benefits Cards">
-                    <span style="font-weight:700;display:block;margin-bottom:3px">Core Benefits</span>
-                    <div class="mock-grid">
-                      <div class="mock-box" style="border-left:2px solid var(--accent-red)">
-                        <span style="font-weight:700;color:var(--text-primary)">No Plasticisers</span>
-                        <span style="font-size:0.45rem;color:var(--text-secondary)">Will not embrittle or crack over years</span>
-                      </div>
-                      <div class="mock-box" style="border-left:2px solid var(--accent-red)">
-                        <span style="font-weight:700;color:var(--text-primary)">Flexibility</span>
-                        <span style="font-size:0.45rem;color:var(--text-secondary)">Excellent multi-axial strain resilience</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- Installation Specification block -->
-                  <div class="mock-element mock-installation" id="el-install" data-label="Installation Specs Block">
-                    <span style="font-weight:700;display:block;margin-bottom:2px;color:var(--accent-red)">Installation Guidelines</span>
-                    <p style="font-size:0.5rem;color:var(--text-secondary)">Installation must be done by certified technicians. Prep subgrade to be completely free of sharp rocks. Test all wedge welds under GRI-GM19 rules.</p>
-                  </div>
-                  
-                  <!-- FAQs accordion -->
-                  <div class="mock-element" id="el-faqs" data-label="FAQs Accordion">
-                    <span style="font-weight:700;display:block;margin-bottom:3px">Frequently Asked Questions</span>
-                    <div class="mock-accordion" style="margin-bottom:3px">
-                      <span>How long does fPP geomembrane last?</span>
-                      <div class="mock-accordion-arrow"></div>
-                    </div>
-                    <div class="mock-accordion">
-                      <span>Is fPP certified for drinking water?</span>
-                      <div class="mock-accordion-arrow"></div>
-                    </div>
-                  </div>
-                  
-                </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Initialize a New Slug</h4>
+                <p class="paragraph">
+                  In the left sidebar of the templates builder, click the
+                  <strong>+ New Template</strong> button. A small text input will appear inside the
+                  sidebar area.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Enter Slug Name</h4>
+                <p class="paragraph">
+                  Type in the exact lowercase URL-safe slug for your product sub-page (e.g.
+                  <code>custom-clay-liners</code>). Ensure you use only alphanumeric characters and
+                  hyphens. Click <strong>Create</strong> to initialize local defaults.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">4</div>
+              <div class="step-body">
+                <h4 class="step-title">Build Out Content & Save</h4>
+                <p class="paragraph">
+                  The template is added instantly. Now, go tab by tab (Hero, Description, FAQs,
+                  Table) and fill in your values. Once finished, click the glowing
+                  <strong>Save All</strong> button in the top right header to commit it to Supabase.
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      
-      <!-- CREATION GUIDE SECTION -->
-      <section id="create-page" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-          Creating a Page Template
-        </h2>
-        <p class="paragraph">
-          Adding a brand-new dynamic sub-category is fully streamlined. Follow this step-by-step procedure to add a page correctly:
-        </p>
-        
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Access Page Templates</h4>
-              <p class="paragraph">Log into the admin portal using your credential console. Once inside, locate and click the <strong>Product Page Templates</strong> item from the administration navigation menu or visit <code>/admin/page-templates</code>.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Initialize a New Slug</h4>
-              <p class="paragraph">In the left sidebar of the templates builder, click the <strong>+ New Template</strong> button. A small text input will appear inside the sidebar area.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Enter Slug Name</h4>
-              <p class="paragraph">Type in the exact lowercase URL-safe slug for your product sub-page (e.g. <code>custom-clay-liners</code>). Ensure you use only alphanumeric characters and hyphens. Click <strong>Create</strong> to initialize local defaults.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">4</div>
-            <div class="step-body">
-              <h4 class="step-title">Build Out Content & Save</h4>
-              <p class="paragraph">The template is added instantly. Now, go tab by tab (Hero, Description, FAQs, Table) and fill in your values. Once finished, click the glowing <strong>Save All</strong> button in the top right header to commit it to Supabase.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      <!-- EDITING GUIDE SECTION -->
-      <section id="edit-page" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-          Editing Page Contents
-        </h2>
-        <p class="paragraph">
-          Editing page contents is fully structured into 12 visual tabs. Select your target category from the sidebar and use the designated sub-panels:
-        </p>
-        
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="card-title">Properties & Specs Table</h3>
-            <p class="card-desc">Located in the <strong>Properties Table</strong> tab. Build a robust grid of physical specs. You can dynamically click <strong>+ Column</strong> to add new test vectors (e.g. "Metric Value", "Imperial Value") or <strong>+ Row</strong> to add custom polymer test properties (e.g. "Puncture Resistance").</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">Badge Callouts</h3>
-            <p class="card-desc">Managed in the <strong>Highlights</strong> tab. Configure a set of micro key-value pairs (e.g., "Standard Roll: 7.0m", "Warranty: 20 years"). These are automatically compiled into visual pill badges that render prominently under the H1 page header.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">FAQs Accordion</h3>
-            <p class="card-desc">Located in the <strong>FAQs</strong> tab. Add recursive question and answer sections. Administrators can easily update pricing guidance, welding tolerances, or storage procedures which customers can slide open instantly.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">Cross-Linking Products</h3>
-            <p class="card-desc">Located in the <strong>Products</strong> tab. Link actual items from the primary catalog by entering their exact product names, short descriptions, and technical links. These render as product recommendations at the bottom of the page.</p>
-          </div>
-        </div>
+        </section>
 
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Visual Icon Selection (Lucide Icon Picker)</h3>
-        <p class="paragraph">
-          Across the admin control panel (e.g., when editing navigation category icons in the <strong>Site Builder</strong>, setting key pillars in <strong>Quality Assurance Templates</strong>, or defining quick action lists in the <strong>Mega Menu</strong> builder), you will find the interactive <strong>Lucide Icon Picker</strong>.
-        </p>
-        <p class="paragraph">
-          Instead of manually typing icon names and risking spelling mistakes that display broken icons, the Icon Picker provides an interactive, visual interface:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Real-time Search:</strong> Simply click the icon picker button to open the popover, and type keywords (e.g., "shield", "globe", "settings") to filter Lucide's extensive catalog in real-time.</li>
-          <li><strong>Hover Name Preview:</strong> Hover your cursor over any icon in the grid to see its exact Lucide name displayed in the picker's footer before making a selection.</li>
-          <li><strong>1-Click Selection:</strong> Click any icon in the grid to assign it instantly. The picker handles dynamic rendering and resolves the selected graphic.</li>
-          <li><strong>Clear Icon:</strong> Click the small "✕" button next to the search icon in the selector to reset and remove the assigned icon.</li>
-        </ul>
+        <!-- EDITING GUIDE SECTION -->
+        <section id="edit-page" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              ></path>
+            </svg>
+            Editing Page Contents
+          </h2>
+          <p class="paragraph">
+            Editing page contents is fully structured into 12 visual tabs. Select your target
+            category from the sidebar and use the designated sub-panels:
+          </p>
 
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Media Library Selection (Image Picker)</h3>
-        <p class="paragraph">
-          To manage visual media across the admin platform (such as hero banner background images, QA document cover pictures, partner logos, or case study photos), we use the centralized <strong>Image Picker</strong>. 
-        </p>
-        <p class="paragraph">
-          Instead of manually copy-pasting storage URLs or FTP locations, the Image Picker is integrated directly into Supabase Storage and features:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Drag & Drop Uploader:</strong> Drag any image (PNG, JPEG, WEBP, SVG, GIF up to 25MB), document (PDF), or video (MP4, WEBM) directly into the dashed upload container to host it on the CDN instantly.</li>
-          <li><strong>Automatic Bandwidth Optimization:</strong> When uploading raster files, the picker automatically compresses their dimensions and converts them to modern <code>.webp</code> format on the fly, saving up to 80% bandwidth.</li>
-          <li><strong>Search & Filter Tabs:</strong> Easily toggle between the <strong>Media Vault</strong> bucket (shared system assets) and <strong>Product Images</strong> bucket. Use the search field and sorting menu to find files by date, file name, or file size.</li>
-          <li><strong>Asset Previews:</strong> Dynamic visual cards display thumbnails for images, previews for videos, and dedicated icons for documents. Hovering over any card displays its file name and byte size.</li>
-          <li><strong>Quick Clearing:</strong> Use the red "✕" button next to any image input to instantly remove the selected asset URL.</li>
-        </ul>
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">Properties & Specs Table</h3>
+              <p class="card-desc">
+                Located in the <strong>Properties Table</strong> tab. Build a robust grid of
+                physical specs. You can dynamically click <strong>+ Column</strong> to add new test
+                vectors (e.g. "Metric Value", "Imperial Value") or <strong>+ Row</strong> to add
+                custom polymer test properties (e.g. "Puncture Resistance").
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Badge Callouts</h3>
+              <p class="card-desc">
+                Managed in the <strong>Highlights</strong> tab. Configure a set of micro key-value
+                pairs (e.g., "Standard Roll: 7.0m", "Warranty: 20 years"). These are automatically
+                compiled into visual pill badges that render prominently under the H1 page header.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">FAQs Accordion</h3>
+              <p class="card-desc">
+                Located in the <strong>FAQs</strong> tab. Add recursive question and answer
+                sections. Administrators can easily update pricing guidance, welding tolerances, or
+                storage procedures which customers can slide open instantly.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Cross-Linking Products</h3>
+              <p class="card-desc">
+                Located in the <strong>Products</strong> tab. Link actual items from the primary
+                catalog by entering their exact product names, short descriptions, and technical
+                links. These render as product recommendations at the bottom of the page.
+              </p>
+            </div>
+          </div>
 
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Database Product Linker (Product Selector)</h3>
-        <p class="paragraph">
-          When linking specific catalog products inside lists (like the Mega Menu's featured products or the Product Categories templates), the platform uses the <strong>Product Selector</strong> combobox.
-        </p>
-        <p class="paragraph">
-          This selector prevents administrators from typing incorrect URLs or misspelling product titles:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Direct Database Connection:</strong> The selector queries the Supabase <code>products</code> table in real-time, displaying active catalog names.</li>
-          <li><strong>Autocomplete Search:</strong> Click the selector and type search terms to instantly filter matches.</li>
-          <li><strong>Automatic Auto-Fill:</strong> Once selected, the component passes the full product record (such as its title, slug, thickness specification, description, and image URL) back to the editor, which automatically fills all associated input fields in one click.</li>
-          <li><strong>Duplicate Exclusion:</strong> The selector dynamically detects and filters out products that are already selected in the current list to avoid duplicate links.</li>
-        </ul>
-        
-        <div class="callout callout-tip">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-            Pro Tip: Real-time Live Preview
-          </div>
-          <div class="callout-content">
-            Unsaved changes are clearly marked with an amber <strong>● Unsaved</strong> indicator. You can preview your work at any time by clicking the <strong>Preview</strong> button in the active category header bar. This launches the exact draft in a separate browser tab before committing the save.
-          </div>
-        </div>
-      </section>
-      
-      <!-- DELETION GUIDE SECTION -->
-      <section id="delete-page" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-          Deleting a Template Page
-        </h2>
-        <p class="paragraph">
-          If a product line is discontinued or consolidated, you can easily purge its dynamic template configuration from the platform:
-        </p>
-        
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Hover Target Template</h4>
-              <p class="paragraph">Locate the template you wish to delete in the left sidebar of the templates builder interface.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Trigger purges</h4>
-              <p class="paragraph">Click the red <strong>Trash Icon</strong> that dynamically fades in next to the template label on hover. This triggers an Alert Dialog window.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Confirm and Commit</h4>
-              <p class="paragraph">Confirm the action inside the alert box. Lastly, click the global <strong>Save All</strong> button in the top right corner. The database record is immediately purged, and the public route will safely output a clean 404 response.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      <!-- MEGAMENU LINKING SECTION -->
-      <section id="link-megamenu" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-          Linking to Mega Menu
-        </h2>
-        <p class="paragraph">
-          Creating a new template page doesn't automatically publish it in the navigation headers. To make your new page accessible to public users, you must register it in the megamenu hierarchy. Thanks to our unified system, this is now a simple **1-click automatic action**:
-        </p>
-        
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Check Menu Status Pill</h4>
-              <p class="paragraph">Look at the active template header bar inside the <strong>Page Templates</strong> page. If the template is not in the menu, you will see a warning pill: <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:0.65rem;font-weight:700">✕ Unlinked (Hidden from Nav Menu)</span>.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Link Instantly</h4>
-              <p class="paragraph">Click the glowing <strong>⚡ Link to Menu</strong> action button right next to the status pill. A dialog box will appear asking you to choose the parent menu category.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Select Parent & Confirm</h4>
-              <p class="paragraph">Select the desired parent group (e.g. <strong>Geomembranes</strong> or <strong>Geotextiles</strong>) from the dropdown list and click <strong>Confirm Link</strong>. The system will automatically build the required JSON structures, resolve parameters, purge old duplicate paths, register the link in Supabase, and update the status pill to green instantly!</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="callout callout-tip" style="margin-top:2rem">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Alternative: Site Builder Autocomplete
-          </div>
-          <div class="callout-content">
-            If you are already inside the <strong>Site Builder</strong> (<code>/admin/site-builder</code>) configuring links, you don't need to manually type labels or path names. Simply add/select a tree node, locate the <strong>⚡ Auto-fill from Page Template</strong> panel under the Identity tab, and pick your template. All parameters will instantly auto-populate without any risk of spelling errors or 404s!
-          </div>
-        </div>
-      </section>
-      
-      <!-- HOMEPAGE BUILDER GUIDE SECTION -->
-      <section id="homepage-builder" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-          Managing Homepage Content
-        </h2>
-        <p class="paragraph">
-          The Geosynthetics Africa landing page is entirely data-driven. Rather than editing static code templates, administrators can visually configure all texts, checkboxes, locations, case studies, and call-to-action buttons directly from the admin dashboard.
-        </p>
-        <p class="paragraph">
-          The homepage configuration is divided into <strong>8 core modules</strong> accessible via horizontal sub-tabs inside the <strong>Homepage</strong> tab of the Site Builder (<code>/admin/site-builder</code>). All configurations are stored under the key <code>homepage_content</code> in the Supabase <code>site_config</code> database table.
-        </p>
-        
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="card-title">1. Hero Section</h3>
-            <p class="card-desc">Edit the main high-conversion banner. Adjust the three-part H1 headline (Prefix, Red Accent, and Suffix), the dynamic tagline list, the descriptive subtext, and the full-width background photo. You can configure up to 3 custom call-to-action buttons with individual labels and target paths (e.g. <code>/contacts</code>).</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">2. Trust Bar Badges</h3>
-            <p class="card-desc">Configure the horizontal security strip below the hero. Administrators can add, edit, or reorder badges (such as "IAGI MEMBER / One of only 5 in Africa"). You can upload/link custom vector icons or fall back automatically to premium red outline icons (Award, Shield, Globe, etc.).</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">3. Application Systems</h3>
-            <p class="card-desc">Manage the grid of 6 primary application systems (e.g., MINING SYSTEMS, WATER CONTAINMENT). Administrators can edit section titles, add/remove cards, upload rich background images, and customize the click-through URLs. Cards are fully collapsible inside the visual editor to simplify organization.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">4. Global Partners Carousel</h3>
-            <p class="card-desc">Customize the best-in-class materials brand section. Add or remove partner logos (e.g., Solmax) and brand names to present active industrial alliances, which render in a sleek, infinite auto-scrolling ticker strip on the public landing page.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">5. Services Grid & Quality Box</h3>
-            <p class="card-desc">Govern the middle section of the homepage. The <strong>Left Grid</strong> lets you edit 6 services cards (icon, title, and mini-description). The <strong>Right Box</strong> lets you manage the high-visibility dark QA/QC assurance panel, including editable checkmarks (e.g., Weld Integrity Testing) and background illustrations.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">6. Stats & Presence Map</h3>
-            <p class="card-desc">Edit counter metrics (e.g. "20+ Years Experience", "1000+ Projects") and specify pan-African branches. Adding a branch location name (e.g., Ghana) and type (e.g., HQ) automatically triggers an animated pulsing map coordinate pin over the custom vector outline map of Africa!</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">7. Project Case Studies</h3>
-            <p class="card-desc">Manage the case studies showcase cards by adding cover photos, categories (e.g., TSF LINING SYSTEM), location flags, system details, and titles. You can also customize the adjacent high-impact "Explore Our Catalogue" search teaser box and button.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">8. BOQ Callout Banner</h3>
-            <p class="card-desc">Optimize the red primary call-to-action bar above the website footer. Customise the bold headline ("SUBMIT YOUR BOQ."), descriptive paragraph, and two distinct primary action buttons to maximize business conversions and quote requests.</p>
-          </div>
-        </div>
-        
-        <div class="callout callout-tip" style="margin-top:2rem">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-            Automatic Image Optimization Engine
-          </div>
-          <div class="callout-content">
-            Our platform features a built-in image compression pipeline. When you click <strong>Upload</strong> inside any image field, the system automatically intercepts the asset, scales extreme dimensions down to safe heights (max 1600px), converts the format to modern high-fidelity <strong>.webp</strong> format, and reduces file size by up to 80% without losing quality. This ensures your uploads never slow down public loading speeds!
-          </div>
-        </div>
-        
-        <div class="steps-container" style="margin-top:2rem">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Access the Homepage Builder Workspace</h4>
-              <p class="paragraph">From the admin panel navigation list, click on <strong>Site Builder</strong> (or visit <code>/admin/site-builder</code>). By default, the interface opens to the first tab, <strong>Homepage</strong>.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Select Target Module Tab</h4>
-              <p class="paragraph">Within the Homepage Builder workspace, use the secondary top horizontal sub-tabs (Hero Section, Trust Bar, App Systems, Partners, etc.) to view the custom fields for each visual block.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Input Content & Manage Cards</h4>
-              <p class="paragraph">Enter your desired text or links. For repeating lists (e.g. trust badges or project cards), click <strong>+ Add Card</strong>. You can expand/collapse cards by clicking their headers to easily edit fields or upload new optimized photos.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">4</div>
-            <div class="step-body">
-              <h4 class="step-title">Verify Status & Save Changes</h4>
-              <p class="paragraph">Unsaved changes are clearly flagged in the sub-header with an amber <span class="badge" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);font-size:0.65rem;font-weight:700">● Unsaved</span> badge. Once you are satisfied with your edits, click the glowing <strong>Save Homepage</strong> button in the top-right corner to instantly push updates live to the public site!</p>
-            </div>
-          </div>
-        </div>
-      </section>
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            Visual Icon Selection (Lucide Icon Picker)
+          </h3>
+          <p class="paragraph">
+            Across the admin control panel (e.g., when editing navigation category icons in the
+            <strong>Site Builder</strong>, setting key pillars in
+            <strong>Quality Assurance Templates</strong>, or defining quick action lists in the
+            <strong>Mega Menu</strong> builder), you will find the interactive
+            <strong>Lucide Icon Picker</strong>.
+          </p>
+          <p class="paragraph">
+            Instead of manually typing icon names and risking spelling mistakes that display broken
+            icons, the Icon Picker provides an interactive, visual interface:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Real-time Search:</strong> Simply click the icon picker button to open the
+              popover, and type keywords (e.g., "shield", "globe", "settings") to filter Lucide's
+              extensive catalog in real-time.
+            </li>
+            <li>
+              <strong>Hover Name Preview:</strong> Hover your cursor over any icon in the grid to
+              see its exact Lucide name displayed in the picker's footer before making a selection.
+            </li>
+            <li>
+              <strong>1-Click Selection:</strong> Click any icon in the grid to assign it instantly.
+              The picker handles dynamic rendering and resolves the selected graphic.
+            </li>
+            <li>
+              <strong>Clear Icon:</strong> Click the small "✕" button next to the search icon in the
+              selector to reset and remove the assigned icon.
+            </li>
+          </ul>
 
-      <!-- MANAGING APPLICATION CATEGORIES SECTION -->
-      <section id="applications-builder" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          Managing Application Categories & Sub-pages
-        </h2>
-        <p class="paragraph">
-          The Geosynthetics Africa navigation systems are built dynamically. Both application categories (e.g. <em>Containment & Lining</em>) and their corresponding nested sub-pages (e.g. <em>Mining TSF Lining</em>) can be customized, reordered, added, or deleted directly in the Admin Control Panel.
-        </p>
-        <p class="paragraph">
-          The administration of applications is divided into two primary workspaces: structural hierarchy editing in the <strong>Site Builder</strong> (<code>/admin/site-builder</code>), and content detailing in the <strong>Page Templates</strong> editor (<code>/admin/page-templates</code>). All configurations are synced atomically to the Supabase <code>site_config</code> database table under the keys <code>hierarchy_applications</code> and <code>template_applications</code>.
-        </p>
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            Media Library Selection (Image Picker)
+          </h3>
+          <p class="paragraph">
+            To manage visual media across the admin platform (such as hero banner background images,
+            QA document cover pictures, partner logos, or case study photos), we use the centralized
+            <strong>Image Picker</strong>.
+          </p>
+          <p class="paragraph">
+            Instead of manually copy-pasting storage URLs or FTP locations, the Image Picker is
+            integrated directly into Supabase Storage and features:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Drag & Drop Uploader:</strong> Drag any image (PNG, JPEG, WEBP, SVG, GIF up to
+              25MB), document (PDF), or video (MP4, WEBM) directly into the dashed upload container
+              to host it on the CDN instantly.
+            </li>
+            <li>
+              <strong>Automatic Bandwidth Optimization:</strong> When uploading raster files, the
+              picker automatically compresses their dimensions and converts them to modern
+              <code>.webp</code> format on the fly, saving up to 80% bandwidth.
+            </li>
+            <li>
+              <strong>Search & Filter Tabs:</strong> Easily toggle between the
+              <strong>Media Vault</strong> bucket (shared system assets) and
+              <strong>Product Images</strong> bucket. Use the search field and sorting menu to find
+              files by date, file name, or file size.
+            </li>
+            <li>
+              <strong>Asset Previews:</strong> Dynamic visual cards display thumbnails for images,
+              previews for videos, and dedicated icons for documents. Hovering over any card
+              displays its file name and byte size.
+            </li>
+            <li>
+              <strong>Quick Clearing:</strong> Use the red "✕" button next to any image input to
+              instantly remove the selected asset URL.
+            </li>
+          </ul>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Navigation Tree & Hierarchy Management</h3>
-        <p class="paragraph">
-          To modify the categories listed in the header's <strong>Applications</strong> mega menu dropdown, navigate to the <strong>Site Builder</strong> (<code>/admin/site-builder</code>) and select the <strong>Applications</strong> tab:
-        </p>
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Reorder Items (Drag & Drop)</h4>
-              <p class="paragraph">Hover over any item in the category tree. Click and hold the vertical drag handle (<code>⋮⋮</code>) next to the item, then drag it up or down to reorder the items or move sub-pages under a different parent category.</p>
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            Database Product Linker (Product Selector)
+          </h3>
+          <p class="paragraph">
+            When linking specific catalog products inside lists (like the Mega Menu's featured
+            products or the Product Categories templates), the platform uses the
+            <strong>Product Selector</strong> combobox.
+          </p>
+          <p class="paragraph">
+            This selector prevents administrators from typing incorrect URLs or misspelling product
+            titles:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Direct Database Connection:</strong> The selector queries the Supabase
+              <code>products</code> table in real-time, displaying active catalog names.
+            </li>
+            <li>
+              <strong>Autocomplete Search:</strong> Click the selector and type search terms to
+              instantly filter matches.
+            </li>
+            <li>
+              <strong>Automatic Auto-Fill:</strong> Once selected, the component passes the full
+              product record (such as its title, slug, thickness specification, description, and
+              image URL) back to the editor, which automatically fills all associated input fields
+              in one click.
+            </li>
+            <li>
+              <strong>Duplicate Exclusion:</strong> The selector dynamically detects and filters out
+              products that are already selected in the current list to avoid duplicate links.
+            </li>
+          </ul>
+
+          <div class="callout callout-tip">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+              Pro Tip: Real-time Live Preview
+            </div>
+            <div class="callout-content">
+              Unsaved changes are clearly marked with an amber <strong>● Unsaved</strong> indicator.
+              You can preview your work at any time by clicking the <strong>Preview</strong> button
+              in the active category header bar. This launches the exact draft in a separate browser
+              tab before committing the save.
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Add a Top-Level Category</h4>
-              <p class="paragraph">Enter the label of the new category inside the input box at the bottom of the tree sidebar (e.g., <em>Waterproofing</em>) and click the <strong>+</strong> button. The system will automatically generate a corresponding URL slug.</p>
+        </section>
+
+        <!-- DELETION GUIDE SECTION -->
+        <section id="delete-page" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              ></path>
+            </svg>
+            Deleting a Template Page
+          </h2>
+          <p class="paragraph">
+            If a product line is discontinued or consolidated, you can easily purge its dynamic
+            template configuration from the platform:
+          </p>
+
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Hover Target Template</h4>
+                <p class="paragraph">
+                  Locate the template you wish to delete in the left sidebar of the templates
+                  builder interface.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Trigger purges</h4>
+                <p class="paragraph">
+                  Click the red <strong>Trash Icon</strong> that dynamically fades in next to the
+                  template label on hover. This triggers an Alert Dialog window.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Confirm and Commit</h4>
+                <p class="paragraph">
+                  Confirm the action inside the alert box. Lastly, click the global
+                  <strong>Save All</strong> button in the top right corner. The database record is
+                  immediately purged, and the public route will safely output a clean 404 response.
+                </p>
+              </div>
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Add a Child Sub-page</h4>
-              <p class="paragraph">Hover over any parent category in the tree and click the small blue <strong>+</strong> icon that appears on the right edge. Type the name of the new sub-page and press Enter to instantly create the sub-item.</p>
+        </section>
+
+        <!-- MEGAMENU LINKING SECTION -->
+        <section id="link-megamenu" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+              ></path>
+            </svg>
+            Linking to Mega Menu
+          </h2>
+          <p class="paragraph">
+            Creating a new template page doesn't automatically publish it in the navigation headers.
+            To make your new page accessible to public users, you must register it in the megamenu
+            hierarchy. Thanks to our unified system, this is now a simple **1-click automatic
+            action**:
+          </p>
+
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Check Menu Status Pill</h4>
+                <p class="paragraph">
+                  Look at the active template header bar inside the
+                  <strong>Page Templates</strong> page. If the template is not in the menu, you will
+                  see a warning pill:
+                  <span
+                    class="badge"
+                    style="
+                      background: rgba(245, 158, 11, 0.1);
+                      color: #f59e0b;
+                      border: 1px solid rgba(245, 158, 11, 0.25);
+                      font-size: 0.65rem;
+                      font-weight: 700;
+                    "
+                    >✕ Unlinked (Hidden from Nav Menu)</span
+                  >.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Link Instantly</h4>
+                <p class="paragraph">
+                  Click the glowing <strong>⚡ Link to Menu</strong> action button right next to the
+                  status pill. A dialog box will appear asking you to choose the parent menu
+                  category.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Select Parent & Confirm</h4>
+                <p class="paragraph">
+                  Select the desired parent group (e.g. <strong>Geomembranes</strong> or
+                  <strong>Geotextiles</strong>) from the dropdown list and click
+                  <strong>Confirm Link</strong>. The system will automatically build the required
+                  JSON structures, resolve parameters, purge old duplicate paths, register the link
+                  in Supabase, and update the status pill to green instantly!
+                </p>
+              </div>
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">4</div>
-            <div class="step-body">
-              <h4 class="step-title">Delete an Item</h4>
-              <p class="paragraph">Hover over the category or sub-page you wish to delete and click the red <strong>Trash</strong> icon. Confirm the action in the alert box. Note that deleting a sub-page here will remove it from navigation, but you must click <strong>Save</strong> to commit it.</p>
+
+          <div class="callout callout-tip" style="margin-top: 2rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Alternative: Site Builder Autocomplete
+            </div>
+            <div class="callout-content">
+              If you are already inside the
+              <strong>Site Builder</strong> (<code>/admin/site-builder</code>) configuring links,
+              you don't need to manually type labels or path names. Simply add/select a tree node,
+              locate the <strong>⚡ Auto-fill from Page Template</strong> panel under the Identity
+              tab, and pick your template. All parameters will instantly auto-populate without any
+              risk of spelling errors or 404s!
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">5</div>
-            <div class="step-body">
-              <h4 class="step-title">Save to Database</h4>
-              <p class="paragraph">Any structural alterations are flagged as unsaved. Click the <strong>Save Applications</strong> button in the top-right header to commit all structural changes to Supabase.</p>
+        </section>
+
+        <!-- HOMEPAGE BUILDER GUIDE SECTION -->
+        <section id="homepage-builder" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+            </svg>
+            Managing Homepage Content
+          </h2>
+          <p class="paragraph">
+            The Geosynthetics Africa landing page is entirely data-driven. Rather than editing
+            static code templates, administrators can visually configure all texts, checkboxes,
+            locations, case studies, and call-to-action buttons directly from the admin dashboard.
+          </p>
+          <p class="paragraph">
+            The homepage configuration is divided into <strong>8 core modules</strong> accessible
+            via horizontal sub-tabs inside the <strong>Homepage</strong> tab of the Site Builder
+            (<code>/admin/site-builder</code>). All configurations are stored under the key
+            <code>homepage_content</code> in the Supabase <code>site_config</code> database table.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">1. Hero Section</h3>
+              <p class="card-desc">
+                Edit the main high-conversion banner. Adjust the three-part H1 headline (Prefix, Red
+                Accent, and Suffix), the dynamic tagline list, the descriptive subtext, and the
+                full-width background photo. You can configure up to 3 custom call-to-action buttons
+                with individual labels and target paths (e.g. <code>/contacts</code>).
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">2. Trust Bar Badges</h3>
+              <p class="card-desc">
+                Configure the horizontal security strip below the hero. Administrators can add,
+                edit, or reorder badges (such as "IAGI MEMBER / One of only 5 in Africa"). You can
+                upload/link custom vector icons or fall back automatically to premium red outline
+                icons (Award, Shield, Globe, etc.).
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">3. Application Systems</h3>
+              <p class="card-desc">
+                Manage the grid of 6 primary application systems (e.g., MINING SYSTEMS, WATER
+                CONTAINMENT). Administrators can edit section titles, add/remove cards, upload rich
+                background images, and customize the click-through URLs. Cards are fully collapsible
+                inside the visual editor to simplify organization.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">4. Global Partners Carousel</h3>
+              <p class="card-desc">
+                Customize the best-in-class materials brand section. Add or remove partner logos
+                (e.g., Solmax) and brand names to present active industrial alliances, which render
+                in a sleek, infinite auto-scrolling ticker strip on the public landing page.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">5. Services Grid & Quality Box</h3>
+              <p class="card-desc">
+                Govern the middle section of the homepage. The <strong>Left Grid</strong> lets you
+                edit 6 services cards (icon, title, and mini-description). The
+                <strong>Right Box</strong> lets you manage the high-visibility dark QA/QC assurance
+                panel, including editable checkmarks (e.g., Weld Integrity Testing) and background
+                illustrations.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">6. Stats & Presence Map</h3>
+              <p class="card-desc">
+                Edit counter metrics (e.g. "20+ Years Experience", "1000+ Projects") and specify
+                pan-African branches. Adding a branch location name (e.g., Ghana) and type (e.g.,
+                HQ) automatically triggers an animated pulsing map coordinate pin over the custom
+                vector outline map of Africa!
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">7. Project Case Studies</h3>
+              <p class="card-desc">
+                Manage the case studies showcase cards by adding cover photos, categories (e.g., TSF
+                LINING SYSTEM), location flags, system details, and titles. You can also customize
+                the adjacent high-impact "Explore Our Catalogue" search teaser box and button.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">8. BOQ Callout Banner</h3>
+              <p class="card-desc">
+                Optimize the red primary call-to-action bar above the website footer. Customise the
+                bold headline ("SUBMIT YOUR BOQ."), descriptive paragraph, and two distinct primary
+                action buttons to maximize business conversions and quote requests.
+              </p>
             </div>
           </div>
-        </div>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">2. Editing Category Page Content & Layout Templates</h3>
-        <p class="paragraph">
-          To update the copy, images, and search engine metadata of category landing pages, navigate to <strong>Page Templates</strong> (<code>/admin/page-templates</code>) and choose the <strong>Application Templates</strong> sub-tab:
-        </p>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="card-title">Hero Section Tab</h3>
-            <p class="card-desc">Configure the top banner of the application landing page. Edit the main Page Title (H1), upload a custom background photo using the image picker, and enter a detailed subtitle description.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">Sub-systems Content Tab</h3>
-            <p class="card-desc">Manage the sub-systems list. Each item is rendered as a stylized card on the category landing page. Administrators can add, remove, and reorder these items dynamically using the String List editor.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">SEO Meta Tab</h3>
-            <p class="card-desc">Update metadata to optimize organic Google rankings. Write a custom Meta Title, a meta description explaining the system value, and comma-separated meta keywords (e.g. <em>tailings storage, pond liners</em>).</p>
-          </div>
-        </div>
-
-        <div class="callout callout-note" style="margin-top:1.5rem">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Static vs Custom Slugs
-          </div>
-          <div class="callout-content">
-            Protected static categories built into the main menu structure (e.g., <code>mining-systems</code>, <code>water-containment</code>) cannot be deleted. However, administrators can create new custom categories or templates dynamically. Deleting custom categories will prompt a confirmation dialog to prevent accidental data loss.
-          </div>
-        </div>
-      </section>
-
-      <!-- TRACKING & COOKIES SECTION -->
-      <section id="tracking-cookies" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-          Tracking & Cookie Flow
-        </h2>
-        <p class="paragraph">
-          The Geosynthetics Africa platform implements a modern, highly secure, and fully compliant privacy consent structure. Designed to respect international data privacy regulations (such as GDPR, CCPA, and South Africa's POPIA), third-party tracking scripts are loaded dynamically and strictly in accordance with each visitor's selected preferences.
-        </p>
-
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Admin Integration Portal</h3>
-        <p class="paragraph">
-          Administrators can connect third-party analytics suites without modifying any code. Navigate to the dedicated <strong>Tracking & Cookies</strong> control panel (<code>/admin/tracking</code>) under Pages SEO.
-        </p>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3 class="card-title">Google Analytics 4 (GA4)</h3>
-            <p class="card-desc">Input your GA4 Measurement ID (formatted as <code>G-XXXXXXXXXX</code>) found in your Google Analytics Admin console under <em>Data Streams > Web Stream Details</em>. GA4 tracks user engagement, pageviews, events, and funnel conversions.</p>
-          </div>
-          <div class="card">
-            <h3 class="card-title">Google Tag Manager (GTM)</h3>
-            <p class="card-desc">Input your GTM Container ID (formatted as <code>GTM-XXXXXXX</code>) visible at the top of your Tag Manager workspace dashboard. GTM acts as a unified container to deploy advertising pixels, heatmaps, and custom marketing scripts.</p>
-          </div>
-        </div>
-
-        <div class="callout callout-note" style="margin-top:1.5rem">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Database Architecture
-          </div>
-          <div class="callout-content">
-            Credentials saved in the tracking control panel are committed to the <code>site_config</code> database table under the row key <code>tracking_config</code>. This data is structured as a simple JSON object: <code>{ googleAnalyticsId: string, googleTagManagerId: string }</code>, allowing direct queries and fast caching.
-          </div>
-        </div>
-
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">2. Granular Cookie Consent Banner</h3>
-        <p class="paragraph">
-          When a new visitor arrives, a custom glassmorphic <strong>CookieConsent</strong> notice slides up from the page bottom after a 1000ms delay. The banner presents three options:
-        </p>
-
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Necessary Cookies (Always Active)</h4>
-              <p class="paragraph">Required for basic platform operations, user sessions, routing, authentication security, and recording user settings. These cannot be disabled.</p>
+          <div class="callout callout-tip" style="margin-top: 2rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+              Automatic Image Optimization Engine
+            </div>
+            <div class="callout-content">
+              Our platform features a built-in image compression pipeline. When you click
+              <strong>Upload</strong> inside any image field, the system automatically intercepts
+              the asset, scales extreme dimensions down to safe heights (max 1600px), converts the
+              format to modern high-fidelity <strong>.webp</strong> format, and reduces file size by
+              up to 80% without losing quality. This ensures your uploads never slow down public
+              loading speeds!
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Analytical Trackers</h4>
-              <p class="paragraph">Controls the dynamic loading of Google Analytics and Google Tag Manager to audit traffic patterns and measure site performance metrics anonymously.</p>
+
+          <div class="steps-container" style="margin-top: 2rem">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Access the Homepage Builder Workspace</h4>
+                <p class="paragraph">
+                  From the admin panel navigation list, click on <strong>Site Builder</strong> (or
+                  visit <code>/admin/site-builder</code>). By default, the interface opens to the
+                  first tab, <strong>Homepage</strong>.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Select Target Module Tab</h4>
+                <p class="paragraph">
+                  Within the Homepage Builder workspace, use the secondary top horizontal sub-tabs
+                  (Hero Section, Trust Bar, App Systems, Partners, etc.) to view the custom fields
+                  for each visual block.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Input Content & Manage Cards</h4>
+                <p class="paragraph">
+                  Enter your desired text or links. For repeating lists (e.g. trust badges or
+                  project cards), click <strong>+ Add Card</strong>. You can expand/collapse cards
+                  by clicking their headers to easily edit fields or upload new optimized photos.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">4</div>
+              <div class="step-body">
+                <h4 class="step-title">Verify Status & Save Changes</h4>
+                <p class="paragraph">
+                  Unsaved changes are clearly flagged in the sub-header with an amber
+                  <span
+                    class="badge"
+                    style="
+                      background: rgba(245, 158, 11, 0.1);
+                      color: #f59e0b;
+                      border: 1px solid rgba(245, 158, 11, 0.25);
+                      font-size: 0.65rem;
+                      font-weight: 700;
+                    "
+                    >● Unsaved</span
+                  >
+                  badge. Once you are satisfied with your edits, click the glowing
+                  <strong>Save Homepage</strong> button in the top-right corner to instantly push
+                  updates live to the public site!
+                </p>
+              </div>
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Marketing Pixels</h4>
-              <p class="paragraph">Enables specialized campaign tracing, retargeting tags, and custom conversion events for advertising networks (e.g. LinkedIn, Meta).</p>
+        </section>
+
+        <!-- MANAGING APPLICATION CATEGORIES SECTION -->
+        <section id="applications-builder" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              ></path>
+            </svg>
+            Managing Application Categories & Sub-pages
+          </h2>
+          <p class="paragraph">
+            The Geosynthetics Africa navigation systems are built dynamically. Both application
+            categories (e.g. <em>Containment & Lining</em>) and their corresponding nested sub-pages
+            (e.g. <em>Mining TSF Lining</em>) can be customized, reordered, added, or deleted
+            directly in the Admin Control Panel.
+          </p>
+          <p class="paragraph">
+            The administration of applications is divided into two primary workspaces: structural
+            hierarchy editing in the
+            <strong>Site Builder</strong> (<code>/admin/site-builder</code>), and content detailing
+            in the <strong>Page Templates</strong> editor (<code>/admin/page-templates</code>). All
+            configurations are synced atomically to the Supabase <code>site_config</code> database
+            table under the keys <code>hierarchy_applications</code> and
+            <code>template_applications</code>.
+          </p>
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            1. Navigation Tree & Hierarchy Management
+          </h3>
+          <p class="paragraph">
+            To modify the categories listed in the header's <strong>Applications</strong> mega menu
+            dropdown, navigate to the
+            <strong>Site Builder</strong> (<code>/admin/site-builder</code>) and select the
+            <strong>Applications</strong> tab:
+          </p>
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Reorder Items (Drag & Drop)</h4>
+                <p class="paragraph">
+                  Hover over any item in the category tree. Click and hold the vertical drag handle
+                  (<code>⋮⋮</code>) next to the item, then drag it up or down to reorder the items
+                  or move sub-pages under a different parent category.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Add a Top-Level Category</h4>
+                <p class="paragraph">
+                  Enter the label of the new category inside the input box at the bottom of the tree
+                  sidebar (e.g., <em>Waterproofing</em>) and click the <strong>+</strong> button.
+                  The system will automatically generate a corresponding URL slug.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Add a Child Sub-page</h4>
+                <p class="paragraph">
+                  Hover over any parent category in the tree and click the small blue
+                  <strong>+</strong> icon that appears on the right edge. Type the name of the new
+                  sub-page and press Enter to instantly create the sub-item.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">4</div>
+              <div class="step-body">
+                <h4 class="step-title">Delete an Item</h4>
+                <p class="paragraph">
+                  Hover over the category or sub-page you wish to delete and click the red
+                  <strong>Trash</strong> icon. Confirm the action in the alert box. Note that
+                  deleting a sub-page here will remove it from navigation, but you must click
+                  <strong>Save</strong> to commit it.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">5</div>
+              <div class="step-body">
+                <h4 class="step-title">Save to Database</h4>
+                <p class="paragraph">
+                  Any structural alterations are flagged as unsaved. Click the
+                  <strong>Save Applications</strong> button in the top-right header to commit all
+                  structural changes to Supabase.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">3. Storage & Event Lifecycle Flow</h3>
-        <p class="paragraph">
-          The cookie lifecycle is designed for seamless transitions, zero-delay initialization, and persistence:
-        </p>
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            2. Editing Category Page Content & Layout Templates
+          </h3>
+          <p class="paragraph">
+            To update the copy, images, and search engine metadata of category landing pages,
+            navigate to <strong>Page Templates</strong> (<code>/admin/page-templates</code>) and
+            choose the <strong>Application Templates</strong> sub-tab:
+          </p>
 
-        <div class="grid-2" style="margin-bottom: 2rem;">
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Preference Storage</h3>
-            <p class="card-desc">When consent preferences are saved, the state is persisted in <code>localStorage</code> under the key <code>gsa-cookie-preferences</code> as JSON:<br>
-            <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-size:0.7rem;display:inline-block;margin-top:0.3rem">{ "necessary": true, "analytics": false, "marketing": false }</code></p>
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">Hero Section Tab</h3>
+              <p class="card-desc">
+                Configure the top banner of the application landing page. Edit the main Page Title
+                (H1), upload a custom background photo using the image picker, and enter a detailed
+                subtitle description.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Sub-systems Content Tab</h3>
+              <p class="card-desc">
+                Manage the sub-systems list. Each item is rendered as a stylized card on the
+                category landing page. Administrators can add, remove, and reorder these items
+                dynamically using the String List editor.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">SEO Meta Tab</h3>
+              <p class="card-desc">
+                Update metadata to optimize organic Google rankings. Write a custom Meta Title, a
+                meta description explaining the system value, and comma-separated meta keywords
+                (e.g. <em>tailings storage, pond liners</em>).
+              </p>
+            </div>
           </div>
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Grace Period Dismissal</h3>
-            <p class="card-desc">If a visitor clicks the close (<code>✕</code>) button instead of accepting/declining, the banner is dismissed and a timestamp is recorded in <code>gsa-cookie-dismissed-at</code>. The banner is hidden for a <strong>3-hour grace period</strong> before prompting again.</p>
-          </div>
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Backward Compatibility</h3>
-            <p class="card-desc">To maintain continuity for legacy visitors, any existing binary cookie consent saved as <code>gsa-cookie-consent</code> is auto-detected on load and migrated into the new granular preferences object structure seamlessly.</p>
-          </div>
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Reactive Event Dispatcher</h3>
-            <p class="card-desc">Every time a visitor modifies cookie settings, the consent panel dispatches a custom window event: <code>window.dispatchEvent(new Event("gsa-cookie-preferences-changed"))</code>. This triggers immediate response from loading scripts.</p>
-          </div>
-        </div>
 
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">4. Dynamic Script Injection (TrackingLoader)</h3>
-        <p class="paragraph">
-          The <code>TrackingLoader</code> is a global, non-rendering React component mounted in the root page layout. It orchestrates script injection under strict conditions:
-        </p>
+          <div class="callout callout-note" style="margin-top: 1.5rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Static vs Custom Slugs
+            </div>
+            <div class="callout-content">
+              Protected static categories built into the main menu structure (e.g.,
+              <code>mining-systems</code>, <code>water-containment</code>) cannot be deleted.
+              However, administrators can create new custom categories or templates dynamically.
+              Deleting custom categories will prompt a confirmation dialog to prevent accidental
+              data loss.
+            </div>
+          </div>
+        </section>
 
-        <pre><span class="token-comment">// 1. Listen for consent changes reactively</span>
+        <!-- TRACKING & COOKIES SECTION -->
+        <section id="tracking-cookies" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              ></path>
+            </svg>
+            Tracking & Cookie Flow
+          </h2>
+          <p class="paragraph">
+            The Geosynthetics Africa platform implements a modern, highly secure, and fully
+            compliant privacy consent structure. Designed to respect international data privacy
+            regulations (such as GDPR, CCPA, and South Africa's POPIA), third-party tracking scripts
+            are loaded dynamically and strictly in accordance with each visitor's selected
+            preferences.
+          </p>
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            1. Admin Integration Portal
+          </h3>
+          <p class="paragraph">
+            Administrators can connect third-party analytics suites without modifying any code.
+            Navigate to the dedicated <strong>Tracking & Cookies</strong> control panel
+            (<code>/admin/tracking</code>) under Pages SEO.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">Google Analytics 4 (GA4)</h3>
+              <p class="card-desc">
+                Input your GA4 Measurement ID (formatted as <code>G-XXXXXXXXXX</code>) found in your
+                Google Analytics Admin console under <em>Data Streams > Web Stream Details</em>. GA4
+                tracks user engagement, pageviews, events, and funnel conversions.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Google Tag Manager (GTM)</h3>
+              <p class="card-desc">
+                Input your GTM Container ID (formatted as <code>GTM-XXXXXXX</code>) visible at the
+                top of your Tag Manager workspace dashboard. GTM acts as a unified container to
+                deploy advertising pixels, heatmaps, and custom marketing scripts.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-note" style="margin-top: 1.5rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Database Architecture
+            </div>
+            <div class="callout-content">
+              Credentials saved in the tracking control panel are committed to the
+              <code>site_config</code> database table under the row key
+              <code>tracking_config</code>. This data is structured as a simple JSON object:
+              <code>{ googleAnalyticsId: string, googleTagManagerId: string }</code>, allowing
+              direct queries and fast caching.
+            </div>
+          </div>
+
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            2. Granular Cookie Consent Banner
+          </h3>
+          <p class="paragraph">
+            When a new visitor arrives, a custom glassmorphic <strong>CookieConsent</strong> notice
+            slides up from the page bottom after a 1000ms delay. The banner presents three options:
+          </p>
+
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Necessary Cookies (Always Active)</h4>
+                <p class="paragraph">
+                  Required for basic platform operations, user sessions, routing, authentication
+                  security, and recording user settings. These cannot be disabled.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Analytical Trackers</h4>
+                <p class="paragraph">
+                  Controls the dynamic loading of Google Analytics and Google Tag Manager to audit
+                  traffic patterns and measure site performance metrics anonymously.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Marketing Pixels</h4>
+                <p class="paragraph">
+                  Enables specialized campaign tracing, retargeting tags, and custom conversion
+                  events for advertising networks (e.g. LinkedIn, Meta).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            3. Storage & Event Lifecycle Flow
+          </h3>
+          <p class="paragraph">
+            The cookie lifecycle is designed for seamless transitions, zero-delay initialization,
+            and persistence:
+          </p>
+
+          <div class="grid-2" style="margin-bottom: 2rem">
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Preference Storage</h3>
+              <p class="card-desc">
+                When consent preferences are saved, the state is persisted in
+                <code>localStorage</code> under the key <code>gsa-cookie-preferences</code> as
+                JSON:<br />
+                <code
+                  style="
+                    background: var(--bg-surface);
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-size: 0.7rem;
+                    display: inline-block;
+                    margin-top: 0.3rem;
+                  "
+                  >{ "necessary": true, "analytics": false, "marketing": false }</code
+                >
+              </p>
+            </div>
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Grace Period Dismissal</h3>
+              <p class="card-desc">
+                If a visitor clicks the close (<code>✕</code>) button instead of
+                accepting/declining, the banner is dismissed and a timestamp is recorded in
+                <code>gsa-cookie-dismissed-at</code>. The banner is hidden for a
+                <strong>3-hour grace period</strong> before prompting again.
+              </p>
+            </div>
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Backward Compatibility</h3>
+              <p class="card-desc">
+                To maintain continuity for legacy visitors, any existing binary cookie consent saved
+                as <code>gsa-cookie-consent</code> is auto-detected on load and migrated into the
+                new granular preferences object structure seamlessly.
+              </p>
+            </div>
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Reactive Event Dispatcher</h3>
+              <p class="card-desc">
+                Every time a visitor modifies cookie settings, the consent panel dispatches a custom
+                window event:
+                <code>window.dispatchEvent(new Event("gsa-cookie-preferences-changed"))</code>. This
+                triggers immediate response from loading scripts.
+              </p>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            4. Dynamic Script Injection (TrackingLoader)
+          </h3>
+          <p class="paragraph">
+            The <code>TrackingLoader</code> is a global, non-rendering React component mounted in
+            the root page layout. It orchestrates script injection under strict conditions:
+          </p>
+
+          <pre><span class="token-comment">// 1. Listen for consent changes reactively</span>
 <span class="token-keyword">window</span>.<span class="token-function">addEventListener</span>(<span class="token-string">"gsa-cookie-preferences-changed"</span>, loadPreferences);
 
 <span class="token-comment">// 2. Dynamic Injection checks (GDPR/POPIA compliance)</span>
@@ -847,97 +1716,196 @@
   <span class="token-keyword">document</span>.head.<span class="token-function">appendChild</span>(script);
 }</pre>
 
-        <div class="callout callout-tip" style="margin-top:1.5rem">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-            Preventing Duplicate Injections
-          </div>
-          <div class="callout-content">
-            To prevent performance-degrading duplicate script initializations, all dynamically injected scripts are given unique IDs (e.g. <code>gsa-google-analytics</code>, <code>gsa-google-analytics-init</code>, <code>gsa-google-tagmanager</code>). The loader checks for the existence of these elements before executing any DOM manipulations.
-          </div>
-        </div>
-      </section>
-
-      <!-- MEDIA CENTER SECTION -->
-      <section id="media-center" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          Media Center Operations
-        </h2>
-        <p class="paragraph">
-          The Geosynthetics Africa platform features an integrated <strong>Media Center</strong> inside the admin control panel. This hub acts as the centralized file hosting and asset management engine for the entire website, removing the need for manual FTP client access or direct Git repository commits for simple asset updates.
-        </p>
-        <p class="paragraph">
-          Whether you need to upload high-resolution product photography, detailed product brochures, engineering data PDFs, or promotional/instructional videos, the Media Center provides a fast, drag-and-drop workflow that optimizes and hosts your files instantly.
-        </p>
-
-        <div class="grid-2" style="margin-bottom: 2rem;">
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Supported File Types</h3>
-            <p class="card-desc">The Media Center accepts a comprehensive range of file extensions including images (<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>), document sheets (<code>.xlsx</code>, <code>.docx</code>), standard pamphlets and brochures (<code>.pdf</code>), and high-definition video files (<code>.mp4</code>, <code>.webm</code>).</p>
-          </div>
-          <div class="card" style="border-left: 2px solid var(--accent-red)">
-            <h3 class="card-title">Supabase Storage Backing</h3>
-            <p class="card-desc">All files are securely uploaded directly to our high-speed, globally distributed Supabase Storage Buckets. This guarantees rapid content delivery network (CDN) responses and zero application server load when clients download huge documents.</p>
-          </div>
-        </div>
-
-        <div class="callout callout-tip" style="margin-bottom: 2rem;">
-          <div class="callout-title">
-            <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-            Automatic Image WebP Converter
-          </div>
-          <div class="callout-content">
-            When uploading raster images like PNGs or JPEGs, the control panel dynamically compresses and converts them into the modern <strong>.webp</strong> format to ensure your web pages load lightning-fast for cellular users across Africa, saving up to 80% bandwidth with zero perceptible quality loss.
-          </div>
-        </div>
-
-        <h3 style="margin-top:2.5rem;margin-bottom:0.75rem;font-size:1.15rem">Workflow: Upload, Copy, and Distribute</h3>
-        <p class="paragraph">
-          Managing your documents and embedding them across the website is incredibly simple and requires no code updates:
-        </p>
-
-        <div class="steps-container">
-          <div class="step-row">
-            <div class="step-number">1</div>
-            <div class="step-body">
-              <h4 class="step-title">Navigate and Upload</h4>
-              <p class="paragraph">Go to the admin dashboard and select <strong>Media Center</strong> from the left menu. Drag your files directly into the dashed upload boundary, or click the box to select files from your computer. Click <strong>Upload Assets</strong> to push them to the CDN.</p>
+          <div class="callout callout-tip" style="margin-top: 1.5rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+              Preventing Duplicate Injections
+            </div>
+            <div class="callout-content">
+              To prevent performance-degrading duplicate script initializations, all dynamically
+              injected scripts are given unique IDs (e.g. <code>gsa-google-analytics</code>,
+              <code>gsa-google-analytics-init</code>, <code>gsa-google-tagmanager</code>). The
+              loader checks for the existence of these elements before executing any DOM
+              manipulations.
             </div>
           </div>
-          <div class="step-row">
-            <div class="step-number">2</div>
-            <div class="step-body">
-              <h4 class="step-title">Copy the Public URL</h4>
-              <p class="paragraph">Once the upload completes, your file will appear in the grid list below with its thumbnail or file type icon. Hover over the asset card and click the blue <strong>🔗 Copy Link</strong> button. The fully qualified public URL will be copied to your clipboard instantly (e.g. <code>https://.../storage/v1/object/public/...</code>).</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-number">3</div>
-            <div class="step-body">
-              <h4 class="step-title">Add it Anywhere in the Project</h4>
-              <p class="paragraph">Paste this URL directly into any admin panel inputs! For example, paste it into the <strong>Hero Image URL</strong> in Page Templates to change a banner, add it to <strong>Case Study Images</strong>, use it for a downloadable <strong>Brochure PDF Link</strong>, or insert it inside description text fields. The public website will render or link to the asset immediately.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- DEVELOPER REFERENCE SECTION -->
-      <section id="tech-ref" class="doc-section">
-        <h2 class="section-title">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-          Technical & Architecture Reference
-        </h2>
-        <p class="paragraph">
-          For software engineers and AI coding agents extending this codebase, please adhere to the following architecture rules and structures:
-        </p>
-        
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">1. Strict TanStack Router/Page Separation</h3>
-        <p class="paragraph">
-          In order to allow TanStack Router to properly code-split routes into light chunks and prevent warning console logs during <code>bun dev</code>, <strong>never export page JSX components directly from route files</strong>. Route files must only configure createFileRoute, while the full JSX live separately in pages.
-        </p>
-        
-        <pre><span class="token-comment">// ❌ AVOID - exporting component from route file breaks code-splitting</span>
+        <!-- MEDIA CENTER SECTION -->
+        <section id="media-center" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
+            </svg>
+            Media Center Operations
+          </h2>
+          <p class="paragraph">
+            The Geosynthetics Africa platform features an integrated
+            <strong>Media Center</strong> inside the admin control panel. This hub acts as the
+            centralized file hosting and asset management engine for the entire website, removing
+            the need for manual FTP client access or direct Git repository commits for simple asset
+            updates.
+          </p>
+          <p class="paragraph">
+            Whether you need to upload high-resolution product photography, detailed product
+            brochures, engineering data PDFs, or promotional/instructional videos, the Media Center
+            provides a fast, drag-and-drop workflow that optimizes and hosts your files instantly.
+          </p>
+
+          <div class="grid-2" style="margin-bottom: 2rem">
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Supported File Types</h3>
+              <p class="card-desc">
+                The Media Center accepts a comprehensive range of file extensions including images
+                (<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>),
+                document sheets (<code>.xlsx</code>, <code>.docx</code>), standard pamphlets and
+                brochures (<code>.pdf</code>), and high-definition video files (<code>.mp4</code>,
+                <code>.webm</code>).
+              </p>
+            </div>
+            <div class="card" style="border-left: 2px solid var(--accent-red)">
+              <h3 class="card-title">Supabase Storage Backing</h3>
+              <p class="card-desc">
+                All files are securely uploaded directly to our high-speed, globally distributed
+                Supabase Storage Buckets. This guarantees rapid content delivery network (CDN)
+                responses and zero application server load when clients download huge documents.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-tip" style="margin-bottom: 2rem">
+            <div class="callout-title">
+              <svg
+                style="width: 16px; height: 16px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+              Automatic Image WebP Converter
+            </div>
+            <div class="callout-content">
+              When uploading raster images like PNGs or JPEGs, the control panel dynamically
+              compresses and converts them into the modern <strong>.webp</strong> format to ensure
+              your web pages load lightning-fast for cellular users across Africa, saving up to 80%
+              bandwidth with zero perceptible quality loss.
+            </div>
+          </div>
+
+          <h3 style="margin-top: 2.5rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            Workflow: Upload, Copy, and Distribute
+          </h3>
+          <p class="paragraph">
+            Managing your documents and embedding them across the website is incredibly simple and
+            requires no code updates:
+          </p>
+
+          <div class="steps-container">
+            <div class="step-row">
+              <div class="step-number">1</div>
+              <div class="step-body">
+                <h4 class="step-title">Navigate and Upload</h4>
+                <p class="paragraph">
+                  Go to the admin dashboard and select <strong>Media Center</strong> from the left
+                  menu. Drag your files directly into the dashed upload boundary, or click the box
+                  to select files from your computer. Click <strong>Upload Assets</strong> to push
+                  them to the CDN.
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">2</div>
+              <div class="step-body">
+                <h4 class="step-title">Copy the Public URL</h4>
+                <p class="paragraph">
+                  Once the upload completes, your file will appear in the grid list below with its
+                  thumbnail or file type icon. Hover over the asset card and click the blue
+                  <strong>🔗 Copy Link</strong> button. The fully qualified public URL will be
+                  copied to your clipboard instantly (e.g.
+                  <code>https://.../storage/v1/object/public/...</code>).
+                </p>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-number">3</div>
+              <div class="step-body">
+                <h4 class="step-title">Add it Anywhere in the Project</h4>
+                <p class="paragraph">
+                  Paste this URL directly into any admin panel inputs! For example, paste it into
+                  the <strong>Hero Image URL</strong> in Page Templates to change a banner, add it
+                  to <strong>Case Study Images</strong>, use it for a downloadable
+                  <strong>Brochure PDF Link</strong>, or insert it inside description text fields.
+                  The public website will render or link to the asset immediately.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DEVELOPER REFERENCE SECTION -->
+        <section id="tech-ref" class="doc-section">
+          <h2 class="section-title">
+            <svg
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+              ></path>
+            </svg>
+            Technical & Architecture Reference
+          </h2>
+          <p class="paragraph">
+            For software engineers and AI coding agents extending this codebase, please adhere to
+            the following architecture rules and structures:
+          </p>
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            1. Strict TanStack Router/Page Separation
+          </h3>
+          <p class="paragraph">
+            In order to allow TanStack Router to properly code-split routes into light chunks and
+            prevent warning console logs during <code>bun dev</code>,
+            <strong>never export page JSX components directly from route files</strong>. Route files
+            must only configure createFileRoute, while the full JSX live separately in pages.
+          </p>
+
+          <pre><span class="token-comment">// ❌ AVOID - exporting component from route file breaks code-splitting</span>
 <span class="token-keyword">export function</span> <span class="token-function">ProductCategoryPage</span>() { ... }
 <span class="token-keyword">export const</span> <span class="token-number">Route</span> = <span class="token-function">createFileRoute</span>(<span class="token-string">"/products/$category"</span>)({ component: <span class="token-number">ProductCategoryPage</span> });
 
@@ -947,13 +1915,20 @@
   loader: <span class="token-keyword">async</span> ({ params }) => { ... },
   component: <span class="token-number">ProductCategoryPage</span>
 });</pre>
-        
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">2. Supabase Integration Hooks</h3>
-        <p class="paragraph">
-          Fetching from Supabase uses cached loaders and helper APIs. The core function is <code>getProductPageContent(slug)</code>, located in <code>src/data/product-pages.ts</code>. It fetches custom family templates, but also seamlessly resolves parent categories by querying the visual hierarchy tree (<code>hierarchy_products</code>) and merging site builder customizations onto premium default layouts:
-        </p>
-        
-        <pre><span class="token-keyword">export async function</span> <span class="token-function">getProductPageContent</span>(slug: <span class="token-number">string</span>): <span class="token-number">Promise</span>&lt;<span class="token-number">ProductPageContent</span> | <span class="token-number">null</span>&gt; {
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            2. Supabase Integration Hooks
+          </h3>
+          <p class="paragraph">
+            Fetching from Supabase uses cached loaders and helper APIs. The core function is
+            <code>getProductPageContent(slug)</code>, located in
+            <code>src/data/product-pages.ts</code>. It fetches custom family templates, but also
+            seamlessly resolves parent categories by querying the visual hierarchy tree
+            (<code>hierarchy_products</code>) and merging site builder customizations onto premium
+            default layouts:
+          </p>
+
+          <pre><span class="token-keyword">export async function</span> <span class="token-function">getProductPageContent</span>(slug: <span class="token-number">string</span>): <span class="token-number">Promise</span>&lt;<span class="token-number">ProductPageContent</span> | <span class="token-number">null</span>&gt; {
   <span class="token-comment">// 1. Query custom templates for product family sub-pages</span>
   <span class="token-keyword">const</span> { data } = <span class="token-keyword">await</span> supabase
     .from(<span class="token-string">"site_config"</span>)
@@ -988,208 +1963,316 @@
   <span class="token-keyword">return</span> <span class="token-number">null</span>;
 }</pre>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">3. Unified Parent Categories vs. Sub-Page Templates</h3>
-        <p class="paragraph">
-          To prevent data duplication and configuration conflicts, the platform enforces a strict separation between parent landing pages and sub-page/family templates:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Parent Category Pages:</strong> The 8 root product categories (e.g. <code>/products/geomembranes</code>, <code>/products/geotextiles</code>) are governed inside the <strong>Site Builder</strong> visual hierarchy tree. Admin customizations in the Site Builder are merged onto premium fallback layouts.</li>
-          <li><strong>Sub-Page Templates:</strong> Detailed family sub-pages (e.g. <code>/products/geomembranes/hdpe-geomembranes</code>) are governed inside <strong>Page Templates</strong>. Parent category slugs are strictly protected from creation here to prevent layout/navigation loop issues.</li>
-        </ul>
-        
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">4. XML Sitemap & SEO Discovery</h3>
-        <p class="paragraph">
-          The dynamic sitemap at <code>/sitemap.xml</code> is auto-generated by a TanStack Start server route located in <code>src/routes/sitemap[.]xml.ts</code>. It automatically queries `template_product_categories` and includes all dynamic admin-created categories seamlessly, ensuring instant Google discovery without manual updates.
-        </p>
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            3. Unified Parent Categories vs. Sub-Page Templates
+          </h3>
+          <p class="paragraph">
+            To prevent data duplication and configuration conflicts, the platform enforces a strict
+            separation between parent landing pages and sub-page/family templates:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Parent Category Pages:</strong> The 8 root product categories (e.g.
+              <code>/products/geomembranes</code>, <code>/products/geotextiles</code>) are governed
+              inside the <strong>Site Builder</strong> visual hierarchy tree. Admin customizations
+              in the Site Builder are merged onto premium fallback layouts.
+            </li>
+            <li>
+              <strong>Sub-Page Templates:</strong> Detailed family sub-pages (e.g.
+              <code>/products/geomembranes/hdpe-geomembranes</code>) are governed inside
+              <strong>Page Templates</strong>. Parent category slugs are strictly protected from
+              creation here to prevent layout/navigation loop issues.
+            </li>
+          </ul>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">5. Dynamic Lucide Icon Picker Architecture</h3>
-        <p class="paragraph">
-          The <code>IconPicker</code> component (located in <code>src/components/admin/IconPicker.tsx</code>) provides a robust way to select Lucide icons visually. For other AI agents and developers extending this system, keep the following design patterns in mind:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Dynamic Parsing:</strong> It dynamically extracts all icon exports from <code>lucide-react</code> using keys that start with a capital letter, excluding helper exports like <code>createReactComponent</code>. This ensures that any updates to the <code>lucide-react</code> package automatically make new icons available in the picker.</li>
-          <li><strong>Performance Optimization:</strong> It uses <code>useMemo</code> to filter icon names based on the search query. To prevent browser rendering lag with over 1,000 icons, it slices the filtered list to a maximum of 100 visible items at a time.</li>
-          <li><strong>Dynamic Resolution:</strong> The public site loads selected icons dynamically using their string names. When rendering icons dynamically, retrieve the corresponding Lucide React component from the <code>lucide-react</code> exports using the stored name string (e.g., <code>const Component = (LucideIcons as any)[name]</code>).</li>
-        </ul>
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            4. XML Sitemap & SEO Discovery
+          </h3>
+          <p class="paragraph">
+            The dynamic sitemap at <code>/sitemap.xml</code> is auto-generated by a TanStack Start
+            server route located in <code>src/routes/sitemap[.]xml.ts</code>. It automatically
+            queries `template_product_categories` and includes all dynamic admin-created categories
+            seamlessly, ensuring instant Google discovery without manual updates.
+          </p>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">6. Centralized Image Picker & Storage Integration</h3>
-        <p class="paragraph">
-          The <code>ImagePicker</code> component (located in <code>src/components/admin/ImagePicker.tsx</code>) handles all system-wide asset hosting, uploads, and media vaults. Keep the following technical specs in mind:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Supabase Storage Integration:</strong> Connects directly to Supabase storage buckets, primarily targeting the <code>media-center</code> public bucket.</li>
-          <li><strong>Image Compression & Format Conversion:</strong> Prior to upload, images are processed client-side via the <code>compressImage</code> utility (from <code>src/lib/image-utils.ts</code>), converting standard formats (JPEG, PNG) to highly compressed WebP files and reducing data payloads.</li>
-          <li><strong>Permission & Bucket Resiliency:</strong> If the primary bucket is restricted or fails to initialize, the component triggers a fallback mode, redirecting uploads to the public <code>product-images</code> bucket under a virtual <code>media-center/</code> subfolder.</li>
-          <li><strong>Mime Filtering & File Capping:</strong> Only images, PDF documents, and standard video files (MP4, WEBM, MOV) are accepted. Upload size is capped at 25MB.</li>
-          <li><strong>Proxy URLs:</strong> Selected assets generate proxy URLs (e.g., <code>/api/storage/media-center/filename.webp</code>) to ensure secure asset fetching and bypass CORS-related browser security warnings.</li>
-        </ul>
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            5. Dynamic Lucide Icon Picker Architecture
+          </h3>
+          <p class="paragraph">
+            The <code>IconPicker</code> component (located in
+            <code>src/components/admin/IconPicker.tsx</code>) provides a robust way to select Lucide
+            icons visually. For other AI agents and developers extending this system, keep the
+            following design patterns in mind:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Dynamic Parsing:</strong> It dynamically extracts all icon exports from
+              <code>lucide-react</code> using keys that start with a capital letter, excluding
+              helper exports like <code>createReactComponent</code>. This ensures that any updates
+              to the <code>lucide-react</code> package automatically make new icons available in the
+              picker.
+            </li>
+            <li>
+              <strong>Performance Optimization:</strong> It uses <code>useMemo</code> to filter icon
+              names based on the search query. To prevent browser rendering lag with over 1,000
+              icons, it slices the filtered list to a maximum of 100 visible items at a time.
+            </li>
+            <li>
+              <strong>Dynamic Resolution:</strong> The public site loads selected icons dynamically
+              using their string names. When rendering icons dynamically, retrieve the corresponding
+              Lucide React component from the <code>lucide-react</code> exports using the stored
+              name string (e.g., <code>const Component = (LucideIcons as any)[name]</code>).
+            </li>
+          </ul>
 
-        <h3 style="margin-top:2rem;margin-bottom:0.75rem;font-size:1.15rem">7. Database Product Selector Combobox</h3>
-        <p class="paragraph">
-          The <code>ProductSelector</code> component (located in <code>src/components/admin/ProductSelector.tsx</code>) provides a search-and-select autocomplete combobox. Key characteristics include:
-        </p>
-        <ul style="margin-left: 1.5rem; margin-bottom: 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
-          <li><strong>Real-time Lookup:</strong> Queries the Supabase <code>products</code> table, selecting title, slug, cover image, brief, specifications, and category relationships.</li>
-          <li><strong>Exclusion Engine:</strong> Takes an optional <code>excludeIds</code> array prop containing already selected IDs, ensuring duplicate product relations cannot be chosen.</li>
-          <li><strong>Unified Command List:</strong> Employs the Radix-based <code>Popover</code> component wrapping the cmdk-driven <code>Command</code> library to provide optimized instant keyword searching over locally cached records.</li>
-        </ul>
-      </section>
-      
-    </main>
-  </div>
-  
-  <!-- INTERACTIVE EXPLORER SCRIPT -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const explorerItems = document.querySelectorAll('.explorer-list-item');
-      const displayTitle = document.getElementById('display-title');
-      const displayTab = document.getElementById('display-tab');
-      const displayDesc = document.getElementById('display-desc');
-      const displayDb = document.getElementById('display-db');
-      const mockWebpage = document.getElementById('mock-webpage');
-      
-      const MAPPING_DATA = {
-        'hero-title': {
-          title: 'Page Title (H1)',
-          tab: 'Hero Tab',
-          db: 'value.label: string',
-          desc: 'This field defines the main uppercase display heading (H1) shown in the top hero banner of the category page. It is highly optimized for H1 SEO crawlers and clearly introduces the product category (e.g. "HDPE Geomembranes").',
-          elementId: 'el-hero-title'
-        },
-        'hero-subtitle': {
-          title: 'Subtitle / Tagline',
-          tab: 'Hero Tab',
-          db: 'value.subtitle: string',
-          desc: 'A descriptive paragraph displayed right below the H1 title in the hero banner. Used to briefly explain the core utility and value proposition of the products in the selected category.',
-          elementId: 'el-hero-subtitle'
-        },
-        'hero-bg': {
-          title: 'Hero Background Image',
-          tab: 'Hero Tab',
-          db: 'value.heroImage: string (URL)',
-          desc: 'A full URL string pointing to an image (e.g., hosted on Unsplash or a corporate CDN). The website renders this as a rich, full-screen background image in the hero banner with a semi-opaque dark overlay to ensure high text contrast.',
-          elementId: 'mock-hero'
-        },
-        'highlights': {
-          title: 'Technical Highlights',
-          tab: 'Highlights Tab',
-          db: 'value.technicalHighlights: { label: string, value: string }[]',
-          desc: 'A key-value list that renders as high-visibility pill-shaped badges at the very top of the hero container. Perfect for displaying key engineering thresholds like "Thickness: 1.0mm - 3.0mm", "Roll Width: 7.0m", or standard materials specifications.',
-          elementId: 'el-highlights'
-        },
-        'desc': {
-          title: 'Description Paragraphs',
-          tab: 'Description Tab',
-          db: 'value.description: string[]',
-          desc: 'A dynamic list of long-form paragraphs. Each entry represents a paragraph of text. These are rendered as the primary descriptive block in the "Technical Description" section of the page, outlining technical usage, brand quality standards, and industry recommendations.',
-          elementId: 'el-desc'
-        },
-        'features': {
-          title: 'Key Feature Bullets',
-          tab: 'Description Tab',
-          db: 'value.features: string[]',
-          desc: 'An array of concise strings rendering as a beautiful checkmark bullet list. These are presented in the "Benefits of Choosing Our Products" section to highlight structural tolerances, standard approvals, or material certifications.',
-          elementId: 'el-features'
-        },
-        'table': {
-          title: 'Properties & Specs Table',
-          tab: 'Properties Table Tab',
-          db: 'value.propertiesTable: { headers: string[], rows: string[][] }',
-          desc: 'A fully dynamic matrix editor enabling administrators to compile test properties, ASTM standards, and physical thresholds into a detailed, beautiful data table. Displays critical data (e.g. Tear Resistance, Puncture Thresholds) in Metric and Imperial grids.',
-          elementId: 'el-table'
-        },
-        'types': {
-          title: 'Product Types Grid',
-          tab: 'Types Tab',
-          db: 'value.types: { name: string, description: string }[]',
-          desc: 'Displays card components in the "Available Types" section of the page. Each card features a bold type name and a short description outlining custom variants (e.g. Smooth, Textured, White, Conductive) to educate clients.',
-          elementId: 'el-types'
-        },
-        'benefits': {
-          title: 'Value Benefits Cards',
-          tab: 'Benefits Tab',
-          db: 'value.benefits: { title: string, description: string }[]',
-          desc: 'Generates structured benefit boxes in the "Benefits of Using Our Products" section. Highlight core selling points (like "Chemical Resistance", "High Durability", "Eco-friendly Composition") with clear explanations.',
-          elementId: 'el-benefits'
-        },
-        'faqs': {
-          title: 'FAQs Accordion',
-          tab: 'FAQs Tab',
-          db: 'value.faqs: { question: string, answer: string }[]',
-          desc: 'Renders dynamic interactive question/answer rows in the FAQ Accordion near the page bottom. Designed to answer client queries about roll specifications, cold-weather installations, or quality testing certifications.',
-          elementId: 'el-faqs'
-        },
-        'install': {
-          title: 'Installation Specs Block',
-          tab: 'Installation Tab',
-          db: 'value.installationSpecs: string[]',
-          desc: 'An array of paragraphs rendering inside a visually highlighted, red-bordered "Installation Specifications" alert banner. Warns of critical requirements such as subgrade smoothing, seam tests, and certified technician wedge welding.',
-          elementId: 'el-install'
-        }
-      };
-      
-      explorerItems.forEach(item => {
-        item.addEventListener('click', () => {
-          // Remove active class from all sidebar list items
-          explorerItems.forEach(i => i.classList.remove('active'));
-          // Add active class to clicked item
-          item.classList.add('active');
-          
-          const elementKey = item.getAttribute('data-element');
-          const data = MAPPING_DATA[elementKey];
-          
-          if (data) {
-            // Update display texts
-            displayTitle.textContent = data.title;
-            displayTab.textContent = data.tab;
-            displayDesc.textContent = data.desc;
-            displayDb.textContent = data.db;
-            
-            // Manage mock highlighted element
-            const mockElements = mockWebpage.querySelectorAll('.mock-element');
-            mockElements.forEach(el => el.classList.remove('highlighted'));
-            
-            const targetEl = document.getElementById(data.elementId);
-            if (targetEl) {
-              targetEl.classList.add('highlighted');
-              
-              // Smooth scroll within mockup container
-              const targetOffset = targetEl.offsetTop;
-              const containerHeight = mockWebpage.clientHeight;
-              const scrollPosition = targetOffset - (containerHeight / 2) + (targetEl.clientHeight / 2);
-              
-              mockWebpage.scrollTo({
-                top: Math.max(0, scrollPosition),
-                behavior: 'smooth'
-              });
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            6. Centralized Image Picker & Storage Integration
+          </h3>
+          <p class="paragraph">
+            The <code>ImagePicker</code> component (located in
+            <code>src/components/admin/ImagePicker.tsx</code>) handles all system-wide asset
+            hosting, uploads, and media vaults. Keep the following technical specs in mind:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Supabase Storage Integration:</strong> Connects directly to Supabase storage
+              buckets, primarily targeting the <code>media-center</code> public bucket.
+            </li>
+            <li>
+              <strong>Image Compression & Format Conversion:</strong> Prior to upload, images are
+              processed client-side via the <code>compressImage</code> utility (from
+              <code>src/lib/image-utils.ts</code>), converting standard formats (JPEG, PNG) to
+              highly compressed WebP files and reducing data payloads.
+            </li>
+            <li>
+              <strong>Permission & Bucket Resiliency:</strong> If the primary bucket is restricted
+              or fails to initialize, the component triggers a fallback mode, redirecting uploads to
+              the public <code>product-images</code> bucket under a virtual
+              <code>media-center/</code> subfolder.
+            </li>
+            <li>
+              <strong>Mime Filtering & File Capping:</strong> Only images, PDF documents, and
+              standard video files (MP4, WEBM, MOV) are accepted. Upload size is capped at 25MB.
+            </li>
+            <li>
+              <strong>Proxy URLs:</strong> Selected assets generate proxy URLs (e.g.,
+              <code>/api/storage/media-center/filename.webp</code>) to ensure secure asset fetching
+              and bypass CORS-related browser security warnings.
+            </li>
+          </ul>
+
+          <h3 style="margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.15rem">
+            7. Database Product Selector Combobox
+          </h3>
+          <p class="paragraph">
+            The <code>ProductSelector</code> component (located in
+            <code>src/components/admin/ProductSelector.tsx</code>) provides a search-and-select
+            autocomplete combobox. Key characteristics include:
+          </p>
+          <ul
+            style="
+              margin-left: 1.5rem;
+              margin-bottom: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              line-height: 1.7;
+            "
+          >
+            <li>
+              <strong>Real-time Lookup:</strong> Queries the Supabase <code>products</code> table,
+              selecting title, slug, cover image, brief, specifications, and category relationships.
+            </li>
+            <li>
+              <strong>Exclusion Engine:</strong> Takes an optional <code>excludeIds</code> array
+              prop containing already selected IDs, ensuring duplicate product relations cannot be
+              chosen.
+            </li>
+            <li>
+              <strong>Unified Command List:</strong> Employs the Radix-based
+              <code>Popover</code> component wrapping the cmdk-driven <code>Command</code> library
+              to provide optimized instant keyword searching over locally cached records.
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <!-- INTERACTIVE EXPLORER SCRIPT -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const explorerItems = document.querySelectorAll(".explorer-list-item");
+        const displayTitle = document.getElementById("display-title");
+        const displayTab = document.getElementById("display-tab");
+        const displayDesc = document.getElementById("display-desc");
+        const displayDb = document.getElementById("display-db");
+        const mockWebpage = document.getElementById("mock-webpage");
+
+        const MAPPING_DATA = {
+          "hero-title": {
+            title: "Page Title (H1)",
+            tab: "Hero Tab",
+            db: "value.label: string",
+            desc: 'This field defines the main uppercase display heading (H1) shown in the top hero banner of the category page. It is highly optimized for H1 SEO crawlers and clearly introduces the product category (e.g. "HDPE Geomembranes").',
+            elementId: "el-hero-title",
+          },
+          "hero-subtitle": {
+            title: "Subtitle / Tagline",
+            tab: "Hero Tab",
+            db: "value.subtitle: string",
+            desc: "A descriptive paragraph displayed right below the H1 title in the hero banner. Used to briefly explain the core utility and value proposition of the products in the selected category.",
+            elementId: "el-hero-subtitle",
+          },
+          "hero-bg": {
+            title: "Hero Background Image",
+            tab: "Hero Tab",
+            db: "value.heroImage: string (URL)",
+            desc: "A full URL string pointing to an image (e.g., hosted on Unsplash or a corporate CDN). The website renders this as a rich, full-screen background image in the hero banner with a semi-opaque dark overlay to ensure high text contrast.",
+            elementId: "mock-hero",
+          },
+          highlights: {
+            title: "Technical Highlights",
+            tab: "Highlights Tab",
+            db: "value.technicalHighlights: { label: string, value: string }[]",
+            desc: 'A key-value list that renders as high-visibility pill-shaped badges at the very top of the hero container. Perfect for displaying key engineering thresholds like "Thickness: 1.0mm - 3.0mm", "Roll Width: 7.0m", or standard materials specifications.',
+            elementId: "el-highlights",
+          },
+          desc: {
+            title: "Description Paragraphs",
+            tab: "Description Tab",
+            db: "value.description: string[]",
+            desc: 'A dynamic list of long-form paragraphs. Each entry represents a paragraph of text. These are rendered as the primary descriptive block in the "Technical Description" section of the page, outlining technical usage, brand quality standards, and industry recommendations.',
+            elementId: "el-desc",
+          },
+          features: {
+            title: "Key Feature Bullets",
+            tab: "Description Tab",
+            db: "value.features: string[]",
+            desc: 'An array of concise strings rendering as a beautiful checkmark bullet list. These are presented in the "Benefits of Choosing Our Products" section to highlight structural tolerances, standard approvals, or material certifications.',
+            elementId: "el-features",
+          },
+          table: {
+            title: "Properties & Specs Table",
+            tab: "Properties Table Tab",
+            db: "value.propertiesTable: { headers: string[], rows: string[][] }",
+            desc: "A fully dynamic matrix editor enabling administrators to compile test properties, ASTM standards, and physical thresholds into a detailed, beautiful data table. Displays critical data (e.g. Tear Resistance, Puncture Thresholds) in Metric and Imperial grids.",
+            elementId: "el-table",
+          },
+          types: {
+            title: "Product Types Grid",
+            tab: "Types Tab",
+            db: "value.types: { name: string, description: string }[]",
+            desc: 'Displays card components in the "Available Types" section of the page. Each card features a bold type name and a short description outlining custom variants (e.g. Smooth, Textured, White, Conductive) to educate clients.',
+            elementId: "el-types",
+          },
+          benefits: {
+            title: "Value Benefits Cards",
+            tab: "Benefits Tab",
+            db: "value.benefits: { title: string, description: string }[]",
+            desc: 'Generates structured benefit boxes in the "Benefits of Using Our Products" section. Highlight core selling points (like "Chemical Resistance", "High Durability", "Eco-friendly Composition") with clear explanations.',
+            elementId: "el-benefits",
+          },
+          faqs: {
+            title: "FAQs Accordion",
+            tab: "FAQs Tab",
+            db: "value.faqs: { question: string, answer: string }[]",
+            desc: "Renders dynamic interactive question/answer rows in the FAQ Accordion near the page bottom. Designed to answer client queries about roll specifications, cold-weather installations, or quality testing certifications.",
+            elementId: "el-faqs",
+          },
+          install: {
+            title: "Installation Specs Block",
+            tab: "Installation Tab",
+            db: "value.installationSpecs: string[]",
+            desc: 'An array of paragraphs rendering inside a visually highlighted, red-bordered "Installation Specifications" alert banner. Warns of critical requirements such as subgrade smoothing, seam tests, and certified technician wedge welding.',
+            elementId: "el-install",
+          },
+        };
+
+        explorerItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            // Remove active class from all sidebar list items
+            explorerItems.forEach((i) => i.classList.remove("active"));
+            // Add active class to clicked item
+            item.classList.add("active");
+
+            const elementKey = item.getAttribute("data-element");
+            const data = MAPPING_DATA[elementKey];
+
+            if (data) {
+              // Update display texts
+              displayTitle.textContent = data.title;
+              displayTab.textContent = data.tab;
+              displayDesc.textContent = data.desc;
+              displayDb.textContent = data.db;
+
+              // Manage mock highlighted element
+              const mockElements = mockWebpage.querySelectorAll(".mock-element");
+              mockElements.forEach((el) => el.classList.remove("highlighted"));
+
+              const targetEl = document.getElementById(data.elementId);
+              if (targetEl) {
+                targetEl.classList.add("highlighted");
+
+                // Smooth scroll within mockup container
+                const targetOffset = targetEl.offsetTop;
+                const containerHeight = mockWebpage.clientHeight;
+                const scrollPosition =
+                  targetOffset - containerHeight / 2 + targetEl.clientHeight / 2;
+
+                mockWebpage.scrollTo({
+                  top: Math.max(0, scrollPosition),
+                  behavior: "smooth",
+                });
+              }
             }
-          }
+          });
+        });
+
+        // Responsive sidebar section highlighting on scroll
+        const sections = document.querySelectorAll(".doc-section");
+        const navItems = document.querySelectorAll(".nav-item");
+
+        window.addEventListener("scroll", () => {
+          let currentSection = "";
+          sections.forEach((sec) => {
+            const top = sec.offsetTop;
+            const height = sec.clientHeight;
+            if (pageYOffset >= top - 200) {
+              currentSection = sec.getAttribute("id");
+            }
+          });
+
+          navItems.forEach((item) => {
+            item.classList.remove("active");
+            if (item.getAttribute("data-section") === currentSection) {
+              item.classList.add("active");
+            }
+          });
         });
       });
-      
-      // Responsive sidebar section highlighting on scroll
-      const sections = document.querySelectorAll('.doc-section');
-      const navItems = document.querySelectorAll('.nav-item');
-      
-      window.addEventListener('scroll', () => {
-        let currentSection = '';
-        sections.forEach(sec => {
-          const top = sec.offsetTop;
-          const height = sec.clientHeight;
-          if (pageYOffset >= top - 200) {
-            currentSection = sec.getAttribute('id');
-          }
-        });
-        
-        navItems.forEach(item => {
-          item.classList.remove('active');
-          if (item.getAttribute('data-section') === currentSection) {
-            item.classList.add('active');
-          }
-        });
-      });
-      
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

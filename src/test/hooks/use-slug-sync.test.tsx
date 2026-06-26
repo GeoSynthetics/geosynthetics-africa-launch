@@ -49,7 +49,7 @@ describe("useSlugSync Hook", () => {
 
     const { rerender } = renderHook(
       ({ title, slug }) => useSlugSync({ title, slug, onSlugChange }),
-      { initialProps: { title: "", slug: "" } }
+      { initialProps: { title: "", slug: "" } },
     );
 
     // Change title
@@ -70,7 +70,7 @@ describe("useSlugSync Hook", () => {
 
     const { result, rerender } = renderHook(
       ({ title, slug }) => useSlugSync({ title, slug, onSlugChange }),
-      { initialProps: { title: "Title", slug: "" } }
+      { initialProps: { title: "Title", slug: "" } },
     );
 
     // Initial sync
@@ -99,7 +99,7 @@ describe("useSlugSync Hook", () => {
 
     const { result, rerender } = renderHook(
       ({ title, slug }) => useSlugSync({ title, slug, onSlugChange }),
-      { initialProps: { title: "Title", slug: "" } }
+      { initialProps: { title: "Title", slug: "" } },
     );
 
     // Initial sync
@@ -129,7 +129,7 @@ describe("useSlugSync Hook", () => {
     });
 
     const { result } = renderHook(() =>
-      useSlugSync({ title: "Test Slug", slug: currentSlug, onSlugChange })
+      useSlugSync({ title: "Test Slug", slug: currentSlug, onSlugChange }),
     );
 
     act(() => {

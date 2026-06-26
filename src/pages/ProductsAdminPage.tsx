@@ -169,7 +169,6 @@ const FEATURE_ICONS_LIST = [
   { value: "check", label: "Verified (Check Circle)" },
 ];
 
-
 export function ProductsAdminPage() {
   const [rows, setRows] = useState<Product[]>([]);
   const [mans, setMans] = useState<Manufacturer[]>([]);
@@ -205,9 +204,7 @@ export function ProductsAdminPage() {
   useEffect(() => {
     if (!open) return;
     async function fetchLookup() {
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, image_url");
+      const { data } = await supabase.from("products").select("id, name, image_url");
       if (data) {
         const lookup: Record<string, { name: string; image_url?: string | null }> = {};
         data.forEach((p) => {
@@ -313,8 +310,6 @@ export function ProductsAdminPage() {
     }));
   };
 
-
-
   const handleUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     setUploading(true);
@@ -377,10 +372,12 @@ export function ProductsAdminPage() {
 
   const load = async () => {
     setLoading(true);
-    let query = supabase.from("products").select(
-      "id, name, slug, sku, short_description, long_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords, family_slug, alternative_ids, system_component_ids, material, structure, colour, standard, roll_width, roll_length, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, key_features, specifications",
-      { count: "exact" },
-    );
+    let query = supabase
+      .from("products")
+      .select(
+        "id, name, slug, sku, short_description, long_description, manufacturer_id, category_id, is_active, created_at, price, sale_price, stock_quantity, weight_kg, length_cm, width_cm, height_cm, image_url, images, meta_title, meta_description, seo_keywords, family_slug, alternative_ids, system_component_ids, material, structure, colour, standard, roll_width, roll_length, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, key_features, specifications",
+        { count: "exact" },
+      );
 
     if (q.trim()) {
       const qs = q.trim();
@@ -471,7 +468,9 @@ export function ProductsAdminPage() {
       className={`cursor-pointer select-none hover:bg-muted/50 transition-colors ${className}`}
       onClick={() => toggleSort(field)}
     >
-      <div className={`flex items-center gap-1 ${className.includes("text-right") ? "justify-end" : ""}`}>
+      <div
+        className={`flex items-center gap-1 ${className.includes("text-right") ? "justify-end" : ""}`}
+      >
         {children}
         {sortField === field ? (
           sortAsc ? (
@@ -619,7 +618,10 @@ export function ProductsAdminPage() {
           <span className="text-xs text-muted-foreground">Total: {total}</span>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button onClick={openNew} className="bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-wide text-xs">
+              <Button
+                onClick={openNew}
+                className="bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-wide text-xs"
+              >
                 <Plus className="h-4 w-4 mr-1.5" /> New product
               </Button>
             </DialogTrigger>
@@ -633,20 +635,60 @@ export function ProductsAdminPage() {
               <div className="flex-1 overflow-y-auto px-6 py-4 no-scrollbar">
                 <Tabs defaultValue="general" className="w-full space-y-4">
                   <TabsList className="grid grid-cols-4 lg:grid-cols-7 gap-1 bg-muted p-1 rounded-lg shrink-0">
-                    <TabsTrigger value="general" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">General</TabsTrigger>
-                    <TabsTrigger value="pricing" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">Pricing & Gallery</TabsTrigger>
-                    <TabsTrigger value="glance" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">At a Glance</TabsTrigger>
-                    <TabsTrigger value="highlights" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">Highlights</TabsTrigger>
-                    <TabsTrigger value="specs" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">Specs Table</TabsTrigger>
-                    <TabsTrigger value="relations" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">Relations</TabsTrigger>
-                    <TabsTrigger value="seo" className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5">Docs & SEO</TabsTrigger>
+                    <TabsTrigger
+                      value="general"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      General
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="pricing"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      Pricing & Gallery
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="glance"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      At a Glance
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="highlights"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      Highlights
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="specs"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      Specs Table
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="relations"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      Relations
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="seo"
+                      className="text-[10px] uppercase font-bold tracking-wider py-1.5 px-1.5"
+                    >
+                      Docs & SEO
+                    </TabsTrigger>
                   </TabsList>
 
                   {/* 1. GENERAL TAB */}
                   <TabsContent value="general" className="space-y-4 outline-none">
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="p-name" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Product Name</Label>
+                        <Label
+                          htmlFor="p-name"
+                          className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                        >
+                          Product Name
+                        </Label>
                         <Input
                           id="p-name"
                           value={editing.name ?? ""}
@@ -661,7 +703,12 @@ export function ProductsAdminPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="p-slug" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">URL Slug</Label>
+                          <Label
+                            htmlFor="p-slug"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            URL Slug
+                          </Label>
                           <Input
                             id="p-slug"
                             value={editing.slug ?? ""}
@@ -671,7 +718,12 @@ export function ProductsAdminPage() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="p-sku" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Product SKU</Label>
+                          <Label
+                            htmlFor="p-sku"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Product SKU
+                          </Label>
                           <Input
                             id="p-sku"
                             value={editing.sku ?? ""}
@@ -682,11 +734,16 @@ export function ProductsAdminPage() {
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Manufacturer</Label>
+                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                            Manufacturer
+                          </Label>
                           <Select
                             value={editing.manufacturer_id ?? "none"}
                             onValueChange={(v) =>
-                              setEditing((s) => ({ ...s, manufacturer_id: v === "none" ? null : v }))
+                              setEditing((s) => ({
+                                ...s,
+                                manufacturer_id: v === "none" ? null : v,
+                              }))
                             }
                           >
                             <SelectTrigger className="mt-1.5 w-full">
@@ -703,7 +760,9 @@ export function ProductsAdminPage() {
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Main Category</Label>
+                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                            Main Category
+                          </Label>
                           <Select
                             value={editing.category_id ?? "none"}
                             onValueChange={(v) =>
@@ -724,7 +783,9 @@ export function ProductsAdminPage() {
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Product Family (Template Link)</Label>
+                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                            Product Family (Template Link)
+                          </Label>
                           <Select
                             value={editing.family_slug ?? "none"}
                             onValueChange={(v) =>
@@ -744,28 +805,43 @@ export function ProductsAdminPage() {
                             </SelectContent>
                           </Select>
                           <p className="text-[10px] text-muted-foreground/80 mt-1 leading-tight">
-                            Linking a family automatically populates default applications, QA/QC checklists, and method statements.
+                            Linking a family automatically populates default applications, QA/QC
+                            checklists, and method statements.
                           </p>
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="p-desc" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Short Description</Label>
+                        <Label
+                          htmlFor="p-desc"
+                          className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                        >
+                          Short Description
+                        </Label>
                         <Textarea
                           id="p-desc"
                           rows={2}
                           value={editing.short_description ?? ""}
-                          onChange={(e) => setEditing((s) => ({ ...s, short_description: e.target.value }))}
+                          onChange={(e) =>
+                            setEditing((s) => ({ ...s, short_description: e.target.value }))
+                          }
                           placeholder="Quick summarizing statement displayed on catalogue grids and header."
                           className="mt-1.5 text-sm"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="p-long-desc" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Long Description</Label>
+                        <Label
+                          htmlFor="p-long-desc"
+                          className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                        >
+                          Long Description
+                        </Label>
                         <Textarea
                           id="p-long-desc"
                           rows={4}
                           value={editing.long_description ?? ""}
-                          onChange={(e) => setEditing((s) => ({ ...s, long_description: e.target.value }))}
+                          onChange={(e) =>
+                            setEditing((s) => ({ ...s, long_description: e.target.value }))
+                          }
                           placeholder="Full detailed specifications and descriptive text shown in the Overview tab. Separate paragraphs with double enter (empty lines)."
                           className="mt-1.5 text-sm"
                         />
@@ -776,7 +852,12 @@ export function ProductsAdminPage() {
                           checked={editing.is_active ?? true}
                           onCheckedChange={(v) => setEditing((s) => ({ ...s, is_active: v }))}
                         />
-                        <Label htmlFor="p-active" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Active & Visible in Catalogue</Label>
+                        <Label
+                          htmlFor="p-active"
+                          className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                        >
+                          Active & Visible in Catalogue
+                        </Label>
                       </div>
                     </div>
                   </TabsContent>
@@ -785,10 +866,17 @@ export function ProductsAdminPage() {
                   <TabsContent value="pricing" className="space-y-4 outline-none">
                     <div className="space-y-4">
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/60 pb-2 mb-3">Pricing & Logistics</h4>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/60 pb-2 mb-3">
+                          Pricing & Logistics
+                        </h4>
                         <div className="grid grid-cols-3 gap-4">
                           <div>
-                            <Label htmlFor="p-price" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Base Price (ZAR)</Label>
+                            <Label
+                              htmlFor="p-price"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Base Price (ZAR)
+                            </Label>
                             <Input
                               id="p-price"
                               type="number"
@@ -805,7 +893,12 @@ export function ProductsAdminPage() {
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-sale" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sale Price (ZAR)</Label>
+                            <Label
+                              htmlFor="p-sale"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Sale Price (ZAR)
+                            </Label>
                             <Input
                               id="p-sale"
                               type="number"
@@ -815,14 +908,20 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  sale_price: e.target.value === "" ? null : parseFloat(e.target.value),
+                                  sale_price:
+                                    e.target.value === "" ? null : parseFloat(e.target.value),
                                 }))
                               }
                               className="mt-1.5"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-stock" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Stock Quantity</Label>
+                            <Label
+                              htmlFor="p-stock"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Stock Quantity
+                            </Label>
                             <Input
                               id="p-stock"
                               type="number"
@@ -832,7 +931,8 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  stock_quantity: e.target.value === "" ? null : parseInt(e.target.value),
+                                  stock_quantity:
+                                    e.target.value === "" ? null : parseInt(e.target.value),
                                 }))
                               }
                               className="mt-1.5"
@@ -841,7 +941,12 @@ export function ProductsAdminPage() {
                         </div>
                         <div className="grid grid-cols-4 gap-4 mt-4">
                           <div>
-                            <Label htmlFor="p-weight" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Weight (kg)</Label>
+                            <Label
+                              htmlFor="p-weight"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Weight (kg)
+                            </Label>
                             <Input
                               id="p-weight"
                               type="number"
@@ -850,14 +955,20 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  weight_kg: e.target.value === "" ? null : parseFloat(e.target.value),
+                                  weight_kg:
+                                    e.target.value === "" ? null : parseFloat(e.target.value),
                                 }))
                               }
                               className="mt-1.5 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-len" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Length (cm)</Label>
+                            <Label
+                              htmlFor="p-len"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Length (cm)
+                            </Label>
                             <Input
                               id="p-len"
                               type="number"
@@ -865,14 +976,20 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  length_cm: e.target.value === "" ? null : parseFloat(e.target.value),
+                                  length_cm:
+                                    e.target.value === "" ? null : parseFloat(e.target.value),
                                 }))
                               }
                               className="mt-1.5 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-wid" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Width (cm)</Label>
+                            <Label
+                              htmlFor="p-wid"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Width (cm)
+                            </Label>
                             <Input
                               id="p-wid"
                               type="number"
@@ -880,14 +997,20 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  width_cm: e.target.value === "" ? null : parseFloat(e.target.value),
+                                  width_cm:
+                                    e.target.value === "" ? null : parseFloat(e.target.value),
                                 }))
                               }
                               className="mt-1.5 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-hei" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Height (cm)</Label>
+                            <Label
+                              htmlFor="p-hei"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Height (cm)
+                            </Label>
                             <Input
                               id="p-hei"
                               type="number"
@@ -895,7 +1018,8 @@ export function ProductsAdminPage() {
                               onChange={(e) =>
                                 setEditing((s) => ({
                                   ...s,
-                                  height_cm: e.target.value === "" ? null : parseFloat(e.target.value),
+                                  height_cm:
+                                    e.target.value === "" ? null : parseFloat(e.target.value),
                                 }))
                               }
                               className="mt-1.5 text-xs"
@@ -907,8 +1031,12 @@ export function ProductsAdminPage() {
                       <div className="border-t border-border/60 pt-4">
                         <div className="flex items-center justify-between mb-3">
                           <div>
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Media Gallery</h4>
-                            <p className="text-[10px] text-muted-foreground">Upload multiple high-res product pictures. Max size 25MB each.</p>
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+                              Media Gallery
+                            </h4>
+                            <p className="text-[10px] text-muted-foreground">
+                              Upload multiple high-res product pictures. Max size 25MB each.
+                            </p>
                           </div>
                           <label className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide cursor-pointer rounded-lg border border-border px-3 py-2 bg-surface hover:bg-muted text-foreground transition-all duration-200 shadow-sm">
                             {uploading ? (
@@ -988,14 +1116,21 @@ export function ProductsAdminPage() {
                           </div>
                         )}
 
-                        <Label htmlFor="p-img" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Or paste external image URL</Label>
+                        <Label
+                          htmlFor="p-img"
+                          className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+                        >
+                          Or paste external image URL
+                        </Label>
                         <div className="flex gap-2 mt-1.5">
                           <Input
                             id="p-img"
                             type="url"
                             placeholder="https://…"
                             value={editing.image_url ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, image_url: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, image_url: e.target.value }))
+                            }
                             className="text-xs"
                           />
                           {editing.image_url && (
@@ -1023,27 +1158,42 @@ export function ProductsAdminPage() {
                           At a Glance Attributes (Sidebar Specification Box)
                         </h4>
                         <p className="text-[10px] text-muted-foreground mb-4">
-                          These fields are loaded instantly into the product sidebar box under "At a Glance" descriptors.
+                          These fields are loaded instantly into the product sidebar box under "At a
+                          Glance" descriptors.
                         </p>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="p-material" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Material / Polymer</Label>
+                          <Label
+                            htmlFor="p-material"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Material / Polymer
+                          </Label>
                           <Input
                             id="p-material"
                             value={editing.material ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, material: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, material: e.target.value }))
+                            }
                             placeholder="e.g. Polypropylene (PP) or HDPE"
                             className="mt-1.5"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="p-structure" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Structure / Design</Label>
+                          <Label
+                            htmlFor="p-structure"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Structure / Design
+                          </Label>
                           <Input
                             id="p-structure"
                             value={editing.structure ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, structure: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, structure: e.target.value }))
+                            }
                             placeholder="e.g. Honeycomb cells or Needle-punched"
                             className="mt-1.5"
                           />
@@ -1052,7 +1202,12 @@ export function ProductsAdminPage() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="p-colour" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Colour Availability</Label>
+                          <Label
+                            htmlFor="p-colour"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Colour Availability
+                          </Label>
                           <Input
                             id="p-colour"
                             value={editing.colour ?? ""}
@@ -1062,11 +1217,18 @@ export function ProductsAdminPage() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="p-standard" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Manufacturing Standard</Label>
+                          <Label
+                            htmlFor="p-standard"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Manufacturing Standard
+                          </Label>
                           <Input
                             id="p-standard"
                             value={editing.standard ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, standard: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, standard: e.target.value }))
+                            }
                             placeholder="e.g. ISO 9001, CE, GRI-GM13"
                             className="mt-1.5"
                           />
@@ -1075,21 +1237,35 @@ export function ProductsAdminPage() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="p-rwidth" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Roll Width / Format Size</Label>
+                          <Label
+                            htmlFor="p-rwidth"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Roll Width / Format Size
+                          </Label>
                           <Input
                             id="p-rwidth"
                             value={editing.roll_width ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, roll_width: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, roll_width: e.target.value }))
+                            }
                             placeholder="e.g. 1.176 m (sheet) or 5.8 m"
                             className="mt-1.5"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="p-rlength" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Roll Length / Formats</Label>
+                          <Label
+                            htmlFor="p-rlength"
+                            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                          >
+                            Roll Length / Formats
+                          </Label>
                           <Input
                             id="p-rlength"
                             value={editing.roll_length ?? ""}
-                            onChange={(e) => setEditing((s) => ({ ...s, roll_length: e.target.value }))}
+                            onChange={(e) =>
+                              setEditing((s) => ({ ...s, roll_length: e.target.value }))
+                            }
                             placeholder="e.g. 0.764 m or 100 m"
                             className="mt-1.5"
                           />
@@ -1103,9 +1279,12 @@ export function ProductsAdminPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Key Performance Highlights</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+                            Key Performance Highlights
+                          </h4>
                           <p className="text-[10px] text-muted-foreground">
-                            Specify up to 5 icons & descriptive highlights displayed prominently in the hero background card.
+                            Specify up to 5 icons & descriptive highlights displayed prominently in
+                            the hero background card.
                           </p>
                         </div>
                         <Button
@@ -1126,10 +1305,14 @@ export function ProductsAdminPage() {
                             key={index}
                             className="flex items-center gap-3 p-3.5 rounded-xl border border-border bg-surface/50 shadow-sm relative group"
                           >
-                            <span className="text-xs font-bold text-muted-foreground w-6">#{index + 1}</span>
+                            <span className="text-xs font-bold text-muted-foreground w-6">
+                              #{index + 1}
+                            </span>
 
                             <div className="flex-1 min-w-0">
-                              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Highlight Label</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                                Highlight Label
+                              </Label>
                               <Input
                                 value={feat.label}
                                 onChange={(e) => updateKeyFeature(index, "label", e.target.value)}
@@ -1139,7 +1322,9 @@ export function ProductsAdminPage() {
                             </div>
 
                             <div className="w-56 shrink-0">
-                              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Select Icon Class</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                                Select Icon Class
+                              </Label>
                               <Select
                                 value={feat.icon ?? "check"}
                                 onValueChange={(v) => updateKeyFeature(index, "icon", v)}
@@ -1173,7 +1358,8 @@ export function ProductsAdminPage() {
                         {(editing.key_features ?? []).length === 0 && (
                           <div className="text-center py-10 border border-dashed border-border rounded-xl bg-surface/20">
                             <span className="text-xs text-muted-foreground italic">
-                              No overrides defined. This product will inherit highlights from its linked Product Family template.
+                              No overrides defined. This product will inherit highlights from its
+                              linked Product Family template.
                             </span>
                           </div>
                         )}
@@ -1186,9 +1372,12 @@ export function ProductsAdminPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
                         <div>
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-primary">Typical Properties Table</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+                            Typical Properties Table
+                          </h4>
                           <p className="text-[10px] text-muted-foreground">
-                            Build an interactive product-specific specification table showing exact laboratory testing values.
+                            Build an interactive product-specific specification table showing exact
+                            laboratory testing values.
                           </p>
                         </div>
                         <Button
@@ -1207,21 +1396,33 @@ export function ProductsAdminPage() {
                           <TableHeader className="bg-surface-dark/95 dark:bg-surface-dark">
                             <TableRow className="border-0">
                               <TableHead className="w-10 text-white"></TableHead>
-                              <TableHead className="font-bold text-white uppercase tracking-wider">Property</TableHead>
-                              <TableHead className="font-bold text-white uppercase tracking-wider">Test Method</TableHead>
-                              <TableHead className="font-bold text-white uppercase tracking-wider">Unit</TableHead>
-                              <TableHead className="font-bold text-white uppercase tracking-wider">Typical Value</TableHead>
+                              <TableHead className="font-bold text-white uppercase tracking-wider">
+                                Property
+                              </TableHead>
+                              <TableHead className="font-bold text-white uppercase tracking-wider">
+                                Test Method
+                              </TableHead>
+                              <TableHead className="font-bold text-white uppercase tracking-wider">
+                                Unit
+                              </TableHead>
+                              <TableHead className="font-bold text-white uppercase tracking-wider">
+                                Typical Value
+                              </TableHead>
                               <TableHead className="w-10 text-white"></TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody className="bg-card">
                             {(editing.specifications ?? []).map((row, index) => (
                               <TableRow key={index} className="hover:bg-muted/10">
-                                <TableCell className="text-center font-bold text-muted-foreground">#{index + 1}</TableCell>
+                                <TableCell className="text-center font-bold text-muted-foreground">
+                                  #{index + 1}
+                                </TableCell>
                                 <TableCell>
                                   <Input
                                     value={row.property}
-                                    onChange={(e) => updateSpecRow(index, "property", e.target.value)}
+                                    onChange={(e) =>
+                                      updateSpecRow(index, "property", e.target.value)
+                                    }
                                     placeholder="e.g. Vertical strength — empty"
                                     className="h-8 text-xs border-transparent hover:border-border focus:border-primary transition"
                                   />
@@ -1229,7 +1430,9 @@ export function ProductsAdminPage() {
                                 <TableCell>
                                   <Input
                                     value={row.test_method ?? ""}
-                                    onChange={(e) => updateSpecRow(index, "test_method", e.target.value)}
+                                    onChange={(e) =>
+                                      updateSpecRow(index, "test_method", e.target.value)
+                                    }
                                     placeholder="e.g. ISO 10319"
                                     className="h-8 text-xs border-transparent hover:border-border focus:border-primary transition"
                                   />
@@ -1245,7 +1448,9 @@ export function ProductsAdminPage() {
                                 <TableCell>
                                   <Input
                                     value={row.typical_value ?? ""}
-                                    onChange={(e) => updateSpecRow(index, "typical_value", e.target.value)}
+                                    onChange={(e) =>
+                                      updateSpecRow(index, "typical_value", e.target.value)
+                                    }
                                     placeholder="e.g. >450 or 120"
                                     className="h-8 text-xs border-transparent hover:border-border focus:border-primary transition"
                                   />
@@ -1266,8 +1471,12 @@ export function ProductsAdminPage() {
                             ))}
                             {(editing.specifications ?? []).length === 0 && (
                               <TableRow>
-                                <TableCell colSpan={6} className="text-center py-10 text-xs text-muted-foreground italic">
-                                  No properties specified. Inherits from linked Product Family template properties table automatically.
+                                <TableCell
+                                  colSpan={6}
+                                  className="text-center py-10 text-xs text-muted-foreground italic"
+                                >
+                                  No properties specified. Inherits from linked Product Family
+                                  template properties table automatically.
                                 </TableCell>
                               </TableRow>
                             )}
@@ -1286,7 +1495,8 @@ export function ProductsAdminPage() {
                           <ArrowLeftRight className="h-4 w-4" /> Alternative Solutions (Max 5)
                         </h4>
                         <p className="text-[10px] text-muted-foreground mb-3">
-                          Flag alternative solutions on the details page. If empty, defaults to automatic category products.
+                          Flag alternative solutions on the details page. If empty, defaults to
+                          automatic category products.
                         </p>
 
                         {(editing.alternative_ids ?? []).length > 0 && (
@@ -1310,7 +1520,9 @@ export function ProductsAdminPage() {
                                         No img
                                       </div>
                                     )}
-                                    <span className="text-xs font-semibold truncate">{item?.name ?? "Loading product..."}</span>
+                                    <span className="text-xs font-semibold truncate">
+                                      {item?.name ?? "Loading product..."}
+                                    </span>
                                   </div>
                                   <Button
                                     type="button"
@@ -1330,7 +1542,11 @@ export function ProductsAdminPage() {
                         {(editing.alternative_ids ?? []).length < 5 ? (
                           <ProductSelector
                             onSelect={(prod) => addAlternative(prod.id)}
-                            excludeIds={[editing.id, ...(editing.alternative_ids ?? [])].filter(Boolean) as string[]}
+                            excludeIds={
+                              [editing.id, ...(editing.alternative_ids ?? [])].filter(
+                                Boolean,
+                              ) as string[]
+                            }
                           />
                         ) : (
                           <div className="text-[10px] text-center py-2 px-3 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-md font-medium">
@@ -1345,7 +1561,8 @@ export function ProductsAdminPage() {
                           <Puzzle className="h-4 w-4" /> System Accessories & Components
                         </h4>
                         <p className="text-[10px] text-muted-foreground mb-3">
-                          Dynamically link necessary accessories, anchor pins, or installation tools that construct this complete system.
+                          Dynamically link necessary accessories, anchor pins, or installation tools
+                          that construct this complete system.
                         </p>
 
                         {(editing.system_component_ids ?? []).length > 0 && (
@@ -1390,7 +1607,11 @@ export function ProductsAdminPage() {
 
                         <ProductSelector
                           onSelect={(prod) => addSystemComponent(prod.id)}
-                          excludeIds={[editing.id, ...(editing.system_component_ids ?? [])].filter(Boolean) as string[]}
+                          excludeIds={
+                            [editing.id, ...(editing.system_component_ids ?? [])].filter(
+                              Boolean,
+                            ) as string[]
+                          }
                         />
                       </div>
                     </div>
@@ -1406,48 +1627,82 @@ export function ProductsAdminPage() {
                         </h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="p-doc-tds" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Technical Data Sheet (TDS)</Label>
+                            <Label
+                              htmlFor="p-doc-tds"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Technical Data Sheet (TDS)
+                            </Label>
                             <Input
                               id="p-doc-tds"
                               type="url"
                               placeholder="https://… datasheet path"
                               value={editing.datasheet_url ?? ""}
-                              onChange={(e) => setEditing((s) => ({ ...s, datasheet_url: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({ ...s, datasheet_url: e.target.value }))
+                              }
                               className="mt-1.5 text-xs font-mono"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-doc-install" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Installation Guide / Statement</Label>
+                            <Label
+                              htmlFor="p-doc-install"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Installation Guide / Statement
+                            </Label>
                             <Input
                               id="p-doc-install"
                               type="url"
                               placeholder="https://… installation guide path"
                               value={editing.installation_guide_url ?? ""}
-                              onChange={(e) => setEditing((s) => ({ ...s, installation_guide_url: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({
+                                  ...s,
+                                  installation_guide_url: e.target.value,
+                                }))
+                              }
                               className="mt-1.5 text-xs font-mono"
                             />
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4 mt-4">
                           <div>
-                            <Label htmlFor="p-doc-qa" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">QA/QC Site Checklist PDF</Label>
+                            <Label
+                              htmlFor="p-doc-qa"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              QA/QC Site Checklist PDF
+                            </Label>
                             <Input
                               id="p-doc-qa"
                               type="url"
                               placeholder="https://… QA/QC log path"
                               value={editing.qa_checklist_url ?? ""}
-                              onChange={(e) => setEditing((s) => ({ ...s, qa_checklist_url: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({ ...s, qa_checklist_url: e.target.value }))
+                              }
                               className="mt-1.5 text-xs font-mono"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-doc-chem" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Chemical Resistance / Accessories Guide</Label>
+                            <Label
+                              htmlFor="p-doc-chem"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Chemical Resistance / Accessories Guide
+                            </Label>
                             <Input
                               id="p-doc-chem"
                               type="url"
                               placeholder="https://… compatibility chart path"
                               value={editing.chemical_resistance_url ?? ""}
-                              onChange={(e) => setEditing((s) => ({ ...s, chemical_resistance_url: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({
+                                  ...s,
+                                  chemical_resistance_url: e.target.value,
+                                }))
+                              }
                               className="mt-1.5 text-xs font-mono"
                             />
                           </div>
@@ -1456,17 +1711,28 @@ export function ProductsAdminPage() {
 
                       {/* SEO */}
                       <div className="border-t border-border/60 pt-4">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Search Engine Optimization (SEO)</h4>
-                        <p className="text-[10px] text-muted-foreground mb-3">Optimize how this item displays on Google search results.</p>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                          Search Engine Optimization (SEO)
+                        </h4>
+                        <p className="text-[10px] text-muted-foreground mb-3">
+                          Optimize how this item displays on Google search results.
+                        </p>
                         <div className="space-y-3">
                           <div>
-                            <Label htmlFor="p-meta-title" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Meta Title</Label>
+                            <Label
+                              htmlFor="p-meta-title"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Meta Title
+                            </Label>
                             <Input
                               id="p-meta-title"
                               value={editing.meta_title ?? ""}
                               maxLength={70}
                               placeholder="Recommended: ≤ 60 chars"
-                              onChange={(e) => setEditing((s) => ({ ...s, meta_title: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({ ...s, meta_title: e.target.value }))
+                              }
                               className="mt-1.5 text-xs font-medium"
                             />
                             <div className="text-[10px] text-muted-foreground mt-1">
@@ -1474,24 +1740,38 @@ export function ProductsAdminPage() {
                             </div>
                           </div>
                           <div>
-                            <Label htmlFor="p-seo-kw" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">SEO Focus Keywords</Label>
+                            <Label
+                              htmlFor="p-seo-kw"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              SEO Focus Keywords
+                            </Label>
                             <Input
                               id="p-seo-kw"
                               value={editing.seo_keywords ?? ""}
                               placeholder="Comma-separated keywords"
-                              onChange={(e) => setEditing((s) => ({ ...s, seo_keywords: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({ ...s, seo_keywords: e.target.value }))
+                              }
                               className="mt-1.5 text-xs"
                             />
                           </div>
                           <div>
-                            <Label htmlFor="p-meta-desc" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Meta Description</Label>
+                            <Label
+                              htmlFor="p-meta-desc"
+                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                            >
+                              Meta Description
+                            </Label>
                             <Textarea
                               id="p-meta-desc"
                               rows={2}
                               maxLength={200}
                               value={editing.meta_description ?? ""}
                               placeholder="Short compelling summary showing in SERPs. Recommended: ≤ 160 chars"
-                              onChange={(e) => setEditing((s) => ({ ...s, meta_description: e.target.value }))}
+                              onChange={(e) =>
+                                setEditing((s) => ({ ...s, meta_description: e.target.value }))
+                              }
                               className="mt-1.5 text-xs"
                             />
                             <div className="text-[10px] text-muted-foreground mt-1">
@@ -1520,10 +1800,18 @@ export function ProductsAdminPage() {
               </div>
 
               <DialogFooter className="px-6 py-4 border-t border-border shrink-0 bg-muted/20">
-                <Button variant="outline" onClick={() => setOpen(false)} className="text-xs font-bold uppercase tracking-wider">
+                <Button
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                  className="text-xs font-bold uppercase tracking-wider"
+                >
                   Cancel
                 </Button>
-                <Button onClick={() => void save()} disabled={saving} className="bg-primary hover:bg-primary/90 text-white text-xs font-bold uppercase tracking-wider px-6">
+                <Button
+                  onClick={() => void save()}
+                  disabled={saving}
+                  className="bg-primary hover:bg-primary/90 text-white text-xs font-bold uppercase tracking-wider px-6"
+                >
                   {saving ? (
                     <>
                       <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
@@ -1543,13 +1831,39 @@ export function ProductsAdminPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-14"></TableHead>
-              <SortableHead field="name" className="text-xs font-bold uppercase tracking-wider">Name</SortableHead>
-              <SortableHead field="sku" className="text-xs font-bold uppercase tracking-wider">SKU</SortableHead>
-              <SortableHead field="category_id" className="text-xs font-bold uppercase tracking-wider">Category</SortableHead>
-              <SortableHead field="price" className="text-right text-xs font-bold uppercase tracking-wider">Price</SortableHead>
-              <SortableHead field="stock_quantity" className="text-right text-xs font-bold uppercase tracking-wider">Stock</SortableHead>
-              <SortableHead field="is_active" className="text-xs font-bold uppercase tracking-wider">Active</SortableHead>
-              <TableHead className="w-32 text-right text-xs font-bold uppercase tracking-wider">Actions</TableHead>
+              <SortableHead field="name" className="text-xs font-bold uppercase tracking-wider">
+                Name
+              </SortableHead>
+              <SortableHead field="sku" className="text-xs font-bold uppercase tracking-wider">
+                SKU
+              </SortableHead>
+              <SortableHead
+                field="category_id"
+                className="text-xs font-bold uppercase tracking-wider"
+              >
+                Category
+              </SortableHead>
+              <SortableHead
+                field="price"
+                className="text-right text-xs font-bold uppercase tracking-wider"
+              >
+                Price
+              </SortableHead>
+              <SortableHead
+                field="stock_quantity"
+                className="text-right text-xs font-bold uppercase tracking-wider"
+              >
+                Stock
+              </SortableHead>
+              <SortableHead
+                field="is_active"
+                className="text-xs font-bold uppercase tracking-wider"
+              >
+                Active
+              </SortableHead>
+              <TableHead className="w-32 text-right text-xs font-bold uppercase tracking-wider">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -1591,7 +1905,9 @@ export function ProductsAdminPage() {
                       {mans.find((m) => m.id === p.manufacturer_id)?.name ?? p.slug}
                     </div>
                   </TableCell>
-                  <TableCell className="text-sm font-semibold text-muted-foreground">{p.sku ?? "—"}</TableCell>
+                  <TableCell className="text-sm font-semibold text-muted-foreground">
+                    {p.sku ?? "—"}
+                  </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {cats.find((c) => c.id === p.category_id)?.name ?? "—"}
                   </TableCell>
@@ -1616,7 +1932,12 @@ export function ProductsAdminPage() {
                     <Switch checked={p.is_active} onCheckedChange={() => void toggleActive(p)} />
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="icon" variant="ghost" className="h-8 w-8 rounded-lg hover:bg-muted" onClick={() => openEdit(p)}>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 rounded-lg hover:bg-muted"
+                      onClick={() => openEdit(p)}
+                    >
                       <Pencil className="h-4 w-4 text-primary" />
                     </Button>
                     <Button
@@ -1634,8 +1955,8 @@ export function ProductsAdminPage() {
         </Table>
         <div className="p-4 border-t border-border flex flex-col sm:flex-row items-center justify-between bg-muted/10 gap-4">
           <div className="text-xs text-muted-foreground font-medium">
-            Showing {Math.min((page - 1) * pageSize + 1, total || 0)} to {Math.min(page * pageSize, total)} of{" "}
-            {total} products
+            Showing {Math.min((page - 1) * pageSize + 1, total || 0)} to{" "}
+            {Math.min(page * pageSize, total)} of {total} products
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">

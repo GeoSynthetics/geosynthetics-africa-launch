@@ -11,10 +11,12 @@ export async function loadApplicationData(categorySlug: string) {
     "mining-systems": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
     "water-containment": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80",
     "waste-landfills": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1920&q=80",
-    "roads-infrastructure": "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    "roads-infrastructure":
+      "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
     "erosion-control": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&q=80",
     "drainage-systems": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80",
-    "agriculture-aquaculture": "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
+    "agriculture-aquaculture":
+      "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
@@ -24,7 +26,7 @@ export async function loadApplicationData(categorySlug: string) {
     .select("value")
     .eq("key", "template_applications")
     .maybeSingle();
-  const templates = templateRow?.value as Record<string, any> || {};
+  const templates = (templateRow?.value as Record<string, any>) || {};
 
   // Try loading from hierarchy
   const { data: hierarchyRow, error: hierarchyError } = await supabase
@@ -37,9 +39,9 @@ export async function loadApplicationData(categorySlug: string) {
     console.error("Failed to load hierarchy_applications:", hierarchyError);
   }
 
-  const hierarchy = hierarchyRow?.value as any || {};
+  const hierarchy = (hierarchyRow?.value as any) || {};
   const matchedItem = hierarchy.items?.find(
-    (item: any) => item.slug === categorySlug || item.id === categorySlug
+    (item: any) => item.slug === categorySlug || item.id === categorySlug,
   );
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then categorySlug)
@@ -93,7 +95,13 @@ export async function loadApplicationData(categorySlug: string) {
   }
 
   const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);
-  const label = matchedItem?.label ?? staticCat?.label ?? categorySlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const label =
+    matchedItem?.label ??
+    staticCat?.label ??
+    categorySlug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
   // Fetch dynamic case studies that match this application category
   let caseStudies: any[] = [];
@@ -106,15 +114,19 @@ export async function loadApplicationData(categorySlug: string) {
 
     const { data: casesData } = await supabase
       .from("case_studies")
-      .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+      .select(
+        "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+      )
       .eq("status", "published");
 
     if (casesData) {
       caseStudies = casesData.filter((cs: any) => {
         const text = `${cs.title} ${cs.summary} ${cs.sector}`.toLowerCase();
-        return text.includes(queryTerm.toLowerCase()) ||
+        return (
+          text.includes(queryTerm.toLowerCase()) ||
           (categorySlug === "mining-systems" && text.includes("tsf")) ||
-          (categorySlug === "waste-landfills" && text.includes("waste"));
+          (categorySlug === "waste-landfills" && text.includes("waste"))
+        );
       });
     }
   } catch (e) {
@@ -127,12 +139,16 @@ export async function loadApplicationData(categorySlug: string) {
     try {
       const { data: prodsData, error: prodsError } = await supabase
         .from("products_public")
-        .select("id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)")
+        .select(
+          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
+        )
         .in("id", templateData.products);
       if (!prodsError && prodsData) {
         linkedProducts = prodsData.map((d: any) => ({
           ...d,
-          product_categories: Array.isArray(d.product_categories) ? d.product_categories[0] : d.product_categories
+          product_categories: Array.isArray(d.product_categories)
+            ? d.product_categories[0]
+            : d.product_categories,
         }));
       }
     } catch (e) {
@@ -146,7 +162,9 @@ export async function loadApplicationData(categorySlug: string) {
     try {
       const { data: fcData, error: fcError } = await supabase
         .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year")
+        .select(
+          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+        )
         .eq("slug", templateData.featuredCaseStudySlug)
         .eq("status", "published")
         .maybeSingle();
@@ -163,7 +181,7 @@ export async function loadApplicationData(categorySlug: string) {
     templateData,
     caseStudies,
     linkedProducts,
-    featuredCaseStudy
+    featuredCaseStudy,
   };
 }
 
@@ -195,7 +213,16 @@ export function ApplicationCategorySkeleton() {
       {/* Sticky Tab Navigation */}
       <div className="border-b border-border bg-surface py-4 sticky z-40 top-[80px]">
         <div className="container-page flex gap-8 overflow-x-auto no-scrollbar">
-          {["Overview", "System Components", "Design Considerations", "Installation", "QA & Testing", "Products Used", "Case Studies", "Downloads"].map((label, i) => (
+          {[
+            "Overview",
+            "System Components",
+            "Design Considerations",
+            "Installation",
+            "QA & Testing",
+            "Products Used",
+            "Case Studies",
+            "Downloads",
+          ].map((label, i) => (
             <Skeleton key={i} className="h-4 w-20 shrink-0" />
           ))}
         </div>
@@ -260,7 +287,10 @@ export function ApplicationCategorySkeleton() {
             <Skeleton className="h-4 w-24" />
             <div className="grid grid-cols-2 gap-2.5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="border border-border p-3 rounded-lg flex flex-col items-center justify-center min-h-[90px]">
+                <div
+                  key={i}
+                  className="border border-border p-3 rounded-lg flex flex-col items-center justify-center min-h-[90px]"
+                >
                   <Skeleton className="h-6 w-6 rounded-full mb-2" />
                   <Skeleton className="h-3 w-12" />
                 </div>
@@ -285,11 +315,16 @@ export const Route = createFileRoute("/applications/$category")({
   pendingComponent: ApplicationCategorySkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
-    const { category, templateData } = loaderData || { category: { slug: "", label: "" }, templateData: null };
+    const { category, templateData } = loaderData || {
+      category: { slug: "", label: "" },
+      templateData: null,
+    };
     const label = category.label;
 
     const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-    const description = templateData?.seo?.description || `Explore our advanced ${label.toLowerCase()} applications and projects.`;
+    const description =
+      templateData?.seo?.description ||
+      `Explore our advanced ${label.toLowerCase()} applications and projects.`;
 
     return {
       meta: [

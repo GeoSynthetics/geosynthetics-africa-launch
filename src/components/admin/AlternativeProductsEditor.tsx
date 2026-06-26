@@ -146,7 +146,9 @@ export function AlternativeProductsEditor({
             </DialogTitle>
           </div>
           <DialogDescription className="text-xs text-muted-foreground leading-normal">
-            Configure the alternative solutions displayed on the public page for <strong>{productName}</strong>. If no custom alternatives are specified, fallback category products will be loaded dynamically.
+            Configure the alternative solutions displayed on the public page for{" "}
+            <strong>{productName}</strong>. If no custom alternatives are specified, fallback
+            category products will be loaded dynamically.
           </DialogDescription>
         </DialogHeader>
 
@@ -182,9 +184,12 @@ export function AlternativeProductsEditor({
                   <ArrowLeftRight className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
-                  <h5 className="text-xs font-bold uppercase text-foreground">No Specific Alternatives Selected</h5>
+                  <h5 className="text-xs font-bold uppercase text-foreground">
+                    No Specific Alternatives Selected
+                  </h5>
                   <p className="text-[11px] text-muted-foreground max-w-sm leading-normal">
-                    This product currently displays automatic category products as a fallback. Use the picker above to specify custom alternatives.
+                    This product currently displays automatic category products as a fallback. Use
+                    the picker above to specify custom alternatives.
                   </p>
                 </div>
               </div>

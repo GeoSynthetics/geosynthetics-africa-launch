@@ -15,8 +15,11 @@ export function ProductsLanding() {
 
   const landing = templates?.["__landing"] || {};
   const heroTitle = landing.label || "Engineered Materials for Every Application";
-  const heroDescription = landing.subtitle || "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.";
-  const heroImage = landing.heroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
+  const heroDescription =
+    landing.subtitle ||
+    "Browse our full catalogue of geosynthetic products — sourced from global best-in-class manufacturers and specified to fit your engineered system.";
+  const heroImage =
+    landing.heroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
 
   const productItems = useMemo(() => {
     if (hierarchy?.items && hierarchy.items.length > 0) {
@@ -36,14 +39,20 @@ export function ProductsLanding() {
     const hItem = hierarchy?.items?.find((item: any) => item.id === slug || item.slug === slug);
     return {
       title: t.label || hItem?.label || fallbackLabel,
-      description: hItem?.description || t.subtitle || `High-performance geosynthetic ${fallbackLabel.toLowerCase()} solutions engineered for African operating conditions.`,
+      description:
+        hItem?.description ||
+        t.subtitle ||
+        `High-performance geosynthetic ${fallbackLabel.toLowerCase()} solutions engineered for African operating conditions.`,
       icon: hItem?.icon || t.icon || "Layers",
     };
   };
 
   const resolveIcon = (iconName: string) => {
     const IconComp = (Icons as any)[iconName];
-    if (IconComp) return <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />;
+    if (IconComp)
+      return (
+        <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
+      );
     return <Icons.CheckCircle2 className="h-6 w-6 text-primary" />;
   };
 
@@ -80,7 +89,8 @@ export function ProductsLanding() {
                     </p>
                   </div>
                   <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
-                    Explore Category <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                    Explore Category{" "}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </Link>
               );

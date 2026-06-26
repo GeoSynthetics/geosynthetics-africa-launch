@@ -16,7 +16,7 @@ const supabaseProjectId = env.VITE_SUPABASE_PROJECT_ID;
 
 if (!supabaseUrl || !supabasePublishableKey) {
   throw new Error(
-    "Missing required environment variables: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Please check your .env file."
+    "Missing required environment variables: VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY. Please check your .env file.",
   );
 }
 

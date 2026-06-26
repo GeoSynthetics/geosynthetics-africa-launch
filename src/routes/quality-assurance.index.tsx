@@ -19,7 +19,10 @@ function QALandingSkeleton() {
       <section className="py-16">
         <div className="container-page grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="border border-border rounded overflow-hidden bg-card flex flex-col">
+            <div
+              key={i}
+              className="border border-border rounded overflow-hidden bg-card flex flex-col"
+            >
               <Skeleton className="aspect-video w-full" />
               <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-3">
@@ -41,7 +44,9 @@ export const Route = createFileRoute("/quality-assurance/")({
   loader: async () => {
     const { data: qaDocuments, error: qaError } = await supabase
       .from("qa_documents")
-      .select("id, slug, category_name, short_description, hero_image_url, eyebrow, key_pillars, cta_label, sort_order")
+      .select(
+        "id, slug, category_name, short_description, hero_image_url, eyebrow, key_pillars, cta_label, sort_order",
+      )
       .eq("status", "published")
       .order("sort_order", { ascending: true });
 
@@ -65,7 +70,9 @@ export const Route = createFileRoute("/quality-assurance/")({
   head: ({ loaderData }) => {
     const landing = (loaderData?.landingContent as any) || {};
     const title = landing.seo?.title || "Quality Assurance — Geosynthetics Africa";
-    const description = landing.seo?.description || "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.";
+    const description =
+      landing.seo?.description ||
+      "QA/QC standards, testing methods, documentation and certificates. No system leaves site unverified. IAGI-aligned installer serving Africa.";
     const keywords = landing.seo?.keywords || "";
     return {
       meta: [
