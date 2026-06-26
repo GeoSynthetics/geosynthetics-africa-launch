@@ -12,7 +12,7 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
   if (_fetchPromise) return _fetchPromise;
 
   _fetchPromise = (async () => {
-    const SECTION_KEYS = ["products", "applications", "services", "industries"] as const;
+    const SECTION_KEYS = ["applications", "products", "services", "industries"] as const;
     const keysToFetch = [
       ...SECTION_KEYS.map(k => `hierarchy_${k}`),
       "template_services",

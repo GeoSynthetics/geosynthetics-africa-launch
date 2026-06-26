@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link, type LinkComponentProps, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
+import { Link, type LinkComponentProps, useLocation, useNavigate, useRouter, useMatches } from "@tanstack/react-router";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
 import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
@@ -44,11 +44,32 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const pathname = location.pathname;
+  const matches = useMatches();
+  const slugMatch = matches.find((m) => m.routeId === "/$slug");
+  const slugLoaderData = slugMatch?.loaderData as any;
+
   const isActiveRoute = (to: string) => {
     if (to === "/") {
       return pathname === "/";
     }
-    return pathname === to || pathname.startsWith(to + "/");
+    const directMatch = pathname === to || pathname.startsWith(to + "/");
+    if (directMatch) return true;
+
+    if (slugLoaderData) {
+      if (slugLoaderData.type === "application" && to === "/applications") {
+        return true;
+      }
+      if (slugLoaderData.type === "service" && to === "/services") {
+        return true;
+      }
+      if (slugLoaderData.type === "industry" && to === "/industries") {
+        return true;
+      }
+      if (slugLoaderData.type === "core" && slugLoaderData.originalPath === to) {
+        return true;
+      }
+    }
+    return false;
   };
 
   useEffect(() => {
@@ -253,6 +274,37 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
 function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
   const [open, setOpen] = useState(false);
   const { open: openQuickQuote } = useQuickQuote();
+  const location = useLocation();
+  const matches = useMatches();
+  const pathname = location.pathname;
+
+  const slugMatch = matches.find((m) => m.routeId === "/$slug");
+  const slugLoaderData = slugMatch?.loaderData as any;
+
+  const isActiveRoute = (to: string) => {
+    if (to === "/") {
+      return pathname === "/";
+    }
+    const directMatch = pathname === to || pathname.startsWith(to + "/");
+    if (directMatch) return true;
+
+    if (slugLoaderData) {
+      if (slugLoaderData.type === "application" && to === "/applications") {
+        return true;
+      }
+      if (slugLoaderData.type === "service" && to === "/services") {
+        return true;
+      }
+      if (slugLoaderData.type === "industry" && to === "/industries") {
+        return true;
+      }
+      if (slugLoaderData.type === "core" && slugLoaderData.originalPath === to) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -271,60 +323,67 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
         </SheetHeader>
         <div className="flex-1 overflow-y-auto p-4">
           <Accordion type="single" collapsible>
-            {menus.map((m) => (
-              <AccordionItem value={m.key} key={m.key}>
-                <AccordionTrigger className="text-sm font-bold uppercase tracking-wide">{m.label}</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-1 pl-2">
-                    <li>
-                      <RLink
-                        to={m.to}
-                        onClick={() => setOpen(false)}
-                        className="block py-3 text-sm font-semibold text-primary"
-                      >
-                        All {m.label} →
-                      </RLink>
-                    </li>
-                    {isLoading ? (
-                      <div className="py-2 pl-2 space-y-2">
-                        <Skeleton className="h-4 w-3/4 bg-muted animate-pulse" />
-                        <Skeleton className="h-4 w-1/2 bg-muted animate-pulse" />
-                        <Skeleton className="h-4 w-2/3 bg-muted animate-pulse" />
-                      </div>
-                    ) : (
-                      m.columns.primary.map((item) => (
-                        <li key={item.label}>
-                          <RLink
-                            to={item.to}
-                            params={item.params}
-                            onClick={() => setOpen(false)}
-                            className="block py-3 text-sm text-foreground hover:text-primary"
-                            activeProps={{ className: "!text-primary" }}
-                          >
-                            {item.label}
-                          </RLink>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+            {menus.map((m) => {
+              const active = isActiveRoute(m.to);
+              return (
+                <AccordionItem value={m.key} key={m.key}>
+                  <AccordionTrigger className={`text-sm font-bold uppercase tracking-wide transition-colors ${active ? "text-primary" : "text-foreground"}`}>{m.label}</AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="space-y-1 pl-2">
+                      <li>
+                        <RLink
+                          to={m.to}
+                          onClick={() => setOpen(false)}
+                          className="block py-3 text-sm font-semibold text-primary"
+                        >
+                          All {m.label} →
+                        </RLink>
+                      </li>
+                      {isLoading ? (
+                        <div className="py-2 pl-2 space-y-2">
+                          <Skeleton className="h-4 w-3/4 bg-muted animate-pulse" />
+                          <Skeleton className="h-4 w-1/2 bg-muted animate-pulse" />
+                          <Skeleton className="h-4 w-2/3 bg-muted animate-pulse" />
+                        </div>
+                      ) : (
+                        m.columns.primary.map((item) => (
+                          <li key={item.label}>
+                            <RLink
+                              to={item.to}
+                              params={item.params}
+                              onClick={() => setOpen(false)}
+                              className="block py-3 text-sm text-foreground hover:text-primary"
+                              activeProps={{ className: "!text-primary" }}
+                            >
+                              {item.label}
+                            </RLink>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
           </Accordion>
           <ul className="mt-2 border-t border-border pt-2">
-            {SIMPLE_NAV.map((item) => (
-              <li key={item.to}>
-                <RLink
-                  to={item.to}
-                  params={item.params}
-                  onClick={() => setOpen(false)}
-                  className="block py-3 text-sm font-bold uppercase tracking-wide text-foreground hover:text-primary"
-                  activeProps={{ className: "!text-primary" }}
-                >
-                  {item.label}
-                </RLink>
-              </li>
-            ))}
+            {SIMPLE_NAV.map((item) => {
+              const active = isActiveRoute(item.to);
+              return (
+                <li key={item.to}>
+                  <RLink
+                    to={item.to}
+                    params={item.params}
+                    onClick={() => setOpen(false)}
+                    className={`block py-3 text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors ${
+                      active ? "text-primary" : "text-foreground"
+                    }`}
+                  >
+                    {item.label}
+                  </RLink>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="border-t border-border p-4">

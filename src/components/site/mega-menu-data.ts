@@ -828,22 +828,6 @@ function generateIndustryContent(categorySlug: string, categoryLabel: string) {
 
 export const megaMenus: MegaMenuConfig[] = [
   {
-    key: "products",
-    label: "Products",
-    to: "/products",
-    columns: {
-      primaryTitle: "Browse Products",
-      primary: PRODUCT_CATEGORIES.map((c) => ({
-        label: c.label,
-        icon: c.icon,
-        slug: c.slug,
-        ...productLink(c.slug),
-        content: generateProductContent(c.slug, c.label)
-      })),
-      ...generateProductContent(PRODUCT_CATEGORIES[0].slug, PRODUCT_CATEGORIES[0].label),
-    },
-  },
-  {
     key: "applications",
     label: "Applications",
     to: "/applications",
@@ -857,6 +841,22 @@ export const megaMenus: MegaMenuConfig[] = [
         content: generateApplicationContent(c.slug, c.label)
       })),
       ...generateApplicationContent(APPLICATION_CATEGORIES[0].slug, APPLICATION_CATEGORIES[0].label),
+    },
+  },
+  {
+    key: "products",
+    label: "Products",
+    to: "/products",
+    columns: {
+      primaryTitle: "Browse Products",
+      primary: PRODUCT_CATEGORIES.map((c) => ({
+        label: c.label,
+        icon: c.icon,
+        slug: c.slug,
+        ...productLink(c.slug),
+        content: generateProductContent(c.slug, c.label)
+      })),
+      ...generateProductContent(PRODUCT_CATEGORIES[0].slug, PRODUCT_CATEGORIES[0].label),
     },
   },
   {
