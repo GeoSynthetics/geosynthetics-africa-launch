@@ -65,13 +65,13 @@ A code search was performed for `console.` statements.
 These are actual errors caught by the TypeScript compiler (`tsc`) that pose runtime risks or prevent strict compilation:
 
 ### A. Missing `industries` Property Type Mismatch
-* **File**: [ProductFamilyPage.tsx:L856](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ProductFamilyPage.tsx#L856)
+* **File**: [ProductFamilyPage.tsx:L851](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ProductFamilyPage.tsx#L851)
 * **Error**: `Property 'industries' does not exist on type ...`
 * **Root Cause**: `data` is type-cast as `typeof mockData & { heroImage?: string }`. However, `mockData` does not contain an `industries` key, while the actual `mapFamilyData` mapper function does return `industries`. This results in a type compilation error when attempting to map `data.industries`.
 * **Proposed Fix**: Add an empty or mock `industries: [...]` array to `mockData` or broaden the type assertion of `data` to include `industries?: { label: string; slug: string }[]`.
 
 ### B. Unsafe Option Types in Sorting
-* **File**: [ProjectsPage.tsx:L70](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ProjectsPage.tsx#L70)
+* **File**: [ProjectsPage.tsx:L77](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ProjectsPage.tsx#L77)
 * **Error**: `Argument of type 'string | undefined' is not assignable to parameter of type 'string'.`
 * **Root Cause**: The sorting function `getNum` takes a strict `string`, but is invoked with `a.scale` and `b.scale`, which are optional properties (`scale?: string`) on the `CaseStudy` interface.
 * **Proposed Fix**: Change the calls to `getNum(b.scale || "")` and `getNum(a.scale || "")` to ensure type safety.
@@ -87,13 +87,37 @@ These are actual errors caught by the TypeScript compiler (`tsc`) that pose runt
 
 ### D. Parameter Type Implicitly 'any'
 * **Files**:
-  * [ApplicationCategoryPage.tsx:L249, L303, L318](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ApplicationCategoryPage.tsx#L249)
-  * [ServicePage.tsx:L208, L280](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ServicePage.tsx#L208)
+  * [ApplicationCategoryPage.tsx:L251, L305, L320](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ApplicationCategoryPage.tsx#L251)
+  * [ServicePage.tsx:L210, L282](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ServicePage.tsx#L210)
 * **Error**: `Parameter 'para' / 'idx' / 'bullet' implicitly has an 'any' type.`
 * **Root Cause**: Array mapping functions destructure parameters without explicit types while `noImplicitAny` is enabled or in strict type-check mode.
 * **Proposed Fix**: Type them explicitly (e.g. `para: string, idx: number`).
 
-### E. Test File Failures
+### E. SEO Landing Content Type Mismatch
+* **File**: [ProjectsTemplatesEditor.tsx:L115, L143](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/admin/ProjectsTemplatesEditor.tsx#L115)
+* **Error**: `Type '{ title?: string | undefined; ... }' is not assignable to type '{ title: string; description: string; ... }'.`
+* **Root Cause**: `defaultLandingContent().seo` is optional in the interface `ProjectsLandingContent`. Spreading it inside `setEditingLanding` results in properties like `title` and `description` becoming optional, which doesn't match the strict type of `ProjectsLandingContent['seo']`.
+* **Proposed Fix**: Use non-null assertion or cast `defaultLandingContent().seo!` since we know it is defined, or adjust the type definition.
+
+### F. Breadcrumb Route Params Cast Error
+* **File**: [Breadcrumbs.tsx:L72](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/Breadcrumbs.tsx#L72)
+* **Error**: `Type 'Record<string, string> | undefined' is not assignable to type 'true | ParamsReducerFn<...>'`
+* **Root Cause**: The `params` object of type `Record<string, string>` is passed to a `<Link>` with `to={item.to as any}`. Under strict types, this triggers type mismatches with TanStack Router's dynamic path types.
+* **Proposed Fix**: Cast `params={item.params as any}`.
+
+### G. Invalid Loader / Search Hook parameters when strict: false
+* **File**: [ContactsPage.tsx:L540, L548, L1032, L1039](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ContactsPage.tsx#L540)
+* **Error**: `Type 'string' is not assignable to type 'undefined'.`
+* **Root Cause**: Calling `useSearch` and `useLoaderData` with both `from` and `strict: false` is invalid according to the API definition since when `strict: false`, route path validation should be bypassed by omitting the `from` property.
+* **Proposed Fix**: Remove the `from` argument from `useSearch` and `useLoaderData` calls where `strict: false` is used.
+
+### H. Missing `slug` Property on Fallback `CASE_STUDIES`
+* **File**: [ContactsPage.tsx:L1205, L1208](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ContactsPage.tsx#L1205)
+* **Error**: `Property 'slug' does not exist on type ...`
+* **Root Cause**: When database results are empty, the code falls back to `CASE_STUDIES`. Because the elements of `CASE_STUDIES` lack a `slug` property, `projectExperience` is typed as a union of objects with and without `slug`. Accessing `c.slug` when rendering then causes compilation errors.
+* **Proposed Fix**: Add `slug: ""` to the static `CASE_STUDIES` array elements.
+
+### I. Test File Failures
 * **[hierarchy-utils.test.ts](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/test/lib/hierarchy-utils.test.ts#L31)**:
   * Uses `label` instead of `title` in test mock `quickActions` array.
   * Uses `label` and `imageUrl` for `FeaturedImage`/`FeaturedProduct` array which lacks expected properties like `spec` and `to`.
@@ -109,6 +133,6 @@ These are actual errors caught by the TypeScript compiler (`tsc`) that pose runt
 
 ## Summary of Recommended Actions
 
-1. **Keep Code Intact**: No changes have been applied.
+1. **Keep Code Intact**: No changes have been applied to the code logic, in alignment with the directive to inspect first.
 2. **Clean Up Unused Code**: Safely prune the unused imports listed above to keep the bundle size clean and codebase easy to read.
 3. **Fix Real Compiler Errors**: Apply the proposed fixes in Section 3 to ensure the project passes typechecking (`tsc --noEmit`) cleanly, preventing future regressions.

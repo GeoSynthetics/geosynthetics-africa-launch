@@ -1,8 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ContactsPage } from "@/pages/ContactsPage";
+import { z } from "zod";
+
+const contactsSearchSchema = z.object({
+  country: z.string().optional(),
+});
 
 export const Route = createFileRoute("/contacts")({
+  validateSearch: (search) => contactsSearchSchema.parse(search),
   loader: async () => {
     const { data: seoData } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
     const seoMap = (seoData?.value as Record<string, any>) || {};

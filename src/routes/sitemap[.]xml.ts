@@ -187,6 +187,31 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Silently skip
         }
 
+        /* ── 7. Country-specific SEO slug pages ───────────────── */
+        const countrySlugs = [
+          "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
+          "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
+          "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+          "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
+          "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
+          "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+          "kenya-geosynthetics-supplier-contact",
+          "cote-divoire-geosynthetics-supplier-contact",
+          "mozambique-geosynthetics-supplier-contact",
+          "ghana-geosynthetics-supplier-contact",
+          "namibia-geosynthetics-supplier-contact",
+        ];
+
+        for (const slug of countrySlugs) {
+          urls.push(
+            urlEntry(`${baseUrl}/${slug}`, {
+              lastmod: now,
+              changefreq: "monthly",
+              priority: 0.6,
+            }),
+          );
+        }
+
         /* ── Build final XML ──────────────────────────────────── */
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

@@ -27,6 +27,75 @@ const ServicePageLazy = lazy(() => import("@/pages/ServicePage").then((m) => ({ 
 const IndustryPageLazy = lazy(() => import("@/pages/IndustryPage").then((m) => ({ default: m.IndustryPage })));
 const ApplicationCategoryPageLazy = lazy(() => import("@/pages/ApplicationCategoryPage").then((m) => ({ default: m.ApplicationCategoryPage })));
 
+const COUNTRY_SEO_MAP: Record<string, { country: string; title: string; description: string; keywords: string }> = {
+  "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa": {
+    country: "South Africa",
+    title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa | Geosynthetics Africa",
+    description: "Geosynthetics Africa is a leading supplier and IAGI-certified installer of GSE HDPE liners and smooth geomembranes in South Africa. Contact our Johannesburg head office.",
+    keywords: "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
+  },
+  "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier": {
+    country: "Botswana",
+    title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier | Geosynthetics Africa",
+    description: "Leading supplier of HDPE geomembranes, geotextiles, and geogrids for mining and infrastructure projects in Botswana. Reliable cross-border logistics to Gaborone.",
+    keywords: "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
+  },
+  "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids": {
+    country: "Tanzania",
+    title: "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
+    description: "High-quality HDPE liners, geotextiles, and geogrids for mining TSF and water containment projects in Tanzania. East Africa operations hub.",
+    keywords: "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
+  },
+  "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control": {
+    country: "Zimbabwe",
+    title: "Zimbabwe River Rehabilitation & JuteSoilLock 292 Erosion Control | Geosynthetics Africa",
+    description: "Erosion control, river rehabilitation, and JuteSoilLock 292 supply and installation in Zimbabwe. Technical support and logistics cleared to Harare.",
+    keywords: "Zimbabwe river rehabilitation, JuteSoilLock 292, erosion control Zimbabwe, Harare geosynthetics",
+  },
+  "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier": {
+    country: "Zambia",
+    title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier | Geosynthetics Africa",
+    description: "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
+    keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
+  },
+  "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier": {
+    country: "Democratic Republic of Congo (DRC)",
+    title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier | Geosynthetics Africa",
+    description: "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
+    keywords: "DRC geosynthetics, Bidim Congo, HDPE geomembranes DRC, Kolwezi mining lining",
+  },
+  "kenya-geosynthetics-supplier-contact": {
+    country: "Kenya",
+    title: "Kenya Geosynthetics Supplier — Contact & Technical Support | Geosynthetics Africa",
+    description: "Contact Geosynthetics Africa for premium agricultural and municipal water containment supply and lining installations in Kenya.",
+    keywords: "Kenya geosynthetics, geomembrane supplier Kenya, Nairobi lining installations, water containment Kenya",
+  },
+  "cote-divoire-geosynthetics-supplier-contact": {
+    country: "Côte d'Ivoire",
+    title: "Côte d'Ivoire Geosynthetics Supplier — Contact & Supply | Geosynthetics Africa",
+    description: "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, and port infrastructure projects in Côte d'Ivoire.",
+    keywords: "Côte d'Ivoire geosynthetics, Abidjan geomembrane supplier, coastal erosion Côte d'Ivoire",
+  },
+  "mozambique-geosynthetics-supplier-contact": {
+    country: "Mozambique",
+    title: "Mozambique Geosynthetics Supplier — Maputo Regional Office | Geosynthetics Africa",
+    description: "Contact our Maputo regional hub for coastal works supply, geosynthetic clay liners (GCL), and geomembrane installation QA/QC in Mozambique.",
+    keywords: "Mozambique geosynthetics, Maputo geomembrane, GCL Mozambique, coastal works Mozambique",
+  },
+  "ghana-geosynthetics-supplier-contact": {
+    country: "Ghana",
+    title: "Ghana Geosynthetics Supplier — West Africa Mining Hub | Geosynthetics Africa",
+    description: "Contact Geosynthetics Africa in Accra for West African gold mining TSF lining projects, geosynthetics supply, and IAGI-certified installations.",
+    keywords: "Ghana geosynthetics, Accra geomembrane supplier, gold mining TSF Ghana, geosynthetics West Africa",
+  },
+  "namibia-geosynthetics-supplier-contact": {
+    country: "Namibia",
+    title: "Namibia Geosynthetics Supplier — Windhoek Logistics Hub | Geosynthetics Africa",
+    description: "Contact our Windhoek office for uranium mining lining, water conservation reservoirs, and geosynthetics supply across Namibia.",
+    keywords: "Namibia geosynthetics, Windhoek geomembrane supplier, uranium mining lining Namibia",
+  },
+};
+
 /**
  * Root-level catch-all route that handles custom SEO slugs, services, industries, and applications.
  * Keep the custom SEO slugs visible in the browser URL bar.
@@ -34,6 +103,33 @@ const ApplicationCategoryPageLazy = lazy(() => import("@/pages/ApplicationCatego
 export const Route = createFileRoute("/$slug")({
   loader: async ({ params }) => {
     const customSlug = params.slug;
+
+    // Check if it's a country-specific SEO page slug
+    if (COUNTRY_SEO_MAP[customSlug]) {
+      const countryData = COUNTRY_SEO_MAP[customSlug];
+      const originalPath = "/contacts";
+      
+      const { data: caseStudies } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url")
+        .eq("status", "published")
+        .order("project_year", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      return {
+        type: "core" as const,
+        originalPath,
+        seo: {
+          title: countryData.title,
+          description: countryData.description,
+          keywords: countryData.keywords,
+          pageLabel: `Contact — ${countryData.country}`,
+        },
+        country: countryData.country,
+        caseStudies: caseStudies || [],
+      };
+    }
 
     // 1. Try resolving to custom SEO path for static core pages first
     const originalPath = await resolveSlugToPath(customSlug);

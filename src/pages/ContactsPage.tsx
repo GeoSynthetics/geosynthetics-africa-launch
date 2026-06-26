@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import {
@@ -36,6 +36,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
+
 const HERO_IMG =
   "/src/assets/contact-page-hero.png";
 
@@ -64,7 +67,19 @@ const OFFICE_SERVICES = [
   { icon: Wrench, label: "Technical Support" },
 ];
 
-const REGIONAL_COVERAGE = ["South Africa", "Botswana", "Namibia", "Zimbabwe", "Mozambique", "Zambia"];
+const REGIONAL_COVERAGE = [
+  "South Africa",
+  "Botswana",
+  "Namibia",
+  "Zimbabwe",
+  "Mozambique",
+  "Zambia",
+  "Democratic Republic of Congo (DRC)",
+  "Tanzania",
+  "Kenya",
+  "Ghana",
+  "Côte d'Ivoire"
+];
 
 const CASE_STUDIES = [
   {
@@ -183,6 +198,56 @@ const REGIONAL_LOCATIONS = [
     email: "zambia@geosynthetics.co.za",
     services: "Mining TSF Lining & Cross-Border Cleared Supply",
   },
+  {
+    country: "Democratic Republic of Congo (DRC)",
+    title: "Kolwezi Office",
+    subtitle: "Central Africa Mining Hub",
+    coords: [-10.7222, 25.4678] as [number, number],
+    address: "Avenue de la Métallurgie, Zone Industrielle, Kolwezi",
+    phone: "+27 78 1355 926",
+    email: "drc@geosynthetics.co.za",
+    services: "Mining TSF Lining & Heavy Confinement Supply",
+  },
+  {
+    country: "Tanzania",
+    title: "Tanzania Operations",
+    subtitle: "East Africa Hub",
+    coords: [-6.7924, 39.2083] as [number, number],
+    address: "Plot 45, Mandela Road, Industrial Area, Dar es Salaam",
+    phone: "+27 78 1355 926",
+    email: "tanzania@geosynthetics.co.za",
+    services: "Material Supply & Technical Supervision",
+  },
+  {
+    country: "Kenya",
+    title: "Nairobi Office",
+    subtitle: "East Africa Hub",
+    coords: [-1.2921, 36.8219] as [number, number],
+    address: "Mombasa Road, Syokimau, Nairobi",
+    phone: "+27 78 1355 926",
+    email: "kenya@geosynthetics.co.za",
+    services: "Agricultural & Municipal Water Containment Supply",
+  },
+  {
+    country: "Ghana",
+    title: "West Africa Regional Hub",
+    subtitle: "Accra Office",
+    coords: [5.6037, -0.1870] as [number, number],
+    address: "14 Spintex Road, Accra",
+    phone: "+27 78 1355 926",
+    email: "ghana@geosynthetics.co.za",
+    services: "West Africa Mining Supply & Certified Installation",
+  },
+  {
+    country: "Côte d'Ivoire",
+    title: "Abidjan Hub",
+    subtitle: "West Africa Office",
+    coords: [5.3600, -4.0083] as [number, number],
+    address: "Zone 4C, Rue des Carrossiers, Abidjan",
+    phone: "+27 78 1355 926",
+    email: "civ@geosynthetics.co.za",
+    services: "Port Infrastructure & Shoreline Erosion Supply",
+  },
 ];
 
 const REGIONAL_DETAILS = {
@@ -245,6 +310,56 @@ const REGIONAL_DETAILS = {
     routes: "Johannesburg → Martins Drift (Botswana) → Kazungula / Chirundu → Lusaka",
     stats: "Copperbelt TSF lining & Kazungula bridge routes",
     services: ["Material Supply", "HDPE Liner Installation", "Logistics & Export"]
+  },
+  "Democratic Republic of Congo (DRC)": {
+    flag: "🇨🇩",
+    code: "COD",
+    hub: "Kolwezi / Lubumbashi Hub",
+    transit: "5 - 7 Days (Road Freight)",
+    description: "Supporting major cobalt and copper mining operations in the Katanga Province. We handle complex customs clearances at Kasumbalesa and coordinate local installation crews.",
+    routes: "Johannesburg → Zambia (transit) → Kasumbalesa → Kolwezi / Lubumbashi",
+    stats: "Kamoa-Kakula & Mutanda copper/cobalt projects",
+    services: ["Material Supply", "HDPE Liner Installation", "Cross-Border Logistics"]
+  },
+  "Tanzania": {
+    flag: "🇹🇿",
+    code: "TZA",
+    hub: "East Africa Regional Hub",
+    transit: "6 - 8 Days (Road Freight / Sea)",
+    description: "Serving gold mining, infrastructure, and agricultural developments. Coordination of customs clearance via Dar es Salaam port and Tunduma border post.",
+    routes: "Durban / JHB → Zimbabwe / Zambia (transit) → Tunduma → Dar es Salaam",
+    stats: "Geita Gold Mine & North Mara TSF projects",
+    services: ["Material Supply", "HDPE Liner Installation", "Technical Support"]
+  },
+  "Kenya": {
+    flag: "🇰🇪",
+    code: "KEN",
+    hub: "Nairobi Office",
+    transit: "7 - 9 Days (Sea / Road)",
+    description: "Serving East African agriculture, water containment, and infrastructure projects. Stock management and technical specifications support.",
+    routes: "Port of Durban → Port of Mombasa → Nairobi",
+    stats: "Rift Valley agricultural & municipal water reservoirs",
+    services: ["Material Supply", "Design Support", "Logistics & Customs"]
+  },
+  "Ghana": {
+    flag: "🇬🇭",
+    code: "GHA",
+    hub: "West Africa Mining Hub",
+    transit: "14 - 18 Days (Sea Freight)",
+    description: "Headed by our West African regional office in Accra, serving gold mining and environmental containment projects across Ghana, Mali, and Burkina Faso.",
+    routes: "Port of Durban / Cape Town → Port of Tema → Accra / Tarkwa",
+    stats: "Tarkwa & Obuasi Gold Mine TSF lining projects",
+    services: ["Material Supply", "HDPE Liner Installation", "QA/QC Testing", "Logistics & Export"]
+  },
+  "Côte d'Ivoire": {
+    flag: "🇨🇮",
+    code: "CIV",
+    hub: "West Africa Hub",
+    transit: "16 - 20 Days (Sea Freight)",
+    description: "Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
+    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
+    stats: "Yaouré Gold Mine and coastal erosion control structures",
+    services: ["Material Supply", "Logistics & Export", "QA/QC Support"]
   }
 };
 
@@ -416,6 +531,37 @@ function RegionalMap({
 export function ContactsPage() {
   const [selectedCountry, setSelectedCountry] = useState<string>("South Africa");
 
+  // Safely read search params or loader data to pre-select country
+  useEffect(() => {
+    let initialCountry = "";
+
+    // 1. Try reading from contacts search param
+    try {
+      const search = useSearch({ from: "/contacts", strict: false }) as any;
+      if (search?.country) {
+        initialCountry = search.country;
+      }
+    } catch {}
+
+    // 2. Try reading from $slug loader data
+    try {
+      const loader = useLoaderData({ from: "/$slug", strict: false }) as any;
+      if (loader?.country) {
+        initialCountry = loader.country;
+      }
+    } catch {}
+
+    if (initialCountry) {
+      // Find matching country in REGIONAL_COVERAGE (case-insensitive)
+      const matched = REGIONAL_COVERAGE.find(
+        (c) => c.toLowerCase() === initialCountry.toLowerCase()
+      );
+      if (matched) {
+        setSelectedCountry(matched);
+      }
+    }
+  }, []);
+
   return (
     <>
       <ContactsHero />
@@ -423,7 +569,47 @@ export function ContactsPage() {
       <ServicesAndCoverage selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
       <FormsBlock />
       <ResourceStrip />
+      <CountrySeoLinks />
     </>
+  );
+}
+
+function CountrySeoLinks() {
+  const links = [
+    { name: "South Africa", slug: "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
+    { name: "Botswana", slug: "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
+    { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
+    { name: "Zimbabwe", slug: "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
+    { name: "Zambia", slug: "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
+    { name: "Democratic Republic of Congo (DRC)", slug: "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier" },
+    { name: "Kenya", slug: "kenya-geosynthetics-supplier-contact" },
+    { name: "Côte d'Ivoire", slug: "cote-divoire-geosynthetics-supplier-contact" },
+    { name: "Mozambique", slug: "mozambique-geosynthetics-supplier-contact" },
+    { name: "Ghana", slug: "ghana-geosynthetics-supplier-contact" },
+    { name: "Namibia", slug: "namibia-geosynthetics-supplier-contact" },
+  ];
+
+  return (
+    <section className="bg-muted/30 border-t border-border py-8">
+      <div className="container-page">
+        <h3 className="font-display text-xs font-bold uppercase tracking-wider text-muted-foreground/80 mb-4">
+          Pan-African Coverage & Regional Pages
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+          {links.map((link) => (
+            <RLink
+              key={link.slug}
+              to="/$slug"
+              params={{ slug: link.slug }}
+              className="text-xs text-muted-foreground hover:text-primary transition font-medium flex items-center gap-1.5"
+            >
+              <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+              Geosynthetics {link.name} &rarr;
+            </RLink>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -788,7 +974,7 @@ function ServicesAndCoverage({
 
             {/* Right side: Country Selector buttons */}
             <div className="md:col-span-5 flex flex-col justify-between">
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 max-h-[380px] overflow-y-auto pr-1">
                 <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-2">
                   Select a Region
                 </span>
@@ -840,7 +1026,22 @@ function FormsBlock() {
   const [boqSubmitting, setBoqSubmitting] = useState(false);
   const [quickSubmitting, setQuickSubmitting] = useState(false);
 
-  const { caseStudies = [] } = useLoaderData({ from: "/contacts" }) as { caseStudies?: any[] } || {};
+  // Safely extract case studies from either /contacts loader or /$slug loader
+  let caseStudies: any[] = [];
+  try {
+    const contactsData = useLoaderData({ from: "/contacts", strict: false }) as any;
+    if (contactsData?.caseStudies) {
+      caseStudies = contactsData.caseStudies;
+    }
+  } catch {}
+  if (!caseStudies || caseStudies.length === 0) {
+    try {
+      const slugData = useLoaderData({ from: "/$slug", strict: false }) as any;
+      if (slugData?.caseStudies) {
+        caseStudies = slugData.caseStudies;
+      }
+    } catch {}
+  }
 
   // Map database projects if available, otherwise fall back to static CASE_STUDIES
   const projectExperience = caseStudies.length > 0

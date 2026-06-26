@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Linkedin, Facebook, Instagram, Youtube } from "lucide-react";
+import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { PRODUCT_CATEGORIES, APPLICATION_CATEGORIES, SERVICES, INDUSTRIES } from "./mega-menu-data";
 import { usePageSlugs } from "@/hooks/use-page-slugs";
+import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
 
 const RESOURCES = [
   { label: "Datasheets", to: "/resources" },
@@ -31,7 +32,10 @@ const SOCIAL_LINKS = [
   { Icon: Youtube, label: "YouTube", href: "#" },
 ];
 
-function FooterCol({ title, items }: { title: string; items: { label: string; to: string }[] }) {
+type AnyLinkProps = Omit<LinkComponentProps, "to"> & { to: string; params?: Record<string, string> };
+const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
+
+function FooterCol({ title, items }: { title: string; items: { label: string; to: string; params?: Record<string, string> }[] }) {
   return (
     <div className="min-w-0">
       <h4 className="text-[10px] font-bold uppercase tracking-widest text-surface-dark-foreground mb-3">
@@ -40,12 +44,13 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
       <ul className="space-y-1.5">
         {items.map((i) => (
           <li key={i.label}>
-            <a
-              href={i.to}
+            <RLink
+              to={i.to}
+              params={i.params}
               className="text-xs text-surface-dark-foreground/60 hover:text-primary transition-colors"
             >
               {i.label}
-            </a>
+            </RLink>
           </li>
         ))}
       </ul>
@@ -56,26 +61,54 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
 export function Footer() {
   const [email, setEmail] = useState("");
   const { resolve } = usePageSlugs();
+  const { menus } = useDynamicMegaMenus();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     setEmail("");
   };
 
-  // Trim categories to match Figma list length
-  const products = [
-    ...PRODUCT_CATEGORIES.slice(0, 6).map((c) => ({ label: c.label, to: `/products/${c.slug}` })),
-    { label: "All Products", to: "/products" },
-  ];
+  const productMenu = menus.find((m) => m.key === "products");
+  const products = productMenu
+    ? [
+        ...productMenu.columns.primary.slice(0, 6).map((c) => ({
+          label: c.label,
+          to: c.to,
+          params: c.params,
+        })),
+        { label: "All Products", to: "/products" },
+      ]
+    : [];
 
-  const applications = [
-    ...APPLICATION_CATEGORIES.slice(0, 6).map((c) => ({ label: c.label, to: `/${c.slug}` })),
-    { label: "All Applications", to: "/applications" },
-  ];
+  const applicationMenu = menus.find((m) => m.key === "applications");
+  const applications = applicationMenu
+    ? [
+        ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
+          label: c.label,
+          to: c.to,
+          params: c.params,
+        })),
+        { label: "All Applications", to: "/applications" },
+      ]
+    : [];
 
-  const services = SERVICES.map((s) => ({ label: s.label, to: `/${s.slug}` }));
+  const serviceMenu = menus.find((m) => m.key === "services");
+  const services = serviceMenu
+    ? serviceMenu.columns.primary.map((s) => ({
+        label: s.label,
+        to: s.to,
+        params: s.params,
+      }))
+    : [];
 
-  const industries = INDUSTRIES.map((i) => ({ label: i.label, to: `/${i.slug}` }));
+  const industryMenu = menus.find((m) => m.key === "industries");
+  const industries = industryMenu
+    ? industryMenu.columns.primary.map((i) => ({
+        label: i.label,
+        to: i.to,
+        params: i.params,
+      }))
+    : [];
 
   // Resolve custom slugs for core page links
   const company = COMPANY.map((item) => ({
