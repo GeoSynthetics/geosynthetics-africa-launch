@@ -565,8 +565,8 @@ export function ContactsPage() {
   return (
     <>
       <ContactsHero />
-      <OfficeAndMap selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
-      <ServicesAndCoverage selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+      <OfficeDetailsAndServices />
+      <MapAndCoverage selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
       <FormsBlock />
       <ResourceStrip />
       <CountrySeoLinks />
@@ -741,16 +741,32 @@ function ContactsHero() {
   );
 }
 
-/* -------------------- Office details + Map -------------------- */
-function OfficeAndMap({
-  selectedCountry,
-  onSelectCountry,
+function DetailRow({
+  icon: Icon,
+  label,
+  children,
 }: {
-  selectedCountry: string;
-  onSelectCountry: (country: string) => void;
+  icon: React.ElementType;
+  label: string;
+  children: React.ReactNode;
 }) {
-  const activeLoc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry) || REGIONAL_LOCATIONS[0];
+  return (
+    <div className="flex gap-3">
+      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <Icon className="h-4 w-4" />
+      </span>
+      <div>
+        <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          {label}
+        </div>
+        <div className="mt-1 text-foreground">{children}</div>
+      </div>
+    </div>
+  );
+}
 
+/* -------------------- Office details + Services -------------------- */
+function OfficeDetailsAndServices() {
   return (
     <section className="bg-background">
       <div className="container-page py-14 grid lg:grid-cols-12 gap-8">
@@ -819,19 +835,69 @@ function OfficeAndMap({
           </div>
         </div>
 
-        {/* Map */}
+        {/* Services Available From This Office */}
         <div className="lg:col-span-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-display text-xl font-bold uppercase tracking-wide">Find Us</h2>
-            <Link
-              to="/contacts"
-              className="inline-flex items-center gap-2 rounded border border-primary text-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition"
-            >
-              <MapPin className="h-3.5 w-3.5" /> View All African Offices
-            </Link>
+          <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
+            Services Available From This Office
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {OFFICE_SERVICES.map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="rounded border border-border bg-card p-4 flex flex-col items-center text-center hover:border-primary transition"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div className="mt-3 text-xs font-display font-bold uppercase tracking-wide leading-snug">
+                  {label}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="rounded border border-border overflow-hidden bg-card relative">
-            <div className="relative h-[390px] w-full">
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------- Map + Regional Coverage -------------------- */
+function MapAndCoverage({
+  selectedCountry,
+  onSelectCountry,
+}: {
+  selectedCountry: string;
+  onSelectCountry: (country: string) => void;
+}) {
+  const activeLoc = REGIONAL_LOCATIONS.find((l) => l.country === selectedCountry) || REGIONAL_LOCATIONS[0];
+  const activeDetails = REGIONAL_DETAILS[selectedCountry as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+
+  return (
+    <section className="bg-surface">
+      <div className="container-page py-14">
+        {/* Section Title */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 className="font-display text-2xl font-bold uppercase tracking-wide">
+              Regional Coverage & Presence
+            </h2>
+            <p className="text-xs text-muted-foreground mt-1">
+              Select a country below or click a map pin to explore our offices and logistics routes across Africa.
+            </p>
+          </div>
+          <button
+            onClick={() => onSelectCountry("South Africa")}
+            className="inline-flex items-center gap-2 rounded border border-primary text-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition cursor-pointer self-start md:self-auto"
+          >
+            <MapPin className="h-3.5 w-3.5" /> Reset View (HQ)
+          </button>
+        </div>
+
+        {/* Side-by-Side Map and Coverage Info */}
+        <div className="grid lg:grid-cols-12 gap-8 items-stretch">
+          {/* Map wrapper */}
+          <div className="lg:col-span-6 flex flex-col">
+            <div className="rounded border border-border overflow-hidden bg-card relative flex-1 min-h-[450px] lg:min-h-0">
               <RegionalMap selectedCountry={selectedCountry} onSelectCountry={onSelectCountry} />
               
               {/* Dynamic floating detail card */}
@@ -853,161 +919,98 @@ function OfficeAndMap({
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-function DetailRow({
-  icon: Icon,
-  label,
-  children,
-}: {
-  icon: React.ElementType;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex gap-3">
-      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <Icon className="h-4 w-4" />
-      </span>
-      <div>
-        <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          {label}
-        </div>
-        <div className="mt-1 text-foreground">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-function ServicesAndCoverage({
-  selectedCountry,
-  onSelectCountry,
-}: {
-  selectedCountry: string;
-  onSelectCountry: (country: string) => void;
-}) {
-  const activeDetails = REGIONAL_DETAILS[selectedCountry as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
-
-  return (
-    <section className="bg-surface">
-      <div className="container-page py-14 grid lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-6">
-          <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
-            Services Available From This Office
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {OFFICE_SERVICES.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="rounded border border-border bg-card p-4 flex flex-col items-center text-center hover:border-primary transition"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <div className="mt-3 text-xs font-display font-bold uppercase tracking-wide leading-snug">
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="lg:col-span-6">
-          <h2 className="font-display text-xl font-bold uppercase tracking-wide mb-5">
-            Regional Coverage
-          </h2>
-          <div className="rounded border border-border bg-card p-6 grid md:grid-cols-12 gap-6 min-h-[340px]">
-            {/* Left side: Interactive Country Details Dashboard */}
-            <div className="md:col-span-7 flex flex-col justify-between bg-surface border border-border rounded p-5">
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl animate-bounce-subtle" role="img" aria-label={selectedCountry}>
-                    {activeDetails.flag}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-lg font-bold uppercase tracking-wide leading-none">
-                      {selectedCountry}
-                    </h3>
-                    <span className="inline-block mt-1 px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">
-                      Hub: {activeDetails.code}
+          {/* Regional coverage dashboard card */}
+          <div className="lg:col-span-6">
+            <div className="rounded border border-border bg-card p-6 grid md:grid-cols-12 gap-6 h-full min-h-[450px]">
+              {/* Left side: Interactive Country Details Dashboard */}
+              <div className="md:col-span-7 flex flex-col justify-between bg-surface border border-border rounded p-5">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl animate-bounce-subtle" role="img" aria-label={selectedCountry}>
+                      {activeDetails.flag}
                     </span>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
-                  {activeDetails.description}
-                </p>
-
-                <div className="mt-4 space-y-2 border-t border-border/80 pt-3 text-xs">
-                  <div>
-                    <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
-                      Transit Time
-                    </span>
-                    <span className="text-foreground font-medium">{activeDetails.transit}</span>
-                  </div>
-                  <div>
-                    <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
-                      Logistics Route
-                    </span>
-                    <span className="text-foreground font-medium">{activeDetails.routes}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-border/80">
-                <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-1.5">
-                  Core Capabilities
-                </span>
-                <div className="flex flex-wrap gap-1">
-                  {activeDetails.services.map((svc) => (
-                    <span key={svc} className="text-[10px] bg-card border border-border px-2 py-0.5 rounded font-medium text-foreground/80">
-                      {svc}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right side: Country Selector buttons */}
-            <div className="md:col-span-5 flex flex-col justify-between">
-              <div className="space-y-1.5 max-h-[380px] overflow-y-auto pr-1">
-                <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-2">
-                  Select a Region
-                </span>
-                {REGIONAL_COVERAGE.map((c) => {
-                  const isSelected = c === selectedCountry;
-                  const details = REGIONAL_DETAILS[c as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
-                  return (
-                    <button
-                      key={c}
-                      onClick={() => onSelectCountry(c)}
-                      className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 ${
-                        isSelected
-                          ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
-                          : "bg-card border-border text-foreground hover:border-primary/50"
-                      }`}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span>{details.flag}</span>
-                        <span>{c}</span>
+                    <div>
+                      <h3 className="font-display text-lg font-bold uppercase tracking-wide leading-none">
+                        {selectedCountry}
+                      </h3>
+                      <span className="inline-block mt-1 px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">
+                        Hub: {activeDetails.code}
                       </span>
-                      <CheckCircle2 className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary-foreground" : "text-primary opacity-60"}`} />
-                    </button>
-                  );
-                })}
+                    </div>
+                  </div>
+
+                  <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+                    {activeDetails.description}
+                  </p>
+
+                  <div className="mt-4 space-y-2 border-t border-border/80 pt-3 text-xs">
+                    <div>
+                      <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
+                        Transit Time
+                      </span>
+                      <span className="text-foreground font-medium">{activeDetails.transit}</span>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide">
+                        Logistics Route
+                      </span>
+                      <span className="text-foreground font-medium">{activeDetails.routes}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-border/80">
+                  <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-1.5">
+                    Core Capabilities
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {activeDetails.services.map((svc) => (
+                      <span key={svc} className="text-[10px] bg-card border border-border px-2 py-0.5 rounded font-medium text-foreground/80">
+                        {svc}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <div className="mt-4 pt-3">
-                <a
-                  href="#boq-form"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded border border-primary text-primary px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                >
-                  Request Regional Quote <ChevronRight className="h-3.5 w-3.5" />
-                </a>
+              {/* Right side: Country Selector buttons */}
+              <div className="md:col-span-5 flex flex-col justify-between">
+                <div className="space-y-1.5 max-h-[340px] overflow-y-auto pr-1">
+                  <span className="font-semibold text-muted-foreground uppercase text-[10px] block tracking-wide mb-2">
+                    Select a Region
+                  </span>
+                  {REGIONAL_COVERAGE.map((c) => {
+                    const isSelected = c === selectedCountry;
+                    const details = REGIONAL_DETAILS[c as keyof typeof REGIONAL_DETAILS] || REGIONAL_DETAILS["South Africa"];
+                    return (
+                      <button
+                        key={c}
+                        onClick={() => onSelectCountry(c)}
+                        className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
+                            : "bg-card border-border text-foreground hover:border-primary/50"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span>{details.flag}</span>
+                          <span>{c}</span>
+                        </span>
+                        <CheckCircle2 className={`h-4 w-4 shrink-0 ${isSelected ? "text-primary-foreground" : "text-primary opacity-60"}`} />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 pt-3">
+                  <a
+                    href="#boq-form"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded border border-primary text-primary px-4 py-2 text-xs font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+                  >
+                    Request Regional Quote <ChevronRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
