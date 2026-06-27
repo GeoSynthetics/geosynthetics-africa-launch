@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category.$family";
 import {
   ChevronRight,
@@ -8,8 +8,6 @@ import {
   FileText,
   BookOpen,
   ArrowRight,
-  Check,
-  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -117,6 +115,11 @@ const mockData = {
       location: "Windhoek, Namibia",
       image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&q=80",
     },
+  ],
+  industries: [
+    { label: "Mining", slug: "mining" },
+    { label: "Water Management", slug: "water-management" },
+    { label: "Construction & Infrastructure", slug: "construction-infrastructure" },
   ],
   applications: [
     "Mining (Heap Leach Pads, Tailings Impoundments)",
@@ -246,7 +249,7 @@ function mapFamilyData(
 
 export function ProductFamilyPage() {
   const { category, family, familyData, dynamicCaseStudies } = Route.useLoaderData();
-  const location = useLocation();
+
 
   const data = (
     familyData ? mapFamilyData(familyData, category, family, dynamicCaseStudies) : mockData

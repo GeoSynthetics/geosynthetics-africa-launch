@@ -129,37 +129,6 @@ export type AllApplicationTemplates = Record<string, ApplicationTemplate>;
 
 const SUPABASE_KEY = "template_applications";
 
-// List of common Lucide icons that make sense in this technical context
-const COMMON_ICONS = [
-  "Droplets",
-  "Wind",
-  "Shield",
-  "Leaf",
-  "Pickaxe",
-  "Construction",
-  "Wrench",
-  "Layers",
-  "Gauge",
-  "HardHat",
-  "Settings",
-  "ClipboardCheck",
-  "Activity",
-  "FileText",
-  "CheckCircle2",
-  "Sprout",
-  "Trash2",
-  "Waves",
-  "Grid3x3",
-  "Grid2x2",
-  "Hexagon",
-  "Mountain",
-  "Truck",
-  "Ship",
-  "LifeBuoy",
-  "Zap",
-  "Building2",
-];
-
 // ─── Blank template factory ───────────────────────────────────────────────────
 
 function blankTemplate(): ApplicationTemplate {

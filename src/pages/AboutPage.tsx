@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
+
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
-import { ShieldCheck, Truck, Cog, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { ShieldCheck, Truck, Cog, MapPin, Phone, Clock } from "lucide-react";
 
 export function AboutPage() {
   return (

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ProductFamilyPage } from "@/pages/ProductFamilyPage";
 import { supabase } from "@/integrations/supabase/client";
@@ -103,7 +103,7 @@ function ProductFamilySkeleton() {
             "Applications & Industries",
             "Projects",
             "FAQs",
-          ].map((label, i) => (
+          ].map((_, i) => (
             <Skeleton key={i} className="h-4 w-24 shrink-0" />
           ))}
         </div>

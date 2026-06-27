@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Upload,
+
   CloudUpload,
   Copy,
   Check,
@@ -79,7 +79,7 @@ export function MediaCenterPage() {
     setLoading(true);
     try {
       // 1. Try to list from the 'media-center' bucket
-      const { data, error } = await supabase.storage.from("media-center").list("", {
+      const { error } = await supabase.storage.from("media-center").list("", {
         limit: 1,
       });
 
@@ -110,7 +110,7 @@ export function MediaCenterPage() {
 
         if (createError) {
           console.warn("Programmatic bucket creation restricted/failed:", createError.message);
-          console.log(
+          console.info(
             "Using 'product-images' bucket inside 'media-center/' folder as a zero-fail fallback.",
           );
           setFallbackMode(true);

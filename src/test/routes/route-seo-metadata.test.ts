@@ -15,7 +15,7 @@ vi.mock("@/pages/ProductFamilyPage", () => ({
 describe("Route SEO Metadata generation", () => {
   describe("Category Index Route metadata", () => {
     it("should generate default meta tags when loaderData is empty", () => {
-      const headResult = CategoryRoute.options.head!({ loaderData: undefined } as any);
+      const headResult = (CategoryRoute.options.head as any)({ loaderData: undefined });
       expect(headResult).toBeDefined();
       expect(headResult.meta).toBeDefined();
       expect(headResult.meta).toContainEqual({ title: "Products — Geosynthetics Africa" });
@@ -34,7 +34,7 @@ describe("Route SEO Metadata generation", () => {
         },
       };
 
-      const headResult = CategoryRoute.options.head!({ loaderData: mockLoaderData } as any);
+      const headResult = (CategoryRoute.options.head as any)({ loaderData: mockLoaderData });
       expect(headResult).toBeDefined();
       expect(headResult.meta).toBeDefined();
       expect(headResult.meta).toContainEqual({ title: "Custom Title" });
@@ -60,7 +60,7 @@ describe("Route SEO Metadata generation", () => {
         },
       };
 
-      const headResult = CategoryRoute.options.head!({ loaderData: mockLoaderData } as any);
+      const headResult = (CategoryRoute.options.head as any)({ loaderData: mockLoaderData });
       expect(headResult.meta).not.toContainEqual(expect.objectContaining({ name: "keywords" }));
     });
   });
@@ -76,7 +76,7 @@ describe("Route SEO Metadata generation", () => {
         },
       };
 
-      const headResult = FamilyRoute.options.head!({ loaderData: mockLoaderData } as any);
+      const headResult = (FamilyRoute.options.head as any)({ loaderData: mockLoaderData });
       expect(headResult).toBeDefined();
       expect(headResult.meta).toContainEqual({
         title: "Hdpe Geomembranes | Geomembranes — Geosynthetics Africa",
@@ -98,7 +98,7 @@ describe("Route SEO Metadata generation", () => {
         },
       };
 
-      const headResult = FamilyRoute.options.head!({ loaderData: mockLoaderData } as any);
+      const headResult = (FamilyRoute.options.head as any)({ loaderData: mockLoaderData });
       expect(headResult.meta).toContainEqual({ title: "HDPE Liners - Premium Quality" });
       expect(headResult.meta).toContainEqual({
         name: "keywords",

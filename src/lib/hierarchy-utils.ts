@@ -1,4 +1,4 @@
-import type { HierarchySection, HierarchyItem, MegaContent } from "@/types/hierarchy";
+import type { HierarchySection, HierarchyItem } from "@/types/hierarchy";
 import type { MegaMenuConfig } from "@/components/site/mega-menu-data";
 
 /**

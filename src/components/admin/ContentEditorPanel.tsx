@@ -19,10 +19,8 @@ import {
   FAQEditor,
   PropertiesTableEditor,
   PairsEditor,
-  QuickActionsEditor,
   SectionsEditor,
 } from "./TemplateEditorShared";
-import { ProductSelector } from "./ProductSelector";
 import { IconPicker } from "./IconPicker";
 import { ImagePicker } from "./ImagePicker";
 import { useSlugSync } from "@/hooks/use-slug-sync";
@@ -160,18 +158,6 @@ export function ContentEditorPanel({
 
   const [templates, setTemplates] = useState<Record<string, any>>({});
   const [loadingTemplates, setLoadingTemplates] = useState(false);
-  const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const { data: dbProds } = await supabase
-        .from("products")
-        .select("id, name, slug")
-        .order("name");
-      if (dbProds) setAllProducts(dbProds);
-    }
-    fetchProducts();
-  }, []);
 
   useEffect(() => {
     async function loadTemplates() {

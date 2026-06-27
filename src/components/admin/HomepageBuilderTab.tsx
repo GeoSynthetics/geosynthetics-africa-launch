@@ -15,13 +15,8 @@ import {
   CheckCircle2,
   GripVertical,
   Home,
-  Upload,
-  Copy,
-  Check,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { compressImage } from "@/lib/image-utils";
 import { SectionHeading, FieldLabel } from "./TemplateEditorShared";
 import {
   type HomepageContent,
@@ -34,32 +29,11 @@ import {
   type OfficeLocation,
   type ProjectCard,
   type GsaStep,
-  type GsaDifference,
 } from "@/types/homepage";
 
 const SUPABASE_KEY = "homepage_content";
 
 // ─── Reusable sub-components ─────────────────────────────────────────────────
-
-function FormField({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  const id = useId();
-  return (
-    <div>
-      <FieldLabel htmlFor={id} hint={hint}>
-        {label}
-      </FieldLabel>
-      <div id={id}>{children}</div>
-    </div>
-  );
-}
 
 function ImageUploadField({
   label,

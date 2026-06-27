@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { ProductSelector, type ProductData } from "./ProductSelector";
+import { ProductSelector } from "./ProductSelector";
 import { useSlugSync } from "@/hooks/use-slug-sync";
 import { ImagePicker } from "./ImagePicker";
 import {
@@ -39,7 +39,6 @@ import {
   MicroLabel,
   EmptyState,
   AddItemButton,
-  ListEditorHeader,
 } from "./TemplateEditorShared";
 
 // Reusable Sub-components for Form Layouts
@@ -134,8 +133,9 @@ export function ProjectsTemplatesEditor() {
         ...defaultLandingContent(),
         ...landingContent,
         seo: {
-          ...defaultLandingContent().seo,
-          ...(landingContent?.seo || {}),
+          title: landingContent?.seo?.title || defaultLandingContent().seo?.title || "",
+          description: landingContent?.seo?.description || defaultLandingContent().seo?.description || "",
+          keywords: landingContent?.seo?.keywords || defaultLandingContent().seo?.keywords || "",
         },
       });
       setDirty(false);
@@ -164,7 +164,9 @@ export function ProjectsTemplatesEditor() {
     setEditingLanding((prev) => ({
       ...prev,
       seo: {
-        ...prev.seo,
+        title: prev.seo?.title || defaultLandingContent().seo?.title || "",
+        description: prev.seo?.description || defaultLandingContent().seo?.description || "",
+        keywords: prev.seo?.keywords || defaultLandingContent().seo?.keywords || "",
         [key]: value,
       },
     }));

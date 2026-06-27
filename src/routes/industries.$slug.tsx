@@ -259,7 +259,8 @@ export const Route = createFileRoute("/industries/$slug")({
   ssr: false,
   beforeLoad: ({ params }) => {
     throw redirect({
-      to: `/${params.slug}`,
+      to: "/$slug",
+      params: { slug: params.slug },
       statusCode: 301,
     });
   },

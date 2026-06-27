@@ -109,7 +109,7 @@ describe("Dynamic Route Loaders", () => {
 
   describe("applications.$category loader", () => {
     it("should fallback to default values when no template or hierarchy matches", async () => {
-      const result = await ApplicationsRoute.options.loader!({
+      const result = await (ApplicationsRoute.options.loader as any)({
         params: { category: "non-existent-category" },
       } as any);
 
@@ -129,7 +129,7 @@ describe("Dynamic Route Loaders", () => {
         },
       };
 
-      const result = await ApplicationsRoute.options.loader!({
+      const result = await (ApplicationsRoute.options.loader as any)({
         params: { category: "mining-systems" },
       } as any);
 
@@ -157,7 +157,7 @@ describe("Dynamic Route Loaders", () => {
         },
       };
 
-      const result = await ApplicationsRoute.options.loader!({
+      const result = await (ApplicationsRoute.options.loader as any)({
         params: { category: "tailings-storage-facility-lining" },
       } as any);
 
@@ -197,7 +197,7 @@ describe("Dynamic Route Loaders", () => {
         },
       };
 
-      const result = await ApplicationsRoute.options.loader!({
+      const result = await (ApplicationsRoute.options.loader as any)({
         params: { category: "tailings-storage-facility-lining" },
       } as any);
 
@@ -230,7 +230,7 @@ describe("Dynamic Route Loaders", () => {
         },
       };
 
-      const result = await ServicesRoute.options.loader!({
+      const result = await (ServicesRoute.options.loader as any)({
         params: { slug: "custom-supply-slug" },
       } as any);
 
@@ -269,7 +269,7 @@ describe("Dynamic Route Loaders", () => {
         },
       ];
 
-      const result = await IndustriesRoute.options.loader!({
+      const result = await (IndustriesRoute.options.loader as any)({
         params: { slug: "custom-mining-slug" },
       } as any);
 

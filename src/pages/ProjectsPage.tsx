@@ -4,7 +4,7 @@ import { Route } from "@/routes/projects.index";
 import { MapPin, ChevronRight, Grid, List, ArrowUpDown, ArrowRight } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
-import { Button } from "@/components/ui/button";
+
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
@@ -69,7 +69,7 @@ export function ProjectsPage() {
     result.sort((a, b) => {
       if (sortOption === "scale") {
         const getNum = (str: string) => parseInt((str || "").replace(/[^0-9]/g, "")) || 0;
-        return getNum(b.scale) - getNum(a.scale);
+        return getNum(b.scale || "") - getNum(a.scale || "");
       }
       if (sortOption === "country") {
         return (a.country || "").localeCompare(b.country || "");

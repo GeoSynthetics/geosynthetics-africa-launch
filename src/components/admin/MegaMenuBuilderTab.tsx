@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Select,
@@ -20,12 +20,8 @@ import {
   Trash2,
   ArrowUp,
   ArrowDown,
-  ChevronRight,
   Sparkles,
-  Link as LinkIcon,
-  HelpCircle,
   LayoutGrid,
-  Image as ImageIcon,
   Compass,
   Zap,
   CheckCircle2,
@@ -42,7 +38,6 @@ import type {
   HierarchySection,
   HierarchyItem,
   HierarchyChild,
-  MegaContent,
   QuickAction,
   FeaturedProduct,
   FeaturedImage,

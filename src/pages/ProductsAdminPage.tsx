@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { Button } from "@/components/ui/button";
@@ -43,16 +43,9 @@ import {
   Loader2,
   ArrowUp,
   ArrowDown,
-  Layers,
   ArrowLeftRight,
   Puzzle,
   FileText,
-  ShieldCheck,
-  Sun,
-  Wrench,
-  Sparkles,
-  Droplets,
-  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { compressImage } from "@/lib/image-utils";

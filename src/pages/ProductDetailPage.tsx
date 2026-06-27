@@ -23,8 +23,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";

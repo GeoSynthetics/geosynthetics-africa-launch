@@ -355,7 +355,7 @@ export function PairsEditor<T extends Record<string, string>>({
                       onSelect={(project) => {
                         const n = [...items];
                         const updatedItem = { ...n[i] };
-                        updatedItem[f.key] = project.slug;
+                        (updatedItem as any)[f.key] = project.slug;
 
                         // Auto-fill other fields if present in the item definition:
                         if ("name" in updatedItem) {
@@ -381,7 +381,7 @@ export function PairsEditor<T extends Record<string, string>>({
                       onSelect={(product) => {
                         const n = [...items];
                         const updatedItem = { ...n[i] };
-                        updatedItem[f.key] = product.slug;
+                        (updatedItem as any)[f.key] = product.slug;
 
                         // Auto-fill other fields if present in the item definition:
                         if ("name" in updatedItem) {

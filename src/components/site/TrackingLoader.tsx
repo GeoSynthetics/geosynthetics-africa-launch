@@ -14,9 +14,7 @@ interface TrackingConfig {
 
 export function TrackingLoader() {
   const [config, setConfig] = useState<TrackingConfig | null>(null);
-  const [preferences, setPreferences] = useState<CookiePreferences | null>(null);
-
-  // 1. Load tracking configuration from Supabase on mount
+  // Load tracking configuration from Supabase on mount
   useEffect(() => {
     async function loadConfig() {
       try {
@@ -38,34 +36,6 @@ export function TrackingLoader() {
 
     loadConfig();
   }, []);
-
-  // 2. Load cookie preferences from localStorage and listen to updates
-  useEffect(() => {
-    function loadPreferences() {
-      try {
-        const stored = localStorage.getItem("gsa-cookie-preferences");
-        if (stored) {
-          setPreferences(JSON.parse(stored) as CookiePreferences);
-        } else {
-          setPreferences(null);
-        }
-      } catch (err) {
-        console.error("Error parsing cookie preferences:", err);
-        setPreferences(null);
-      }
-    }
-
-    // Initial load
-    loadPreferences();
-
-    // Listen to changes dispatched by the CookieConsent component
-    window.addEventListener("gsa-cookie-preferences-changed", loadPreferences);
-
-    return () => {
-      window.removeEventListener("gsa-cookie-preferences-changed", loadPreferences);
-    };
-  }, []);
-
   // 3. Inject scripts based on config (always load GA4 & GTM for direct verification and crawler tag compatibility)
   useEffect(() => {
     if (!config) return;

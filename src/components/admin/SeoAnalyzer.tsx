@@ -52,14 +52,6 @@ const STOP = new Set([
   "our",
 ]);
 
-function tokenize(s: string): string[] {
-  return s
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, " ")
-    .split(/\s+/)
-    .filter((w) => w && !STOP.has(w));
-}
-
 function primaryKeyword(keywords: string | null | undefined): string {
   const first =
     (keywords ?? "")

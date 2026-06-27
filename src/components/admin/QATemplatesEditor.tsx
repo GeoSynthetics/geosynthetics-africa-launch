@@ -20,8 +20,7 @@ import {
   TemplatesEditorSkeleton,
 } from "./TemplateEditorShared";
 import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -33,10 +32,8 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import {
   Plus,
-  Pencil,
   Trash2,
   Search,
-  Eye,
   Save,
   Loader2,
   ChevronRight,

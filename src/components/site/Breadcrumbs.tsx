@@ -70,7 +70,7 @@ export function Breadcrumbs({ items, variant = "default", className }: Breadcrum
             ) : (
               <Link
                 to={item.to as any}
-                params={item.params}
+                params={item.params as any}
                 search={item.search}
                 className={linkClasses}
               >

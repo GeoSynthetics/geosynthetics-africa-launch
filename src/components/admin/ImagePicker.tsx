@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { compressImage } from "@/lib/image-utils";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,9 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Upload,
   CloudUpload,
   Search,
   ArrowUpDown,
@@ -77,7 +76,7 @@ export function ImagePicker({
   const initializeBuckets = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.storage.from("media-center").list("", {
+      const { error } = await supabase.storage.from("media-center").list("", {
         limit: 1,
       });
 

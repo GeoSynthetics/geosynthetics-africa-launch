@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Link,
@@ -9,7 +9,7 @@ import {
   useMatches,
 } from "@tanstack/react-router";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
-import { Menu, Upload, X, User as UserIcon, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
+import { Menu, Upload } from "lucide-react";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { useTranslation } from "react-i18next";
 import {
@@ -35,7 +35,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/hooks/use-auth";
+
 import { Logo } from "./Logo";
 import { TopBar } from "./TopBar";
 import { MegaPanel, megaMenus } from "./MegaMenu";

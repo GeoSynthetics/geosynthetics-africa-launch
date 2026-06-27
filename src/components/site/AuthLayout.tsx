@@ -1,17 +1,10 @@
 import { type ReactNode } from "react";
-import { Shield, Award, CheckCircle } from "lucide-react";
 import authHero from "@/assets/auth-hero.png";
 
 interface AuthLayoutProps {
   /** Content rendered inside the right-hand form panel */
   children: ReactNode;
 }
-
-const TRUST_BADGES = [
-  { icon: Shield, label: "IAGI Member" },
-  { icon: Award, label: "B-BBEE Level 2" },
-  { icon: CheckCircle, label: "GA/QC Certified" },
-] as const;
 
 /**
  * Split-panel auth layout shared by login and signup pages.

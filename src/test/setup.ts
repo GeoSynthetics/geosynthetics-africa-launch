@@ -20,7 +20,7 @@ if (typeof globalThis.document === "undefined") {
 
 // Mock IntersectionObserver globally for tests
 class MockIntersectionObserver {
-  readonly root: Element | null = null;
+  readonly root: Element | Document | null = null;
   readonly rootMargin: string = "";
   readonly thresholds: ReadonlyArray<number> = [];
 

@@ -5,7 +5,6 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Route } from "@/routes/services.$slug";
-import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // Interface Definitions for Type Safety
@@ -199,12 +198,7 @@ export function ServicePage({ data }: { data?: any } = {}) {
       ? templateData.downloads
       : [{ label: "Geosynthetics Africa Service Capability Statement", url: "/resources" }];
 
-  // Helpers
-  const renderIcon = (iconName: string) => {
-    const IconComp = (Icons as any)[iconName];
-    if (IconComp) return <IconComp className="h-5 w-5 text-primary shrink-0" />;
-    return <Icons.CheckCircle2 className="h-5 w-5 text-primary shrink-0" />;
-  };
+
 
   return (
     <div className="bg-background">
@@ -264,7 +258,7 @@ export function ServicePage({ data }: { data?: any } = {}) {
               Service Overview
             </h2>
             <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed space-y-4 font-sans">
-              {overviewParagraphs.map((para, idx) => (
+              {overviewParagraphs.map((para: string, idx: number) => (
                 <p key={idx}>{para}</p>
               ))}
             </div>
@@ -337,7 +331,7 @@ export function ServicePage({ data }: { data?: any } = {}) {
               <div className="md:col-span-7 space-y-4">
                 <p className="text-sm text-muted-foreground leading-relaxed">{coverageText}</p>
                 <ul className="space-y-3">
-                  {coverageBullets.map((bullet, idx) => (
+                  {coverageBullets.map((bullet: string, idx: number) => (
                     <li
                       key={idx}
                       className="flex gap-2.5 items-start text-xs text-muted-foreground leading-relaxed"

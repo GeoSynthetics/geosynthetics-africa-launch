@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Download, ExternalLink, Search, ArrowRight, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
-import { RESOURCE_CATEGORIES, VIDEO_HOST_RE, getCategory } from "@/lib/resource-categories";
+import { VIDEO_HOST_RE, getCategory } from "@/lib/resource-categories";
 
 export const Route = createFileRoute("/resources/$category/")({
   beforeLoad: ({ params }) => {

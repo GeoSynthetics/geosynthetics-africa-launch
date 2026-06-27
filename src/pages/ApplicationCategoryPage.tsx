@@ -37,7 +37,7 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
     templateData?.heroImage ||
     "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-  const quoteLink = templateData?.quoteLink || "#quote";
+
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
   const downloadGuideUrl = templateData?.downloadGuideUrl || "";
 
@@ -263,7 +263,7 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
               System Overview
             </h2>
             <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed space-y-4">
-              {overviewParagraphs.map((para, idx) => (
+              {overviewParagraphs.map((para: string, idx: number) => (
                 <p key={idx}>{para}</p>
               ))}
             </div>
@@ -331,7 +331,7 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 {designTitle}
               </h2>
               <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed space-y-4">
-                {designParagraphs.map((para, idx) => (
+                {designParagraphs.map((para: string, idx: number) => (
                   <p key={idx}>{para}</p>
                 ))}
               </div>
@@ -346,7 +346,7 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
                 {installationTitle}
               </h2>
               <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed space-y-4">
-                {installationParagraphs.map((para, idx) => (
+                {installationParagraphs.map((para: string, idx: number) => (
                   <p key={idx}>{para}</p>
                 ))}
               </div>

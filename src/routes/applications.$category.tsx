@@ -222,7 +222,7 @@ export function ApplicationCategorySkeleton() {
             "Products Used",
             "Case Studies",
             "Downloads",
-          ].map((label, i) => (
+          ].map((_, i) => (
             <Skeleton key={i} className="h-4 w-20 shrink-0" />
           ))}
         </div>
@@ -307,7 +307,8 @@ export const Route = createFileRoute("/applications/$category")({
   ssr: false,
   beforeLoad: ({ params }) => {
     throw redirect({
-      to: `/${params.category}`,
+      to: "/$slug",
+      params: { slug: params.category },
       statusCode: 301,
     });
   },
