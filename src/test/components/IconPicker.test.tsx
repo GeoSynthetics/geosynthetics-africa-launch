@@ -2,7 +2,6 @@ import "../setup";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { IconPicker } from "@/components/admin/IconPicker";
-import * as React from "react";
 
 describe("IconPicker Component", () => {
   it("renders trigger button with placeholder when no value is provided", () => {

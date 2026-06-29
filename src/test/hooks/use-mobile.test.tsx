@@ -63,7 +63,7 @@ describe("useIsMobile hook", () => {
   it("should update isMobile state when the media query listener fires", () => {
     (window as any).innerWidth = 1024;
     let changeHandler: any = null;
-    addEventListenerMock.mockImplementation((event: string, handler: any) => {
+    addEventListenerMock.mockImplementation((_event: string, handler: any) => {
       changeHandler = handler;
     });
 

@@ -968,7 +968,7 @@ export function IndustriesTemplatesEditor() {
                               ...(active.topSellingProductId ? [active.topSellingProductId] : []),
                             ]}
                             onSelect={(prod) => {
-                              let currentIds = [...(active.topSellingProductIds ?? [])];
+                              const currentIds = [...(active.topSellingProductIds ?? [])];
                               if (active.topSellingProductId && currentIds.length === 0) {
                                 currentIds.push(active.topSellingProductId);
                               }
@@ -1027,7 +1027,7 @@ export function IndustriesTemplatesEditor() {
                           <ProductSelector
                             excludeIds={active.keyProducts ?? []}
                             onSelect={(prod) => {
-                              let currentIds = active.keyProducts ?? [];
+                              const currentIds = active.keyProducts ?? [];
                               setField("keyProducts", [...currentIds, prod.id]);
                             }}
                           />

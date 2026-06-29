@@ -170,7 +170,10 @@ export function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
-              {t("footer.desc", "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.")}
+              {t(
+                "footer.desc",
+                "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
+              )}
             </p>
             <div className="mt-5 flex items-center gap-2">
               {SOCIAL_LINKS.map(({ Icon, label, href }) => (
@@ -210,7 +213,10 @@ export function Footer() {
               {t("footer.newsletterTitle", "Newsletter")}
             </h4>
             <p className="text-xs text-surface-dark-foreground/60 leading-relaxed mb-3">
-              {t("footer.newsletterDesc", "Subscribe to our newsletter for latest updates and insights.")}
+              {t(
+                "footer.newsletterDesc",
+                "Subscribe to our newsletter for latest updates and insights.",
+              )}
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
               <input
@@ -236,7 +242,11 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            {t("footer.copyright", "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.", { year: new Date().getFullYear() })}{" "}
+            {t(
+              "footer.copyright",
+              "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
+              { year: new Date().getFullYear() },
+            )}{" "}
             <span className="hidden md:inline">|</span>
             <br className="md:hidden" />{" "}
             <a

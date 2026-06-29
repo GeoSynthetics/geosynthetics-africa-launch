@@ -141,7 +141,7 @@ export function QuoteCard({
         "user_id",
         "contact_phone",
       ];
-      let payload = { ...basePayload };
+      const payload = { ...basePayload };
       let lastError: { message: string } | null = null;
       for (let attempt = 0; attempt < optionalKeys.length + 1; attempt += 1) {
         const { error } = await supabase.from("quote_requests").insert(payload);

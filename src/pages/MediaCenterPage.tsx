@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-
   CloudUpload,
   Copy,
   Check,
@@ -340,7 +339,9 @@ export function MediaCenterPage() {
         if (lastPart && lastPart.includes(".")) {
           fileName = lastPart;
         }
-      } catch {}
+      } catch {
+        // ignore invalid URL parsing errors and use default filename
+      }
 
       // Convert Blob to a File
       const file = new File([blobData], fileName, { type: blobData.type });

@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
-import { Route } from "@/routes/industries.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
-export function IndustryPage({ data }: { data?: any } = {}) {
-  const loaderData = data ? data : Route.useLoaderData();
+export function IndustryPage({ data }: { data: any }) {
+  const loaderData = data;
   const { industry, templateData, caseStudies = [], keyProducts = [] } = loaderData;
 
   const title = templateData?.title || industry.label;

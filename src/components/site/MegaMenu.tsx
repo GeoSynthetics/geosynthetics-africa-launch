@@ -14,14 +14,7 @@ function closeMenus() {
   }
 }
 import { useQuickQuote } from "@/hooks/use-quick-quote";
-import {
-  ChevronRight,
-  BookOpen,
-  Wrench,
-  Package,
-  Globe,
-  ShieldCheck,
-} from "lucide-react";
+import { ChevronRight, BookOpen, Wrench, Package, Globe, ShieldCheck } from "lucide-react";
 import {
   megaMenus,
   type MegaMenuConfig,

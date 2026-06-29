@@ -336,7 +336,7 @@ export const Route = createFileRoute("/applications/$category")({
       ],
     };
   },
-  component: ApplicationCategoryPage,
+  component: ApplicationCategoryRoute,
   errorComponent: ({ error }) => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-2xl font-bold uppercase">Something went wrong</h1>
@@ -353,3 +353,8 @@ export const Route = createFileRoute("/applications/$category")({
     </div>
   ),
 });
+
+function ApplicationCategoryRoute() {
+  const data = Route.useLoaderData();
+  return <ApplicationCategoryPage data={data} />;
+}

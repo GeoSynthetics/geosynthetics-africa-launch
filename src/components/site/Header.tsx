@@ -27,14 +27,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { Logo } from "./Logo";
 import { TopBar } from "./TopBar";
@@ -373,7 +365,9 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                           onClick={() => setOpen(false)}
                           className="block py-3 text-sm font-semibold text-primary"
                         >
-                          {t("nav.allCategory", "All {{category}} →", { category: t(`nav.${m.key}`, m.label) })}
+                          {t("nav.allCategory", "All {{category}} →", {
+                            category: t(`nav.${m.key}`, m.label),
+                          })}
                         </RLink>
                       </li>
                       {isLoading ? (

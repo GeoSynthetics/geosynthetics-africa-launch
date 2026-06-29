@@ -51,7 +51,7 @@ vi.mock("@/integrations/supabase/client", () => {
       return this;
     }
 
-    order(col: string, options?: any) {
+    order(_col: string, _options?: any) {
       return this;
     }
 

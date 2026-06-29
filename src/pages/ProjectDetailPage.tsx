@@ -16,7 +16,6 @@ import {
   Compass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { QuoteCard } from "@/components/site/QuoteCard";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";

@@ -10,14 +10,7 @@ import {
   Building2,
   User,
   Clock,
-  Target,
-  ShieldCheck,
-  Truck,
-  Layers,
-  HardHat,
-  Waves,
   ClipboardCheck,
-  Wrench,
   ChevronRight,
   CheckCircle2,
   MessageCircle,
@@ -25,7 +18,6 @@ import {
   AppWindow,
   FileText,
   BookOpen,
-  Image as ImageIcon,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { Input } from "@/components/ui/input";
@@ -275,32 +267,7 @@ const DEFAULT_REGIONAL_COVERAGE = [
   },
 ];
 
-const CASE_STUDIES = [
-  {
-    name: "Danielskuil Reservoir",
-    location: "North West, South Africa",
-    description: "2.0mm HDPE liner with QA testing and installation.",
-    image:
-      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80&auto=format&fit=crop",
-    slug: "",
-  },
-  {
-    name: "Samancor PCD Lining",
-    location: "Northern Cape, South Africa",
-    description: "HDPE liner installation for PCD facility.",
-    image:
-      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80&auto=format&fit=crop",
-    slug: "",
-  },
-  {
-    name: "Sekhukhune Works",
-    location: "Limpopo, South Africa",
-    description: "HDPE liner and geotextile installation.",
-    image:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&q=80&auto=format&fit=crop",
-    slug: "",
-  },
-];
+import { mockContactsCaseStudies as CASE_STUDIES } from "@/mocks/contactsMocks";
 
 const RESOURCE_STRIP = [
   { icon: Package, title: "VIEW PRODUCTS", subtitle: "Explore our range", to: "/products" },
@@ -324,11 +291,6 @@ const RESOURCE_STRIP = [
   },
   { icon: BookOpen, title: "RESOURCES", subtitle: "Technical library", to: "/resources" },
 ];
-
-const MAP_EMBED =
-  "https://www.google.com/maps?q=7+Tamar+Avenue,+Lea+Glen,+Randburg,+Johannesburg&output=embed";
-const MAP_LINK =
-  "https://www.google.com/maps/search/?api=1&query=7+Tamar+Avenue+Lea+Glen+Randburg+Johannesburg";
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_EXT = [".pdf", ".xls", ".xlsx", ".csv", ".dwg", ".dxf", ".doc", ".docx", ".zip"];
@@ -452,7 +414,6 @@ function RegionalMap({
       marker.on("click", () => {
         onSelectCountry(loc.country);
       });
-
     });
 
     return () => {

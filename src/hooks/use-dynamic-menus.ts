@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  megaMenus,
-  type MegaMenuConfig,
-  type MegaProductItem,
-  type MegaFeatureItem,
-} from "@/components/site/mega-menu-data";
+import { megaMenus, type MegaMenuConfig } from "@/components/site/mega-menu-data";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
 
 // Module-level in-memory cache to keep data across route transitions / remounts
@@ -171,7 +166,7 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
         }
       }
 
-      let productMap = new Map<string, { image_url: string | null; category_slug: string }>();
+      const productMap = new Map<string, { image_url: string | null; category_slug: string }>();
       if (slugsToHydrate.size > 0) {
         const { data: productData } = await supabase
           .from("products_public")

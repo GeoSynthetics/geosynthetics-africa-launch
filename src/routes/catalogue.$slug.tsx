@@ -77,12 +77,15 @@ const PRODUCT_SELECT =
 
 async function loadProduct(slug: string) {
   // Try the rich select first; if columns don't exist yet, fall back to a minimal select.
-  let { data, error } = await supabase
+  const result = await supabase
     .from("products_public")
     .select(PRODUCT_SELECT)
     .eq("slug", slug)
     .eq("is_active", true)
     .maybeSingle();
+
+  let data = result.data;
+  const error = result.error;
 
   if (error && /column .* does not exist/i.test(error.message)) {
     const fallback = await supabase

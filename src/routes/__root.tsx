@@ -1,10 +1,4 @@
-import {
-  Outlet,
-  Link,
-  createRootRoute,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -30,9 +24,7 @@ function NotFoundComponent() {
         <h2 className="mt-4 font-display text-2xl font-bold uppercase tracking-tight">
           {t("common.notFound")}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("common.notFoundDesc")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("common.notFoundDesc")}</p>
         <div className="mt-6">
           <Link
             to="/"

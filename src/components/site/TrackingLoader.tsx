@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface CookiePreferences {
-  necessary: boolean;
-  analytics: boolean;
-  marketing: boolean;
-}
-
 interface TrackingConfig {
   googleAnalyticsId?: string;
   googleTagManagerId?: string;

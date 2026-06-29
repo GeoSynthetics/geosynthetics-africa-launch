@@ -24,34 +24,6 @@ interface Check {
   hint?: string;
 }
 
-const STOP = new Set([
-  "the",
-  "a",
-  "an",
-  "and",
-  "or",
-  "of",
-  "for",
-  "to",
-  "in",
-  "on",
-  "with",
-  "by",
-  "is",
-  "are",
-  "at",
-  "from",
-  "as",
-  "be",
-  "this",
-  "that",
-  "it",
-  "its",
-  "your",
-  "you",
-  "our",
-]);
-
 function primaryKeyword(keywords: string | null | undefined): string {
   const first =
     (keywords ?? "")

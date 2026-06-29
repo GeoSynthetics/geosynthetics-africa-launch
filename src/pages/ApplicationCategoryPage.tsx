@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
-import { Route } from "@/routes/applications.$category";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
@@ -18,8 +17,8 @@ function IconRenderer({ name, className }: { name: string; className?: string })
   return <IconComponent className={className} />;
 }
 
-export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
-  const loaderData = data ? data : Route.useLoaderData();
+export function ApplicationCategoryPage({ data }: { data: any }) {
+  const loaderData = data;
   const {
     category,
     templateData,
@@ -36,7 +35,6 @@ export function ApplicationCategoryPage({ data }: { data?: any } = {}) {
   const heroImage =
     templateData?.heroImage ||
     "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
-
 
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
   const downloadGuideUrl = templateData?.downloadGuideUrl || "";

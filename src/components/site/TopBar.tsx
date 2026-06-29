@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   Award,
   ShieldCheck,
-  Globe,
   Truck,
   ChevronDown,
   User as UserIcon,

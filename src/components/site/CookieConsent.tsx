@@ -190,7 +190,10 @@ export function CookieConsent() {
                     Cookie Preferences Notice
                   </h4>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-4xl">
-                    {t("cookies.message", "We use cookies to improve your experience on our website.")}
+                    {t(
+                      "cookies.message",
+                      "We use cookies to improve your experience on our website.",
+                    )}
                   </p>
                 </div>
               </div>

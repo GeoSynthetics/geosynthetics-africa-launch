@@ -1,15 +1,11 @@
 import "../setup";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
-import { AuthProvider, useAuth, type AppRole } from "@/hooks/use-auth";
+import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => {
-  const mockSubscription = {
-    unsubscribe: vi.fn(),
-  };
-
   const mockAuth = {
     onAuthStateChange: vi.fn(),
     getSession: vi.fn(),

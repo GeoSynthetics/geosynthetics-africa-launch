@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
-import { Route } from "@/routes/services.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 // Interface Definitions for Type Safety
@@ -35,8 +34,8 @@ const FALLBACK_HEROES: Record<string, string> = {
 
 const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-export function ServicePage({ data }: { data?: any } = {}) {
-  const loaderData = data ? data : Route.useLoaderData();
+export function ServicePage({ data }: { data: any }) {
+  const loaderData = data;
   const { service, templateData, linkedProducts = [] } = loaderData;
 
   // General details
@@ -197,8 +196,6 @@ export function ServicePage({ data }: { data?: any } = {}) {
     templateData?.downloads && templateData.downloads.length > 0
       ? templateData.downloads
       : [{ label: "Geosynthetics Africa Service Capability Statement", url: "/resources" }];
-
-
 
   return (
     <div className="bg-background">

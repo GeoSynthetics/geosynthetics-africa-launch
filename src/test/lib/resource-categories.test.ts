@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { RESOURCE_CATEGORIES, VIDEO_HOST_RE, getCategory } from "@/lib/resource-categories";
+import { VIDEO_HOST_RE, getCategory } from "@/lib/resource-categories";
 
 describe("RESOURCE_CATEGORIES utilities", () => {
   it("should match valid video host domains using VIDEO_HOST_RE", () => {

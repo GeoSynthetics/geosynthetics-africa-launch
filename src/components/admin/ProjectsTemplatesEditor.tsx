@@ -134,7 +134,8 @@ export function ProjectsTemplatesEditor() {
         ...landingContent,
         seo: {
           title: landingContent?.seo?.title || defaultLandingContent().seo?.title || "",
-          description: landingContent?.seo?.description || defaultLandingContent().seo?.description || "",
+          description:
+            landingContent?.seo?.description || defaultLandingContent().seo?.description || "",
           keywords: landingContent?.seo?.keywords || defaultLandingContent().seo?.keywords || "",
         },
       });

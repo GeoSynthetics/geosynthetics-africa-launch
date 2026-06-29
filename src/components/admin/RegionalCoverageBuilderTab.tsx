@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Plus, Trash2, Save, MapPin, Loader2, Globe, Sparkles } from "lucide-react";
+import { Plus, Trash2, Save, Loader2, Globe, Sparkles } from "lucide-react";
 
 interface RegionItem {
   country: string;

@@ -176,7 +176,7 @@ export function QuickQuoteModal() {
         "source",
         "country",
       ];
-      let payload = { ...basePayload };
+      const payload = { ...basePayload };
       let lastError: { message: string } | null = null;
       for (let attempt = 0; attempt < optionalKeys.length + 1; attempt += 1) {
         const { error } = await supabase.from("quote_requests").insert(payload);
@@ -215,7 +215,10 @@ export function QuickQuoteModal() {
             {t("quote.title", "ADD TO PROJECT BOQ")}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground leading-normal mt-1.5">
-            {t("quote.subtitle", "Submit your project details and files. Our technical sales team will review your requirements and provide a customised proposal.")}
+            {t(
+              "quote.subtitle",
+              "Submit your project details and files. Our technical sales team will review your requirements and provide a customised proposal.",
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -342,7 +345,9 @@ export function QuickQuoteModal() {
                   {t("quote.dragDrop", "Drag & drop your BOQ or drawings here")}
                 </span>
                 <span className="text-muted-foreground"> {t("quote.or", "or")} </span>
-                <span className="text-primary font-semibold underline">{t("quote.browse", "click to browse files")}</span>
+                <span className="text-primary font-semibold underline">
+                  {t("quote.browse", "click to browse files")}
+                </span>
               </div>
               <div className="text-[10px] text-muted-foreground mt-1 leading-normal">
                 {t("quote.allowedFormats", "PDF, DWG, DOC, XLS (Max 20MB)")}
@@ -396,7 +401,9 @@ export function QuickQuoteModal() {
             className="w-full bg-primary hover:bg-primary-hover text-white uppercase font-display font-extrabold tracking-wider text-sm h-11 rounded-xl mt-2 transition duration-200 border-0"
           >
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-            {submitting ? t("quote.submitting", "Submitting...") : t("quote.submit", "SUBMIT & GET PROPOSAL")}
+            {submitting
+              ? t("quote.submitting", "Submitting...")
+              : t("quote.submit", "SUBMIT & GET PROPOSAL")}
           </Button>
         </div>
       </DialogContent>

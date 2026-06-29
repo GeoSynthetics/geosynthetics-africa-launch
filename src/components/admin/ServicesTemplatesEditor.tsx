@@ -1438,7 +1438,7 @@ export function ServicesTemplatesEditor() {
                                     : []),
                                 ]}
                                 onSelect={(prod) => {
-                                  let currentIds = [...(active.topSellingProductIds ?? [])];
+                                  const currentIds = [...(active.topSellingProductIds ?? [])];
                                   if (active.topSellingProductId && currentIds.length === 0) {
                                     currentIds.push(active.topSellingProductId);
                                   }

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { useTranslation } from "react-i18next";
 
-
 export interface BoqBannerData {
   title: string;
   subtitle: string;
@@ -22,11 +21,13 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
   const subtitle = data?.subtitle ?? t("quote.getQuote", "Get a quote – not just a price.");
   const paragraph =
     data?.paragraph ??
-    t("quote.uploadBoqDesc", "Upload your BOQ or speak to our technical team for expert recommendations and support.");
+    t(
+      "quote.uploadBoqDesc",
+      "Upload your BOQ or speak to our technical team for expert recommendations and support.",
+    );
   const btn1Text = data?.btn1Text ?? t("nav.uploadBoq", "Upload Project BOQ");
   const btn2Text = data?.btn2Text ?? t("nav.quickContact", "Quick Contact");
   const btn2Url = data?.btn2Url ?? "/contacts";
-
 
   return (
     <section className="bg-primary text-primary-foreground">
