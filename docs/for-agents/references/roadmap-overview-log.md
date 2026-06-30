@@ -36,6 +36,38 @@ src/                                # Principal application source code
 └── types/                          # Shared TypeScript interface declarations (e.g., site builder layouts, homepage)
 ```
 
+## 2026-06-29 — Resolve Codebase Type Safety & React Hook Violations
+
+**Scope:** Code Health / Routing / Tests
+**Summary:** Resolved "Rules of Hooks" violations where reusable page components (e.g. `ApplicationCategoryPage.tsx`, `ServicePage.tsx`) conditionally or directly called `Route.useLoaderData()`. Resolved this by introducing thin route-level wrappers in the route files and passing data down as props. Fixed 7 unused variables and parameters in the test suite (prefixing unused parameters with underscores), adjusted ESLint to warn on unused variables, and verified that all vitest unit tests pass.
+**Files touched:** `eslint.config.js`, `src/pages/ApplicationCategoryPage.tsx`, `src/pages/ServicePage.tsx`, `src/pages/ProductFamilyPage.tsx`, `src/routes/services.$slug.tsx`, `src/routes/applications.$category.tsx`, test suite files, etc.
+**Notes / follow-ups:** Restored codebase compilation and clean build status.
+
+---
+
+## 2026-06-27 — Refactor Unused Imports & Compile Warnings
+
+**Scope:** Code Refactoring
+**Summary:** Cleaned up the main application code (`src/` excluding tests) by removing unused variables, unused imports, and redundant Lucide icon imports to minimize bundle size. Fixed TypeScript compilation issues.
+**Files touched:** Over 20 files under `src/components/` and `src/pages/`.
+**Notes / follow-ups:** Paved the way for strict unused variable checking.
+
+---
+
+## 2026-06-26 — Implement Internationalization (i18n), Regional Coverage & Contacts Page
+
+**Scope:** Core Features / Navigation / SEO
+**Summary:** Implemented the modernization foundations of the platform including:
+1. Multi-language (i18n) support (French and Portuguese localizations).
+2. Connected Navigation mega menus showing Applications before Products.
+3. Leaflet-based dynamic Regional Coverage map showing African branches.
+4. ContactsPage displaying dynamic Case Studies fetched from Supabase.
+5. Country-specific SEO landing pages.
+**Files touched:** `src/pages/ContactsPage.tsx`, `src/routes/__root.tsx`, `src/locales/`, `src/components/site/Header.tsx`, `src/components/site/Footer.tsx`, etc.
+**Notes / follow-ups:** Leaflet dependency added to handle map rendering.
+
+---
+
 ## 2026-06-10 — Integrate Centralized Image Picker & Product Selector Components
 
 **Scope:** Admin / UI / UX / Assets & Database Linkers
