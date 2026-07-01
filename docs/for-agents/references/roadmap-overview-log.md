@@ -58,13 +58,14 @@ src/                                # Principal application source code
 
 **Scope:** Core Features / Navigation / SEO
 **Summary:** Implemented the modernization foundations of the platform including:
+
 1. Multi-language (i18n) support (French and Portuguese localizations).
 2. Connected Navigation mega menus showing Applications before Products.
 3. Leaflet-based dynamic Regional Coverage map showing African branches.
 4. ContactsPage displaying dynamic Case Studies fetched from Supabase.
 5. Country-specific SEO landing pages.
-**Files touched:** `src/pages/ContactsPage.tsx`, `src/routes/__root.tsx`, `src/locales/`, `src/components/site/Header.tsx`, `src/components/site/Footer.tsx`, etc.
-**Notes / follow-ups:** Leaflet dependency added to handle map rendering.
+   **Files touched:** `src/pages/ContactsPage.tsx`, `src/routes/__root.tsx`, `src/locales/`, `src/components/site/Header.tsx`, `src/components/site/Footer.tsx`, etc.
+   **Notes / follow-ups:** Leaflet dependency added to handle map rendering.
 
 ---
 

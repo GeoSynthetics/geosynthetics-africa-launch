@@ -112,6 +112,7 @@ A codebase search for `console.info`, `console.warn`, `console.error`, and `cons
 
 - **`console.log`**: No `console.log` statements are present in any application file within the `src/` directory.
 - **`console.info`**: One statement is present in **[MediaCenterPage.tsx:L113](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/MediaCenterPage.tsx#L113)**:
+
   ```typescript
   console.info(
     "Using 'product-images' bucket inside 'media-center/' folder as a zero-fail fallback.",
@@ -119,6 +120,7 @@ A codebase search for `console.info`, `console.warn`, `console.error`, and `cons
   ```
 
   - _Status_: This is a warning fallback strategy log when bucket creation fails. It is valid and useful for system diagnostics, so we should keep it.
+
 - **`console.warn` & `console.error`**: There are standard try-catch error loggers (e.g. logging database errors, bucket permissions, local storage failures). These are necessary diagnostic logs and should remain.
 
 ---

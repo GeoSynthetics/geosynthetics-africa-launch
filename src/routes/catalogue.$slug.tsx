@@ -105,60 +105,70 @@ async function loadProduct(slug: string) {
 
   const product = data as unknown as ProductRow;
 
-  // 1. Fetch alternatives from Supabase using alternative_ids
-  let alternatives: RelatedProduct[] = [];
-  if (product.alternative_ids && product.alternative_ids.length > 0) {
-    const { data: altData } = await supabase
-      .from("products_public")
-      .select("id, name, slug, image_url, images, product_categories(name)")
-      .eq("is_active", true)
-      .in("id", product.alternative_ids);
-    alternatives = (altData ?? []) as unknown as RelatedProduct[];
-  } else {
-    // Fallback to fetching other products in the same category
-    const { data: catData } = await supabase
-      .from("products_public")
-      .select("id, name, slug, image_url, images, product_categories(name)")
-      .eq("is_active", true)
-      .neq("id", product.id)
-      .eq("category_id", product.category_id ?? "00000000-0000-0000-0000-000000000000")
-      .limit(4);
-    alternatives = (catData ?? []) as unknown as RelatedProduct[];
-  }
+  // Start independent queries concurrently to eliminate network waterfalls
+  const alternativesPromise = (async () => {
+    if (product.alternative_ids && product.alternative_ids.length > 0) {
+      const { data: altData } = await supabase
+        .from("products_public")
+        .select("id, name, slug, image_url, images, product_categories(name)")
+        .eq("is_active", true)
+        .in("id", product.alternative_ids);
+      return (altData ?? []) as unknown as RelatedProduct[];
+    } else {
+      // Fallback to fetching other products in the same category
+      const { data: catData } = await supabase
+        .from("products_public")
+        .select("id, name, slug, image_url, images, product_categories(name)")
+        .eq("is_active", true)
+        .neq("id", product.id)
+        .eq("category_id", product.category_id ?? "00000000-0000-0000-0000-000000000000")
+        .limit(4);
+      return (catData ?? []) as unknown as RelatedProduct[];
+    }
+  })();
 
-  // 2. Fetch system components from Supabase using system_component_ids
-  let systemComponents: RelatedProduct[] = [];
-  if (product.system_component_ids && product.system_component_ids.length > 0) {
-    const { data: sysData } = await supabase
-      .from("products_public")
-      .select("id, name, slug, image_url, images, product_categories(name)")
-      .eq("is_active", true)
-      .in("id", product.system_component_ids);
-    systemComponents = (sysData ?? []) as unknown as RelatedProduct[];
-  }
+  const systemComponentsPromise = (async () => {
+    if (product.system_component_ids && product.system_component_ids.length > 0) {
+      const { data: sysData } = await supabase
+        .from("products_public")
+        .select("id, name, slug, image_url, images, product_categories(name)")
+        .eq("is_active", true)
+        .in("id", product.system_component_ids);
+      return (sysData ?? []) as unknown as RelatedProduct[];
+    }
+    return [] as RelatedProduct[];
+  })();
 
-  // 3. Fetch product family template from site_config
-  let familyData = null;
-  if (product.family_slug) {
-    const { data: templateRes } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "template_product_categories")
-      .maybeSingle();
-    const templates = (templateRes?.value as Record<string, any>) || {};
-    familyData = templates[product.family_slug] || null;
-  }
+  const familyDataPromise = (async () => {
+    if (product.family_slug) {
+      const { data: templateRes } = await supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "template_product_categories")
+        .maybeSingle();
+      const templates = (templateRes?.value as Record<string, any>) || {};
+      return templates[product.family_slug] || null;
+    }
+    return null;
+  })();
 
-  // 4. Fetch dynamic Case Studies linked to this product
-  let caseStudies: any[] = [];
-  const { data: casesData } = await supabase
-    .from("case_study_products")
-    .select("case_studies(id, title, slug, summary, location, country, hero_image_url)")
-    .eq("product_id", product.id);
+  const caseStudiesPromise = (async () => {
+    const { data: casesData } = await supabase
+      .from("case_study_products")
+      .select("case_studies(id, title, slug, summary, location, country, hero_image_url)")
+      .eq("product_id", product.id);
+    if (casesData) {
+      return casesData.map((item: any) => item.case_studies).filter(Boolean);
+    }
+    return [] as any[];
+  })();
 
-  if (casesData) {
-    caseStudies = casesData.map((item: any) => item.case_studies).filter(Boolean);
-  }
+  const [alternatives, systemComponents, familyData, caseStudies] = await Promise.all([
+    alternativesPromise,
+    systemComponentsPromise,
+    familyDataPromise,
+    caseStudiesPromise,
+  ]);
 
   return { product, alternatives, systemComponents, familyData, caseStudies };
 }

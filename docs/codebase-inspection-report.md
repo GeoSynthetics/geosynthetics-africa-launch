@@ -85,6 +85,7 @@ These elements are declared or imported but never read. Cleaning them up will ke
 A full codebase search shows only one active `console.log` statement in the `src/` directory.
 
 - **[MediaCenterPage.tsx:L113](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/MediaCenterPage.tsx#L113)**:
+
   ```typescript
   console.log(
     "Using 'product-images' bucket inside 'media-center/' folder as a zero-fail fallback.",
@@ -92,6 +93,7 @@ A full codebase search shows only one active `console.log` statement in the `src
   ```
 
   - _Status_: This is a fallback log message triggered when the programmatic creation of the `media-center` bucket fails. It is useful for debugging storage permissions in production. We can keep it, downgrade it to `console.info`, or remove it if desired.
+
 - **`console.warn` & `console.error`**:
   - There are several warnings and errors in try-catch blocks for API responses, bucket permissions, or localStorage fallbacks. These are standard error monitoring practices and should be retained.
 

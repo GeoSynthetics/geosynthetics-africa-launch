@@ -65,17 +65,18 @@ export const Route = createFileRoute("/about")({ component: AboutPage });
 // ✅ GOOD — component lives in src/pages/, route file only exports Route and uses a wrapper to pass data
 import { AboutPage } from "@/pages/AboutPage";
 export const Route = createFileRoute("/about")({
-  loader: () => loadAboutData(),
-  component: AboutRoute,
+loader: () => loadAboutData(),
+component: AboutRoute,
 });
 
 function AboutRoute() {
-  const data = Route.useLoaderData();
-  return <AboutPage data={data} />;
+const data = Route.useLoaderData();
+return <AboutPage data={data} />;
 }
 
 ### Safe Route Hook Usage in Reusable Pages
-Page components under `src/pages/` are often imported and rendered inside admin site builders, preview panels, or layout templates where their corresponding route is NOT active. 
+
+Page components under `src/pages/` are often imported and rendered inside admin site builders, preview panels, or layout templates where their corresponding route is NOT active.
+
 - **Rule:** Never call `Route.useLoaderData()`, `Route.useSearch()`, or other route-bound hooks inside `src/pages/` files.
 - **Correct Pattern:** Define a thin wrapper component inside the route file (`src/routes/*.tsx`) to consume the hook and pass the data down to the page component as a prop (e.g., `<ServicePage data={data} />`).
-
