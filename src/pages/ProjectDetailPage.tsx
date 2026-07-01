@@ -403,7 +403,7 @@ export function ProjectDetailPage() {
               </div>
               <div className="p-4 border-r border-white/5 flex flex-col">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-white/60 mb-1">
-                  Field Welders
+                  Resources
                 </span>
                 <span className="font-display font-extrabold text-sm text-white uppercase">
                   {project.qa_details?.welders || "14 Certified"}
@@ -786,53 +786,46 @@ export function ProjectDetailPage() {
                 <section id="sequence" className="scroll-mt-28 space-y-4">
                   <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
-                    Installation Sequence Sequence
+                    Installation Sequence
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        1
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Subgrade Accept
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Clay base compaction and clearance check.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        2
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        GCL Deploy
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Bentonite sealing layer rolled out on subgrade.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        3
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Wedge Welding
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Dual-track fusion welds with thermal wedges.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        4
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Air Pressure Test
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Double seam channels locked and pressure tested.
-                      </p>
-                    </div>
+                    {(() => {
+                      const defaultSequence = [
+                        {
+                          title: "Subgrade Accept",
+                          description: "Clay base compaction and clearance check.",
+                        },
+                        {
+                          title: "GCL Deploy",
+                          description: "Bentonite sealing layer rolled out on subgrade.",
+                        },
+                        {
+                          title: "Wedge Welding",
+                          description: "Dual-track fusion welds with thermal wedges.",
+                        },
+                        {
+                          title: "Air Pressure Test",
+                          description: "Double seam channels locked and pressure tested.",
+                        },
+                      ];
+                      const sequence = project.qa_details?.sequence || defaultSequence;
+                      return sequence.map((step: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center"
+                        >
+                          <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
+                            {idx + 1}
+                          </div>
+                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
+                            {step.title}
+                          </h4>
+                          <p className="text-[10px] text-muted-foreground leading-normal">
+                            {step.description}
+                          </p>
+                        </div>
+                      ));
+                    })()}
                   </div>
                 </section>
 

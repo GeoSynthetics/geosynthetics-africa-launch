@@ -918,11 +918,11 @@ export function ProductDetailPage() {
                 </p>
                 <div className="mt-4 space-y-3 text-xs font-medium">
                   <a
-                    href="tel:+27117940974"
+                    href="tel:+27710939964"
                     className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
                   >
                     <Phone className="h-4 w-4 text-primary shrink-0" />
-                    +27 11 794 0974
+                    +27 71 093 9964
                   </a>
                   <a
                     href="mailto:sales@geosynthetics.co.za"
