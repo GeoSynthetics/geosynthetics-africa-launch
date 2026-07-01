@@ -82,6 +82,7 @@ We conducted a complete search for console statements (`console.log`, `console.i
 
 - **`console.log`**: **Zero** active `console.log` messages remain in the production code under `src/`. They have all been removed.
 - **`console.info`**: Only one statement remains in `src/pages/MediaCenterPage.tsx` at line 148 (inside the `initializeBuckets` fallback catch block):
+
   ```typescript
   console.info(
     "Using 'product-images' bucket inside 'media-center/' folder as a zero-fail fallback.",
@@ -89,6 +90,7 @@ We conducted a complete search for console statements (`console.log`, `console.i
   ```
 
   - _Assessment_: This is a valid system configuration diagnostic log that fires only when initialization of a secondary storage bucket fails, indicating the fallback mechanism was successfully engaged. It should be kept.
+
 - **`console.error` and `console.warn`**:
   - There are standard error catching loggers in various files (e.g. database queries, storage deletions, cookie parser failures). These are necessary runtime diagnostics to print errors to the console in production environments, and we recommend keeping them.
 - **Scripts & Scratch Files**:

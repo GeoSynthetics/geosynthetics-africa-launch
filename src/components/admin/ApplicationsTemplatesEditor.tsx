@@ -148,7 +148,7 @@ function blankTemplate(): ApplicationTemplate {
     overviewParagraphs: [],
     keyBenefits: [],
     suitableFor: [],
-    assistancePhone: "+27 11 794 0974",
+    assistancePhone: "+27 71 093 9964",
     assistanceEmail: "sales@geosynthetics.co.za",
     featuredCaseStudySlug: "",
     componentsTitle: "Typical System Components",
@@ -961,7 +961,7 @@ export function ApplicationsTemplatesEditor() {
                         <Input
                           value={active.assistancePhone ?? ""}
                           onChange={(e) => setField("assistancePhone", e.target.value)}
-                          placeholder="+27 11 794 0974"
+                          placeholder="+27 71 093 9964"
                           className="text-sm"
                         />
                       </div>

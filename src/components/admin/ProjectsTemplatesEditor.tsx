@@ -305,8 +305,11 @@ export function ProjectsTemplatesEditor() {
     toast.success(`Project "${blankProject.title}" template created. Edit it and click Save.`);
   };
 
-  // â”€â”€ Delete Project â”€â”€
+  // ─── Delete Project ───
   const handleDelete = async (id: string, title: string) => {
+    // Clear product links first to prevent FK constraint violations
+    await supabase.from("case_study_products").delete().eq("case_study_id", id);
+
     const { error } = await supabase.from("case_studies").delete().eq("id", id);
     if (error) {
       toast.error("Failed to delete project: " + error.message);
@@ -350,6 +353,33 @@ export function ProjectsTemplatesEditor() {
       if (error) {
         toast.error("Save failed: " + error.message);
       } else {
+        // Sync case_study_products relationship
+        try {
+          // Delete existing product links for this case study
+          await supabase.from("case_study_products").delete().eq("case_study_id", active.id);
+
+          // Get product IDs linked in products_used
+          const productIds = (active.products_used || [])
+            .map((item: any) => item.productId)
+            .filter(Boolean);
+
+          if (productIds.length > 0) {
+            const links = productIds.map((pId: string) => ({
+              case_study_id: active.id,
+              product_id: pId,
+            }));
+
+            const { error: linkErr } = await supabase.from("case_study_products").insert(links);
+
+            if (linkErr) {
+              console.error("Error linking products:", linkErr);
+              toast.error("Failed to link products: " + linkErr.message);
+            }
+          }
+        } catch (err) {
+          console.error("Exception syncing case study products:", err);
+        }
+
         toast.success(`Project template "${active.title}" saved successfully!`);
         setDirty(false);
         load();
@@ -1085,8 +1115,8 @@ export function ProjectsTemplatesEditor() {
                           <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Welders count/crews (e.g. '14 Certified')">
-                                  Field Welders
+                                <FieldLabel hint="Resources or welders count/crews (e.g. 'REACH (EC 1907/2006)' or '14 Certified')">
+                                  Resources
                                 </FieldLabel>
                                 <Input
                                   value={active.qa_details?.welders || ""}
@@ -1151,7 +1181,73 @@ export function ProjectsTemplatesEditor() {
                               </div>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-4 border-t border-border pt-4">
+                              <FieldLabel hint="The 4 steps of the installation sequence shown on the project page">
+                                Installation Sequence Steps (Steps 1–4)
+                              </FieldLabel>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {Array.from({ length: 4 }).map((_, stepIdx) => {
+                                  const step = (active.qa_details?.sequence || [])[stepIdx] || {
+                                    title: "",
+                                    description: "",
+                                  };
+                                  return (
+                                    <div
+                                      key={stepIdx}
+                                      className="p-3 border border-border rounded-lg bg-surface/20 space-y-2"
+                                    >
+                                      <div className="font-display font-bold text-xs uppercase text-primary">
+                                        Step {stepIdx + 1}
+                                      </div>
+                                      <div className="space-y-1">
+                                        <MicroLabel>Step Title</MicroLabel>
+                                        <Input
+                                          value={step.title || ""}
+                                          placeholder={`e.g. Step ${stepIdx + 1} Title`}
+                                          onChange={(e) => {
+                                            const seq = [...(active.qa_details?.sequence || [])];
+                                            while (seq.length <= stepIdx)
+                                              seq.push({ title: "", description: "" });
+                                            seq[stepIdx] = {
+                                              ...seq[stepIdx],
+                                              title: e.target.value,
+                                            };
+                                            setField("qa_details", {
+                                              ...active.qa_details,
+                                              sequence: seq,
+                                            });
+                                          }}
+                                          className="h-8 text-xs"
+                                        />
+                                      </div>
+                                      <div className="space-y-1">
+                                        <MicroLabel>Step Description</MicroLabel>
+                                        <Input
+                                          value={step.description || ""}
+                                          placeholder={`e.g. Step ${stepIdx + 1} Description`}
+                                          onChange={(e) => {
+                                            const seq = [...(active.qa_details?.sequence || [])];
+                                            while (seq.length <= stepIdx)
+                                              seq.push({ title: "", description: "" });
+                                            seq[stepIdx] = {
+                                              ...seq[stepIdx],
+                                              description: e.target.value,
+                                            };
+                                            setField("qa_details", {
+                                              ...active.qa_details,
+                                              sequence: seq,
+                                            });
+                                          }}
+                                          className="h-8 text-xs"
+                                        />
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            <div className="space-y-4 border-t border-border pt-4">
                               <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
                                 Field Quality Control Checklist
                               </FieldLabel>
