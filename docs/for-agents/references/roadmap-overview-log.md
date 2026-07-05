@@ -321,6 +321,13 @@ To validate: paste the sitemap URL into [Google's Rich Results Test](https://sea
 **Files touched:** `src/pages/PageTemplatesAdminPage.tsx`, `src/components/admin/ContentEditorPanel.tsx`, `src/data/product-pages.ts`, `src/lib/hierarchy-utils.ts`, `docs/index.html`
 **Notes / follow-ups:** Updated user manuals in `docs/index.html` and verified the build using the bun package manager.
 
+## 2026-07-04 — Fix Saving "Installation Guide / Manual" Resources
+
+**Scope:** Admin UI / Resources / Database Integration
+**Summary:** Resolved the issue where "Installation Guide / Manual" and "Case Study" resources could not be saved to Supabase due to missing values in the `resource_type` database enum. Added JSDOM integration/unit tests for `ResourcesAdminPage` verifying listing, searching, and correct saving of `manual` resource types. Refactored the resources admin list table to render friendly, localized labels (e.g. "Installation Guide / Manual") instead of the raw uppercase enum keys.
+**Files touched:** `src/pages/ResourcesAdminPage.tsx`, `src/test/components/ResourcesAdminPage.test.tsx` (new)
+**Notes / follow-ups:** Developers/administrators must ensure that the `20260701140000_add_resource_types.sql` migration is applied to their self-managed Supabase instance so that the database supports the `manual` and `case_study` enum values.
+
 ---
 
 <!--
