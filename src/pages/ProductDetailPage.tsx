@@ -859,7 +859,8 @@ export function ProductDetailPage() {
                       </div>
                       <div className="px-4 pb-4">
                         <Link
-                          to="/resources"
+                          to="/projects/$slug"
+                          params={{ slug: cs.slug } as any}
                           className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary group-hover:text-primary-hover transition"
                         >
                           View Case Study <ChevronRight className="h-3 w-3" />
