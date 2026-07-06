@@ -9,6 +9,8 @@ if (typeof globalThis.document === "undefined") {
   (globalThis as any).window = jsdom.window;
   (globalThis as any).document = jsdom.window.document;
   (globalThis as any).navigator = jsdom.window.navigator;
+  (globalThis as any).Element = jsdom.window.Element;
+  (globalThis as any).Node = jsdom.window.Node;
   (globalThis as any).HTMLElement = jsdom.window.HTMLElement;
   (globalThis as any).HTMLAnchorElement = jsdom.window.HTMLAnchorElement;
   (globalThis as any).HTMLButtonElement = jsdom.window.HTMLButtonElement;

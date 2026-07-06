@@ -808,7 +808,10 @@ export function ProjectDetailPage() {
                           description: "Double seam channels locked and pressure tested.",
                         },
                       ];
-                      const sequence = project.qa_details?.sequence || defaultSequence;
+                      const sequence =
+                        project.qa_details?.sequence && project.qa_details.sequence.length > 0
+                          ? project.qa_details.sequence
+                          : defaultSequence;
                       return sequence.map((step: any, idx: number) => (
                         <div
                           key={idx}
