@@ -1920,38 +1920,29 @@ function ChecklistEditor({
 // â”€â”€â”€ Photos / Gallery Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PhotosEditor({ photos, onChange }: { photos: any[]; onChange: (photos: any[]) => void }) {
   const { add, updateByKey, remove } = useListEditor(photos, onChange, () => ({
-    url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
-    caption: "Photo caption description",
+    url: "",
+    caption: "",
   }));
 
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-2 gap-4">
         {photos.map((ph, idx) => (
-          <ItemCard key={idx} className="flex flex-col group">
+          <ItemCard key={idx} className="flex flex-col group pt-6">
             <ItemDeleteButton onClick={() => remove(idx)} />
-            {ph.url && (
-              <div
-                className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border"
-                style={{ backgroundImage: `url(${ph.url})` }}
+            <div className="space-y-3 flex-grow">
+              <ImagePicker
+                label="Photo URL"
+                value={ph.url || ""}
+                onChange={(val) => updateByKey(idx, "url", val)}
+                placeholder="https://..."
               />
-            )}
-            <div className="space-y-2 flex-grow">
-              <div>
-                <MicroLabel>Photo URL</MicroLabel>
-                <Input
-                  value={ph.url || ""}
-                  onChange={(e) => updateByKey(idx, "url", e.target.value)}
-                  className="h-7 text-xs font-mono"
-                  placeholder="https://images.unsplash.com/..."
-                />
-              </div>
-              <div>
+              <div className="space-y-1">
                 <MicroLabel>Caption</MicroLabel>
                 <Input
                   value={ph.caption || ""}
                   onChange={(e) => updateByKey(idx, "caption", e.target.value)}
-                  className="h-7 text-xs font-semibold"
+                  className="h-9 text-xs font-semibold"
                   placeholder="e.g. Subgrade compaction acceptance test"
                 />
               </div>

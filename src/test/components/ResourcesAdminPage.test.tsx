@@ -37,7 +37,7 @@ vi.mock("@/integrations/supabase/client", () => {
           mockLimit.mockResolvedValue({ data: mockResources, error: null });
           mockOrder.mockReturnValue({ limit: mockLimit });
           mockSelect.mockReturnValue({ order: mockOrder });
-          
+
           mockEq.mockResolvedValue({ data: null, error: null });
           mockUpdate.mockReturnValue({ eq: mockEq });
           mockInsert.mockResolvedValue({ data: null, error: null });
@@ -60,7 +60,9 @@ vi.mock("@/integrations/supabase/client", () => {
         from: vi.fn().mockReturnValue({
           upload: vi.fn().mockResolvedValue({ data: { path: "test" }, error: null }),
           remove: vi.fn().mockResolvedValue({ data: null, error: null }),
-          createSignedUrl: vi.fn().mockResolvedValue({ data: { signedUrl: "http://signed" }, error: null }),
+          createSignedUrl: vi
+            .fn()
+            .mockResolvedValue({ data: { signedUrl: "http://signed" }, error: null }),
         }),
       },
     },
@@ -105,10 +107,10 @@ describe("ResourcesAdminPage Component", () => {
 
     // Since Radix Select is tricky to select in testing-library, we directly test the form value bindings or click elements
     // Note: The default type is 'tds' as per `empty` initialization: `type: "tds"`
-    
+
     // Trigger Save
     const saveBtn = screen.getByRole("button", { name: /save/i });
-    
+
     // We mock a manual select interaction by simulating value change if Select is difficult,
     // but we can check if it saves.
     fireEvent.click(saveBtn);

@@ -49,7 +49,7 @@ vi.mock("@/components/site/Breadcrumbs", () => ({
 describe("ProductDetailPage - Linked Projects", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Mock window.matchMedia
     Object.defineProperty(window, "matchMedia", {
       writable: true,

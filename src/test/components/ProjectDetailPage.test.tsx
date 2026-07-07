@@ -103,7 +103,9 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("Subgrade Accept")).toBeInTheDocument();
     expect(screen.getByText("Clay base compaction and clearance check.")).toBeInTheDocument();
     expect(screen.getByText("Air Pressure Test")).toBeInTheDocument();
-    expect(screen.getByText("Double seam channels locked and pressure tested.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Double seam channels locked and pressure tested."),
+    ).toBeInTheDocument();
   });
 
   it("should fall back to default sequence steps if sequence is an empty array in qa_details", () => {
@@ -129,6 +131,37 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("Subgrade Accept")).toBeInTheDocument();
     expect(screen.getByText("Clay base compaction and clearance check.")).toBeInTheDocument();
     expect(screen.getByText("Air Pressure Test")).toBeInTheDocument();
-    expect(screen.getByText("Double seam channels locked and pressure tested.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Double seam channels locked and pressure tested."),
+    ).toBeInTheDocument();
+  });
+
+  it("should render the field label as 'Resources' and not 'Field Welders', mapping to project.qa_details.welders", () => {
+    const mockProject = {
+      id: "project-123",
+      title: "Custom Lining Project",
+      location: "Johannesburg",
+      country: "South Africa",
+      project_year: 2026,
+      sector: "Mining",
+      scale: "50,000 m²",
+      service_type: "supply_install",
+      qa_details: {
+        welders: "12 Certified Welders",
+      },
+    };
+
+    vi.mocked(Route.useLoaderData).mockReturnValue({ project: mockProject });
+
+    render(<ProjectDetailPage />);
+
+    // Assert that the label is 'Resources'
+    expect(screen.getByText("Resources")).toBeInTheDocument();
+
+    // Assert that the label 'Field Welders' is NOT rendered
+    expect(screen.queryByText("Field Welders")).not.toBeInTheDocument();
+
+    // Assert that the resource value is rendered under the label
+    expect(screen.getByText("12 Certified Welders")).toBeInTheDocument();
   });
 });
