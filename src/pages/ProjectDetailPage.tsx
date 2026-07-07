@@ -1011,14 +1011,16 @@ export function ProjectDetailPage() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
-                    <div className="font-display text-2xl font-black text-primary mb-1">100%</div>
+                    <div className="font-display text-2xl font-black text-primary mb-1">
+                      {project.logistics_details?.kpi_demurrage_free || "100%"}
+                    </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Demurrage Free
                     </div>
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
                     <div className="font-display text-2xl font-black text-foreground mb-1">
-                      0 Days
+                      {project.logistics_details?.kpi_frontier_delays || "0 Days"}
                     </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Frontier Delays
@@ -1026,14 +1028,16 @@ export function ProjectDetailPage() {
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
                     <div className="font-display text-2xl font-black text-foreground mb-1">
-                      12 Trucks
+                      {project.logistics_details?.kpi_sealed_consignments || "12 Trucks"}
                     </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Sealed Consignments
                     </div>
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
-                    <div className="font-display text-2xl font-black text-primary mb-1">100%</div>
+                    <div className="font-display text-2xl font-black text-primary mb-1">
+                      {project.logistics_details?.kpi_ontime_laydown || "100%"}
+                    </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       On-Time laydown
                     </div>

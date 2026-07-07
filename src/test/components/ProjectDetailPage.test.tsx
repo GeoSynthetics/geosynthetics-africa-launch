@@ -164,4 +164,43 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     // Assert that the resource value is rendered under the label
     expect(screen.getByText("12 Certified Welders")).toBeInTheDocument();
   });
+
+  it("should render the Logistics Performance KPIs from project.logistics_details when using supply_only service_type", () => {
+    const mockProject = {
+      id: "project-456",
+      title: "Supply Only Case Study",
+      location: "Kolwezi",
+      country: "Democratic Republic of the Congo",
+      project_year: 2026,
+      sector: "Mining",
+      scale: "340 t",
+      service_type: "supply_only",
+      logistics_details: {
+        kpi_demurrage_free: "98% Free",
+        kpi_frontier_delays: "1 Day delay",
+        kpi_sealed_consignments: "24 Sealed Trucks",
+        kpi_ontime_laydown: "99% On-Time",
+      },
+    };
+
+    vi.mocked(Route.useLoaderData).mockReturnValue({ project: mockProject });
+
+    render(<ProjectDetailPage />);
+
+    // Assert that the Logistics Performance KPIs section header is rendered
+    expect(screen.getByText("Logistics Performance KPIs")).toBeInTheDocument();
+
+    // Assert that the custom KPI values are rendered
+    expect(screen.getByText("98% Free")).toBeInTheDocument();
+    expect(screen.getByText("1 Day delay")).toBeInTheDocument();
+    expect(screen.getByText("24 Sealed Trucks")).toBeInTheDocument();
+    expect(screen.getByText("99% On-Time")).toBeInTheDocument();
+
+    // Assert that the labels are rendered
+    expect(screen.getByText("Demurrage Free")).toBeInTheDocument();
+    expect(screen.getByText("Frontier Delays")).toBeInTheDocument();
+    expect(screen.getByText("Sealed Consignments")).toBeInTheDocument();
+    expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
+  });
 });
+

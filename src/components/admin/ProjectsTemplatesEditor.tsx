@@ -268,6 +268,10 @@ export function ProjectsTemplatesEditor() {
         route: "1,200 km",
         borders: "2 borders",
         ontime: "100%",
+        kpi_demurrage_free: "100%",
+        kpi_frontier_delays: "0 Days",
+        kpi_sealed_consignments: "12 Trucks",
+        kpi_ontime_laydown: "100%",
         route_steps: [],
         documents: [],
       },
@@ -1338,6 +1342,68 @@ export function ProjectsTemplatesEditor() {
                                     setField("logistics_details", {
                                       ...active.logistics_details,
                                       ontime: e.target.value,
+                                    })
+                                  }
+                              </div>
+                            </div>
+
+                            {/* KPI Metrics Row */}
+                            <div className="grid grid-cols-4 gap-4 border-t border-border pt-4">
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Demurrage Free percentage (e.g., '100%')">
+                                  KPI: Demurrage Free
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_demurrage_free || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_demurrage_free: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Frontier delays average (e.g., '0 Days')">
+                                  KPI: Frontier Delays
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_frontier_delays || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_frontier_delays: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Sealed consignments count (e.g., '12 Trucks')">
+                                  KPI: Sealed Consignments
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_sealed_consignments || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_sealed_consignments: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: On-Time laydown index (e.g., '100%')">
+                                  KPI: On-Time Laydown
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_ontime_laydown || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_ontime_laydown: e.target.value,
                                     })
                                   }
                                   className="text-sm font-semibold text-primary"
