@@ -1344,6 +1344,8 @@ export function ProjectsTemplatesEditor() {
                                       ontime: e.target.value,
                                     })
                                   }
+                                  className="text-sm font-semibold"
+                                />
                               </div>
                             </div>
 

@@ -101,6 +101,10 @@ INSERT INTO public.case_studies (
     "route": "3,420 km",
     "borders": "4 borders",
     "ontime": "100%",
+    "kpi_demurrage_free": "100%",
+    "kpi_frontier_delays": "0 Days",
+    "kpi_sealed_consignments": "12 Trucks",
+    "kpi_ontime_laydown": "100%",
     "route_steps": [
       {"stage": "Stage 01", "name": "Heerenveen Mill", "desc": "Manufacturer extrusion run, mill-certificated, batch-numbered & sealed.", "duration": "D0 - D+3"},
       {"stage": "Stage 02", "name": "Rotterdam → Durban", "desc": "Sea freight, temperature-logged storage, full track & trace.", "duration": "D+3 - D+24"},

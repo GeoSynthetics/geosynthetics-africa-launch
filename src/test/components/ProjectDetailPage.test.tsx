@@ -202,5 +202,38 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("Sealed Consignments")).toBeInTheDocument();
     expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
   });
+
+  it("should fall back to default Logistics Performance KPIs if they are not defined in logistics_details when using supply_only service_type", () => {
+    const mockProject = {
+      id: "project-456",
+      title: "Supply Only Case Study",
+      location: "Kolwezi",
+      country: "Democratic Republic of the Congo",
+      project_year: 2026,
+      sector: "Mining",
+      scale: "340 t",
+      service_type: "supply_only",
+      logistics_details: {}, // Empty logistics_details
+    };
+
+    vi.mocked(Route.useLoaderData).mockReturnValue({ project: mockProject });
+
+    render(<ProjectDetailPage />);
+
+    // Assert that the Logistics Performance KPIs section header is rendered
+    expect(screen.getByText("Logistics Performance KPIs")).toBeInTheDocument();
+
+    // Assert that default fallbacks are rendered
+    const onetimeElements = screen.getAllByText("100%");
+    expect(onetimeElements.length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("0 Days")).toBeInTheDocument();
+    expect(screen.getByText("12 Trucks")).toBeInTheDocument();
+
+    // Assert that the labels are rendered
+    expect(screen.getByText("Demurrage Free")).toBeInTheDocument();
+    expect(screen.getByText("Frontier Delays")).toBeInTheDocument();
+    expect(screen.getByText("Sealed Consignments")).toBeInTheDocument();
+    expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
+  });
 });
 
