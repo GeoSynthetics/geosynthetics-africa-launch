@@ -678,36 +678,54 @@ export function ProductDetailPage() {
                     </h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    To ensure certified waterproof integrity, the following field quality control
+                    To ensure certified performance and long-term integrity, the following field quality control
                     procedures must be completed by the contractor:
                   </p>
                   <ul className="space-y-2.5 text-xs text-foreground/85">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Subgrade Acceptance:</strong> Smooth, compacted, free of sharp stone
-                        protrusions (&gt;10mm) and standing water.
+                        <strong>Subgrade/Foundation Acceptance:</strong> Surface smooth, compacted, free of
+                        sharp protrusions (&gt;10mm), vegetation, and standing water.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Trial Welds:</strong> Mandatory trial seams completed at start of
-                        shift and after breaks to calibrate welding wedges.
+                        <strong>Material Verification:</strong> Roll, panel, or unit batch numbers and certificates
+                        of conformance checked against approved specifications before installation.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Non-Destructive Testing:</strong> 100% of double-track fusion seams
-                        tested via air channel pressure testing.
+                        <strong>Installation Compliance:</strong> Placement, overlap, anchoring, jointing, or
+                        connection method (welding, lacing, interlocking, mechanical, or solvent joints) verified
+                        per manufacturer's installation guide for the specific product.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Destructive Shear & Peel:</strong> Coupons cut and tested on-site
-                        using a calibrated tensiometer.
+                        <strong>Joint &amp; Connection Testing:</strong> 100% visual inspection of all seams, laps, or
+                        connections, plus non-destructive testing (e.g., air channel, vacuum box, or pressure testing)
+                        where applicable to the product type.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span>
+                        <strong>Destructive/Performance Sampling:</strong> Representative samples or connections
+                        tested on-site or at an accredited lab (shear, peel, tensile, or pull-out strength) to confirm
+                        performance meets spec.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span>
+                        <strong>Damage &amp; Curing Inspection:</strong> Full surface check for punctures, tears, UV
+                        degradation, or (for cementitious products) correct hydration/curing prior to backfilling
+                        or cover placement.
                       </span>
                     </li>
                   </ul>
