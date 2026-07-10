@@ -190,7 +190,7 @@ export function ProductDetailPage() {
       },
       {
         label: "Installation & Method Statement",
-        desc: "Standard procedures, wedge welding temperatures, and panel deployment guidance.",
+        desc: "Standard deployment procedures, installation specifications, and field application method statements.",
         url: product.installation_guide_url || null,
         tag: "INSTALLATION",
         isAnchor:
@@ -200,7 +200,7 @@ export function ProductDetailPage() {
       },
       {
         label: "QA/QC Site Checklist",
-        desc: "Field testing procedures, pressure test logs, and seam verification guidelines.",
+        desc: "Field quality control procedures, inspection checklists, and testing standards to verify installation integrity.",
         url: product.qa_checklist_url || null,
         tag: "QUALITY CHECKLIST",
       },
@@ -212,7 +212,7 @@ export function ProductDetailPage() {
       },
       {
         label: "Chemical Resistance / Accessories Guide",
-        desc: "Chemical compatibility matrix and list of accessories needed for seam connection.",
+        desc: "Chemical compatibility matrix and list of auxiliary materials needed for installation.",
         url: product.chemical_resistance_url || null,
         tag: "ACCESSORIES GUIDE",
       },

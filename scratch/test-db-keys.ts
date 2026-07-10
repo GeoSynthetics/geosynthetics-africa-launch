@@ -29,11 +29,17 @@ async function main() {
       console.log("Label:", val.label);
       console.log("Items:");
       val.items?.forEach((item: any) => {
-        console.log(`  - ID: "${item.id}", Slug: "${item.slug}", Label: "${item.label}", params:`, item.params);
+        console.log(
+          `  - ID: "${item.id}", Slug: "${item.slug}", Label: "${item.label}", params:`,
+          item.params,
+        );
         if (item.children && item.children.length > 0) {
           console.log("    Children:");
           item.children.forEach((c: any) => {
-            console.log(`      * ID: "${c.id}", Slug: "${c.slug}", Label: "${c.label}", params:`, c.params);
+            console.log(
+              `      * ID: "${c.id}", Slug: "${c.slug}", Label: "${c.label}", params:`,
+              c.params,
+            );
           });
         }
       });

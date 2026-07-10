@@ -1,5 +1,6 @@
 import "../setup";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { supabase } from "@/integrations/supabase/client";
 import { Route as CatalogueSlugRoute } from "@/routes/catalogue.$slug";
 
 // We will count how many queries are active concurrently to verify parallel execution.
@@ -7,6 +8,111 @@ let activeQueriesCount = 0;
 let maxConcurrentQueries = 0;
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const PRODUCT_SELECT =
+  "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, family_slug, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)";
+
+vi.mock("@/lib/catalogue.functions", () => {
+  return {
+    getProductDetail: vi.fn(async ({ data: { slug } }: { data: { slug: string } }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const result = await supabase
+        .from("products_public")
+        .select("id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, family_slug, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)")
+        .eq("slug", slug)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      let data = result.data;
+      const error = result.error;
+
+      if (error && /column .* does not exist/i.test(error.message)) {
+        const fallback = await supabase
+          .from("products_public")
+          .select(
+            "id, name, slug, sku, short_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, product_categories(id, name, slug), manufacturers(id, name)",
+          )
+          .eq("slug", slug)
+          .eq("is_active", true)
+          .maybeSingle();
+        if (fallback.error) throw fallback.error;
+        data = fallback.data as never;
+      } else if (error) {
+        throw error;
+      }
+      if (!data) throw new Error("Not found");
+
+      const product = data as any;
+
+      // Start independent queries concurrently to eliminate network waterfalls
+      const alternativesPromise = (async () => {
+        if (product.alternative_ids && product.alternative_ids.length > 0) {
+          const { data: altData } = await supabase
+            .from("products_public")
+            .select("id, name, slug, image_url, images, product_categories(name)")
+            .eq("is_active", true)
+            .in("id", product.alternative_ids);
+          return (altData ?? []) as any[];
+        } else {
+          // Fallback to fetching other products in the same category
+          const { data: catData } = await supabase
+            .from("products_public")
+            .select("id, name, slug, image_url, images, product_categories(name)")
+            .eq("is_active", true)
+            .neq("id", product.id)
+            .eq("category_id", product.category_id ?? "00000000-0000-0000-0000-000000000000")
+            .limit(4);
+          return (catData ?? []) as any[];
+        }
+      })();
+
+      const systemComponentsPromise = (async () => {
+        if (product.system_component_ids && product.system_component_ids.length > 0) {
+          const { data: sysData } = await supabase
+            .from("products_public")
+            .select("id, name, slug, image_url, images, product_categories(name)")
+            .eq("is_active", true)
+            .in("id", product.system_component_ids);
+          return (sysData ?? []) as any[];
+        }
+        return [] as any[];
+      })();
+
+      const familyDataPromise = (async () => {
+        if (product.family_slug) {
+          const { data: templateRes } = await supabase
+            .from("site_config")
+            .select("value")
+            .eq("key", "template_product_categories")
+            .maybeSingle();
+          const templates = (templateRes?.value as Record<string, any>) || {};
+          return templates[product.family_slug] || null;
+        }
+        return null;
+      })();
+
+      const caseStudiesPromise = (async () => {
+        const { data: casesData } = await supabase
+          .from("case_study_products")
+          .select("case_studies(id, title, slug, summary, location, country, hero_image_url)")
+          .eq("product_id", product.id);
+        if (casesData) {
+          return casesData.map((item: any) => item.case_studies).filter(Boolean);
+        }
+        return [] as any[];
+      })();
+
+      const [alternatives, systemComponents, familyData, caseStudies] = await Promise.all([
+        alternativesPromise,
+        systemComponentsPromise,
+        familyDataPromise,
+        caseStudiesPromise,
+      ]);
+
+      return { product, alternatives, systemComponents, familyData, caseStudies };
+    }),
+  };
+});
 
 vi.mock("@/integrations/supabase/client", () => {
   return {
