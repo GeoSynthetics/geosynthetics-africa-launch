@@ -14,6 +14,7 @@ import { QuickQuoteModal } from "@/components/site/QuickQuoteModal";
 import "@/lib/i18n";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
+import { fetchDynamicMenus } from "@/hooks/use-dynamic-menus";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -39,6 +40,9 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+  loader: async () => ({
+    megaMenu: await fetchDynamicMenus(),
+  }),
   head: () => ({
     meta: [
       { charSet: "utf-8" },

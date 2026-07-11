@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLoaderData } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { megaMenus, type MegaMenuConfig } from "@/components/site/mega-menu-data";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
@@ -272,15 +273,7 @@ export function invalidateDynamicMenusCache() {
 }
 
 export function useDynamicMegaMenus() {
-  const [menus, setMenus] = useState<typeof megaMenus>(() => _cache ?? megaMenus);
-  const [isLoading, setIsLoading] = useState(!_cache);
-
-  useEffect(() => {
-    fetchDynamicMenus().then((builtMenus) => {
-      setMenus(builtMenus);
-      setIsLoading(false);
-    });
-  }, []);
-
-  return { menus, isLoading };
+  const rootData = useLoaderData({ from: "__root__" }) as { megaMenu: MegaMenuConfig[] } | undefined;
+  const menus = rootData?.megaMenu ?? _cache ?? megaMenus;
+  return { menus, isLoading: false };
 }
