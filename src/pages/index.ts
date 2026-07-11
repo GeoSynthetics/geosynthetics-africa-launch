@@ -2,6 +2,7 @@
 // Route files import from here, and $slug.tsx lazy-loads from here.
 
 export { AboutPage } from "./AboutPage";
+export { CataloguePage } from "./CataloguePage";
 export { HomePage } from "./HomePage";
 export { ProductsLanding } from "./ProductsLanding";
 export { ProjectsPage } from "./ProjectsPage";
