@@ -51,24 +51,16 @@ export type MegaMenuConfig = {
   };
 };
 
-import logo1 from "@/assets/brand-logos/Logo Brand 1.png";
-import logo2 from "@/assets/brand-logos/Logo Brand 2.png";
-import logo3 from "@/assets/brand-logos/Logo Brand 3.png";
-import logo4 from "@/assets/brand-logos/Logo Brand 4.png";
-import logo5 from "@/assets/brand-logos/Logo Brand 5.png";
-import logo6 from "@/assets/brand-logos/Logo Brand 6.png";
-import logo7 from "@/assets/brand-logos/Logo Brand 7.png";
-import logo8 from "@/assets/brand-logos/Logo Brand 8.png";
+import logo1 from "@/assets/brand-logos/brand-1.webp";
+import logo2 from "@/assets/brand-logos/brand-2.webp";
+import logo3 from "@/assets/brand-logos/brand-3.webp";
+import logo4 from "@/assets/brand-logos/brand-4.webp";
 
 export const PARTNER_LOGOS = [
-  { name: "GSE", logo: logo1 },
-  { name: "Tensar", logo: logo2 },
-  { name: "Eurobent", logo: logo3 },
-  { name: "Tiltex", logo: logo4 },
-  { name: "Bera", logo: logo5 },
-  { name: "Flowtex", logo: logo6 },
-  { name: "Polytape", logo: logo7 },
-  { name: "SoilLock", logo: logo8 },
+  { name: "AmourRock", logo: logo1 },
+  { name: "SoilLock", logo: logo2 },
+  { name: "FlowTex", logo: logo3 },
+  { name: "PolyTape", logo: logo4 },
 ];
 
 export const PRODUCT_CATEGORIES = [
