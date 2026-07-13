@@ -60,6 +60,7 @@ export interface CatalogueProduct {
 export interface FilterOption {
   id: string;
   name: string;
+  slug?: string | null;
 }
 
 export interface CataloguePageProps {
@@ -106,11 +107,47 @@ export function CataloguePage({ search }: CataloguePageProps) {
     void (async () => {
       const { data } = await supabase
         .from("product_categories")
-        .select("id, name")
+        .select("id, name, slug")
         .order("name");
       setCategories((data ?? []) as FilterOption[]);
     })();
   }, []);
+
+  // Resolve category slugs in URL to UUIDs dynamically
+  useEffect(() => {
+    if (categories.length > 0 && selectedCats.length > 0) {
+      const hasSlugs = selectedCats.some(
+        (cat) =>
+          !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat),
+      );
+      if (hasSlugs) {
+        const resolvedCats = selectedCats
+          .map((cat) => {
+            if (
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat)
+            ) {
+              return cat;
+            }
+            const found = categories.find(
+              (c) =>
+                c.slug === cat ||
+                c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
+            );
+            return found ? found.id : null;
+          })
+          .filter((x): x is string => x !== null);
+
+        void navigate({
+          to: ".",
+          search: (prev: Record<string, unknown>) => ({
+            ...prev,
+            cats: resolvedCats,
+          }),
+          replace: true,
+        });
+      }
+    }
+  }, [categories, selectedCats, navigate]);
 
   // Debounce search input -> URL
   useEffect(() => {

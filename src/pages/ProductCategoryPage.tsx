@@ -401,13 +401,23 @@ export function ProductCategoryPage() {
                   ))}
                 </div>
                 <div className="mt-4">
-                  <Link
-                    to="/catalogue"
-                    search={{ q: content.label, cats: [], mans: [], sort: "newest" }}
-                    className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1"
-                  >
-                    View Full Catalogue <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  {(() => {
+                    const filters = getCatalogueFiltersForSubcategory(category.slug);
+                    return (
+                      <Link
+                        to="/catalogue"
+                        search={{
+                          q: filters.q,
+                          cats: filters.catSlug ? [filters.catSlug] : [],
+                          mans: [],
+                          sort: "newest",
+                        }}
+                        className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1"
+                      >
+                        View Full Catalogue <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -613,13 +623,23 @@ export function ProductCategoryPage() {
                 </h3>
                 <ul className="space-y-1">
                   <li>
-                    <Link
-                      to="/catalogue"
-                      search={{ q: category.label, cats: [], mans: [], sort: "newest" }}
-                      className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium"
-                    >
-                      Catalogue Products <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </Link>
+                    {(() => {
+                      const filters = getCatalogueFiltersForSubcategory(category.slug);
+                      return (
+                        <Link
+                          to="/catalogue"
+                          search={{
+                            q: filters.q,
+                            cats: filters.catSlug ? [filters.catSlug] : [],
+                            mans: [],
+                            sort: "newest",
+                          }}
+                          className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium"
+                        >
+                          Catalogue Products <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                      );
+                    })()}
                   </li>
                   <li>
                     <Link
@@ -744,4 +764,72 @@ export function ProductCategoryPage() {
       <PartnerStrip />
     </>
   );
+}
+
+export function getCatalogueFiltersForSubcategory(slug: string): { q: string; catSlug: string } {
+  const mapping: Record<string, { q: string; catSlug: string }> = {
+    // Geomembranes
+    "hdpe-geomembranes": { q: "HDPE", catSlug: "geomembranes" },
+    "lldpe-geomembranes": { q: "LLDPE", catSlug: "geomembranes" },
+    "pvc-geomembranes": { q: "PVC", catSlug: "geomembranes" },
+    "epdm-geomembranes": { q: "EPDM", catSlug: "geomembranes" },
+    "pp-geomembranes": { q: "PP Geomembrane", catSlug: "geomembranes" },
+    "textured-geomembranes": { q: "EVA", catSlug: "geomembranes" },
+    "speciality-geomembranes": { q: "CSPE", catSlug: "geomembranes" },
+    "floating-cover-geomembranes": { q: "Floating Cover", catSlug: "geomembranes" },
+    "hdpe-coated-bentonite-geosynthetic-clay-liners": { q: "GCL", catSlug: "geomembranes" },
+    "reinforced-sodium-bentonite-geosynthetic-clay-liners": { q: "GCL", catSlug: "geomembranes" },
+    "tiltex-concrete-gccm-liner": { q: "Tiltex", catSlug: "geomembranes" },
+
+    // Geotextiles
+    "pp-root-barrier": { q: "Root Barrier", catSlug: "geotextiles" },
+    "pp-polytape-silt-fence": { q: "Silt Fence", catSlug: "geotextiles" },
+    "pp-weedblock-ground-cover": { q: "Ground Cover", catSlug: "geotextiles" },
+    "polypropylene-woven-geotextiles": { q: "Woven", catSlug: "geotextiles" },
+    "polypropylene-non-woven-geotextiles": { q: "Nonwoven", catSlug: "geotextiles" },
+    "geotextile-sand-bags": { q: "Sand", catSlug: "geotextiles" },
+    "woven-geotextile-sand-bags": { q: "Sand", catSlug: "geotextiles" },
+
+    // Geogrids
+    "biaxial-geogrids": { q: "Biaxial", catSlug: "geogrids" },
+    "triaxial-geogrids": { q: "Triaxial", catSlug: "geogrids" },
+    "uniaxial-geogrids": { q: "Uniaxial", catSlug: "geogrids" },
+    "composite-geogrids": { q: "Composite", catSlug: "geogrids" },
+    "multi-axial-geogrids": { q: "InterAx", catSlug: "geogrids" },
+    "glass-asphalt-geogrid": { q: "Asphalt", catSlug: "geogrids" },
+
+    // Erosion Control / Geocells / Gravel & Grass
+    "geostrata-hdpe-geocells": { q: "Geocell", catSlug: "erosion-control" },
+    "polycell-polypropylene-geocells": { q: "Geocell", catSlug: "erosion-control" },
+    "coir-fibre-soil-blankets": { q: "Coir", catSlug: "erosion-control" },
+    "envirowool-soil-erosion-blankets": { q: "EnviroWool", catSlug: "erosion-control" },
+    "straw-cellulose-erosion-blanket": { q: "Straw", catSlug: "erosion-control" },
+    "jute-soil-erosion-saver-control-blanket": { q: "Jute", catSlug: "erosion-control" },
+    "bera-grass-fix": { q: "Grass Fix", catSlug: "erosion-control" },
+    "bera-gravel-fix": { q: "Gravel Fix", catSlug: "erosion-control" },
+    "bera-stable-fix": { q: "Stable Fix", catSlug: "erosion-control" },
+
+    // Gabions
+    "galvanised-woven-gabion-baskets": { q: "Gabion", catSlug: "gabion-baskets" },
+    "square-weld-mesh-gabion-baskets": { q: "Weldmesh", catSlug: "gabion-baskets" },
+    "river-reno-matresses": { q: "Reno", catSlug: "gabion-baskets" },
+
+    // Dewatering / Sediment Control
+    "geotube-dewatering-systems": { q: "Geotube", catSlug: "dewatering-systems" },
+    "flowtex-dewatering-tubes-bags": { q: "FlowTex", catSlug: "dewatering-systems" },
+    "geo-curtain-silt-turbidity-curtains": { q: "Silt Curtain", catSlug: "dewatering-systems" },
+
+    // Drainage Composites / Pipes
+    "cable-ducting-pipes": { q: "Duct", catSlug: "drainage-composites" },
+    "subsoil-drainage-pipes": { q: "Subsoil", catSlug: "drainage-composites" },
+    "structured-wall-pipes": { q: "Structured", catSlug: "drainage-composites" },
+    "dimpled-drainage-boards": { q: "Dimpled", catSlug: "drainage-composites" },
+    "leak-detection-drainage-sheets": { q: "Leak", catSlug: "drainage-composites" },
+    "dpc-damp-proof-membranes-construction-plastic-sheeting-": { q: "DPC", catSlug: "damp-proofing" },
+
+    // Accessories
+    "accessories": { q: "", catSlug: "accessories" },
+  };
+
+  return mapping[slug] || { q: "", catSlug: "" };
 }
