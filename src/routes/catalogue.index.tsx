@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 import { CataloguePage } from "@/pages/CataloguePage";
 
 const SORT_OPTIONS = [
@@ -39,6 +40,16 @@ export const Route = createFileRoute("/catalogue/")({
       sort,
     };
   },
+  loader: async () => {
+    const { data } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "catalogue_page_content")
+      .maybeSingle();
+    return {
+      catalogueContent: data?.value || null,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Catalogue — Geosynthetics Africa" },
@@ -52,6 +63,7 @@ export const Route = createFileRoute("/catalogue/")({
   }),
   component: () => {
     const search = Route.useSearch();
-    return <CataloguePage search={search} />;
+    const loaderData = Route.useLoaderData();
+    return <CataloguePage search={search} catalogueContent={loaderData?.catalogueContent} />;
   },
 });

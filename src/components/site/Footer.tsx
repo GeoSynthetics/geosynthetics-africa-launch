@@ -1,10 +1,20 @@
 import { useState } from "react";
-import { Linkedin, Facebook, Instagram, Youtube } from "lucide-react";
+import {
+  Linkedin,
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+  MessageCircle,
+  Music2,
+} from "lucide-react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { usePageSlugs } from "@/hooks/use-page-slugs";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
+import { useFooterContent } from "@/hooks/use-footer-content";
 import { useTranslation } from "react-i18next";
+import type { FooterSocialLink } from "@/types/footer";
 
 const RESOURCES = [
   { label: "Datasheets", to: "/resources" },
@@ -24,19 +34,28 @@ const COMPANY = [
   { label: "Terms & Conditions", to: "/" },
 ];
 
-const CERTIFICATIONS = [
-  "IAGI Member - One of only 5 in Africa",
-  "B-BBEE Level 2",
-  "Pan-African Logistics",
-  "QA/QC Certified",
-];
+const PLATFORM_ICONS: Record<
+  FooterSocialLink["platform"],
+  React.ComponentType<{ className?: string }>
+> = {
+  linkedin: Linkedin,
+  facebook: Facebook,
+  instagram: Instagram,
+  youtube: Youtube,
+  twitter: Twitter,
+  whatsapp: MessageCircle,
+  tiktok: Music2,
+};
 
-const SOCIAL_LINKS = [
-  { Icon: Linkedin, label: "LinkedIn", href: "#" },
-  { Icon: Facebook, label: "Facebook", href: "#" },
-  { Icon: Instagram, label: "Instagram", href: "#" },
-  { Icon: Youtube, label: "YouTube", href: "#" },
-];
+const PLATFORM_LABELS: Record<FooterSocialLink["platform"], string> = {
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  twitter: "X / Twitter",
+  whatsapp: "WhatsApp",
+  tiktok: "TikTok",
+};
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
@@ -78,6 +97,7 @@ export function Footer() {
   const [email, setEmail] = useState("");
   const { resolve } = usePageSlugs();
   const { menus } = useDynamicMegaMenus();
+  const footerContent = useFooterContent();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,13 +173,6 @@ export function Footer() {
     };
   });
 
-  const certificationsMapped = CERTIFICATIONS.map((cert) => {
-    let key = "topbar.iagi";
-    if (cert === "B-BBEE Level 2") key = "topbar.bbbee";
-    if (cert === "Pan-African Logistics") key = "topbar.logistics";
-    if (cert === "QA/QC Certified") key = "topbar.qa";
-    return t(key, cert);
-  });
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
@@ -170,22 +183,25 @@ export function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
             <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
-              {t(
-                "footer.desc",
-                "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
-              )}
+              {footerContent.brandDescription}
             </p>
             <div className="mt-5 flex items-center gap-2">
-              {SOCIAL_LINKS.map(({ Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-dark-foreground/20 text-surface-dark-foreground/70 hover:bg-primary hover:border-primary hover:text-white transition"
-                  aria-label={label}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                </a>
-              ))}
+              {footerContent.socialLinks.map((link) => {
+                const Icon = PLATFORM_ICONS[link.platform] ?? Linkedin;
+                const label = PLATFORM_LABELS[link.platform] ?? link.platform;
+                return (
+                  <a
+                    key={`${link.platform}-${link.url}`}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-dark-foreground/20 text-surface-dark-foreground/70 hover:bg-primary hover:border-primary hover:text-white transition"
+                    aria-label={label}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -242,10 +258,9 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            {t(
-              "footer.copyright",
-              "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
-              { year: new Date().getFullYear() },
+            {footerContent.copyrightText.replace(
+              "{{year}}",
+              String(new Date().getFullYear()),
             )}{" "}
             <span className="hidden md:inline">|</span>
             <br className="md:hidden" />{" "}
@@ -259,7 +274,7 @@ export function Footer() {
             </a>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-y-2 md:gap-y-0">
-            {certificationsMapped.map((cert, idx) => (
+            {footerContent.certifications.map((cert, idx) => (
               <span key={cert} className="flex items-center uppercase tracking-wider text-center">
                 {idx > 0 && <span className="mx-2 md:mx-3 text-surface-dark-foreground/30">|</span>}
                 <span>{cert}</span>

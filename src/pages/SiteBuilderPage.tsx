@@ -13,9 +13,11 @@ import { HomepageBuilderTab } from "@/components/admin/HomepageBuilderTab";
 import { MegaMenuBuilderTab } from "@/components/admin/MegaMenuBuilderTab";
 import { RegionalCoverageBuilderTab } from "@/components/admin/RegionalCoverageBuilderTab";
 import { ContactsBuilderTab } from "@/components/admin/ContactsBuilderTab";
+import { FooterBuilderTab } from "@/components/admin/FooterBuilderTab";
+import { CatalogueBuilderTab } from "@/components/admin/CatalogueBuilderTab";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | "megamenu" | "regional" | "contacts" | SectionKey;
+type TopLevelTab = "homepage" | "megamenu" | "regional" | "contacts" | "footer" | "catalogue" | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }
@@ -245,6 +247,18 @@ export function SiteBuilderPage() {
           >
             Contact Page
           </TabsTrigger>
+          <TabsTrigger
+            value="footer"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Footer
+          </TabsTrigger>
+          <TabsTrigger
+            value="catalogue"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
+          >
+            Catalogue Page
+          </TabsTrigger>
           {SECTION_KEYS.map((key) => (
             <TabsTrigger
               key={key}
@@ -279,6 +293,16 @@ export function SiteBuilderPage() {
         {/* Contact Page tab content */}
         <TabsContent value="contacts" className="flex-1 overflow-hidden m-0">
           <ContactsBuilderTab />
+        </TabsContent>
+
+        {/* Footer tab content */}
+        <TabsContent value="footer" className="flex-1 overflow-hidden m-0">
+          <FooterBuilderTab />
+        </TabsContent>
+
+        {/* Catalogue Page tab content */}
+        <TabsContent value="catalogue" className="flex-1 overflow-hidden m-0">
+          <CatalogueBuilderTab />
         </TabsContent>
 
         {/* Navigation hierarchy tabs */}

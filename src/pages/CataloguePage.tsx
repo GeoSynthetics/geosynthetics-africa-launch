@@ -25,6 +25,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { type CataloguePageContent, DEFAULT_CATALOGUE_PAGE_CONTENT } from "@/types/catalogue";
 
 const PAGE_SIZE = 6;
 
@@ -69,6 +70,7 @@ export interface CataloguePageProps {
     cats: string[];
     sort: SortValue;
   };
+  catalogueContent?: any;
 }
 
 function formatZAR(n: number) {
@@ -79,7 +81,7 @@ function formatZAR(n: number) {
   }).format(n);
 }
 
-export function CataloguePage({ search }: CataloguePageProps) {
+export function CataloguePage({ search, catalogueContent }: CataloguePageProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -303,12 +305,22 @@ export function CataloguePage({ search }: CataloguePageProps) {
 
   const activeFilterCount = selectedCats.length + (q ? 1 : 0);
 
+  const pageContent = {
+    ...DEFAULT_CATALOGUE_PAGE_CONTENT,
+    ...(catalogueContent as Partial<CataloguePageContent>),
+  };
+  const hero = {
+    ...DEFAULT_CATALOGUE_PAGE_CONTENT.hero,
+    ...pageContent.hero,
+  };
+
   return (
     <>
       <PageHero
-        eyebrow="Catalogue"
-        title="Engineered Geosynthetic Materials"
-        description="Search and filter our full catalogue of engineered geosynthetic products."
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
+        image={hero.bgImage}
       />
       <section className="bg-background">
         <div className="container-page py-10">

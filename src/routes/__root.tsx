@@ -15,6 +15,7 @@ import "@/lib/i18n";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import { fetchDynamicMenus } from "@/hooks/use-dynamic-menus";
+import { fetchFooterContent } from "@/hooks/use-footer-content";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -40,9 +41,13 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
-  loader: async () => ({
-    megaMenu: await fetchDynamicMenus(),
-  }),
+  loader: async () => {
+    const [megaMenu, footerContent] = await Promise.all([
+      fetchDynamicMenus(),
+      fetchFooterContent(),
+    ]);
+    return { megaMenu, footerContent };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
