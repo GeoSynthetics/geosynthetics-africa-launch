@@ -26,10 +26,11 @@ function mergeWithDefaults(partial: Partial<FooterContent>): FooterContent {
 }
 
 export function fetchFooterContent(): Promise<FooterContent> {
-  if (_cache) return Promise.resolve(_cache);
-  if (_fetchPromise) return _fetchPromise;
+  const isServer = typeof window === "undefined";
+  if (!isServer && _cache) return Promise.resolve(_cache);
+  if (!isServer && _fetchPromise) return _fetchPromise;
 
-  _fetchPromise = (async () => {
+  const fetchPromise = (async () => {
     try {
       const { data, error } = await supabase
         .from("site_config")
@@ -39,21 +40,32 @@ export function fetchFooterContent(): Promise<FooterContent> {
 
       if (error) {
         console.error("Failed to load footer content:", error.message);
-        _cache = DEFAULT_FOOTER_CONTENT;
+        if (!isServer) {
+          _cache = DEFAULT_FOOTER_CONTENT;
+        }
         return DEFAULT_FOOTER_CONTENT;
       }
 
       const value = data?.value as Partial<FooterContent> | null;
-      _cache = value ? mergeWithDefaults(value) : DEFAULT_FOOTER_CONTENT;
-      return _cache;
+      const merged = value ? mergeWithDefaults(value) : DEFAULT_FOOTER_CONTENT;
+      if (!isServer) {
+        _cache = merged;
+      }
+      return merged;
     } catch (err) {
       console.error("Error fetching footer content:", err);
-      _cache = DEFAULT_FOOTER_CONTENT;
+      if (!isServer) {
+        _cache = DEFAULT_FOOTER_CONTENT;
+      }
       return DEFAULT_FOOTER_CONTENT;
     }
   })();
 
-  return _fetchPromise;
+  if (!isServer) {
+    _fetchPromise = fetchPromise;
+  }
+
+  return fetchPromise;
 }
 
 export function invalidateFooterCache() {

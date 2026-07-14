@@ -42,6 +42,7 @@ import type {
   FeaturedProduct,
   FeaturedImage,
 } from "@/types/hierarchy";
+import { invalidateDynamicMenusCache } from "@/hooks/use-dynamic-menus";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 
@@ -231,6 +232,7 @@ export function MegaMenuBuilderTab({
         );
 
       if (error) throw error;
+      invalidateDynamicMenusCache();
       toast.success(`${currentSection.label} Mega Menu saved successfully.`);
       updateSectionState(updatedSection, false);
       setDirty(false);
