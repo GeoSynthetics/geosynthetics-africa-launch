@@ -112,8 +112,7 @@ export function ProductCategoryPage() {
             {/* Description */}
             <div>
               <h2 className="font-display text-xl font-bold uppercase mb-4 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> This is a comprehensive description of the{" "}
-                {content.label}
+                <span className="text-primary">|</span> About {content.label}
               </h2>
               <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
                 {splitIntoParagraphs(content.description).map((paragraph, idx) => (

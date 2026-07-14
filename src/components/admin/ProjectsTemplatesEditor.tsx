@@ -43,10 +43,25 @@ import {
 
 // Reusable Sub-components for Form Layouts
 
+interface StatCounter {
+  id: string;
+  value: string;
+  label: string;
+}
+
+interface AfricanCountryReach {
+  id: string;
+  flag: string;
+  name: string;
+  count: number;
+}
+
 interface ProjectsLandingContent {
   title: string;
   description: string;
   heroImage: string;
+  stats?: StatCounter[];
+  countries?: AfricanCountryReach[];
   seo?: {
     title: string;
     description: string;
@@ -59,6 +74,26 @@ const defaultLandingContent = (): ProjectsLandingContent => ({
   description:
     "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.",
   heroImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+  stats: [
+    { id: "stat-1", value: "340+", label: "Projects delivered" },
+    { id: "stat-2", value: "17", label: "African countries" },
+    { id: "stat-3", value: "28M m²", label: "Geosynthetics installed" },
+    { id: "stat-4", value: "20+", label: "Years experience" },
+  ],
+  countries: [
+    { id: "country-1", flag: "🇿🇦", name: "South Africa", count: 218 },
+    { id: "country-2", flag: "🇨🇩", name: "DRC", count: 34 },
+    { id: "country-3", flag: "🇲🇱", name: "Mali", count: 18 },
+    { id: "country-4", flag: "🇿🇲", name: "Zambia", count: 14 },
+    { id: "country-5", flag: "🇬🇭", name: "Ghana", count: 11 },
+    { id: "country-6", flag: "🇰🇪", name: "Kenya", count: 9 },
+    { id: "country-7", flag: "🇹🇿", name: "Tanzania", count: 8 },
+    { id: "country-8", flag: "🇿🇼", name: "Zimbabwe", count: 7 },
+    { id: "country-9", flag: "🇲🇿", name: "Mozambique", count: 6 },
+    { id: "country-10", flag: "🇳🇦", name: "Namibia", count: 6 },
+    { id: "country-11", flag: "🇦🇴", name: "Angola", count: 5 },
+    { id: "country-12", flag: "🇬🇬", name: "Guinea", count: 4 },
+  ],
   seo: {
     title: "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa",
     description:
@@ -132,6 +167,8 @@ export function ProjectsTemplatesEditor() {
       setEditingLanding({
         ...defaultLandingContent(),
         ...landingContent,
+        stats: landingContent?.stats || defaultLandingContent().stats || [],
+        countries: landingContent?.countries || defaultLandingContent().countries || [],
         seo: {
           title: landingContent?.seo?.title || defaultLandingContent().seo?.title || "",
           description:
@@ -146,11 +183,11 @@ export function ProjectsTemplatesEditor() {
   // Handle activeTab switching between landing vs normal project tabs
   useEffect(() => {
     if (activeId === "__landing") {
-      if (activeTab !== "landing" && activeTab !== "seo") {
+      if (activeTab !== "landing" && activeTab !== "seo" && activeTab !== "stats_reach") {
         setActiveTab("landing");
       }
     } else {
-      if (activeTab === "landing" || activeTab === "seo") {
+      if (activeTab === "landing" || activeTab === "seo" || activeTab === "stats_reach") {
         setActiveTab("hero");
       }
     }
@@ -172,6 +209,49 @@ export function ProjectsTemplatesEditor() {
       },
     }));
     setDirty(true);
+  };
+
+  const handleAddStat = () => {
+    const newStats = [...(editingLanding.stats || [])];
+    newStats.push({
+      id: `stat-${Date.now()}`,
+      value: "100+",
+      label: "New Stat Metric"
+    });
+    setLandingField("stats", newStats);
+  };
+
+  const handleUpdateStat = (index: number, field: string, value: string) => {
+    const newStats = [...(editingLanding.stats || [])];
+    newStats[index] = { ...newStats[index], [field]: value };
+    setLandingField("stats", newStats);
+  };
+
+  const handleRemoveStat = (index: number) => {
+    const newStats = (editingLanding.stats || []).filter((_, i) => i !== index);
+    setLandingField("stats", newStats);
+  };
+
+  const handleAddCountry = () => {
+    const newCountries = [...(editingLanding.countries || [])];
+    newCountries.push({
+      id: `country-${Date.now()}`,
+      flag: "🌍",
+      name: "New Country",
+      count: 0
+    });
+    setLandingField("countries", newCountries);
+  };
+
+  const handleUpdateCountry = (index: number, field: string, value: any) => {
+    const newCountries = [...(editingLanding.countries || [])];
+    newCountries[index] = { ...newCountries[index], [field]: value };
+    setLandingField("countries", newCountries);
+  };
+
+  const handleRemoveCountry = (index: number) => {
+    const newCountries = (editingLanding.countries || []).filter((_, i) => i !== index);
+    setLandingField("countries", newCountries);
   };
 
   const handleConfirmDelete = () => {
@@ -665,6 +745,12 @@ export function ProjectsTemplatesEditor() {
                           Hero & Details
                         </TabsTrigger>
                         <TabsTrigger
+                          value="stats_reach"
+                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          Stats & Reach
+                        </TabsTrigger>
+                        <TabsTrigger
                           value="seo"
                           className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
@@ -710,6 +796,166 @@ export function ProjectsTemplatesEditor() {
                               value={editingLanding.heroImage ?? ""}
                               onChange={(val) => setLandingField("heroImage", val)}
                             />
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* STATS & REACH TAB */}
+                      <TabsContent
+                        value="stats_reach"
+                        className="space-y-8 m-0 focus-visible:outline-none"
+                      >
+                        {/* Section 1: Counter Metrics */}
+                        <div>
+                          <div className="flex items-center justify-between mb-4">
+                            <SectionHeading>Stats Ribbon Counter Metrics</SectionHeading>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleAddStat}
+                              className="h-8 text-xs gap-1.5 cursor-pointer"
+                            >
+                              <Plus className="h-3.5 w-3.5" /> Add Metric
+                            </Button>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {(editingLanding.stats || []).map((stat, idx) => (
+                              <div
+                                key={stat.id || idx}
+                                className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3"
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => handleRemoveStat(idx)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+
+                                <div className="space-y-3">
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Stat Value / Number
+                                    </label>
+                                    <Input
+                                      value={stat.value}
+                                      onChange={(e) =>
+                                        handleUpdateStat(idx, "value", e.target.value)
+                                      }
+                                      placeholder="e.g. 340+"
+                                      className="text-xs font-mono font-bold"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Stat Label
+                                    </label>
+                                    <Input
+                                      value={stat.label}
+                                      onChange={(e) =>
+                                        handleUpdateStat(idx, "label", e.target.value)
+                                      }
+                                      placeholder="e.g. Projects delivered"
+                                      className="text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {(editingLanding.stats || []).length === 0 && (
+                              <p className="text-xs text-muted-foreground italic col-span-2">
+                                No stats defined. Click Add Metric.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Section 2: Country Reach Grid */}
+                        <div className="border-t border-border pt-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <SectionHeading>Pan-African Reach Flag Statistics</SectionHeading>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleAddCountry}
+                              className="h-8 text-xs gap-1.5 cursor-pointer"
+                            >
+                              <Plus className="h-3.5 w-3.5" /> Add Country
+                            </Button>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {(editingLanding.countries || []).map((c, idx) => (
+                              <div
+                                key={c.id || idx}
+                                className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3"
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => handleRemoveCountry(idx)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-4 gap-2">
+                                    <div className="col-span-1 space-y-1">
+                                      <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                        Flag
+                                      </label>
+                                      <Input
+                                        value={c.flag}
+                                        onChange={(e) =>
+                                          handleUpdateCountry(idx, "flag", e.target.value)
+                                        }
+                                        placeholder="🇿🇦"
+                                        className="text-xs text-center"
+                                      />
+                                    </div>
+                                    <div className="col-span-3 space-y-1">
+                                      <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                        Country Name
+                                      </label>
+                                      <Input
+                                        value={c.name}
+                                        onChange={(e) =>
+                                          handleUpdateCountry(idx, "name", e.target.value)
+                                        }
+                                        placeholder="e.g. South Africa"
+                                        className="text-xs"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Project Count
+                                    </label>
+                                    <Input
+                                      type="number"
+                                      value={c.count}
+                                      onChange={(e) =>
+                                        handleUpdateCountry(
+                                          idx,
+                                          "count",
+                                          parseInt(e.target.value) || 0,
+                                        )
+                                      }
+                                      placeholder="0"
+                                      className="text-xs font-mono"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {(editingLanding.countries || []).length === 0 && (
+                              <p className="text-xs text-muted-foreground italic col-span-3">
+                                No countries defined. Click Add Country.
+                              </p>
+                            )}
                           </div>
                         </div>
                       </TabsContent>
