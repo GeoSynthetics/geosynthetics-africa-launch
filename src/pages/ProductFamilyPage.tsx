@@ -551,52 +551,12 @@ export function ProductFamilyPage() {
         {/* Sidebar Area */}
         <aside className="lg:col-span-4 space-y-12">
           {/* Request For Quote Form */}
-          <div className="bg-surface border-t-4 border-t-primary border-x border-b border-border p-6 rounded-b shadow-sm sticky top-[160px]">
-            <h3 className="font-display text-xl font-bold uppercase tracking-wide text-foreground mb-2">
-              Request For Quote
-            </h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Need pricing for {data.title}? Our sales engineers are ready to assist you.
-            </p>
-
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Full Name"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Email <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="email"
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Email Address"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Project Details
-                </label>
-                <textarea
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary min-h-[100px] resize-none"
-                  placeholder="Quantity, location, application..."
-                ></textarea>
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-hover font-bold uppercase tracking-wider"
-              >
-                Submit Request
-              </Button>
-            </form>
-          </div>
+          <QuoteCard
+            contextId={family}
+            contextLabel={data.title}
+            heading="Request For Quote"
+            description={`Need pricing for ${data.title}? Our sales engineers are ready to assist you.`}
+          />
         </aside>
       </div>
 

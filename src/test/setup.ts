@@ -52,6 +52,16 @@ class MockIntersectionObserver {
 
 (globalThis as any).IntersectionObserver = MockIntersectionObserver;
 
+// Mock ResizeObserver globally for tests
+class MockResizeObserver {
+  constructor(public callback: ResizeObserverCallback) {}
+  observe(target: Element) {}
+  unobserve(target: Element) {}
+  disconnect() {}
+}
+
+(globalThis as any).ResizeObserver = MockResizeObserver;
+
 // Mock localStorage globally for tests
 const localStorageMock = (() => {
   let store: Record<string, string> = {};

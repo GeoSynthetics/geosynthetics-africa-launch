@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,10 @@ interface QuoteCardProps {
   heading?: string;
   /** Subheading / description text */
   description?: string;
+  /** Initial message value */
+  initialMessage?: string;
+  /** Whether to show file uploader */
+  showFileUpload?: boolean;
 }
 
 export function QuoteCard({
@@ -40,6 +44,8 @@ export function QuoteCard({
   contextLabel,
   heading = "Request a Quote",
   description = "Upload your BOQ or drawings and we'll provide a technical proposal.",
+  initialMessage,
+  showFileUpload = true,
 }: QuoteCardProps) {
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -48,6 +54,12 @@ export function QuoteCard({
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
+
+  useEffect(() => {
+    if (initialMessage !== undefined) {
+      setMessage(initialMessage);
+    }
+  }, [initialMessage]);
   const [submitting, setSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -213,69 +225,73 @@ export function QuoteCard({
           className="resize-none"
         />
 
-        {/* File drop zone */}
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={onDrop}
-          onClick={() => inputRef.current?.click()}
-          className={cn(
-            "rounded-xl border-2 border-dashed p-5 text-center cursor-pointer transition",
-            dragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/60",
-          )}
-        >
-          <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
-          <div className="mt-2 text-xs">
-            <span className="font-medium text-foreground">Drag & drop your BOQ or drawings</span>
-            <span className="text-muted-foreground"> or </span>
-            <span className="text-primary font-medium underline">click to upload</span>
-          </div>
-          <div className="text-[10px] text-muted-foreground mt-1 leading-normal">
-            PDF, DWG, DOC, XLS, images (Max 20MB each, up to {MAX_FILES} files)
-          </div>
-          <input
-            ref={inputRef}
-            type="file"
-            multiple
-            className="hidden"
-            accept={ALLOWED_TYPES.join(",")}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              addFiles(e.target.files);
-              e.target.value = "";
-            }}
-          />
-        </div>
+        {showFileUpload && (
+          <>
+            {/* File drop zone */}
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={onDrop}
+              onClick={() => inputRef.current?.click()}
+              className={cn(
+                "rounded-xl border-2 border-dashed p-5 text-center cursor-pointer transition",
+                dragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/60",
+              )}
+            >
+              <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
+              <div className="mt-2 text-xs">
+                <span className="font-medium text-foreground">Drag & drop your BOQ or drawings</span>
+                <span className="text-muted-foreground"> or </span>
+                <span className="text-primary font-medium underline">click to upload</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground mt-1 leading-normal">
+                PDF, DWG, DOC, XLS, images (Max 20MB each, up to {MAX_FILES} files)
+              </div>
+              <input
+                ref={inputRef}
+                type="file"
+                multiple
+                className="hidden"
+                accept={ALLOWED_TYPES.join(",")}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  addFiles(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+            </div>
 
-        {files.length > 0 && (
-          <ul className="space-y-2">
-            {files.map((f, i) => (
-              <li
-                key={`${f.name}-${i}`}
-                className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface p-2.5"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <FileText className="h-4 w-4 text-primary shrink-0" />
-                  <div className="min-w-0">
-                    <div className="text-xs font-semibold truncate text-foreground">{f.name}</div>
-                    <div className="text-[10px] text-muted-foreground">
-                      {(f.size / 1024 / 1024).toFixed(2)} MB
+            {files.length > 0 && (
+              <ul className="space-y-2">
+                {files.map((f, i) => (
+                  <li
+                    key={`${f.name}-${i}`}
+                    className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface p-2.5"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileText className="h-4 w-4 text-primary shrink-0" />
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold truncate text-foreground">{f.name}</div>
+                        <div className="text-[10px] text-muted-foreground">
+                          {(f.size / 1024 / 1024).toFixed(2)} MB
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeFile(i)}
-                  className="text-muted-foreground hover:text-destructive transition p-1"
-                  aria-label={`Remove ${f.name}`}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </li>
-            ))}
-          </ul>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(i)}
+                      className="text-muted-foreground hover:text-destructive transition p-1"
+                      aria-label={`Remove ${f.name}`}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
 
         <Button

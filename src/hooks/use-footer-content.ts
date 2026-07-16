@@ -22,6 +22,8 @@ function mergeWithDefaults(partial: Partial<FooterContent>): FooterContent {
       partial.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
     copyrightText:
       partial.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
+    columns:
+      partial.columns ?? DEFAULT_FOOTER_CONTENT.columns,
   };
 }
 

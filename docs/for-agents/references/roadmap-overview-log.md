@@ -329,6 +329,22 @@ To validate: paste the sitemap URL into [Google's Rich Results Test](https://sea
 **Notes / follow-ups:** Developers/administrators must ensure that the `20260701140000_add_resource_types.sql` migration is applied to their self-managed Supabase instance so that the database supports the `manual` and `case_study` enum values.
 
 ---
+## 2026-07-15 — Dynamic Footer Builder in Site Builder Admin Control Panel
+
+**Scope:** Admin / Footer / Navigation
+**Summary:** Implemented dynamic footer columns in the Site Builder admin control panel. Replaced hardcoded link columns in the public footer with dynamic configuration loaded from Supabase site_config (key `footer_content`). Added a "Navigation Columns" tab to the Footer Builder tab allowing administrators to add, remove, and reorder custom or dynamic columns and links.
+**Files touched:** `src/types/footer.ts`, `src/hooks/use-footer-content.ts`, `src/components/site/Footer.tsx`, `src/components/admin/FooterBuilderTab.tsx`, `src/test/components/Footer.test.tsx` (new), `src/test/components/FooterBuilderTab.test.tsx` (new)
+**Notes / follow-ups:** Added robust Vitest unit tests verifying components under the new dynamic model using Test-Driven Development (TDD).
+
+---
+## 2026-07-16 — Horizontal Scrolling Navigation with Arrow Overlays in Site Builder
+
+**Scope:** Admin / Site Builder / UI
+**Summary:** Refactored the Site Builder tab navigation to scroll horizontally instead of clipping or wrapping when there are many tabs. Added interactive Left and Right navigation arrow indicators with premium gradient edge overlays. The arrows appear dynamically depending on the scroll position and container width.
+**Files touched:** `src/pages/SiteBuilderPage.tsx`, `src/test/setup.ts`, `src/test/components/SiteBuilderPage.test.tsx` (new)
+**Notes / follow-ups:** Added global `ResizeObserver` mock in the test setup config to support testing window resize logic.
+
+---
 
 <!--
 Entry template — copy when adding a new entry:

@@ -14,25 +14,7 @@ import { usePageSlugs } from "@/hooks/use-page-slugs";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
 import { useFooterContent } from "@/hooks/use-footer-content";
 import { useTranslation } from "react-i18next";
-import type { FooterSocialLink } from "@/types/footer";
-
-const RESOURCES = [
-  { label: "Datasheets", to: "/resources" },
-  { label: "Installation Guides", to: "/resources" },
-  { label: "QA Checklists", to: "/quality-assurance" },
-  { label: "Technical Articles", to: "/resources" },
-  { label: "Videos", to: "/resources" },
-  { label: "FAQs", to: "/resources" },
-];
-
-const COMPANY = [
-  { label: "About Us", to: "/about" },
-  { label: "Careers", to: "/" },
-  { label: "News", to: "/resources" },
-  { label: "Sustainability", to: "/" },
-  { label: "Privacy Policy", to: "/" },
-  { label: "Terms & Conditions", to: "/" },
-];
+import { type FooterSocialLink, DEFAULT_FOOTER_CONTENT } from "@/types/footer";
 
 const PLATFORM_ICONS: Record<
   FooterSocialLink["platform"],
@@ -146,39 +128,79 @@ export function Footer() {
       }))
     : [];
 
-  // Resolve custom slugs for core page links
-  const company = COMPANY.map((item) => {
-    let key = "footer.aboutUs";
-    if (item.label === "Careers") key = "footer.careers";
-    if (item.label === "News") key = "footer.news";
-    if (item.label === "Sustainability") key = "footer.sustainability";
-    if (item.label === "Privacy Policy") key = "footer.privacyPolicy";
-    if (item.label === "Terms & Conditions") key = "footer.termsConditions";
+  const columns = footerContent.columns || DEFAULT_FOOTER_CONTENT.columns || [];
+
+  const dynamicCols = columns.map((col) => {
+    let items: { label: string; to: string; params?: Record<string, string> }[] = [];
+    if (col.type === "custom") {
+      items = (col.links || []).map((link) => {
+        let key = `footer.${link.label.toLowerCase()}`;
+        if (link.label === "About Us") key = "footer.aboutUs";
+        if (link.label === "Careers") key = "footer.careers";
+        if (link.label === "News") key = "footer.news";
+        if (link.label === "Sustainability") key = "footer.sustainability";
+        if (link.label === "Privacy Policy") key = "footer.privacyPolicy";
+        if (link.label === "Terms & Conditions") key = "footer.termsConditions";
+        if (link.label === "Datasheets") key = "footer.datasheets";
+        if (link.label === "Installation Guides") key = "footer.installationGuides";
+        if (link.label === "QA Checklists") key = "footer.qaChecklists";
+        if (link.label === "Technical Articles") key = "footer.technicalArticles";
+        if (link.label === "Videos") key = "footer.videos";
+        if (link.label === "FAQs") key = "footer.faqs";
+
+        return {
+          label: t(key, link.label),
+          to: resolve(link.to),
+          params: link.params,
+        };
+      });
+    } else if (col.type === "products") {
+      items = products;
+    } else if (col.type === "applications") {
+      items = applications;
+    } else if (col.type === "services") {
+      items = services;
+    } else if (col.type === "industries") {
+      items = industries;
+    }
     return {
-      label: t(key, item.label),
-      to: resolve(item.to),
+      title: col.title,
+      type: col.type,
+      items,
     };
   });
 
-  const resources = RESOURCES.map((item) => {
-    let key = "footer.datasheets";
-    if (item.label === "Installation Guides") key = "footer.installationGuides";
-    if (item.label === "QA Checklists") key = "footer.qaChecklists";
-    if (item.label === "Technical Articles") key = "footer.technicalArticles";
-    if (item.label === "Videos") key = "footer.videos";
-    if (item.label === "FAQs") key = "footer.faqs";
-    return {
-      label: t(key, item.label),
-      to: resolve(item.to),
-    };
-  });
-
+  const getTranslatedTitle = (title: string, type: string) => {
+    if (type === "products") {
+      return title === "Products" ? t("nav.products", title) : title;
+    }
+    if (type === "applications") {
+      return title === "Applications" ? t("nav.applications", title) : title;
+    }
+    if (type === "services") {
+      return title === "Services" ? t("nav.services", title) : title;
+    }
+    if (type === "industries") {
+      return title === "Industries" ? t("nav.industries", title) : title;
+    }
+    if (type === "custom") {
+      if (title === "Resources") return t("footer.resources", title);
+      if (title === "Company") return t("footer.company", title);
+      return t(`footer.colTitle.${title.toLowerCase()}`, title);
+    }
+    return title;
+  };
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
       {/* Main footer grid */}
       <div className="w-full px-6 lg:px-10 xl:px-16 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-x-6 gap-y-8">
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-[repeat(var(--cols-count),_minmax(0,_1fr))] gap-x-6 gap-y-8"
+          style={{
+            "--cols-count": 2 + columns.length + 1,
+          } as React.CSSProperties}
+        >
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
@@ -205,23 +227,14 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Products */}
-          <FooterCol title={t("nav.products", "Products")} items={products} />
-
-          {/* Applications */}
-          <FooterCol title={t("nav.applications", "Applications")} items={applications} />
-
-          {/* Industries */}
-          <FooterCol title={t("nav.industries", "Industries")} items={industries} />
-
-          {/* Services */}
-          <FooterCol title={t("nav.services", "Services")} items={services} />
-
-          {/* Resources */}
-          <FooterCol title={t("footer.resources", "Resources")} items={resources} />
-
-          {/* Company */}
-          <FooterCol title={t("footer.company", "Company")} items={company} />
+          {/* Dynamic Columns */}
+          {dynamicCols.map((col, idx) => (
+            <FooterCol
+              key={`${col.title}-${idx}`}
+              title={getTranslatedTitle(col.title, col.type)}
+              items={col.items}
+            />
+          ))}
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 min-w-0">

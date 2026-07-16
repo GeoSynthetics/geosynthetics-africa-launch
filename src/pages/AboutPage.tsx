@@ -1,5 +1,6 @@
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import { ShieldCheck, Truck, Cog, MapPin, Phone, Clock } from "lucide-react";
 
 export function AboutPage() {
@@ -274,73 +275,13 @@ export function AboutPage() {
             </div>
           </div>
 
-          <div className="bg-card text-card-foreground rounded p-6 md:p-8 border border-border shadow-2xl relative z-10">
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">Name</label>
-                  <input
-                    className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">
-                    Email Address
-                  </label>
-                  <input
-                    className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                    placeholder="john@example.com"
-                    type="email"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">
-                    Company (Optional)
-                  </label>
-                  <input
-                    className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                    placeholder="Company Ltd"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">
-                    Phone Number
-                  </label>
-                  <input
-                    className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                    placeholder="+27 00 000 0000"
-                    type="tel"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-muted-foreground">Project</label>
-                <input
-                  className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                  placeholder="Project name or location"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-muted-foreground">
-                  Your Message
-                </label>
-                <textarea
-                  rows={4}
-                  className="w-full bg-surface border border-border rounded px-4 py-2.5 text-sm focus:border-primary focus:outline-none transition"
-                  placeholder="Tell us about your requirements..."
-                ></textarea>
-              </div>
-              <button
-                type="button"
-                className="w-full bg-primary text-primary-foreground font-bold uppercase tracking-wide py-3.5 rounded hover:bg-primary-hover transition mt-2"
-              >
-                Submit Request
-              </button>
-            </form>
-          </div>
+          <QuoteCard
+            heading="Send a Message"
+            description="Our technical team is ready to support your project. Fill in your details below."
+            showFileUpload={false}
+            contextId="about-page"
+            contextLabel="About Page Inquiry"
+          />
         </div>
       </section>
 

@@ -79,6 +79,7 @@ export function ProductDetailPage() {
     Route.useLoaderData();
   const { open } = useQuickQuote();
   const [activeTab, setActiveTab] = useState("overview");
+  const [quoteMessage, setQuoteMessage] = useState("");
   const [headerH, setHeaderH] = useState(96);
   const [tabsVisible, setTabsVisible] = useState(true);
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
@@ -818,14 +819,9 @@ export function ProductDetailPage() {
                         <button
                           type="button"
                           onClick={() => {
-                            const quoteMessage = `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`;
-                            const messageEl = document.querySelector(
-                              'textarea[placeholder*="Message"]',
-                            ) as HTMLTextAreaElement;
-                            if (messageEl) {
-                              messageEl.value = quoteMessage;
-                              messageEl.dispatchEvent(new Event("input", { bubbles: true }));
-                            }
+                            setQuoteMessage(
+                              `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`,
+                            );
                             scrollTo("quote");
                           }}
                           className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start cursor-pointer"
@@ -991,7 +987,11 @@ export function ProductDetailPage() {
               )}
 
               {/* Quote form */}
-              <QuoteCard contextId={product.id} contextLabel={product.name} />
+              <QuoteCard
+                contextId={product.id}
+                contextLabel={product.name}
+                initialMessage={quoteMessage}
+              />
 
               {/* Alternative Solutions */}
               {alternatives.length > 0 && (

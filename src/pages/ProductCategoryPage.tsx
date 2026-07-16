@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import {
   Accordion,
   AccordionContent,
@@ -494,80 +495,12 @@ export function ProductCategoryPage() {
             </div>
 
             {/* BOQ Upload Form */}
-            <div>
-              <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> BOQ Upload to Specific Sales
-              </h2>
-              <div className="bg-surface p-6 rounded border border-border">
-                <p className="text-sm text-muted-foreground mb-6">
-                  Upload your Bill of Quantities (BOQ) for a tailored quotation. Our sales team will
-                  review your requirements and provide a competitive pricing schedule.
-                </p>
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Full Name <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Company <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="Company Name"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Email Address <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="name@company.com"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="+27 12 345 6789"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1 pt-2">
-                    <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                      Upload BOQ Document (PDF, Excel) <span className="text-primary">*</span>
-                    </label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition bg-background cursor-pointer">
-                      <Download className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
-                      <span className="text-sm text-muted-foreground block">
-                        Click to upload or drag and drop
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-primary hover:bg-primary-hover font-bold uppercase tracking-wider mt-4"
-                  >
-                    Submit BOQ for Review
-                  </Button>
-                </form>
-              </div>
-            </div>
+            <QuoteCard
+              contextId={content.slug}
+              contextLabel={content.label}
+              heading="BOQ Upload to Specific Sales"
+              description="Upload your Bill of Quantities (BOQ) or drawings for a tailored quotation. Our sales team will review your requirements and provide a competitive pricing schedule."
+            />
 
             {/* Bottom FAQs duplicate from screenshot layout */}
             {content.faqs && (

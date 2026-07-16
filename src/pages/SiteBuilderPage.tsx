@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -37,6 +38,45 @@ export function SiteBuilderPage() {
   const [saving, setSaving] = useState(false);
   const [activeSection, setActiveSection] = useState<TopLevelTab>("homepage");
   const [selected, setSelected] = useState<SelectedNode | null>(null);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setShowLeftArrow(scrollLeft > 2);
+    setShowRightArrow(scrollLeft + clientWidth < scrollWidth - 2);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    checkScroll();
+
+    const observer = new ResizeObserver(() => {
+      checkScroll();
+    });
+    observer.observe(el);
+
+    const tabList = el.querySelector("[role='tablist']");
+    if (tabList) {
+      observer.observe(tabList);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [sections]);
+
+  const handleScroll = (offset: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: offset, behavior: "smooth" });
+  };
 
   // Load from Supabase; fall back to hardcoded defaults
   useEffect(() => {
@@ -221,54 +261,88 @@ export function SiteBuilderPage() {
         }}
         className="flex-1 flex flex-col overflow-hidden"
       >
-        <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto gap-0 shrink-0">
-          {/* Homepage tab — always first */}
-          <TabsTrigger
-            value="homepage"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Homepage
-          </TabsTrigger>
-          <TabsTrigger
-            value="megamenu"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Mega Menu
-          </TabsTrigger>
-          <TabsTrigger
-            value="regional"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Regional Coverage
-          </TabsTrigger>
-          <TabsTrigger
-            value="contacts"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Contact Page
-          </TabsTrigger>
-          <TabsTrigger
-            value="footer"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Footer
-          </TabsTrigger>
-          <TabsTrigger
-            value="catalogue"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer"
-          >
-            Catalogue Page
-          </TabsTrigger>
-          {SECTION_KEYS.map((key) => (
-            <TabsTrigger
-              key={key}
-              value={key}
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 capitalize font-semibold text-sm hover:cursor-pointer"
+        <div className="relative border-b border-border bg-background shrink-0">
+          {/* Left Arrow Button */}
+          {showLeftArrow && (
+            <button
+              onClick={() => handleScroll(-200)}
+              className="absolute left-0 top-0 bottom-0 z-10 px-3 flex items-center bg-gradient-to-r from-background via-background/95 to-transparent text-muted-foreground hover:text-foreground transition-all duration-200"
+              title="Scroll Left"
+              type="button"
             >
-              {sections[key]?.label ?? key}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+              <ChevronLeft className="h-5 w-5 bg-background/80 rounded-full border border-border/50 shadow-sm p-0.5" />
+            </button>
+          )}
+
+          {/* Right Arrow Button */}
+          {showRightArrow && (
+            <button
+              onClick={() => handleScroll(200)}
+              className="absolute right-0 top-0 bottom-0 z-10 px-3 flex items-center bg-gradient-to-l from-background via-background/95 to-transparent text-muted-foreground hover:text-foreground transition-all duration-200"
+              title="Scroll Right"
+              type="button"
+            >
+              <ChevronRight className="h-5 w-5 bg-background/80 rounded-full border border-border/50 shadow-sm p-0.5" />
+            </button>
+          )}
+
+          {/* Scrollable container */}
+          <div
+            ref={scrollRef}
+            onScroll={checkScroll}
+            data-testid="site-builder-scroll-container"
+            className="overflow-x-auto scrollbar-none scroll-smooth flex justify-start w-full"
+          >
+            <TabsList className="px-6 pt-3 pb-0 bg-transparent border-b-0 rounded-none justify-start h-auto gap-0 shrink-0 flex flex-nowrap w-max min-w-full">
+              {/* Homepage tab — always first */}
+              <TabsTrigger
+                value="homepage"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Homepage
+              </TabsTrigger>
+              <TabsTrigger
+                value="megamenu"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Mega Menu
+              </TabsTrigger>
+              <TabsTrigger
+                value="regional"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Regional Coverage
+              </TabsTrigger>
+              <TabsTrigger
+                value="contacts"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Contact Page
+              </TabsTrigger>
+              <TabsTrigger
+                value="footer"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Footer
+              </TabsTrigger>
+              <TabsTrigger
+                value="catalogue"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                Catalogue Page
+              </TabsTrigger>
+              {SECTION_KEYS.map((key) => (
+                <TabsTrigger
+                  key={key}
+                  value={key}
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 capitalize font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+                >
+                  {sections[key]?.label ?? key}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        </div>
 
         {/* Homepage tab content */}
         <TabsContent value="homepage" className="flex-1 overflow-hidden m-0">

@@ -20,6 +20,9 @@ import {
   Twitter,
   MessageCircle,
   Music2,
+  Plus,
+  Trash2,
+  GripVertical,
 } from "lucide-react";
 import {
   SectionHeading,
@@ -34,9 +37,12 @@ import {
 import {
   type FooterContent,
   type FooterSocialLink,
+  type FooterColumn,
   DEFAULT_FOOTER_CONTENT,
 } from "@/types/footer";
 import { updateFooterCache } from "@/hooks/use-footer-content";
+import { LinkTargetPicker } from "./LinkTargetPicker";
+import { cn } from "@/lib/utils";
 
 const SUPABASE_KEY = "footer_content";
 
@@ -241,6 +247,286 @@ function CopyrightEditor({
   );
 }
 
+function CollapsibleCard({
+  index,
+  title,
+  onRemove,
+  children,
+}: {
+  index: number;
+  title: string;
+  onRemove: () => void;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(index === 0);
+  return (
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div
+        className={cn(
+          "flex items-center gap-2 px-3 py-2.5 cursor-pointer select-none",
+          open ? "bg-accent/60" : "bg-surface/30 hover:bg-accent/30",
+        )}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <GripVertical className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+        <span className="flex-1 text-xs font-semibold truncate">
+          {index + 1}. {title || "Untitled Column"}
+        </span>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          className="h-6 w-6 rounded flex items-center justify-center text-destructive hover:bg-destructive/10 shrink-0"
+        >
+          <Trash2 className="h-3 w-3" />
+        </button>
+      </div>
+      {open && <div className="p-4 space-y-3 bg-card">{children}</div>}
+    </div>
+  );
+}
+
+function NavigationColumnsEditor({
+  columns,
+  onChange,
+}: {
+  columns: FooterColumn[];
+  onChange: (v: FooterColumn[]) => void;
+}) {
+  const addColumn = () => {
+    onChange([
+      ...columns,
+      {
+        id: `col-${Date.now()}`,
+        title: "",
+        type: "custom",
+        links: [],
+      },
+    ]);
+  };
+
+  const removeColumn = (idx: number) => {
+    onChange(columns.filter((_, i) => i !== idx));
+  };
+
+  const updateColumn = (idx: number, patch: Partial<FooterColumn>) => {
+    const next = [...columns];
+    next[idx] = { ...next[idx], ...patch };
+    onChange(next);
+  };
+
+  const moveColumn = (idx: number, direction: number) => {
+    const nextIdx = idx + direction;
+    if (nextIdx < 0 || nextIdx >= columns.length) return;
+    const next = [...columns];
+    const temp = next[idx];
+    next[idx] = next[nextIdx];
+    next[nextIdx] = temp;
+    onChange(next);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <SectionHeading>Navigation Columns</SectionHeading>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage the custom and dynamic link columns shown in the website footer.
+          </p>
+        </div>
+        <Button
+          onClick={addColumn}
+          className="bg-primary hover:bg-primary-hover hover:cursor-pointer text-white font-bold uppercase tracking-wide text-xs h-8 gap-1.5"
+        >
+          <Plus className="h-3 w-3" /> Add Column
+        </Button>
+      </div>
+
+      {columns.length === 0 ? (
+        <EmptyState message="No navigation columns configured. Click 'Add Column' to add one." />
+      ) : (
+        <div className="space-y-4">
+          {columns.map((col, idx) => (
+            <CollapsibleCard
+              key={col.id}
+              index={idx}
+              title={`${col.title || "Untitled Column"} (${col.type === "custom" ? "Custom Links" : "Dynamic Menu"})`}
+              onRemove={() => removeColumn(idx)}
+            >
+              {/* Column order controls */}
+              <div className="flex items-center gap-1 mb-3 justify-end border-b border-border/40 pb-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 cursor-pointer"
+                  disabled={idx === 0}
+                  onClick={() => moveColumn(idx, -1)}
+                  title="Move Left"
+                >
+                  <ArrowUp className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 cursor-pointer"
+                  disabled={idx === columns.length - 1}
+                  onClick={() => moveColumn(idx, 1)}
+                  title="Move Right"
+                >
+                  <ArrowDown className="h-3 w-3" />
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <FieldLabel>Column Title</FieldLabel>
+                  <Input
+                    value={col.title}
+                    onChange={(e) => updateColumn(idx, { title: e.target.value })}
+                    placeholder="Column Title"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <FieldLabel>Column Type</FieldLabel>
+                  <select
+                    value={col.type}
+                    onChange={(e) =>
+                      updateColumn(idx, {
+                        type: e.target.value as FooterColumn["type"],
+                        links: e.target.value === "custom" ? col.links || [] : undefined,
+                      })
+                    }
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  >
+                    <option value="custom">Custom Links</option>
+                    <option value="products">Dynamic Products Menu</option>
+                    <option value="applications">Dynamic Applications Menu</option>
+                    <option value="services">Dynamic Services Menu</option>
+                    <option value="industries">Dynamic Industries Menu</option>
+                  </select>
+                </div>
+              </div>
+
+              {col.type === "custom" && (
+                <div className="mt-4 border-t border-border/40 pt-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <FieldLabel>Links in Column</FieldLabel>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const links = [...(col.links || [])];
+                        links.push({ label: "", to: "/" });
+                        updateColumn(idx, { links });
+                      }}
+                      className="h-6 text-[10px] uppercase font-bold tracking-wider"
+                    >
+                      Add Link
+                    </Button>
+                  </div>
+
+                  {(col.links || []).length === 0 ? (
+                    <p className="text-xs text-muted-foreground italic">
+                      No links added yet. Click "Add Link" above.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {(col.links || []).map((link, lIdx) => (
+                        <div
+                          key={lIdx}
+                          className="flex items-start gap-3 bg-surface/20 p-3 rounded-lg border border-border/30 relative group"
+                        >
+                          <div className="flex-1 grid grid-cols-2 gap-3 pr-8">
+                            <div>
+                              <FieldLabel>Label</FieldLabel>
+                              <Input
+                                value={link.label}
+                                onChange={(e) => {
+                                  const links = [...(col.links || [])];
+                                  links[lIdx] = { ...links[lIdx], label: e.target.value };
+                                  updateColumn(idx, { links });
+                                }}
+                                placeholder="e.g. About Us"
+                                className="text-sm h-8"
+                              />
+                            </div>
+                            <div>
+                              <LinkTargetPicker
+                                to={link.to}
+                                params={link.params}
+                                onChange={(to, params) => {
+                                  const links = [...(col.links || [])];
+                                  links[lIdx] = { ...links[lIdx], to, params };
+                                  updateColumn(idx, { links });
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const links = (col.links || []).filter((_, i) => i !== lIdx);
+                                updateColumn(idx, { links });
+                              }}
+                              className="h-6 w-6 rounded flex items-center justify-center text-destructive hover:bg-destructive/10"
+                              title="Delete Link"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                            <div className="flex items-center">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5"
+                                disabled={lIdx === 0}
+                                onClick={() => {
+                                  const links = [...(col.links || [])];
+                                  const temp = links[lIdx];
+                                  links[lIdx] = links[lIdx - 1];
+                                  links[lIdx - 1] = temp;
+                                  updateColumn(idx, { links });
+                                }}
+                                title="Move Link Up"
+                              >
+                                <ArrowUp className="h-2.5 w-2.5" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-5 w-5"
+                                disabled={lIdx === (col.links || []).length - 1}
+                                onClick={() => {
+                                  const links = [...(col.links || [])];
+                                  const temp = links[lIdx];
+                                  links[lIdx] = links[lIdx + 1];
+                                  links[lIdx + 1] = temp;
+                                  updateColumn(idx, { links });
+                                }}
+                                title="Move Link Down"
+                              >
+                                <ArrowDown className="h-2.5 w-2.5" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CollapsibleCard>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 let footerContentCache: FooterContent | null = null;
@@ -248,6 +534,7 @@ let footerContentCache: FooterContent | null = null;
 const TABS = [
   { id: "brand", label: "Brand Details" },
   { id: "social", label: "Social Links" },
+  { id: "columns", label: "Navigation Columns" },
   { id: "certifications", label: "Certifications" },
   { id: "copyright", label: "Copyright & Meta" },
 ];
@@ -280,6 +567,7 @@ export function FooterBuilderTab() {
         socialLinks: val.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
         certifications: val.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
         copyrightText: val.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
+        columns: val.columns ?? DEFAULT_FOOTER_CONTENT.columns,
       };
       setContent(merged);
       footerContentCache = merged;
@@ -387,6 +675,13 @@ export function FooterBuilderTab() {
             <SocialLinksEditor
               items={content.socialLinks}
               onChange={(v) => update({ socialLinks: v })}
+            />
+          </TabsContent>
+
+          <TabsContent value="columns" className="p-6 m-0">
+            <NavigationColumnsEditor
+              columns={content.columns || []}
+              onChange={(v) => update({ columns: v })}
             />
           </TabsContent>
 
