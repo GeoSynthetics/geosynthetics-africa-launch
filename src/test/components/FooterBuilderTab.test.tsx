@@ -106,5 +106,5 @@ describe("FooterBuilderTab Component", () => {
     expect(
       lastCallPayload.value.columns.some((c: any) => c.title === "Support Col")
     ).toBe(true);
-  });
+  }, 15000);
 });

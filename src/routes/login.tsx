@@ -10,6 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthLayout } from "@/components/site/AuthLayout";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+
 const searchSchema = z.object({
   redirect: z.string().optional().catch(undefined),
 });
@@ -34,9 +38,15 @@ function LoginPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/login" });
   const { isAuthenticated, loading, rolesLoaded, isStaff } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof credentialsSchema>>({
+    resolver: zodResolver(credentialsSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   useEffect(() => {
     if (!loading && rolesLoaded && isAuthenticated) {
@@ -48,15 +58,9 @@ function LoginPage() {
     }
   }, [loading, rolesLoaded, isAuthenticated, isStaff, navigate, search.redirect]);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsed = credentialsSchema.safeParse({ email, password });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
-      return;
-    }
+  const onSubmit = async (values: z.infer<typeof credentialsSchema>) => {
     setSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
+    const { error } = await supabase.auth.signInWithPassword(values);
     setSubmitting(false);
     if (error) {
       toast.error(error.message);
@@ -76,60 +80,70 @@ function LoginPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={onSubmit} className="space-y-5">
-        <div>
-          <Label htmlFor="login-email" className="text-sm font-medium">
-            Email address
-          </Label>
-          <div className="relative mt-1.5">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-11 pl-10"
-              required
-            />
-          </div>
-        </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">Email address</FormLabel>
+                <div className="relative mt-1.5">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@company.com"
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div>
-          <Label htmlFor="login-password" className="text-sm font-medium">
-            Password
-          </Label>
-          <div className="relative mt-1.5">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="login-password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="h-11 pl-10"
-              required
-            />
-          </div>
-        </div>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">Password</FormLabel>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="••••••••"
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button
-          type="submit"
-          disabled={submitting}
-          className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
-        >
-          {submitting ? (
-            "Signing in…"
-          ) : (
-            <span className="flex items-center justify-center gap-2">
-              Sign In
-              <ArrowRight className="h-4 w-4" />
-            </span>
-          )}
-        </Button>
-      </form>
+          <Button
+            type="submit"
+            disabled={submitting}
+            className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
+          >
+            {submitting ? (
+              "Signing in…"
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Sign In
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            )}
+          </Button>
+        </form>
+      </Form>
 
       {/* Divider */}
       <div className="relative my-6">

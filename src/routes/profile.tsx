@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
@@ -18,37 +22,44 @@ export const Route = createFileRoute("/profile")({
   }),
 });
 
+const passwordSchema = z.object({
+  newPassword: z.string().min(6, "Password must be at least 6 characters").max(72),
+  confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters").max(72),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
 function ProfilePage() {
   const { user, loading, isAuthenticated, roles } = useAuth();
   const navigate = useNavigate();
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
 
   if (!loading && !isAuthenticated) {
     void navigate({ to: "/login" });
     return null;
   }
 
-  const handlePasswordUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
+  const handlePasswordUpdate = async (values: z.infer<typeof passwordSchema>) => {
     setSubmitting(true);
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    const { error } = await supabase.auth.updateUser({ password: values.newPassword });
     setSubmitting(false);
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Password updated successfully");
-      setNewPassword("");
-      setConfirmPassword("");
+      form.reset({
+        newPassword: "",
+        confirmPassword: "",
+      });
     }
   };
 
@@ -85,33 +96,49 @@ function ProfilePage() {
           <CardDescription>Update your account password</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handlePasswordUpdate} className="space-y-4">
-            <div>
-              <Label htmlFor="new-password">New Password</Label>
-              <Input
-                id="new-password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                minLength={6}
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handlePasswordUpdate)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                minLength={6}
-                required
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Updating..." : "Update Password"}
-            </Button>
-          </form>
+
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Updating..." : "Update Password"}
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

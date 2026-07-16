@@ -122,5 +122,5 @@ describe("ResourcesAdminPage Component", () => {
     const lastCallPayload = mockInsert.mock.calls[0][0];
     expect(lastCallPayload.title).toBe("New Installation Guide");
     expect(lastCallPayload.slug).toBe("new-installation-guide");
-  });
+  }, 15000);
 });

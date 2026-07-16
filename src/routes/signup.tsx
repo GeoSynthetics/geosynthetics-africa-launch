@@ -10,6 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthLayout } from "@/components/site/AuthLayout";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
@@ -30,33 +34,33 @@ const schema = z.object({
 function SignupPage() {
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAuth();
-  const [fullName, setFullName] = useState("");
-  const [company, setCompany] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      fullName: "",
+      company: "",
+      email: "",
+      password: "",
+    },
+  });
 
   useEffect(() => {
     if (!loading && isAuthenticated) navigate({ to: "/" });
   }, [loading, isAuthenticated, navigate]);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsed = schema.safeParse({ fullName, company, email, password });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
-      return;
-    }
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     setSubmitting(true);
     const redirectTo = typeof window !== "undefined" ? window.location.origin : undefined;
     const { error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
+      email: values.email,
+      password: values.password,
       options: {
         emailRedirectTo: redirectTo,
         data: {
-          full_name: parsed.data.fullName,
-          company: parsed.data.company ?? null,
+          full_name: values.fullName,
+          company: values.company || null,
         },
       },
     });
@@ -80,95 +84,115 @@ function SignupPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={onSubmit} className="space-y-5">
-        <div>
-          <Label htmlFor="signup-fullName" className="text-sm font-medium">
-            Full name
-          </Label>
-          <div className="relative mt-1.5">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="signup-fullName"
-              placeholder="John Doe"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="h-11 pl-10"
-              required
-            />
-          </div>
-        </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">Full name</FormLabel>
+                <div className="relative mt-1.5">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      placeholder="John Doe"
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div>
-          <Label htmlFor="signup-company" className="text-sm font-medium">
-            Company
-            <span className="text-muted-foreground font-normal ml-1">(optional)</span>
-          </Label>
-          <div className="relative mt-1.5">
-            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="signup-company"
-              placeholder="Acme Construction Ltd."
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className="h-11 pl-10"
-            />
-          </div>
-        </div>
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">
+                  Company <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+                </FormLabel>
+                <div className="relative mt-1.5">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      placeholder="Acme Construction Ltd."
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div>
-          <Label htmlFor="signup-email" className="text-sm font-medium">
-            Email address
-          </Label>
-          <div className="relative mt-1.5">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="signup-email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-11 pl-10"
-              required
-            />
-          </div>
-        </div>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">Email address</FormLabel>
+                <div className="relative mt-1.5">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@company.com"
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div>
-          <Label htmlFor="signup-password" className="text-sm font-medium">
-            Password
-          </Label>
-          <div className="relative mt-1.5">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              id="signup-password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="h-11 pl-10"
-              required
-            />
-          </div>
-          <p className="mt-1.5 text-xs text-muted-foreground">Minimum 8 characters.</p>
-        </div>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormLabel className="text-sm font-medium">Password</FormLabel>
+                <div className="relative mt-1.5">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <FormControl>
+                    <Input
+                      type="password"
+                      autoComplete="new-password"
+                      placeholder="••••••••"
+                      className="h-11 pl-10"
+                      {...field}
+                    />
+                  </FormControl>
+                </div>
+                <p className="mt-1.5 text-xs text-muted-foreground">Minimum 8 characters.</p>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button
-          type="submit"
-          disabled={submitting}
-          className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
-        >
-          {submitting ? (
-            "Creating…"
-          ) : (
-            <span className="flex items-center justify-center gap-2">
-              Create Account
-              <ArrowRight className="h-4 w-4" />
-            </span>
-          )}
-        </Button>
-      </form>
+          <Button
+            type="submit"
+            disabled={submitting}
+            className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
+          >
+            {submitting ? (
+              "Creating…"
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Create Account
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            )}
+          </Button>
+        </form>
+      </Form>
 
       {/* Divider */}
       <div className="relative my-6">

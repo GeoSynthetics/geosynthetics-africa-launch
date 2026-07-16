@@ -1,6 +1,16 @@
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   MapPin,
   Phone,
@@ -27,6 +37,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
+
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
@@ -51,221 +63,6 @@ const getIconComponent = (
   return (LucideIcons as any)[name] || fallback;
 };
 
-const DEFAULT_REGIONAL_COVERAGE = [
-  {
-    country: "South Africa",
-    flag: "🇿🇦",
-    code: "RSA",
-    hub: "Johannesburg (HQ)",
-    coords: [-26.2041, 28.0473],
-    title: "Johannesburg Head Office",
-    subtitle: "Southern Africa Regional Hub",
-    address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191",
-    phone: "+27 78 1355 926",
-    email: "sales@geosynthetics.co.za",
-    services: "Full Supply, Installation & QA/QC Hub",
-    transit: "Same day / Next day dispatch",
-    routes: "Direct distribution across all 9 provinces.",
-    description:
-      "Our primary manufacturing, warehousing, and QA/QC hub. We manage large-scale manufacturing, custom lining fabrication, and coordinate all cross-border engineering teams.",
-    capabilities: [
-      "Material Supply",
-      "HDPE Liner Installation",
-      "QA/QC Testing",
-      "Technical Support",
-    ],
-  },
-  {
-    country: "Botswana",
-    flag: "🇧🇼",
-    code: "BWA",
-    hub: "Gaborone Logistics Hub",
-    coords: [-24.6282, 25.9231],
-    title: "Botswana Logistics Hub",
-    subtitle: "Gaborone Distribution Center",
-    address: "Plot 22017, Gaborone West Industrial, Gaborone",
-    phone: "+27 78 1355 926",
-    email: "botswana@geosynthetics.co.za",
-    services: "Material Supply & Cross-Border Logistics",
-    transit: "2 - 3 Days (Road Freight)",
-    routes: "Johannesburg → Pioneer Gate / Tlokweng → Gaborone",
-    description:
-      "Supporting major diamond, copper, and iron ore mining operations. We handle advance customs clearances (SAD500) to ensure seamless material deliveries via Tlokweng/Pioneer Gate.",
-    capabilities: [
-      "Material Supply",
-      "Cross-Border Logistics",
-      "HDPE Liner Installation",
-      "On-site QA/QC",
-    ],
-  },
-  {
-    country: "Namibia",
-    flag: "🇳🇦",
-    code: "NAM",
-    hub: "Windhoek Hub",
-    coords: [-22.5609, 17.0658],
-    title: "Namibia Logistics Hub",
-    subtitle: "Windhoek Distribution Center",
-    address: "12 Edison Street, Southern Industrial Area, Windhoek",
-    phone: "+27 78 1355 926",
-    email: "namibia@geosynthetics.co.za",
-    services: "Material Supply & QA/QC Support",
-    transit: "3 - 4 Days (Road Freight)",
-    routes: "Johannesburg → Trans-Kalahari Corridor → Windhoek",
-    description:
-      "Key supply route for uranium mines, marine civil works, and water conservation reservoirs. Logistics managed via the Trans-Kalahari Corridor.",
-    capabilities: ["Material Supply", "Logistics & Customs", "QA/QC Testing"],
-  },
-  {
-    country: "Zimbabwe",
-    flag: "🇿🇼",
-    code: "ZWE",
-    hub: "Harare Hub",
-    coords: [-17.8252, 31.0335],
-    title: "Zimbabwe Operations Hub",
-    subtitle: "Harare Office",
-    address: "55 Coventry Road, Workington, Harare",
-    phone: "+27 78 1355 926",
-    email: "zimbabwe@geosynthetics.co.za",
-    services: "Lining Installation & Technical Support",
-    transit: "3 - 5 Days (Road Freight)",
-    routes: "Johannesburg → Beitbridge → Harare / Bulawayo",
-    description:
-      "Serving agriculture, gold mining, and waste water treatment facilities. Full logistics support through Beitbridge border clearance with pre-scanned digital customs packs.",
-    capabilities: ["Material Supply", "HDPE Liner Installation", "Technical Support"],
-  },
-  {
-    country: "Mozambique",
-    flag: "🇲🇿",
-    code: "MOZ",
-    hub: "Maputo Hub",
-    coords: [-25.9692, 32.5732],
-    title: "Mozambique Regional Hub",
-    subtitle: "Maputo Office",
-    address: "Avenida de Moçambique, Bairro do Jardim, Maputo",
-    phone: "+27 78 1355 926",
-    email: "mozambique@geosynthetics.co.za",
-    services: "Coastal Works Supply & Installation QA/QC",
-    transit: "2 - 3 Days (Road Freight)",
-    routes: "Johannesburg → Lebombo / Ressano Garcia → Maputo",
-    description:
-      "Critical support for port infrastructure, coal mining, and coastal containment barriers. Specialized GCL (Geosynthetic Clay Liner) and geotextile supply for erosion control.",
-    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
-  },
-  {
-    country: "Zambia",
-    flag: "🇿🇲",
-    code: "ZMB",
-    hub: "Lusaka Hub",
-    coords: [-15.3875, 28.3228],
-    title: "Zambia & DRC Hub",
-    subtitle: "Lusaka Office",
-    address: "Stand 10432, Katanga Road, Industrial Area, Lusaka",
-    phone: "+27 78 1355 926",
-    email: "zambia@geosynthetics.co.za",
-    services: "Mining TSF Lining & Cross-Border Cleared Supply",
-    transit: "4 - 6 Days (Road Freight)",
-    routes: "Johannesburg → Martins Drift (Botswana) → Kazungula / Chirundu → Lusaka",
-    description:
-      "Serving the Copperbelt mining sector and large-scale agricultural projects. Coordinates cross-border transit towards DRC (Kolwezi) with full COMESA documentation.",
-    capabilities: ["Material Supply", "HDPE Liner Installation", "Logistics & Export"],
-  },
-  {
-    country: "Democratic Republic of Congo (DRC)",
-    flag: "🇨🇩",
-    code: "COD",
-    hub: "Kolwezi / Lubumbashi Hub",
-    coords: [-10.7222, 25.4678],
-    title: "Kolwezi Office",
-    subtitle: "Central Africa Mining Hub",
-    address: "Avenue de la Métallurgie, Zone Industrielle, Kolwezi",
-    phone: "+27 78 1355 926",
-    email: "drc@geosynthetics.co.za",
-    services: "Mining TSF Lining & Heavy Confinement Supply",
-    transit: "5 - 7 Days (Road Freight)",
-    routes: "Johannesburg → Zambia (transit) → Kasumbalesa → Kolwezi / Lubumbashi",
-    description:
-      "Supporting major cobalt and copper mining operations in the Katanga Province. We handle complex customs clearances at Kasumbalesa and coordinate local installation crews.",
-    capabilities: ["Material Supply", "HDPE Liner Installation", "Cross-Border Logistics"],
-  },
-  {
-    country: "Tanzania",
-    flag: "🇹🇿",
-    code: "TZA",
-    hub: "East Africa Regional Hub",
-    coords: [-6.7924, 39.2083],
-    title: "Tanzania Operations",
-    subtitle: "East Africa Hub",
-    address: "Plot 45, Mandela Road, Industrial Area, Dar es Salaam",
-    phone: "+27 78 1355 926",
-    email: "tanzania@geosynthetics.co.za",
-    services: "Material Supply & Technical Supervision",
-    transit: "6 - 8 Days (Road Freight / Sea)",
-    routes: "Durban / JHB → Zimbabwe / Zambia (transit) → Tunduma → Dar es Salaam",
-    description:
-      "Serving gold mining, infrastructure, and agricultural developments. Coordination of customs clearance via Dar es Salaam port and Tunduma border post.",
-    capabilities: ["Material Supply", "HDPE Liner Installation", "Technical Support"],
-  },
-  {
-    country: "Kenya",
-    flag: "🇰🇪",
-    code: "KEN",
-    hub: "Nairobi Office",
-    coords: [-1.2921, 36.8219],
-    title: "Nairobi Office",
-    subtitle: "East Africa Hub",
-    address: "Mombasa Road, Syokimau, Nairobi",
-    phone: "+27 78 1355 926",
-    email: "kenya@geosynthetics.co.za",
-    services: "Agricultural & Municipal Water Containment Supply",
-    transit: "7 - 9 Days (Sea / Road)",
-    routes: "Port of Durban → Port of Mombasa → Nairobi",
-    description:
-      "Serving East African agriculture, water containment, and infrastructure projects. Stock management and technical specifications support.",
-    capabilities: ["Material Supply", "Design Support", "Logistics & Customs"],
-  },
-  {
-    country: "Ghana",
-    flag: "🇬🇭",
-    code: "GHA",
-    hub: "West Africa Mining Hub",
-    coords: [5.6037, -0.187],
-    title: "West Africa Regional Hub",
-    subtitle: "Accra Office",
-    address: "14 Spintex Road, Accra",
-    phone: "+27 78 1355 926",
-    email: "ghana@geosynthetics.co.za",
-    services: "West Africa Mining Supply & Certified Installation",
-    transit: "14 - 18 Days (Sea Freight)",
-    routes: "Port of Durban / Cape Town → Port of Tema → Accra / Tarkwa",
-    description:
-      "Headed by our West African regional office in Accra, serving gold mining and environmental containment projects across Ghana, Mali, and Burkina Faso.",
-    capabilities: [
-      "Material Supply",
-      "HDPE Liner Installation",
-      "QA/QC Testing",
-      "Logistics & Export",
-    ],
-  },
-  {
-    country: "Côte d'Ivoire",
-    flag: "🇨🇮",
-    code: "CIV",
-    hub: "West Africa Hub",
-    coords: [5.36, -4.0083],
-    title: "Abidjan Hub",
-    subtitle: "West Africa Office",
-    address: "Zone 4C, Rue des Carrossiers, Abidjan",
-    phone: "+27 78 1355 926",
-    email: "civ@geosynthetics.co.za",
-    services: "Port Infrastructure & Shoreline Erosion Supply",
-    transit: "16 - 20 Days (Sea Freight)",
-    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
-    description:
-      "Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
-    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
-  },
-];
 
 import { mockContactsCaseStudies as CASE_STUDIES } from "@/mocks/contactsMocks";
 
@@ -962,11 +759,10 @@ function MapAndCoverage({
                       <button
                         key={loc.country}
                         onClick={() => onSelectCountry(loc.country)}
-                        className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${
-                          isSelected
-                            ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
-                            : "bg-card border-border text-foreground hover:border-primary/50"
-                        }`}
+                        className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${isSelected
+                          ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
+                          : "bg-card border-border text-foreground hover:border-primary/50"
+                          }`}
                       >
                         <span className="flex items-center gap-2">
                           <span>{loc.flag}</span>
@@ -998,7 +794,7 @@ function MapAndCoverage({
 }
 
 /* -------------------- Forms (BOQ + Quick contact) -------------------- */
-function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
+export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const { user } = useAuth();
   const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -1019,16 +815,53 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const projectExperience =
     caseStudies.length > 0
       ? caseStudies.map((cs) => ({
-          name: cs.title,
-          location:
-            cs.location && cs.country
-              ? `${cs.location}, ${cs.country}`
-              : cs.location || cs.country || "",
-          description: cs.summary || "",
-          image: cs.hero_image_url || "",
-          slug: cs.slug,
-        }))
+        name: cs.title,
+        location:
+          cs.location && cs.country
+            ? `${cs.location}, ${cs.country}`
+            : cs.location || cs.country || "",
+        description: cs.summary || "",
+        image: cs.hero_image_url || "",
+        slug: cs.slug,
+      }))
       : CASE_STUDIES;
+
+  // Zod forms initialization
+  type BoqValues = z.infer<typeof boqSchema>;
+  type QuickValues = z.infer<typeof quickSchema>;
+
+  const boqForm = useForm<BoqValues>({
+    resolver: zodResolver(boqSchema),
+    defaultValues: {
+      name: "",
+      company: "",
+      email: user?.email ?? "",
+      phone: "",
+      country: "",
+      message: "",
+    },
+  });
+
+  const quickForm = useForm<QuickValues>({
+    resolver: zodResolver(quickSchema),
+    defaultValues: {
+      name: "",
+      email: user?.email ?? "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  useEffect(() => {
+    if (user?.email) {
+      if (!boqForm.getValues("email")) {
+        boqForm.setValue("email", user.email);
+      }
+      if (!quickForm.getValues("email")) {
+        quickForm.setValue("email", user.email);
+      }
+    }
+  }, [user?.email, boqForm, quickForm]);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = Array.from(e.target.files ?? []);
@@ -1052,21 +885,7 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const removeFile = (idx: number) => setFiles((prev) => prev.filter((_, i) => i !== idx));
 
-  const onBoqSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = boqSchema.safeParse({
-      name: fd.get("name"),
-      company: fd.get("company") || undefined,
-      email: fd.get("email"),
-      phone: fd.get("phone") || undefined,
-      country: fd.get("country") || undefined,
-      message: fd.get("message"),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form.");
-      return;
-    }
+  const onBoqSubmit = async (values: BoqValues) => {
     setBoqSubmitting(true);
     try {
       const ownerKey = user?.id ?? "anonymous";
@@ -1083,15 +902,15 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       }
 
       const messageWithMeta =
-        `${parsed.data.message}` +
-        (parsed.data.country ? `\n\n[country] ${parsed.data.country}` : "") +
+        `${values.message}` +
+        (values.country ? `\n\n[country] ${values.country}` : "") +
         (uploadedPaths.length ? `\n\n[attachments]\n${uploadedPaths.join("\n")}` : "");
 
       const { error: insertErr } = await supabase.from("quote_requests").insert({
-        contact_name: parsed.data.name,
-        contact_email: parsed.data.email,
-        contact_phone: parsed.data.phone ?? null,
-        company: parsed.data.company ?? null,
+        contact_name: values.name,
+        contact_email: values.email,
+        contact_phone: values.phone ?? null,
+        company: values.company ?? null,
         project_description: messageWithMeta,
         boq_file_path: uploadedPaths[0] ?? null,
         user_id: user?.id ?? null,
@@ -1100,7 +919,14 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       if (insertErr) throw insertErr;
 
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
-      (e.target as HTMLFormElement).reset();
+      boqForm.reset({
+        name: "",
+        company: "",
+        email: user?.email ?? "",
+        phone: "",
+        country: "",
+        message: "",
+      });
       setFiles([]);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not submit. Please try again.");
@@ -1109,34 +935,27 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     }
   };
 
-  const onQuickSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = quickSchema.safeParse({
-      name: fd.get("name"),
-      email: fd.get("email"),
-      phone: fd.get("phone") || undefined,
-      message: fd.get("message"),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form.");
-      return;
-    }
+  const onQuickSubmit = async (values: QuickValues) => {
     setQuickSubmitting(true);
     try {
       const { error } = await supabase.from("quote_requests").insert({
-        contact_name: parsed.data.name,
-        contact_email: parsed.data.email,
-        contact_phone: parsed.data.phone ?? null,
+        contact_name: values.name,
+        contact_email: values.email,
+        contact_phone: values.phone ?? null,
         company: null,
-        project_description: `[quick contact]\n${parsed.data.message}`,
+        project_description: `[quick contact]\n${values.message}`,
         boq_file_path: null,
         user_id: user?.id ?? null,
         status: "new",
       });
       if (error) throw error;
       toast.success("Inquiry sent — thank you!");
-      (e.target as HTMLFormElement).reset();
+      quickForm.reset({
+        name: "",
+        email: user?.email ?? "",
+        phone: "",
+        message: "",
+      });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not submit. Please try again.");
     } finally {
@@ -1147,9 +966,8 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   return (
     <section className="bg-background">
       <div className="container-page py-12">
-        {/* 3-column layout: Case Studies | BOQ Form | Quick Contact */}
         <div className="grid lg:grid-cols-12 gap-8">
-          {/* LEFT: Project Experience / Case Studies ΓÇö compact horizontal cards */}
+          {/* LEFT: Project Experience */}
           <div className="lg:col-span-4 order-2 lg:order-1">
             <h2 className="font-display text-base font-bold uppercase tracking-wide mb-4">
               Project Experience In The Region
@@ -1160,14 +978,12 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                   key={c.name}
                   className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
                 >
-                  {/* Thumbnail */}
                   <div
                     className="w-28 shrink-0 bg-cover bg-center"
                     style={{ backgroundImage: `url(${c.image})` }}
                     role="img"
                     aria-label={c.name}
                   />
-                  {/* Content */}
                   <div className="p-3 flex flex-col justify-between min-w-0">
                     <div>
                       <div className="font-display text-sm font-bold uppercase leading-tight">
@@ -1203,156 +1019,257 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
             </div>
           </div>
 
-          {/* RIGHT: 2-column sub-grid ΓÇö BOQ Form + Quick Contact side-by-side */}
+          {/* RIGHT: Forms */}
           <div className="lg:col-span-8 order-1 lg:order-2">
             <div className="grid lg:grid-cols-2 gap-6 items-start">
-              {/* RIGHT-LEFT: BOQ Upload Form */}
+              {/* BOQ Upload Form */}
               <div id="boq-form">
                 <div className="rounded border border-border bg-card p-5 md:p-6">
                   <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-5">
                     Upload Your BOQ / Drawings
                   </h2>
-                  <form onSubmit={onBoqSubmit} className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <Field id="name" label="Full Name" required>
-                        <Input id="name" name="name" required maxLength={120} />
-                      </Field>
-                      <Field id="company" label="Company">
-                        <Input id="company" name="company" maxLength={160} />
-                      </Field>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Field id="email" label="Email" required>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          required
-                          maxLength={255}
-                          defaultValue={user?.email ?? ""}
+                  <Form {...boqForm}>
+                    <form onSubmit={boqForm.handleSubmit(onBoqSubmit)} className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Full Name <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input maxLength={120} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
-                      </Field>
-                      <Field id="phone" label="Phone" required>
-                        <Input id="phone" name="phone" type="tel" required maxLength={40} />
-                      </Field>
-                    </div>
-                    <Field id="country" label="Project Location / Country">
-                      <Input
-                        id="country"
+                        <FormField
+                          control={boqForm.control}
+                          name="company"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                Company
+                              </FormLabel>
+                              <FormControl>
+                                <Input maxLength={160} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Email <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="email" maxLength={255} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={boqForm.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Phone <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="tel" maxLength={40} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={boqForm.control}
                         name="country"
-                        maxLength={120}
-                        placeholder="Select country"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Project Location / Country
+                            </FormLabel>
+                            <FormControl>
+                              <Input maxLength={120} placeholder="Select country" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Field id="message" label="Message / Project Description">
-                      <Textarea
-                        id="message"
+                      <FormField
+                        control={boqForm.control}
                         name="message"
-                        rows={3}
-                        required
-                        maxLength={2000}
-                        placeholder="Tell us about your project..."
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Message / Project Description
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                rows={3}
+                                maxLength={2000}
+                                placeholder="Tell us about your project..."
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
 
-                    <label className="block rounded border-2 border-dashed border-border bg-surface p-4 text-center cursor-pointer hover:border-primary transition">
-                      <Upload className="h-6 w-6 text-primary mx-auto" />
-                      <div className="mt-1.5 text-sm font-semibold">
-                        Drag & drop your BOQ or drawings here
-                      </div>
-                      <div className="text-xs text-primary underline">or click to browse files</div>
-                      <div className="mt-1 text-xs text-muted-foreground">
-                        PDF, DWG, DOC, XLS (Max 20MB)
-                      </div>
-                      <input
-                        ref={fileRef}
-                        type="file"
-                        multiple
-                        className="sr-only"
-                        accept={ALLOWED_EXT.join(",")}
-                        onChange={onFileChange}
-                      />
-                    </label>
+                      <label className="block rounded border-2 border-dashed border-border bg-surface p-4 text-center cursor-pointer hover:border-primary transition">
+                        <Upload className="h-6 w-6 text-primary mx-auto" />
+                        <div className="mt-1.5 text-sm font-semibold">
+                          Drag & drop your BOQ or drawings here
+                        </div>
+                        <div className="text-xs text-primary underline">or click to browse files</div>
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          PDF, DWG, DOC, XLS (Max 20MB)
+                        </div>
+                        <input
+                          ref={fileRef}
+                          type="file"
+                          multiple
+                          className="sr-only"
+                          accept={ALLOWED_EXT.join(",")}
+                          onChange={onFileChange}
+                        />
+                      </label>
 
-                    {files.length > 0 && (
-                      <ul className="space-y-1.5">
-                        {files.map((f, idx) => (
-                          <li
-                            key={`${f.name}-${idx}`}
-                            className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
-                          >
-                            <span className="flex items-center gap-2 min-w-0">
-                              <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
-                              <span className="truncate">{f.name}</span>
-                              <span className="text-xs text-muted-foreground shrink-0">
-                                {(f.size / 1024 / 1024).toFixed(2)} MB
-                              </span>
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile(idx)}
-                              className="text-xs text-muted-foreground hover:text-primary"
+                      {files.length > 0 && (
+                        <ul className="space-y-1.5">
+                          {files.map((f, idx) => (
+                            <li
+                              key={`${f.name}-${idx}`}
+                              className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
                             >
-                              Remove
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                              <span className="flex items-center gap-2 min-w-0">
+                                <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
+                                <span className="truncate">{f.name}</span>
+                                <span className="text-xs text-muted-foreground shrink-0">
+                                  {(f.size / 1024 / 1024).toFixed(2)} MB
+                                </span>
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(idx)}
+                                className="text-xs text-muted-foreground hover:text-primary"
+                              >
+                                Remove
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
 
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={boqSubmitting}
-                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-                    >
-                      {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
-                    </Button>
-                  </form>
+                      <Button
+                        type="submit"
+                        size="lg"
+                        disabled={boqSubmitting}
+                        className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide cursor-pointer"
+                      >
+                        {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
               </div>
 
-              {/* RIGHT-RIGHT: Quick Contact + Immediate Assistance */}
+              {/* Quick Contact */}
               <aside id="quick-contact" className="space-y-4">
                 <div className="rounded border border-border bg-card p-5 md:p-6">
                   <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-4">
                     Quick Contact
                   </h2>
-                  <form onSubmit={onQuickSubmit} className="space-y-3">
-                    <Field id="q-name" label="Full Name" required>
-                      <Input id="q-name" name="name" required maxLength={120} />
-                    </Field>
-                    <Field id="q-email" label="Email" required>
-                      <Input
-                        id="q-email"
+                  <Form {...quickForm}>
+                    <form onSubmit={quickForm.handleSubmit(onQuickSubmit)} className="space-y-3">
+                      <FormField
+                        control={quickForm.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Full Name <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input maxLength={120} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
                         name="email"
-                        type="email"
-                        required
-                        maxLength={255}
-                        defaultValue={user?.email ?? ""}
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Email <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="email" maxLength={255} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Field id="q-phone" label="Phone">
-                      <Input id="q-phone" name="phone" type="tel" maxLength={40} />
-                    </Field>
-                    <Field id="q-message" label="Message">
-                      <Textarea
-                        id="q-message"
+                      <FormField
+                        control={quickForm.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Phone
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="tel" maxLength={40} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
                         name="message"
-                        rows={4}
-                        required
-                        maxLength={2000}
-                        placeholder="How can we help?"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Message <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                rows={4}
+                                maxLength={2000}
+                                placeholder="How can we help?"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Button
-                      type="submit"
-                      disabled={quickSubmitting}
-                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-                    >
-                      {quickSubmitting ? "Sending…" : "Send Inquiry"}
-                    </Button>
-                  </form>
+                      <Button
+                        type="submit"
+                        disabled={quickSubmitting}
+                        className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide cursor-pointer"
+                      >
+                        {quickSubmitting ? "Sending…" : "Send Inquiry"}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
 
                 <div className="rounded bg-surface-dark text-surface-dark-foreground p-5">
@@ -1406,26 +1323,6 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   );
 }
 
-function Field({
-  id,
-  label,
-  required,
-  children,
-}: {
-  id: string;
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label htmlFor={id} className="text-xs font-semibold uppercase tracking-wide">
-        {label} {required && <span className="text-primary">*</span>}
-      </Label>
-      <div className="mt-1.5">{children}</div>
-    </div>
-  );
-}
 
 /* -------------------- Resource strip -------------------- */
 function ResourceStrip() {
