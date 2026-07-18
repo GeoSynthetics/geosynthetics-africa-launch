@@ -466,7 +466,7 @@ export function ProjectDetailPage() {
                 <span className="w-1.5 h-6 bg-primary rounded-full" />
                 Case Study Brief
               </h2>
-              <div className="text-base leading-relaxed text-muted-foreground font-medium border-l-2 border-primary/25 pl-4 mb-6">
+              <div className="text-base leading-relaxed text-muted-foreground font-medium border-l-2 border-primary/25 pl-4 mb-6 whitespace-pre-line">
                 {project.body}
               </div>
 
@@ -505,7 +505,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     The Logistics Challenge
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.logistics_details?.challenge_description ||
                       "Kolwezi is approximately 3,420 km by road from the Port of Durban, crossing four sovereign customs regimes — South Africa, Botswana, Zambia, and into the Democratic Republic of the Congo. demurrages are common, and mismatched documentation packages represent significant hold windows."}
                   </p>
@@ -514,7 +514,7 @@ export function ProjectDetailPage() {
                       {project.logistics_details?.challenge_callout_title ||
                         "Zero-Tolerance Documentation Control"}
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                       {project.logistics_details?.challenge_callout_body ||
                         "Material transits cross border checkpoints with daily checks. A single spelling discrepancy on SADC Certificates of Origin or SGS pre-shipment inspections can trigger multi-week detentions. The client specified a logistics provider with pre-clearance capabilities."}
                     </p>
@@ -620,7 +620,7 @@ export function ProjectDetailPage() {
                     <h3 className="font-display font-extrabold text-sm uppercase text-primary tracking-wider mb-2">
                       Technical Independence Statement
                     </h3>
-                    <p className="text-xs text-white/80 leading-relaxed max-w-2xl">
+                    <p className="text-xs text-white/80 leading-relaxed max-w-2xl whitespace-pre-line">
                       {project.service_details?.independence_statement}
                     </p>
                   </div>
@@ -632,7 +632,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Forensic Methodology Protocol
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.challenge_description ||
                       "To comply with SANS and voluntary GISTM guidelines, GSA engineers executed a five-stage forensic examination of the in-service geomembrane composite."}
                   </p>
@@ -673,7 +673,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Laboratory Testing Programme
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.testing_description ||
                       "Our laboratory matrix focused on chemical antioxidant levels, thickness degradation, and environmental stress cracking resistance under high pressures."}
                   </p>
@@ -711,7 +711,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Forensic Findings Register
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.findings_description ||
                       "Visual checks and testing coupons yielded three discrete findings which were registered in the environmental plan."}
                   </p>
@@ -772,11 +772,11 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     The Installation Challenge
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.qa_details?.challenge_description ||
                       "Taiings storage facilities are exposed to complex mechanical loading, high chemical pH acidity, and thermal swelling forces. Double-liner composite system installation requires highly accurate wedge-welding and extensive field CQA logs."}
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.qa_details?.challenge_approach ||
                       "Our team managed the complete sequence — clearing clay subgrade, deploying geosynthetic clay liners (GCL) to prevent leakage, installing smooth and textured HDPE geomembranes, and laying drainage geocomposites to manage hydrostatic heads."}
                   </p>
