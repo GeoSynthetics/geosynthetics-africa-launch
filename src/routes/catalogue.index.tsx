@@ -19,6 +19,7 @@ const VALID_SORTS = new Set<string>(SORT_OPTIONS.map((s) => s.value));
 interface CatalogueSearch {
   q: string;
   cats: string[];
+  mans: string[];
   sort: SortValue;
 }
 
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/catalogue/")({
     return {
       q: typeof raw.q === "string" ? raw.q : "",
       cats: parseList(raw.cats),
+      mans: parseList(raw.mans),
       sort,
     };
   },

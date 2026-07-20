@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { FormsBlock } from "@/pages/ContactsPage";
 import { supabase } from "@/integrations/supabase/client";
+import { ContactHeadOffice } from "@/types/contacts";
 
 // Mock TanStack Router
 vi.mock("@tanstack/react-router", () => ({
@@ -30,16 +31,15 @@ describe("FormsBlock Component (React Hook Form)", () => {
     vi.clearAllMocks();
   });
 
-  const mockHeadOffice = {
-    title: "Johannesburg Head Office",
-    subtitle: "Southern Africa Hub",
-    address: "123 Street",
+  const mockHeadOffice: ContactHeadOffice = {
+    company: "Geosynthetics Africa (Pty) Ltd",
+    address: ["123 Street", "Johannesburg", "South Africa"],
+    contactPerson: "James Chabata",
+    contactRole: "Sales Admin Manager",
     phone: "+27 12 345 6789",
     email: "test@geosynthetics.co.za",
-    transit: "1 day",
-    routes: "Direct",
-    description: "HQ description",
-    capabilities: ["Testing"],
+    hours: ["Mon - Fri: 08:00 - 17:00"],
+    mapEmbedUrl: "https://maps.google.com",
   };
 
   it("submits the Quick Contact form successfully with valid inputs", async () => {
