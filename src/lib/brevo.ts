@@ -5,6 +5,13 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import {
+  generateQuoteCustomerEmail,
+  generateQuoteAdminEmail,
+  generateContactCustomerEmail,
+  generateContactAdminEmail,
+  formatReference,
+} from "./email-templates";
 
 export interface EmailRecipient {
   email: string;
@@ -27,6 +34,8 @@ export interface SendQuoteEmailParams {
   country?: string;
   productName?: string;
   projectDescription?: string;
+  attachments?: string[] | string;
+  reference?: string;
 }
 
 /**
@@ -89,52 +98,17 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
     process.env.NOTIFICATION_TO_EMAIL ||
     process.env.VITE_NOTIFICATION_TO_EMAIL;
 
-  // 1. Email to Customer
-  const customerHtml = `
-    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-      <h2 style="color: #0f172a;">Quote Request Received</h2>
-      <p>Dear ${params.contactName},</p>
-      <p>Thank you for reaching out to <strong>GeoSynthetics Africa</strong>. We have successfully received your quote request.</p>
-      
-      <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #1e293b;">Summary of your request:</h3>
-        <ul style="list-style: none; padding-left: 0; line-height: 1.6;">
-          ${params.productName ? `<li><strong>Product / Service:</strong> ${params.productName}</li>` : ""}
-          ${params.company ? `<li><strong>Company:</strong> ${params.company}</li>` : ""}
-          ${params.country ? `<li><strong>Country:</strong> ${params.country}</li>` : ""}
-          ${params.projectDescription ? `<li><strong>Project Details:</strong> ${params.projectDescription}</li>` : ""}
-        </ul>
-      </div>
+  const reference = formatReference(params.reference);
+  const siteUrl = process.env.VITE_SITE_URL || "https://geosynthetics.co.za";
 
-      <p>Our engineering & sales team will review your specs and respond with an official quotation shortly.</p>
-      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-      <p style="font-size: 12px; color: #64748b;">GeoSynthetics Africa — High-Performance Geosynthetic Solutions across the Continent.</p>
-    </div>
-  `;
-
-  // 2. Email to Admin / Sales Team
-  const adminHtml = `
-    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-      <h2 style="color: #2563eb;">New Web Quote Submission</h2>
-      <p>A new quote request has been submitted on the GeoSynthetics website:</p>
-      
-      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactName}</td></tr>
-        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${params.contactEmail}">${params.contactEmail}</a></td></tr>
-        ${params.contactPhone ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactPhone}</td></tr>` : ""}
-        ${params.company ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Company:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.company}</td></tr>` : ""}
-        ${params.country ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Country:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.country}</td></tr>` : ""}
-        ${params.productName ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Product:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.productName}</td></tr>` : ""}
-        ${params.projectDescription ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Project Details:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.projectDescription}</td></tr>` : ""}
-      </table>
-    </div>
-  `;
+  const customerHtml = generateQuoteCustomerEmail({ ...params, reference, siteUrl });
+  const adminHtml = generateQuoteAdminEmail({ ...params, reference, siteUrl });
 
   // Send to customer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "", name: "GeoSynthetics Sales Team" },
-    subject: "We received your quote request — GeoSynthetics Africa",
+    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "GeoSynthetics Sales Team" },
+    subject: `Quote request received — an engineer responds within 24 hours | Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
 
@@ -143,7 +117,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
     await sendBrevoEmail({
       to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
       replyTo: { email: params.contactEmail, name: params.contactName },
-      subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"})`,
+      subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"}) — REF ${reference}`,
       htmlContent: adminHtml,
     });
   }
@@ -157,6 +131,8 @@ const sendQuoteEmailParamsSchema = z.object({
   country: z.string().optional(),
   productName: z.string().optional(),
   projectDescription: z.string().optional(),
+  attachments: z.union([z.array(z.string()), z.string()]).optional(),
+  reference: z.string().optional(),
 });
 
 /**
@@ -175,7 +151,10 @@ export interface SendContactEmailParams {
   contactName: string;
   contactEmail: string;
   contactPhone?: string;
+  company?: string;
+  country?: string;
   message: string;
+  reference?: string;
 }
 
 /**
@@ -186,41 +165,17 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
     process.env.NOTIFICATION_TO_EMAIL ||
     process.env.VITE_NOTIFICATION_TO_EMAIL;
 
-  const customerHtml = `
-    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-      <h2 style="color: #0f172a;">We've Received Your Message</h2>
-      <p>Dear ${params.contactName},</p>
-      <p>Thank you for contacting <strong>GeoSynthetics Africa</strong>. Our team has received your enquiry and will get back to you within 1 business day.</p>
+  const reference = formatReference(params.reference);
+  const siteUrl = process.env.VITE_SITE_URL || "https://geosynthetics.co.za";
 
-      <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #1e293b;">Your message:</h3>
-        <p style="white-space: pre-wrap;">${params.message}</p>
-      </div>
-
-      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-      <p style="font-size: 12px; color: #64748b;">GeoSynthetics Africa — High-Performance Geosynthetic Solutions across the Continent.</p>
-    </div>
-  `;
-
-  const adminHtml = `
-    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-      <h2 style="color: #2563eb;">[Quick Contact] New Enquiry from Website</h2>
-      <p>A new contact enquiry has been submitted:</p>
-
-      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactName}</td></tr>
-        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${params.contactEmail}">${params.contactEmail}</a></td></tr>
-        ${params.contactPhone ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactPhone}</td></tr>` : ""}
-        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold; vertical-align: top;">Message:</td><td style="padding: 8px; border-bottom: 1px solid #eee; white-space: pre-wrap;">${params.message}</td></tr>
-      </table>
-    </div>
-  `;
+  const customerHtml = generateContactCustomerEmail({ ...params, reference, siteUrl });
+  const adminHtml = generateContactAdminEmail({ ...params, reference, siteUrl });
 
   // Send confirmation to the enquirer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "", name: "GeoSynthetics Sales Team" },
-    subject: "We received your message — GeoSynthetics Africa",
+    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "GeoSynthetics Sales Team" },
+    subject: `We received your message — GeoSynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
 
@@ -229,7 +184,7 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
     await sendBrevoEmail({
       to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
       replyTo: { email: params.contactEmail, name: params.contactName },
-      subject: `[Quick Contact] ${params.contactName}`,
+      subject: `[Quick Contact] ${params.contactName} — REF ${reference}`,
       htmlContent: adminHtml,
     });
   }
@@ -239,7 +194,10 @@ const sendContactEmailParamsSchema = z.object({
   contactName: z.string(),
   contactEmail: z.string(),
   contactPhone: z.string().optional(),
+  company: z.string().optional(),
+  country: z.string().optional(),
   message: z.string(),
+  reference: z.string().optional(),
 });
 
 /**

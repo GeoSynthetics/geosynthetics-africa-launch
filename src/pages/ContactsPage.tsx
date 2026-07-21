@@ -956,7 +956,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         contact_email: values.email,
         contact_phone: values.phone ?? null,
         company: null,
-        project_description: `[quick contact]\n${values.message}`,
+        project_description: `${values.message}`,
         boq_file_path: null,
         user_id: user?.id ?? null,
         status: "new",
@@ -969,7 +969,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           contactName: values.name,
           contactEmail: values.email,
           contactPhone: values.phone ?? undefined,
-          message: `[quick contact]\n${values.message}`,
+          message: `${values.message}`,
         },
       }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
 

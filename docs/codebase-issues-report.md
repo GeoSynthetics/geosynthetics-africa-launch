@@ -198,3 +198,10 @@ These are compilation errors caught by `tsc --noEmit` that pose runtime risks or
 2. **Resolve React Hook Bugs**: Update route component definitions to fetch loader data externally, making pages pure presentation components.
 3. **Clean Up Unused Code**: Safely prune the unused imports listed in Section 2.
 4. **Fix Compiler Errors**: Apply the proposed fixes in Section 5 to ensure the project passes typechecking (`tsc --noEmit`) cleanly.
+
+---
+
+## 6. Resolved Build & Parser Bugs
+
+- **[brevo.ts](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/lib/brevo.ts#L193-L204)**: Duplicate Zod schema properties (`contactPhone`, `message`) lingering at line 202 caused a `[tanstack-start-core::server-fn:client] Missing semicolon` syntax error during Vite build transforms; fixed by removing the redundant lines.
+
