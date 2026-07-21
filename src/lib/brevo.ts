@@ -87,8 +87,7 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ succe
 export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise<void> {
   const adminEmail =
     process.env.NOTIFICATION_TO_EMAIL ||
-    process.env.VITE_NOTIFICATION_TO_EMAIL ||
-    "info@geosynthetics.co.za";
+    process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   // 1. Email to Customer
   const customerHtml = `
@@ -134,13 +133,13 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   // Send to customer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail, name: "GeoSynthetics Sales Team" },
+    replyTo: { email: adminEmail ?? "", name: "GeoSynthetics Sales Team" },
     subject: "We received your quote request — GeoSynthetics Africa",
     htmlContent: customerHtml,
   });
 
   // Send notification to admin
-  if (adminEmail !== params.contactEmail) {
+  if (adminEmail && adminEmail !== params.contactEmail) {
     await sendBrevoEmail({
       to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
       replyTo: { email: params.contactEmail, name: params.contactName },
@@ -170,3 +169,85 @@ export const sendQuoteEmailFn = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+// ─── Contact Form (Quick Contact / General Enquiry) ──────────────────────────
+
+export interface SendContactEmailParams {
+  contactName: string;
+  contactEmail: string;
+  contactPhone?: string;
+  message: string;
+}
+
+/**
+ * Sends both a customer confirmation and an admin notification for a quick-contact enquiry.
+ */
+export async function dispatchContactEmails(params: SendContactEmailParams): Promise<void> {
+  const adminEmail =
+    process.env.NOTIFICATION_TO_EMAIL ||
+    process.env.VITE_NOTIFICATION_TO_EMAIL;
+
+  const customerHtml = `
+    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #0f172a;">We've Received Your Message</h2>
+      <p>Dear ${params.contactName},</p>
+      <p>Thank you for contacting <strong>GeoSynthetics Africa</strong>. Our team has received your enquiry and will get back to you within 1 business day.</p>
+
+      <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; margin: 20px 0;">
+        <h3 style="margin-top: 0; color: #1e293b;">Your message:</h3>
+        <p style="white-space: pre-wrap;">${params.message}</p>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #64748b;">GeoSynthetics Africa — High-Performance Geosynthetic Solutions across the Continent.</p>
+    </div>
+  `;
+
+  const adminHtml = `
+    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #2563eb;">[Quick Contact] New Enquiry from Website</h2>
+      <p>A new contact enquiry has been submitted:</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactName}</td></tr>
+        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${params.contactEmail}">${params.contactEmail}</a></td></tr>
+        ${params.contactPhone ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${params.contactPhone}</td></tr>` : ""}
+        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold; vertical-align: top;">Message:</td><td style="padding: 8px; border-bottom: 1px solid #eee; white-space: pre-wrap;">${params.message}</td></tr>
+      </table>
+    </div>
+  `;
+
+  // Send confirmation to the enquirer
+  await sendBrevoEmail({
+    to: [{ email: params.contactEmail, name: params.contactName }],
+    replyTo: { email: adminEmail ?? "", name: "GeoSynthetics Sales Team" },
+    subject: "We received your message — GeoSynthetics Africa",
+    htmlContent: customerHtml,
+  });
+
+  // Notify the admin / sales team
+  if (adminEmail && adminEmail !== params.contactEmail) {
+    await sendBrevoEmail({
+      to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
+      replyTo: { email: params.contactEmail, name: params.contactName },
+      subject: `[Quick Contact] ${params.contactName}`,
+      htmlContent: adminHtml,
+    });
+  }
+}
+
+const sendContactEmailParamsSchema = z.object({
+  contactName: z.string(),
+  contactEmail: z.string(),
+  contactPhone: z.string().optional(),
+  message: z.string(),
+});
+
+/**
+ * TanStack Start Server Function to trigger contact email dispatch safely from client components.
+ */
+export const sendContactEmailFn = createServerFn({ method: "POST" })
+  .inputValidator(sendContactEmailParamsSchema)
+  .handler(async ({ data }) => {
+    await dispatchContactEmails(data);
+    return { success: true };
+  });

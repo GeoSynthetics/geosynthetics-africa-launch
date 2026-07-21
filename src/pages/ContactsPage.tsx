@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
+import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/brevo";
 
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
@@ -918,6 +919,18 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (insertErr) throw insertErr;
 
+      // Trigger Brevo transactional email notifications (non-blocking)
+      void sendQuoteEmailFn({
+        data: {
+          contactName: values.name,
+          contactEmail: values.email,
+          contactPhone: values.phone ?? undefined,
+          company: values.company ?? undefined,
+          country: values.country ?? undefined,
+          projectDescription: messageWithMeta,
+        },
+      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
       boqForm.reset({
         name: "",
@@ -949,6 +962,17 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         status: "new",
       });
       if (error) throw error;
+
+      // Trigger Brevo transactional email notifications (non-blocking)
+      void sendContactEmailFn({
+        data: {
+          contactName: values.name,
+          contactEmail: values.email,
+          contactPhone: values.phone ?? undefined,
+          message: `[quick contact]\n${values.message}`,
+        },
+      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+
       toast.success("Inquiry sent — thank you!");
       quickForm.reset({
         name: "",
