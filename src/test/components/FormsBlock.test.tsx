@@ -16,6 +16,12 @@ vi.mock("@/hooks/use-auth", () => ({
   useAuth: () => ({ user: { id: "test-user-id", email: "test@example.com" } }),
 }));
 
+// Mock Brevo Server Functions
+vi.mock("@/lib/brevo", () => ({
+  sendQuoteEmailFn: vi.fn().mockResolvedValue({ success: true }),
+  sendContactEmailFn: vi.fn().mockResolvedValue({ success: true }),
+}));
+
 // Mock Supabase
 const mockInsert = vi.fn().mockResolvedValue({ data: null, error: null });
 vi.mock("@/integrations/supabase/client", () => ({
