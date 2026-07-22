@@ -99,7 +99,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
     process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
-  const siteUrl = process.env.VITE_SITE_URL || "https://geosynthetics.co.za";
+  const siteUrl = process.env.VITE_SITE_URL;
 
   const customerHtml = generateQuoteCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateQuoteAdminEmail({ ...params, reference, siteUrl });
@@ -166,7 +166,7 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
     process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
-  const siteUrl = process.env.VITE_SITE_URL || "https://geosynthetics.co.za";
+  const siteUrl = process.env.VITE_SITE_URL;
 
   const customerHtml = generateContactCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateContactAdminEmail({ ...params, reference, siteUrl });
