@@ -904,8 +904,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
       const messageWithMeta =
         `${values.message}` +
-        (values.country ? `\n\n[country] ${values.country}` : "") +
-        (uploadedPaths.length ? `\n\n[attachments]\n${uploadedPaths.join("\n")}` : "");
+        (values.country ? `${values.country}` : "") +
+        (uploadedPaths.length ? `${uploadedPaths.join("\n")}` : "");
 
       const { error: insertErr } = await supabase.from("quote_requests").insert({
         contact_name: values.name,

@@ -27,6 +27,21 @@ export interface ContactEmailParams extends BaseEmailParams {
 }
 
 const DEFAULT_SITE_URL = "https://geosynthetics.co.za";
+const DEFAULT_BREVO_IMG_HOST = "https://img.emailer.geosynthetics.co.za";
+
+/**
+ * Resolves the authenticated Brevo image redirection host or site fallback URL.
+ */
+export function getEmailImgHost(siteUrl: string = DEFAULT_SITE_URL): string {
+  const envHost = process.env.BREVO_IMG_HOST || process.env.VITE_BREVO_IMG_HOST;
+  if (envHost && envHost.trim()) {
+    return envHost.trim().replace(/\/$/, "");
+  }
+  if (siteUrl && siteUrl.includes("geosynthetics.co.za")) {
+    return DEFAULT_BREVO_IMG_HOST;
+  }
+  return siteUrl.replace(/\/$/, "");
+}
 
 /**
  * Formats a clean reference code if not provided (e.g. GSA-2026-8942)
@@ -68,11 +83,14 @@ export function escapeHtml(text?: string): string {
 }
 
 /**
- * Renders shared branded email header with Navy background, site logo icon, brand title, and Amber accent line.
+ * Renders shared branded email header with Navy background, site logo image, brand title, and Amber accent line.
+ * Uses Brevo's authenticated image redirection domain (img.emailer.geosynthetics.co.za).
  */
 function renderEmailHeader(siteUrl: string = DEFAULT_SITE_URL): string {
-  const logoDataUri = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%23F2A900'><path d='M201.56 19.495l-87.79 9.131-73.745 94.814v52.676l56.186 61.805 64.615-13.344 49.164 9.832-10.535 37.926 33.711 61.103-16.855 42.842 39.79 116.225 53.62-8.768 49.164-55.484 4.213-38.629 31.605-23.879-6.322-69.531 83.594-106.994-51.989 7.263-79.363-138.359-125.016-8.428-14.046-30.2zm252.346 319.8l-14.402 20.86-13.408.496c-11.849 24.321-12.598 38.019-13.907 66.547l17.383 4.471 21.852-52.147 2.482-40.226z'/></svg>`;
-  const logoUrl = `${siteUrl.replace(/\/$/, "")}/assets/africa.svg`;
+  const imgHost = getEmailImgHost(siteUrl);
+  const cleanSiteUrl = siteUrl.replace(/\/$/, "");
+  const logoIconUrl = `${imgHost}/assets/email-africa-icon.png`;
+  const fallbackIconUrl = `${cleanSiteUrl}/assets/email-africa-icon.png`;
 
   return `
     <!-- ===== HEADER ===== -->
@@ -84,12 +102,12 @@ function renderEmailHeader(siteUrl: string = DEFAULT_SITE_URL): string {
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle; padding-right:12px;">
-                    <a href="${siteUrl}" style="text-decoration:none;">
-                      <img src="${logoUrl}" width="28" height="28" alt="GeoSynthetics Africa" style="display:block; width:28px; height:28px; border:0;" onerror="this.onerror=null;this.src='${logoDataUri}';" />
+                    <a href="${cleanSiteUrl}" style="text-decoration:none;">
+                      <img src="${logoIconUrl}" width="32" height="32" alt="GeoSynthetics Africa Logo" style="display:block; width:32px; height:32px; border:0; outline:none; text-decoration:none;" onerror="this.onerror=null;this.src='${fallbackIconUrl}';" />
                     </a>
                   </td>
                   <td style="vertical-align:middle; font-family:Arial, Helvetica, sans-serif; font-size:20px; font-weight:bold; letter-spacing:2px; color:#FFFFFF;">
-                    <a href="${siteUrl}" style="color:#FFFFFF; text-decoration:none;">
+                    <a href="${cleanSiteUrl}" style="color:#FFFFFF; text-decoration:none;">
                       GEOSYNTHETICS<span style="color:#F2A900;">AFRICA</span>
                     </a>
                   </td>

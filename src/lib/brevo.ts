@@ -108,7 +108,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "GeoSynthetics Sales Team" },
-    subject: `Quote request received — an engineer responds within 24 hours | Geosynthetics Africa (REF ${reference})`,
+    subject: `Quote request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
 
