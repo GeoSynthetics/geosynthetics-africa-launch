@@ -1,0 +1,34 @@
+/* Geosynthetic shape decorative containers */
+
+.geo-shape-container {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.geo-shape-container svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .geo-shape-container svg,
+  .geo-shape-container svg * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Scale down shapes on very small screens to avoid visual clutter */
+@media (max-width: 480px) {
+  .geo-shape-container {
+    opacity: 0.4;
+  }
+}

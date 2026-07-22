@@ -2,6 +2,12 @@ import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { ShieldCheck, Truck, Cog, MapPin, Phone, Clock } from "lucide-react";
+import {
+  GeoGrid,
+  HexCell,
+  DrainageMesh,
+  FiberStrand,
+} from "@/components/site/shapes";
 
 export function AboutPage() {
   return (
@@ -13,7 +19,8 @@ export function AboutPage() {
         image="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80"
       />
 
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.07} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 md:py-24">
           <div className="max-w-3xl">
             <h2 className="font-display text-3xl font-bold uppercase tracking-tight text-primary">
@@ -70,7 +77,8 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-surface-dark text-surface-dark-foreground">
+      <section className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground">
+        <FiberStrand opacity={0.1} color="#ffffff" clusterCount={6} />
         <div className="container-page py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-10">
             <div>
@@ -124,7 +132,8 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={10} opacity={0.05} color="var(--foreground)" spread="wide" />
         <div className="container-page py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-3xl font-bold uppercase tracking-tight">
@@ -151,7 +160,8 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-surface py-16 border-t border-border">
+      <section className="relative isolate overflow-hidden bg-surface py-16 border-t border-border">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
         <div className="container-page">
           <h2 className="font-display text-2xl font-bold uppercase text-center mb-10">
             Frequently Asked Questions

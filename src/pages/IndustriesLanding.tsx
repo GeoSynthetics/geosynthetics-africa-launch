@@ -5,6 +5,7 @@ import * as Icons from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { HexCell } from "@/components/site/shapes";
 
 export function IndustriesLanding() {
   const { templates, hierarchy } = useLoaderData({ from: "/industries/" }) as {
@@ -65,7 +66,8 @@ export function IndustriesLanding() {
         description={heroDescription}
         image={heroImage}
       />
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={15} opacity={0.06} color="var(--primary)" spread="wide" />
         <div className="container-page py-16 md:py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {industriesItems.map((s: any) => {

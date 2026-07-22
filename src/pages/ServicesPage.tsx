@@ -12,6 +12,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  GeoGrid,
+  HexCell,
+  DrainageMesh,
+  FiberStrand,
+} from "@/components/site/shapes";
 
 interface CapabilityItem {
   icon: string;
@@ -210,7 +216,8 @@ export function ServicesPage() {
       </PageHero>
 
       {/* ── Services Grid ── */}
-      <section className="bg-background border-b border-border">
+      <section className="relative isolate overflow-hidden bg-background border-b border-border">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
         <div className="container-page py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/15 px-3 py-1.5 rounded-full">
@@ -260,7 +267,8 @@ export function ServicesPage() {
       </section>
 
       {/* ── Capabilities Grid ── */}
-      <section className="bg-background border-b border-border">
+      <section className="relative isolate overflow-hidden bg-background border-b border-border">
+        <FiberStrand opacity={0.07} color="var(--primary)" clusterCount={6} />
         <div className="container-page py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
@@ -298,7 +306,8 @@ export function ServicesPage() {
       </section>
 
       {/* ── Why Work With Us (Typographic, Sleek Dark-ish Theme) ── */}
-      <section className="bg-surface py-20 md:py-28">
+      <section className="relative isolate overflow-hidden bg-surface py-20 md:py-28">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
         <div className="container-page">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-5">

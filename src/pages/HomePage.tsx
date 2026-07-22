@@ -12,6 +12,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import {
+  MembraneFold,
+  GeoGrid,
+  HexCell,
+  DrainageMesh,
+  FiberStrand,
+} from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
 import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage";
 import { Route } from "@/routes/index";
@@ -41,14 +48,15 @@ export function HomePage() {
     <>
       {/* Hero */}
       <section
-        className="relative bg-surface-dark text-surface-dark-foreground"
+        className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.55) 50%, rgba(8,8,10,0.2) 100%), url(${hero.bgImage || heroInstallation})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="container-page py-20 md:py-32">
+        <DrainageMesh opacity={0.14} color="#ffffff" lineSpacing={40} />
+        <div className="relative container-page py-20 md:py-32">
           <div className="max-w-3xl">
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight">
               {hero.headlinePrefix}{" "}
@@ -130,8 +138,9 @@ export function HomePage() {
       </section>
 
       {/* GSA Difference + 5 step process */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20 grid lg:grid-cols-12 gap-10">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.07} color="var(--primary)" gridSize={8} />
+        <div className="relative container-page py-16 md:py-20 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">
               {gsaDifference.subtitle}
@@ -196,8 +205,9 @@ export function HomePage() {
       </section>
 
       {/* Engineered systems */}
-      <section className="bg-surface">
-        <div className="container-page py-16 md:py-20">
+      <section className="relative isolate overflow-hidden bg-surface">
+        <HexCell count={15} opacity={0.06} color="var(--primary)" spread="wide" />
+        <div className="relative container-page py-16 md:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {engineeredSystems.sectionTitle}
@@ -248,8 +258,9 @@ export function HomePage() {
       />
 
       {/* Services + dark verification panel */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20 grid lg:grid-cols-12 gap-8">
+      <section className="relative isolate overflow-hidden bg-background">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
+        <div className="relative container-page py-16 md:py-20 grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-7">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
               <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
@@ -318,8 +329,9 @@ export function HomePage() {
       </section>
 
       {/* Stats + Pan-African */}
-      <section className="bg-surface-dark text-surface-dark-foreground">
-        <div className="container-page py-16 grid lg:grid-cols-12 gap-10 items-center">
+      <section className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground">
+        <FiberStrand opacity={0.1} color="#ffffff" clusterCount={6} />
+        <div className="relative container-page py-16 grid lg:grid-cols-12 gap-10 items-center">
           {/* Left stats column — spans 4 on large screens */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             {presence.stats.map((s, idx) => (
@@ -411,8 +423,9 @@ export function HomePage() {
       </section>
 
       {/* Case studies + catalogue teaser */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={8} opacity={0.05} color="var(--foreground)" spread="tight" />
+        <div className="relative container-page py-16 md:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {projects.sectionTitle}

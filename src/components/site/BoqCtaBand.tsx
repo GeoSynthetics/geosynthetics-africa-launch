@@ -3,6 +3,7 @@ import { Upload, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { useTranslation } from "react-i18next";
+import { DrainageMesh } from "@/components/site/shapes";
 
 export interface BoqBannerData {
   title: string;
@@ -30,8 +31,9 @@ export function BoqCtaBand({ data }: { data?: BoqBannerData }) {
   const btn2Url = data?.btn2Url ?? "/contacts";
 
   return (
-    <section className="bg-primary text-primary-foreground">
-      <div className="container-page py-10 grid lg:grid-cols-2 gap-6 items-center">
+    <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
+      <DrainageMesh opacity={0.08} color="#ffffff" lineSpacing={45} />
+      <div className="container-page py-10 grid lg:grid-cols-2 gap-6 items-center relative z-10">
         <div>
           <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-tight">
             {title}

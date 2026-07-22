@@ -55,6 +55,7 @@ import {
   DEFAULT_CONTACTS_PAGE_CONTENT,
 } from "@/types/contacts";
 import * as LucideIcons from "lucide-react";
+import { DrainageMesh, FiberStrand } from "@/components/site/shapes";
 
 const getIconComponent = (
   name: string | undefined,
@@ -340,9 +341,10 @@ function CountrySeoLinks() {
 function ContactsHero({ hero, headOffice }: { hero: ContactHero; headOffice: ContactHeadOffice }) {
   return (
     <section
-      className="relative overflow-hidden bg-surface-dark text-surface-dark-foreground"
+      className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
       style={{ minHeight: "420px" }}
     >
+      <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
       {/* Full-bleed background image with left-heavy gradient */}
       <div
         className="absolute inset-0"

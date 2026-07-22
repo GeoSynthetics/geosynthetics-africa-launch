@@ -5,6 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { DrainageMesh } from "@/components/site/shapes";
 
 // Interface Definitions for Type Safety
 interface BulletItem {
@@ -201,13 +202,14 @@ export function ServicePage({ data }: { data: any }) {
     <div className="bg-background">
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}
       <section
-        className="bg-surface-dark text-white relative"
+        className="relative isolate overflow-hidden bg-surface-dark text-white"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(15,15,18,0.9), rgba(15,15,18,0.55)), url(${heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
+        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-24 relative z-10">
           <Breadcrumbs
             items={[

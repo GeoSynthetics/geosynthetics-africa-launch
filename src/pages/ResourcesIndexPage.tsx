@@ -11,6 +11,7 @@ import {
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { HelpCircle } from "lucide-react";
 import { RESOURCE_CATEGORIES, VIDEO_HOST_RE } from "@/lib/resource-categories";
+import { DrainageMesh, FiberStrand } from "@/components/site/shapes";
 
 const FAQ = [
   {
@@ -63,7 +64,8 @@ export function ResourcesIndexPage() {
         title="Technical Library"
         description="Datasheets, installation guides, case studies and engineering references."
       />
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
         <div className="container-page py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {RESOURCE_CATEGORIES.map((c) => (
             <Link
@@ -93,7 +95,8 @@ export function ResourcesIndexPage() {
           </div>
         </div>
       </section>
-      <section className="bg-surface">
+      <section className="relative isolate overflow-hidden bg-surface">
+        <FiberStrand opacity={0.07} color="var(--primary)" clusterCount={5} />
         <div className="container-page py-16 max-w-3xl">
           <h2 className="font-display text-2xl md:text-3xl font-bold uppercase mb-6">
             Frequently Asked Questions

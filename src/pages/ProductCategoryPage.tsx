@@ -25,6 +25,7 @@ import {
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
 
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
@@ -35,13 +36,14 @@ export function ProductCategoryPage() {
   return (
     <>
       <section
-        className="bg-surface-dark text-surface-dark-foreground relative"
+        className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.95), rgba(10,10,12,0.7)), url(${heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
+        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-24 relative z-10 flex flex-col md:flex-row gap-10">
           <div className="flex-1">
             <Breadcrumbs
@@ -106,7 +108,8 @@ export function ProductCategoryPage() {
         </div>
       </section>
 
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.05} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 grid lg:grid-cols-12 gap-12">
           {/* Main Content Area */}
           <div className="lg:col-span-8 space-y-16">

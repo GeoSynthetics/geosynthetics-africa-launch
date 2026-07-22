@@ -4,6 +4,7 @@ import { Route } from "@/routes/projects.index";
 import { MapPin, ChevronRight, Grid, List, ArrowUpDown, ArrowRight } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { DrainageMesh, HexCell } from "@/components/site/shapes";
 
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -116,7 +117,7 @@ export function ProjectsPage() {
       {/* ============ HERO SECTION ============ */}
       <section
         className={cn(
-          "relative text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
+          "relative isolate text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
           heroImage
             ? "bg-surface-dark"
             : "bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111]",
@@ -131,6 +132,7 @@ export function ProjectsPage() {
             : undefined
         }
       >
+        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         {/* Decorative elements */}
         {!heroImage && (
           <>
@@ -183,7 +185,6 @@ export function ProjectsPage() {
           Showing{" "}
           <span className="text-primary font-black">{filteredCaseStudies.length} projects</span>
         </div>
-
         <div className="flex flex-wrap items-center gap-4 shrink-0">
           {/* View Mode Switcher */}
           <div className="flex border border-border rounded overflow-hidden h-8">
@@ -226,7 +227,8 @@ export function ProjectsPage() {
       </div>
 
       {/* ============ PROJECTS GRID ============ */}
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={14} opacity={0.05} color="var(--primary)" spread="wide" />
         <div className="container-page pb-20">
           {viewMode === "list" ? (
             <div className="space-y-3">

@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { DrainageMesh } from "@/components/site/shapes";
 
 export function PageHero({
   eyebrow,
@@ -15,14 +16,15 @@ export function PageHero({
 }) {
   return (
     <section
-      className="relative bg-surface-dark text-surface-dark-foreground"
+      className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
       style={{
         backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.55)), url(${image})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="container-page py-20 md:py-28">
+      <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
+      <div className="container-page py-20 md:py-28 relative z-10">
         <div className="max-w-3xl">
           {eyebrow && (
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
