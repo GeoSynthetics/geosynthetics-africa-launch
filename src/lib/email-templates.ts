@@ -258,11 +258,13 @@ export function generateQuoteCustomerEmail(params: QuoteEmailParams): string {
   const company = params.company ? escapeHtml(params.company) : "N/A";
   const country = params.country ? escapeHtml(params.country) : "Not specified";
   const product = params.productName ? escapeHtml(params.productName) : undefined;
-  const projectDetails = params.projectDescription ? escapeHtml(params.projectDescription) : "Standard quote request.";
+  const projectDetails = params.projectDescription
+    ? escapeHtml(params.projectDescription)
+    : "Standard quote request.";
 
   let attachmentsStr = "None";
   if (Array.isArray(params.attachments) && params.attachments.length > 0) {
-    attachmentsStr = params.attachments.map(a => escapeHtml(a)).join(", ");
+    attachmentsStr = params.attachments.map((a) => escapeHtml(a)).join(", ");
   } else if (typeof params.attachments === "string" && params.attachments.trim()) {
     attachmentsStr = escapeHtml(params.attachments.trim());
   }
@@ -321,11 +323,15 @@ export function generateQuoteCustomerEmail(params: QuoteEmailParams): string {
           <tr>
             <td style="padding:18px 20px 6px 20px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#3D4756;">
-                ${product ? `
+                ${
+                  product
+                    ? `
                 <tr>
                   <td width="130" style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Product / System</td>
                   <td style="padding:6px 0; color:#0C1F35; font-weight:bold;">${product}</td>
-                </tr>` : ""}
+                </tr>`
+                    : ""
+                }
                 <tr>
                   <td width="130" style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Company</td>
                   <td style="padding:6px 0; color:#0C1F35; font-weight:bold;">${company}</td>
@@ -394,7 +400,9 @@ export function generateQuoteAdminEmail(params: QuoteEmailParams): string {
   const company = params.company ? escapeHtml(params.company) : "Not provided";
   const country = params.country ? escapeHtml(params.country) : "Not specified";
   const product = params.productName ? escapeHtml(params.productName) : "General Quote Request";
-  const projectDetails = params.projectDescription ? escapeHtml(params.projectDescription) : "None provided";
+  const projectDetails = params.projectDescription
+    ? escapeHtml(params.projectDescription)
+    : "None provided";
 
   const preheader = `[New Quote] ${name} (${product}) - REF: ${reference}`;
 

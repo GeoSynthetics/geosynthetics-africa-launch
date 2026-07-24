@@ -49,7 +49,7 @@ export function DrainageMesh({
             end: "bottom top",
             scrub: 2,
           },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -65,7 +65,7 @@ export function DrainageMesh({
             end: "bottom top",
             scrub: 2.5,
           },
-        }
+        },
       );
     }, container);
 
@@ -104,8 +104,10 @@ export function DrainageMesh({
           <line
             key={`f-${i}`}
             className="mesh-line-forward"
-            x1={line.x1} y1={line.y1}
-            x2={line.x2} y2={line.y2}
+            x1={line.x1}
+            y1={line.y1}
+            x2={line.x2}
+            y2={line.y2}
             stroke={color}
             strokeWidth="1"
           />
@@ -114,8 +116,10 @@ export function DrainageMesh({
           <line
             key={`b-${i}`}
             className="mesh-line-backward"
-            x1={line.x1} y1={line.y1}
-            x2={line.x2} y2={line.y2}
+            x1={line.x1}
+            y1={line.y1}
+            x2={line.x2}
+            y2={line.y2}
             stroke={color}
             strokeWidth="0.75"
           />
@@ -123,14 +127,7 @@ export function DrainageMesh({
         {forwardLines
           .filter((_, i) => i % 3 === 0)
           .map((line, i) => (
-            <circle
-              key={`dot-${i}`}
-              cx={line.x2}
-              cy={line.y2}
-              r="2.5"
-              fill={color}
-              opacity="0.6"
-            />
+            <circle key={`dot-${i}`} cx={line.x2} cy={line.y2} r="2.5" fill={color} opacity="0.6" />
           ))}
       </svg>
     </div>

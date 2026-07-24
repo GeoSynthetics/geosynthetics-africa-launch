@@ -236,4 +236,3 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
   });
 });
-

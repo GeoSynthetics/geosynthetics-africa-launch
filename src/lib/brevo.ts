@@ -41,14 +41,12 @@ export interface SendQuoteEmailParams {
 /**
  * Sends a transactional email using Brevo HTTP API v3.
  */
-export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ success: boolean; messageId?: string }> {
-  const apiKey =
-    process.env.BREVO_API_KEY ||
-    process.env.VITE_BREVO_API_KEY;
+export async function sendBrevoEmail(
+  payload: SendEmailPayload,
+): Promise<{ success: boolean; messageId?: string }> {
+  const apiKey = process.env.BREVO_API_KEY || process.env.VITE_BREVO_API_KEY;
 
-  const fromEmail =
-    process.env.BREVO_FROM_EMAIL ||
-    process.env.VITE_BREVO_FROM_EMAIL;
+  const fromEmail = process.env.BREVO_FROM_EMAIL || process.env.VITE_BREVO_FROM_EMAIL;
 
   const fromName = "Geosynthetics Africa";
 
@@ -61,7 +59,7 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ succe
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
-        "accept": "application/json",
+        accept: "application/json",
         "api-key": apiKey,
         "content-type": "application/json",
       },
@@ -82,7 +80,9 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ succe
     }
 
     const result = (await response.json()) as { messageId?: string };
-    console.log(`[Brevo Email Sent Successfully] Message ID: ${result.messageId} to ${payload.to.map(t => t.email).join(", ")}`);
+    console.log(
+      `[Brevo Email Sent Successfully] Message ID: ${result.messageId} to ${payload.to.map((t) => t.email).join(", ")}`,
+    );
     return { success: true, messageId: result.messageId };
   } catch (err) {
     console.error("[Brevo Email Exception]:", err);
@@ -94,9 +94,7 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ succe
  * Sends both Customer Confirmation and Admin Notification emails upon quote submission.
  */
 export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise<void> {
-  const adminEmail =
-    process.env.NOTIFICATION_TO_EMAIL ||
-    process.env.VITE_NOTIFICATION_TO_EMAIL;
+  const adminEmail = process.env.NOTIFICATION_TO_EMAIL || process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
   const siteUrl = process.env.VITE_SITE_URL;
@@ -161,9 +159,7 @@ export interface SendContactEmailParams {
  * Sends both a customer confirmation and an admin notification for a quick-contact enquiry.
  */
 export async function dispatchContactEmails(params: SendContactEmailParams): Promise<void> {
-  const adminEmail =
-    process.env.NOTIFICATION_TO_EMAIL ||
-    process.env.VITE_NOTIFICATION_TO_EMAIL;
+  const adminEmail = process.env.NOTIFICATION_TO_EMAIL || process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
   const siteUrl = process.env.VITE_SITE_URL;

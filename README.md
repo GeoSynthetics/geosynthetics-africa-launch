@@ -13,9 +13,10 @@ Core capabilities:
 - **Solution-first navigation** — browse by Application (Mining, Roads, Landfills…) or by Product, with relational links between them.
 - **Project enquiry pipeline** — `/contacts` form posts into the `quote_requests` table and uploads BOQ files (PDF/XLS/DWG, ≤ 20 MB) to Supabase Storage.
 - **Catalogue** — products, manufacturers, categories with full-text search (`search_products` Postgres FTS function).
+- **Technical Blog & CMS** — `/blog` landing hub, category search, and `/blog/$slug` articles with featured hero posts, upsell sidebars, and custom SEO metadata.
 - **Resources hub** — TDS, SDS, brochures and case studies served through gated signed URLs.
 - **Auth + RBAC** — Supabase Auth with roles stored in a separate `user_roles` table (`admin`, `staff`, `contractor`, `customer`, `viewer`). Roles are checked via the `has_role()` security-definer function — never on the client.
-- **Admin control panel** at `/admin` for managing quote requests, products, resources and user roles.
+- **Admin control panel** at `/admin` for managing quote requests, products, blog posts, resources and user roles.
 
 ---
 
@@ -103,6 +104,7 @@ src/
 │   ├── applications.tsx          # + applications.$category.tsx (dynamic)
 │   ├── products.tsx              # + products.$category.tsx
 │   ├── catalogue.tsx
+│   ├── blog.tsx                  # + blog.index.tsx & blog.$slug.tsx (CMS)
 │   ├── services.tsx
 │   ├── resources.tsx
 │   ├── quality-assurance.tsx
@@ -112,6 +114,7 @@ src/
 │       ├── admin.index.tsx       # Dashboard with live counts
 │       ├── admin.quotes.tsx      # Quote request inbox
 │       ├── admin.products.tsx    # Product CRUD
+│       ├── admin.blog.tsx        # Blog Post CMS & Editor
 │       ├── admin.resources.tsx   # Document management
 │       └── admin.users.tsx       # Role management
 │

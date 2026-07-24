@@ -1,6 +1,7 @@
 const https = require("https");
 
-const apiKey = "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";
+const apiKey =
+  "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";
 
 function sendEmail(senderEmail, recipientEmail) {
   return new Promise((resolve, reject) => {
@@ -22,7 +23,7 @@ function sendEmail(senderEmail, recipientEmail) {
       path: "/v3/smtp/email",
       method: "POST",
       headers: {
-        "accept": "application/json",
+        accept: "application/json",
         "api-key": apiKey,
         "content-type": "application/json",
         "content-length": Buffer.byteLength(data),
@@ -33,7 +34,10 @@ function sendEmail(senderEmail, recipientEmail) {
       let body = "";
       res.on("data", (chunk) => (body += chunk));
       res.on("end", () => {
-        console.log(`Status code for sender [${senderEmail}] -> [${recipientEmail}]:`, res.statusCode);
+        console.log(
+          `Status code for sender [${senderEmail}] -> [${recipientEmail}]:`,
+          res.statusCode,
+        );
         console.log("Body:", body);
         resolve({ status: res.statusCode, body });
       });

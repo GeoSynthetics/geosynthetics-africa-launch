@@ -65,11 +65,11 @@ describe("FooterBuilderTab Component", () => {
 
     // Check if brand details loaded
     expect(screen.getByText("Brand Details")).toBeInTheDocument();
-    
+
     // Switch to Navigation Columns tab
     const colsTabTrigger = screen.getByRole("tab", { name: /columns/i });
     expect(colsTabTrigger).toBeInTheDocument();
-    
+
     // Fire complete mouse/pointer event sequence for Radix UI Compatibility in JSDOM
     fireEvent.pointerDown(colsTabTrigger, { button: 0 });
     fireEvent.mouseDown(colsTabTrigger, { button: 0 });
@@ -103,8 +103,6 @@ describe("FooterBuilderTab Component", () => {
     expect(lastCallPayload.key).toBe("footer_content");
     expect(lastCallPayload.value.columns).toBeDefined();
     // Support Col is part of the saved columns list
-    expect(
-      lastCallPayload.value.columns.some((c: any) => c.title === "Support Col")
-    ).toBe(true);
+    expect(lastCallPayload.value.columns.some((c: any) => c.title === "Support Col")).toBe(true);
   }, 15000);
 });

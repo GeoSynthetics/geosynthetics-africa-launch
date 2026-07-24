@@ -31,7 +31,10 @@ function BlogLandingSkeleton() {
       <section className="py-16">
         <div className="container-page grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="border border-border rounded-2xl overflow-hidden bg-card space-y-4">
+            <div
+              key={i}
+              className="border border-border rounded-2xl overflow-hidden bg-card space-y-4"
+            >
               <Skeleton className="aspect-[16/10] w-full" />
               <div className="p-6 space-y-3">
                 <Skeleton className="h-3 w-16 bg-primary/30 rounded" />
@@ -51,12 +54,14 @@ export const Route = createFileRoute("/blog/")({
   loader: async () => {
     const { data, error } = await supabase
       .from("blog_posts")
-      .select(`
+      .select(
+        `
         *,
         author:author_id (
           full_name
         )
-      `)
+      `,
+      )
       .eq("status", "published")
       .order("published_at", { ascending: false });
 

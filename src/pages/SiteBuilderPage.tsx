@@ -18,7 +18,14 @@ import { FooterBuilderTab } from "@/components/admin/FooterBuilderTab";
 import { CatalogueBuilderTab } from "@/components/admin/CatalogueBuilderTab";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
-type TopLevelTab = "homepage" | "megamenu" | "regional" | "contacts" | "footer" | "catalogue" | SectionKey;
+type TopLevelTab =
+  | "homepage"
+  | "megamenu"
+  | "regional"
+  | "contacts"
+  | "footer"
+  | "catalogue"
+  | SectionKey;
 
 type SelectedNode =
   | { type: "item"; itemIdx: number }

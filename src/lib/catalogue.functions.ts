@@ -78,7 +78,7 @@ export const getProductDetail = createServerFn()
   .inputValidator(
     z.object({
       slug: z.string(),
-    })
+    }),
   )
   .handler(async ({ data: { slug } }) => {
     // Try the rich select first; if columns don't exist yet, fall back to a minimal select.

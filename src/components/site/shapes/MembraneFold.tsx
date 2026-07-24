@@ -17,7 +17,7 @@ function buildWavePath(
   amplitude: number,
   frequency: number,
   yOffset: number,
-  phaseShift: number
+  phaseShift: number,
 ): string {
   const segments = 12;
   const segmentWidth = viewWidth / segments;
@@ -27,16 +27,12 @@ function buildWavePath(
     const x1 = i * segmentWidth + segmentWidth * 0.33;
     const x2 = i * segmentWidth + segmentWidth * 0.66;
     const x3 = (i + 1) * segmentWidth;
-    const wave =
-      Math.sin(((i + phaseShift) / segments) * Math.PI * 2 * frequency) *
-      amplitude;
+    const wave = Math.sin(((i + phaseShift) / segments) * Math.PI * 2 * frequency) * amplitude;
     const nextWave =
-      Math.sin(
-        ((i + 1 + phaseShift) / segments) * Math.PI * 2 * frequency
-      ) * amplitude;
+      Math.sin(((i + 1 + phaseShift) / segments) * Math.PI * 2 * frequency) * amplitude;
 
     points.push(
-      `C${x1},${yOffset + wave} ${x2},${yOffset + nextWave} ${x3},${yOffset + nextWave * 0.8}`
+      `C${x1},${yOffset + wave} ${x2},${yOffset + nextWave} ${x3},${yOffset + nextWave * 0.8}`,
     );
   }
 
@@ -94,7 +90,7 @@ export function MembraneFold({
               end: "bottom top",
               scrub: 1 + i * 0.3,
             },
-          }
+          },
         );
       });
     }, container);
@@ -118,7 +114,7 @@ export function MembraneFold({
               wave.amplitude,
               wave.frequency,
               wave.yOffset,
-              wave.phaseShift
+              wave.phaseShift,
             )}
             fill="none"
             stroke={color}

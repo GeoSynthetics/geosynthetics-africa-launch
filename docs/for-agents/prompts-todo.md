@@ -29,9 +29,9 @@ Clean Up Implicit Any Lints: Refactor the remaining implicit any parameter type 
 ---
 
 Implement Footer Newsletter with Brevo: The newsletter subscription form in `Footer.tsx` (`handleSubscribe`) is currently a complete stub — it only clears the email field and does nothing. When implementing:
+
 1. Add the subscriber's email to a Brevo **Contact List** via the Brevo Contacts API (`POST /v3/contacts`) so it feeds into Brevo's marketing campaign audience.
 2. Optionally send a "Thank you for subscribing" transactional confirmation email to the subscriber using the existing `sendBrevoEmail()` utility in `src/lib/brevo.ts`.
 3. Add a `sendNewsletterEmailFn` TanStack Start server function in `brevo.ts` (similar to `sendQuoteEmailFn`) to keep the API key server-side only.
 4. Add a loading state (`isSubmitting`) to the subscribe button to prevent double-submits.
 5. Show `toast.success` / `toast.error` feedback after the submission.
-

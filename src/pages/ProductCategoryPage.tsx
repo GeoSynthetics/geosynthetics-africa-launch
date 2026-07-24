@@ -571,7 +571,8 @@ export function ProductCategoryPage() {
                           }}
                           className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium"
                         >
-                          Catalogue Products <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          Catalogue Products{" "}
+                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
                         </Link>
                       );
                     })()}
@@ -760,10 +761,13 @@ export function getCatalogueFiltersForSubcategory(slug: string): { q: string; ca
     "structured-wall-pipes": { q: "Structured", catSlug: "drainage-composites" },
     "dimpled-drainage-boards": { q: "Dimpled", catSlug: "drainage-composites" },
     "leak-detection-drainage-sheets": { q: "Leak", catSlug: "drainage-composites" },
-    "dpc-damp-proof-membranes-construction-plastic-sheeting-": { q: "DPC", catSlug: "damp-proofing" },
+    "dpc-damp-proof-membranes-construction-plastic-sheeting-": {
+      q: "DPC",
+      catSlug: "damp-proofing",
+    },
 
     // Accessories
-    "accessories": { q: "", catSlug: "accessories" },
+    accessories: { q: "", catSlug: "accessories" },
   };
 
   return mapping[slug] || { q: "", catSlug: "" };

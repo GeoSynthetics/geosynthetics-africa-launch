@@ -83,8 +83,8 @@ function BrandEditor({
     <div className="space-y-6">
       <SectionHeading>Brand Description</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        This paragraph appears directly below the logo in the footer. Use it to
-        summarize the company's offering in one to two sentences.
+        This paragraph appears directly below the logo in the footer. Use it to summarize the
+        company's offering in one to two sentences.
       </p>
       <div>
         <FieldLabel hint="Maximum ~200 characters recommended for clean formatting">
@@ -135,8 +135,7 @@ function SocialLinksEditor({
         <div>
           <SectionHeading>Social Media Links</SectionHeading>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Manage the social media icon buttons displayed beneath the brand
-            description.
+            Manage the social media icon buttons displayed beneath the brand description.
           </p>
         </div>
         <AddItemButton onClick={add} label="Add Link" />
@@ -179,7 +178,8 @@ function SocialLinksEditor({
                 <div className="flex items-center gap-2 pr-16">
                   <PlatformIcon className="h-4 w-4 text-primary shrink-0" />
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    {PLATFORM_OPTIONS.find((o) => o.value === link.platform)?.label ?? link.platform}
+                    {PLATFORM_OPTIONS.find((o) => o.value === link.platform)?.label ??
+                      link.platform}
                   </p>
                 </div>
 
@@ -229,11 +229,11 @@ function CopyrightEditor({
       <SectionHeading>Copyright &amp; Meta</SectionHeading>
       <p className="text-xs text-muted-foreground">
         Customize the copyright line at the very bottom of the footer. Use{" "}
-        <code className="text-[10px] bg-muted px-1 py-0.5 rounded">{"{{year}}"}</code>{" "}
-        to dynamically insert the current year.
+        <code className="text-[10px] bg-muted px-1 py-0.5 rounded">{"{{year}}"}</code> to
+        dynamically insert the current year.
       </p>
       <div>
-        <FieldLabel hint='Example: © {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.'>
+        <FieldLabel hint="Example: © {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.">
           Copyright Text
         </FieldLabel>
         <Textarea

@@ -19,14 +19,10 @@ export function useGsapScrollTrigger() {
   const contextRef = useRef<gsap.Context | null>(null);
 
   const createScrollAnimation = useCallback(
-    (
-      targets: gsap.TweenTarget,
-      config: ScrollAnimationConfig
-    ): gsap.core.Tween | null => {
+    (targets: gsap.TweenTarget, config: ScrollAnimationConfig): gsap.core.Tween | null => {
       if (typeof window === "undefined") return null;
 
-      const triggerElement =
-        config.trigger ?? containerRef.current;
+      const triggerElement = config.trigger ?? containerRef.current;
 
       if (!triggerElement) return null;
 
@@ -41,7 +37,7 @@ export function useGsapScrollTrigger() {
         },
       });
     },
-    []
+    [],
   );
 
   useEffect(() => {

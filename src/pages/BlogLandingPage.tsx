@@ -69,7 +69,8 @@ export function BlogLandingPage() {
               Geosynthetics <span className="text-primary">Insights</span>
             </h1>
             <p className="mt-6 text-sm md:text-base text-zinc-300 leading-relaxed max-w-2xl font-sans">
-              Expert articles, technical documentation deep-dives, and installation guides on engineered geosynthetics and civil infrastructure projects across Africa.
+              Expert articles, technical documentation deep-dives, and installation guides on
+              engineered geosynthetics and civil infrastructure projects across Africa.
             </p>
           </div>
         </div>
@@ -118,7 +119,8 @@ export function BlogLandingPage() {
               No Articles Found
             </h3>
             <p className="text-xs text-muted-foreground mt-2 px-6">
-              We couldn't find any articles matching "{searchQuery}" under category "{activeCategory}". Try adjusting your filters.
+              We couldn't find any articles matching "{searchQuery}" under category "
+              {activeCategory}". Try adjusting your filters.
             </p>
           </div>
         ) : (
@@ -136,7 +138,10 @@ export function BlogLandingPage() {
                 {/* Left/Top Cover Image */}
                 <div className="lg:col-span-7 aspect-[16/10] lg:aspect-auto overflow-hidden bg-muted">
                   <img
-                    src={featuredPost.cover_image || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200"}
+                    src={
+                      featuredPost.cover_image ||
+                      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200"
+                    }
                     alt={featuredPost.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-103"
                     loading="eager"
@@ -206,7 +211,10 @@ export function BlogLandingPage() {
                         {/* Cover Image */}
                         <div className="aspect-[16/10] overflow-hidden bg-muted relative">
                           <img
-                            src={post.cover_image || "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=800"}
+                            src={
+                              post.cover_image ||
+                              "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=800"
+                            }
                             alt={post.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-104"
                             loading="lazy"

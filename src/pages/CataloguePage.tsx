@@ -119,21 +119,17 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
   useEffect(() => {
     if (categories.length > 0 && selectedCats.length > 0) {
       const hasSlugs = selectedCats.some(
-        (cat) =>
-          !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat),
+        (cat) => !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat),
       );
       if (hasSlugs) {
         const resolvedCats = selectedCats
           .map((cat) => {
-            if (
-              /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat)
-            ) {
+            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat)) {
               return cat;
             }
             const found = categories.find(
               (c) =>
-                c.slug === cat ||
-                c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
+                c.slug === cat || c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
             );
             return found ? found.id : null;
           })
@@ -395,11 +391,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
                 )}
               </div>
 
-              <Accordion
-                type="multiple"
-                defaultValue={["category"]}
-                className="w-full space-y-1"
-              >
+              <Accordion type="multiple" defaultValue={["category"]} className="w-full space-y-1">
                 {/* Category Filter */}
                 <AccordionItem value="category" className="border-b-0">
                   <AccordionTrigger className="hover:no-underline py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">

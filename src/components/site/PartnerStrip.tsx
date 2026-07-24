@@ -39,8 +39,9 @@ export function PartnerStrip({
           <div className="lg:w-1/4">
             <p className="text-xs font-bold uppercase tracking-wider text-primary">{subtitle}</p>
             <p
-              className={`mt-2 text-sm leading-relaxed ${dark ? "text-surface-dark-foreground/70" : "text-muted-foreground"
-                }`}
+              className={`mt-2 text-sm leading-relaxed ${
+                dark ? "text-surface-dark-foreground/70" : "text-muted-foreground"
+              }`}
             >
               {description}
             </p>
@@ -64,4 +65,3 @@ export function PartnerStrip({
     </section>
   );
 }
-

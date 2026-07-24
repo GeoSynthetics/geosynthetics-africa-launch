@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quote Request Received — Geosynthetics Africa</title>
-<!--
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quote Request Received — Geosynthetics Africa</title>
+    <!--
   ============================================================
   GEOSYNTHETICS AFRICA — QUOTE REQUEST CONFIRMATION EMAIL
   ============================================================
@@ -26,205 +26,492 @@
     {{date}}             Submission date, e.g. 21 July 2026
   ============================================================
 -->
-<style>
-  /* Client-support fallback only; all critical styles are inline */
-  @media only screen and (max-width: 620px) {
-    .container { width: 100% !important; }
-    .px { padding-left: 24px !important; padding-right: 24px !important; }
-    .stack { display: block !important; width: 100% !important; }
-  }
-</style>
-</head>
-<body style="margin:0; padding:0; background-color:#EDEFF2; -webkit-text-size-adjust:100%;">
+    <style>
+      /* Client-support fallback only; all critical styles are inline */
+      @media only screen and (max-width: 620px) {
+        .container {
+          width: 100% !important;
+        }
+        .px {
+          padding-left: 24px !important;
+          padding-right: 24px !important;
+        }
+        .stack {
+          display: block !important;
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #edeff2; -webkit-text-size-adjust: 100%">
+    <!-- Preheader (hidden) -->
+    <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all">
+      Reference {{reference}} &middot; Your specs are with our engineering &amp; sales team.
+    </div>
 
-  <!-- Preheader (hidden) -->
-  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
-    Reference {{reference}} &middot; Your specs are with our engineering &amp; sales team.
-  </div>
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #edeff2"
+    >
+      <tr>
+        <td align="center" style="padding: 32px 16px">
+          <table
+            role="presentation"
+            class="container"
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            style="width: 600px; max-width: 600px"
+          >
+            <!-- ===== HEADER ===== -->
+            <tr>
+              <td style="background-color: #0c1f35; padding: 28px 40px 24px 40px" class="px">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td
+                      style="
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 20px;
+                        font-weight: bold;
+                        letter-spacing: 2px;
+                        color: #ffffff;
+                      "
+                    >
+                      GEOSYNTHETICS<span style="color: #f2a900">AFRICA</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        padding-top: 10px;
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 11px;
+                        letter-spacing: 1.5px;
+                        color: #8fa3b8;
+                        text-transform: uppercase;
+                      "
+                    >
+                      Supply &nbsp;&middot;&nbsp; Logistics &nbsp;&middot;&nbsp; Installation
+                      &nbsp;&middot;&nbsp; QA/QC
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#EDEFF2;">
-    <tr>
-      <td align="center" style="padding:32px 16px;">
+            <!-- Amber rule — brand accent -->
+            <tr>
+              <td style="background-color: #f2a900; height: 4px; line-height: 4px; font-size: 0">
+                &nbsp;
+              </td>
+            </tr>
 
-        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px;">
+            <!-- ===== BODY ===== -->
+            <tr>
+              <td style="background-color: #ffffff; padding: 36px 40px 8px 40px" class="px">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td
+                      style="
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 11px;
+                        letter-spacing: 2px;
+                        color: #8a94a6;
+                        text-transform: uppercase;
+                        padding-bottom: 8px;
+                      "
+                    >
+                      Quote request received
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 24px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        color: #0c1f35;
+                        padding-bottom: 20px;
+                      "
+                    >
+                      Your specs are with our engineers.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 15px;
+                        line-height: 24px;
+                        color: #3d4756;
+                        padding-bottom: 12px;
+                      "
+                    >
+                      Dear {{name}},
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 15px;
+                        line-height: 24px;
+                        color: #3d4756;
+                        padding-bottom: 24px;
+                      "
+                    >
+                      Thank you for reaching out to
+                      <strong style="color: #0c1f35">Geosynthetics Africa</strong>. Your quote
+                      request has been logged and assigned to our engineering &amp; sales team.
+                      <strong style="color: #0c1f35"
+                        >An engineer will respond with an official quotation within 24
+                        hours.</strong
+                      >
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-          <!-- ===== HEADER ===== -->
-          <tr>
-            <td style="background-color:#0C1F35; padding:28px 40px 24px 40px;" class="px">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="font-family:Arial, Helvetica, sans-serif; font-size:20px; font-weight:bold; letter-spacing:2px; color:#FFFFFF;">
-                    GEOSYNTHETICS<span style="color:#F2A900;">AFRICA</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top:10px; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:1.5px; color:#8FA3B8; text-transform:uppercase;">
-                    Supply &nbsp;&middot;&nbsp; Logistics &nbsp;&middot;&nbsp; Installation &nbsp;&middot;&nbsp; QA/QC
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+            <!-- ===== TRANSMITTAL RECORD (summary block) ===== -->
+            <tr>
+              <td style="background-color: #ffffff; padding: 0 40px 28px 40px" class="px">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="border: 1px solid #d8dee6; border-left: 4px solid #f2a900"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #f4f6f9;
+                        padding: 14px 20px;
+                        border-bottom: 1px solid #d8dee6;
+                      "
+                    >
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td
+                            style="
+                              font-family: Arial, Helvetica, sans-serif;
+                              font-size: 11px;
+                              font-weight: bold;
+                              letter-spacing: 2px;
+                              color: #0c1f35;
+                              text-transform: uppercase;
+                            "
+                          >
+                            Request summary
+                          </td>
+                          <td
+                            align="right"
+                            style="
+                              font-family: &quot;Courier New&quot;, Courier, monospace;
+                              font-size: 12px;
+                              color: #5a6b7e;
+                            "
+                          >
+                            REF&nbsp;{{reference}}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 18px 20px 6px 20px">
+                      <table
+                        role="presentation"
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="
+                          font-family: Arial, Helvetica, sans-serif;
+                          font-size: 14px;
+                          color: #3d4756;
+                        "
+                      >
+                        <tr>
+                          <td
+                            width="130"
+                            style="
+                              padding: 6px 0;
+                              font-size: 11px;
+                              letter-spacing: 1px;
+                              color: #8a94a6;
+                              text-transform: uppercase;
+                              vertical-align: top;
+                            "
+                          >
+                            Company
+                          </td>
+                          <td style="padding: 6px 0; color: #0c1f35; font-weight: bold">
+                            {{company}}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 6px 0;
+                              font-size: 11px;
+                              letter-spacing: 1px;
+                              color: #8a94a6;
+                              text-transform: uppercase;
+                              vertical-align: top;
+                            "
+                          >
+                            Country
+                          </td>
+                          <td style="padding: 6px 0">{{country}}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 6px 0;
+                              font-size: 11px;
+                              letter-spacing: 1px;
+                              color: #8a94a6;
+                              text-transform: uppercase;
+                              vertical-align: top;
+                            "
+                          >
+                            Submitted
+                          </td>
+                          <td style="padding: 6px 0">{{date}}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 6px 0;
+                              font-size: 11px;
+                              letter-spacing: 1px;
+                              color: #8a94a6;
+                              text-transform: uppercase;
+                              vertical-align: top;
+                            "
+                          >
+                            Project details
+                          </td>
+                          <td style="padding: 6px 0; line-height: 22px">{{project_details}}</td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 6px 0 16px 0;
+                              font-size: 11px;
+                              letter-spacing: 1px;
+                              color: #8a94a6;
+                              text-transform: uppercase;
+                              vertical-align: top;
+                            "
+                          >
+                            Attachments
+                          </td>
+                          <td style="padding: 6px 0 16px 0">{{attachments}}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-          <!-- Amber rule — brand accent -->
-          <tr><td style="background-color:#F2A900; height:4px; line-height:4px; font-size:0;">&nbsp;</td></tr>
+            <!-- ===== WHAT HAPPENS NEXT ===== -->
+            <tr>
+              <td style="background-color: #ffffff; padding: 0 40px 28px 40px" class="px">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="font-family: Arial, Helvetica, sans-serif"
+                >
+                  <tr>
+                    <td
+                      style="
+                        font-size: 11px;
+                        font-weight: bold;
+                        letter-spacing: 2px;
+                        color: #0c1f35;
+                        text-transform: uppercase;
+                        padding-bottom: 12px;
+                      "
+                    >
+                      What happens next
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 14px; line-height: 24px; color: #3d4756">
+                      <strong style="color: #0c1f35">1&nbsp;&nbsp;Review</strong> — An engineer
+                      reviews your specs, quantities and site conditions.<br />
+                      <strong style="color: #0c1f35">2&nbsp;&nbsp;Quotation</strong> — You receive
+                      an official quotation covering material supply, pan-African logistics and,
+                      where required, QA/QC-controlled installation.<br />
+                      <strong style="color: #0c1f35">3&nbsp;&nbsp;One contract</strong> — Design
+                      through certification, delivered under one contract, one crew, one signature.
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-          <!-- ===== BODY ===== -->
-          <tr>
-            <td style="background-color:#FFFFFF; padding:36px 40px 8px 40px;" class="px">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#8A94A6; text-transform:uppercase; padding-bottom:8px;">
-                    Quote request received
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:32px; font-weight:bold; color:#0C1F35; padding-bottom:20px;">
-                    Your specs are with our engineers.
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#3D4756; padding-bottom:12px;">
-                    Dear {{name}},
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#3D4756; padding-bottom:24px;">
-                    Thank you for reaching out to <strong style="color:#0C1F35;">Geosynthetics Africa</strong>. Your quote request has been logged and assigned to our engineering &amp; sales team. <strong style="color:#0C1F35;">An engineer will respond with an official quotation within 24 hours.</strong>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+            <!-- ===== CREDENTIALS STRIP ===== -->
+            <tr>
+              <td style="background-color: #0c1f35; padding: 20px 40px" class="px">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="font-family: Arial, Helvetica, sans-serif"
+                >
+                  <tr>
+                    <td class="stack" width="33%" align="center" style="padding: 6px 4px">
+                      <div style="font-size: 16px; font-weight: bold; color: #f2a900">IAGI</div>
+                      <div
+                        style="
+                          font-size: 10px;
+                          letter-spacing: 1px;
+                          color: #8fa3b8;
+                          text-transform: uppercase;
+                          padding-top: 4px;
+                        "
+                      >
+                        Installer Member — 1 of only 5 in Africa
+                      </div>
+                    </td>
+                    <td class="stack" width="33%" align="center" style="padding: 6px 4px">
+                      <div style="font-size: 16px; font-weight: bold; color: #f2a900">30+</div>
+                      <div
+                        style="
+                          font-size: 10px;
+                          letter-spacing: 1px;
+                          color: #8fa3b8;
+                          text-transform: uppercase;
+                          padding-top: 4px;
+                        "
+                      >
+                        African countries delivered to
+                      </div>
+                    </td>
+                    <td class="stack" width="33%" align="center" style="padding: 6px 4px">
+                      <div style="font-size: 16px; font-weight: bold; color: #f2a900">
+                        15M+ m&sup2;
+                      </div>
+                      <div
+                        style="
+                          font-size: 10px;
+                          letter-spacing: 1px;
+                          color: #8fa3b8;
+                          text-transform: uppercase;
+                          padding-top: 4px;
+                        "
+                      >
+                        Installed &middot; 100% QA/QC tested
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-          <!-- ===== TRANSMITTAL RECORD (summary block) ===== -->
-          <tr>
-            <td style="background-color:#FFFFFF; padding:0 40px 28px 40px;" class="px">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #D8DEE6; border-left:4px solid #F2A900;">
-                <tr>
-                  <td style="background-color:#F4F6F9; padding:14px 20px; border-bottom:1px solid #D8DEE6;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td style="font-family:Arial, Helvetica, sans-serif; font-size:11px; font-weight:bold; letter-spacing:2px; color:#0C1F35; text-transform:uppercase;">
-                          Request summary
-                        </td>
-                        <td align="right" style="font-family:'Courier New', Courier, monospace; font-size:12px; color:#5A6B7E;">
-                          REF&nbsp;{{reference}}
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:18px 20px 6px 20px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#3D4756;">
-                      <tr>
-                        <td width="130" style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Company</td>
-                        <td style="padding:6px 0; color:#0C1F35; font-weight:bold;">{{company}}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Country</td>
-                        <td style="padding:6px 0;">{{country}}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Submitted</td>
-                        <td style="padding:6px 0;">{{date}}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Project details</td>
-                        <td style="padding:6px 0; line-height:22px;">{{project_details}}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding:6px 0 16px 0; font-size:11px; letter-spacing:1px; color:#8A94A6; text-transform:uppercase; vertical-align:top;">Attachments</td>
-                        <td style="padding:6px 0 16px 0;">{{attachments}}</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+            <!-- ===== CTA ===== -->
+            <tr>
+              <td style="background-color: #ffffff; padding: 28px 40px" class="px" align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="background-color: #f2a900; border-radius: 2px">
+                      <a
+                        href="https://geosynthetics.co.za/catalogue"
+                        style="
+                          display: inline-block;
+                          padding: 13px 28px;
+                          font-family: Arial, Helvetica, sans-serif;
+                          font-size: 13px;
+                          font-weight: bold;
+                          letter-spacing: 1.5px;
+                          color: #0c1f35;
+                          text-decoration: none;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Explore the catalogue
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+                <div
+                  style="
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 13px;
+                    color: #5a6b7e;
+                    padding-top: 14px;
+                  "
+                >
+                  Need to add specs or drawings? Reply directly to this email — it reaches our
+                  engineering team.
+                </div>
+              </td>
+            </tr>
 
-          <!-- ===== WHAT HAPPENS NEXT ===== -->
-          <tr>
-            <td style="background-color:#FFFFFF; padding:0 40px 28px 40px;" class="px">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, Helvetica, sans-serif;">
-                <tr>
-                  <td style="font-size:11px; font-weight:bold; letter-spacing:2px; color:#0C1F35; text-transform:uppercase; padding-bottom:12px;">
-                    What happens next
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-size:14px; line-height:24px; color:#3D4756;">
-                    <strong style="color:#0C1F35;">1&nbsp;&nbsp;Review</strong> — An engineer reviews your specs, quantities and site conditions.<br>
-                    <strong style="color:#0C1F35;">2&nbsp;&nbsp;Quotation</strong> — You receive an official quotation covering material supply, pan-African logistics and, where required, QA/QC-controlled installation.<br>
-                    <strong style="color:#0C1F35;">3&nbsp;&nbsp;One contract</strong> — Design through certification, delivered under one contract, one crew, one signature.
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- ===== CREDENTIALS STRIP ===== -->
-          <tr>
-            <td style="background-color:#0C1F35; padding:20px 40px;" class="px">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, Helvetica, sans-serif;">
-                <tr>
-                  <td class="stack" width="33%" align="center" style="padding:6px 4px;">
-                    <div style="font-size:16px; font-weight:bold; color:#F2A900;">IAGI</div>
-                    <div style="font-size:10px; letter-spacing:1px; color:#8FA3B8; text-transform:uppercase; padding-top:4px;">Installer Member — 1 of only 5 in Africa</div>
-                  </td>
-                  <td class="stack" width="33%" align="center" style="padding:6px 4px;">
-                    <div style="font-size:16px; font-weight:bold; color:#F2A900;">30+</div>
-                    <div style="font-size:10px; letter-spacing:1px; color:#8FA3B8; text-transform:uppercase; padding-top:4px;">African countries delivered to</div>
-                  </td>
-                  <td class="stack" width="33%" align="center" style="padding:6px 4px;">
-                    <div style="font-size:16px; font-weight:bold; color:#F2A900;">15M+ m&sup2;</div>
-                    <div style="font-size:10px; letter-spacing:1px; color:#8FA3B8; text-transform:uppercase; padding-top:4px;">Installed &middot; 100% QA/QC tested</div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- ===== CTA ===== -->
-          <tr>
-            <td style="background-color:#FFFFFF; padding:28px 40px;" class="px" align="center">
-              <table role="presentation" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="background-color:#F2A900; border-radius:2px;">
-                    <a href="https://geosynthetics.co.za/catalogue" style="display:inline-block; padding:13px 28px; font-family:Arial, Helvetica, sans-serif; font-size:13px; font-weight:bold; letter-spacing:1.5px; color:#0C1F35; text-decoration:none; text-transform:uppercase;">
-                      Explore the catalogue
-                    </a>
-                  </td>
-                </tr>
-              </table>
-              <div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#5A6B7E; padding-top:14px;">
-                Need to add specs or drawings? Reply directly to this email — it reaches our engineering team.
-              </div>
-            </td>
-          </tr>
-
-          <!-- ===== FOOTER ===== -->
-          <tr>
-            <td style="background-color:#F4F6F9; border-top:1px solid #D8DEE6; padding:22px 40px;" class="px" align="center">
-              <div style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:20px; color:#5A6B7E;">
-                <strong style="color:#0C1F35;">Geosynthetics Africa (Pty) Ltd</strong> — Geosynthetics Supply, Installation &amp; QA/QC Across Africa.<br>
-                SUPPLY. LOGISTICS. INSTALLATION. — ONE CONTRACT. ONE CREW. ONE SIGNATURE.
-              </div>
-              <div style="font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:18px; color:#8A94A6; padding-top:10px;">
-                IAGI Installer Member &nbsp;|&nbsp; B-BBEE Level 2 &nbsp;|&nbsp; QA/QC Certified &nbsp;|&nbsp; Pan-African Logistics<br>
-                <a href="https://geosynthetics.co.za/" style="color:#5A6B7E;">geosynthetics.co.za</a> &nbsp;&middot;&nbsp; <a href="https://geosynthetics.co.za/contacts" style="color:#5A6B7E;">Contact us</a>
-              </div>
-              <div style="font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#A6AFBC; padding-top:12px;">
-                &copy; 2026 Geosynthetics Africa (Pty) Ltd. All rights reserved.
-              </div>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
+            <!-- ===== FOOTER ===== -->
+            <tr>
+              <td
+                style="background-color: #f4f6f9; border-top: 1px solid #d8dee6; padding: 22px 40px"
+                class="px"
+                align="center"
+              >
+                <div
+                  style="
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 12px;
+                    line-height: 20px;
+                    color: #5a6b7e;
+                  "
+                >
+                  <strong style="color: #0c1f35">Geosynthetics Africa (Pty) Ltd</strong> —
+                  Geosynthetics Supply, Installation &amp; QA/QC Across Africa.<br />
+                  SUPPLY. LOGISTICS. INSTALLATION. — ONE CONTRACT. ONE CREW. ONE SIGNATURE.
+                </div>
+                <div
+                  style="
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 11px;
+                    line-height: 18px;
+                    color: #8a94a6;
+                    padding-top: 10px;
+                  "
+                >
+                  IAGI Installer Member &nbsp;|&nbsp; B-BBEE Level 2 &nbsp;|&nbsp; QA/QC Certified
+                  &nbsp;|&nbsp; Pan-African Logistics<br />
+                  <a href="https://geosynthetics.co.za/" style="color: #5a6b7e"
+                    >geosynthetics.co.za</a
+                  >
+                  &nbsp;&middot;&nbsp;
+                  <a href="https://geosynthetics.co.za/contacts" style="color: #5a6b7e"
+                    >Contact us</a
+                  >
+                </div>
+                <div
+                  style="
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 10px;
+                    color: #a6afbc;
+                    padding-top: 12px;
+                  "
+                >
+                  &copy; 2026 Geosynthetics Africa (Pty) Ltd. All rights reserved.
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

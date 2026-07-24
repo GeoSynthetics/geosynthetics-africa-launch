@@ -329,6 +329,7 @@ To validate: paste the sitemap URL into [Google's Rich Results Test](https://sea
 **Notes / follow-ups:** Developers/administrators must ensure that the `20260701140000_add_resource_types.sql` migration is applied to their self-managed Supabase instance so that the database supports the `manual` and `case_study` enum values.
 
 ---
+
 ## 2026-07-15 — Dynamic Footer Builder in Site Builder Admin Control Panel
 
 **Scope:** Admin / Footer / Navigation
@@ -337,6 +338,7 @@ To validate: paste the sitemap URL into [Google's Rich Results Test](https://sea
 **Notes / follow-ups:** Added robust Vitest unit tests verifying components under the new dynamic model using Test-Driven Development (TDD).
 
 ---
+
 ## 2026-07-16 — Horizontal Scrolling Navigation with Arrow Overlays in Site Builder
 
 **Scope:** Admin / Site Builder / UI

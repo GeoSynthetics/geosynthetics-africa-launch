@@ -7,14 +7,16 @@ async function loadPost(slug: string) {
   // 1. Fetch the blog post
   const { data: post, error } = await supabase
     .from("blog_posts")
-    .select(`
+    .select(
+      `
       *,
       author:author_id (
         id,
         full_name,
         email
       )
-    `)
+    `,
+    )
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -106,8 +108,13 @@ export const Route = createFileRoute("/blog/$slug")({
   pendingMs: 0,
   head: ({ loaderData }) => {
     const post = loaderData?.post;
-    const title = post?.meta_title || (post ? `${post.title} — Blog | Geosynthetics Africa` : "Blog — Geosynthetics Africa");
-    const desc = post?.meta_description || post?.excerpt || "Expert geosynthetics article by Geosynthetics Africa.";
+    const title =
+      post?.meta_title ||
+      (post ? `${post.title} — Blog | Geosynthetics Africa` : "Blog — Geosynthetics Africa");
+    const desc =
+      post?.meta_description ||
+      post?.excerpt ||
+      "Expert geosynthetics article by Geosynthetics Africa.";
     return {
       meta: [
         { title },

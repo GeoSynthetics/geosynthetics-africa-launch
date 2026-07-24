@@ -51,8 +51,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
     "Pan-African Logistics",
     "QA/QC Certified",
   ],
-  copyrightText:
-    "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
+  copyrightText: "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
   columns: [
     {
       id: "col-products",

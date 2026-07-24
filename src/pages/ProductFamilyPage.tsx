@@ -285,38 +285,53 @@ export function ProductFamilyPage() {
         {/* Stats Row */}
         <div className="border-t border-white/10 relative z-10 bg-black/20">
           <div className="container-page grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.projects || mockData.stats.projects}
+            <Link
+              to="/$slug"
+              params={{ slug: "supply" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                Supply
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Projects
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Direct Sourcing
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.countries || mockData.stats.countries}
+            </Link>
+            <Link
+              to="/$slug"
+              params={{ slug: "logistics" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                30+
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Countries
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Country Delivery
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.experts || mockData.stats.experts}
+            </Link>
+            <Link
+              to="/$slug"
+              params={{ slug: "installation" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105 leading-none md:leading-normal">
+                IAGI-Aligned
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Experts
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Installation
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.years || mockData.stats.years}
+            </Link>
+            <Link
+              to="/quality-assurance"
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                Quality
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Years
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Assurance
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

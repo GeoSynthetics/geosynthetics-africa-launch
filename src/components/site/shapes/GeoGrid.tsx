@@ -23,7 +23,7 @@ function generateGridNodes(
   spacingX: number,
   spacingY: number,
   offsetX: number,
-  offsetY: number
+  offsetY: number,
 ): GridNode[] {
   const nodes: GridNode[] = [];
   for (let row = 0; row < rows; row++) {
@@ -58,7 +58,7 @@ export function GeoGrid({
 
   const nodes = useMemo(
     () => generateGridNodes(cols, rows, spacingX, spacingY, 40, 40),
-    [cols, rows]
+    [cols, rows],
   );
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function GeoGrid({
             end: "bottom top",
             scrub: 1.5,
           },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -102,7 +102,7 @@ export function GeoGrid({
             end: "bottom top",
             scrub: 2,
           },
-        }
+        },
       );
     }, container);
 
@@ -117,8 +117,10 @@ export function GeoGrid({
       const fromNode = nodes[row * cols + col];
       const toNode = nodes[row * cols + col + 1];
       horizontalLines.push({
-        x1: fromNode.cx, y1: fromNode.cy,
-        x2: toNode.cx, y2: toNode.cy,
+        x1: fromNode.cx,
+        y1: fromNode.cy,
+        x2: toNode.cx,
+        y2: toNode.cy,
       });
     }
   }
@@ -128,8 +130,10 @@ export function GeoGrid({
       const fromNode = nodes[row * cols + col];
       const toNode = nodes[(row + 1) * cols + col];
       verticalLines.push({
-        x1: fromNode.cx, y1: fromNode.cy,
-        x2: toNode.cx, y2: toNode.cy,
+        x1: fromNode.cx,
+        y1: fromNode.cy,
+        x2: toNode.cx,
+        y2: toNode.cy,
       });
     }
   }
@@ -145,8 +149,10 @@ export function GeoGrid({
           <line
             key={`h-${i}`}
             className="geo-grid-line"
-            x1={line.x1} y1={line.y1}
-            x2={line.x2} y2={line.y2}
+            x1={line.x1}
+            y1={line.y1}
+            x2={line.x2}
+            y2={line.y2}
             stroke={color}
             strokeWidth="1.5"
           />
@@ -155,8 +161,10 @@ export function GeoGrid({
           <line
             key={`v-${i}`}
             className="geo-grid-line"
-            x1={line.x1} y1={line.y1}
-            x2={line.x2} y2={line.y2}
+            x1={line.x1}
+            y1={line.y1}
+            x2={line.x2}
+            y2={line.y2}
             stroke={color}
             strokeWidth="1.5"
           />

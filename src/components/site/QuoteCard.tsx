@@ -256,7 +256,9 @@ export function QuoteCard({
             >
               <CloudUpload className="h-8 w-8 mx-auto text-muted-foreground" />
               <div className="mt-2 text-xs">
-                <span className="font-medium text-foreground">Drag & drop your BOQ or drawings</span>
+                <span className="font-medium text-foreground">
+                  Drag & drop your BOQ or drawings
+                </span>
                 <span className="text-muted-foreground"> or </span>
                 <span className="text-primary font-medium underline">click to upload</span>
               </div>
@@ -286,7 +288,9 @@ export function QuoteCard({
                     <div className="flex items-center gap-2 min-w-0">
                       <FileText className="h-4 w-4 text-primary shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-xs font-semibold truncate text-foreground">{f.name}</div>
+                        <div className="text-xs font-semibold truncate text-foreground">
+                          {f.name}
+                        </div>
                         <div className="text-[10px] text-muted-foreground">
                           {(f.size / 1024 / 1024).toFixed(2)} MB
                         </div>

@@ -12,7 +12,14 @@ import { AuthLayout } from "@/components/site/AuthLayout";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -95,11 +102,7 @@ function SignupPage() {
                 <div className="relative mt-1.5">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                   <FormControl>
-                    <Input
-                      placeholder="John Doe"
-                      className="h-11 pl-10"
-                      {...field}
-                    />
+                    <Input placeholder="John Doe" className="h-11 pl-10" {...field} />
                   </FormControl>
                 </div>
                 <FormMessage />
@@ -118,11 +121,7 @@ function SignupPage() {
                 <div className="relative mt-1.5">
                   <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                   <FormControl>
-                    <Input
-                      placeholder="Acme Construction Ltd."
-                      className="h-11 pl-10"
-                      {...field}
-                    />
+                    <Input placeholder="Acme Construction Ltd." className="h-11 pl-10" {...field} />
                   </FormControl>
                 </div>
                 <FormMessage />

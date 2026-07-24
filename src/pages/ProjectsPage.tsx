@@ -73,7 +73,11 @@ export function ProjectsPage() {
       <>
         {parts.map((p, i) => {
           if (p === "+" || p === "M") {
-            return <span key={i} className="text-primary">{p}</span>;
+            return (
+              <span key={i} className="text-primary">
+                {p}
+              </span>
+            );
           }
           return p;
         })}
@@ -164,7 +168,7 @@ export function ProjectsPage() {
                   idx === 0 && "border-r border-b md:border-b-0",
                   idx === 1 && "border-r border-b md:border-b-0",
                   idx === 2 && "border-r",
-                  idx === 3 && ""
+                  idx === 3 && "",
                 )}
               >
                 <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
@@ -409,22 +413,24 @@ export function ProjectsPage() {
 
           <div className="lg:col-span-8">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-[1px] bg-white/10 p-[1px] rounded border border-white/5 overflow-hidden">
-              {countries.map((c: { id: string; flag: string; name: string; count: number }, i: number) => (
-                <div
-                  key={c.id || i}
-                  className="bg-foreground p-4 hover:bg-white/5 transition flex flex-col justify-between group h-24"
-                >
-                  <div className="text-2xl">{c.flag}</div>
-                  <div className="mt-2">
-                    <div className="text-[10px] font-bold uppercase tracking-wide text-white group-hover:text-primary transition">
-                      {c.name}
-                    </div>
-                    <div className="text-[9px] text-primary font-extrabold mt-0.5">
-                      {c.count} projects
+              {countries.map(
+                (c: { id: string; flag: string; name: string; count: number }, i: number) => (
+                  <div
+                    key={c.id || i}
+                    className="bg-foreground p-4 hover:bg-white/5 transition flex flex-col justify-between group h-24"
+                  >
+                    <div className="text-2xl">{c.flag}</div>
+                    <div className="mt-2">
+                      <div className="text-[10px] font-bold uppercase tracking-wide text-white group-hover:text-primary transition">
+                        {c.name}
+                      </div>
+                      <div className="text-[9px] text-primary font-extrabold mt-0.5">
+                        {c.count} projects
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </div>

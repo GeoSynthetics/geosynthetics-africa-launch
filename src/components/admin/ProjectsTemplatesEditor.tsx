@@ -216,7 +216,7 @@ export function ProjectsTemplatesEditor() {
     newStats.push({
       id: `stat-${Date.now()}`,
       value: "100+",
-      label: "New Stat Metric"
+      label: "New Stat Metric",
     });
     setLandingField("stats", newStats);
   };
@@ -238,7 +238,7 @@ export function ProjectsTemplatesEditor() {
       id: `country-${Date.now()}`,
       flag: "🌍",
       name: "New Country",
-      count: 0
+      count: 0,
     });
     setLandingField("countries", newCountries);
   };

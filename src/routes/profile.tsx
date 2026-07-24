@@ -10,7 +10,14 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
 export const Route = createFileRoute("/profile")({
   beforeLoad: async ({ location }) => {
@@ -33,13 +40,15 @@ export const Route = createFileRoute("/profile")({
   }),
 });
 
-const passwordSchema = z.object({
-  newPassword: z.string().min(6, "Password must be at least 6 characters").max(72),
-  confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters").max(72),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const passwordSchema = z
+  .object({
+    newPassword: z.string().min(6, "Password must be at least 6 characters").max(72),
+    confirmPassword: z.string().min(6, "Confirm password must be at least 6 characters").max(72),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 function ProfilePage() {
   const { user, loading, isAuthenticated, roles } = useAuth();
@@ -116,11 +125,7 @@ function ProfilePage() {
                   <FormItem className="space-y-1">
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        {...field}
-                      />
+                      <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,11 +139,7 @@ function ProfilePage() {
                   <FormItem className="space-y-1">
                     <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        {...field}
-                      />
+                      <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

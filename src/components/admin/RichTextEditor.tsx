@@ -25,7 +25,11 @@ interface RichTextEditorProps {
   placeholder?: string;
 }
 
-export function RichTextEditor({ value, onChange, placeholder = "Write post content here..." }: RichTextEditorProps) {
+export function RichTextEditor({
+  value,
+  onChange,
+  placeholder = "Write post content here...",
+}: RichTextEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [activeButtons, setActiveButtons] = useState<Record<string, boolean>>({});
 

@@ -54,7 +54,9 @@ describe("Email Templates Engine", () => {
       // Brand headers & palette
       expect(html).toContain("GEOSYNTHETICS");
       expect(html).toContain("AFRICA");
-      expect(html).toContain("Supply &nbsp;&middot;&nbsp; Logistics &nbsp;&middot;&nbsp; Installation &nbsp;&middot;&nbsp; QA/QC");
+      expect(html).toContain(
+        "Supply &nbsp;&middot;&nbsp; Logistics &nbsp;&middot;&nbsp; Installation &nbsp;&middot;&nbsp; QA/QC",
+      );
 
       // Body & Greeting
       expect(html).toContain("Quote request received");

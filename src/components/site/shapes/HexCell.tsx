@@ -25,9 +25,7 @@ function createHexPath(cx: number, cy: number, size: number): string {
   for (let i = 0; i < 6; i++) {
     const angleDeg = 60 * i - 30;
     const angleRad = (Math.PI / 180) * angleDeg;
-    points.push(
-      `${cx + size * Math.cos(angleRad)},${cy + size * Math.sin(angleRad)}`
-    );
+    points.push(`${cx + size * Math.cos(angleRad)},${cy + size * Math.sin(angleRad)}`);
   }
   return `M${points.join("L")}Z`;
 }
@@ -41,7 +39,7 @@ function generateHexagons(
   count: number,
   viewWidth: number,
   viewHeight: number,
-  spread: string
+  spread: string,
 ): HexData[] {
   const spreadMultiplier = spread === "tight" ? 0.7 : spread === "wide" ? 1.3 : 1;
 
@@ -71,7 +69,7 @@ export function HexCell({
 
   const hexagons = useMemo(
     () => generateHexagons(count, viewWidth, viewHeight, spread),
-    [count, spread]
+    [count, spread],
   );
 
   useEffect(() => {
@@ -101,7 +99,7 @@ export function HexCell({
               end: "bottom top",
               scrub: 1.5 + i * 0.1,
             },
-          }
+          },
         );
       });
     }, container);
@@ -117,11 +115,7 @@ export function HexCell({
         preserveAspectRatio="xMidYMid slice"
       >
         {hexagons.map((hex, i) => (
-          <g
-            key={i}
-            className="hex-cell"
-            style={{ transformOrigin: `${hex.x}px ${hex.y}px` }}
-          >
+          <g key={i} className="hex-cell" style={{ transformOrigin: `${hex.x}px ${hex.y}px` }}>
             <path
               d={createHexPath(hex.x, hex.y, hex.size)}
               fill="none"

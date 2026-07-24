@@ -33,11 +33,7 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x);
 }
 
-function generateClusters(
-  count: number,
-  viewWidth: number,
-  viewHeight: number
-): FiberCluster[] {
+function generateClusters(count: number, viewWidth: number, viewHeight: number): FiberCluster[] {
   return Array.from({ length: count }, (_, i) => ({
     cx: viewWidth * 0.1 + seededRandom(i * 5 + 1) * viewWidth * 0.8,
     cy: viewHeight * 0.1 + seededRandom(i * 5 + 2) * viewHeight * 0.8,
@@ -55,8 +51,7 @@ function generateStrands(clusters: FiberCluster[]): Strand[] {
         cluster.baseAngle +
         (360 / cluster.strandCount) * s +
         (seededRandom(ci * 100 + s) - 0.5) * 30;
-      const length =
-        cluster.maxLength * (0.4 + seededRandom(ci * 100 + s + 50) * 0.6);
+      const length = cluster.maxLength * (0.4 + seededRandom(ci * 100 + s + 50) * 0.6);
 
       strands.push({
         clusterIndex: ci,
@@ -88,7 +83,7 @@ export function FiberStrand({
 
   const clusters = useMemo(
     () => generateClusters(clusterCount, viewWidth, viewHeight),
-    [clusterCount]
+    [clusterCount],
   );
 
   const strands = useMemo(() => generateStrands(clusters), [clusters]);
@@ -115,7 +110,7 @@ export function FiberStrand({
               end: "bottom top",
               scrub: 2 + i * 0.2,
             },
-          }
+          },
         );
       });
     }, container);
@@ -138,13 +133,7 @@ export function FiberStrand({
               transformOrigin: `${cluster.cx}px ${cluster.cy}px`,
             }}
           >
-            <circle
-              cx={cluster.cx}
-              cy={cluster.cy}
-              r="4"
-              fill={color}
-              opacity="0.7"
-            />
+            <circle cx={cluster.cx} cy={cluster.cy} r="4" fill={color} opacity="0.7" />
 
             {strands
               .filter((s) => s.clusterIndex === ci)

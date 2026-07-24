@@ -95,14 +95,16 @@ export function BlogAdminPage() {
       // Fetch posts with author profiles joined
       const { data, error } = await supabase
         .from("blog_posts")
-        .select(`
+        .select(
+          `
           *,
           author:author_id (
             id,
             full_name,
             email
           )
-        `)
+        `,
+        )
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -348,7 +350,10 @@ export function BlogAdminPage() {
               </h3>
 
               <div className="space-y-2">
-                <Label htmlFor="post-status" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-status"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Status
                 </Label>
                 <Select
@@ -361,15 +366,24 @@ export function BlogAdminPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-card">
-                    <SelectItem value="draft" className="focus:bg-muted">Draft</SelectItem>
-                    <SelectItem value="published" className="focus:bg-muted">Published</SelectItem>
-                    <SelectItem value="archived" className="focus:bg-muted">Archived</SelectItem>
+                    <SelectItem value="draft" className="focus:bg-muted">
+                      Draft
+                    </SelectItem>
+                    <SelectItem value="published" className="focus:bg-muted">
+                      Published
+                    </SelectItem>
+                    <SelectItem value="archived" className="focus:bg-muted">
+                      Archived
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="post-published-at" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-published-at"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Publish Date & Time
                 </Label>
                 <Input
@@ -385,7 +399,10 @@ export function BlogAdminPage() {
 
               <div className="flex items-center justify-between p-3.5 bg-muted/30 border border-border/30 rounded-xl">
                 <div className="space-y-0.5">
-                  <Label htmlFor="post-featured" className="text-xs font-bold uppercase tracking-wide cursor-pointer">
+                  <Label
+                    htmlFor="post-featured"
+                    className="text-xs font-bold uppercase tracking-wide cursor-pointer"
+                  >
                     Featured Post
                   </Label>
                   <p className="text-[10px] text-muted-foreground">
@@ -400,7 +417,10 @@ export function BlogAdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="post-read-time" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-read-time"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Read Time (Minutes)
                 </Label>
                 <div className="flex gap-2">
@@ -472,7 +492,10 @@ export function BlogAdminPage() {
               {/* Slug Editor */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="post-slug" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                  <Label
+                    htmlFor="post-slug"
+                    className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                  >
                     URL Slug
                   </Label>
                   {!editingPost.id && (
@@ -499,14 +522,19 @@ export function BlogAdminPage() {
 
               {/* Category */}
               <div className="space-y-2">
-                <Label htmlFor="post-category" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-category"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Category <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="post-category"
                   placeholder="e.g. Geotextiles, Case Studies"
                   value={editingPost.category || ""}
-                  onChange={(e) => setEditingPost((prev) => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) =>
+                    setEditingPost((prev) => ({ ...prev, category: e.target.value }))
+                  }
                   className="h-10 rounded-xl"
                 />
                 {categories.length > 0 && (
@@ -527,7 +555,10 @@ export function BlogAdminPage() {
 
               {/* Tags */}
               <div className="space-y-2">
-                <Label htmlFor="post-tags" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-tags"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Tags (Comma separated)
                 </Label>
                 <Input
@@ -569,20 +600,28 @@ export function BlogAdminPage() {
               </h3>
 
               <div className="space-y-2">
-                <Label htmlFor="post-meta-title" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-meta-title"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Meta Title
                 </Label>
                 <Input
                   id="post-meta-title"
                   placeholder="Custom browser tab title..."
                   value={editingPost.meta_title || ""}
-                  onChange={(e) => setEditingPost((prev) => ({ ...prev, meta_title: e.target.value }))}
+                  onChange={(e) =>
+                    setEditingPost((prev) => ({ ...prev, meta_title: e.target.value }))
+                  }
                   className="h-10 rounded-xl text-sm"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="post-meta-desc" className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                <Label
+                  htmlFor="post-meta-desc"
+                  className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground"
+                >
                   Meta Description
                 </Label>
                 <Textarea
@@ -621,10 +660,18 @@ export function BlogAdminPage() {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent className="bg-card">
-                  <SelectItem value="all" className="focus:bg-muted">All Statuses</SelectItem>
-                  <SelectItem value="draft" className="focus:bg-muted">Draft</SelectItem>
-                  <SelectItem value="published" className="focus:bg-muted">Published</SelectItem>
-                  <SelectItem value="archived" className="focus:bg-muted">Archived</SelectItem>
+                  <SelectItem value="all" className="focus:bg-muted">
+                    All Statuses
+                  </SelectItem>
+                  <SelectItem value="draft" className="focus:bg-muted">
+                    Draft
+                  </SelectItem>
+                  <SelectItem value="published" className="focus:bg-muted">
+                    Published
+                  </SelectItem>
+                  <SelectItem value="archived" className="focus:bg-muted">
+                    Archived
+                  </SelectItem>
                 </SelectContent>
               </Select>
 
@@ -634,7 +681,9 @@ export function BlogAdminPage() {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-card">
-                  <SelectItem value="all" className="focus:bg-muted">All Categories</SelectItem>
+                  <SelectItem value="all" className="focus:bg-muted">
+                    All Categories
+                  </SelectItem>
                   {categories.map((c) => (
                     <SelectItem key={c} value={c} className="focus:bg-muted">
                       {c}
@@ -704,13 +753,19 @@ export function BlogAdminPage() {
                         : "N/A";
 
                       const statusColors: Record<BlogPostStatus, string> = {
-                        draft: "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-900/50",
-                        published: "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-900/50",
-                        archived: "bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-800/30 dark:text-zinc-300 dark:border-zinc-800/50",
+                        draft:
+                          "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-900/50",
+                        published:
+                          "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-900/50",
+                        archived:
+                          "bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-800/30 dark:text-zinc-300 dark:border-zinc-800/50",
                       };
 
                       return (
-                        <TableRow key={post.id} className="hover:bg-muted/15 border-b border-border/40 transition-colors">
+                        <TableRow
+                          key={post.id}
+                          className="hover:bg-muted/15 border-b border-border/40 transition-colors"
+                        >
                           <TableCell className="align-middle py-3.5">
                             <div className="flex items-center gap-3">
                               {post.cover_image && (
@@ -742,7 +797,9 @@ export function BlogAdminPage() {
                             {pubDate}
                           </TableCell>
                           <TableCell className="align-middle py-3.5">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border rounded-full ${statusColors[post.status]}`}>
+                            <span
+                              className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border rounded-full ${statusColors[post.status]}`}
+                            >
                               {post.status}
                             </span>
                           </TableCell>

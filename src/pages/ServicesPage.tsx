@@ -12,12 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import {
-  GeoGrid,
-  HexCell,
-  DrainageMesh,
-  FiberStrand,
-} from "@/components/site/shapes";
+import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 
 interface CapabilityItem {
   icon: string;

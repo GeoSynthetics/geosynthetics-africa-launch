@@ -14,16 +14,11 @@ const _listeners = new Set<() => void>();
 /** Merges partial DB data with defaults to ensure every field is populated */
 function mergeWithDefaults(partial: Partial<FooterContent>): FooterContent {
   return {
-    brandDescription:
-      partial.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
-    socialLinks:
-      partial.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
-    certifications:
-      partial.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
-    copyrightText:
-      partial.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
-    columns:
-      partial.columns ?? DEFAULT_FOOTER_CONTENT.columns,
+    brandDescription: partial.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
+    socialLinks: partial.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
+    certifications: partial.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
+    copyrightText: partial.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
+    columns: partial.columns ?? DEFAULT_FOOTER_CONTENT.columns,
   };
 }
 

@@ -1,6 +1,7 @@
 const https = require("https");
 
-const apiKey = "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";
+const apiKey =
+  "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";
 const fromEmail = "info@geosynthetics.co.za";
 const userEmail = "danjumashiwaju@gmail.com";
 const adminEmail = "info@geosynthetics.co.za";
@@ -22,7 +23,7 @@ function sendBrevoEmail(payload) {
         path: "/v3/smtp/email",
         method: "POST",
         headers: {
-          "accept": "application/json",
+          accept: "application/json",
           "api-key": apiKey,
           "content-type": "application/json",
           "content-length": Buffer.byteLength(data),
@@ -35,7 +36,7 @@ function sendBrevoEmail(payload) {
           console.log(`[Brevo Response ${res.statusCode} to ${payload.to[0].email}]:`, body);
           resolve({ status: res.statusCode, body });
         });
-      }
+      },
     );
 
     req.on("error", reject);
@@ -46,7 +47,7 @@ function sendBrevoEmail(payload) {
 
 async function testFullQuoteDispatch() {
   console.log("=== Dispatching Test Quote Email to User & Admin ===");
-  
+
   // 1. Email to User (danjumashiwaju@gmail.com)
   const userHtml = `
     <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">

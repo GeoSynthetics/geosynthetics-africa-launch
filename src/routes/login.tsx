@@ -12,7 +12,14 @@ import { AuthLayout } from "@/components/site/AuthLayout";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 
 const searchSchema = z.object({
   redirect: z.string().optional().catch(undefined),

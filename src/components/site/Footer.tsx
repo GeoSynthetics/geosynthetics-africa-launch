@@ -197,9 +197,11 @@ export function Footer() {
       <div className="w-full px-6 lg:px-10 xl:px-16 py-10">
         <div
           className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-[repeat(var(--cols-count),_minmax(0,_1fr))] gap-x-6 gap-y-8"
-          style={{
-            "--cols-count": 2 + columns.length + 1,
-          } as React.CSSProperties}
+          style={
+            {
+              "--cols-count": 2 + columns.length + 1,
+            } as React.CSSProperties
+          }
         >
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
@@ -271,10 +273,7 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            {footerContent.copyrightText.replace(
-              "{{year}}",
-              String(new Date().getFullYear()),
-            )}{" "}
+            {footerContent.copyrightText.replace("{{year}}", String(new Date().getFullYear()))}{" "}
             <span className="hidden md:inline">|</span>
             <br className="md:hidden" />{" "}
             <a

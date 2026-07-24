@@ -5,19 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import {
-  Save,
-  Loader2,
-  AlertTriangle,
-  CheckCircle2,
-  BookOpen,
-} from "lucide-react";
+import { Save, Loader2, AlertTriangle, CheckCircle2, BookOpen } from "lucide-react";
 import { ImagePicker } from "./ImagePicker";
 import { SectionHeading, FieldLabel } from "./TemplateEditorShared";
-import {
-  type CataloguePageContent,
-  DEFAULT_CATALOGUE_PAGE_CONTENT,
-} from "@/types/catalogue";
+import { type CataloguePageContent, DEFAULT_CATALOGUE_PAGE_CONTENT } from "@/types/catalogue";
 
 const SUPABASE_KEY = "catalogue_page_content";
 
@@ -30,14 +21,15 @@ function HeroEditor({
 }) {
   const set = <K extends keyof CataloguePageContent["hero"]>(
     key: K,
-    val: CataloguePageContent["hero"][K]
+    val: CataloguePageContent["hero"][K],
   ) => onChange({ ...data, [key]: val });
 
   return (
     <div className="space-y-6">
       <SectionHeading>Hero Section</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        Customize the main hero title, eyebrow, description, and background image for the Catalogue page.
+        Customize the main hero title, eyebrow, description, and background image for the Catalogue
+        page.
       </p>
 
       <div>
@@ -126,7 +118,7 @@ export function CatalogueBuilderTab() {
       .from("site_config")
       .upsert(
         { key: SUPABASE_KEY, value: content as unknown as Record<string, unknown> },
-        { onConflict: "key" }
+        { onConflict: "key" },
       );
 
     if (error) {

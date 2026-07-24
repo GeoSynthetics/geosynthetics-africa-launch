@@ -204,4 +204,3 @@ These are compilation errors caught by `tsc --noEmit` that pose runtime risks or
 ## 6. Resolved Build & Parser Bugs
 
 - **[brevo.ts](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/lib/brevo.ts#L193-L204)**: Duplicate Zod schema properties (`contactPhone`, `message`) lingering at line 202 caused a `[tanstack-start-core::server-fn:client] Missing semicolon` syntax error during Vite build transforms; fixed by removing the redundant lines.
-

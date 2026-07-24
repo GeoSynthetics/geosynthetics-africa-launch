@@ -18,7 +18,9 @@ vi.mock("@/lib/catalogue.functions", () => {
       const { supabase } = await import("@/integrations/supabase/client");
       const result = await supabase
         .from("products_public")
-        .select("id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, family_slug, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)")
+        .select(
+          "id, name, slug, sku, short_description, long_description, price, sale_price, stock_quantity, image_url, images, category_id, manufacturer_id, key_features, specifications, applications, compatible_systems, datasheet_url, installation_guide_url, qa_checklist_url, chemical_resistance_url, material, structure, colour, standard, roll_width, roll_length, meta_title, meta_description, seo_keywords, alternative_ids, system_component_ids, family_slug, product_categories(id, name, slug, selection_guide_url), manufacturers(id, name)",
+        )
         .eq("slug", slug)
         .eq("is_active", true)
         .maybeSingle();

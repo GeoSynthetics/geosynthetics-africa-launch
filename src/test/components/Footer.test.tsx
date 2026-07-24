@@ -61,7 +61,11 @@ vi.mock("@/hooks/use-dynamic-menus", () => ({
         key: "products",
         columns: {
           primary: [
-            { label: "Geomembranes", to: "/products/geomembranes", params: { category: "geomembranes" } },
+            {
+              label: "Geomembranes",
+              to: "/products/geomembranes",
+              params: { category: "geomembranes" },
+            },
           ],
         },
       },

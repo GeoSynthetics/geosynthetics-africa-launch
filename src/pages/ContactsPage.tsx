@@ -40,7 +40,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
 import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/brevo";
 
-
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
   params?: Record<string, string>;
@@ -64,7 +63,6 @@ const getIconComponent = (
   if (!name) return fallback;
   return (LucideIcons as any)[name] || fallback;
 };
-
 
 import { mockContactsCaseStudies as CASE_STUDIES } from "@/mocks/contactsMocks";
 
@@ -762,10 +760,11 @@ function MapAndCoverage({
                       <button
                         key={loc.country}
                         onClick={() => onSelectCountry(loc.country)}
-                        className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${isSelected
-                          ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
-                          : "bg-card border-border text-foreground hover:border-primary/50"
-                          }`}
+                        className={`w-full flex items-center justify-between p-3 rounded border text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? "bg-primary border-primary text-primary-foreground shadow-md scale-[1.02]"
+                            : "bg-card border-border text-foreground hover:border-primary/50"
+                        }`}
                       >
                         <span className="flex items-center gap-2">
                           <span>{loc.flag}</span>
@@ -818,15 +817,15 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const projectExperience =
     caseStudies.length > 0
       ? caseStudies.map((cs) => ({
-        name: cs.title,
-        location:
-          cs.location && cs.country
-            ? `${cs.location}, ${cs.country}`
-            : cs.location || cs.country || "",
-        description: cs.summary || "",
-        image: cs.hero_image_url || "",
-        slug: cs.slug,
-      }))
+          name: cs.title,
+          location:
+            cs.location && cs.country
+              ? `${cs.location}, ${cs.country}`
+              : cs.location || cs.country || "",
+          description: cs.summary || "",
+          image: cs.hero_image_url || "",
+          slug: cs.slug,
+        }))
       : CASE_STUDIES;
 
   // Zod forms initialization
@@ -1161,7 +1160,9 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                         <div className="mt-1.5 text-sm font-semibold">
                           Drag & drop your BOQ or drawings here
                         </div>
-                        <div className="text-xs text-primary underline">or click to browse files</div>
+                        <div className="text-xs text-primary underline">
+                          or click to browse files
+                        </div>
                         <div className="mt-1 text-xs text-muted-foreground">
                           PDF, DWG, DOC, XLS (Max 20MB)
                         </div>
@@ -1348,7 +1349,6 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     </section>
   );
 }
-
 
 /* -------------------- Resource strip -------------------- */
 function ResourceStrip() {

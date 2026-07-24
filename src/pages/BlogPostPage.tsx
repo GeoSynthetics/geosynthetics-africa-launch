@@ -168,7 +168,12 @@ export function BlogPostPage() {
                 className="h-9 w-9 rounded-lg border-border hover:bg-muted/50 text-muted-foreground hover:text-foreground"
                 asChild
               >
-                <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" title="Share on LinkedIn">
+                <a
+                  href={shareUrls.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Share on LinkedIn"
+                >
                   <Linkedin className="h-4 w-4" />
                 </a>
               </Button>
@@ -178,7 +183,12 @@ export function BlogPostPage() {
                 className="h-9 w-9 rounded-lg border-border hover:bg-muted/50 text-muted-foreground hover:text-foreground"
                 asChild
               >
-                <a href={shareUrls.twitter} target="_blank" rel="noopener noreferrer" title="Share on Twitter">
+                <a
+                  href={shareUrls.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Share on Twitter"
+                >
                   <Twitter className="h-4 w-4" />
                 </a>
               </Button>
@@ -188,7 +198,12 @@ export function BlogPostPage() {
                 className="h-9 w-9 rounded-lg border-border hover:bg-muted/50 text-muted-foreground hover:text-foreground"
                 asChild
               >
-                <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook">
+                <a
+                  href={shareUrls.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Share on Facebook"
+                >
                   <Facebook className="h-4 w-4" />
                 </a>
               </Button>
@@ -259,7 +274,8 @@ export function BlogPostPage() {
               Need Specifications?
             </h3>
             <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-              Geosynthetics Africa provides tailored design, procurement support, and BOQ calculations for civil works across Africa.
+              Geosynthetics Africa provides tailored design, procurement support, and BOQ
+              calculations for civil works across Africa.
             </p>
             <Button
               className="bg-primary hover:bg-primary-hover text-white w-full uppercase text-[9px] tracking-wider font-bold h-9 rounded-xl border-0"

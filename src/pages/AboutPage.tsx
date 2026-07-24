@@ -2,12 +2,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { ShieldCheck, Truck, Cog, MapPin, Phone, Clock } from "lucide-react";
-import {
-  GeoGrid,
-  HexCell,
-  DrainageMesh,
-  FiberStrand,
-} from "@/components/site/shapes";
+import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 
 export function AboutPage() {
   return (
