@@ -7,6 +7,7 @@ This document provides a comprehensive guide for AI agents, developers, and plat
 ## 1. Overview & Business Purpose
 
 The blog engine serves three primary functions:
+
 1. **Search Engine Optimization (SEO)**: Drives organic traffic for high-intent keywords across African civil infrastructure, mining containment, and soil stabilization sectors.
 2. **Technical Authority**: Publishes deep-dive engineering analyses on standards (e.g. GRI-GM13, ASTM D5397, SANS 12236), installation QA/QC, and product selection matrices.
 3. **Product Upselling**: Links articles directly to relevant products and service channels via dynamic sidebar widgets.
@@ -15,11 +16,11 @@ The blog engine serves three primary functions:
 
 ## 2. Public & Admin Routes
 
-| Route | Component / File | Description & Access |
-| :--- | :--- | :--- |
-| `/blog` | `src/routes/blog.index.tsx` | **Public Blog Landing Page**. Displays hero featured post, category tabs (`Mining & Containment`, `Civil & Roads`, `Soil Reinforcement`), real-time search input, and responsive post grid. |
-| `/blog/$slug` | `src/routes/blog.$slug.tsx` | **Public Article Detail Page**. Renders markdown article body, publication date, author details, dynamic product upsell sidebar, and technical CTA banner. |
-| `/admin/blog` | `src/routes/admin.blog.tsx` | **Admin CMS Panel**. Gated to `admin` and `staff` roles. Full CRUD table for managing posts, toggling status, managing cover images, and editing Markdown content. |
+| Route         | Component / File            | Description & Access                                                                                                                                                                        |
+| :------------ | :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/blog`       | `src/routes/blog.index.tsx` | **Public Blog Landing Page**. Displays hero featured post, category tabs (`Mining & Containment`, `Civil & Roads`, `Soil Reinforcement`), real-time search input, and responsive post grid. |
+| `/blog/$slug` | `src/routes/blog.$slug.tsx` | **Public Article Detail Page**. Renders markdown article body, publication date, author details, dynamic product upsell sidebar, and technical CTA banner.                                  |
+| `/admin/blog` | `src/routes/admin.blog.tsx` | **Admin CMS Panel**. Gated to `admin` and `staff` roles. Full CRUD table for managing posts, toggling status, managing cover images, and editing Markdown content.                          |
 
 ---
 
@@ -95,23 +96,27 @@ CREATE POLICY "blog_posts_staff_write" ON public.blog_posts
 ## 5. Agent & Developer Operations Guide
 
 ### A. How to Programmatically Query Published Posts
+
 ```typescript
 import { supabase } from "@/integrations/supabase/client";
 
 // Fetch all published posts ordered by published_at DESC
 const { data: posts, error } = await supabase
   .from("blog_posts")
-  .select(`
+  .select(
+    `
     *,
     author:author_id (
       full_name
     )
-  `)
+  `,
+  )
   .eq("status", "published")
   .order("published_at", { ascending: false });
 ```
 
 ### B. How to Add a Blog Post via Supabase SQL
+
 ```sql
 INSERT INTO public.blog_posts (
   slug,
@@ -143,5 +148,6 @@ INSERT INTO public.blog_posts (
 ```
 
 ### C. How to Soft-Archive or Delete a Post
+
 - **Soft Unpublish**: `UPDATE public.blog_posts SET status = 'draft' WHERE id = '<post_id>';`
 - **Permanent Delete**: `DELETE FROM public.blog_posts WHERE id = '<post_id>';`

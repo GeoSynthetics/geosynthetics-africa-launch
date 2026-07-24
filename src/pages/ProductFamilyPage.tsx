@@ -28,7 +28,7 @@ function mapFamilyData(
     heroImage: familyData.heroImage || familyData.heroImageUrl || "",
     subtitle: familyData.subtitle || "",
     stats: familyData.stats || {
-      projects: "900+",
+      projects: "1 of 5  IAGI Installer Members in Africa",
       countries: "15+",
       experts: "30+",
       years: "20+",

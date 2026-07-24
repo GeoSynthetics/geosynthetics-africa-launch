@@ -32,8 +32,8 @@ async function loadPost(slug: string) {
 
   // 2. Fetch active products for the dynamic upsell sidebar
   const { data: products, error: productsErr } = await supabase
-    .from("products")
-    .select("id, name, slug, short_description, image_url, base_price_zar")
+    .from("products_public")
+    .select("id, name, slug, short_description, image_url")
     .eq("is_active", true)
     .limit(30);
 

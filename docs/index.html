@@ -1910,36 +1910,75 @@
             Managing Blog Posts & Technical CMS
           </h2>
           <p class="paragraph">
-            The Geosynthetics Africa platform features a full-featured, headless blogging and technical content management system (CMS) powered by Supabase. Designed for civil engineers, contractors, and stakeholders, the blog showcases technical articles, case studies, product application guides, and industry news across African mining and infrastructure sectors.
+            The Geosynthetics Africa platform features a full-featured, headless blogging and
+            technical content management system (CMS) powered by Supabase. Designed for civil
+            engineers, contractors, and stakeholders, the blog showcases technical articles, case
+            studies, product application guides, and industry news across African mining and
+            infrastructure sectors.
           </p>
 
-          <div class="grid-2" style="margin-bottom: 2rem;">
+          <div class="grid-2" style="margin-bottom: 2rem">
             <div class="card">
               <h3 class="card-title">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
                 Public Routes & User Experience
               </h3>
               <p class="card-desc">
-                Articles are rendered at <code>/blog</code> (Landing hub with search, category tabs, and hero featured card) and <code>/blog/:slug</code> (Detail post page with sidebar product recommendations and technical CTA blocks).
+                Articles are rendered at <code>/blog</code> (Landing hub with search, category tabs,
+                and hero featured card) and <code>/blog/:slug</code> (Detail post page with sidebar
+                product recommendations and technical CTA blocks).
               </p>
             </div>
             <div class="card">
               <h3 class="card-title">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  ></path>
+                </svg>
                 Admin Control & Security (RBAC)
               </h3>
               <p class="card-desc">
-                Admin control lives at <code>/admin/blog</code>. Access is restricted via Supabase Row Level Security (RLS) to authenticated users with <code>admin</code> or <code>staff</code> roles.
+                Admin control lives at <code>/admin/blog</code>. Access is restricted via Supabase
+                Row Level Security (RLS) to authenticated users with <code>admin</code> or
+                <code>staff</code> roles.
               </p>
             </div>
           </div>
 
           <h3 class="subsection-title">Database Schema & Field Reference (public.blog_posts)</h3>
           <p class="paragraph">
-            Blog articles are stored in the <code>public.blog_posts</code> Supabase Postgres table. Below is the complete data dictionary and UI field mapping:
+            Blog articles are stored in the <code>public.blog_posts</code> Supabase Postgres table.
+            Below is the complete data dictionary and UI field mapping:
           </p>
 
-          <table class="table" style="width: 100%; margin-bottom: 2rem;">
+          <table class="table" style="width: 100%; margin-bottom: 2rem">
             <thead>
               <tr>
                 <th>Field Name</th>
@@ -1959,7 +1998,11 @@
                 <td><code>slug</code></td>
                 <td>Text</td>
                 <td>Yes</td>
-                <td>Unique URL path identifier (e.g. <code>hdpe-geomembrane-selection-tailings-storage-africa</code>). Auto-generated from title during post creation.</td>
+                <td>
+                  Unique URL path identifier (e.g.
+                  <code>hdpe-geomembrane-selection-tailings-storage-africa</code>). Auto-generated
+                  from title during post creation.
+                </td>
               </tr>
               <tr>
                 <td><code>title</code></td>
@@ -1971,55 +2014,84 @@
                 <td><code>content</code></td>
                 <td>Text</td>
                 <td>Yes</td>
-                <td>Full article body text formatted in Markdown or HTML. Supports headings, tables, code blocks, callouts, and mathematical formulas.</td>
+                <td>
+                  Full article body text formatted in Markdown or HTML. Supports headings, tables,
+                  code blocks, callouts, and mathematical formulas.
+                </td>
               </tr>
               <tr>
                 <td><code>excerpt</code></td>
                 <td>Text</td>
                 <td>No</td>
-                <td>Short summary snippet (1–2 sentences) displayed on post preview cards and search results.</td>
+                <td>
+                  Short summary snippet (1–2 sentences) displayed on post preview cards and search
+                  results.
+                </td>
               </tr>
               <tr>
                 <td><code>cover_image</code></td>
                 <td>Text</td>
                 <td>No</td>
-                <td>URL or asset path for the main featured image (e.g. <code>/assets/blog/hdpe-geomembrane-tailings.jpg</code>).</td>
+                <td>
+                  URL or asset path for the main featured image (e.g.
+                  <code>/assets/blog/hdpe-geomembrane-tailings.jpg</code>).
+                </td>
               </tr>
               <tr>
                 <td><code>category</code></td>
                 <td>Text</td>
                 <td>Yes</td>
-                <td>Topic category for classification (e.g. <code>Mining & Containment</code>, <code>Civil & Roads</code>, <code>Soil Reinforcement</code>). Powers category filter tabs on <code>/blog</code>.</td>
+                <td>
+                  Topic category for classification (e.g. <code>Mining & Containment</code>,
+                  <code>Civil & Roads</code>, <code>Soil Reinforcement</code>). Powers category
+                  filter tabs on <code>/blog</code>.
+                </td>
               </tr>
               <tr>
                 <td><code>tags</code></td>
                 <td>Text[]</td>
                 <td>No</td>
-                <td>Array of keyword tags (e.g. <code>["HDPE Geomembrane", "QA/QC"]</code>) used for tagging and article discovery.</td>
+                <td>
+                  Array of keyword tags (e.g. <code>["HDPE Geomembrane", "QA/QC"]</code>) used for
+                  tagging and article discovery.
+                </td>
               </tr>
               <tr>
                 <td><code>read_time</code></td>
                 <td>Integer</td>
                 <td>No</td>
-                <td>Estimated reading duration in minutes (e.g. <code>7</code>). Displayed alongside clock icon on cards.</td>
+                <td>
+                  Estimated reading duration in minutes (e.g. <code>7</code>). Displayed alongside
+                  clock icon on cards.
+                </td>
               </tr>
               <tr>
                 <td><code>status</code></td>
                 <td>Enum</td>
                 <td>Yes</td>
-                <td>Publication state: <code>'draft'</code>, <code>'published'</code>, or <code>'archived'</code>. Only <code>'published'</code> posts are visible on the public website.</td>
+                <td>
+                  Publication state: <code>'draft'</code>, <code>'published'</code>, or
+                  <code>'archived'</code>. Only <code>'published'</code> posts are visible on the
+                  public website.
+                </td>
               </tr>
               <tr>
                 <td><code>featured</code></td>
                 <td>Boolean</td>
                 <td>No</td>
-                <td>When <code>true</code>, highlights the post in the large hero card banner at the top of the <code>/blog</code> landing page.</td>
+                <td>
+                  When <code>true</code>, highlights the post in the large hero card banner at the
+                  top of the <code>/blog</code> landing page.
+                </td>
               </tr>
               <tr>
                 <td><code>author_id</code></td>
                 <td>UUID</td>
                 <td>No</td>
-                <td>Foreign key referencing <code>public.profiles(id)</code>. Resolves author name and profile details.</td>
+                <td>
+                  Foreign key referencing <code>public.profiles(id)</code>. Resolves author name and
+                  profile details.
+                </td>
               </tr>
               <tr>
                 <td><code>meta_title</code></td>
@@ -2031,13 +2103,17 @@
                 <td><code>meta_description</code></td>
                 <td>Text</td>
                 <td>No</td>
-                <td>Custom SEO Meta Description tag for Google search engine snippet optimization.</td>
+                <td>
+                  Custom SEO Meta Description tag for Google search engine snippet optimization.
+                </td>
               </tr>
               <tr>
                 <td><code>published_at</code></td>
                 <td>Timestamptz</td>
                 <td>Yes</td>
-                <td>Publication timestamp used for date formatting and sorting posts chronologically.</td>
+                <td>
+                  Publication timestamp used for date formatting and sorting posts chronologically.
+                </td>
               </tr>
             </tbody>
           </table>
@@ -2050,14 +2126,19 @@
               <div class="step-body">
                 <h4 class="step-title">How to Add / Create a New Blog Post</h4>
                 <p class="paragraph">
-                  1. Log into the platform with an account assigned the <code>admin</code> or <code>staff</code> role.<br>
-                  2. Navigate to <code>/admin/blog</code> via the admin sidebar.<br>
-                  3. Click the <strong>"New Blog Post"</strong> button in the top right header.<br>
-                  4. Fill in the modal fields: Title, Category, Status (Draft or Published), Read Time, Cover Image URL, and Excerpt.<br>
-                  5. Write or paste your article body into the Content editor (supports full Markdown formatting).<br>
-                  6. (Optional) Provide custom SEO Meta Title and Meta Description tags.<br>
-                  7. Check <strong>"Featured Post"</strong> if you want this article to take precedence on the blog home hero section.<br>
-                  8. Click <strong>"Save Blog Post"</strong>. The post will be inserted into Supabase and published instantly if status is <code>published</code>.
+                  1. Log into the platform with an account assigned the <code>admin</code> or
+                  <code>staff</code> role.<br />
+                  2. Navigate to <code>/admin/blog</code> via the admin sidebar.<br />
+                  3. Click the <strong>"New Blog Post"</strong> button in the top right header.<br />
+                  4. Fill in the modal fields: Title, Category, Status (Draft or Published), Read
+                  Time, Cover Image URL, and Excerpt.<br />
+                  5. Write or paste your article body into the Content editor (supports full
+                  Markdown formatting).<br />
+                  6. (Optional) Provide custom SEO Meta Title and Meta Description tags.<br />
+                  7. Check <strong>"Featured Post"</strong> if you want this article to take
+                  precedence on the blog home hero section.<br />
+                  8. Click <strong>"Save Blog Post"</strong>. The post will be inserted into
+                  Supabase and published instantly if status is <code>published</code>.
                 </p>
               </div>
             </div>
@@ -2067,11 +2148,13 @@
               <div class="step-body">
                 <h4 class="step-title">How to Edit an Existing Blog Post</h4>
                 <p class="paragraph">
-                  1. Go to <code>/admin/blog</code>.<br>
-                  2. Locate the post in the data table (use search or category filter if needed).<br>
-                  3. Click the <strong>Edit icon</strong> (pencil) on the post row.<br>
-                  4. Modify any fields (e.g. update content, change status from Draft to Published, or change cover image).<br>
-                  5. Click <strong>"Save Blog Post"</strong>. Changes sync immediately to the database and live website.
+                  1. Go to <code>/admin/blog</code>.<br />
+                  2. Locate the post in the data table (use search or category filter if needed).<br />
+                  3. Click the <strong>Edit icon</strong> (pencil) on the post row.<br />
+                  4. Modify any fields (e.g. update content, change status from Draft to Published,
+                  or change cover image).<br />
+                  5. Click <strong>"Save Blog Post"</strong>. Changes sync immediately to the
+                  database and live website.
                 </p>
               </div>
             </div>
@@ -2081,8 +2164,14 @@
               <div class="step-body">
                 <h4 class="step-title">How to Remove / Delete / Archive a Blog Post</h4>
                 <p class="paragraph">
-                  <strong>Soft Unpublish / Archive:</strong> Open the post in the edit modal and set <strong>Status</strong> to <code>Draft</code> or <code>Archived</code>. Click Save. The post is hidden from the public website immediately while retaining all content and history in Supabase.<br><br>
-                  <strong>Permanent Delete:</strong> Click the <strong>Delete icon</strong> (trash red icon) on the post row in <code>/admin/blog</code>. Confirm deletion in the confirmation dialog. The post will be permanently deleted from <code>public.blog_posts</code>.
+                  <strong>Soft Unpublish / Archive:</strong> Open the post in the edit modal and set
+                  <strong>Status</strong> to <code>Draft</code> or <code>Archived</code>. Click
+                  Save. The post is hidden from the public website immediately while retaining all
+                  content and history in Supabase.<br /><br />
+                  <strong>Permanent Delete:</strong> Click the <strong>Delete icon</strong> (trash
+                  red icon) on the post row in <code>/admin/blog</code>. Confirm deletion in the
+                  confirmation dialog. The post will be permanently deleted from
+                  <code>public.blog_posts</code>.
                 </p>
               </div>
             </div>
