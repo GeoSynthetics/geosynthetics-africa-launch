@@ -111,7 +111,7 @@ export function BlogLandingPage() {
       </section>
 
       {/* Filter and Search Bar */}
-      <div className="border-b border-border bg-surface sticky top-0 z-30 shadow-sm backdrop-blur-md bg-surface/90 py-5">
+      <div className="border-b border-border bg-surface py-5">
         <div className="container-page max-w-6xl mx-auto px-4 md:px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* Category Tabs */}
           <div className="relative w-full md:flex-1 md:max-w-[calc(100%-22rem)] overflow-hidden">

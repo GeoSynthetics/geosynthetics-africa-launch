@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BlogPost, BlogPostStatus } from "@/types/blog";
+import { BlogPost, BlogPostStatus, getBlogPostAuthorName } from "@/types/blog";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -791,7 +791,7 @@ export function BlogAdminPage() {
                             </span>
                           </TableCell>
                           <TableCell className="align-middle py-3.5 text-xs text-muted-foreground font-semibold">
-                            {post.author?.full_name || "System Staff"}
+                            {getBlogPostAuthorName(post.author)}
                           </TableCell>
                           <TableCell className="align-middle py-3.5 text-xs text-muted-foreground font-semibold">
                             {pubDate}

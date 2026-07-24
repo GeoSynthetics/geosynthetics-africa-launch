@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
+import { getBlogPostAuthorName } from "@/types/blog";
 import { Route } from "@/routes/blog.$slug";
 import {
   Calendar,
@@ -13,6 +14,8 @@ import {
   Link2,
   Package,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   MessageSquare,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { HexCell } from "@/components/site/shapes";
 
 export function BlogPostPage() {
-  const { post, products } = Route.useLoaderData();
+  const { post, products, prevPost, nextPost } = Route.useLoaderData();
 
   // Pick 3 random products to upsell
   const randomProducts = useMemo(() => {
@@ -84,7 +87,7 @@ export function BlogPostPage() {
             <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-zinc-300 font-semibold pt-2">
               <span className="flex items-center gap-1.5">
                 <User className="h-4 w-4 text-primary" />
-                {post.author?.full_name || "System Staff"}
+                {getBlogPostAuthorName(post.author)}
               </span>
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4 text-primary" />
@@ -289,6 +292,72 @@ export function BlogPostPage() {
           </div>
         </aside>
       </div>
+
+      {/* Next & Previous Post Navigation Bar */}
+      {(prevPost || nextPost) && (
+        <nav
+          aria-label="Post navigation"
+          className="container-page max-w-5xl mx-auto px-4 md:px-6 pb-16 pt-6 border-t border-border/60"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {/* Previous Post */}
+            {prevPost ? (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: prevPost.slug }}
+                className="group bg-card border border-border/70 hover:border-primary/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-4 text-left"
+              >
+                <img
+                  src={
+                    prevPost.cover_image ||
+                    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=600"
+                  }
+                  alt={prevPost.title}
+                  className="h-16 w-20 md:h-20 md:w-24 rounded-xl object-cover border border-border/50 shrink-0 group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1 mb-1">
+                    <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                    Previous Article
+                  </span>
+                  <h4 className="font-display text-xs md:text-sm font-bold uppercase text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+                    {prevPost.title}
+                  </h4>
+                </div>
+              </Link>
+            ) : (
+              <div className="hidden md:block" />
+            )}
+
+            {/* Next Post */}
+            {nextPost && (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: nextPost.slug }}
+                className="group bg-card border border-border/70 hover:border-primary/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-end text-right gap-4 md:col-start-2"
+              >
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center justify-end gap-1 mb-1">
+                    Next Article
+                    <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                  <h4 className="font-display text-xs md:text-sm font-bold uppercase text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+                    {nextPost.title}
+                  </h4>
+                </div>
+                <img
+                  src={
+                    nextPost.cover_image ||
+                    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=600"
+                  }
+                  alt={nextPost.title}
+                  className="h-16 w-20 md:h-20 md:w-24 rounded-xl object-cover border border-border/50 shrink-0 group-hover:scale-105 transition-transform duration-300 order-last"
+                />
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

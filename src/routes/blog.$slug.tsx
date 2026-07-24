@@ -30,7 +30,25 @@ async function loadPost(slug: string) {
     throw notFound();
   }
 
-  // 2. Fetch active products for the dynamic upsell sidebar
+  // 2. Fetch Previous Post (published before this post)
+  const { data: prevPosts } = await supabase
+    .from("blog_posts")
+    .select("id, title, slug, cover_image, category")
+    .eq("status", "published")
+    .lt("published_at", post.published_at)
+    .order("published_at", { ascending: false })
+    .limit(1);
+
+  // 3. Fetch Next Post (published after this post)
+  const { data: nextPosts } = await supabase
+    .from("blog_posts")
+    .select("id, title, slug, cover_image, category")
+    .eq("status", "published")
+    .gt("published_at", post.published_at)
+    .order("published_at", { ascending: true })
+    .limit(1);
+
+  // 4. Fetch active products for the dynamic upsell sidebar
   const { data: products, error: productsErr } = await supabase
     .from("products_public")
     .select("id, name, slug, short_description, image_url")
@@ -43,6 +61,8 @@ async function loadPost(slug: string) {
 
   return {
     post: post as any,
+    prevPost: (prevPosts?.[0] as any) || null,
+    nextPost: (nextPosts?.[0] as any) || null,
     products: products || [],
   };
 }

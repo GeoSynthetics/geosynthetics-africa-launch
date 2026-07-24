@@ -42,4 +42,12 @@ export interface CreateBlogPostInput {
   meta_title?: string | null;
   meta_description?: string | null;
   published_at?: string | null;
+}export const DEFAULT_BLOG_AUTHOR = "Geosynthetics Africa";
+
+export function getBlogPostAuthorName(author?: BlogPostAuthor | null): string {
+  const name = author?.full_name?.trim();
+  if (!name || name === "Developer" || name === "System Staff") {
+    return DEFAULT_BLOG_AUTHOR;
+  }
+  return name;
 }
