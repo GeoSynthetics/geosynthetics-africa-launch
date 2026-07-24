@@ -16,12 +16,14 @@ import { RegionalCoverageBuilderTab } from "@/components/admin/RegionalCoverageB
 import { ContactsBuilderTab } from "@/components/admin/ContactsBuilderTab";
 import { FooterBuilderTab } from "@/components/admin/FooterBuilderTab";
 import { CatalogueBuilderTab } from "@/components/admin/CatalogueBuilderTab";
+import { AboutBuilderTab } from "@/components/admin/AboutBuilderTab";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 type TopLevelTab =
   | "homepage"
   | "megamenu"
   | "regional"
+  | "about"
   | "contacts"
   | "footer"
   | "catalogue"
@@ -321,6 +323,12 @@ export function SiteBuilderPage() {
                 Regional Coverage
               </TabsTrigger>
               <TabsTrigger
+                value="about"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
+              >
+                About Page
+              </TabsTrigger>
+              <TabsTrigger
                 value="contacts"
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent pb-3 px-5 font-semibold text-sm hover:cursor-pointer whitespace-nowrap"
               >
@@ -369,6 +377,11 @@ export function SiteBuilderPage() {
         {/* Regional Coverage tab content */}
         <TabsContent value="regional" className="flex-1 overflow-hidden m-0">
           <RegionalCoverageBuilderTab />
+        </TabsContent>
+
+        {/* About Page tab content */}
+        <TabsContent value="about" className="flex-1 overflow-hidden m-0">
+          <AboutBuilderTab />
         </TabsContent>
 
         {/* Contact Page tab content */}
