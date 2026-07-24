@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { HexCell } from "@/components/site/shapes";
 
 export function BlogPostPage() {
   const { post, products } = Route.useLoaderData();
@@ -56,9 +57,11 @@ export function BlogPostPage() {
   return (
     <div className="w-full bg-background min-h-screen">
       {/* Article Header Hero */}
-      <section className="relative bg-surface-dark text-white py-14 md:py-20 overflow-hidden">
+      <section className="relative isolate bg-surface-dark text-white py-14 md:py-20 overflow-hidden">
         {/* Abstract shapes */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <HexCell opacity={0.30} color="var(--primary)" count={60} />
 
         <div className="container-page max-w-5xl mx-auto px-4 md:px-6 relative z-10">
           <Link

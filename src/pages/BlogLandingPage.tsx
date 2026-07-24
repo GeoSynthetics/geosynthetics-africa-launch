@@ -4,12 +4,18 @@ import { Route } from "@/routes/blog.index";
 import { BlogPost } from "@/types/blog";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Calendar, Clock, ArrowRight, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Calendar, Clock, ArrowRight, BookOpen, ChevronDown } from "lucide-react";
+import { DrainageMesh } from "@/components/site/shapes";
+
+const INITIAL_POST_LIMIT = 7;
+const LOAD_MORE_BATCH_SIZE = 10;
 
 export function BlogLandingPage() {
   const { posts } = Route.useLoaderData();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [visibleLimit, setVisibleLimit] = useState(INITIAL_POST_LIMIT);
 
   // Get unique categories for filter tabs
   const categories = useMemo(() => {
@@ -20,7 +26,19 @@ export function BlogLandingPage() {
     return ["All", ...Array.from(cats)];
   }, [posts]);
 
-  // Filter posts
+  // Reset limit when user selects a new category
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    setVisibleLimit(INITIAL_POST_LIMIT);
+  };
+
+  // Reset limit when user updates search query
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setVisibleLimit(INITIAL_POST_LIMIT);
+  };
+
+  // Filter posts based on active query and category
   const filteredPosts = useMemo(() => {
     return posts.filter((p) => {
       const matchesSearch =
@@ -39,10 +57,24 @@ export function BlogLandingPage() {
   }, [filteredPosts]);
 
   // Remaining posts in the grid (excluding the featured one)
-  const gridPosts = useMemo(() => {
+  const allGridPosts = useMemo(() => {
     if (!featuredPost) return [];
     return filteredPosts.filter((p) => p.id !== featuredPost.id);
   }, [filteredPosts, featuredPost]);
+
+  // Sliced grid posts according to current visible limit
+  // Initial load displays 8 total posts (1 featured + 7 grid posts)
+  const gridLimit = featuredPost ? Math.max(0, visibleLimit - 1) : visibleLimit;
+  const visibleGridPosts = useMemo(() => {
+    return allGridPosts.slice(0, gridLimit);
+  }, [allGridPosts, gridLimit]);
+
+  const totalDisplayedCount = (featuredPost ? 1 : 0) + visibleGridPosts.length;
+  const hasMorePosts = totalDisplayedCount < filteredPosts.length;
+
+  const handleLoadMore = () => {
+    setVisibleLimit((prev) => prev + LOAD_MORE_BATCH_SIZE);
+  };
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-ZA", {
@@ -55,10 +87,12 @@ export function BlogLandingPage() {
   return (
     <div className="w-full bg-background min-h-screen">
       {/* Premium Hero Section */}
-      <section className="relative bg-surface-dark text-white py-16 md:py-24 overflow-hidden">
+      <section className="relative isolate bg-surface-dark text-white py-16 md:py-24 overflow-hidden">
         {/* Abstract design elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-80 h-80 bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
+
+        <DrainageMesh opacity={0.50} color="var(--primary)" lineSpacing={80} />
 
         <div className="container-page relative z-10 max-w-6xl mx-auto px-4 md:px-6">
           <div className="max-w-3xl">
@@ -80,20 +114,27 @@ export function BlogLandingPage() {
       <div className="border-b border-border bg-surface sticky top-0 z-30 shadow-sm backdrop-blur-md bg-surface/90 py-5">
         <div className="container-page max-w-6xl mx-auto px-4 md:px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-1.5 justify-center md:justify-start w-full md:w-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 uppercase tracking-wider ${
-                  activeCategory === cat
+          <div className="relative w-full md:flex-1 md:max-w-[calc(100%-22rem)] overflow-hidden">
+            {/* Left fade overlay */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-surface via-surface/60 to-transparent pointer-events-none z-10" />
+
+            <div className="flex gap-1.5 overflow-x-auto no-scrollbar py-1 px-4 w-full justify-start whitespace-nowrap scroll-smooth">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 uppercase tracking-wider shrink-0 ${activeCategory === cat
                     ? "bg-primary text-white shadow-md shadow-primary/25"
                     : "bg-background text-muted-foreground border border-border hover:text-foreground hover:bg-muted/40"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+                    }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Right fade overlay */}
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-surface via-surface/60 to-transparent pointer-events-none z-10" />
           </div>
 
           {/* Search Field */}
@@ -103,7 +144,7 @@ export function BlogLandingPage() {
               type="text"
               placeholder="Search articles..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 h-10 rounded-full border-border bg-background focus:ring-primary/20 focus:border-primary text-sm w-full"
             />
           </div>
@@ -195,14 +236,14 @@ export function BlogLandingPage() {
             )}
 
             {/* Post Grid (Remaining posts) */}
-            {gridPosts.length > 0 && (
+            {visibleGridPosts.length > 0 && (
               <div className="space-y-8">
                 <h3 className="font-display text-xl font-bold uppercase tracking-wider text-foreground">
                   Latest Publications
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {gridPosts.map((post) => (
+                  {visibleGridPosts.map((post) => (
                     <article
                       key={post.id}
                       className="group bg-card border border-border/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
@@ -257,6 +298,24 @@ export function BlogLandingPage() {
                     </article>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Load More Button & Article Counter */}
+            {hasMorePosts && (
+              <div className="pt-8 text-center flex flex-col items-center justify-center space-y-3">
+                <Button
+                  onClick={handleLoadMore}
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-wider text-xs px-8 py-6 rounded-full shadow-lg shadow-primary/20 transition-all hover:scale-102 flex items-center gap-2 cursor-pointer"
+                >
+                  Load More Articles
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                <p className="text-xs text-muted-foreground font-sans">
+                  Showing <span className="font-bold text-foreground">{totalDisplayedCount}</span> of{" "}
+                  <span className="font-bold text-foreground">{filteredPosts.length}</span> articles
+                </p>
               </div>
             )}
           </div>
