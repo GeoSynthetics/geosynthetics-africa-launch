@@ -16,6 +16,7 @@ import {
   Menu,
   Shield,
   Cookie,
+  BookOpen,
 } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -26,6 +27,7 @@ const ITEMS = [
   { to: "/admin/quotes" as const, label: "Quote Requests", icon: Inbox, exact: false },
   { to: "/admin/products" as const, label: "Products", icon: Package, exact: false },
   { to: "/admin/resources" as const, label: "Resources", icon: FileText, exact: false },
+  { to: "/admin/blog" as const, label: "Blog Posts", icon: BookOpen, exact: false },
   { to: "/admin/site-builder" as const, label: "Site Builder", icon: LayoutTemplate, exact: false },
   { to: "/admin/page-templates" as const, label: "Page Templates", icon: LayoutList, exact: false },
   { to: "/admin/media-center" as const, label: "Media Center", icon: Image, exact: false },

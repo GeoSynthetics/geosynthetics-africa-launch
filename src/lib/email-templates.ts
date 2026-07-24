@@ -1,5 +1,5 @@
 /**
- * GeoSynthetics Africa — Modular Transactional Email Templates Engine
+ * Geosynthetics Africa — Modular Transactional Email Templates Engine
  * Clean Code implementation strictly adhering to SRP, DRY, and explicit self-documenting layout rendering.
  * Matches stakeholder specification: gsa-quote-confirmation-email.html
  */
@@ -103,7 +103,7 @@ function renderEmailHeader(siteUrl: string = DEFAULT_SITE_URL): string {
                 <tr>
                   <td style="vertical-align:middle; padding-right:12px;">
                     <a href="${cleanSiteUrl}" style="text-decoration:none;">
-                      <img src="${logoIconUrl}" width="32" height="32" alt="GeoSynthetics Africa Logo" style="display:block; width:32px; height:32px; border:0; outline:none; text-decoration:none;" onerror="this.onerror=null;this.src='${fallbackIconUrl}';" />
+                      <img src="${logoIconUrl}" width="32" height="32" alt="Geosynthetics Africa Logo" style="display:block; width:32px; height:32px; border:0; outline:none; text-decoration:none;" onerror="this.onerror=null;this.src='${fallbackIconUrl}';" />
                     </a>
                   </td>
                   <td style="vertical-align:middle; font-family:Arial, Helvetica, sans-serif; font-size:20px; font-weight:bold; letter-spacing:2px; color:#FFFFFF;">

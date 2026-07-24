@@ -960,7 +960,7 @@ export function MegaMenuBuilderTab({
                                     }));
                                   }}
                                   className="text-xs bg-background h-8"
-                                  placeholder="E.g. GeoSynthetics Africa member"
+                                  placeholder="E.g. Geosynthetics Africa member"
                                 />
                               </div>
 

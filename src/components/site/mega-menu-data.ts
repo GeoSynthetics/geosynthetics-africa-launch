@@ -1152,5 +1152,6 @@ export const SIMPLE_NAV: MegaLink[] = [
   { label: "Quality Assurance", to: "/quality-assurance" },
   { label: "Catalogue", to: "/catalogue" },
   { label: "Resources", to: "/resources" },
+  { label: "Blog", to: "/blog" },
   { label: "Contacts", to: "/contacts" },
 ];

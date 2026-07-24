@@ -50,7 +50,7 @@ export async function sendBrevoEmail(payload: SendEmailPayload): Promise<{ succe
     process.env.BREVO_FROM_EMAIL ||
     process.env.VITE_BREVO_FROM_EMAIL;
 
-  const fromName = "GeoSynthetics Africa";
+  const fromName = "Geosynthetics Africa";
 
   if (!apiKey) {
     console.warn("[Brevo] API key missing. Email sending skipped.");
@@ -107,7 +107,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   // Send to customer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "GeoSynthetics Sales Team" },
+    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "Geosynthetics Sales Team" },
     subject: `Quote request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
@@ -115,7 +115,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   // Send notification to admin
   if (adminEmail && adminEmail !== params.contactEmail) {
     await sendBrevoEmail({
-      to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
+      to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
       replyTo: { email: params.contactEmail, name: params.contactName },
       subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"}) — REF ${reference}`,
       htmlContent: adminHtml,
@@ -174,15 +174,15 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
   // Send confirmation to the enquirer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "GeoSynthetics Sales Team" },
-    subject: `We received your message — GeoSynthetics Africa (REF ${reference})`,
+    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "Geosynthetics Sales Team" },
+    subject: `We received your message — Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
 
   // Notify the admin / sales team
   if (adminEmail && adminEmail !== params.contactEmail) {
     await sendBrevoEmail({
-      to: [{ email: adminEmail, name: "GeoSynthetics Sales" }],
+      to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
       replyTo: { email: params.contactEmail, name: params.contactName },
       subject: `[Quick Contact] ${params.contactName} — REF ${reference}`,
       htmlContent: adminHtml,
