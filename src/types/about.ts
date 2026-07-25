@@ -65,6 +65,11 @@ export interface AboutContactSection {
   operatingHoursDetails: string;
   formHeading: string;
   formDescription: string;
+  mapEmbedUrl?: string;
+  mapHeading?: string;
+  mapDescription?: string;
+  catalogButtonText?: string;
+  catalogButtonUrl?: string;
 }
 
 export interface AboutPageContent {
@@ -190,8 +195,14 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
     operatingHoursTitle: "Operating Hours",
     operatingHoursDetails:
       "Monday – Friday: 08:00 AM – 17:00 PM\nWeekends: Closed on Saturday & Sunday",
-    formHeading: "Send a Message",
+    formHeading: "Store Location & Directions",
     formDescription:
-      "Our technical team is ready to support your project. Fill in your details below.",
+      "Visit our primary head office and logistics hub in Johannesburg.",
+    mapEmbedUrl:
+      "https://www.google.com/maps?q=7+Tamar+Avenue,+Lea+Glen,+Randburg,+Johannesburg&output=embed",
+    mapHeading: "Store & Office Location",
+    mapDescription: "Visit our primary head office and distribution center in Johannesburg.",
+    catalogButtonText: "View Catalog Products",
+    catalogButtonUrl: "/catalogue",
   },
 };

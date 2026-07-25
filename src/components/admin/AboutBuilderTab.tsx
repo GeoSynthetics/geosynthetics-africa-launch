@@ -538,24 +538,67 @@ function ContactAndTrademarkEditor({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <div className="pt-4 border-t border-border space-y-4">
+          <SectionHeading>Store Location Map & Catalog Link</SectionHeading>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <FieldLabel hint="Google Maps embed iframe URL or search query embed URL">
+                Map Embed URL
+              </FieldLabel>
+              <Input
+                value={contact.mapEmbedUrl || ""}
+                onChange={(e) => setContact("mapEmbedUrl", e.target.value)}
+                placeholder="https://www.google.com/maps?q=7+Tamar+Avenue...&output=embed"
+                className="text-sm font-mono"
+              />
+            </div>
+            <div>
+              <FieldLabel>Map Card Heading</FieldLabel>
+              <Input
+                value={contact.mapHeading || contact.formHeading || ""}
+                onChange={(e) => {
+                  setContact("mapHeading", e.target.value);
+                  setContact("formHeading", e.target.value);
+                }}
+                placeholder="Store & Office Location"
+                className="text-sm"
+              />
+            </div>
+          </div>
+
           <div>
-            <FieldLabel>Form Heading</FieldLabel>
+            <FieldLabel>Map Card Description</FieldLabel>
             <Input
-              value={contact.formHeading}
-              onChange={(e) => setContact("formHeading", e.target.value)}
-              placeholder="Send a Message"
+              value={contact.mapDescription || contact.formDescription || ""}
+              onChange={(e) => {
+                setContact("mapDescription", e.target.value);
+                setContact("formDescription", e.target.value);
+              }}
+              placeholder="Visit our primary head office and distribution center in Johannesburg."
               className="text-sm"
             />
           </div>
-          <div>
-            <FieldLabel>Form Description</FieldLabel>
-            <Input
-              value={contact.formDescription}
-              onChange={(e) => setContact("formDescription", e.target.value)}
-              placeholder="Our technical team is ready to support your project..."
-              className="text-sm"
-            />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <FieldLabel>Catalog Button Text</FieldLabel>
+              <Input
+                value={contact.catalogButtonText || ""}
+                onChange={(e) => setContact("catalogButtonText", e.target.value)}
+                placeholder="View Catalog Products"
+                className="text-sm"
+              />
+            </div>
+            <div>
+              <FieldLabel>Catalog Button Target URL</FieldLabel>
+              <Input
+                value={contact.catalogButtonUrl || ""}
+                onChange={(e) => setContact("catalogButtonUrl", e.target.value)}
+                placeholder="/catalogue"
+                className="text-sm"
+              />
+            </div>
           </div>
         </div>
       </div>

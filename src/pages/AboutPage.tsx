@@ -1,10 +1,11 @@
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
-import { QuoteCard } from "@/components/site/QuoteCard";
-import { MapPin, Phone, Clock } from "lucide-react";
+import { MapPin, Phone, Clock, Package } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 import { useAboutContent } from "@/hooks/use-about-content";
+import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
 function DynamicCardIcon({ iconName, className }: { iconName: string; className?: string }) {
   const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.ShieldCheck;
@@ -58,7 +59,7 @@ export function AboutPage() {
 
       {/* Pan-African Execution & Philosophy Section */}
       <section className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground">
-        <FiberStrand opacity={0.1} color="#ffffff" clusterCount={6} />
+        <FiberStrand opacity={0.1} color="#ffffff" clusterCount={12} />
         <div className="container-page py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-10">
             {execution.capabilities.map((cap, idx) => (
@@ -93,7 +94,7 @@ export function AboutPage() {
 
       {/* Global Supply Partners Section */}
       <section className="relative isolate overflow-hidden bg-background">
-        <HexCell count={10} opacity={0.05} color="var(--foreground)" spread="wide" />
+        <HexCell count={10} opacity={0.2} color="var(--primary)" spread="wide" />
         <div className="container-page py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-3xl font-bold uppercase tracking-tight">
@@ -215,13 +216,57 @@ export function AboutPage() {
             </div>
           </div>
 
-          <QuoteCard
-            heading={contact.formHeading}
-            description={contact.formDescription}
-            showFileUpload={false}
-            contextId="about-page"
-            contextLabel="About Page Inquiry"
-          />
+          {/* Store Location Map Container */}
+          <div className="bg-card text-card-foreground border border-border rounded-xl shadow-2xl p-6 md:p-8 flex flex-col space-y-6">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-display text-xl font-bold uppercase tracking-tight text-foreground">
+                    {contact.mapHeading || contact.formHeading || "Store & Office Location"}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {contact.mapDescription || contact.formDescription || "Visit our primary head office and logistics hub in Johannesburg."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative w-full h-[320px] md:h-[360px] rounded-lg overflow-hidden border border-border bg-muted">
+              {contact.mapEmbedUrl ? (
+                <iframe
+                  title="Store location map"
+                  src={contact.mapEmbedUrl}
+                  className="absolute inset-0 h-full w-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-muted-foreground bg-muted/50">
+                  <MapPin className="h-10 w-10 mb-2 text-primary/60" />
+                  <p className="text-sm font-semibold">Store Location Map</p>
+                  <p className="text-xs mt-1 max-w-xs">{contact.headOfficeAddress}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-2 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-xs text-muted-foreground">
+                Explore our full line of geosynthetic products and technical specifications.
+              </p>
+              <Button
+                asChild
+                className="w-full sm:w-auto bg-primary hover:bg-primary-hover text-primary-foreground font-bold text-xs uppercase tracking-wide px-6 py-2.5 shadow-md transition shrink-0"
+              >
+                <Link to={contact.catalogButtonUrl || "/catalogue"}>
+                  <Package className="mr-2 h-4 w-4" />
+                  {contact.catalogButtonText || "View Catalog Products"}
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -86,4 +86,34 @@ if ((globalThis as any).window) {
     writable: true,
     configurable: true,
   });
+
+  const matchMediaMock = (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  });
+
+  (globalThis as any).window.matchMedia = matchMediaMock;
+  (globalThis as any).matchMedia = matchMediaMock;
+
+  const getComputedStyleMock = (elt: any) =>
+    elt?.style || {
+      getPropertyValue: () => "",
+      transform: "none",
+      opacity: "1",
+    };
+
+  if (!(globalThis as any).window.getComputedStyle) {
+    (globalThis as any).window.getComputedStyle = getComputedStyleMock;
+  }
+  if (!(globalThis as any).getComputedStyle) {
+    (globalThis as any).getComputedStyle = getComputedStyleMock;
+  }
 }
+
+
