@@ -47,6 +47,15 @@ export interface ProjectCard {
   systemDetails: string; // e.g. "HDPE Lining System"
 }
 
+export interface HeroSlide {
+  image: string;
+  titlePrefix?: string;
+  titleAccent?: string;
+  titleSuffix?: string;
+  subtitle?: string;
+  description?: string;
+}
+
 export interface HeroSection {
   headlinePrefix: string; // e.g. "Africa's Integrated"
   headlineAccent: string; // e.g. "Geosynthetics"
@@ -54,7 +63,8 @@ export interface HeroSection {
   tagline: string; // e.g. "Designed. Supplied. Installed. Tested. Certified."
   subtext: string; // e.g. "Complete engineered systems for containment..."
   bgImage: string; // image URL or blank
-  sliderImages?: string[]; // multiple hero background images for carousel
+  sliderImages?: (string | HeroSlide)[]; // multiple hero background images/configs for carousel
+  autoPlayInterval?: number; // Configurable slide auto-play interval duration in ms
   btn1Text: string; // Primary button text
   btn1Url: string; // Primary button url
   btn2Text: string; // Secondary button text
@@ -166,6 +176,7 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
       "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=80",
       "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80",
     ],
+    autoPlayInterval: 5000,
     btn1Text: "Upload Project BOQ",
     btn1Url: "/contacts",
     btn2Text: "Request Material Supply",

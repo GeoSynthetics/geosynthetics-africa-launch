@@ -48,7 +48,7 @@ export function HomePage() {
   return (
     <>
       {/* Hero Slider */}
-      <HeroSlider hero={hero} onOpenQuote={open} />
+      <HeroSlider hero={hero} onOpenQuote={open} autoPlayInterval={hero.autoPlayInterval} />
 
       {/* Trust strip */}
       <section className="border-b border-border bg-background">

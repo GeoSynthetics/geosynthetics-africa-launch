@@ -29,6 +29,7 @@ import {
   type OfficeLocation,
   type ProjectCard,
   type GsaStep,
+  type HeroSlide,
 } from "@/types/homepage";
 
 const SUPABASE_KEY = "homepage_content";
@@ -169,13 +170,34 @@ function HeroEditor({
         />
       </div>
 
+      <div>
+        <FieldLabel>Slide Auto-Play Interval (milliseconds)</FieldLabel>
+        <Input
+          type="number"
+          min={1000}
+          step={500}
+          value={data.autoPlayInterval ?? 5000}
+          onChange={(e) => {
+            const val = parseInt(e.target.value, 10);
+            set("autoPlayInterval", isNaN(val) ? undefined : val);
+          }}
+          placeholder="5000"
+          className="text-sm w-48"
+        />
+        <p className="text-[10px] text-muted-foreground mt-1">
+          The duration each slide remains visible before transitioning to the next (e.g. 5000 = 5
+          seconds).
+        </p>
+      </div>
+
       {/* Hero Carousel Multi-Image Manager */}
       <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wide">Hero Carousel Images</h4>
             <p className="text-xs text-muted-foreground">
-              Add multiple high-resolution images to display in the homepage Revolution Hero Carousel slider.
+              Add multiple high-resolution images to display in the homepage Revolution Hero
+              Carousel slider.
             </p>
           </div>
           <Button
@@ -184,7 +206,17 @@ function HeroEditor({
             size="sm"
             onClick={() => {
               const current = data.sliderImages || [];
-              set("sliderImages", [...current, ""]);
+              set("sliderImages", [
+                ...current,
+                {
+                  image: "",
+                  titlePrefix: "",
+                  titleAccent: "",
+                  titleSuffix: "",
+                  subtitle: "",
+                  description: "",
+                },
+              ]);
             }}
             className="text-xs cursor-pointer"
           >
@@ -194,40 +226,133 @@ function HeroEditor({
 
         {(!data.sliderImages || data.sliderImages.length === 0) && (
           <p className="text-xs text-muted-foreground italic py-2">
-            No carousel images added yet. Click "Add Slide Image" above to configure your homepage hero slider.
+            No carousel images added yet. Click "Add Slide Image" above to configure your homepage
+            hero slider.
           </p>
         )}
 
-        {(data.sliderImages || []).map((imgUrl, index) => (
-          <div key={index} className="flex items-start gap-3 p-3 border rounded-md bg-background">
-            <span className="text-xs font-bold text-muted-foreground mt-2 shrink-0">
-              #{index + 1}
-            </span>
-            <div className="flex-1">
-              <ImageUploadField
-                label={`Slide ${index + 1} Image URL / Upload`}
-                value={imgUrl}
-                onChange={(val) => {
-                  const updated = [...(data.sliderImages || [])];
-                  updated[index] = val;
+        {(data.sliderImages || []).map((slide, index) => {
+          const isStr = typeof slide === "string";
+          const slideObj = isStr
+            ? {
+                image: slide,
+                titlePrefix: "",
+                titleAccent: "",
+                titleSuffix: "",
+                subtitle: "",
+                description: "",
+              }
+            : slide;
+
+          const updateSlideField = (key: keyof HeroSlide, val: any) => {
+            const updated = [...(data.sliderImages || [])];
+            const currentObj =
+              typeof updated[index] === "string"
+                ? {
+                    image: updated[index] as string,
+                    titlePrefix: "",
+                    titleAccent: "",
+                    titleSuffix: "",
+                    subtitle: "",
+                    description: "",
+                  }
+                : { ...(updated[index] as HeroSlide) };
+            currentObj[key] = val;
+            updated[index] = currentObj;
+            set("sliderImages", updated);
+          };
+
+          return (
+            <div
+              key={index}
+              className="flex items-start gap-4 p-4 border rounded-md bg-background shadow-sm"
+            >
+              <span className="text-xs font-bold text-muted-foreground mt-2 shrink-0 font-mono">
+                #{String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="flex-1 space-y-4">
+                <ImageUploadField
+                  label={`Slide ${index + 1} Image URL / Upload`}
+                  value={slideObj.image}
+                  onChange={(val) => updateSlideField("image", val)}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Prefix (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titlePrefix || ""}
+                      onChange={(e) => updateSlideField("titlePrefix", e.target.value)}
+                      placeholder="e.g. Africa's Integrated"
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Accent / Red (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titleAccent || ""}
+                      onChange={(e) => updateSlideField("titleAccent", e.target.value)}
+                      placeholder="e.g. Geosynthetics"
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Suffix (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titleSuffix || ""}
+                      onChange={(e) => updateSlideField("titleSuffix", e.target.value)}
+                      placeholder="e.g. Execution Platform"
+                      className="text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Subtitle / Tagline (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.subtitle || ""}
+                      onChange={(e) => updateSlideField("subtitle", e.target.value)}
+                      placeholder="e.g. Designed. Supplied. Installed. Tested. Certified."
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Description / Subtext (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.description || ""}
+                      onChange={(e) => updateSlideField("description", e.target.value)}
+                      placeholder="e.g. Complete engineered systems for containment..."
+                      className="text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 shrink-0 mt-6 cursor-pointer"
+                onClick={() => {
+                  const updated = (data.sliderImages || []).filter((_, i) => i !== index);
                   set("sliderImages", updated);
                 }}
-              />
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="text-destructive hover:bg-destructive/10 shrink-0 mt-6 cursor-pointer"
-              onClick={() => {
-                const updated = (data.sliderImages || []).filter((_, i) => i !== index);
-                set("sliderImages", updated);
-              }}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <ImageUploadField

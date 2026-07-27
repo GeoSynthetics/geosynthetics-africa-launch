@@ -1,47 +1,101 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
-import { Upload, Phone, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrainageMesh } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
-import type { HeroSection } from "@/types/homepage";
+import type { HeroSection, HeroSlide } from "@/types/homepage";
 
 interface HeroSliderProps {
   hero: HeroSection;
   onOpenQuote: () => void;
+  autoPlayInterval?: number;
 }
 
-export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
-  // Normalize images list
-  const rawImages =
-    hero.sliderImages && hero.sliderImages.length > 0
-      ? hero.sliderImages.map((img) => (!img || img.trim() === "" ? heroInstallation : img))
-      : hero.bgImage && hero.bgImage.trim() !== ""
-        ? [hero.bgImage]
-        : [heroInstallation];
+export function HeroSlider({
+  hero,
+  onOpenQuote,
+  autoPlayInterval = hero.autoPlayInterval ?? 5000,
+}: HeroSliderProps) {
+  // Normalize slides list (supporting both simple string URLs and HeroSlide objects)
+  const activeSlides = React.useMemo(() => {
+    const rawSlides = hero.sliderImages && hero.sliderImages.length > 0 ? hero.sliderImages : [];
 
-  // Deduplicate consecutive identical images if any, fallback to heroInstallation
-  const images = rawImages.length > 0 ? rawImages : [heroInstallation];
+    if (rawSlides.length === 0) {
+      // Fallback if no sliderImages configured
+      return [
+        {
+          image: hero.bgImage && hero.bgImage.trim() !== "" ? hero.bgImage : heroInstallation,
+          titlePrefix: hero.headlinePrefix,
+          titleAccent: hero.headlineAccent,
+          titleSuffix: hero.headlineSuffix,
+          subtitle: hero.tagline,
+          description: hero.subtext,
+        },
+      ];
+    }
+
+    return rawSlides.map((slide) => {
+      if (typeof slide === "string") {
+        return {
+          image: !slide || slide.trim() === "" ? heroInstallation : slide,
+          titlePrefix: hero.headlinePrefix,
+          titleAccent: hero.headlineAccent,
+          titleSuffix: hero.headlineSuffix,
+          subtitle: hero.tagline,
+          description: hero.subtext,
+        };
+      }
+      return {
+        image: !slide.image || slide.image.trim() === "" ? heroInstallation : slide.image,
+        titlePrefix:
+          slide.titlePrefix && slide.titlePrefix.trim() !== ""
+            ? slide.titlePrefix
+            : hero.headlinePrefix,
+        titleAccent:
+          slide.titleAccent && slide.titleAccent.trim() !== ""
+            ? slide.titleAccent
+            : hero.headlineAccent,
+        titleSuffix:
+          slide.titleSuffix && slide.titleSuffix.trim() !== ""
+            ? slide.titleSuffix
+            : hero.headlineSuffix,
+        subtitle: slide.subtitle && slide.subtitle.trim() !== "" ? slide.subtitle : hero.tagline,
+        description:
+          slide.description && slide.description.trim() !== "" ? slide.description : hero.subtext,
+      };
+    });
+  }, [
+    hero.sliderImages,
+    hero.bgImage,
+    hero.headlinePrefix,
+    hero.headlineAccent,
+    hero.headlineSuffix,
+    hero.tagline,
+    hero.subtext,
+  ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  }, [images.length]);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % activeSlides.length);
+  }, [activeSlides.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  }, [images.length]);
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + activeSlides.length) % activeSlides.length);
+  }, [activeSlides.length]);
 
   // Auto-play interval
   useEffect(() => {
-    if (!isPlaying || images.length <= 1) return;
+    if (!isPlaying || activeSlides.length <= 1) return;
     const timer = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, autoPlayInterval);
     return () => clearInterval(timer);
-  }, [isPlaying, images.length, nextSlide]);
+  }, [isPlaying, activeSlides.length, nextSlide, autoPlayInterval]);
+
+  const currentSlide = activeSlides[currentIndex] || activeSlides[0];
 
   return (
     <section
@@ -52,14 +106,14 @@ export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
     >
       {/* Carousel Background Images */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {images.map((img, index) => (
+        {activeSlides.map((slide, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105"
             } transform transition-transform duration-10000`}
             style={{
-              backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.88) 0%, rgba(8,8,10,0.65) 50%, rgba(8,8,10,0.3) 100%), url(${img})`,
+              backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.98) 0%, rgba(8,8,10,0.88) 35%, rgba(8,8,10,0.5) 70%, rgba(8,8,10,0) 100%), url(${slide.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -77,26 +131,36 @@ export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
         <div className="max-w-3xl">
           {/* Headline */}
           <h1
+            key={`headline-${currentIndex}`}
             id="home-page-hero-heading"
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight text-white drop-shadow-sm"
+            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight text-white drop-shadow-sm animate-hero-text"
           >
-            {hero.headlinePrefix}{" "}
-            <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
-            {hero.headlineSuffix}
+            {currentSlide.titlePrefix}{" "}
+            <span className="text-primary block md:inline">{currentSlide.titleAccent}</span>{" "}
+            {currentSlide.titleSuffix}
           </h1>
 
           {/* Tagline */}
-          <p className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90 font-medium">
-            {hero.tagline}
+          <p
+            key={`tagline-${currentIndex}`}
+            className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90 font-medium animate-hero-text animation-delay-100"
+          >
+            {currentSlide.subtitle}
           </p>
 
           {/* Subtext */}
-          <p className="mt-4 text-sm md:text-base text-surface-dark-foreground/80 max-w-xl leading-relaxed">
-            {hero.subtext}
+          <p
+            key={`subtext-${currentIndex}`}
+            className="mt-4 text-sm md:text-base text-surface-dark-foreground/80 max-w-xl leading-relaxed animate-hero-text animation-delay-200"
+          >
+            {currentSlide.description}
           </p>
 
           {/* Action Buttons */}
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div
+            key={`buttons-${currentIndex}`}
+            className="mt-8 flex flex-wrap gap-3 animate-hero-text animation-delay-300"
+          >
             {hero.btn1Text && (
               <Button
                 size="lg"
@@ -137,11 +201,11 @@ export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
       </div>
 
       {/* Advanced Slider Controls & Indicators Footer Bar */}
-      {images.length > 1 && (
+      {activeSlides.length > 1 && (
         <div className="relative z-20 container-page pb-8 pt-4 flex items-center justify-between gap-4 border-t border-white/10 bg-gradient-to-t from-black/60 to-transparent">
           {/* Slide Indicator Dots */}
           <div className="flex items-center gap-2">
-            {images.map((_, index) => (
+            {activeSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
@@ -156,7 +220,8 @@ export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
           {/* Slide Counter & Prev/Next Navigation Controls */}
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono tracking-widest text-white/80 font-bold">
-              {String(currentIndex + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
+              {String(currentIndex + 1).padStart(2, "0")} /{" "}
+              {String(activeSlides.length).padStart(2, "0")}
             </span>
 
             <div className="flex items-center gap-1.5 ml-2">
@@ -166,18 +231,6 @@ export function HeroSlider({ hero, onOpenQuote }: HeroSliderProps) {
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md hover:bg-primary hover:border-primary transition-all cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4" />
-              </button>
-
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                aria-label={isPlaying ? "Pause slider" : "Play slider"}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md hover:bg-white/20 transition-all cursor-pointer"
-              >
-                {isPlaying ? (
-                  <Pause className="h-3.5 w-3.5" />
-                ) : (
-                  <Play className="h-3.5 w-3.5 ml-0.5" />
-                )}
               </button>
 
               <button
