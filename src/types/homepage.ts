@@ -54,6 +54,7 @@ export interface HeroSection {
   tagline: string; // e.g. "Designed. Supplied. Installed. Tested. Certified."
   subtext: string; // e.g. "Complete engineered systems for containment..."
   bgImage: string; // image URL or blank
+  sliderImages?: string[]; // multiple hero background images for carousel
   btn1Text: string; // Primary button text
   btn1Url: string; // Primary button url
   btn2Text: string; // Secondary button text
@@ -159,6 +160,12 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     subtext:
       "Complete engineered systems for containment, drainage, reinforcement and protection — delivered across Africa with global best-in-class materials and certified execution.",
     bgImage: "",
+    sliderImages: [
+      "",
+      "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1600&q=80",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=80",
+      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80",
+    ],
     btn1Text: "Upload Project BOQ",
     btn1Url: "/contacts",
     btn2Text: "Request Material Supply",

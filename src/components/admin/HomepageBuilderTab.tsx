@@ -169,9 +169,70 @@ function HeroEditor({
         />
       </div>
 
+      {/* Hero Carousel Multi-Image Manager */}
+      <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-wide">Hero Carousel Images</h4>
+            <p className="text-xs text-muted-foreground">
+              Add multiple high-resolution images to display in the homepage Revolution Hero Carousel slider.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const current = data.sliderImages || [];
+              set("sliderImages", [...current, ""]);
+            }}
+            className="text-xs cursor-pointer"
+          >
+            <Plus className="h-3.5 w-3.5 mr-1" /> Add Slide Image
+          </Button>
+        </div>
+
+        {(!data.sliderImages || data.sliderImages.length === 0) && (
+          <p className="text-xs text-muted-foreground italic py-2">
+            No carousel images added yet. Click "Add Slide Image" above to configure your homepage hero slider.
+          </p>
+        )}
+
+        {(data.sliderImages || []).map((imgUrl, index) => (
+          <div key={index} className="flex items-start gap-3 p-3 border rounded-md bg-background">
+            <span className="text-xs font-bold text-muted-foreground mt-2 shrink-0">
+              #{index + 1}
+            </span>
+            <div className="flex-1">
+              <ImageUploadField
+                label={`Slide ${index + 1} Image URL / Upload`}
+                value={imgUrl}
+                onChange={(val) => {
+                  const updated = [...(data.sliderImages || [])];
+                  updated[index] = val;
+                  set("sliderImages", updated);
+                }}
+              />
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="text-destructive hover:bg-destructive/10 shrink-0 mt-6 cursor-pointer"
+              onClick={() => {
+                const updated = (data.sliderImages || []).filter((_, i) => i !== index);
+                set("sliderImages", updated);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+
       <ImageUploadField
-        label="Hero Background Image"
-        hint="Upload/link a high-resolution background image"
+        label="Hero Primary Fallback Image"
+        hint="Used as fallback when carousel images are empty"
         value={data.bgImage}
         onChange={(v) => set("bgImage", v)}
       />

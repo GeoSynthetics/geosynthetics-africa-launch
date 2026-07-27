@@ -23,6 +23,7 @@ import heroInstallation from "@/assets/hero-installation.png";
 import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage";
 import { Route } from "@/routes/index";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
+import { HeroSlider } from "@/components/site/HeroSlider";
 
 export function HomePage() {
   const loaderData = Route.useLoaderData();
@@ -46,67 +47,8 @@ export function HomePage() {
 
   return (
     <>
-      {/* Hero */}
-      <section
-        className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.55) 50%, rgba(8,8,10,0.2) 100%), url(${hero.bgImage || heroInstallation})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <DrainageMesh opacity={0.14} color="#ffffff" lineSpacing={40} />
-        <div className="relative container-page py-20 md:py-32">
-          <div className="max-w-3xl">
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight">
-              {hero.headlinePrefix}{" "}
-              <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
-              {hero.headlineSuffix}
-            </h1>
-            <p className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90">
-              {hero.tagline}
-            </p>
-            <p className="mt-4 text-sm md:text-base text-surface-dark-foreground/75 max-w-xl">
-              {hero.subtext}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {hero.btn1Text && (
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0"
-                  onClick={() => open()}
-                >
-                  <Upload className="mr-2 h-4 w-4" />
-                  {hero.btn1Text}
-                </Button>
-              )}
-              {hero.btn2Text && (
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
-                </Button>
-              )}
-              {hero.btn3Text && (
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  <Link to={hero.btn3Url as any}>
-                    <Phone className="mr-2 h-4 w-4" />
-                    {hero.btn3Text}
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider hero={hero} onOpenQuote={open} />
 
       {/* Trust strip */}
       <section className="border-b border-border bg-background">
