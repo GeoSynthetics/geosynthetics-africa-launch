@@ -138,7 +138,7 @@ export function ProductDetailPage() {
       value:
         product.roll_width ||
         (familyData?.technicalHighlights?.[1]?.value &&
-        familyData.technicalHighlights[1].label.toLowerCase().includes("width")
+          familyData.technicalHighlights[1].label.toLowerCase().includes("width")
           ? familyData.technicalHighlights[1].value
           : null),
     },
@@ -148,7 +148,7 @@ export function ProductDetailPage() {
       value:
         product.roll_length ||
         (familyData?.technicalHighlights?.[2]?.value &&
-        familyData.technicalHighlights[2].label.toLowerCase().includes("length")
+          familyData.technicalHighlights[2].label.toLowerCase().includes("length")
           ? familyData.technicalHighlights[2].value
           : null),
     },
@@ -300,11 +300,11 @@ export function ProductDetailPage() {
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
           ...(product.product_categories?.name
             ? [
-                {
-                  name: product.product_categories.name,
-                  url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
-                },
-              ]
+              {
+                name: product.product_categories.name,
+                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+              },
+            ]
             : []),
           { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
         ]}
@@ -341,32 +341,32 @@ export function ProductDetailPage() {
               },
               ...(product.product_categories?.name
                 ? [
-                    product.product_categories.slug
-                      ? {
-                          label: product.product_categories.name,
-                          to: "/products/$category",
-                          params: { category: product.product_categories.slug },
-                        }
-                      : {
-                          label: product.product_categories.name,
-                          to: "/catalogue",
-                          search: {
-                            q: "",
-                            cats: [product.product_categories.id],
-                            mans: [],
-                            sort: "newest",
-                          },
-                        },
-                  ]
+                  product.product_categories.slug
+                    ? {
+                      label: product.product_categories.name,
+                      to: "/products/$category",
+                      params: { category: product.product_categories.slug },
+                    }
+                    : {
+                      label: product.product_categories.name,
+                      to: "/catalogue",
+                      search: {
+                        q: "",
+                        cats: [product.product_categories.id],
+                        mans: [],
+                        sort: "newest",
+                      },
+                    },
+                ]
                 : []),
               ...(product.manufacturers?.name
                 ? [
-                    {
-                      label: product.manufacturers.name,
-                      to: "/catalogue",
-                      search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
-                    },
-                  ]
+                  {
+                    label: product.manufacturers.name,
+                    to: "/catalogue",
+                    search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
+                  },
+                ]
                 : []),
               { label: product.name },
             ]}
@@ -513,7 +513,7 @@ export function ProductDetailPage() {
                         <li key={r.label} className="flex items-center gap-3 py-2.5 text-sm">
                           <r.icon className="h-4 w-4 text-primary shrink-0" />
                           <span className="text-muted-foreground w-24">{r.label}</span>
-                          <span className="font-medium text-foreground">{r.value}</span>
+                          <span className="font-medium text-foreground text-xs">{r.value}</span>
                         </li>
                       ))}
                     </ul>
@@ -632,7 +632,7 @@ export function ProductDetailPage() {
                         Standard Method Statement
                       </h3>
                     </div>
-                    <div className="space-y-4 text-sm leading-relaxed text-foreground/80">
+                    <div className="space-y-4 text-md leading-relaxed text-foreground/80">
                       {splitIntoParagraphs(familyData.installationSpecs).map(
                         (spec: string, i: number) => (
                           <p key={i}>{spec}</p>
@@ -793,10 +793,10 @@ export function ProductDetailPage() {
                             {hasUrl ? "PDF DOCUMENT" : "REQUEST ON DEMAND"}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">
+                        <h3 className="text-lg font-bold text-foreground mb-1 leading-snug">
                           {doc.label}
                         </h3>
-                        <p className="text-xs text-muted-foreground leading-normal mb-4">
+                        <p className="text-sm text-muted-foreground leading-normal mb-4">
                           {doc.desc}
                         </p>
                       </div>
@@ -1156,23 +1156,20 @@ function Strip({
           {title} information will appear here once added.
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {items.slice(0, 5).map((it, i) => (
             <div
               key={i}
               className="rounded border border-border bg-card overflow-hidden hover:border-primary transition"
             >
-              <div className="aspect-[4/3] bg-surface overflow-hidden">
-                {it.image_url ? (
-                  <img src={it.image_url} alt={it.title} className="h-full w-full object-cover" />
-                ) : null}
-              </div>
-              <div className="p-3">
-                <div className="font-display text-xs font-bold uppercase leading-tight">
-                  {it.title}
+              <div className="p-5">
+                <div className="font-display text-sm font-bold uppercase leading-tight">
+                  <h5 className="text-lg">{it.title}</h5>
                 </div>
                 {it.subtitle && (
-                  <div className="text-[11px] text-muted-foreground mt-1">{it.subtitle}</div>
+                  <div className="text-sm leading-relaxed text-muted-foreground mt-2">
+                    <p>{it.subtitle}</p>
+                  </div>
                 )}
               </div>
             </div>
