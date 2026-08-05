@@ -634,38 +634,38 @@ export function ProductCategoryPage() {
                 </ul>
               </div>
 
-              {/* Stats Box */}
+              {/* Claims Box */}
               <div className="rounded bg-surface-dark text-white p-6 grid grid-cols-2 gap-4 divide-x divide-white/10 text-center">
                 <div className="px-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    900<span className="text-lg">+</span>
+                  <div className="text-xl md:text-2xl font-display font-bold text-primary mb-1">
+                    1 of 5
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Projects
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    IAGI installer members
                   </div>
                 </div>
                 <div className="px-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    15<span className="text-lg">+</span>
+                  <div className="text-xl md:text-2xl font-display font-bold text-primary mb-1">
+                    One scope
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Countries
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    Supply, install, certify
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
+                  <div className="text-2xl md:text-3xl font-display font-bold text-primary mb-1">
                     30<span className="text-lg">+</span>
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Experts
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    Countries served
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    20<span className="text-lg">+</span>
+                  <div className="text-2xl md:text-3xl font-display font-bold text-primary mb-1">
+                    100<span className="text-lg">%</span>
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Years
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    QA Testing
                   </div>
                 </div>
               </div>

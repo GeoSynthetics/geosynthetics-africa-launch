@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSelector } from "./ProductSelector";
+import { ScrollableTabsHeader } from "./ScrollableTabsHeader";
 import { useSlugSync } from "@/hooks/use-slug-sync";
 import { ImagePicker } from "./ImagePicker";
 import {
@@ -735,30 +736,30 @@ export function ProjectsTemplatesEditor() {
 
                 {/* Landing page editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                  <div className="px-6 border-b border-border bg-surface/10 shrink-0">
+                  <ScrollableTabsHeader>
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
+                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start flex-nowrap shrink-0 w-max">
                         <TabsTrigger
                           value="landing"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Hero & Details
                         </TabsTrigger>
                         <TabsTrigger
                           value="stats_reach"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Stats & Reach
                         </TabsTrigger>
                         <TabsTrigger
                           value="seo"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           SEO Settings
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
-                  </div>
+                  </ScrollableTabsHeader>
 
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
@@ -1037,48 +1038,70 @@ export function ProjectsTemplatesEditor() {
 
                 {/* Subpage editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                  <div className="px-6 border-b border-border bg-surface/10 shrink-0">
+                  <ScrollableTabsHeader>
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
+                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start flex-nowrap shrink-0 w-max">
                         <TabsTrigger
                           value="hero"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Identity & Hero
                         </TabsTrigger>
                         <TabsTrigger
                           value="brief"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Brief & Body
                         </TabsTrigger>
                         <TabsTrigger
                           value="products"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Products Used
                         </TabsTrigger>
                         <TabsTrigger
                           value="compliance"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Spec Conformity
                         </TabsTrigger>
                         <TabsTrigger
                           value="testimonial"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Testimonial
                         </TabsTrigger>
+                        {active.service_type === "supply_install" && (
+                          <>
+                            <TabsTrigger
+                              value="sequence"
+                              className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                            >
+                              Installation Sequence
+                            </TabsTrigger>
+                            <TabsTrigger
+                              value="qa"
+                              className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                            >
+                              QA & QC
+                            </TabsTrigger>
+                          </>
+                        )}
+                        <TabsTrigger
+                          value="gallery"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          Project Gallery
+                        </TabsTrigger>
                         <TabsTrigger
                           value="scopedetails"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-primary"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-primary"
                         >
-                          Technical Scope
+                          {active.service_type === "supply_install" ? "Installation Challenge" : "Technical Scope"}
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
-                  </div>
+                  </ScrollableTabsHeader>
 
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
@@ -1430,105 +1453,8 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                             </div>
-
-                            <div className="space-y-4 border-t border-border pt-4">
-                              <FieldLabel hint="The 4 steps of the installation sequence shown on the project page">
-                                Installation Sequence Steps (Steps 1–4)
-                              </FieldLabel>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {Array.from({ length: 4 }).map((_, stepIdx) => {
-                                  const step = (active.qa_details?.sequence || [])[stepIdx] || {
-                                    title: "",
-                                    description: "",
-                                  };
-                                  return (
-                                    <div
-                                      key={stepIdx}
-                                      className="p-3 border border-border rounded-lg bg-surface/20 space-y-2"
-                                    >
-                                      <div className="font-display font-bold text-xs uppercase text-primary">
-                                        Step {stepIdx + 1}
-                                      </div>
-                                      <div className="space-y-1">
-                                        <MicroLabel>Step Title</MicroLabel>
-                                        <Input
-                                          value={step.title || ""}
-                                          placeholder={`e.g. Step ${stepIdx + 1} Title`}
-                                          onChange={(e) => {
-                                            const seq = [...(active.qa_details?.sequence || [])];
-                                            while (seq.length <= stepIdx)
-                                              seq.push({ title: "", description: "" });
-                                            seq[stepIdx] = {
-                                              ...seq[stepIdx],
-                                              title: e.target.value,
-                                            };
-                                            setField("qa_details", {
-                                              ...active.qa_details,
-                                              sequence: seq,
-                                            });
-                                          }}
-                                          className="h-8 text-xs"
-                                        />
-                                      </div>
-                                      <div className="space-y-1">
-                                        <MicroLabel>Step Description</MicroLabel>
-                                        <Input
-                                          value={step.description || ""}
-                                          placeholder={`e.g. Step ${stepIdx + 1} Description`}
-                                          onChange={(e) => {
-                                            const seq = [...(active.qa_details?.sequence || [])];
-                                            while (seq.length <= stepIdx)
-                                              seq.push({ title: "", description: "" });
-                                            seq[stepIdx] = {
-                                              ...seq[stepIdx],
-                                              description: e.target.value,
-                                            };
-                                            setField("qa_details", {
-                                              ...active.qa_details,
-                                              sequence: seq,
-                                            });
-                                          }}
-                                          className="h-8 text-xs"
-                                        />
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            <div className="space-y-4 border-t border-border pt-4">
-                              <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
-                                Field Quality Control Checklist
-                              </FieldLabel>
-                              <ChecklistEditor
-                                list={active.qa_details?.checklist || []}
-                                onChange={(checklist) =>
-                                  setField("qa_details", {
-                                    ...active.qa_details,
-                                    checklist,
-                                  })
-                                }
-                              />
-                            </div>
-
-                            <div className="space-y-4">
-                              <FieldLabel hint="Upload or paste on-site verification photos with captions">
-                                Installation Work Photos
-                              </FieldLabel>
-                              <PhotosEditor
-                                photos={active.qa_details?.photos || []}
-                                onChange={(photos) =>
-                                  setField("qa_details", {
-                                    ...active.qa_details,
-                                    photos,
-                                  })
-                                }
-                              />
-                            </div>
                           </div>
                         )}
-
                         {/* 2. SUPPLY ONLY SPECIFIC FIELDS */}
                         {active.service_type === "supply_only" && (
                           <div className="space-y-6">
@@ -1907,6 +1833,120 @@ export function ProjectsTemplatesEditor() {
                           </div>
                         )}
                       </TabsContent>
+                      {/* INSTALLATION SEQUENCE TAB */}
+                      <TabsContent
+                        value="sequence"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>Installation Sequence</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="The 4 steps of the installation sequence shown on the project page">
+                            Installation Sequence Steps (Steps 1–4)
+                          </FieldLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {Array.from({ length: 4 }).map((_, stepIdx) => {
+                              const step = (active.qa_details?.sequence || [])[stepIdx] || {
+                                title: "",
+                                description: "",
+                              };
+                              return (
+                                <div
+                                  key={stepIdx}
+                                  className="p-3 border border-border rounded-lg bg-surface/20 space-y-2"
+                                >
+                                  <div className="font-display font-bold text-xs uppercase text-primary">
+                                    Step {stepIdx + 1}
+                                  </div>
+                                  <div className="space-y-1">
+                                    <MicroLabel>Step Title</MicroLabel>
+                                    <Input
+                                      value={step.title || ""}
+                                      placeholder={`e.g. Step ${stepIdx + 1} Title`}
+                                      onChange={(e) => {
+                                        const seq = [...(active.qa_details?.sequence || [])];
+                                        while (seq.length <= stepIdx)
+                                          seq.push({ title: "", description: "" });
+                                        seq[stepIdx] = {
+                                          ...seq[stepIdx],
+                                          title: e.target.value,
+                                        };
+                                        setField("qa_details", {
+                                          ...active.qa_details,
+                                          sequence: seq,
+                                        });
+                                      }}
+                                      className="h-8 text-xs"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <MicroLabel>Step Description</MicroLabel>
+                                    <Input
+                                      value={step.description || ""}
+                                      placeholder={`e.g. Step ${stepIdx + 1} Description`}
+                                      onChange={(e) => {
+                                        const seq = [...(active.qa_details?.sequence || [])];
+                                        while (seq.length <= stepIdx)
+                                          seq.push({ title: "", description: "" });
+                                        seq[stepIdx] = {
+                                          ...seq[stepIdx],
+                                          description: e.target.value,
+                                        };
+                                        setField("qa_details", {
+                                          ...active.qa_details,
+                                          sequence: seq,
+                                        });
+                                      }}
+                                      className="h-8 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* QA & QC TAB */}
+                      <TabsContent
+                        value="qa"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>QA & QC</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
+                            Field Quality Control Checklist
+                          </FieldLabel>
+                          <ChecklistEditor
+                            list={active.qa_details?.checklist || []}
+                            onChange={(checklist) =>
+                              setField("qa_details", {
+                                ...active.qa_details,
+                                checklist,
+                              })
+                            }
+                          />
+                        </div>
+                      </TabsContent>
+
+                      {/* PROJECT GALLERY TAB */}
+                      <TabsContent
+                        value="gallery"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>Project Gallery</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="Upload or paste on-site verification photos with captions">
+                            Project Photos
+                          </FieldLabel>
+                          <PhotosEditor
+                            photos={active.gallery || []}
+                            onChange={(photos) =>
+                              setField("gallery", photos)
+                            }
+                          />
+                        </div>
+                      </TabsContent>
+
                     </Tabs>
                   </div>
                 </div>

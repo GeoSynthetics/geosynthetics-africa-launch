@@ -49,11 +49,27 @@ export interface ProjectCard {
 
 export interface HeroSlide {
   image: string;
+  mediaType?: "image" | "video";
   titlePrefix?: string;
   titleAccent?: string;
   titleSuffix?: string;
   subtitle?: string;
   description?: string;
+}
+
+export function isVideoUrl(url: string, explicitType?: "image" | "video"): boolean {
+  if (explicitType === "video") return true;
+  if (explicitType === "image") return false;
+  if (!url) return false;
+  const cleanUrl = url.toLowerCase().split("?")[0].split("#")[0];
+  return (
+    cleanUrl.endsWith(".mp4") ||
+    cleanUrl.endsWith(".webm") ||
+    cleanUrl.endsWith(".ogv") ||
+    cleanUrl.endsWith(".mov") ||
+    cleanUrl.includes("video/upload") ||
+    cleanUrl.includes("/video/")
+  );
 }
 
 export interface HeroSection {

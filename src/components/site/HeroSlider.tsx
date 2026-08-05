@@ -4,7 +4,7 @@ import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrainageMesh } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
-import type { HeroSection, HeroSlide } from "@/types/homepage";
+import { type HeroSection, type HeroSlide, isVideoUrl } from "@/types/homepage";
 
 interface HeroSliderProps {
   hero: HeroSection;
@@ -48,6 +48,7 @@ export function HeroSlider({
       }
       return {
         image: !slide.image || slide.image.trim() === "" ? heroInstallation : slide.image,
+        mediaType: slide.mediaType,
         titlePrefix:
           slide.titlePrefix && slide.titlePrefix.trim() !== ""
             ? slide.titlePrefix
@@ -104,21 +105,42 @@ export function HeroSlider({
       onMouseEnter={() => setIsPlaying(false)}
       onMouseLeave={() => setIsPlaying(true)}
     >
-      {/* Carousel Background Images */}
+      {/* Carousel Background Images & Videos */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {activeSlides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105"
-            } transform transition-transform duration-10000`}
-            style={{
-              backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.98) 0%, rgba(8,8,10,0.88) 35%, rgba(8,8,10,0.5) 70%, rgba(8,8,10,0) 100%), url(${slide.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        ))}
+        {activeSlides.map((slide, index) => {
+          const isVideo = isVideoUrl(slide.image, slide.mediaType);
+          return (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
+              } transform transition-transform duration-10000`}
+            >
+              {isVideo ? (
+                <div className="absolute inset-0 overflow-hidden">
+                  <video
+                    src={slide.image}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full object-cover transform scale-105 transition-transform duration-10000 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40" />
+                </div>
+              ) : (
+                <div
+                  className="h-full w-full bg-cover bg-center transition-transform duration-10000 ease-out scale-105"
+                  style={{
+                    backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.98) 0%, rgba(8,8,10,0.88) 35%, rgba(8,8,10,0.5) 70%, rgba(8,8,10,0) 100%), url(${slide.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Shapes Overlay */}

@@ -120,4 +120,26 @@ describe("HomePage hero", () => {
     fireEvent.click(prevBtn!);
     expect(document.body.textContent).toContain("01 / 02");
   });
+
+  it("renders auto-playing video element when a video URL is configured in sliderImages", () => {
+    vi.mocked(Route.useLoaderData).mockReturnValue({
+      hp: {
+        hero: {
+          headlinePrefix: "Engineered for",
+          headlineAccent: "Africa",
+          headlineSuffix: "projects",
+          tagline: "Designed and delivered locally.",
+          subtext: "A complete geosynthetics delivery partner.",
+          sliderImages: ["https://example.com/hero-video.mp4"],
+          btn1Text: "Upload BOQ",
+        },
+      },
+    } as any);
+
+    render(<HomePage />);
+
+    const videoElement = document.querySelector<HTMLVideoElement>("video");
+    expect(videoElement).toBeInTheDocument();
+    expect(videoElement).toHaveAttribute("src", "https://example.com/hero-video.mp4");
+  });
 });

@@ -28,10 +28,10 @@ function mapFamilyData(
     heroImage: familyData.heroImage || familyData.heroImageUrl || "",
     subtitle: familyData.subtitle || "",
     stats: familyData.stats || {
-      projects: "1 of 5  IAGI Installer Members in Africa",
-      countries: "15+",
-      experts: "30+",
-      years: "20+",
+      projects: "1 of 5",
+      countries: "30+",
+      experts: "One scope",
+      years: "100%",
     },
     technicalSpecText: Array.isArray(familyData.description)
       ? familyData.description.join("\n\n")

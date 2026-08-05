@@ -377,7 +377,7 @@ export function ProjectDetailPage() {
             </div>
 
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.98] tracking-tight max-w-4xl text-white mb-6">
-              {project.title} — {project.scale} Composite lining.
+              {project.title} — {project.scale}
             </h1>
             <p className="max-w-3xl text-sm md:text-base text-white/80 leading-relaxed mb-8">
               {project.summary}
@@ -470,10 +470,10 @@ export function ProjectDetailPage() {
                 {project.body}
               </div>
 
-              {/* Install Hero Photo Strip */}
-              {project.service_type === "supply_install" && project.qa_details?.photos && (
+              {/* Install Hero Photo Strip / Gallery */}
+              {(project.gallery?.length > 0 || project.qa_details?.photos?.length > 0) && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6">
-                  {project.qa_details.photos.map((p: any, idx: number) => (
+                  {[...(project.gallery || []), ...(project.qa_details?.photos || [])].map((p: any, idx: number) => (
                     <div
                       key={idx}
                       className="aspect-[4/3] relative rounded overflow-hidden group border border-border"
@@ -868,93 +868,93 @@ export function ProjectDetailPage() {
             {/* Products Supplied / Used list */}
             {(project.service_type === "supply_only" ||
               project.service_type === "supply_install") && (
-              <section id="products" className="scroll-mt-28 space-y-4">
-                <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
-                  <span className="w-1.5 h-6 bg-primary rounded-full" />
-                  {project.service_type === "supply_only"
-                    ? "Products Supplied"
-                    : "Products Used in Project"}
-                </h2>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {project.service_type === "supply_only"
-                    ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
-                    : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
-                </p>
+                <section id="products" className="scroll-mt-28 space-y-4">
+                  <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-primary rounded-full" />
+                    {project.service_type === "supply_only"
+                      ? "Products Supplied"
+                      : "Products Used in Project"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {project.service_type === "supply_only"
+                      ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
+                      : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
+                  </p>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {project.products_used?.map((p: any, idx: number) => {
-                    const dbProd = p.productId
-                      ? dbProducts.find((db) => db.id === p.productId)
-                      : null;
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {project.products_used?.map((p: any, idx: number) => {
+                      const dbProd = p.productId
+                        ? dbProducts.find((db) => db.id === p.productId)
+                        : null;
 
-                    if (dbProd) {
+                      if (dbProd) {
+                        return (
+                          <Link
+                            key={idx}
+                            to="/catalogue/$slug"
+                            params={{ slug: dbProd.slug }}
+                            className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
+                          >
+                            <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
+                              {dbProd.image_url ? (
+                                <img
+                                  src={dbProd.image_url}
+                                  alt={dbProd.name}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <Layers className="h-6 w-6" />
+                              )}
+                            </div>
+                            <div className="flex-grow min-w-0">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
+                                {p.category || dbProd.product_categories?.name}
+                              </span>
+                              <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
+                                {dbProd.name}
+                              </h4>
+                              <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                                Quantity: {p.qty}
+                              </div>
+                              {dbProd.short_description && (
+                                <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
+                                  {dbProd.short_description}
+                                </p>
+                              )}
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
+                          </Link>
+                        );
+                      }
+
                       return (
                         <Link
                           key={idx}
-                          to="/catalogue/$slug"
-                          params={{ slug: dbProd.slug }}
+                          to="/catalogue"
+                          search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
                           className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
                         >
                           <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                            {dbProd.image_url ? (
-                              <img
-                                src={dbProd.image_url}
-                                alt={dbProd.name}
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              <Layers className="h-6 w-6" />
-                            )}
+                            <Layers className="h-6 w-6" />
                           </div>
                           <div className="flex-grow min-w-0">
                             <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                              {p.category || dbProd.product_categories?.name}
+                              {p.category}
                             </span>
-                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
-                              {dbProd.name}
+                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
+                              {p.name}
                             </h4>
-                            <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                            <div className="text-[10px] text-muted-foreground font-mono mt-1">
                               Quantity: {p.qty}
                             </div>
-                            {dbProd.short_description && (
-                              <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
-                                {dbProd.short_description}
-                              </p>
-                            )}
                           </div>
                           <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
                         </Link>
                       );
-                    }
-
-                    return (
-                      <Link
-                        key={idx}
-                        to="/catalogue"
-                        search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
-                        className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
-                      >
-                        <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                          <Layers className="h-6 w-6" />
-                        </div>
-                        <div className="flex-grow min-w-0">
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                            {p.category}
-                          </span>
-                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
-                            {p.name}
-                          </h4>
-                          <div className="text-[10px] text-muted-foreground font-mono mt-1">
-                            Quantity: {p.qty}
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+                    })}
+                  </div>
+                </section>
+              )}
 
             {/* Spec Compliance table */}
             <section id="compliance" className="scroll-mt-28 space-y-4">

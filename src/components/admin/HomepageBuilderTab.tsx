@@ -30,6 +30,7 @@ import {
   type ProjectCard,
   type GsaStep,
   type HeroSlide,
+  isVideoUrl,
 } from "@/types/homepage";
 
 const SUPABASE_KEY = "homepage_content";
@@ -190,14 +191,13 @@ function HeroEditor({
         </p>
       </div>
 
-      {/* Hero Carousel Multi-Image Manager */}
+      {/* Hero Carousel Multi-Media Manager */}
       <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
         <div className="flex items-center justify-between">
           <div>
-            <h4 className="text-sm font-bold uppercase tracking-wide">Hero Carousel Images</h4>
+            <h4 className="text-sm font-bold uppercase tracking-wide">Hero Carousel Media (Images & Videos)</h4>
             <p className="text-xs text-muted-foreground">
-              Add multiple high-resolution images to display in the homepage Revolution Hero
-              Carousel slider.
+              Add high-resolution image URLs (.png, .jpg, .webp) or MP4/WebM video URLs to display in the homepage Hero slider.
             </p>
           </div>
           <Button
@@ -220,14 +220,13 @@ function HeroEditor({
             }}
             className="text-xs cursor-pointer"
           >
-            <Plus className="h-3.5 w-3.5 mr-1" /> Add Slide Image
+            <Plus className="h-3.5 w-3.5 mr-1" /> Add Slide Media
           </Button>
         </div>
 
         {(!data.sliderImages || data.sliderImages.length === 0) && (
           <p className="text-xs text-muted-foreground italic py-2">
-            No carousel images added yet. Click "Add Slide Image" above to configure your homepage
-            hero slider.
+            No carousel media added yet. Click "Add Slide Media" above to configure your homepage hero slider.
           </p>
         )}
 
