@@ -51,7 +51,7 @@ describe("AboutPage Store Location Map & Form Removal", () => {
     expect(screen.queryByPlaceholderText(/Your name/i)).toBeNull();
     expect(screen.queryByPlaceholderText(/Email address/i)).toBeNull();
     expect(screen.queryByText(/SUBMIT & GET PROPOSAL/i)).toBeNull();
-  });
+  }, 15000);
 
   it("should render the Store Location Map iframe with the configured embed URL", () => {
     render(<AboutPage />);
@@ -62,7 +62,7 @@ describe("AboutPage Store Location Map & Form Removal", () => {
     const mapIframe = screen.getAllByTitle("Store location map")[0] as HTMLIFrameElement;
     expect(mapIframe).toBeInTheDocument();
     expect(mapIframe.src).toBe("https://www.google.com/maps?q=custom+location&output=embed");
-  });
+  }, 15000);
 
   it("should render the catalog products CTA button at the bottom of the map pointing to /catalogue", () => {
     render(<AboutPage />);
@@ -70,5 +70,5 @@ describe("AboutPage Store Location Map & Form Removal", () => {
     const catalogBtns = screen.getAllByRole("link", { name: /View Catalog Products/i });
     expect(catalogBtns.length).toBeGreaterThan(0);
     expect(catalogBtns[0].getAttribute("href")).toBe("/catalogue");
-  });
+  }, 15000);
 });

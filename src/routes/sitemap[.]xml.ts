@@ -48,9 +48,8 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        // Derive base URL from the incoming request so it works on any host
-        const url = new URL(request.url);
-        const baseUrl = `${url.protocol}//${url.host}`;
+        // Always use the canonical production base URL for sitemap entries
+        const baseUrl = "https://geosynthetics.co.za";
         const now = today();
 
         const urls: string[] = [];
