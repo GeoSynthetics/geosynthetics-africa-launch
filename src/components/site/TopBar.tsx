@@ -119,47 +119,56 @@ export function TopBar() {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-surface-dark text-surface-dark-foreground text-xs">
-      <div className="container-page flex items-center justify-between gap-4 py-2">
-        <div className="hidden md:flex items-center gap-6 overflow-hidden">
+    <div className="w-full bg-surface-dark text-surface-dark-foreground text-xs border-b border-white/10">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-4 py-2">
+        {/* Left side: Certifications & Perks */}
+        <div className="hidden lg:flex items-center gap-5 xl:gap-6 overflow-hidden">
           {items.map(({ icon: Icon, key, defaultLabel }) => (
             <div key={key} className="flex items-center gap-2 whitespace-nowrap opacity-90">
-              <Icon className="h-3.5 w-3.5 text-primary" />
-              <span>{t(key, defaultLabel)}</span>
+              <Icon className="h-3.5 w-3.5 text-primary shrink-0" />
+              <span className="font-medium text-[11px]">{t(key, defaultLabel)}</span>
             </div>
           ))}
         </div>
 
+        {/* Mobile perks slider */}
         <MobilePerksSlider />
 
-        <div className="flex items-center gap-3 sm:gap-4">
-          <a
-            href="tel:+27710939964"
-            className="hidden xl:flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
-            title="Call Us"
-          >
-            <Phone className="h-3.5 w-3.5 text-primary" />
-            <span>+27 71 093 9964</span>
-          </a>
+        {/* Right side: Phone & Email, Upload BOQ, Partner Portal, Language Selector */}
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-5 ml-auto">
+          {/* Phone & Email contacts */}
+          <div className="hidden md:flex items-center gap-4 border-r border-white/15 pr-4">
+            <a
+              href="tel:+27710939964"
+              className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
+              title="Call Us"
+            >
+              <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
+              <span>+27 71 093 9964</span>
+            </a>
 
-          <a
-            href="mailto:sales@geosynthetics.co.za"
-            className="hidden xl:flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
-            title="Email Sales"
-          >
-            <Mail className="h-3.5 w-3.5 text-primary" />
-            <span>sales@geosynthetics.co.za</span>
-          </a>
+            <a
+              href="mailto:sales@geosynthetics.co.za"
+              className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
+              title="Email Sales"
+            >
+              <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
+              <span>sales@geosynthetics.co.za</span>
+            </a>
+          </div>
 
-          <button
-            onClick={() => open()}
-            className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium cursor-pointer border-0"
-          >
-            <Upload className="h-3.5 w-3.5" />
-            <span>{t("nav.uploadBoq", "Upload Project BOQ")}</span>
-          </button>
-          <PartnerPortalLink />
-          <LanguageSelector />
+          {/* Upload BOQ, Partner Portal & Translation */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button
+              onClick={() => open()}
+              className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2.5 py-1 rounded transition whitespace-nowrap font-medium cursor-pointer border-0 text-[11px]"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              <span>{t("nav.uploadBoq", "Upload Project BOQ")}</span>
+            </button>
+            <PartnerPortalLink />
+            <LanguageSelector />
+          </div>
         </div>
       </div>
     </div>
