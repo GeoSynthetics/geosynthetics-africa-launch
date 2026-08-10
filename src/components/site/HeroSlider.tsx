@@ -189,7 +189,7 @@ export function HeroSlider({
                 <Button
                   size="lg"
                   className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0 shadow-lg transition-transform active:scale-95"
-                  onClick={onOpenQuote}
+                  onClick={() => onOpenQuote()}
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   {hero.btn1Text}

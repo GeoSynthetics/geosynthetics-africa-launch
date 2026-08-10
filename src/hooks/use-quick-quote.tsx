@@ -16,8 +16,8 @@ export function QuickQuoteProvider({ children }: { children: ReactNode }) {
   const [productId, setProductId] = useState<string | null>(null);
 
   const open = (pName?: string, pId?: string) => {
-    setProductName(pName ?? null);
-    setProductId(pId ?? null);
+    setProductName(typeof pName === "string" ? pName : null);
+    setProductId(typeof pId === "string" ? pId : null);
     setIsOpen(true);
   };
 
