@@ -6,7 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PRODUCT_CATEGORIES } from "@/components/site/mega-menu-data";
-import { HexCell, GeoGrid } from "@/components/site/shapes";
+import { HexCell, MembraneFold } from "@/components/site/shapes";
 
 export function ProductsLanding() {
   const { templates, hierarchy } = useLoaderData({ from: "/products/" }) as {
@@ -66,7 +66,8 @@ export function ProductsLanding() {
         image={heroImage}
       />
       <section className="relative isolate overflow-hidden bg-background border-b border-border">
-        <HexCell count={14} opacity={0.06} color="var(--primary)" spread="wide" />
+        <MembraneFold opacity={0.1} color="#ffffff" waveCount={3} />
+
         <div className="container-page py-16 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {productItems.map((c: any) => {

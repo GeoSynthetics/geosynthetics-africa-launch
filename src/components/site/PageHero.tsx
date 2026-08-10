@@ -7,12 +7,14 @@ export function PageHero({
   description,
   image = "https://images.unsplash.com/photo-1563391017873-6e6beab67fed?w=1920&q=80",
   children,
+  showMesh = false,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   image?: string;
   children?: ReactNode;
+  showMesh?: boolean;
 }) {
   return (
     <section
@@ -23,7 +25,7 @@ export function PageHero({
         backgroundPosition: "center",
       }}
     >
-      <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
+      {showMesh && <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />}
       <div className="container-page py-20 md:py-28 relative z-10">
         <div className="max-w-3xl">
           {eyebrow && (

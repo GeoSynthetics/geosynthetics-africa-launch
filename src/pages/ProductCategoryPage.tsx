@@ -25,7 +25,7 @@ import {
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
-import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
+import { GeoGrid } from "@/components/site/shapes";
 
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
@@ -43,7 +43,6 @@ export function ProductCategoryPage() {
           backgroundPosition: "center",
         }}
       >
-        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-24 relative z-10 flex flex-col md:flex-row gap-10">
           <div className="flex-1">
             <Breadcrumbs

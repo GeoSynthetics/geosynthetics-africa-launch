@@ -5,7 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
-import { DrainageMesh } from "@/components/site/shapes";
+import { GeoGrid, HexCell, FiberStrand } from "@/components/site/shapes";
 
 // Interface Definitions for Type Safety
 interface BulletItem {
@@ -209,7 +209,6 @@ export function ServicePage({ data }: { data: any }) {
           backgroundPosition: "center",
         }}
       >
-        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-24 relative z-10">
           <Breadcrumbs
             items={[

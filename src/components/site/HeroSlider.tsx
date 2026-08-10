@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
 import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DrainageMesh } from "@/components/site/shapes";
+import { DrainageMesh, MembraneFold } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
 import { type HeroSection, type HeroSlide, isVideoUrl } from "@/types/homepage";
 
@@ -112,9 +112,8 @@ export function HeroSlider({
           return (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
-              } transform transition-transform duration-10000`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
+                } transform transition-transform duration-10000`}
             >
               {isVideo ? (
                 <div className="absolute inset-0 overflow-hidden">
@@ -145,7 +144,8 @@ export function HeroSlider({
 
       {/* Shapes Overlay */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <DrainageMesh opacity={0.14} color="#ffffff" lineSpacing={40} />
+
+        <MembraneFold opacity={0.1} color="#ffffff" waveCount={5} />
       </div>
 
       {/* Hero Content Container */}
@@ -232,9 +232,8 @@ export function HeroSlider({
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
-                  index === currentIndex ? "w-8 bg-primary" : "w-2 bg-white/40 hover:bg-white/70"
-                }`}
+                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${index === currentIndex ? "w-8 bg-primary" : "w-2 bg-white/40 hover:bg-white/70"
+                  }`}
               />
             ))}
           </div>

@@ -5,7 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
-import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
+import { GeoGrid } from "@/components/site/shapes";
 
 export function IndustryPage({ data }: { data: any }) {
   const loaderData = data;
@@ -47,7 +47,6 @@ export function IndustryPage({ data }: { data: any }) {
           backgroundPosition: "center",
         }}
       >
-        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-20">
           <Breadcrumbs items={breadcrumbs} variant="default" />
           <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold uppercase tracking-tight">
