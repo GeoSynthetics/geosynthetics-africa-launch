@@ -223,37 +223,42 @@ export function HeroSlider({
             </div>
           </div>
 
-          {/* Right Banner Quick Contacts Panel (Modern Glassmorphism Card) */}
+          {/* Right Banner Quick Contacts Panel (Ultra-Modern Glassmorphism Card) */}
           <div className="lg:col-span-5 xl:col-span-4 animate-hero-text animation-delay-300">
-            <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-xl p-6 shadow-2xl space-y-5 transition-all hover:border-primary/50 group">
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <span className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
+            <div className="relative overflow-hidden rounded-2xl glassmorphic-card p-6 sm:p-7 space-y-5 transition-all duration-500 hover:border-primary/60 hover:shadow-[0_20px_50px_rgba(220,38,38,0.25)] group">
+              {/* Subtle Ambient Radial Light Flares inside the Card */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/35 transition-all duration-700" />
+              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Card Header Bar */}
+              <div className="relative z-10 flex items-center justify-between border-b border-white/15 pb-4">
+                <span className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-2.5">
+                  <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
                   </span>
                   Quick Contacts
                 </span>
-                <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white/80 bg-white/10 border border-white/15 backdrop-blur-md uppercase tracking-wider shadow-sm">
                   Direct Line
                 </span>
               </div>
 
               {/* Quick Contacts Items */}
-              <div className="space-y-4">
+              <div className="relative z-10 space-y-3.5">
                 {/* Phone Contact */}
                 <a
                   href="tel:+27710939964"
-                  className="flex items-center gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/40 transition-all duration-300 group/link"
+                  className="flex items-center gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary group-hover/link:bg-primary group-hover/link:text-black transition-colors shrink-0">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0">
                     <Phone className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
                       Phone / Call Direct
                     </div>
-                    <div className="text-sm font-bold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
+                    <div className="text-sm sm:text-base font-extrabold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
                       +27 71 093 9964
                     </div>
                   </div>
@@ -262,31 +267,31 @@ export function HeroSlider({
                 {/* Email Contact */}
                 <a
                   href="mailto:sales@geosynthetics.co.za"
-                  className="flex items-center gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/40 transition-all duration-300 group/link"
+                  className="flex items-center gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary group-hover/link:bg-primary group-hover/link:text-black transition-colors shrink-0">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0">
                     <Mail className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
                       Email Sales Team
                     </div>
-                    <div className="text-sm font-bold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
+                    <div className="text-sm sm:text-base font-extrabold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
                       sales@geosynthetics.co.za
                     </div>
                   </div>
                 </a>
 
                 {/* Location / HQ */}
-                <div className="flex items-start gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 shrink-0 mt-0.5">
+                <div className="flex items-start gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-white/[0.12] transition-all duration-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-primary border border-white/20 shrink-0 mt-0.5 shadow-sm">
                     <MapPin className="h-4 w-4 text-primary" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400">
                       Johannesburg HQ
                     </div>
-                    <div className="text-xs text-white/80 leading-snug">
+                    <div className="text-xs sm:text-sm font-semibold text-white/90 leading-snug">
                       7 Tamar Avenue, Lea Glen, Randburg, South Africa
                     </div>
                   </div>
