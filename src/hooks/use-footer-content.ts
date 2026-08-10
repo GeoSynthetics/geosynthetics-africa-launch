@@ -15,6 +15,7 @@ const _listeners = new Set<() => void>();
 function mergeWithDefaults(partial: Partial<FooterContent>): FooterContent {
   return {
     brandDescription: partial.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
+    address: partial.address ?? DEFAULT_FOOTER_CONTENT.address,
     socialLinks: partial.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
     certifications: partial.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
     copyrightText: partial.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,

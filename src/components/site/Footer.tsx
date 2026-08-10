@@ -7,6 +7,9 @@ import {
   Twitter,
   MessageCircle,
   Music2,
+  MapPin,
+  Phone,
+  Mail,
 } from "lucide-react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { Logo } from "./Logo";
@@ -206,9 +209,38 @@ export function Footer() {
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
-            <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
+            <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[240px]">
               {footerContent.brandDescription}
             </p>
+
+            {/* Address & Quick Contact Info */}
+            <div className="mt-4 space-y-2 text-xs text-surface-dark-foreground/75 max-w-[260px]">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <span className="leading-snug">
+                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"}
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5 pt-1">
+                <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
+                <a
+                  href="tel:+27710939964"
+                  className="hover:text-primary transition-colors font-medium"
+                >
+                  +27 71 093 9964
+                </a>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
+                <a
+                  href="mailto:sales@geosynthetics.co.za"
+                  className="hover:text-primary transition-colors font-medium"
+                >
+                  sales@geosynthetics.co.za
+                </a>
+              </div>
+            </div>
+
             <div className="mt-5 flex items-center gap-2">
               {footerContent.socialLinks.map((link) => {
                 const Icon = PLATFORM_ICONS[link.platform] ?? Linkedin;

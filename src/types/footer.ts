@@ -23,6 +23,9 @@ export interface FooterContent {
   /** Brand description paragraph displayed below the logo */
   brandDescription: string;
 
+  /** Physical address displayed below brand description in footer */
+  address?: string;
+
   /** Social media links displayed as icon buttons */
   socialLinks: FooterSocialLink[];
 
@@ -39,6 +42,7 @@ export interface FooterContent {
 export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   brandDescription:
     "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
+  address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa",
   socialLinks: [
     { platform: "linkedin", url: "#" },
     { platform: "facebook", url: "#" },

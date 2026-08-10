@@ -74,17 +74,20 @@ const PLATFORM_ICONS: Record<SocialPlatform, React.ComponentType<{ className?: s
 
 function BrandEditor({
   description,
-  onChange,
+  address,
+  onDescriptionChange,
+  onAddressChange,
 }: {
   description: string;
-  onChange: (value: string) => void;
+  address?: string;
+  onDescriptionChange: (value: string) => void;
+  onAddressChange: (value: string) => void;
 }) {
   return (
     <div className="space-y-6">
-      <SectionHeading>Brand Description</SectionHeading>
+      <SectionHeading>Brand Description &amp; Address</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        This paragraph appears directly below the logo in the footer. Use it to summarize the
-        company's offering in one to two sentences.
+        This description and address appear directly below the logo in the footer.
       </p>
       <div>
         <FieldLabel hint="Maximum ~200 characters recommended for clean formatting">
@@ -92,9 +95,20 @@ function BrandEditor({
         </FieldLabel>
         <Textarea
           value={description}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="Africa's integrated geosynthetics platform..."
           className="text-sm min-h-[100px] resize-none"
+        />
+      </div>
+      <div>
+        <FieldLabel hint="Physical address displayed below brand description">
+          Physical Address
+        </FieldLabel>
+        <Input
+          value={address ?? ""}
+          onChange={(e) => onAddressChange(e.target.value)}
+          placeholder="7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"
+          className="text-sm"
         />
       </div>
     </div>
@@ -564,6 +578,7 @@ export function FooterBuilderTab() {
       const val = data.value as unknown as Partial<FooterContent>;
       const merged: FooterContent = {
         brandDescription: val.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
+        address: val.address ?? DEFAULT_FOOTER_CONTENT.address,
         socialLinks: val.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
         certifications: val.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
         copyrightText: val.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
@@ -667,7 +682,9 @@ export function FooterBuilderTab() {
           <TabsContent value="brand" className="p-6 m-0">
             <BrandEditor
               description={content.brandDescription}
-              onChange={(v) => update({ brandDescription: v })}
+              address={content.address}
+              onDescriptionChange={(v) => update({ brandDescription: v })}
+              onAddressChange={(v) => update({ address: v })}
             />
           </TabsContent>
 

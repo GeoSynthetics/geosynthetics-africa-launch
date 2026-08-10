@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
-import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Upload, Phone, ChevronLeft, ChevronRight, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrainageMesh, MembraneFold } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
@@ -149,75 +149,150 @@ export function HeroSlider({
       </div>
 
       {/* Hero Content Container */}
-      <div className="relative z-20 container-page py-20 md:py-28 my-auto">
-        <div className="max-w-3xl">
-          {/* Headline */}
-          <h1
-            key={`headline-${currentIndex}`}
-            id="home-page-hero-heading"
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight text-white drop-shadow-sm animate-hero-text"
-          >
-            {currentSlide.titlePrefix}{" "}
-            <span className="text-primary block md:inline">{currentSlide.titleAccent}</span>{" "}
-            {currentSlide.titleSuffix}
-          </h1>
+      <div className="relative z-20 container-page py-16 md:py-24 my-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Main Hero Headline & Copy */}
+          <div className="lg:col-span-7 xl:col-span-8">
+            {/* Headline */}
+            <h1
+              key={`headline-${currentIndex}`}
+              id="home-page-hero-heading"
+              className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight text-white drop-shadow-sm animate-hero-text"
+            >
+              {currentSlide.titlePrefix}{" "}
+              <span className="text-primary block md:inline">{currentSlide.titleAccent}</span>{" "}
+              {currentSlide.titleSuffix}
+            </h1>
 
-          {/* Tagline */}
-          <p
-            key={`tagline-${currentIndex}`}
-            className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90 font-medium animate-hero-text animation-delay-100"
-          >
-            {currentSlide.subtitle}
-          </p>
+            {/* Tagline */}
+            <p
+              key={`tagline-${currentIndex}`}
+              className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90 font-medium animate-hero-text animation-delay-100"
+            >
+              {currentSlide.subtitle}
+            </p>
 
-          {/* Subtext */}
-          <p
-            key={`subtext-${currentIndex}`}
-            className="mt-4 text-sm md:text-base text-surface-dark-foreground/80 max-w-xl leading-relaxed animate-hero-text animation-delay-200"
-          >
-            {currentSlide.description}
-          </p>
+            {/* Subtext */}
+            <p
+              key={`subtext-${currentIndex}`}
+              className="mt-4 text-sm md:text-base text-surface-dark-foreground/80 max-w-xl leading-relaxed animate-hero-text animation-delay-200"
+            >
+              {currentSlide.description}
+            </p>
 
-          {/* Action Buttons */}
-          <div
-            key={`buttons-${currentIndex}`}
-            className="mt-8 flex flex-wrap gap-3 animate-hero-text animation-delay-300"
-          >
-            {hero.btn1Text && (
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0 shadow-lg transition-transform active:scale-95"
-                onClick={onOpenQuote}
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                {hero.btn1Text}
-              </Button>
-            )}
+            {/* Action Buttons */}
+            <div
+              key={`buttons-${currentIndex}`}
+              className="mt-8 flex flex-wrap gap-3 animate-hero-text animation-delay-300"
+            >
+              {hero.btn1Text && (
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0 shadow-lg transition-transform active:scale-95"
+                  onClick={onOpenQuote}
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {hero.btn1Text}
+                </Button>
+              )}
 
-            {hero.btn2Text && (
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="bg-surface-dark/40 backdrop-blur-md border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide transition-all"
-              >
-                <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
-              </Button>
-            )}
+              {hero.btn2Text && (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="bg-surface-dark/40 backdrop-blur-md border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide transition-all"
+                >
+                  <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
+                </Button>
+              )}
 
-            {hero.btn3Text && (
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="bg-surface-dark/40 backdrop-blur-md border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide transition-all"
-              >
-                <Link to={hero.btn3Url as any}>
-                  <Phone className="mr-2 h-4 w-4" />
-                  {hero.btn3Text}
-                </Link>
-              </Button>
-            )}
+              {hero.btn3Text && (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="bg-surface-dark/40 backdrop-blur-md border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide transition-all"
+                >
+                  <Link to={hero.btn3Url as any}>
+                    <Phone className="mr-2 h-4 w-4" />
+                    {hero.btn3Text}
+                  </Link>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Right Banner Quick Contacts Panel (Modern Glassmorphism Card) */}
+          <div className="lg:col-span-5 xl:col-span-4 animate-hero-text animation-delay-300">
+            <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-xl p-6 shadow-2xl space-y-5 transition-all hover:border-primary/50 group">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  </span>
+                  Quick Contacts
+                </span>
+                <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">
+                  Direct Line
+                </span>
+              </div>
+
+              {/* Quick Contacts Items */}
+              <div className="space-y-4">
+                {/* Phone Contact */}
+                <a
+                  href="tel:+27710939964"
+                  className="flex items-center gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/40 transition-all duration-300 group/link"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary group-hover/link:bg-primary group-hover/link:text-black transition-colors shrink-0">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                      Phone / Call Direct
+                    </div>
+                    <div className="text-sm font-bold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
+                      +27 71 093 9964
+                    </div>
+                  </div>
+                </a>
+
+                {/* Email Contact */}
+                <a
+                  href="mailto:sales@geosynthetics.co.za"
+                  className="flex items-center gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/40 transition-all duration-300 group/link"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary group-hover/link:bg-primary group-hover/link:text-black transition-colors shrink-0">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                      Email Sales Team
+                    </div>
+                    <div className="text-sm font-bold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
+                      sales@geosynthetics.co.za
+                    </div>
+                  </div>
+                </a>
+
+                {/* Location / HQ */}
+                <div className="flex items-start gap-3.5 p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 shrink-0 mt-0.5">
+                    <MapPin className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] uppercase tracking-wider font-semibold text-white/60">
+                      Johannesburg HQ
+                    </div>
+                    <div className="text-xs text-white/80 leading-snug">
+                      7 Tamar Avenue, Lea Glen, Randburg, South Africa
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

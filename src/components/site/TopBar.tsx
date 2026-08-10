@@ -7,6 +7,8 @@ import {
   User as UserIcon,
   LogOut,
   Upload,
+  Phone,
+  Mail,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
@@ -130,7 +132,25 @@ export function TopBar() {
 
         <MobilePerksSlider />
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <a
+            href="tel:+27710939964"
+            className="hidden xl:flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
+            title="Call Us"
+          >
+            <Phone className="h-3.5 w-3.5 text-primary" />
+            <span>+27 71 093 9964</span>
+          </a>
+
+          <a
+            href="mailto:sales@geosynthetics.co.za"
+            className="hidden xl:flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
+            title="Email Sales"
+          >
+            <Mail className="h-3.5 w-3.5 text-primary" />
+            <span>sales@geosynthetics.co.za</span>
+          </a>
+
           <button
             onClick={() => open()}
             className="hidden lg:flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-primary-foreground px-2 py-1 rounded transition whitespace-nowrap font-medium cursor-pointer border-0"
