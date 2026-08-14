@@ -877,8 +877,8 @@ export function ProjectDetailPage() {
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {project.service_type === "supply_only"
-                      ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
-                      : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
+                      ? "The following certified products were supplied and delivered directly to SADC laydown."
+                      : "The following certified products were supplied and deployed by GSA crews on site."}
                   </p>
 
                   <div className="grid sm:grid-cols-2 gap-4">

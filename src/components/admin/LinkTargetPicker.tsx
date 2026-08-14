@@ -32,6 +32,7 @@ const STATIC_PAGES = [
   { label: "Quality Assurance", to: "/quality-assurance", params: undefined },
   { label: "Catalogue", to: "/catalogue", params: undefined },
   { label: "Resources", to: "/resources", params: undefined },
+  { label: "Blog", to: "/blog", params: undefined },
   { label: "Contacts", to: "/contacts", params: undefined },
   { label: "About", to: "/about", params: undefined },
 ] as const;

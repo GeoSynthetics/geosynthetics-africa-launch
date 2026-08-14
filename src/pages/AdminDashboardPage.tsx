@@ -141,7 +141,7 @@ const TILES = [
   {
     icon: BookOpen,
     label: "Blog Posts",
-    desc: "Publish industry articles & company news.",
+    desc: "Publish industry articles & blog posts.",
     to: "/admin/blog" as const,
     table: "blog_posts",
     badge: "Content",

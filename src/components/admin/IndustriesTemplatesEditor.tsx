@@ -898,9 +898,9 @@ export function IndustriesTemplatesEditor() {
                   {/* ── PRODUCTS ── */}
                   <TabsContent value="products" className="p-6 space-y-6 m-0">
                     <div>
-                      <SectionHeading>Mega Menu Top Selling Products (Max 5)</SectionHeading>
+                      <SectionHeading>Mega Menu Most Specified Products (Max 5)</SectionHeading>
                       <p className="text-xs text-muted-foreground mb-4">
-                        Select up to 5 top-selling products for this industry to show as a slider in
+                        Select up to 5 most-specified products for this industry to show as a slider in
                         the mega menu dropdown.
                       </p>
 
@@ -934,7 +934,7 @@ export function IndustriesTemplatesEditor() {
                           active.topSellingProductIds.length === 0) &&
                           !active.topSellingProductId && (
                             <p className="text-xs text-muted-foreground italic">
-                              No top selling products selected.
+                              No most specified products selected.
                             </p>
                           )}
 

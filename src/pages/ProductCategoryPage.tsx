@@ -27,6 +27,22 @@ import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { GeoGrid } from "@/components/site/shapes";
 
+const LEGACY_SLUG_MAP: Record<string, string> = {
+  mining: "mining-systems",
+  waste: "waste-landfills",
+  water: "water-containment",
+  power: "roads-infrastructure",
+};
+
+function resolveApplicationSlug(rawSlug?: string): { isDirectPath: boolean; pathOrSlug: string } {
+  if (!rawSlug) return { isDirectPath: false, pathOrSlug: "applications" };
+  if (rawSlug.startsWith("/")) {
+    return { isDirectPath: true, pathOrSlug: rawSlug };
+  }
+  const mapped = LEGACY_SLUG_MAP[rawSlug] || rawSlug;
+  return { isDirectPath: false, pathOrSlug: mapped };
+}
+
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
   const { open } = useQuickQuote();
@@ -127,33 +143,49 @@ export function ProductCategoryPage() {
             </div>
 
             {/* Applications */}
-            <div>
-              <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> Common Applications and Engineering Use
-                Cases
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {content.applications.map((app, i) => (
-                  <div
-                    key={i}
-                    className="border border-border p-5 rounded hover:border-primary/50 transition bg-surface"
-                  >
-                    <h3 className="font-bold text-sm uppercase tracking-wide mb-2">{app.label}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                      {app.description ||
-                        `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
-                    </p>
-                    <Link
-                      to="/$slug"
-                      params={{ slug: app.slug }}
-                      className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
-                    >
-                      Read More <ChevronRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                ))}
+            {content.applications && content.applications.length > 0 && (
+              <div>
+                <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
+                  <span className="text-primary">|</span> Common Applications and Engineering Use
+                  Cases
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {content.applications.map((app, i) => {
+                    const { isDirectPath, pathOrSlug } = resolveApplicationSlug(app.slug);
+                    return (
+                      <div
+                        key={i}
+                        className="border border-border p-5 rounded hover:border-primary/50 transition bg-surface"
+                      >
+                        <h3 className="font-bold text-sm uppercase tracking-wide mb-2">
+                          {app.label}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {app.description ||
+                            `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
+                        </p>
+                        {isDirectPath ? (
+                          <Link
+                            to={pathOrSlug}
+                            className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
+                          >
+                            Read More <ChevronRight className="h-3 w-3" />
+                          </Link>
+                        ) : (
+                          <Link
+                            to="/$slug"
+                            params={{ slug: pathOrSlug }}
+                            className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
+                          >
+                            Read More <ChevronRight className="h-3 w-3" />
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Properties Table */}
             {content.propertiesTable && (

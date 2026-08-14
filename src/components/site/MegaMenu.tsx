@@ -122,7 +122,7 @@ export function TopSellingProductsSlider({
     return (
       <div className="flex flex-col items-center justify-center h-[180px] max-w-[250px] rounded-xl border border-dashed border-border bg-muted/20 text-center p-4">
         <Package className="h-8 w-8 text-muted-foreground/30 mb-2" />
-        <p className="text-xs text-muted-foreground">No top selling products selected</p>
+        <p className="text-xs text-muted-foreground">No most specified products selected</p>
       </div>
     );
   }
@@ -180,7 +180,7 @@ export function TopSellingProductsSlider({
 
               <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
                 <div className="absolute top-3 left-3 bg-primary text-white font-display text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm z-10">
-                  Best Seller
+                  Most Specified
                 </div>
 
                 <div className="space-y-0.5 transform translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
@@ -325,10 +325,10 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
           )}
         </div>
 
-        {/* Secondary list or Top Selling Product */}
+        {/* Secondary list or Most Specified Product */}
         <div className="col-span-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {isServiceOrAppOrIndustry ? "Top Selling Products" : displayData.secondaryTitle}
+            {isServiceOrAppOrIndustry ? "Most Specified" : displayData.secondaryTitle}
           </h4>
           {isServiceOrAppOrIndustry ? (
             <TopSellingProductsSlider

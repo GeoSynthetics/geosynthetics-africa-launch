@@ -270,6 +270,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
               if (label === "Quality Assurance") return "nav.qualityAssurance";
               if (label === "Catalogue") return "nav.catalogue";
               if (label === "Resources") return "nav.resources";
+              if (label === "Blog") return "nav.blog";
               if (label === "Contacts") return "nav.contacts";
               return label;
             };
@@ -405,6 +406,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                 if (label === "Quality Assurance") return "nav.qualityAssurance";
                 if (label === "Catalogue") return "nav.catalogue";
                 if (label === "Resources") return "nav.resources";
+                if (label === "Blog") return "nav.blog";
                 if (label === "Contacts") return "nav.contacts";
                 return label;
               };

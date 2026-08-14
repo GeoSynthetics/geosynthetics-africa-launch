@@ -44,6 +44,7 @@ import { QATemplatesEditor } from "@/components/admin/QATemplatesEditor";
 import { ApplicationsTemplatesEditor } from "@/components/admin/ApplicationsTemplatesEditor";
 import { ServicesTemplatesEditor } from "@/components/admin/ServicesTemplatesEditor";
 import { IndustriesTemplatesEditor } from "@/components/admin/IndustriesTemplatesEditor";
+import { CountriesTemplatesEditor } from "@/components/admin/CountriesTemplatesEditor";
 import {
   SectionHeading,
   FieldLabel,
@@ -66,7 +67,7 @@ const SUPABASE_KEY = "template_product_categories";
 
 export function PageTemplatesAdminPage() {
   const [editorType, setEditorType] = useState<
-    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries"
+    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries" | "countries"
   >("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
@@ -638,6 +639,17 @@ export function PageTemplatesAdminPage() {
         >
           Industry Templates
         </button>
+        <button
+          onClick={() => setEditorType("countries")}
+          className={cn(
+            "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
+            editorType === "countries"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground",
+          )}
+        >
+          Country Templates
+        </button>
       </div>
 
       {editorType === "projects" ? (
@@ -650,6 +662,8 @@ export function PageTemplatesAdminPage() {
         <ServicesTemplatesEditor />
       ) : editorType === "industries" ? (
         <IndustriesTemplatesEditor />
+      ) : editorType === "countries" ? (
+        <CountriesTemplatesEditor />
       ) : (
         <>
           {/* ── Header ── */}

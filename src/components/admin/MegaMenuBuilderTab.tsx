@@ -754,14 +754,14 @@ export function MegaMenuBuilderTab({
                       </div>
                     </div>
                   ) : (
-                    // Applications, Services, Industries - Top Selling Slider
+                    // Applications, Services, Industries - Most Specified Slider
                     <div className="space-y-4">
                       <div>
                         <h4 className="text-xs font-bold uppercase tracking-wide text-foreground">
-                          Top Selling Products Slider (Max 5)
+                          Most Specified Products Slider (Max 5)
                         </h4>
                         <p className="text-[10px] text-muted-foreground">
-                          Select products to display as sliding catalog best-sellers for this
+                          Select products to display as sliding catalog most-specified products for this
                           category
                         </p>
                       </div>
@@ -802,7 +802,7 @@ export function MegaMenuBuilderTab({
                         {(!activeItem.megaFallback?.topSellingProductIds ||
                           activeItem.megaFallback?.topSellingProductIds.length === 0) && (
                           <p className="text-xs text-muted-foreground italic">
-                            No top selling products selected.
+                            No most specified products selected.
                           </p>
                         )}
                       </div>

@@ -203,24 +203,24 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
     ],
     applications: [
       {
-        label: "Mining Facilities",
-        slug: "mining",
-        description: "Heap leach pads, tailings storage, and process ponds.",
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Heap leach pads, tailings storage, and process containment.",
       },
       {
-        label: "Waste Management",
-        slug: "waste",
+        label: "Waste Landfills",
+        slug: "waste-landfills",
         description: "Landfill basal liners and capping systems.",
       },
       {
         label: "Water Containment",
-        slug: "water",
+        slug: "water-containment",
         description: "Potable water reservoirs and irrigation dams.",
       },
       {
-        label: "Power Generation",
-        slug: "power",
-        description: "Ash ponds and cooling water reservoirs.",
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Subgrade reinforcement and structural retaining walls.",
       },
     ],
     industries: INDUSTRIES.slice(0, 5),
@@ -269,7 +269,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Flexible landfill caps accommodating uneven subgrade settlement.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Pond and canal linings over soft, settling ground conditions.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Secondary containment and brine evaporation ponds.",
+      },
+      {
+        label: "Agriculture & Aquaculture",
+        slug: "agriculture-aquaculture",
+        description: "Fish farming ponds, farm dams, and agricultural wastewater lagoons.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -317,7 +338,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Tunnel envelopes, foundation waterproofing, and underground structures.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Decorative ponds, irrigation canals, and water features.",
+      },
+      {
+        label: "Agriculture & Aquaculture",
+        slug: "agriculture-aquaculture",
+        description: "Non-toxic fish-safe liners for aquaculture raceways and storage.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Puncture-resistant temporary capping and containment barriers.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -365,7 +407,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Drinking water reservoirs, irrigation dams, and artificial lakes.",
+      },
+      {
+        label: "Agriculture & Aquaculture",
+        slug: "agriculture-aquaculture",
+        description: "Fish farming ponds, farm water storage, and agricultural lagoons.",
+      },
+      {
+        label: "Erosion Control",
+        slug: "erosion-control",
+        description: "Channel linings and high-flexibility spillway protection.",
+      },
+      {
+        label: "Drainage Systems",
+        slug: "drainage-systems",
+        description: "Waterproofing and barrier protection for drainage structures.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -413,7 +476,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Potable water storage and zero-leaching floating covers.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Brine ponds, chemical process tanks, and heap leach pads.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Long-term durable landfill capping and containment.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Structural foundation barriers and environmental wall protection.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -461,7 +545,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Steep heap leach pads and high-slope tailings storage facilities.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Steep side-slope landfill basal liners and capping embankments.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "High-friction lining for steep reservoir slope embankments.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Slope stabilization and mechanically reinforced earth lining.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -509,7 +614,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "High-temperature process brine ponds and chemical heap leaching.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Spark-testable conductive liners for post-installation leak detection.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "White UV-reflective liners to minimize thermal expansion in hot climates.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Custom chemical-resistant alloy containment for hazardous facilities.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 
@@ -557,7 +683,28 @@ export const SEED_CATEGORIES: Record<string, ProductPageContent> = {
         image: DEFAULT_IMAGES["geomembranes"],
       },
     ],
-    applications: APPLICATION_CATEGORIES.slice(0, 5),
+    applications: [
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Evaporation control and algae prevention for drinking water reservoirs.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Odour control and leachate pond gas mitigation covers.",
+      },
+      {
+        label: "Agriculture & Aquaculture",
+        slug: "agriculture-aquaculture",
+        description: "Biogas collection floating covers for agricultural anaerobic digesters.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Chemical evaporation suppression covers for mining process ponds.",
+      },
+    ],
     industries: INDUSTRIES.slice(0, 5),
   },
 };
@@ -794,6 +941,188 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
         name: "Fixing J-Pins & Pegs",
         description:
           "Heavy-duty steel anchors to secure geotextiles and erosion control blankets to the subgrade.",
+      },
+    ],
+  };
+
+  const defaultApplications: Record<
+    string,
+    { label: string; slug: string; description: string }[]
+  > = {
+    geomembranes: [
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Tailings storage, heap leach pads, and process containment.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Drinking water reservoirs, canals, and agricultural dams.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Secure landfill base linings and top caps.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Subgrade reinforcement and structural retaining walls.",
+      },
+    ],
+    geotextiles: [
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Subgrade separation, road base stabilization, and asphalt reinforcement.",
+      },
+      {
+        label: "Drainage Systems",
+        slug: "drainage-systems",
+        description: "Subsoil filtration, trench drains, and retaining wall protection.",
+      },
+      {
+        label: "Erosion Control",
+        slug: "erosion-control",
+        description: "Coastal shoreline revetment and geotextile sand containers.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Cushion protection layers over geomembrane liners.",
+      },
+    ],
+    geogrids: [
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Unpaved and paved road base stabilization, reducing aggregate depth requirements.",
+      },
+      {
+        label: "Erosion Control",
+        slug: "erosion-control",
+        description: "Mechanically stabilized earth (MSE) retaining walls and steep slopes.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Heavy haul road stabilization and tailings capping platforms.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Basal reinforcement over soft subgrades and landfill cap stability.",
+      },
+    ],
+    geocells: [
+      {
+        label: "Erosion Control",
+        slug: "erosion-control",
+        description: "Three-dimensional slope protection, vegetative channel linings, and bank stabilization.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Heavy load support over soft subgrades, unpaved access roads, and rail beds.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Concrete-filled geocell linings for water canals and spillways.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Mine haul road stabilization and retaining wall construction.",
+      },
+    ],
+    gcls: [
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Composite basal liners and final environmental capping seals.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Self-healing secondary hydraulic barriers for heap leach pads.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Canal linings, retention ponds, and dam waterproofing.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Environmental containment beneath transportation corridors and fuel depots.",
+      },
+    ],
+    "drainage-composites": [
+      {
+        label: "Drainage Systems",
+        slug: "drainage-systems",
+        description: "High-flow subsurface drainage behind retaining walls and basement structures.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Landfill gas venting, leachate collection, and cap drainage layers.",
+      },
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Heap leach pad underdrainage and tailings dewatering.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Highway edge drains, bridge abutments, and tunnel water relief.",
+      },
+    ],
+    "erosion-control": [
+      {
+        label: "Erosion Control",
+        slug: "erosion-control",
+        description: "Immediate slope stabilization, hydroseeding protection, and run-off prevention.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Roadside cut/fill slope stabilization and stormwater runoff channels.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Channel bank protection and spillway vegetation reinforcement.",
+      },
+      {
+        label: "Agriculture & Aquaculture",
+        slug: "agriculture-aquaculture",
+        description: "Soil conservation, agricultural watershed management, and dam protection.",
+      },
+    ],
+    accessories: [
+      {
+        label: "Mining Systems",
+        slug: "mining-systems",
+        description: "Panel extrusion welding and pipe penetration boots for mine containment.",
+      },
+      {
+        label: "Water Containment",
+        slug: "water-containment",
+        description: "Waterstop pastes and anchor trench fixing pins for dam and pond liners.",
+      },
+      {
+        label: "Waste Landfills",
+        slug: "waste-landfills",
+        description: "Quality assurance seam testing tools and high-purity extrusion welding rod.",
+      },
+      {
+        label: "Roads & Infrastructure",
+        slug: "roads-infrastructure",
+        description: "Joint seaming tapes and structural geotextile anchoring accessories.",
       },
     ],
   };
@@ -1109,7 +1438,7 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       },
     ],
     popularProducts: defaultPopular[slug] || [],
-    applications: [
+    applications: defaultApplications[slug] || [
       {
         label: "Mining Systems",
         slug: "mining-systems",

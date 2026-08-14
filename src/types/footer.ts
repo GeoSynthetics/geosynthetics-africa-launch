@@ -15,7 +15,7 @@ export interface FooterLink {
 export interface FooterColumn {
   id: string;
   title: string;
-  type: "custom" | "products" | "applications" | "services" | "industries";
+  type: "custom" | "products" | "applications" | "services" | "industries" | "countries";
   links?: FooterLink[];
 }
 
@@ -78,6 +78,24 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
       type: "services",
     },
     {
+      id: "col-countries",
+      title: "Pan-African Coverage & Regional Pages",
+      type: "countries",
+      links: [
+        { label: "Geosynthetics South Africa →", to: "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
+        { label: "Geosynthetics Botswana →", to: "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
+        { label: "Geosynthetics Tanzania →", to: "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
+        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
+        { label: "Geosynthetics Zambia →", to: "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
+        { label: "Geosynthetics Democratic Republic of Congo (DRC) →", to: "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier" },
+        { label: "Geosynthetics Kenya →", to: "/kenya-geosynthetics-supplier-contact" },
+        { label: "Geosynthetics Côte d'Ivoire →", to: "/cote-divoire-geosynthetics-supplier-contact" },
+        { label: "Geosynthetics Mozambique →", to: "/mozambique-geosynthetics-supplier-contact" },
+        { label: "Geosynthetics Ghana →", to: "/ghana-geosynthetics-supplier-contact" },
+        { label: "Geosynthetics Namibia →", to: "/namibia-geosynthetics-supplier-contact" },
+      ],
+    },
+    {
       id: "col-resources",
       title: "Resources",
       type: "custom",
@@ -97,7 +115,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
       links: [
         { label: "About Us", to: "/about" },
         { label: "Careers", to: "/" },
-        { label: "News", to: "/resources" },
+        { label: "Blog", to: "/blog" },
         { label: "Sustainability", to: "/" },
         { label: "Privacy Policy", to: "/" },
         { label: "Terms & Conditions", to: "/" },

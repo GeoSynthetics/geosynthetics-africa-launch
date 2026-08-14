@@ -137,23 +137,27 @@ export function Footer() {
     let items: { label: string; to: string; params?: Record<string, string> }[] = [];
     if (col.type === "custom") {
       items = (col.links || []).map((link) => {
-        let key = `footer.${link.label.toLowerCase()}`;
-        if (link.label === "About Us") key = "footer.aboutUs";
-        if (link.label === "Careers") key = "footer.careers";
-        if (link.label === "News") key = "footer.news";
-        if (link.label === "Sustainability") key = "footer.sustainability";
-        if (link.label === "Privacy Policy") key = "footer.privacyPolicy";
-        if (link.label === "Terms & Conditions") key = "footer.termsConditions";
-        if (link.label === "Datasheets") key = "footer.datasheets";
-        if (link.label === "Installation Guides") key = "footer.installationGuides";
-        if (link.label === "QA Checklists") key = "footer.qaChecklists";
-        if (link.label === "Technical Articles") key = "footer.technicalArticles";
-        if (link.label === "Videos") key = "footer.videos";
-        if (link.label === "FAQs") key = "footer.faqs";
+        const isNews = link.label === "News";
+        const itemLabel = isNews ? "Blog" : link.label;
+        const itemTo = isNews ? "/blog" : link.to;
+
+        let key = `footer.${itemLabel.toLowerCase()}`;
+        if (itemLabel === "About Us") key = "footer.aboutUs";
+        if (itemLabel === "Careers") key = "footer.careers";
+        if (itemLabel === "News" || itemLabel === "Blog") key = "footer.blog";
+        if (itemLabel === "Sustainability") key = "footer.sustainability";
+        if (itemLabel === "Privacy Policy") key = "footer.privacyPolicy";
+        if (itemLabel === "Terms & Conditions") key = "footer.termsConditions";
+        if (itemLabel === "Datasheets") key = "footer.datasheets";
+        if (itemLabel === "Installation Guides") key = "footer.installationGuides";
+        if (itemLabel === "QA Checklists") key = "footer.qaChecklists";
+        if (itemLabel === "Technical Articles") key = "footer.technicalArticles";
+        if (itemLabel === "Videos") key = "footer.videos";
+        if (itemLabel === "FAQs") key = "footer.faqs";
 
         return {
-          label: t(key, link.label),
-          to: resolve(link.to),
+          label: t(key, itemLabel),
+          to: resolve(itemTo),
           params: link.params,
         };
       });
@@ -165,6 +169,12 @@ export function Footer() {
       items = services;
     } else if (col.type === "industries") {
       items = industries;
+    } else if (col.type === "countries") {
+      items = (col.links || []).map((link) => ({
+        label: link.label,
+        to: resolve(link.to),
+        params: link.params,
+      }));
     }
     return {
       title: col.title,

@@ -8,6 +8,7 @@
     "qualityAssurance": "Assurance Qualité",
     "catalogue": "Catalogue",
     "resources": "Ressources",
+    "blog": "Blog",
     "contacts": "Contacts",
     "uploadBoq": "Soumettre le DQE du projet",
     "partnerPortal": "Espace Partenaires",
@@ -24,6 +25,7 @@
   "footer": {
     "resources": "Ressources",
     "company": "Entreprise",
+    "blog": "Blog",
     "newsletterTitle": "Inscrivez-vous à notre newsletter",
     "newsletterDesc": "Recevez les dernières mises à jour, études de cas et articles techniques.",
     "newsletterPlaceholder": "Entrez votre adresse e-mail",

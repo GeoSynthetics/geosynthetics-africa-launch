@@ -1364,8 +1364,8 @@ export function ServicesTemplatesEditor() {
                         </div>
 
                         <div className="border-t border-border pt-6 space-y-3">
-                          <FieldLabel hint="Select up to 5 top-selling products for this service to display as a slider in the mega menu">
-                            Top Selling Products (Max 5)
+                          <FieldLabel hint="Select up to 5 most-specified products for this service to display as a slider in the mega menu">
+                            Most Specified Products (Max 5)
                           </FieldLabel>
 
                           <div className="space-y-2 max-w-md">
@@ -1400,7 +1400,7 @@ export function ServicesTemplatesEditor() {
                               active.topSellingProductIds.length === 0) &&
                               !active.topSellingProductId && (
                                 <p className="text-xs text-muted-foreground italic">
-                                  No top selling products selected.
+                                  No most specified products selected.
                                 </p>
                               )}
 
