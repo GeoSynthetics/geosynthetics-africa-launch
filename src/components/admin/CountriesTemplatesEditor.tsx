@@ -154,11 +154,17 @@ export function CountriesTemplatesEditor() {
       heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
       supplyTitle: `Material Supply & Freight Logistics to ${newCountryName}`,
       supplyDescription: `Direct containerized and road freight logistics serving mining and infrastructure in ${newCountryName}.`,
+      supplyImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+      supplyCardTitle: "Container Direct & Local Warehouse Inventory",
+      supplyCardDescription: "Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports.",
       supplyHighlights: [
         { title: "Direct Logistics", description: "Containerized shipping and road freight delivery." },
       ],
       installationTitle: "Certified Installation & Field Welding Services",
       installationDescription: "IAGI-certified field crews operating dual-track wedge welders.",
+      installationImage: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80",
+      installationCardTitle: "Dual-Track Wedge & Extrusion Welding Rigs",
+      installationCardDescription: "Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing.",
       installationHighlights: [
         { title: "Master Seamers", description: "Trained field welding technicians." },
       ],
@@ -524,6 +530,35 @@ export function CountriesTemplatesEditor() {
                       placeholder="e.g. SAD500 clearance, SADC Certificate of Origin"
                     />
                   </div>
+
+                  <div className="pt-2 border-t border-border space-y-4">
+                    <SectionHeading>Supply & Logistics Showcase Card</SectionHeading>
+                    <div>
+                      <FieldLabel>Showcase Image</FieldLabel>
+                      <ImagePicker
+                        value={currentItem.supplyImage || ""}
+                        onChange={(url) => updateCurrentField("supplyImage", url)}
+                        placeholder="Image URL..."
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Showcase Card Title</FieldLabel>
+                      <Input
+                        value={currentItem.supplyCardTitle || ""}
+                        onChange={(e) => updateCurrentField("supplyCardTitle", e.target.value)}
+                        placeholder="Container Direct & Local Warehouse Inventory"
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Showcase Card Description</FieldLabel>
+                      <Textarea
+                        rows={2}
+                        value={currentItem.supplyCardDescription || ""}
+                        onChange={(e) => updateCurrentField("supplyCardDescription", e.target.value)}
+                        placeholder="Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports."
+                      />
+                    </div>
+                  </div>
                 </TabsContent>
 
                 {/* TAB 3: FIELD INSTALLATION */}
@@ -559,6 +594,35 @@ export function CountriesTemplatesEditor() {
                         value={currentItem.equipmentMobilization || ""}
                         onChange={(e) => updateCurrentField("equipmentMobilization", e.target.value)}
                         placeholder="e.g. 24-48 Hours Nationwide"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-border space-y-4">
+                    <SectionHeading>Field Installation Showcase Card</SectionHeading>
+                    <div>
+                      <FieldLabel>Showcase Image</FieldLabel>
+                      <ImagePicker
+                        value={currentItem.installationImage || ""}
+                        onChange={(url) => updateCurrentField("installationImage", url)}
+                        placeholder="Image URL..."
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Showcase Card Title</FieldLabel>
+                      <Input
+                        value={currentItem.installationCardTitle || ""}
+                        onChange={(e) => updateCurrentField("installationCardTitle", e.target.value)}
+                        placeholder="Dual-Track Wedge & Extrusion Welding Rigs"
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Showcase Card Description</FieldLabel>
+                      <Textarea
+                        rows={2}
+                        value={currentItem.installationCardDescription || ""}
+                        onChange={(e) => updateCurrentField("installationCardDescription", e.target.value)}
+                        placeholder="Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing."
                       />
                     </div>
                   </div>

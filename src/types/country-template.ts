@@ -43,6 +43,9 @@ export interface CountryTemplate {
   transitTime?: string;
   logisticsRoutes?: string;
   customsInfo?: string;
+  supplyImage?: string;
+  supplyCardTitle?: string;
+  supplyCardDescription?: string;
 
   // ── Field Installation & Welding ──
   installationTitle?: string;
@@ -50,6 +53,9 @@ export interface CountryTemplate {
   installationHighlights?: BulletHighlight[];
   masterSeamersCount?: string;
   equipmentMobilization?: string;
+  installationImage?: string;
+  installationCardTitle?: string;
+  installationCardDescription?: string;
 
   // ── QA/QC Testing & Standards ──
   qaqcTitle?: string;

@@ -230,16 +230,20 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
-                alt="Logistics and Freight Delivery"
+                src={
+                  template.supplyImage ||
+                  "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
+                }
+                alt={template.supplyCardTitle || "Logistics and Freight Delivery"}
                 className="w-full h-72 object-cover"
               />
               <div className="p-6 bg-card space-y-3">
                 <h3 className="font-bold text-foreground text-lg">
-                  Container Direct & Local Warehouse Inventory
+                  {template.supplyCardTitle || "Container Direct & Local Warehouse Inventory"}
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports.
+                  {template.supplyCardDescription ||
+                    "Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports."}
                 </p>
               </div>
             </div>
@@ -251,16 +255,20 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80"
-                alt="Geomembrane Field Welding"
+                src={
+                  template.installationImage ||
+                  "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80"
+                }
+                alt={template.installationCardTitle || "Geomembrane Field Welding"}
                 className="w-full h-72 object-cover"
               />
               <div className="p-6 bg-card space-y-3">
                 <h3 className="font-bold text-foreground text-lg">
-                  Dual-Track Wedge & Extrusion Welding Rigs
+                  {template.installationCardTitle || "Dual-Track Wedge & Extrusion Welding Rigs"}
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing.
+                  {template.installationCardDescription ||
+                    "Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing."}
                 </p>
               </div>
             </div>
