@@ -13,6 +13,7 @@ import {
 import { splitIntoParagraphs, cn } from "@/lib/utils";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 import { mockProductFamilyData as mockData } from "@/mocks/productFamilyMocks";
 function mapFamilyData(
@@ -212,6 +213,14 @@ export function ProductFamilyPage() {
 
   return (
     <div className="bg-background relative">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Products", url: "https://geosynthetics.co.za/products" },
+          { name: dynamicCategoryName, url: `https://geosynthetics.co.za/products/${category}` },
+          { name: data.title || dynamicFamilyName, url: `https://geosynthetics.co.za/products/${category}/${family}` },
+        ]}
+      />
       {/* Hero Section */}
       <section
         className="bg-surface-dark text-white relative"

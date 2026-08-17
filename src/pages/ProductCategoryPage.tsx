@@ -25,6 +25,7 @@ import {
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { GeoGrid } from "@/components/site/shapes";
 
 const LEGACY_SLUG_MAP: Record<string, string> = {
@@ -51,6 +52,13 @@ export function ProductCategoryPage() {
 
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Products", url: "https://geosynthetics.co.za/products" },
+          { name: content.label, url: `https://geosynthetics.co.za/products/${category}` },
+        ]}
+      />
       <section
         className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
         style={{

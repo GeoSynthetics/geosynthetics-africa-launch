@@ -156,6 +156,32 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Silently skip if Supabase is unreachable — static routes are still included
         }
 
+        /* ── 5b. Published blog posts from Supabase ──────────── */
+        try {
+          const { data: blogPosts } = await supabase
+            .from("blog_posts")
+            .select("slug, published_at")
+            .eq("status", "published")
+            .order("published_at", { ascending: false });
+
+          if (blogPosts) {
+            for (const post of blogPosts) {
+              const lastmod = post.published_at
+                ? new Date(post.published_at).toISOString().split("T")[0]
+                : now;
+              urls.push(
+                urlEntry(`${baseUrl}/blog/${post.slug}`, {
+                  lastmod,
+                  changefreq: "monthly",
+                  priority: 0.6,
+                }),
+              );
+            }
+          }
+        } catch {
+          // Silently skip if Supabase is unreachable
+        }
+
         /* ── 6. Custom SEO slug pages ─────────────────────────── */
         try {
           const { data: seoConfig } = await supabase

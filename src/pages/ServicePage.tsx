@@ -5,6 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { GeoGrid, HexCell, FiberStrand } from "@/components/site/shapes";
 
 // Interface Definitions for Type Safety
@@ -200,6 +201,13 @@ export function ServicePage({ data }: { data: any }) {
 
   return (
     <div className="bg-background">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Services", url: "https://geosynthetics.co.za/services" },
+          { name: title, url: `https://geosynthetics.co.za/services/${service.slug}` },
+        ]}
+      />
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}
       <section
         className="relative isolate overflow-hidden bg-surface-dark text-white"

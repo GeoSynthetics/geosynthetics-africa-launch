@@ -55,6 +55,7 @@ import {
 } from "@/types/contacts";
 import * as LucideIcons from "lucide-react";
 import { DrainageMesh, FiberStrand } from "@/components/site/shapes";
+import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
 
 const getIconComponent = (
   name: string | undefined,
@@ -279,6 +280,7 @@ export function ContactsPage() {
 
   return (
     <>
+      <LocalBusinessSchema />
       <ContactsHero hero={hero} headOffice={headOffice} />
       <OfficeDetailsAndServices headOffice={headOffice} officeServices={officeServices} />
       <MapAndCoverage

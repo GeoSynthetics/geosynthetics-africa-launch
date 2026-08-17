@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { getBlogPostAuthorName } from "@/types/blog";
+import { BlogPostingSchema } from "@/components/seo/BlogPostingSchema";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { Route } from "@/routes/blog.$slug";
 import {
   Calendar,
@@ -59,6 +61,22 @@ export function BlogPostPage() {
 
   return (
     <div className="w-full bg-background min-h-screen">
+      <BlogPostingSchema
+        title={post.title}
+        description={post.meta_description || post.excerpt || ""}
+        slug={post.slug}
+        coverImage={post.cover_image}
+        publishedAt={post.published_at}
+        updatedAt={post.updated_at}
+        authorName={getBlogPostAuthorName(post.author)}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Blog", url: "https://geosynthetics.co.za/blog" },
+          { name: post.title, url: `https://geosynthetics.co.za/blog/${post.slug}` },
+        ]}
+      />
       {/* Article Header Hero */}
       <section className="relative isolate bg-surface-dark text-white py-14 md:py-20 overflow-hidden">
         {/* Abstract shapes */}
@@ -91,7 +109,7 @@ export function BlogPostPage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4 text-primary" />
-                {formatDate(post.published_at)}
+                <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
               </span>
               {post.read_time && (
                 <span className="flex items-center gap-1.5">
