@@ -152,9 +152,7 @@ export function ProjectDetailPage() {
         <section className="relative bg-gradient-to-br from-[#1C1917] via-[#2F1B0F] to-[#121111] text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]">
           {/* Stylized Africa silhouette */}
           <div className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[340px] h-[340px] opacity-15 pointer-events-none text-primary">
-            <svg viewBox="0 0 320 380" fill="currentColor" className="w-full h-full">
-              <path d="M145 15c-25 5-50 20-65 40-20 25-30 55-25 85 5 20 20 40 35 50 10 10 15 20 10 35-5 15-10 35 0 50 10 15 30 20 50 25 15 5 25 10 30 25 5 15 15 20 30 20 15 0 25-10 30-25 5-25 0-50-10-70-10-25-20-50-15-75 5-25 20-45 15-75-5-30-30-55-60-65-15-5-30-5-25-20z" />
-            </svg>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#ffffff" d="M201.56 19.495l-87.79 9.131-73.745 94.814v52.676l56.186 61.805 64.615-13.344 49.164 9.832-10.535 37.926 33.711 61.103-16.855 42.842 39.79 116.225 53.62-8.768 49.164-55.484 4.213-38.629 31.605-23.879-6.322-69.531 83.594-106.994-51.989 7.263-79.363-138.359-125.016-8.428-14.046-30.2zm252.346 319.8l-14.402 20.86-13.408.496c-11.849 24.321-12.598 38.019-13.907 66.547l17.383 4.471 21.852-52.147 2.482-40.226z"></path></g></svg>
           </div>
 
           <div className="container-page relative z-10">
@@ -185,7 +183,7 @@ export function ProjectDetailPage() {
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.98] tracking-tight max-w-4xl text-white mb-6">
               {project.scale || "340 t"} liner,{" "}
               <span className="text-primary">
-                {project.logistics_details?.route || "3,420 km"} route, 4 borders
+                {project.logistics_details?.route || "3,420 km"}
               </span>{" "}
               — delivered on time.
             </h1>
