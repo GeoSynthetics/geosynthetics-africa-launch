@@ -67,7 +67,13 @@ const SUPABASE_KEY = "template_product_categories";
 
 export function PageTemplatesAdminPage() {
   const [editorType, setEditorType] = useState<
-    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries" | "countries"
+    | "products"
+    | "projects"
+    | "quality-assurance"
+    | "applications"
+    | "services"
+    | "industries"
+    | "countries"
   >("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");

@@ -115,5 +115,3 @@ if ((globalThis as any).window) {
     (globalThis as any).getComputedStyle = getComputedStyleMock;
   }
 }
-
-

@@ -7,8 +7,7 @@ import type { HierarchySection, HierarchyItem, HierarchyChild } from "@/types/hi
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 
 type SelectedNode =
-  | { type: "item"; itemIdx: number }
-  | { type: "child"; itemIdx: number; childIdx: number };
+  { type: "item"; itemIdx: number } | { type: "child"; itemIdx: number; childIdx: number };
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 

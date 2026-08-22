@@ -46,7 +46,12 @@ export function ScrollableTabsHeader({ children, className }: ScrollableTabsHead
   };
 
   return (
-    <div className={cn("relative flex items-center w-full border-b border-border bg-surface/10 shrink-0", className)}>
+    <div
+      className={cn(
+        "relative flex items-center w-full border-b border-border bg-surface/10 shrink-0",
+        className,
+      )}
+    >
       {canScrollLeft && (
         <button
           type="button"
@@ -59,10 +64,7 @@ export function ScrollableTabsHeader({ children, className }: ScrollableTabsHead
         </button>
       )}
 
-      <div
-        ref={scrollRef}
-        className="w-full overflow-x-auto no-scrollbar scroll-smooth px-6"
-      >
+      <div ref={scrollRef} className="w-full overflow-x-auto no-scrollbar scroll-smooth px-6">
         {children}
       </div>
 

@@ -900,8 +900,8 @@ export function IndustriesTemplatesEditor() {
                     <div>
                       <SectionHeading>Mega Menu Most Specified Products (Max 5)</SectionHeading>
                       <p className="text-xs text-muted-foreground mb-4">
-                        Select up to 5 most-specified products for this industry to show as a slider in
-                        the mega menu dropdown.
+                        Select up to 5 most-specified products for this industry to show as a slider
+                        in the mega menu dropdown.
                       </p>
 
                       <div className="space-y-2 max-w-md mb-4">

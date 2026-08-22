@@ -99,14 +99,16 @@ export async function loadCountryData(customSlug: string) {
         id: "hdpe-smooth",
         name: "GSE Smooth HDPE Geomembrane",
         slug: "gse-hdpe-liner-smooth-geomembrane",
-        short_description: "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
+        short_description:
+          "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
         image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
       },
       {
         id: "bidim-geotextile",
         name: "Bidim Non-Woven Geotextile",
         slug: "bidim-non-woven-continuous-filament-geotextile",
-        short_description: "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
+        short_description:
+          "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
         image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
       },
     ];

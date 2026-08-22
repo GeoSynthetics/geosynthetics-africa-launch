@@ -9,129 +9,59 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
-import { Route as ResourcesRouteImport } from './routes/resources'
-import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
-import { Route as ProjectsRouteImport } from './routes/projects'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndustriesRouteImport } from './routes/industries'
-import { Route as ContactsRouteImport } from './routes/contacts'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as ApplicationsRouteImport } from './routes/applications'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ServicesIndexRouteImport } from './routes/services.index'
-import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
-import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
-import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
-import { Route as ProductsIndexRouteImport } from './routes/products.index'
-import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
-import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
-import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
+import { Route as SlugRouteImport } from './routes/$slug'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
-import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
-import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
-import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
-import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
-import { Route as AdminUsersRouteImport } from './routes/admin.users'
-import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
-import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
-import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
-import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
-import { Route as AdminProductsRouteImport } from './routes/admin.products'
-import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
-import { Route as AdminPageTemplatesRouteImport } from './routes/admin.page-templates'
-import { Route as AdminMediaCenterRouteImport } from './routes/admin.media-center'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
-import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
+import { Route as AdminMediaCenterRouteImport } from './routes/admin.media-center'
+import { Route as AdminPageTemplatesRouteImport } from './routes/admin.page-templates'
+import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
+import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
+import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
+import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
+import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
+import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
+import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
+import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
+import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
+import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products.$category.index'
-import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 import { Route as ProductsCategoryFamilyRouteImport } from './routes/products.$category.$family'
+import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
+import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
 import { Route as ApiStorageBucketSplatRouteImport } from './routes/api.storage.$bucket.$'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
-  id: '/robots.txt',
-  path: '/robots.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResourcesRoute = ResourcesRouteImport.update({
-  id: '/resources',
-  path: '/resources',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QualityAssuranceRoute = QualityAssuranceRouteImport.update({
-  id: '/quality-assurance',
-  path: '/quality-assurance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsRoute = ProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndustriesRoute = IndustriesRouteImport.update({
-  id: '/industries',
-  path: '/industries',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactsRoute = ContactsRouteImport.update({
-  id: '/contacts',
-  path: '/contacts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApplicationsRoute = ApplicationsRouteImport.update({
-  id: '/applications',
-  path: '/applications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SlugRoute = SlugRouteImport.update({
@@ -139,139 +69,84 @@ const SlugRoute = SlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ServicesIndexRoute = ServicesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ServicesRoute,
-} as any)
-const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ResourcesRoute,
-} as any)
-const QualityAssuranceIndexRoute = QualityAssuranceIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => QualityAssuranceRoute,
-} as any)
-const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ProjectsRoute,
-} as any)
-const ProductsIndexRoute = ProductsIndexRouteImport.update({
-  id: '/products/',
-  path: '/products/',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => IndustriesRoute,
-} as any)
-const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
-  id: '/catalogue/',
-  path: '/catalogue/',
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => BlogRoute,
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ApplicationsRoute,
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRoute = IndustriesRouteImport.update({
+  id: '/industries',
+  path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QualityAssuranceRoute = QualityAssuranceRouteImport.update({
+  id: '/quality-assurance',
+  path: '/quality-assurance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const ServicesSlugRoute = ServicesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ServicesRoute,
-} as any)
-const QualityAssuranceSlugRoute = QualityAssuranceSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => QualityAssuranceRoute,
-} as any)
-const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProjectsRoute,
-} as any)
-const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => IndustriesRoute,
-} as any)
-const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
-  id: '/catalogue/$slug',
-  path: '/catalogue/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
-} as any)
-const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
-  id: '/$category',
-  path: '/$category',
-  getParentRoute: () => ApplicationsRoute,
-} as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTrackingRoute = AdminTrackingRouteImport.update({
-  id: '/tracking',
-  path: '/tracking',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSiteBuilderRoute = AdminSiteBuilderRouteImport.update({
-  id: '/site-builder',
-  path: '/site-builder',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminResourcesRoute = AdminResourcesRouteImport.update({
-  id: '/resources',
-  path: '/resources',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminQuotesRoute = AdminQuotesRouteImport.update({
-  id: '/quotes',
-  path: '/quotes',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminProductsRoute = AdminProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPagesSeoRoute = AdminPagesSeoRouteImport.update({
-  id: '/pages-seo',
-  path: '/pages-seo',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPageTemplatesRoute = AdminPageTemplatesRouteImport.update({
-  id: '/page-templates',
-  path: '/page-templates',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMediaCenterRoute = AdminMediaCenterRouteImport.update({
-  id: '/media-center',
-  path: '/media-center',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
@@ -279,25 +154,150 @@ const AdminBlogRoute = AdminBlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => AdminRoute,
 } as any)
-const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
-  id: '/$category/',
-  path: '/$category/',
+const AdminMediaCenterRoute = AdminMediaCenterRouteImport.update({
+  id: '/media-center',
+  path: '/media-center',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPageTemplatesRoute = AdminPageTemplatesRouteImport.update({
+  id: '/page-templates',
+  path: '/page-templates',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPagesSeoRoute = AdminPagesSeoRouteImport.update({
+  id: '/pages-seo',
+  path: '/pages-seo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQuotesRoute = AdminQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminResourcesRoute = AdminResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSiteBuilderRoute = AdminSiteBuilderRouteImport.update({
+  id: '/site-builder',
+  path: '/site-builder',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTrackingRoute = AdminTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ApplicationsRoute,
+} as any)
+const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => ApplicationsRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
+const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
+  id: '/catalogue/',
+  path: '/catalogue/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
+  id: '/catalogue/$slug',
+  path: '/catalogue/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => IndustriesRoute,
+} as any)
+const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => IndustriesRoute,
+} as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProjectsRoute,
+} as any)
+const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProjectsRoute,
+} as any)
+const QualityAssuranceIndexRoute = QualityAssuranceIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QualityAssuranceRoute,
+} as any)
+const QualityAssuranceSlugRoute = QualityAssuranceSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => QualityAssuranceRoute,
+} as any)
+const ResourcesIndexRoute = ResourcesIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => ResourcesRoute,
+} as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRoute,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRoute,
 } as any)
 const ProductsCategoryIndexRoute = ProductsCategoryIndexRouteImport.update({
   id: '/products/$category/',
   path: '/products/$category/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
-  id: '/$category/$slug',
-  path: '/$category/$slug',
-  getParentRoute: () => ResourcesRoute,
-} as any)
 const ProductsCategoryFamilyRoute = ProductsCategoryFamilyRouteImport.update({
   id: '/products/$category/$family',
   path: '/products/$category/$family',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
+  id: '/$category/',
+  path: '/$category/',
+  getParentRoute: () => ResourcesRoute,
+} as any)
+const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
+  id: '/$category/$slug',
+  path: '/$category/$slug',
+  getParentRoute: () => ResourcesRoute,
 } as any)
 const ApiStorageBucketSplatRoute = ApiStorageBucketSplatRouteImport.update({
   id: '/api/storage/$bucket/$',
@@ -627,109 +627,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/robots.txt': {
-      id: '/robots.txt'
-      path: '/robots.txt'
-      fullPath: '/robots.txt'
-      preLoaderRoute: typeof RobotsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/resources': {
-      id: '/resources'
-      path: '/resources'
-      fullPath: '/resources'
-      preLoaderRoute: typeof ResourcesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quality-assurance': {
-      id: '/quality-assurance'
-      path: '/quality-assurance'
-      fullPath: '/quality-assurance'
-      preLoaderRoute: typeof QualityAssuranceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects': {
-      id: '/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/industries': {
-      id: '/industries'
-      path: '/industries'
-      fullPath: '/industries'
-      preLoaderRoute: typeof IndustriesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacts': {
-      id: '/contacts'
-      path: '/contacts'
-      fullPath: '/contacts'
-      preLoaderRoute: typeof ContactsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/applications': {
-      id: '/applications'
-      path: '/applications'
-      fullPath: '/applications'
-      preLoaderRoute: typeof ApplicationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$slug': {
@@ -739,193 +641,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/services/': {
-      id: '/services/'
-      path: '/'
-      fullPath: '/services/'
-      preLoaderRoute: typeof ServicesIndexRouteImport
-      parentRoute: typeof ServicesRoute
-    }
-    '/resources/': {
-      id: '/resources/'
-      path: '/'
-      fullPath: '/resources/'
-      preLoaderRoute: typeof ResourcesIndexRouteImport
-      parentRoute: typeof ResourcesRoute
-    }
-    '/quality-assurance/': {
-      id: '/quality-assurance/'
-      path: '/'
-      fullPath: '/quality-assurance/'
-      preLoaderRoute: typeof QualityAssuranceIndexRouteImport
-      parentRoute: typeof QualityAssuranceRoute
-    }
-    '/projects/': {
-      id: '/projects/'
-      path: '/'
-      fullPath: '/projects/'
-      preLoaderRoute: typeof ProjectsIndexRouteImport
-      parentRoute: typeof ProjectsRoute
-    }
-    '/products/': {
-      id: '/products/'
-      path: '/products'
-      fullPath: '/products/'
-      preLoaderRoute: typeof ProductsIndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/industries/': {
-      id: '/industries/'
-      path: '/'
-      fullPath: '/industries/'
-      preLoaderRoute: typeof IndustriesIndexRouteImport
-      parentRoute: typeof IndustriesRoute
-    }
-    '/catalogue/': {
-      id: '/catalogue/'
-      path: '/catalogue'
-      fullPath: '/catalogue/'
-      preLoaderRoute: typeof CatalogueIndexRouteImport
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/': {
-      id: '/blog/'
-      path: '/'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
-      parentRoute: typeof BlogRoute
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/applications/': {
-      id: '/applications/'
-      path: '/'
-      fullPath: '/applications/'
-      preLoaderRoute: typeof ApplicationsIndexRouteImport
-      parentRoute: typeof ApplicationsRoute
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries': {
+      id: '/industries'
+      path: '/industries'
+      fullPath: '/industries'
+      preLoaderRoute: typeof IndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quality-assurance': {
+      id: '/quality-assurance'
+      path: '/quality-assurance'
+      fullPath: '/quality-assurance'
+      preLoaderRoute: typeof QualityAssuranceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/services/$slug': {
-      id: '/services/$slug'
-      path: '/$slug'
-      fullPath: '/services/$slug'
-      preLoaderRoute: typeof ServicesSlugRouteImport
-      parentRoute: typeof ServicesRoute
-    }
-    '/quality-assurance/$slug': {
-      id: '/quality-assurance/$slug'
-      path: '/$slug'
-      fullPath: '/quality-assurance/$slug'
-      preLoaderRoute: typeof QualityAssuranceSlugRouteImport
-      parentRoute: typeof QualityAssuranceRoute
-    }
-    '/projects/$slug': {
-      id: '/projects/$slug'
-      path: '/$slug'
-      fullPath: '/projects/$slug'
-      preLoaderRoute: typeof ProjectsSlugRouteImport
-      parentRoute: typeof ProjectsRoute
-    }
-    '/industries/$slug': {
-      id: '/industries/$slug'
-      path: '/$slug'
-      fullPath: '/industries/$slug'
-      preLoaderRoute: typeof IndustriesSlugRouteImport
-      parentRoute: typeof IndustriesRoute
-    }
-    '/catalogue/$slug': {
-      id: '/catalogue/$slug'
-      path: '/catalogue/$slug'
-      fullPath: '/catalogue/$slug'
-      preLoaderRoute: typeof CatalogueSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
-    }
-    '/applications/$category': {
-      id: '/applications/$category'
-      path: '/$category'
-      fullPath: '/applications/$category'
-      preLoaderRoute: typeof ApplicationsCategoryRouteImport
-      parentRoute: typeof ApplicationsRoute
-    }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tracking': {
-      id: '/admin/tracking'
-      path: '/tracking'
-      fullPath: '/admin/tracking'
-      preLoaderRoute: typeof AdminTrackingRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/site-builder': {
-      id: '/admin/site-builder'
-      path: '/site-builder'
-      fullPath: '/admin/site-builder'
-      preLoaderRoute: typeof AdminSiteBuilderRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/resources': {
-      id: '/admin/resources'
-      path: '/resources'
-      fullPath: '/admin/resources'
-      preLoaderRoute: typeof AdminResourcesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/quotes': {
-      id: '/admin/quotes'
-      path: '/quotes'
-      fullPath: '/admin/quotes'
-      preLoaderRoute: typeof AdminQuotesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/products': {
-      id: '/admin/products'
-      path: '/products'
-      fullPath: '/admin/products'
-      preLoaderRoute: typeof AdminProductsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/pages-seo': {
-      id: '/admin/pages-seo'
-      path: '/pages-seo'
-      fullPath: '/admin/pages-seo'
-      preLoaderRoute: typeof AdminPagesSeoRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/page-templates': {
-      id: '/admin/page-templates'
-      path: '/page-templates'
-      fullPath: '/admin/page-templates'
-      preLoaderRoute: typeof AdminPageTemplatesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/media-center': {
-      id: '/admin/media-center'
-      path: '/media-center'
-      fullPath: '/admin/media-center'
-      preLoaderRoute: typeof AdminMediaCenterRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/blog': {
@@ -935,12 +760,180 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/resources/$category/': {
-      id: '/resources/$category/'
+    '/admin/media-center': {
+      id: '/admin/media-center'
+      path: '/media-center'
+      fullPath: '/admin/media-center'
+      preLoaderRoute: typeof AdminMediaCenterRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/page-templates': {
+      id: '/admin/page-templates'
+      path: '/page-templates'
+      fullPath: '/admin/page-templates'
+      preLoaderRoute: typeof AdminPageTemplatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pages-seo': {
+      id: '/admin/pages-seo'
+      path: '/pages-seo'
+      fullPath: '/admin/pages-seo'
+      preLoaderRoute: typeof AdminPagesSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/quotes': {
+      id: '/admin/quotes'
+      path: '/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AdminQuotesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/resources': {
+      id: '/admin/resources'
+      path: '/resources'
+      fullPath: '/admin/resources'
+      preLoaderRoute: typeof AdminResourcesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/site-builder': {
+      id: '/admin/site-builder'
+      path: '/site-builder'
+      fullPath: '/admin/site-builder'
+      preLoaderRoute: typeof AdminSiteBuilderRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tracking': {
+      id: '/admin/tracking'
+      path: '/tracking'
+      fullPath: '/admin/tracking'
+      preLoaderRoute: typeof AdminTrackingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/applications/': {
+      id: '/applications/'
+      path: '/'
+      fullPath: '/applications/'
+      preLoaderRoute: typeof ApplicationsIndexRouteImport
+      parentRoute: typeof ApplicationsRoute
+    }
+    '/applications/$category': {
+      id: '/applications/$category'
       path: '/$category'
-      fullPath: '/resources/$category/'
-      preLoaderRoute: typeof ResourcesCategoryIndexRouteImport
+      fullPath: '/applications/$category'
+      preLoaderRoute: typeof ApplicationsCategoryRouteImport
+      parentRoute: typeof ApplicationsRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
+    '/catalogue/': {
+      id: '/catalogue/'
+      path: '/catalogue'
+      fullPath: '/catalogue/'
+      preLoaderRoute: typeof CatalogueIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogue/$slug': {
+      id: '/catalogue/$slug'
+      path: '/catalogue/$slug'
+      fullPath: '/catalogue/$slug'
+      preLoaderRoute: typeof CatalogueSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/': {
+      id: '/industries/'
+      path: '/'
+      fullPath: '/industries/'
+      preLoaderRoute: typeof IndustriesIndexRouteImport
+      parentRoute: typeof IndustriesRoute
+    }
+    '/industries/$slug': {
+      id: '/industries/$slug'
+      path: '/$slug'
+      fullPath: '/industries/$slug'
+      preLoaderRoute: typeof IndustriesSlugRouteImport
+      parentRoute: typeof IndustriesRoute
+    }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof ProjectsRoute
+    }
+    '/projects/$slug': {
+      id: '/projects/$slug'
+      path: '/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ProjectsSlugRouteImport
+      parentRoute: typeof ProjectsRoute
+    }
+    '/quality-assurance/': {
+      id: '/quality-assurance/'
+      path: '/'
+      fullPath: '/quality-assurance/'
+      preLoaderRoute: typeof QualityAssuranceIndexRouteImport
+      parentRoute: typeof QualityAssuranceRoute
+    }
+    '/quality-assurance/$slug': {
+      id: '/quality-assurance/$slug'
+      path: '/$slug'
+      fullPath: '/quality-assurance/$slug'
+      preLoaderRoute: typeof QualityAssuranceSlugRouteImport
+      parentRoute: typeof QualityAssuranceRoute
+    }
+    '/resources/': {
+      id: '/resources/'
+      path: '/'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof ResourcesIndexRouteImport
       parentRoute: typeof ResourcesRoute
+    }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRoute
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRoute
     }
     '/products/$category/': {
       id: '/products/$category/'
@@ -949,19 +942,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsCategoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/resources/$category/$slug': {
-      id: '/resources/$category/$slug'
-      path: '/$category/$slug'
-      fullPath: '/resources/$category/$slug'
-      preLoaderRoute: typeof ResourcesCategorySlugRouteImport
-      parentRoute: typeof ResourcesRoute
-    }
     '/products/$category/$family': {
       id: '/products/$category/$family'
       path: '/products/$category/$family'
       fullPath: '/products/$category/$family'
       preLoaderRoute: typeof ProductsCategoryFamilyRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resources/$category/': {
+      id: '/resources/$category/'
+      path: '/$category'
+      fullPath: '/resources/$category/'
+      preLoaderRoute: typeof ResourcesCategoryIndexRouteImport
+      parentRoute: typeof ResourcesRoute
+    }
+    '/resources/$category/$slug': {
+      id: '/resources/$category/$slug'
+      path: '/$category/$slug'
+      fullPath: '/resources/$category/$slug'
+      preLoaderRoute: typeof ResourcesCategorySlugRouteImport
+      parentRoute: typeof ResourcesRoute
     }
     '/api/storage/$bucket/$': {
       id: '/api/storage/$bucket/$'

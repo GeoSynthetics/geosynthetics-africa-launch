@@ -5,13 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import {
-  Save,
-  Loader2,
-  AlertTriangle,
-  CheckCircle2,
-  Info,
-} from "lucide-react";
+import { Save, Loader2, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 import { ImagePicker } from "./ImagePicker";
 import { IconPicker } from "./IconPicker";
 import {
@@ -118,14 +112,15 @@ function AccountabilityEditor({
       icon: "ShieldCheck",
       title: "New Value Proposition",
       description: "Enter proposition details...",
-    })
+    }),
   );
 
   return (
     <div className="space-y-6">
       <SectionHeading>One System. One Accountability. Section</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        Manage the section heading, description, and accountability cards (with custom Lucide icons).
+        Manage the section heading, description, and accountability cards (with custom Lucide
+        icons).
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -215,7 +210,7 @@ function ExecutionEditor({
       id: String(Date.now()),
       title: "New Capability",
       description: "Capability detail...",
-    })
+    }),
   );
 
   return (
@@ -323,7 +318,7 @@ function PartnersAndFaqEditor({
       id: String(Date.now()),
       q: "New Question?",
       a: "Enter answer details here...",
-    })
+    }),
   );
 
   return (
@@ -661,7 +656,7 @@ export function AboutBuilderTab() {
           value: content as any,
           updated_at: new Date().toISOString(),
         },
-        { onConflict: "key" }
+        { onConflict: "key" },
       );
 
       if (error) {
@@ -752,7 +747,10 @@ export function AboutBuilderTab() {
             <HeroEditor data={content.hero} onChange={(val) => updateSection("hero", val)} />
           </TabsContent>
 
-          <TabsContent value="accountability" className="border border-border rounded-2xl p-6 bg-card">
+          <TabsContent
+            value="accountability"
+            className="border border-border rounded-2xl p-6 bg-card"
+          >
             <AccountabilityEditor
               data={content.accountability}
               onChange={(val) => updateSection("accountability", val)}
@@ -766,7 +764,10 @@ export function AboutBuilderTab() {
             />
           </TabsContent>
 
-          <TabsContent value="partners-faqs" className="border border-border rounded-2xl p-6 bg-card">
+          <TabsContent
+            value="partners-faqs"
+            className="border border-border rounded-2xl p-6 bg-card"
+          >
             <PartnersAndFaqEditor
               partners={content.partners}
               faqs={content.faqs}

@@ -141,8 +141,7 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
     ],
     philosophyTitle: "Our Execution Philosophy",
     philosophySubtitle: "We do not participate in fragmented delivery.",
-    philosophyImage:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
+    philosophyImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
   },
   partners: {
     title: "Our Global Supply Partners",
@@ -182,22 +181,17 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   },
   contact: {
     title: "Let's Start a Conversation",
-    subtitle:
-      "Reach out to our experts to discuss your specific project requirements.",
-    backgroundImage:
-      "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    subtitle: "Reach out to our experts to discuss your specific project requirements.",
+    backgroundImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
     headOfficeTitle: "Head Office",
-    headOfficeAddress:
-      "7 Tamar Avenue, Lea Glen\nRandburg, Johannesburg, 2191\nSouth Africa",
+    headOfficeAddress: "7 Tamar Avenue, Lea Glen\nRandburg, Johannesburg, 2191\nSouth Africa",
     contactTitle: "Contact",
-    contactDetails:
-      "E: info@geosynthetics.co.za\nSales: +27 78 1355 926\nAdmin: +27 11 083 8384",
+    contactDetails: "E: info@geosynthetics.co.za\nSales: +27 78 1355 926\nAdmin: +27 11 083 8384",
     operatingHoursTitle: "Operating Hours",
     operatingHoursDetails:
       "Monday – Friday: 08:00 AM – 17:00 PM\nWeekends: Closed on Saturday & Sunday",
     formHeading: "Store Location & Directions",
-    formDescription:
-      "Visit our primary head office and logistics hub in Johannesburg.",
+    formDescription: "Visit our primary head office and logistics hub in Johannesburg.",
     mapEmbedUrl:
       "https://www.google.com/maps?q=7+Tamar+Avenue,+Lea+Glen,+Randburg,+Johannesburg&output=embed",
     mapHeading: "Store & Office Location",

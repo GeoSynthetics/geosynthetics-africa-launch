@@ -1,11 +1,7 @@
 import { FileText, BookOpen, Video, FileCheck, Download, type LucideIcon } from "lucide-react";
 
 export type ResourceCategorySlug =
-  | "datasheets"
-  | "installation-guides"
-  | "case-studies"
-  | "brochures"
-  | "videos";
+  "datasheets" | "installation-guides" | "case-studies" | "brochures" | "videos";
 
 export interface ResourceCategory {
   slug: ResourceCategorySlug;

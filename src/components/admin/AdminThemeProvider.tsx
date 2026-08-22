@@ -59,7 +59,7 @@ export function AdminThemeProvider({ children }: { children: React.ReactNode }) 
       setTheme,
       toggleTheme,
     }),
-    [theme]
+    [theme],
   );
 
   return <AdminThemeContext.Provider value={value}>{children}</AdminThemeContext.Provider>;

@@ -82,14 +82,35 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
       title: "Pan-African Coverage & Regional Pages",
       type: "countries",
       links: [
-        { label: "Geosynthetics South Africa →", to: "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
-        { label: "Geosynthetics Botswana →", to: "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
-        { label: "Geosynthetics Tanzania →", to: "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
-        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
-        { label: "Geosynthetics Zambia →", to: "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
-        { label: "Geosynthetics Democratic Republic of Congo (DRC) →", to: "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier" },
+        {
+          label: "Geosynthetics South Africa →",
+          to: "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
+        },
+        {
+          label: "Geosynthetics Botswana →",
+          to: "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
+        },
+        {
+          label: "Geosynthetics Tanzania →",
+          to: "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+        },
+        {
+          label: "Geosynthetics Zimbabwe →",
+          to: "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
+        },
+        {
+          label: "Geosynthetics Zambia →",
+          to: "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
+        },
+        {
+          label: "Geosynthetics Democratic Republic of Congo (DRC) →",
+          to: "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+        },
         { label: "Geosynthetics Kenya →", to: "/kenya-geosynthetics-supplier-contact" },
-        { label: "Geosynthetics Côte d'Ivoire →", to: "/cote-divoire-geosynthetics-supplier-contact" },
+        {
+          label: "Geosynthetics Côte d'Ivoire →",
+          to: "/cote-divoire-geosynthetics-supplier-contact",
+        },
         { label: "Geosynthetics Mozambique →", to: "/mozambique-geosynthetics-supplier-contact" },
         { label: "Geosynthetics Ghana →", to: "/ghana-geosynthetics-supplier-contact" },
         { label: "Geosynthetics Namibia →", to: "/namibia-geosynthetics-supplier-contact" },

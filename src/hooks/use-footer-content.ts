@@ -83,8 +83,7 @@ export function updateFooterCache(content: FooterContent) {
 
 export function useFooterContent(): FooterContent {
   const rootData = useLoaderData({ from: "__root__" }) as
-    | { footerContent: FooterContent }
-    | undefined;
+    { footerContent: FooterContent } | undefined;
 
   const [, rerender] = useState(0);
 

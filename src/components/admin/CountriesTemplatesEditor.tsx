@@ -19,17 +19,10 @@ import {
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
 import { cn, formatSlugInput } from "@/lib/utils";
-import {
-  SectionHeading,
-  FieldLabel,
-  TemplatesEditorSkeleton,
-} from "./TemplateEditorShared";
+import { SectionHeading, FieldLabel, TemplatesEditorSkeleton } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector, type ProductData } from "./ProductSelector";
-import {
-  type CountryTemplate,
-  DEFAULT_COUNTRY_TEMPLATES,
-} from "@/types/country-template";
+import { type CountryTemplate, DEFAULT_COUNTRY_TEMPLATES } from "@/types/country-template";
 
 const SUPABASE_KEY = "template_countries";
 
@@ -62,7 +55,10 @@ export function CountriesTemplatesEditor() {
 
       let merged: Record<string, CountryTemplate> = { ...DEFAULT_COUNTRY_TEMPLATES };
       if (data?.value && typeof data.value === "object") {
-        merged = { ...DEFAULT_COUNTRY_TEMPLATES, ...(data.value as Record<string, CountryTemplate>) };
+        merged = {
+          ...DEFAULT_COUNTRY_TEMPLATES,
+          ...(data.value as Record<string, CountryTemplate>),
+        };
       }
 
       setAllData(merged);
@@ -156,22 +152,31 @@ export function CountriesTemplatesEditor() {
       supplyDescription: `Direct containerized and road freight logistics serving mining and infrastructure in ${newCountryName}.`,
       supplyImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
       supplyCardTitle: "Container Direct & Local Warehouse Inventory",
-      supplyCardDescription: "Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports.",
+      supplyCardDescription:
+        "Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports.",
       supplyHighlights: [
-        { title: "Direct Logistics", description: "Containerized shipping and road freight delivery." },
+        {
+          title: "Direct Logistics",
+          description: "Containerized shipping and road freight delivery.",
+        },
       ],
       installationTitle: "Certified Installation & Field Welding Services",
       installationDescription: "IAGI-certified field crews operating dual-track wedge welders.",
       installationImage: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80",
       installationCardTitle: "Dual-Track Wedge & Extrusion Welding Rigs",
-      installationCardDescription: "Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing.",
+      installationCardDescription:
+        "Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing.",
       installationHighlights: [
         { title: "Master Seamers", description: "Trained field welding technicians." },
       ],
       qaqcTitle: "Quality Assurance & Compliance Testing",
-      qaqcDescription: "Non-destructive vacuum box/air testing and destructive tensiometer verification.",
+      qaqcDescription:
+        "Non-destructive vacuum box/air testing and destructive tensiometer verification.",
       qaqcHighlights: [
-        { title: "Seam Testing", description: "Comprehensive QA documentation provided upon sign-off." },
+        {
+          title: "Seam Testing",
+          description: "Comprehensive QA documentation provided upon sign-off.",
+        },
       ],
       seo: {
         title: `${newCountryName} Geosynthetics Supplier | Geosynthetics Africa`,
@@ -233,7 +238,8 @@ export function CountriesTemplatesEditor() {
             Pan-African Country & Regional Templates
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Manage regional content, supply logistics, installation standards, QA/QC, and featured products per country.
+            Manage regional content, supply logistics, installation standards, QA/QC, and featured
+            products per country.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -291,7 +297,7 @@ export function CountriesTemplatesEditor() {
                     "flex items-center justify-between p-3 rounded-lg border text-left cursor-pointer transition-all",
                     isActive
                       ? "bg-primary/10 border-primary shadow-xs"
-                      : "bg-card hover:border-primary/50 border-border"
+                      : "bg-card hover:border-primary/50 border-border",
                   )}
                 >
                   <div className="min-w-0 flex-1 pr-2">
@@ -321,7 +327,10 @@ export function CountriesTemplatesEditor() {
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                     <ChevronRight
-                      className={cn("h-4 w-4 text-muted-foreground transition", isActive && "text-primary")}
+                      className={cn(
+                        "h-4 w-4 text-muted-foreground transition",
+                        isActive && "text-primary",
+                      )}
                     />
                   </div>
                 </div>
@@ -554,7 +563,9 @@ export function CountriesTemplatesEditor() {
                       <Textarea
                         rows={2}
                         value={currentItem.supplyCardDescription || ""}
-                        onChange={(e) => updateCurrentField("supplyCardDescription", e.target.value)}
+                        onChange={(e) =>
+                          updateCurrentField("supplyCardDescription", e.target.value)
+                        }
                         placeholder="Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports."
                       />
                     </div>
@@ -576,7 +587,9 @@ export function CountriesTemplatesEditor() {
                     <Textarea
                       rows={3}
                       value={currentItem.installationDescription || ""}
-                      onChange={(e) => updateCurrentField("installationDescription", e.target.value)}
+                      onChange={(e) =>
+                        updateCurrentField("installationDescription", e.target.value)
+                      }
                     />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -592,7 +605,9 @@ export function CountriesTemplatesEditor() {
                       <FieldLabel>Equipment Mobilization Lead Time</FieldLabel>
                       <Input
                         value={currentItem.equipmentMobilization || ""}
-                        onChange={(e) => updateCurrentField("equipmentMobilization", e.target.value)}
+                        onChange={(e) =>
+                          updateCurrentField("equipmentMobilization", e.target.value)
+                        }
                         placeholder="e.g. 24-48 Hours Nationwide"
                       />
                     </div>
@@ -612,7 +627,9 @@ export function CountriesTemplatesEditor() {
                       <FieldLabel>Showcase Card Title</FieldLabel>
                       <Input
                         value={currentItem.installationCardTitle || ""}
-                        onChange={(e) => updateCurrentField("installationCardTitle", e.target.value)}
+                        onChange={(e) =>
+                          updateCurrentField("installationCardTitle", e.target.value)
+                        }
                         placeholder="Dual-Track Wedge & Extrusion Welding Rigs"
                       />
                     </div>
@@ -621,7 +638,9 @@ export function CountriesTemplatesEditor() {
                       <Textarea
                         rows={2}
                         value={currentItem.installationCardDescription || ""}
-                        onChange={(e) => updateCurrentField("installationCardDescription", e.target.value)}
+                        onChange={(e) =>
+                          updateCurrentField("installationCardDescription", e.target.value)
+                        }
                         placeholder="Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing."
                       />
                     </div>
@@ -653,7 +672,10 @@ export function CountriesTemplatesEditor() {
                       onChange={(e) =>
                         updateCurrentField(
                           "complianceStandards",
-                          e.target.value.split(",").map((s) => s.trim()).filter(Boolean)
+                          e.target.value
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
                         )
                       }
                       placeholder="SANS 1526, GRI-GM13, ASTM D6392"

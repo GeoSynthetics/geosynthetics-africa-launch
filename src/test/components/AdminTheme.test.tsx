@@ -26,7 +26,7 @@ describe("Admin Theme System", () => {
     render(
       <AdminThemeProvider>
         <TestConsumer />
-      </AdminThemeProvider>
+      </AdminThemeProvider>,
     );
 
     expect(screen.getByTestId("current-theme").textContent).toBe("dark");
@@ -39,7 +39,7 @@ describe("Admin Theme System", () => {
     render(
       <AdminThemeProvider>
         <TestConsumer />
-      </AdminThemeProvider>
+      </AdminThemeProvider>,
     );
 
     expect(screen.getByTestId("current-theme").textContent).toBe("light");
@@ -50,7 +50,7 @@ describe("Admin Theme System", () => {
     render(
       <AdminThemeProvider>
         <TestConsumer />
-      </AdminThemeProvider>
+      </AdminThemeProvider>,
     );
 
     const btn = screen.getByTestId("toggle-btn");
@@ -70,7 +70,7 @@ describe("Admin Theme System", () => {
     render(
       <AdminThemeProvider>
         <AdminFloatingThemeToggle />
-      </AdminThemeProvider>
+      </AdminThemeProvider>,
     );
 
     const toggleButton = screen.getByRole("button");

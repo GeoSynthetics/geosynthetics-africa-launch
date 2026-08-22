@@ -1097,7 +1097,9 @@ export function ProjectsTemplatesEditor() {
                           value="scopedetails"
                           className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-primary"
                         >
-                          {active.service_type === "supply_install" ? "Installation Challenge" : "Technical Scope"}
+                          {active.service_type === "supply_install"
+                            ? "Installation Challenge"
+                            : "Technical Scope"}
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
@@ -1907,10 +1909,7 @@ export function ProjectsTemplatesEditor() {
                       </TabsContent>
 
                       {/* QA & QC TAB */}
-                      <TabsContent
-                        value="qa"
-                        className="space-y-6 m-0 focus-visible:outline-none"
-                      >
+                      <TabsContent value="qa" className="space-y-6 m-0 focus-visible:outline-none">
                         <SectionHeading>QA & QC</SectionHeading>
                         <div className="space-y-4">
                           <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
@@ -1940,13 +1939,10 @@ export function ProjectsTemplatesEditor() {
                           </FieldLabel>
                           <PhotosEditor
                             photos={active.gallery || []}
-                            onChange={(photos) =>
-                              setField("gallery", photos)
-                            }
+                            onChange={(photos) => setField("gallery", photos)}
                           />
                         </div>
                       </TabsContent>
-
                     </Tabs>
                   </div>
                 </div>

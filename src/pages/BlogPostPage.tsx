@@ -82,7 +82,7 @@ export function BlogPostPage() {
         {/* Abstract shapes */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <HexCell opacity={0.30} color="var(--primary)" count={60} />
+        <HexCell opacity={0.3} color="var(--primary)" count={60} />
 
         <div className="container-page max-w-5xl mx-auto px-4 md:px-6 relative z-10">
           <Link

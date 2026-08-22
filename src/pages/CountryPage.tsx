@@ -166,7 +166,8 @@ export function CountryPage({ data }: { data: any }) {
                   Compliance
                 </p>
                 <p className="text-sm font-bold text-foreground">
-                  {(template.complianceStandards && template.complianceStandards[0]) || "SANS & ASTM"}
+                  {(template.complianceStandards && template.complianceStandards[0]) ||
+                    "SANS & ASTM"}
                 </p>
               </div>
             </div>
@@ -218,7 +219,9 @@ export function CountryPage({ data }: { data: any }) {
                   <div key={idx} className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-foreground text-sm">{bullet.title}: </span>
+                      <span className="font-semibold text-foreground text-sm">
+                        {bullet.title}:{" "}
+                      </span>
                       <span className="text-sm text-muted-foreground">{bullet.description}</span>
                     </div>
                   </div>
@@ -291,7 +294,9 @@ export function CountryPage({ data }: { data: any }) {
               <div className="p-4 rounded-lg bg-card border border-border flex items-center gap-3">
                 <Clock className="h-6 w-6 text-primary shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-muted-foreground">Mobilization</h4>
+                  <h4 className="text-xs font-bold uppercase text-muted-foreground">
+                    Mobilization
+                  </h4>
                   <p className="text-sm font-bold text-foreground">
                     {template.equipmentMobilization || "24 - 48 Hours"}
                   </p>
@@ -300,7 +305,9 @@ export function CountryPage({ data }: { data: any }) {
               <div className="p-4 rounded-lg bg-card border border-border flex items-center gap-3">
                 <Award className="h-6 w-6 text-primary shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-muted-foreground">Master Seamers</h4>
+                  <h4 className="text-xs font-bold uppercase text-muted-foreground">
+                    Master Seamers
+                  </h4>
                   <p className="text-sm font-bold text-foreground">
                     {template.masterSeamersCount || "IAGI Certified"}
                   </p>
@@ -314,7 +321,9 @@ export function CountryPage({ data }: { data: any }) {
                   <div key={idx} className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-foreground text-sm">{bullet.title}: </span>
+                      <span className="font-semibold text-foreground text-sm">
+                        {bullet.title}:{" "}
+                      </span>
                       <span className="text-sm text-muted-foreground">{bullet.description}</span>
                     </div>
                   </div>
@@ -357,7 +366,10 @@ export function CountryPage({ data }: { data: any }) {
           {template.qaqcHighlights && template.qaqcHighlights.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6 pt-4 border-t border-border">
               {template.qaqcHighlights.map((highlight, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-card p-4 rounded-xl border border-border">
+                <div
+                  key={idx}
+                  className="flex items-start gap-3 bg-card p-4 rounded-xl border border-border"
+                >
                   <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-foreground text-sm">{highlight.title}</h4>
@@ -414,7 +426,9 @@ export function CountryPage({ data }: { data: any }) {
                         {prod.name || prod.label}
                       </h3>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                        {prod.short_description || prod.description || "High-performance geosynthetic lining system."}
+                        {prod.short_description ||
+                          prod.description ||
+                          "High-performance geosynthetic lining system."}
                       </p>
                     </div>
                     <Link
@@ -441,7 +455,8 @@ export function CountryPage({ data }: { data: any }) {
                   Featured Projects & Case Studies in {template.country}
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Proven containment, tailings dam, and infrastructure installations across Southern and Pan-Africa.
+                  Proven containment, tailings dam, and infrastructure installations across Southern
+                  and Pan-Africa.
                 </p>
               </div>
               <Link
@@ -523,7 +538,10 @@ export function CountryPage({ data }: { data: any }) {
                 {template.phone && (
                   <div className="flex items-center gap-3">
                     <Phone className="h-4 w-4 text-primary shrink-0" />
-                    <a href={`tel:${template.phone.replace(/\s+/g, "")}`} className="hover:text-primary transition">
+                    <a
+                      href={`tel:${template.phone.replace(/\s+/g, "")}`}
+                      className="hover:text-primary transition"
+                    >
                       {template.phone}
                     </a>
                   </div>

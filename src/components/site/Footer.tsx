@@ -228,7 +228,8 @@ export function Footer() {
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <span className="leading-snug">
-                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"}
+                  {footerContent.address ||
+                    "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"}
                 </span>
               </div>
               <div className="flex items-center gap-2.5 pt-1">
