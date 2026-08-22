@@ -543,31 +543,6 @@ export function ProductCategoryPage() {
               heading="BOQ Upload to Specific Sales"
               description="Upload your Bill of Quantities (BOQ) or drawings for a tailored quotation. Our sales team will review your requirements and provide a competitive pricing schedule."
             />
-
-            {/* Bottom FAQs duplicate from screenshot layout */}
-            {content.faqs && (
-              <div>
-                <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                  <span className="text-primary">|</span> Explore More Questions about{" "}
-                  {content.label}
-                </h2>
-                <Accordion type="single" collapsible className="w-full">
-                  {content.faqs
-                    .slice()
-                    .reverse()
-                    .map((faq, i) => (
-                      <AccordionItem key={i} value={`more-item-${i}`} className="border-border">
-                        <AccordionTrigger className="text-left font-bold text-sm uppercase hover:text-primary transition-colors hover:no-underline px-4 bg-surface/50 data-[state=open]:bg-primary/10 data-[state=open]:text-primary rounded-t mt-2">
-                          {faq.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground px-4 pt-4 pb-6 leading-relaxed">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                </Accordion>
-              </div>
-            )}
           </div>
 
           {/* Sidebar Area */}
