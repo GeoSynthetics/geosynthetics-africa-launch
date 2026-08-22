@@ -21,7 +21,7 @@ export function AdminFloatingThemeToggle({ className }: { className?: string }) 
                 "-translate-x-[calc(100%-2.25rem)] hover:translate-x-0 group-hover:translate-x-0 focus-within:translate-x-0 focus:translate-x-0",
                 isDark
                   ? "bg-card/95 border-border/80 text-foreground shadow-black/50 hover:bg-muted/80 hover:border-primary/50"
-                  : "bg-white/95 border-slate-200 text-slate-800 shadow-slate-400/30 hover:bg-slate-50 hover:border-amber-400/60"
+                  : "bg-white/95 border-slate-200 text-slate-800 shadow-slate-400/30 hover:bg-slate-50 hover:border-amber-400/60",
               )}
             >
               {/* Pulsating Indicator Dot (Left) */}
@@ -29,13 +29,13 @@ export function AdminFloatingThemeToggle({ className }: { className?: string }) 
                 <span
                   className={cn(
                     "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-                    isDark ? "bg-primary" : "bg-amber-400"
+                    isDark ? "bg-primary" : "bg-amber-400",
                   )}
                 />
                 <span
                   className={cn(
                     "relative inline-flex rounded-full h-2.5 w-2.5",
-                    isDark ? "bg-primary" : "bg-amber-500"
+                    isDark ? "bg-primary" : "bg-amber-500",
                   )}
                 />
               </span>
@@ -50,13 +50,13 @@ export function AdminFloatingThemeToggle({ className }: { className?: string }) 
                 <Sun
                   className={cn(
                     "h-4.5 w-4.5 text-amber-500 transition-all duration-300 absolute",
-                    isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
+                    isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100",
                   )}
                 />
                 <Moon
                   className={cn(
                     "h-4.5 w-4.5 text-primary transition-all duration-300 absolute",
-                    isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
+                    isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0",
                   )}
                 />
               </div>

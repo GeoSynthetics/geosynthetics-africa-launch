@@ -215,7 +215,9 @@ export function AdminDashboardPage() {
         supabase.from("resources").select("*", { count: "exact", head: true }),
         supabase.from("blog_posts").select("*", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("products").select("id, name, category_id, datasheet_url, is_active, family_slug"),
+        supabase
+          .from("products")
+          .select("id, name, category_id, datasheet_url, is_active, family_slug"),
         supabase.from("product_categories").select("id, name"),
       ]);
 
@@ -368,7 +370,11 @@ export function AdminDashboardPage() {
   const datasheetPieData = stats?.productHealth
     ? [
         { name: "Datasheet Included", value: stats.productHealth.withDatasheet, color: "#10b981" },
-        { name: "Missing Datasheet", value: stats.productHealth.missingDatasheet, color: "#f59e0b" },
+        {
+          name: "Missing Datasheet",
+          value: stats.productHealth.missingDatasheet,
+          color: "#f59e0b",
+        },
       ]
     : [];
 
@@ -384,7 +390,8 @@ export function AdminDashboardPage() {
             </h1>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Real-time analytics, catalogue product charts, inquiry trends, and site management shortcuts.
+            Real-time analytics, catalogue product charts, inquiry trends, and site management
+            shortcuts.
           </p>
         </div>
 
@@ -394,7 +401,11 @@ export function AdminDashboardPage() {
               Last updated
             </span>
             <span className="text-xs font-semibold text-foreground font-mono">
-              {lastRefreshed.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              {lastRefreshed.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
             </span>
           </div>
           <Button
@@ -404,7 +415,9 @@ export function AdminDashboardPage() {
             disabled={loading || isPending}
             className="h-9 px-3 gap-2 rounded-xl text-xs font-semibold border-border/60 hover:border-primary/50"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${loading || isPending ? "animate-spin text-primary" : ""}`} />
+            <RefreshCw
+              className={`h-3.5 w-3.5 ${loading || isPending ? "animate-spin text-primary" : ""}`}
+            />
             Refresh
           </Button>
         </div>
@@ -432,7 +445,10 @@ export function AdminDashboardPage() {
                   {stats?.quotesTotal ?? 0}
                 </div>
                 {stats?.quotesNew ? (
-                  <Badge variant="destructive" className="animate-bounce text-[10px] px-2 py-0.5 font-bold">
+                  <Badge
+                    variant="destructive"
+                    className="animate-bounce text-[10px] px-2 py-0.5 font-bold"
+                  >
                     {stats.quotesNew} New
                   </Badge>
                 ) : (
@@ -444,7 +460,10 @@ export function AdminDashboardPage() {
             )}
             <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-between">
               <span>Review BOQ requests</span>
-              <Link to="/admin/quotes" className="text-primary hover:underline font-semibold flex items-center gap-0.5">
+              <Link
+                to="/admin/quotes"
+                className="text-primary hover:underline font-semibold flex items-center gap-0.5"
+              >
                 View <ArrowUpRight className="h-3 w-3" />
               </Link>
             </p>
@@ -470,14 +489,20 @@ export function AdminDashboardPage() {
                 <div className="font-display text-2xl font-black text-foreground">
                   {stats?.productsTotal ?? 0}
                 </div>
-                <Badge variant="outline" className="text-[10px] bg-blue-500/10 text-blue-600 border-blue-200 dark:border-blue-800 font-semibold">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] bg-blue-500/10 text-blue-600 border-blue-200 dark:border-blue-800 font-semibold"
+                >
                   Catalogue
                 </Badge>
               </div>
             )}
             <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-between">
               <span>Geotextiles & Geomembranes</span>
-              <Link to="/admin/products" className="text-primary hover:underline font-semibold flex items-center gap-0.5">
+              <Link
+                to="/admin/products"
+                className="text-primary hover:underline font-semibold flex items-center gap-0.5"
+              >
                 Manage <ArrowUpRight className="h-3 w-3" />
               </Link>
             </p>
@@ -503,14 +528,20 @@ export function AdminDashboardPage() {
                 <div className="font-display text-2xl font-black text-foreground">
                   {stats?.resourcesTotal ?? 0}
                 </div>
-                <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-800 font-semibold">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-800 font-semibold"
+                >
                   Datasheets
                 </Badge>
               </div>
             )}
             <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-between">
               <span>Brochures & Case Studies</span>
-              <Link to="/admin/resources" className="text-primary hover:underline font-semibold flex items-center gap-0.5">
+              <Link
+                to="/admin/resources"
+                className="text-primary hover:underline font-semibold flex items-center gap-0.5"
+              >
                 Manage <ArrowUpRight className="h-3 w-3" />
               </Link>
             </p>
@@ -536,14 +567,20 @@ export function AdminDashboardPage() {
                 <div className="font-display text-2xl font-black text-foreground">
                   {stats?.blogTotal ?? 0}
                 </div>
-                <Badge variant="outline" className="text-[10px] bg-purple-500/10 text-purple-600 border-purple-200 dark:border-purple-800 font-semibold">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] bg-purple-500/10 text-purple-600 border-purple-200 dark:border-purple-800 font-semibold"
+                >
                   Blog Posts
                 </Badge>
               </div>
             )}
             <p className="text-[11px] text-muted-foreground mt-2 flex items-center justify-between">
               <span>Industry Insights</span>
-              <Link to="/admin/blog" className="text-primary hover:underline font-semibold flex items-center gap-0.5">
+              <Link
+                to="/admin/blog"
+                className="text-primary hover:underline font-semibold flex items-center gap-0.5"
+              >
                 Write <ArrowUpRight className="h-3 w-3" />
               </Link>
             </p>
@@ -574,7 +611,10 @@ export function AdminDashboardPage() {
             <CardHeader className="pb-2">
               <CardTitle className="font-display text-base font-bold uppercase tracking-wide text-foreground flex items-center justify-between">
                 <span>Products by Category Breakdown</span>
-                <Badge variant="outline" className="text-[10px] font-mono uppercase bg-blue-500/10 text-blue-600 border-blue-200">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-mono uppercase bg-blue-500/10 text-blue-600 border-blue-200"
+                >
                   {stats?.productsTotal ?? 0} Products Total
                 </Badge>
               </CardTitle>
@@ -596,7 +636,11 @@ export function AdminDashboardPage() {
                       data={stats.categoryDistribution}
                       margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.2)" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        vertical={false}
+                        stroke="rgba(148, 163, 184, 0.2)"
+                      />
                       <XAxis
                         dataKey="categoryName"
                         tickLine={false}
@@ -750,7 +794,11 @@ export function AdminDashboardPage() {
                         <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.2)" />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      vertical={false}
+                      stroke="rgba(148, 163, 184, 0.2)"
+                    />
                     <XAxis
                       dataKey="month"
                       tickLine={false}
@@ -971,7 +1019,12 @@ export function AdminDashboardPage() {
               Latest enquiries received from clients across Africa.
             </CardDescription>
           </div>
-          <Button asChild variant="ghost" size="sm" className="text-xs text-primary hover:text-primary font-bold">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="text-xs text-primary hover:text-primary font-bold"
+          >
             <Link to="/admin/quotes" className="flex items-center gap-1">
               View All <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
@@ -996,7 +1049,9 @@ export function AdminDashboardPage() {
                   <TableHead className="text-[11px] font-bold uppercase">Company</TableHead>
                   <TableHead className="text-[11px] font-bold uppercase">Date</TableHead>
                   <TableHead className="text-[11px] font-bold uppercase">Status</TableHead>
-                  <TableHead className="text-[11px] font-bold uppercase text-right">Action</TableHead>
+                  <TableHead className="text-[11px] font-bold uppercase text-right">
+                    Action
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1026,7 +1081,12 @@ export function AdminDashboardPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button asChild variant="outline" size="sm" className="h-7 text-[11px] px-2.5 font-semibold">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="h-7 text-[11px] px-2.5 font-semibold"
+                      >
                         <Link to="/admin/quotes">Details</Link>
                       </Button>
                     </TableCell>
@@ -1057,7 +1117,10 @@ export function AdminDashboardPage() {
                   <div className="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:scale-105 transition-transform">
                     <t.icon className="h-5 w-5" />
                   </div>
-                  <Badge variant="secondary" className="text-[10px] font-bold uppercase px-2 py-0.5 bg-muted/60">
+                  <Badge
+                    variant="secondary"
+                    className="text-[10px] font-bold uppercase px-2 py-0.5 bg-muted/60"
+                  >
                     {t.badge}
                   </Badge>
                 </div>

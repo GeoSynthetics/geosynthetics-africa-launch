@@ -548,7 +548,11 @@ export function ContentEditorPanel({
                   items={(page.applications ?? []) as any[]}
                   fields={[
                     { key: "label", label: "Application Name", placeholder: "e.g. Mining Systems" },
-                    { key: "slug", label: "Application Slug / URL", placeholder: "e.g. mining-systems" },
+                    {
+                      key: "slug",
+                      label: "Application Slug / URL",
+                      placeholder: "e.g. mining-systems",
+                    },
                     {
                       key: "description",
                       label: "Short Description",

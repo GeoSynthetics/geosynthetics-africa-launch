@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category.$family";
@@ -218,7 +217,10 @@ export function ProductFamilyPage() {
           { name: "Home", url: "https://geosynthetics.co.za" },
           { name: "Products", url: "https://geosynthetics.co.za/products" },
           { name: dynamicCategoryName, url: `https://geosynthetics.co.za/products/${category}` },
-          { name: data.title || dynamicFamilyName, url: `https://geosynthetics.co.za/products/${category}/${family}` },
+          {
+            name: data.title || dynamicFamilyName,
+            url: `https://geosynthetics.co.za/products/${category}/${family}`,
+          },
         ]}
       />
       {/* Hero Section */}

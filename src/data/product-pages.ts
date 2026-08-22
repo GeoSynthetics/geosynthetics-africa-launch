@@ -997,7 +997,8 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       {
         label: "Roads & Infrastructure",
         slug: "roads-infrastructure",
-        description: "Unpaved and paved road base stabilization, reducing aggregate depth requirements.",
+        description:
+          "Unpaved and paved road base stabilization, reducing aggregate depth requirements.",
       },
       {
         label: "Erosion Control",
@@ -1019,7 +1020,8 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       {
         label: "Erosion Control",
         slug: "erosion-control",
-        description: "Three-dimensional slope protection, vegetative channel linings, and bank stabilization.",
+        description:
+          "Three-dimensional slope protection, vegetative channel linings, and bank stabilization.",
       },
       {
         label: "Roads & Infrastructure",
@@ -1063,7 +1065,8 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       {
         label: "Drainage Systems",
         slug: "drainage-systems",
-        description: "High-flow subsurface drainage behind retaining walls and basement structures.",
+        description:
+          "High-flow subsurface drainage behind retaining walls and basement structures.",
       },
       {
         label: "Waste Landfills",
@@ -1085,7 +1088,8 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       {
         label: "Erosion Control",
         slug: "erosion-control",
-        description: "Immediate slope stabilization, hydroseeding protection, and run-off prevention.",
+        description:
+          "Immediate slope stabilization, hydroseeding protection, and run-off prevention.",
       },
       {
         label: "Roads & Infrastructure",

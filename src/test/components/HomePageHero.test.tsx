@@ -64,9 +64,7 @@ describe("HomePage hero", () => {
   it("provides an accessible hero landmark with its configured content and CTAs", () => {
     render(<HomePage />);
 
-    const hero = document.querySelector<HTMLElement>(
-      '[aria-labelledby="home-page-hero-heading"]',
-    );
+    const hero = document.querySelector<HTMLElement>('[aria-labelledby="home-page-hero-heading"]');
     expect(hero).toHaveAccessibleName("Engineered for Africa projects");
 
     const withinHero = within(hero!);

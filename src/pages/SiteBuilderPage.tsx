@@ -20,18 +20,10 @@ import { AboutBuilderTab } from "@/components/admin/AboutBuilderTab";
 
 type SectionKey = "products" | "applications" | "services" | "industries";
 type TopLevelTab =
-  | "homepage"
-  | "megamenu"
-  | "regional"
-  | "about"
-  | "contacts"
-  | "footer"
-  | "catalogue"
-  | SectionKey;
+  "homepage" | "megamenu" | "regional" | "about" | "contacts" | "footer" | "catalogue" | SectionKey;
 
 type SelectedNode =
-  | { type: "item"; itemIdx: number }
-  | { type: "child"; itemIdx: number; childIdx: number };
+  { type: "item"; itemIdx: number } | { type: "child"; itemIdx: number; childIdx: number };
 
 const SECTION_KEYS: SectionKey[] = ["products", "applications", "services", "industries"];
 const CONFIG_KEY = (k: SectionKey) => `hierarchy_${k}`;

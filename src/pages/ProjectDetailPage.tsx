@@ -152,7 +152,16 @@ export function ProjectDetailPage() {
         <section className="relative bg-gradient-to-br from-[#1C1917] via-[#2F1B0F] to-[#121111] text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]">
           {/* Stylized Africa silhouette */}
           <div className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[340px] h-[340px] opacity-15 pointer-events-none text-primary">
-            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#ffffff" d="M201.56 19.495l-87.79 9.131-73.745 94.814v52.676l56.186 61.805 64.615-13.344 49.164 9.832-10.535 37.926 33.711 61.103-16.855 42.842 39.79 116.225 53.62-8.768 49.164-55.484 4.213-38.629 31.605-23.879-6.322-69.531 83.594-106.994-51.989 7.263-79.363-138.359-125.016-8.428-14.046-30.2zm252.346 319.8l-14.402 20.86-13.408.496c-11.849 24.321-12.598 38.019-13.907 66.547l17.383 4.471 21.852-52.147 2.482-40.226z"></path></g></svg>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  fill="#ffffff"
+                  d="M201.56 19.495l-87.79 9.131-73.745 94.814v52.676l56.186 61.805 64.615-13.344 49.164 9.832-10.535 37.926 33.711 61.103-16.855 42.842 39.79 116.225 53.62-8.768 49.164-55.484 4.213-38.629 31.605-23.879-6.322-69.531 83.594-106.994-51.989 7.263-79.363-138.359-125.016-8.428-14.046-30.2zm252.346 319.8l-14.402 20.86-13.408.496c-11.849 24.321-12.598 38.019-13.907 66.547l17.383 4.471 21.852-52.147 2.482-40.226z"
+                ></path>
+              </g>
+            </svg>
           </div>
 
           <div className="container-page relative z-10">
@@ -182,9 +191,7 @@ export function ProjectDetailPage() {
 
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.98] tracking-tight max-w-4xl text-white mb-6">
               {project.scale || "340 t"} liner,{" "}
-              <span className="text-primary">
-                {project.logistics_details?.route || "3,420 km"}
-              </span>{" "}
+              <span className="text-primary">{project.logistics_details?.route || "3,420 km"}</span>{" "}
               — delivered on time.
             </h1>
             <p className="max-w-3xl text-sm md:text-base text-white/80 leading-relaxed mb-8">
@@ -471,23 +478,25 @@ export function ProjectDetailPage() {
               {/* Install Hero Photo Strip / Gallery */}
               {(project.gallery?.length > 0 || project.qa_details?.photos?.length > 0) && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6">
-                  {[...(project.gallery || []), ...(project.qa_details?.photos || [])].map((p: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className="aspect-[4/3] relative rounded overflow-hidden group border border-border"
-                    >
-                      <img
-                        src={p.url}
-                        alt={p.caption}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-2 opacity-90">
-                        <span className="text-[8.5px] font-bold uppercase tracking-wide text-white leading-tight">
-                          {p.caption}
-                        </span>
+                  {[...(project.gallery || []), ...(project.qa_details?.photos || [])].map(
+                    (p: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="aspect-[4/3] relative rounded overflow-hidden group border border-border"
+                      >
+                        <img
+                          src={p.url}
+                          alt={p.caption}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex items-end p-2 opacity-90">
+                          <span className="text-[8.5px] font-bold uppercase tracking-wide text-white leading-tight">
+                            {p.caption}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               )}
             </section>
@@ -866,93 +875,93 @@ export function ProjectDetailPage() {
             {/* Products Supplied / Used list */}
             {(project.service_type === "supply_only" ||
               project.service_type === "supply_install") && (
-                <section id="products" className="scroll-mt-28 space-y-4">
-                  <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
-                    <span className="w-1.5 h-6 bg-primary rounded-full" />
-                    {project.service_type === "supply_only"
-                      ? "Products Supplied"
-                      : "Products Used in Project"}
-                  </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {project.service_type === "supply_only"
-                      ? "The following certified products were supplied and delivered directly to SADC laydown."
-                      : "The following certified products were supplied and deployed by GSA crews on site."}
-                  </p>
+              <section id="products" className="scroll-mt-28 space-y-4">
+                <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-primary rounded-full" />
+                  {project.service_type === "supply_only"
+                    ? "Products Supplied"
+                    : "Products Used in Project"}
+                </h2>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {project.service_type === "supply_only"
+                    ? "The following certified products were supplied and delivered directly to SADC laydown."
+                    : "The following certified products were supplied and deployed by GSA crews on site."}
+                </p>
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {project.products_used?.map((p: any, idx: number) => {
-                      const dbProd = p.productId
-                        ? dbProducts.find((db) => db.id === p.productId)
-                        : null;
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {project.products_used?.map((p: any, idx: number) => {
+                    const dbProd = p.productId
+                      ? dbProducts.find((db) => db.id === p.productId)
+                      : null;
 
-                      if (dbProd) {
-                        return (
-                          <Link
-                            key={idx}
-                            to="/catalogue/$slug"
-                            params={{ slug: dbProd.slug }}
-                            className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
-                          >
-                            <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                              {dbProd.image_url ? (
-                                <img
-                                  src={dbProd.image_url}
-                                  alt={dbProd.name}
-                                  className="h-full w-full object-cover"
-                                />
-                              ) : (
-                                <Layers className="h-6 w-6" />
-                              )}
-                            </div>
-                            <div className="flex-grow min-w-0">
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                                {p.category || dbProd.product_categories?.name}
-                              </span>
-                              <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
-                                {dbProd.name}
-                              </h4>
-                              <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                                Quantity: {p.qty}
-                              </div>
-                              {dbProd.short_description && (
-                                <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
-                                  {dbProd.short_description}
-                                </p>
-                              )}
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
-                          </Link>
-                        );
-                      }
-
+                    if (dbProd) {
                       return (
                         <Link
                           key={idx}
-                          to="/catalogue"
-                          search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
+                          to="/catalogue/$slug"
+                          params={{ slug: dbProd.slug }}
                           className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
                         >
                           <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                            <Layers className="h-6 w-6" />
+                            {dbProd.image_url ? (
+                              <img
+                                src={dbProd.image_url}
+                                alt={dbProd.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <Layers className="h-6 w-6" />
+                            )}
                           </div>
                           <div className="flex-grow min-w-0">
                             <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                              {p.category}
+                              {p.category || dbProd.product_categories?.name}
                             </span>
-                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
-                              {p.name}
+                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
+                              {dbProd.name}
                             </h4>
-                            <div className="text-[10px] text-muted-foreground font-mono mt-1">
+                            <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
                               Quantity: {p.qty}
                             </div>
+                            {dbProd.short_description && (
+                              <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
+                                {dbProd.short_description}
+                              </p>
+                            )}
                           </div>
                           <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
                         </Link>
                       );
-                    })}
-                  </div>
-                </section>
-              )}
+                    }
+
+                    return (
+                      <Link
+                        key={idx}
+                        to="/catalogue"
+                        search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
+                        className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
+                      >
+                        <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
+                          <Layers className="h-6 w-6" />
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
+                            {p.category}
+                          </span>
+                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
+                            {p.name}
+                          </h4>
+                          <div className="text-[10px] text-muted-foreground font-mono mt-1">
+                            Quantity: {p.qty}
+                          </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
 
             {/* Spec Compliance table */}
             <section id="compliance" className="scroll-mt-28 space-y-4">

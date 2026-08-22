@@ -11,7 +11,8 @@ export const Route = createFileRoute("/robots.txt")({
     handlers: {
       GET: async ({ request }) => {
         const url = new URL(request.url);
-        const hostHeader = request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
+        const hostHeader =
+          request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
         const isProd = isProductionHost(hostHeader);
 
         if (!isProd) {
@@ -57,4 +58,3 @@ Sitemap: ${productionSiteUrl}/sitemap.xml
     },
   },
 });
-

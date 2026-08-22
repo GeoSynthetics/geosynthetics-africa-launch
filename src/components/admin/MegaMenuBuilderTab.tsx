@@ -761,8 +761,8 @@ export function MegaMenuBuilderTab({
                           Most Specified Products Slider (Max 5)
                         </h4>
                         <p className="text-[10px] text-muted-foreground">
-                          Select products to display as sliding catalog most-specified products for this
-                          category
+                          Select products to display as sliding catalog most-specified products for
+                          this category
                         </p>
                       </div>
 

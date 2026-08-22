@@ -103,9 +103,7 @@ export function updateAboutCache(content: AboutPageContent) {
 }
 
 export function useAboutContent(): AboutPageContent {
-  const [content, setContent] = useState<AboutPageContent>(
-    _cache ?? DEFAULT_ABOUT_PAGE_CONTENT
-  );
+  const [content, setContent] = useState<AboutPageContent>(_cache ?? DEFAULT_ABOUT_PAGE_CONTENT);
 
   useEffect(() => {
     let isMounted = true;

@@ -138,7 +138,7 @@ export function ProductDetailPage() {
       value:
         product.roll_width ||
         (familyData?.technicalHighlights?.[1]?.value &&
-          familyData.technicalHighlights[1].label.toLowerCase().includes("width")
+        familyData.technicalHighlights[1].label.toLowerCase().includes("width")
           ? familyData.technicalHighlights[1].value
           : null),
     },
@@ -148,7 +148,7 @@ export function ProductDetailPage() {
       value:
         product.roll_length ||
         (familyData?.technicalHighlights?.[2]?.value &&
-          familyData.technicalHighlights[2].label.toLowerCase().includes("length")
+        familyData.technicalHighlights[2].label.toLowerCase().includes("length")
           ? familyData.technicalHighlights[2].value
           : null),
     },
@@ -300,11 +300,11 @@ export function ProductDetailPage() {
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
           ...(product.product_categories?.name
             ? [
-              {
-                name: product.product_categories.name,
-                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
-              },
-            ]
+                {
+                  name: product.product_categories.name,
+                  url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+                },
+              ]
             : []),
           { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
         ]}
@@ -341,32 +341,32 @@ export function ProductDetailPage() {
               },
               ...(product.product_categories?.name
                 ? [
-                  product.product_categories.slug
-                    ? {
-                      label: product.product_categories.name,
-                      to: "/products/$category",
-                      params: { category: product.product_categories.slug },
-                    }
-                    : {
-                      label: product.product_categories.name,
-                      to: "/catalogue",
-                      search: {
-                        q: "",
-                        cats: [product.product_categories.id],
-                        mans: [],
-                        sort: "newest",
-                      },
-                    },
-                ]
+                    product.product_categories.slug
+                      ? {
+                          label: product.product_categories.name,
+                          to: "/products/$category",
+                          params: { category: product.product_categories.slug },
+                        }
+                      : {
+                          label: product.product_categories.name,
+                          to: "/catalogue",
+                          search: {
+                            q: "",
+                            cats: [product.product_categories.id],
+                            mans: [],
+                            sort: "newest",
+                          },
+                        },
+                  ]
                 : []),
               ...(product.manufacturers?.name
                 ? [
-                  {
-                    label: product.manufacturers.name,
-                    to: "/catalogue",
-                    search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
-                  },
-                ]
+                    {
+                      label: product.manufacturers.name,
+                      to: "/catalogue",
+                      search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
+                    },
+                  ]
                 : []),
               { label: product.name },
             ]}

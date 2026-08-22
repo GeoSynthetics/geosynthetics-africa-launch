@@ -285,8 +285,7 @@ export function invalidateDynamicMenusCache() {
 
 export function useDynamicMegaMenus() {
   const rootData = useLoaderData({ from: "__root__" }) as
-    | { megaMenu: MegaMenuConfig[] }
-    | undefined;
+    { megaMenu: MegaMenuConfig[] } | undefined;
   const menus = rootData?.megaMenu ?? _cache ?? megaMenus;
   return { menus, isLoading: false };
 }
