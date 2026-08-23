@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import authHero from "@/assets/auth-hero.png";
+import authHero from "@/assets/contact-page-hero.png";
 
 interface AuthLayoutProps {
   /** Content rendered inside the right-hand form panel */
