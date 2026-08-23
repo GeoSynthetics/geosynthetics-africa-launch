@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
+import { DEFAULT_SERVICES_TEMPLATES } from "@/types/service-template";
 
 interface CapabilityItem {
   icon: string;
@@ -175,7 +176,7 @@ export function ServicesPage() {
   }, [hierarchy, templates]);
 
   const serviceDetails = (slug: string, fallbackLabel: string) => {
-    const t = templates?.[slug] || {};
+    const t = templates?.[slug] || DEFAULT_SERVICES_TEMPLATES[slug] || {};
     return {
       title: t.title || fallbackLabel,
       description:

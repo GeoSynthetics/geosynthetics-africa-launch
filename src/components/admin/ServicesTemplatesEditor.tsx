@@ -17,6 +17,7 @@ import {
   Trash2,
   Search,
   ChevronLeft,
+  RotateCcw,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
@@ -32,100 +33,17 @@ import {
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+import {
+  type BulletItem,
+  type CapabilityItem,
+  type StatItem,
+  type DownloadItem,
+  type ServiceSeo,
+  type ServiceTemplate,
+  DEFAULT_SERVICES_TEMPLATES,
+} from "@/types/service-template";
 
-export interface BulletItem {
-  title: string;
-  description?: string;
-}
-
-export interface CapabilityItem {
-  icon: string;
-  title: string;
-  description: string;
-}
-
-export interface StatItem {
-  value: string;
-  label: string;
-}
-
-export interface DownloadItem {
-  label: string;
-  url: string;
-}
-
-export interface ServiceSeo {
-  title: string;
-  description: string;
-  keywords: string;
-}
-
-export interface ServiceTemplate {
-  title: string;
-  description: string;
-  heroImage: string;
-  badge?: string;
-  topSellingProductId?: string;
-  topSellingProductIds?: string[];
-
-  // Left Column Content
-  overviewParagraphs?: string[];
-  whyChooseTitle?: string;
-  whyChoose?: BulletItem[];
-  whatWeDeliverTitle?: string;
-  whatWeDeliver?: BulletItem[];
-  coverageTitle?: string;
-  coverageText?: string;
-  coverageBullets?: string[];
-  coverageImage?: string;
-  coverageCaption?: string;
-
-  // Right Column Sidebar Content
-  sidebarImage?: string;
-  sidebarCaption?: string;
-  directModelTitle?: string;
-  directModelText?: string;
-  directModelItems?: BulletItem[];
-  packagingTitle?: string;
-  packagingText?: string;
-  packagingItems?: string[];
-  afcftaTitle?: string;
-  afcftaText?: string;
-  afcftaItems?: string[];
-  playbookTitle?: string;
-  playbookItems?: BulletItem[];
-
-  // Bottom Stats Row
-  statsTitle?: string;
-  statsDescription?: string;
-  stats?: StatItem[];
-
-  // Products & Downloads
-  productsTitle?: string;
-  products?: string[];
-  downloadsTitle?: string;
-  downloads?: DownloadItem[];
-
-  // Landing Page Specific Fields
-  landingTitle?: string;
-  landingSubtitle?: string;
-  landingHeroImage?: string;
-  capabilitiesTitle?: string;
-  capabilities?: CapabilityItem[];
-  faqs?: { question: string; answer: string }[];
-  ctaTitle?: string;
-  ctaButtonText?: string;
-  ctaButtonUrl?: string;
-
-  seo: ServiceSeo | null;
-
-  // Legacy fields
-  content?: {
-    features: string[];
-    sections: unknown[];
-  };
-}
+export type { BulletItem, CapabilityItem, StatItem, DownloadItem, ServiceSeo, ServiceTemplate };
 
 type AllServiceTemplates = Record<string, ServiceTemplate>;
 
@@ -235,9 +153,21 @@ export function ServicesTemplatesEditor() {
   // DB reference state
   const [allProducts, setAllProducts] = useState<{ id: string; name: string; slug: string }[]>([]);
 
+  const SERVICE_LABEL_MAP: Record<string, string> = {
+    supply: "Supply (Direct Sourcing)",
+    logistics: "30+ Country Delivery (Logistics & Customs)",
+    installation: "IAGI-Aligned Installation",
+    "qa-qc": "QA / QC & Testing",
+    "design-support": "Design Support",
+    "after-sales": "After Sales Support",
+  };
+
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
-    const list = hierarchyItems.map((item) => ({ slug: item.slug, label: item.label }));
+    const list = hierarchyItems.map((item) => ({
+      slug: item.slug,
+      label: SERVICE_LABEL_MAP[item.slug] || item.label,
+    }));
 
     // Add any template key in allData that is NOT in the hierarchy list
     Object.keys(allData).forEach((slug) => {
@@ -245,6 +175,7 @@ export function ServicesTemplatesEditor() {
         list.push({
           slug,
           label:
+            SERVICE_LABEL_MAP[slug] ||
             allData[slug]?.title ||
             slug
               .split("-")
@@ -256,12 +187,16 @@ export function ServicesTemplatesEditor() {
 
     // If hierarchy is empty (e.g. not loaded or default), fallback to static SERVICES
     if (list.length === 0) {
-      const fallbackList = SERVICES.map((s) => ({ slug: s.slug, label: s.label }));
+      const fallbackList = SERVICES.map((s) => ({
+        slug: s.slug,
+        label: SERVICE_LABEL_MAP[s.slug] || s.label,
+      }));
       Object.keys(allData).forEach((slug) => {
         if (slug !== "__landing" && !fallbackList.some((item) => item.slug === slug)) {
           fallbackList.push({
             slug,
             label:
+              SERVICE_LABEL_MAP[slug] ||
               allData[slug]?.title ||
               slug
                 .split("-")
@@ -344,7 +279,6 @@ export function ServicesTemplatesEditor() {
       toast.error("Failed to load service templates: " + error.message);
     } else {
       const stored = (data?.value ?? {}) as AllServiceTemplates;
-      // Pre-seed blank records for any slug not yet in the store
       const seeded: AllServiceTemplates = { ...stored };
 
       // Use hierarchy items for seeding, fallback to static services if empty
@@ -354,39 +288,98 @@ export function ServicesTemplatesEditor() {
           : SERVICES;
 
       for (const svc of seedSource) {
+        const def = DEFAULT_SERVICES_TEMPLATES[svc.slug] || blankTemplate();
         if (!seeded[svc.slug]) {
-          seeded[svc.slug] = { ...blankTemplate(), title: svc.label };
+          seeded[svc.slug] = { ...def, title: def.title || svc.label };
         } else {
-          // Merge default values to prevent crash for templates missing new keys
+          // Merge default values to ensure all fields are populated and none empty
+          const curr = seeded[svc.slug];
           seeded[svc.slug] = {
-            ...blankTemplate(),
-            ...seeded[svc.slug],
+            ...def,
+            ...curr,
+            title: curr.title || def.title || svc.label,
+            description: curr.description || def.description || "",
+            heroImage: curr.heroImage || def.heroImage || "",
+            badge: curr.badge || def.badge || "Services",
+            overviewParagraphs:
+              curr.overviewParagraphs && curr.overviewParagraphs.length > 0
+                ? curr.overviewParagraphs
+                : def.overviewParagraphs || [],
+            whyChooseTitle: curr.whyChooseTitle || def.whyChooseTitle,
+            whyChoose:
+              curr.whyChoose && curr.whyChoose.length > 0 ? curr.whyChoose : def.whyChoose || [],
+            whatWeDeliverTitle: curr.whatWeDeliverTitle || def.whatWeDeliverTitle,
+            whatWeDeliver:
+              curr.whatWeDeliver && curr.whatWeDeliver.length > 0
+                ? curr.whatWeDeliver
+                : def.whatWeDeliver || [],
+            coverageTitle: curr.coverageTitle || def.coverageTitle,
+            coverageText: curr.coverageText || def.coverageText,
+            coverageBullets:
+              curr.coverageBullets && curr.coverageBullets.length > 0
+                ? curr.coverageBullets
+                : def.coverageBullets || [],
+            coverageImage: curr.coverageImage || def.coverageImage,
+            coverageCaption: curr.coverageCaption || def.coverageCaption,
+            sidebarImage: curr.sidebarImage || def.sidebarImage,
+            sidebarCaption: curr.sidebarCaption || def.sidebarCaption,
+            directModelTitle: curr.directModelTitle || def.directModelTitle,
+            directModelText: curr.directModelText || def.directModelText,
+            directModelItems:
+              curr.directModelItems && curr.directModelItems.length > 0
+                ? curr.directModelItems
+                : def.directModelItems || [],
+            packagingTitle: curr.packagingTitle || def.packagingTitle,
+            packagingText: curr.packagingText || def.packagingText,
+            packagingItems:
+              curr.packagingItems && curr.packagingItems.length > 0
+                ? curr.packagingItems
+                : def.packagingItems || [],
+            afcftaTitle: curr.afcftaTitle || def.afcftaTitle,
+            afcftaText: curr.afcftaText || def.afcftaText,
+            afcftaItems:
+              curr.afcftaItems && curr.afcftaItems.length > 0
+                ? curr.afcftaItems
+                : def.afcftaItems || [],
+            playbookTitle: curr.playbookTitle || def.playbookTitle,
+            playbookItems:
+              curr.playbookItems && curr.playbookItems.length > 0
+                ? curr.playbookItems
+                : def.playbookItems || [],
+            statsTitle: curr.statsTitle || def.statsTitle,
+            statsDescription: curr.statsDescription || def.statsDescription,
+            stats: curr.stats && curr.stats.length > 0 ? curr.stats : def.stats || [],
+            productsTitle: curr.productsTitle || def.productsTitle,
+            products:
+              curr.products && curr.products.length > 0 ? curr.products : def.products || [],
+            downloadsTitle: curr.downloadsTitle || def.downloadsTitle,
+            downloads:
+              curr.downloads && curr.downloads.length > 0 ? curr.downloads : def.downloads || [],
             seo: {
-              title: seeded[svc.slug].seo?.title || "",
-              description: seeded[svc.slug].seo?.description || "",
-              keywords: seeded[svc.slug].seo?.keywords || "",
+              ...(def.seo || { title: "", description: "", keywords: "" }),
+              ...(curr.seo || {}),
             },
           };
         }
       }
 
+      const defaultLanding = DEFAULT_SERVICES_TEMPLATES["__landing"] || blankTemplate();
       if (!seeded["__landing"]) {
-        seeded["__landing"] = {
-          ...blankTemplate(),
-          title: "Pan-African Geosynthetics Delivery, Installation & Support",
-          description:
-            "Geosynthetics Africa delivers pan-African supply, installation and QA/QC of geosynthetics systems.",
-          seo: {
-            title: "Services — Geosynthetics Africa",
-            description:
-              "Pan-African supply, installation and QA/QC of geosynthetics systems across mining, infrastructure and environmental projects.",
-            keywords: "geosynthetics installation, geomembrane welding, SANS 1526, leak detection",
-          },
-        };
+        seeded["__landing"] = { ...defaultLanding };
       } else {
         seeded["__landing"] = {
-          ...blankTemplate(),
+          ...defaultLanding,
           ...seeded["__landing"],
+          landingTitle: seeded["__landing"].landingTitle || defaultLanding.landingTitle,
+          landingSubtitle: seeded["__landing"].landingSubtitle || defaultLanding.landingSubtitle,
+          capabilities:
+            seeded["__landing"].capabilities && seeded["__landing"].capabilities.length > 0
+              ? seeded["__landing"].capabilities
+              : defaultLanding.capabilities || [],
+          faqs:
+            seeded["__landing"].faqs && seeded["__landing"].faqs.length > 0
+              ? seeded["__landing"].faqs
+              : defaultLanding.faqs || [],
         };
       }
 
@@ -522,6 +515,21 @@ export function ServicesTemplatesEditor() {
         ...patch,
       },
     }));
+
+  const handleResetDefault = () => {
+    if (!activeSlug) return;
+    const def = DEFAULT_SERVICES_TEMPLATES[activeSlug];
+    if (!def) {
+      toast.error(`No standard default template found for "${activeSlug}".`);
+      return;
+    }
+    setAllData((prev) => ({
+      ...prev,
+      [activeSlug]: { ...def },
+    }));
+    setDirty(true);
+    toast.success(`Reset "${activeSlug}" template to default values. Click "Save" to persist.`);
+  };
 
   if (loading) {
     return <TemplatesEditorSkeleton />;
@@ -771,6 +779,18 @@ export function ServicesTemplatesEditor() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  {DEFAULT_SERVICES_TEMPLATES[activeSlug] && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleResetDefault}
+                      className="gap-1.5 text-xs h-8 cursor-pointer hover:bg-muted text-muted-foreground hover:text-foreground"
+                      title="Reset all fields to standard default content"
+                    >
+                      <RotateCcw className="h-3 w-3" /> Reset Defaults
+                    </Button>
+                  )}
                   <Button
                     asChild
                     variant="outline"
