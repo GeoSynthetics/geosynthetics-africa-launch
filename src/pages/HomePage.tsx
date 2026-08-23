@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Upload,
@@ -44,6 +45,40 @@ export function HomePage() {
   const presence = { ...DEFAULT_HOMEPAGE_CONTENT.presence, ...content.presence };
   const projects = { ...DEFAULT_HOMEPAGE_CONTENT.projects, ...content.projects };
   const boqBanner = { ...DEFAULT_HOMEPAGE_CONTENT.boqBanner, ...content.boqBanner };
+
+  const caseStudies = ((loaderData as any)?.caseStudies || []) as Array<{
+    id: string;
+    slug: string;
+    title: string;
+    hero_image_url?: string | null;
+    sector?: string | null;
+    country?: string | null;
+    location?: string | null;
+    scale?: string | null;
+    summary?: string | null;
+    products_used?: any;
+    service_type?: string | null;
+    project_year?: number | string | null;
+  }>;
+
+  // Derive showcased projects dynamically from published case studies
+  const showcasedProjects = useMemo(() => {
+    if (!caseStudies || caseStudies.length === 0) return [];
+
+    const featuredIds: string[] = projects.featuredProjectIds || [];
+    if (featuredIds.length > 0) {
+      const matched = featuredIds
+        .map((id) => caseStudies.find((cs) => cs.id === id || cs.slug === id))
+        .filter(Boolean) as typeof caseStudies;
+
+      if (matched.length > 0) {
+        const remaining = caseStudies.filter((cs) => !matched.some((m) => m.id === cs.id));
+        return [...matched, ...remaining].slice(0, 3);
+      }
+    }
+
+    return caseStudies.slice(0, 3);
+  }, [caseStudies, projects.featuredProjectIds]);
 
   return (
     <>
@@ -380,32 +415,78 @@ export function HomePage() {
             </Link>
           </div>
           <div className="grid lg:grid-cols-4 gap-5">
-            {projects.cards.map((c, idx) => (
-              <article
-                key={c.id || idx}
-                className="group rounded overflow-hidden border border-border bg-card lg:col-span-1"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={
-                      c.image ||
-                      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
-                    }
-                    alt={c.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                    {c.tag}
-                  </span>
-                </div>
-                <div className="p-4">
-                  <div className="font-display text-base font-bold uppercase">{c.title}</div>
-                  <div className="mt-2 text-xs text-muted-foreground">📍 {c.location}</div>
-                  <div className="text-xs text-muted-foreground">⚙ {c.systemDetails}</div>
-                </div>
-              </article>
-            ))}
+            {showcasedProjects.map((c) => {
+              const tag =
+                c.sector ||
+                (c.service_type ? c.service_type.replace(/_/g, " ") : "PROJECT");
+              const locationText =
+                [c.location, c.country].filter(Boolean).join(", ") ||
+                c.country ||
+                c.location ||
+                "Pan-Africa";
+              const systemDetails =
+                c.scale ||
+                (Array.isArray(c.products_used) && c.products_used[0]?.name
+                  ? c.products_used[0].name
+                  : c.summary) ||
+                "Engineered Geosynthetic System";
+
+              return (
+                <article
+                  key={c.id}
+                  className="group rounded overflow-hidden border border-border bg-card lg:col-span-1 flex flex-col transition-all duration-300 hover:border-primary/50 hover:shadow-md"
+                >
+                  <Link
+                    to="/projects/$slug"
+                    params={{ slug: c.slug }}
+                    className="block relative aspect-[4/3] overflow-hidden bg-muted"
+                  >
+                    <img
+                      src={
+                        c.hero_image_url ||
+                        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+                      }
+                      alt={c.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded shadow-sm">
+                      {tag}
+                    </span>
+                  </Link>
+                  <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link
+                        to="/projects/$slug"
+                        params={{ slug: c.slug }}
+                        className="font-display text-base font-bold uppercase hover:text-primary transition-colors line-clamp-2 block"
+                      >
+                        {c.title}
+                      </Link>
+                      {locationText && (
+                        <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+                          <span>📍</span> {locationText}
+                        </div>
+                      )}
+                      {systemDetails && (
+                        <div className="mt-1 text-xs text-muted-foreground flex items-start gap-1 line-clamp-2">
+                          <span>⚙</span> <span>{systemDetails}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <Link
+                        to="/projects/$slug"
+                        params={{ slug: c.slug }}
+                        className="text-xs font-semibold text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                      >
+                        View Case Study <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
             <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 lg:col-span-1 flex flex-col">
               <h3 className="font-display text-lg font-bold uppercase">
                 {projects.catalogueBoxHeading}

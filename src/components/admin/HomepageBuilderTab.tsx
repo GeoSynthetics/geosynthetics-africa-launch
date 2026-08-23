@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ImagePicker } from "./ImagePicker";
+import { ProjectSelector } from "./ProjectSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +16,10 @@ import {
   CheckCircle2,
   GripVertical,
   Home,
+  ArrowUp,
+  ArrowDown,
+  ExternalLink,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SectionHeading, FieldLabel } from "./TemplateEditorShared";
@@ -1222,20 +1227,71 @@ function ProjectsEditor({
     val: HomepageContent["projects"][K],
   ) => onChange({ ...data, [key]: val });
 
-  const addCard = () =>
-    set("cards", [
-      ...data.cards,
-      { id: `proj-${Date.now()}`, image: "", tag: "", title: "", location: "", systemDetails: "" },
-    ]);
-  const removeCard = (i: number) =>
+  const [availableProjects, setAvailableProjects] = useState<any[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  // Load published case studies from Supabase
+  useEffect(() => {
+    async function loadDbProjects() {
+      setLoadingProjects(true);
+      try {
+        const { data: dbData, error } = await supabase
+          .from("case_studies")
+          .select("id, title, slug, hero_image_url, country, location, sector, scale, project_year")
+          .eq("status", "published")
+          .order("project_year", { ascending: false })
+          .order("title");
+
+        if (!error && dbData) {
+          setAvailableProjects(dbData);
+        }
+      } catch (err) {
+        console.error("Failed to load project templates:", err);
+      } finally {
+        setLoadingProjects(false);
+      }
+    }
+    loadDbProjects();
+  }, []);
+
+  const featuredIds: string[] = data.featuredProjectIds || [];
+
+  // Match selected projects in the exact order configured
+  const selectedProjects = useMemo(() => {
+    return featuredIds
+      .map((id) => availableProjects.find((p) => p.id === id || p.slug === id))
+      .filter(Boolean);
+  }, [featuredIds, availableProjects]);
+
+  const handleAddProject = (project: { id: string }) => {
+    if (!featuredIds.includes(project.id)) {
+      set("featuredProjectIds", [...featuredIds, project.id]);
+    }
+  };
+
+  const handleRemoveProject = (id: string) => {
     set(
-      "cards",
-      data.cards.filter((_, idx) => idx !== i),
+      "featuredProjectIds",
+      featuredIds.filter((fid) => fid !== id),
     );
-  const updateCard = (i: number, patch: Partial<ProjectCard>) => {
-    const n = [...data.cards];
-    n[i] = { ...n[i], ...patch };
-    set("cards", n);
+  };
+
+  const handleMoveUp = (index: number) => {
+    if (index <= 0) return;
+    const next = [...featuredIds];
+    const temp = next[index - 1];
+    next[index - 1] = next[index];
+    next[index] = temp;
+    set("featuredProjectIds", next);
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index >= featuredIds.length - 1) return;
+    const next = [...featuredIds];
+    const temp = next[index + 1];
+    next[index + 1] = next[index];
+    next[index] = temp;
+    set("featuredProjectIds", next);
   };
 
   return (
@@ -1267,79 +1323,116 @@ function ProjectsEditor({
             <Input
               value={data.ctaUrl}
               onChange={(e) => set("ctaUrl", e.target.value)}
-              placeholder="/resources"
+              placeholder="/projects"
               className="text-sm font-mono"
             />
           </div>
         </div>
       </div>
 
-      <div className="border-t border-border pt-4">
-        <div className="flex items-center justify-between mb-3">
-          <FieldLabel>Project Cards ({data.cards.length})</FieldLabel>
-          <Button variant="outline" size="sm" onClick={addCard} className="gap-1 text-xs h-7">
-            <Plus className="h-3 w-3" /> Add Project
-          </Button>
-        </div>
-        <div className="space-y-3">
-          {data.cards.map((card, i) => (
-            <CollapsibleCard
-              key={card.id}
-              index={i}
-              title={card.title}
-              onRemove={() => removeCard(i)}
-            >
-              <ImageUploadField
-                label="Project Cover Photo"
-                value={card.image}
-                onChange={(v) => updateCard(i, { image: v })}
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <FieldLabel>Category Tag</FieldLabel>
-                  <Input
-                    value={card.tag}
-                    onChange={(e) => updateCard(i, { tag: e.target.value })}
-                    placeholder="RESERVOIR LINING"
-                    className="text-sm"
-                  />
-                </div>
-                <div>
-                  <FieldLabel>Location</FieldLabel>
-                  <Input
-                    value={card.location}
-                    onChange={(e) => updateCard(i, { location: e.target.value })}
-                    placeholder="South Africa"
-                    className="text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <FieldLabel>Project Name</FieldLabel>
-                <Input
-                  value={card.title}
-                  onChange={(e) => updateCard(i, { title: e.target.value })}
-                  placeholder="BRANDVLEI RESERVOIR LINING"
-                  className="text-sm"
-                />
-              </div>
-              <div>
-                <FieldLabel>System Details</FieldLabel>
-                <Input
-                  value={card.systemDetails}
-                  onChange={(e) => updateCard(i, { systemDetails: e.target.value })}
-                  placeholder="HDPE Lining System"
-                  className="text-sm"
-                />
-              </div>
-            </CollapsibleCard>
-          ))}
-          {data.cards.length === 0 && (
-            <p className="text-xs text-muted-foreground italic">
-              No project cards yet — click Add Project.
+      {/* Featured Projects Dynamic Selector */}
+      <div className="border-t border-border pt-5 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <FieldLabel>Featured Showcase Projects ({selectedProjects.length})</FieldLabel>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Select case studies from your Project Templates to showcase on the homepage.
             </p>
-          )}
+          </div>
+          <ProjectSelector
+            onSelect={(proj) => handleAddProject(proj)}
+            excludeIds={featuredIds}
+            placeholder="+ Select Project to Feature"
+            className="text-xs h-8"
+          />
         </div>
+
+        {selectedProjects.length === 0 && (
+          <div className="rounded border border-dashed border-border/80 bg-muted/20 p-4 text-center">
+            <Briefcase className="h-6 w-6 text-muted-foreground mx-auto mb-1.5 opacity-60" />
+            <p className="text-xs font-semibold">No specific projects selected</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5 max-w-md mx-auto">
+              The homepage will automatically showcase the 3 latest published case studies from your Projects Templates. You can pick specific ones above to customize the order.
+            </p>
+          </div>
+        )}
+
+        {selectedProjects.length > 0 && (
+          <div className="space-y-2.5">
+            {selectedProjects.map((project, i) => (
+              <div
+                key={project.id}
+                className="flex items-center gap-3 p-3 bg-surface border border-border rounded-lg group hover:border-border/80 transition-colors"
+              >
+                <div className="flex items-center justify-center h-6 w-6 rounded bg-primary/10 text-primary font-bold text-xs shrink-0">
+                  #{i + 1}
+                </div>
+
+                <div className="h-12 w-16 rounded overflow-hidden bg-muted shrink-0 border border-border/50">
+                  {project.hero_image_url ? (
+                    <img
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-[10px] text-muted-foreground">
+                      No img
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm truncate flex items-center gap-2">
+                    <span>{project.title}</span>
+                    {project.sector && (
+                      <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                        {project.sector}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                    {project.country && <span>📍 {project.country}</span>}
+                    {project.scale && <span>⚙ {project.scale}</span>}
+                    <span className="font-mono text-[10px] opacity-70">/projects/{project.slug}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={i === 0}
+                    onClick={() => handleMoveUp(i)}
+                    className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                    title="Move Up"
+                  >
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={i === selectedProjects.length - 1}
+                    onClick={() => handleMoveDown(i)}
+                    className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                    title="Move Down"
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveProject(project.id)}
+                    className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    title="Remove from showcase"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Catalogue Callout Box */}
@@ -1350,7 +1443,7 @@ function ProjectsEditor({
           <Input
             value={data.catalogueBoxHeading}
             onChange={(e) => set("catalogueBoxHeading", e.target.value)}
-            placeholder="EXPLORE OUR CATALOGUE"
+            placeholder="SPEC IT FROM THE CATALOGUE"
             className="text-sm"
           />
         </div>

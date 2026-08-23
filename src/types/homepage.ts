@@ -152,12 +152,12 @@ export interface HomepageContent {
     mapAsset: string; // image URL
   };
 
-  // § 8 – Case Studies / Projects
+  // § 8 – Case Studies / Projects Showcase (Dynamic from case_studies)
   projects: {
     sectionTitle: string;
     ctaText: string;
     ctaUrl: string;
-    cards: ProjectCard[];
+    featuredProjectIds?: string[];
     catalogueBoxHeading: string;
     catalogueBoxContent: string;
     catalogueSearchPlaceholder: string;
@@ -416,36 +416,11 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     sectionTitle: "PROVEN ON PROJECTS ACROSS AFRICA",
     ctaText: "VIEW ALL CASE STUDIES",
     ctaUrl: "/projects",
-    cards: [
-      {
-        id: "brandvlei",
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-        tag: "RESERVOIR LINING",
-        title: "BRANDVLEI RESERVOIR LINING",
-        location: "South Africa",
-        systemDetails: "HDPE Lining System",
-      },
-      {
-        id: "tsf",
-        image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&q=80",
-        tag: "TSF LINING SYSTEM",
-        title: "TSF LINING SYSTEM",
-        location: "Ghana",
-        systemDetails: "HDPE + Geotextile Protection",
-      },
-      {
-        id: "floating",
-        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-        tag: "FLOATING COVER",
-        title: "FLOATING COVER SYSTEM",
-        location: "Zimbabwe",
-        systemDetails: "15,000 m² Installed",
-      },
-    ],
-    catalogueBoxHeading: "EXPLORE OUR CATALOGUE",
+    featuredProjectIds: [],
+    catalogueBoxHeading: "SPEC IT FROM THE CATALOGUE",
     catalogueBoxContent:
-      "Search, filter and explore over 200 engineered materials for every application.",
-    catalogueSearchPlaceholder: "Search products, applications, standards…",
+      "Search 200+ engineered materials by product, application or standard. Datasheets and GRI/ASTM specifications on every item.",
+    catalogueSearchPlaceholder: "HDPE 1.5mm, heap leach pad, GRI-GM13…",
     catalogueCtaText: "VIEW FULL CATALOGUE →",
     catalogueCtaUrl: "/catalogue",
   },
