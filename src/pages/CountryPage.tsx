@@ -22,10 +22,11 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { GeoGrid } from "@/components/site/shapes";
 import type { CountryTemplate } from "@/types/country-template";
+import { useCountryTemplate } from "@/hooks/use-country-templates";
 
 export function CountryPage({ data }: { data: any }) {
-  const { countryTemplate, linkedProducts = [], caseStudies = [] } = data;
-  const template: CountryTemplate = countryTemplate;
+  const { countryTemplate: initialTemplate, linkedProducts = [], caseStudies = [] } = data;
+  const template: CountryTemplate | null = useCountryTemplate(initialTemplate, initialTemplate?.slug);
 
   const { open: openQuickQuote } = useQuickQuote();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);

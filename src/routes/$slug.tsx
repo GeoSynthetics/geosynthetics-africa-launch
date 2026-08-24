@@ -7,6 +7,7 @@ import { loadIndustryData, IndustryDetailSkeleton } from "@/routes/industries.$s
 import { loadApplicationData, ApplicationCategorySkeleton } from "@/routes/applications.$category";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
+import { fetchCountryTemplates } from "@/hooks/use-country-templates";
 
 /**
  * Lazy-load map: original path → lazy component.
@@ -53,30 +54,30 @@ export async function loadCountryData(customSlug: string) {
   let countryTemplate: CountryTemplate | null = null;
 
   try {
-    const { data } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "template_countries")
-      .maybeSingle();
+    const templates = await fetchCountryTemplates();
+    countryTemplate =
+      templates[customSlug] ||
+      Object.values(templates).find((t) => t.slug === customSlug) ||
+      null;
 
-    const templates = (data?.value as Record<string, CountryTemplate>) || {};
-    countryTemplate = templates[customSlug] || null;
-  } catch (err) {
-    console.error("Error reading template_countries:", err);
-  }
-
-  if (!countryTemplate) {
-    countryTemplate = DEFAULT_COUNTRY_TEMPLATES[customSlug] || null;
-  }
-
-  if (!countryTemplate) {
-    const countryMeta = COUNTRY_SEO_MAP[customSlug];
-    if (countryMeta) {
-      countryTemplate =
-        Object.values(DEFAULT_COUNTRY_TEMPLATES).find(
-          (t) => t.country.toLowerCase() === countryMeta.country.toLowerCase(),
-        ) || null;
+    if (!countryTemplate) {
+      const countryMeta = COUNTRY_SEO_MAP[customSlug];
+      if (countryMeta) {
+        countryTemplate =
+          Object.values(templates).find(
+            (t) => t.country.toLowerCase() === countryMeta.country.toLowerCase(),
+          ) || null;
+      }
     }
+  } catch (err) {
+    console.error("Error reading country templates:", err);
+  }
+
+  if (!countryTemplate) {
+    countryTemplate =
+      DEFAULT_COUNTRY_TEMPLATES[customSlug] ||
+      Object.values(DEFAULT_COUNTRY_TEMPLATES).find((t) => t.slug === customSlug) ||
+      null;
   }
 
   // Fetch linked products
@@ -248,11 +249,9 @@ export const Route = createFileRoute("/$slug")({
     const customSlug = params.slug;
 
     // Check if it's a country-specific SEO page slug or country template
-    if (COUNTRY_SEO_MAP[customSlug] || DEFAULT_COUNTRY_TEMPLATES[customSlug]) {
-      const loaderData = await loadCountryData(customSlug);
-      if (loaderData.countryTemplate) {
-        return { type: "country" as const, loaderData };
-      }
+    const countryLoaderData = await loadCountryData(customSlug);
+    if (countryLoaderData.countryTemplate) {
+      return { type: "country" as const, loaderData: countryLoaderData };
     }
 
     // 1. Try resolving to custom SEO path for static core pages first

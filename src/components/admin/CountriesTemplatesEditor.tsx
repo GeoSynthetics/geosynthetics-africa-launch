@@ -23,6 +23,7 @@ import {
   SectionHeading,
   FieldLabel,
   TemplatesEditorSkeleton,
+  PairsEditor,
 } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector, type ProductData } from "./ProductSelector";
@@ -30,6 +31,10 @@ import {
   type CountryTemplate,
   DEFAULT_COUNTRY_TEMPLATES,
 } from "@/types/country-template";
+import {
+  fetchCountryTemplates,
+  updateCountryTemplatesCache,
+} from "@/hooks/use-country-templates";
 
 const SUPABASE_KEY = "template_countries";
 
@@ -52,19 +57,7 @@ export function CountriesTemplatesEditor() {
   const loadTemplates = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", SUPABASE_KEY)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      let merged: Record<string, CountryTemplate> = { ...DEFAULT_COUNTRY_TEMPLATES };
-      if (data?.value && typeof data.value === "object") {
-        merged = { ...DEFAULT_COUNTRY_TEMPLATES, ...(data.value as Record<string, CountryTemplate>) };
-      }
-
+      const merged = await fetchCountryTemplates();
       setAllData(merged);
       const keys = Object.keys(merged);
       if (keys.length > 0 && (!activeSlug || !merged[activeSlug])) {
@@ -121,6 +114,7 @@ export function CountriesTemplatesEditor() {
 
       if (error) throw error;
 
+      updateCountryTemplatesCache(allData);
       toast.success("Country templates saved successfully!");
       setDirty(false);
     } catch (err: any) {
@@ -717,28 +711,57 @@ export function CountriesTemplatesEditor() {
                 </TabsContent>
 
                 {/* TAB 6: SEO & FAQS */}
-                <TabsContent value="seo" className="space-y-4 pt-4">
-                  <SectionHeading>SEO Meta Tags</SectionHeading>
-                  <div>
-                    <FieldLabel>Meta Page Title</FieldLabel>
-                    <Input
-                      value={currentItem.seo?.title || ""}
-                      onChange={(e) => updateSeoField("title", e.target.value)}
-                    />
+                <TabsContent value="seo" className="space-y-6 pt-4">
+                  <div className="space-y-4">
+                    <SectionHeading>SEO Meta Tags</SectionHeading>
+                    <div>
+                      <FieldLabel>Meta Page Title</FieldLabel>
+                      <Input
+                        value={currentItem.seo?.title || ""}
+                        onChange={(e) => updateSeoField("title", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Meta Description</FieldLabel>
+                      <Textarea
+                        rows={2}
+                        value={currentItem.seo?.description || ""}
+                        onChange={(e) => updateSeoField("description", e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Meta Keywords</FieldLabel>
+                      <Input
+                        value={currentItem.seo?.keywords || ""}
+                        onChange={(e) => updateSeoField("keywords", e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <FieldLabel>Meta Description</FieldLabel>
-                    <Textarea
-                      rows={2}
-                      value={currentItem.seo?.description || ""}
-                      onChange={(e) => updateSeoField("description", e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <FieldLabel>Meta Keywords</FieldLabel>
-                    <Input
-                      value={currentItem.seo?.keywords || ""}
-                      onChange={(e) => updateSeoField("keywords", e.target.value)}
+
+                  <div className="pt-4 border-t border-border space-y-4">
+                    <SectionHeading>Frequently Asked Questions (Country-Specific)</SectionHeading>
+                    <p className="text-xs text-muted-foreground">
+                      Configure localized FAQ items displayed on the {currentItem.country || "selected country"} landing page.
+                    </p>
+                    <PairsEditor
+                      label="Country FAQs"
+                      hint="Add, edit, or remove questions and answers specific to this country's supply and logistics."
+                      items={(currentItem.faqs || []) as any}
+                      fields={[
+                        {
+                          key: "question",
+                          label: "Question",
+                          placeholder: `e.g. What roll widths are available for ${currentItem.country || "this country"}?`,
+                        },
+                        {
+                          key: "answer",
+                          label: "Answer",
+                          placeholder: "Provide the localized answer...",
+                          multiline: true,
+                        },
+                      ]}
+                      onChange={(v) => updateCurrentField("faqs", v)}
+                      newItem={{ question: "", answer: "" } as any}
                     />
                   </div>
                 </TabsContent>
