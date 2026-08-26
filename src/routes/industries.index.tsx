@@ -26,10 +26,12 @@ export const Route = createFileRoute("/industries/")({
     const description =
       landing.seo?.description ||
       "High-performance geosynthetic systems tailored for key African industries, including mining, infrastructure, and agriculture.";
+    const keywords = landing.seo?.keywords;
     return {
       meta: [
         { title },
         { name: "description", content: description },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
         { property: "og:title", content: title },
         { property: "og:description", content: description },
       ],

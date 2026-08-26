@@ -35,6 +35,9 @@ const PAGE_COMPONENTS: Record<string, React.LazyExoticComponent<React.ComponentT
   "/projects": lazy(() =>
     import("@/pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage })),
   ),
+  "/industries": lazy(() =>
+    import("@/pages/IndustriesLanding").then((m) => ({ default: m.IndustriesLanding })),
+  ),
 };
 
 const ServicePageLazy = lazy(() =>
@@ -282,6 +285,15 @@ export const Route = createFileRoute("/$slug")({
           .order("created_at", { ascending: false })
           .limit(3);
         extraData.caseStudies = caseStudies || [];
+      } else if (originalPath === "/industries") {
+        const { data: rows } = await supabase
+          .from("site_config")
+          .select("key, value")
+          .in("key", ["template_industries", "hierarchy_industries"]);
+        extraData.templates =
+          (rows?.find((r) => r.key === "template_industries")?.value as Record<string, any>) || {};
+        extraData.hierarchy =
+          (rows?.find((r) => r.key === "hierarchy_industries")?.value as any) || null;
       }
       return { type: "core" as const, originalPath, seo, ...extraData };
     }
@@ -536,7 +548,7 @@ function CustomSlugPage() {
         </div>
       }
     >
-      <PageComponent />
+      <PageComponent data={loaderData} />
     </Suspense>
   );
 }

@@ -17,6 +17,7 @@ import {
   Trash2,
   Search,
   ChevronLeft,
+  RotateCcw,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
@@ -30,32 +31,14 @@ import {
 } from "./TemplateEditorShared";
 import { ImagePicker } from "./ImagePicker";
 import { ProductSelector } from "./ProductSelector";
+import {
+  DEFAULT_INDUSTRY_LANDING,
+  type IndustrySeo,
+  type IndustryTemplate,
+  type AllIndustryTemplates,
+} from "@/types/industry-template";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface IndustrySeo {
-  title: string;
-  description: string;
-  keywords: string;
-}
-
-interface IndustryTemplate {
-  title: string;
-  description: string;
-  heroImage: string;
-  content: {
-    challenges: string[];
-    applications: any[];
-    sections: unknown[];
-  };
-  topSellingProductId?: string;
-  topSellingProductIds?: string[];
-  caseStudies?: string[];
-  keyProducts?: string[];
-  seo: IndustrySeo | null;
-}
-
-type AllIndustryTemplates = Record<string, IndustryTemplate>;
+export type { IndustrySeo, IndustryTemplate, AllIndustryTemplates };
 
 const SUPABASE_KEY = "template_industries";
 
@@ -66,12 +49,17 @@ function blankTemplate(): IndustryTemplate {
     title: "",
     description: "",
     heroImage: "",
+    eyebrow: "Industries",
     content: { challenges: [], applications: [], sections: [] },
     topSellingProductId: "",
     topSellingProductIds: [],
     caseStudies: [],
     keyProducts: [],
-    seo: null,
+    seo: {
+      title: "",
+      description: "",
+      keywords: "",
+    },
   };
 }
 
@@ -130,7 +118,6 @@ export function IndustriesTemplatesEditor() {
     fetchCaseStudies();
   }, []);
 
-  // Dynamic list combining static mega-menu industries with custom ones from DB
   // Dynamic list combining the navigation hierarchy items with custom templates from DB
   const categoriesList = useMemo(() => {
     const list = hierarchyItems.map((item) => ({ slug: item.id, label: item.label }));
@@ -198,7 +185,6 @@ export function IndustriesTemplatesEditor() {
   }, [activeSlug, filteredCategories, currentPage]);
 
   // ── Load from Supabase ──
-  // ── Load from Supabase ──
   const load = useCallback(async () => {
     setLoading(true);
 
@@ -248,13 +234,37 @@ export function IndustriesTemplatesEditor() {
           seeded[ind.slug] = {
             ...blankTemplate(),
             ...seeded[ind.slug],
+            title: seeded[ind.slug].title || ind.label,
+            seo: {
+              ...(blankTemplate().seo || { title: "", description: "", keywords: "" }),
+              ...(seeded[ind.slug].seo || {}),
+            },
           };
         }
       }
+
+      // Seed Landing page template
+      const defaultLanding = DEFAULT_INDUSTRY_LANDING;
+      if (!seeded["__landing"]) {
+        seeded["__landing"] = { ...defaultLanding };
+      } else {
+        seeded["__landing"] = {
+          ...defaultLanding,
+          ...seeded["__landing"],
+          title: seeded["__landing"].title || defaultLanding.title,
+          description: seeded["__landing"].description || defaultLanding.description,
+          heroImage: seeded["__landing"].heroImage || defaultLanding.heroImage,
+          eyebrow: seeded["__landing"].eyebrow || defaultLanding.eyebrow || "Industries",
+          seo: {
+            ...(defaultLanding.seo || { title: "", description: "", keywords: "" }),
+            ...(seeded["__landing"].seo || {}),
+          },
+        };
+      }
+
       setAllData(seeded);
       if (!activeSlug) {
-        const defaultSlug = seedSource[0]?.slug ?? "";
-        setActiveSlug(defaultSlug);
+        setActiveSlug("__landing");
       }
     }
     setLoading(false);
@@ -323,11 +333,19 @@ export function IndustriesTemplatesEditor() {
     }
 
     if (activeSlug === slug) {
-      const nextActive = categoriesList.find((c) => c.slug !== slug)?.slug ?? "";
-      setActiveSlug(nextActive);
+      setActiveSlug("__landing");
     }
     setDirty(true);
     toast.success(`Deleted template "${slug}". Save to persist changes.`);
+  };
+
+  const handleResetLandingDefault = () => {
+    setAllData((prev) => ({
+      ...prev,
+      __landing: { ...DEFAULT_INDUSTRY_LANDING },
+    }));
+    setDirty(true);
+    toast.success("Reset industries landing page to default values. Click Save to persist.");
   };
 
   // ── Save to Supabase ──
@@ -424,7 +442,7 @@ export function IndustriesTemplatesEditor() {
           <Button
             onClick={handleSave}
             disabled={saving || !dirty}
-            className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2"
+            className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2 border-0 cursor-pointer"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {saving ? "Saving…" : "Save All"}
@@ -438,11 +456,7 @@ export function IndustriesTemplatesEditor() {
         <div className="w-64 shrink-0 border-r border-border flex flex-col bg-surface/30">
           <div className="px-4 py-3 border-b border-border">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Industries (
-              {filteredCategories.length !== categoriesList.length
-                ? `${filteredCategories.length}/${categoriesList.length}`
-                : categoriesList.length}
-              )
+              Industries Pages
             </p>
           </div>
 
@@ -508,52 +522,99 @@ export function IndustriesTemplatesEditor() {
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-            {paginatedCategories.map((ind) => {
-              const isActive = ind.slug === activeSlug;
-              const isStatic = ind.slug === "__landing";
-              return (
-                <button
-                  key={ind.slug}
-                  onClick={() => {
-                    setActiveSlug(ind.slug);
-                    setActiveTab("hero");
-                  }}
-                  className={cn(
-                    "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
-                    isActive
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-accent text-foreground",
-                  )}
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate font-medium text-xs">{ind.label}</div>
-                    <div className="truncate text-[10px] text-muted-foreground mt-0.5">
-                      {ind.slug}
+          <div className="flex-1 overflow-y-auto p-2 space-y-4">
+            {/* Main Pages Section */}
+            <div className="space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Main Pages
+              </p>
+              <button
+                onClick={() => {
+                  setActiveSlug("__landing");
+                  setActiveTab("hero");
+                }}
+                className={cn(
+                  "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                  activeSlug === "__landing"
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "hover:bg-accent text-foreground",
+                )}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-xs">Industries Landing Page</div>
+                  <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                    /industries
+                  </div>
+                </div>
+                {activeSlug === "__landing" && <ChevronRight className="h-3 w-3 text-primary" />}
+              </button>
+            </div>
+
+            {/* Categories Section */}
+            <div className="space-y-1">
+              <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Industry Categories (
+                {filteredCategories.length !== categoriesList.length
+                  ? `${filteredCategories.length}/${categoriesList.length}`
+                  : categoriesList.length}
+                )
+              </p>
+              <div className="space-y-0.5">
+                {paginatedCategories.map((ind) => {
+                  const isActive = ind.slug === activeSlug;
+                  const isStatic = ind.slug === "__landing";
+                  return (
+                    <div
+                      key={ind.slug}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
+                        setActiveSlug(ind.slug);
+                        setActiveTab("hero");
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setActiveSlug(ind.slug);
+                          setActiveTab("hero");
+                        }
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center justify-between group transition-colors cursor-pointer",
+                        isActive
+                          ? "bg-primary/10 text-primary font-semibold"
+                          : "hover:bg-accent text-foreground",
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate font-medium text-xs">{ind.label}</div>
+                        <div className="truncate text-[10px] text-muted-foreground mt-0.5">
+                          {ind.slug}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 ml-1 shrink-0">
+                        {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
+                        {!isStatic && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIndustryToDelete({ slug: ind.slug, label: ind.label });
+                            }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-1 ml-1 shrink-0">
-                    {isActive && <ChevronRight className="h-3 w-3 text-primary" />}
-                    {!isStatic && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIndustryToDelete({ slug: ind.slug, label: ind.label });
-                        }}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-            {filteredCategories.length === 0 && (
-              <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
-            )}
+                  );
+                })}
+                {filteredCategories.length === 0 && (
+                  <p className="text-center text-[10px] text-muted-foreground py-4">No results</p>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Pagination footer */}
@@ -597,11 +658,13 @@ export function IndustriesTemplatesEditor() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0 bg-surface/30">
                 <div>
                   <h3 className="font-display text-lg font-bold uppercase tracking-tight">
-                    {active.title || activeSlug}
+                    {activeSlug === "__landing"
+                      ? "Industries Landing Page"
+                      : active.title || activeSlug}
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap mt-1">
                     <code className="text-[10px] bg-surface border border-border px-2 py-0.5 rounded text-muted-foreground">
-                      /{activeSlug}
+                      {activeSlug === "__landing" ? "/industries" : `/${activeSlug}`}
                     </code>
                     {dirty && (
                       <span className="text-[10px] text-amber-500 font-bold">
@@ -611,15 +674,36 @@ export function IndustriesTemplatesEditor() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-                    <a href={`/${activeSlug}`} target="_blank" rel="noopener noreferrer">
+                  {activeSlug === "__landing" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleResetLandingDefault}
+                      className="gap-1.5 text-xs h-8 cursor-pointer hover:bg-muted text-muted-foreground hover:text-foreground"
+                      title="Reset landing page to default content"
+                    >
+                      <RotateCcw className="h-3 w-3" /> Reset Defaults
+                    </Button>
+                  )}
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs h-8 cursor-pointer"
+                  >
+                    <a
+                      href={activeSlug === "__landing" ? "/industries" : `/${activeSlug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <ExternalLink className="h-3 w-3" /> Preview
                     </a>
                   </Button>
                   <Button
                     onClick={handleSave}
                     disabled={saving || !dirty}
-                    className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5"
+                    className="bg-primary hover:bg-primary-hover text-white font-bold text-xs h-8 gap-1.5 border-0 cursor-pointer"
                   >
                     {saving ? (
                       <Loader2 className="h-3 w-3 animate-spin" />
@@ -638,14 +722,20 @@ export function IndustriesTemplatesEditor() {
                 className="flex-1 flex flex-col overflow-hidden"
               >
                 <TabsList className="px-6 pt-2 pb-0 bg-transparent border-b border-border rounded-none justify-start h-auto shrink-0 gap-0 overflow-x-auto flex-nowrap">
-                  {[
-                    { id: "hero", label: "Hero" },
-                    { id: "challenges", label: "Challenges" },
-                    { id: "applications", label: "Applications" },
-                    { id: "case-studies", label: "Case Studies" },
-                    { id: "products", label: "Products" },
-                    { id: "seo", label: "SEO" },
-                  ].map((t) => (
+                  {(activeSlug === "__landing"
+                    ? [
+                        { id: "hero", label: "Hero" },
+                        { id: "seo", label: "SEO" },
+                      ]
+                    : [
+                        { id: "hero", label: "Hero" },
+                        { id: "challenges", label: "Challenges" },
+                        { id: "applications", label: "Applications" },
+                        { id: "case-studies", label: "Case Studies" },
+                        { id: "products", label: "Products" },
+                        { id: "seo", label: "SEO" },
+                      ]
+                  ).map((t) => (
                     <TabsTrigger
                       key={t.id}
                       value={t.id}
@@ -659,19 +749,40 @@ export function IndustriesTemplatesEditor() {
                 <div className="flex-1 overflow-y-auto">
                   {/* ── HERO ── */}
                   <TabsContent value="hero" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Hero Section</SectionHeading>
+                    <SectionHeading>
+                      {activeSlug === "__landing" ? "Landing Hero Section" : "Hero Section"}
+                    </SectionHeading>
                     <div>
-                      <FieldLabel>Page Title (H1)</FieldLabel>
+                      <FieldLabel>
+                        {activeSlug === "__landing" ? "Landing Title (H1)" : "Page Title (H1)"}
+                      </FieldLabel>
                       <Input
                         value={active.title ?? ""}
                         onChange={(e) => setField("title", e.target.value)}
-                        placeholder="e.g. Mining"
+                        placeholder={
+                          activeSlug === "__landing"
+                            ? "e.g. High-Performance Geosynthetic Solutions for African Industries"
+                            : "e.g. Mining & Minerals Processing"
+                        }
                         className="text-sm"
                       />
                     </div>
+                    {activeSlug === "__landing" && (
+                      <div>
+                        <FieldLabel hint="Optional tag displayed above the main heading (default: Industries)">
+                          Hero Eyebrow
+                        </FieldLabel>
+                        <Input
+                          value={active.eyebrow ?? ""}
+                          onChange={(e) => setField("eyebrow", e.target.value)}
+                          placeholder="e.g. Industries"
+                          className="text-sm"
+                        />
+                      </div>
+                    )}
                     <div>
                       <ImagePicker
-                        label="Hero Image"
+                        label={activeSlug === "__landing" ? "Landing Hero Image" : "Hero Image"}
                         hint="Full URL or Supabase storage path to the hero background image"
                         value={active.heroImage ?? ""}
                         onChange={(val) => setField("heroImage", val)}
@@ -679,248 +790,193 @@ export function IndustriesTemplatesEditor() {
                       />
                     </div>
                     <div>
-                      <FieldLabel hint="Short paragraph shown below the title in the hero">
-                        Description
+                      <FieldLabel
+                        hint={
+                          activeSlug === "__landing"
+                            ? "Short introductory paragraph shown below the landing heading"
+                            : "Short paragraph shown below the title in the hero"
+                        }
+                      >
+                        {activeSlug === "__landing"
+                          ? "Landing Subtitle / Description"
+                          : "Description"}
                       </FieldLabel>
                       <Textarea
                         value={active.description ?? ""}
                         onChange={(e) => setField("description", e.target.value)}
-                        placeholder="Geosynthetics solutions for the mining industry across Africa…"
+                        placeholder={
+                          activeSlug === "__landing"
+                            ? "Tailored containment, stabilisation, and erosion control systems..."
+                            : "Geosynthetics solutions for the mining industry across Africa…"
+                        }
                         className="text-sm min-h-[96px] resize-none"
                       />
                     </div>
                   </TabsContent>
 
-                  {/* ── CHALLENGES ── */}
-                  <TabsContent value="challenges" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Industry Challenges</SectionHeading>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      These appear as challenge cards on the industry page, highlighting the key
-                      problems Geosynthetics Africa helps solve in this industry.
-                    </p>
-                    <StringListEditor
-                      label="Challenges"
-                      hint="Each item is shown as a challenge card on the industry page"
-                      items={active.content?.challenges ?? []}
-                      onChange={setChallenges}
-                      placeholder="e.g. Tailings storage and containment requirements"
-                    />
-                  </TabsContent>
+                  {/* ── CHALLENGES (Child pages only) ── */}
+                  {activeSlug !== "__landing" && (
+                    <TabsContent value="challenges" className="p-6 space-y-5 m-0">
+                      <SectionHeading>Industry Challenges</SectionHeading>
+                      <p className="text-xs text-muted-foreground mb-4">
+                        These appear as challenge cards on the industry page, highlighting the key
+                        problems Geosynthetics Africa helps solve in this industry.
+                      </p>
+                      <StringListEditor
+                        label="Challenges"
+                        hint="Each item is shown as a challenge card on the industry page"
+                        items={active.content?.challenges ?? []}
+                        onChange={setChallenges}
+                        placeholder="e.g. Tailings storage and containment requirements"
+                      />
+                    </TabsContent>
+                  )}
 
-                  {/* ── APPLICATIONS ── */}
-                  <TabsContent value="applications" className="p-6 space-y-5 m-0">
-                    {(() => {
-                      const rawApps = active.content?.applications ?? [];
-                      const normalizedApps = rawApps.map((app: any) => {
-                        if (typeof app === "string") {
-                          return { heading: app, description: "", link: "" };
-                        }
-                        return {
-                          heading: app.heading || app.title || "",
-                          description: app.description || "",
-                          link: app.link || app.to || "",
-                        };
-                      });
-
-                      const updateApp = (
-                        index: number,
-                        patch: Partial<{ heading: string; description: string; link: string }>,
-                      ) => {
-                        const next = normalizedApps.map((app, idx) => {
-                          if (idx === index) return { ...app, ...patch };
-                          return app;
-                        });
-                        setApplications(next);
-                      };
-
-                      const addApp = () => {
-                        setApplications([
-                          ...normalizedApps,
-                          { heading: "", description: "", link: "" },
-                        ]);
-                      };
-
-                      const removeApp = (index: number) => {
-                        setApplications(normalizedApps.filter((_, idx) => idx !== index));
-                      };
-
-                      return (
-                        <>
-                          <div className="flex items-center justify-between mb-4">
-                            <div>
-                              <SectionHeading>Key Applications</SectionHeading>
-                              <p className="text-xs text-muted-foreground">
-                                Configure structured key applications for this industry (heading,
-                                description, and link path).
-                              </p>
-                            </div>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={addApp}
-                              className="gap-1 text-xs shrink-0 cursor-pointer"
-                            >
-                              <Plus className="h-3.5 w-3.5" /> Add Application
-                            </Button>
-                          </div>
-
-                          <div className="space-y-4 max-w-2xl">
-                            {normalizedApps.map((app, idx) => (
-                              <div
-                                key={idx}
-                                className="border border-border rounded-lg p-4 bg-background space-y-3 relative group"
-                              >
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => removeApp(idx)}
-                                  className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                                <div className="grid sm:grid-cols-2 gap-3">
-                                  <div>
-                                    <FieldLabel>Heading</FieldLabel>
-                                    <Input
-                                      value={app.heading}
-                                      onChange={(e) => updateApp(idx, { heading: e.target.value })}
-                                      placeholder="e.g. Heap Leach Pad Lining"
-                                      className="text-xs h-8"
-                                    />
-                                  </div>
-                                  <div>
-                                    <FieldLabel>Link Path (optional)</FieldLabel>
-                                    <Input
-                                      value={app.link}
-                                      onChange={(e) => updateApp(idx, { link: e.target.value })}
-                                      placeholder="e.g. /applications/mining-systems"
-                                      className="text-xs h-8"
-                                    />
-                                  </div>
-                                </div>
-                                <div>
-                                  <FieldLabel>Description</FieldLabel>
-                                  <Textarea
-                                    value={app.description}
-                                    onChange={(e) =>
-                                      updateApp(idx, { description: e.target.value })
-                                    }
-                                    placeholder="Provide a detailed description of this key application..."
-                                    className="text-xs min-h-[60px] resize-none"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-
-                            {normalizedApps.length === 0 && (
-                              <p className="text-xs text-muted-foreground italic py-4">
-                                No key applications configured.
-                              </p>
-                            )}
-                          </div>
-                        </>
-                      );
-                    })()}
-                  </TabsContent>
-
-                  {/* ── CASE STUDIES ── */}
-                  <TabsContent value="case-studies" className="p-6 space-y-5 m-0">
-                    <SectionHeading>Featured Case Studies (Nominated)</SectionHeading>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      Select and order specific case studies to feature on this industry page. If
-                      none are selected, the system will fall back to automatically matching by
-                      sector.
-                    </p>
-
-                    <div className="space-y-2 max-w-md mb-4">
-                      {(active.caseStudies ?? []).map((csId) => {
-                        const csData = allCaseStudies.find((c) => c.id === csId);
-                        return (
-                          <div
-                            key={csId}
-                            className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
-                          >
-                            <span>{csData ? csData.title : `Case Study ID: ${csId}`}</span>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                              onClick={() =>
-                                setField(
-                                  "caseStudies",
-                                  (active.caseStudies ?? []).filter((id) => id !== csId),
-                                )
-                              }
-                            >
-                              ✕
-                            </Button>
-                          </div>
-                        );
-                      })}
-
-                      {(!active.caseStudies || active.caseStudies.length === 0) && (
-                        <p className="text-xs text-muted-foreground italic">
-                          No specific case studies nominated (falling back to auto-matching by
-                          sector).
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="max-w-md pt-2">
-                      <FieldLabel>Nominate a Case Study</FieldLabel>
-                      <select
-                        className="w-full text-xs border border-border bg-background rounded-lg p-2 h-9 text-foreground cursor-pointer focus:ring-1 focus:ring-primary focus:border-primary"
-                        value=""
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          if (val) {
-                            const currentIds = active.caseStudies ?? [];
-                            if (!currentIds.includes(val)) {
-                              setField("caseStudies", [...currentIds, val]);
-                            }
+                  {/* ── APPLICATIONS (Child pages only) ── */}
+                  {activeSlug !== "__landing" && (
+                    <TabsContent value="applications" className="p-6 space-y-5 m-0">
+                      {(() => {
+                        const rawApps = active.content?.applications ?? [];
+                        const normalizedApps = rawApps.map((app: any) => {
+                          if (typeof app === "string") {
+                            return { heading: app, description: "", link: "" };
                           }
-                        }}
-                      >
-                        <option value="" disabled>
-                          -- Select a case study to nominate --
-                        </option>
-                        {allCaseStudies
-                          .filter((cs) => !(active.caseStudies ?? []).includes(cs.id))
-                          .map((cs) => (
-                            <option key={cs.id} value={cs.id}>
-                              {cs.title}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </TabsContent>
+                          return {
+                            heading: app.heading || app.title || "",
+                            description: app.description || "",
+                            link: app.link || app.to || "",
+                          };
+                        });
 
-                  {/* ── PRODUCTS ── */}
-                  <TabsContent value="products" className="p-6 space-y-6 m-0">
-                    <div>
-                      <SectionHeading>Mega Menu Most Specified Products (Max 5)</SectionHeading>
+                        const updateApp = (
+                          index: number,
+                          patch: Partial<{ heading: string; description: string; link: string }>,
+                        ) => {
+                          const next = normalizedApps.map((app, idx) => {
+                            if (idx === index) return { ...app, ...patch };
+                            return app;
+                          });
+                          setApplications(next);
+                        };
+
+                        const addApp = () => {
+                          setApplications([
+                            ...normalizedApps,
+                            { heading: "", description: "", link: "" },
+                          ]);
+                        };
+
+                        const removeApp = (index: number) => {
+                          setApplications(normalizedApps.filter((_, idx) => idx !== index));
+                        };
+
+                        return (
+                          <>
+                            <div className="flex items-center justify-between mb-4">
+                              <div>
+                                <SectionHeading>Key Applications</SectionHeading>
+                                <p className="text-xs text-muted-foreground">
+                                  Configure structured key applications for this industry (heading,
+                                  description, and link path).
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={addApp}
+                                className="gap-1 text-xs shrink-0 cursor-pointer"
+                              >
+                                <Plus className="h-3.5 w-3.5" /> Add Application
+                              </Button>
+                            </div>
+
+                            <div className="space-y-4 max-w-2xl">
+                              {normalizedApps.map((app, idx) => (
+                                <div
+                                  key={idx}
+                                  className="border border-border rounded-lg p-4 bg-background space-y-3 relative group"
+                                >
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removeApp(idx)}
+                                    className="absolute top-2 right-2 h-7 w-7 text-destructive hover:bg-destructive/10 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                  <div className="grid sm:grid-cols-2 gap-3">
+                                    <div>
+                                      <FieldLabel>Heading</FieldLabel>
+                                      <Input
+                                        value={app.heading}
+                                        onChange={(e) => updateApp(idx, { heading: e.target.value })}
+                                        placeholder="e.g. Heap Leach Pad Lining"
+                                        className="text-xs h-8"
+                                      />
+                                    </div>
+                                    <div>
+                                      <FieldLabel>Link Path (optional)</FieldLabel>
+                                      <Input
+                                        value={app.link}
+                                        onChange={(e) => updateApp(idx, { link: e.target.value })}
+                                        placeholder="e.g. /applications/mining-systems"
+                                        className="text-xs h-8"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <FieldLabel>Description</FieldLabel>
+                                    <Textarea
+                                      value={app.description}
+                                      onChange={(e) =>
+                                        updateApp(idx, { description: e.target.value })
+                                      }
+                                      placeholder="Provide a detailed description of this key application..."
+                                      className="text-xs min-h-[60px] resize-none"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+
+                              {normalizedApps.length === 0 && (
+                                <p className="text-xs text-muted-foreground italic py-4">
+                                  No key applications configured.
+                                </p>
+                              )}
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </TabsContent>
+                  )}
+
+                  {/* ── CASE STUDIES (Child pages only) ── */}
+                  {activeSlug !== "__landing" && (
+                    <TabsContent value="case-studies" className="p-6 space-y-5 m-0">
+                      <SectionHeading>Featured Case Studies (Nominated)</SectionHeading>
                       <p className="text-xs text-muted-foreground mb-4">
-                        Select up to 5 most-specified products for this industry to show as a slider in
-                        the mega menu dropdown.
+                        Select and order specific case studies to feature on this industry page. If
+                        none are selected, the system will fall back to automatically matching by
+                        sector.
                       </p>
 
                       <div className="space-y-2 max-w-md mb-4">
-                        {(active.topSellingProductIds ?? []).map((pId) => {
-                          const pData = allProducts.find((p) => p.id === pId);
+                        {(active.caseStudies ?? []).map((csId) => {
+                          const csData = allCaseStudies.find((c) => c.id === csId);
                           return (
                             <div
-                              key={pId}
+                              key={csId}
                               className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
                             >
-                              <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                              <span>{csData ? csData.title : `Case Study ID: ${csId}`}</span>
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
                                 onClick={() =>
                                   setField(
-                                    "topSellingProductIds",
-                                    (active.topSellingProductIds ?? []).filter((id) => id !== pId),
+                                    "caseStudies",
+                                    (active.caseStudies ?? []).filter((id) => id !== csId),
                                   )
                                 }
                               >
@@ -930,124 +986,205 @@ export function IndustriesTemplatesEditor() {
                           );
                         })}
 
-                        {(!active.topSellingProductIds ||
-                          active.topSellingProductIds.length === 0) &&
-                          !active.topSellingProductId && (
-                            <p className="text-xs text-muted-foreground italic">
-                              No most specified products selected.
-                            </p>
-                          )}
-
-                        {(!active.topSellingProductIds ||
-                          active.topSellingProductIds.length === 0) &&
-                          active.topSellingProductId && (
-                            <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
-                              <span className="flex items-center gap-1.5">
-                                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                {allProducts.find((p) => p.id === active.topSellingProductId)
-                                  ?.name || `Product ID: ${active.topSellingProductId}`}{" "}
-                                (Legacy Single)
-                              </span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                onClick={() => setField("topSellingProductId", "")}
-                              >
-                                ✕
-                              </Button>
-                            </div>
-                          )}
-                      </div>
-
-                      {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
-                        <div className="max-w-md pt-2">
-                          <ProductSelector
-                            excludeIds={[
-                              ...(active.topSellingProductIds ?? []),
-                              ...(active.topSellingProductId ? [active.topSellingProductId] : []),
-                            ]}
-                            onSelect={(prod) => {
-                              const currentIds = [...(active.topSellingProductIds ?? [])];
-                              if (active.topSellingProductId && currentIds.length === 0) {
-                                currentIds.push(active.topSellingProductId);
-                              }
-                              setField("topSellingProductIds", [...currentIds, prod.id]);
-                              if (active.topSellingProductId) {
-                                setField("topSellingProductId", "");
-                              }
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="border-t border-border pt-6 mt-6">
-                      <SectionHeading>Industry Page Featured Products (3 to 5)</SectionHeading>
-                      <p className="text-xs text-muted-foreground mb-4">
-                        Nominate 3 to 5 products to display as a featured products block on the
-                        industry detail page.
-                      </p>
-
-                      <div className="space-y-2 max-w-md mb-4">
-                        {(active.keyProducts ?? []).map((pId) => {
-                          const pData = allProducts.find((p) => p.id === pId);
-                          return (
-                            <div
-                              key={pId}
-                              className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
-                            >
-                              <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
-                                onClick={() =>
-                                  setField(
-                                    "keyProducts",
-                                    (active.keyProducts ?? []).filter((id) => id !== pId),
-                                  )
-                                }
-                              >
-                                ✕
-                              </Button>
-                            </div>
-                          );
-                        })}
-
-                        {(!active.keyProducts || active.keyProducts.length === 0) && (
+                        {(!active.caseStudies || active.caseStudies.length === 0) && (
                           <p className="text-xs text-muted-foreground italic">
-                            No featured products selected.
+                            No specific case studies nominated (falling back to auto-matching by
+                            sector).
                           </p>
                         )}
                       </div>
 
-                      {(!active.keyProducts || active.keyProducts.length < 5) && (
-                        <div className="max-w-md pt-2">
-                          <ProductSelector
-                            excludeIds={active.keyProducts ?? []}
-                            onSelect={(prod) => {
-                              const currentIds = active.keyProducts ?? [];
-                              setField("keyProducts", [...currentIds, prod.id]);
-                            }}
-                          />
+                      <div className="max-w-md pt-2">
+                        <FieldLabel>Nominate a Case Study</FieldLabel>
+                        <select
+                          className="w-full text-xs border border-border bg-background rounded-lg p-2 h-9 text-foreground cursor-pointer focus:ring-1 focus:ring-primary focus:border-primary"
+                          value=""
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val) {
+                              const currentIds = active.caseStudies ?? [];
+                              if (!currentIds.includes(val)) {
+                                setField("caseStudies", [...currentIds, val]);
+                              }
+                            }
+                          }}
+                        >
+                          <option value="" disabled>
+                            -- Select a case study to nominate --
+                          </option>
+                          {allCaseStudies
+                            .filter((cs) => !(active.caseStudies ?? []).includes(cs.id))
+                            .map((cs) => (
+                              <option key={cs.id} value={cs.id}>
+                                {cs.title}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    </TabsContent>
+                  )}
+
+                  {/* ── PRODUCTS (Child pages only) ── */}
+                  {activeSlug !== "__landing" && (
+                    <TabsContent value="products" className="p-6 space-y-6 m-0">
+                      <div>
+                        <SectionHeading>Mega Menu Most Specified Products (Max 5)</SectionHeading>
+                        <p className="text-xs text-muted-foreground mb-4">
+                          Select up to 5 most-specified products for this industry to show as a slider in
+                          the mega menu dropdown.
+                        </p>
+
+                        <div className="space-y-2 max-w-md mb-4">
+                          {(active.topSellingProductIds ?? []).map((pId) => {
+                            const pData = allProducts.find((p) => p.id === pId);
+                            return (
+                              <div
+                                key={pId}
+                                className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                              >
+                                <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() =>
+                                    setField(
+                                      "topSellingProductIds",
+                                      (active.topSellingProductIds ?? []).filter((id) => id !== pId),
+                                    )
+                                  }
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            );
+                          })}
+
+                          {(!active.topSellingProductIds ||
+                            active.topSellingProductIds.length === 0) &&
+                            !active.topSellingProductId && (
+                              <p className="text-xs text-muted-foreground italic">
+                                No most specified products selected.
+                              </p>
+                            )}
+
+                          {(!active.topSellingProductIds ||
+                            active.topSellingProductIds.length === 0) &&
+                            active.topSellingProductId && (
+                              <div className="flex items-center justify-between p-2.5 bg-background border border-amber-500/30 rounded-lg text-xs font-semibold shadow-sm">
+                                <span className="flex items-center gap-1.5">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                  {allProducts.find((p) => p.id === active.topSellingProductId)
+                                    ?.name || `Product ID: ${active.topSellingProductId}`}{" "}
+                                  (Legacy Single)
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => setField("topSellingProductId", "")}
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            )}
                         </div>
-                      )}
-                    </div>
-                  </TabsContent>
+
+                        {(!active.topSellingProductIds || active.topSellingProductIds.length < 5) && (
+                          <div className="max-w-md pt-2">
+                            <ProductSelector
+                              excludeIds={[
+                                ...(active.topSellingProductIds ?? []),
+                                ...(active.topSellingProductId ? [active.topSellingProductId] : []),
+                              ]}
+                              onSelect={(prod) => {
+                                const currentIds = [...(active.topSellingProductIds ?? [])];
+                                if (active.topSellingProductId && currentIds.length === 0) {
+                                  currentIds.push(active.topSellingProductId);
+                                }
+                                setField("topSellingProductIds", [...currentIds, prod.id]);
+                                if (active.topSellingProductId) {
+                                  setField("topSellingProductId", "");
+                                }
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="border-t border-border pt-6 mt-6">
+                        <SectionHeading>Industry Page Featured Products (3 to 5)</SectionHeading>
+                        <p className="text-xs text-muted-foreground mb-4">
+                          Nominate 3 to 5 products to display as a featured products block on the
+                          industry detail page.
+                        </p>
+
+                        <div className="space-y-2 max-w-md mb-4">
+                          {(active.keyProducts ?? []).map((pId) => {
+                            const pData = allProducts.find((p) => p.id === pId);
+                            return (
+                              <div
+                                key={pId}
+                                className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-sm"
+                              >
+                                <span>{pData ? pData.name : `Product ID: ${pId}`}</span>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-5 w-5 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() =>
+                                    setField(
+                                      "keyProducts",
+                                      (active.keyProducts ?? []).filter((id) => id !== pId),
+                                    )
+                                  }
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            );
+                          })}
+
+                          {(!active.keyProducts || active.keyProducts.length === 0) && (
+                            <p className="text-xs text-muted-foreground italic">
+                              No featured products selected.
+                            </p>
+                          )}
+                        </div>
+
+                        {(!active.keyProducts || active.keyProducts.length < 5) && (
+                          <div className="max-w-md pt-2">
+                            <ProductSelector
+                              excludeIds={active.keyProducts ?? []}
+                              onSelect={(prod) => {
+                                const currentIds = active.keyProducts ?? [];
+                                setField("keyProducts", [...currentIds, prod.id]);
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </TabsContent>
+                  )}
 
                   {/* ── SEO ── */}
                   <TabsContent value="seo" className="p-6 space-y-5 m-0">
                     <SectionHeading>SEO / Meta Tags</SectionHeading>
                     <p className="text-xs text-muted-foreground mb-4">
-                      Configure the search engine optimization tags for this industry page.
+                      {activeSlug === "__landing"
+                        ? "Configure the search engine optimization tags for the main /industries landing page."
+                        : "Configure the search engine optimization tags for this industry page."}
                     </p>
                     <div>
                       <FieldLabel hint="Recommended: 50–60 characters">Meta Title</FieldLabel>
                       <Input
                         value={active.seo?.title ?? ""}
                         onChange={(e) => setSeo({ title: e.target.value })}
-                        placeholder="e.g. Mining Industry Solutions | Geosynthetics Africa"
+                        placeholder={
+                          activeSlug === "__landing"
+                            ? "e.g. Industries — Geosynthetics Africa"
+                            : "e.g. Mining Industry Solutions | Geosynthetics Africa"
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -1058,7 +1195,11 @@ export function IndustriesTemplatesEditor() {
                       <Textarea
                         value={active.seo?.description ?? ""}
                         onChange={(e) => setSeo({ description: e.target.value })}
-                        placeholder="Engineered geosynthetic solutions for mining operations across Africa…"
+                        placeholder={
+                          activeSlug === "__landing"
+                            ? "High-performance geosynthetic systems tailored for key African industries..."
+                            : "Engineered geosynthetic solutions for mining operations across Africa…"
+                        }
                         className="text-sm min-h-[96px] resize-none"
                       />
                     </div>
@@ -1069,7 +1210,11 @@ export function IndustriesTemplatesEditor() {
                       <Input
                         value={active.seo?.keywords ?? ""}
                         onChange={(e) => setSeo({ keywords: e.target.value })}
-                        placeholder="e.g. mining geosynthetics, tailings dam, heap leach africa"
+                        placeholder={
+                          activeSlug === "__landing"
+                            ? "e.g. geosynthetics industries, mining containment, agricultural liners"
+                            : "e.g. mining geosynthetics, tailings dam, heap leach africa"
+                        }
                         className="text-sm"
                       />
                     </div>
@@ -1100,3 +1245,4 @@ export function IndustriesTemplatesEditor() {
     </>
   );
 }
+
