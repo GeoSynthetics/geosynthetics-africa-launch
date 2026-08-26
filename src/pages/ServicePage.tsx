@@ -59,38 +59,38 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.whyChoose && templateData.whyChoose.length > 0
       ? templateData.whyChoose
       : [
-          {
-            title: "Direct Manufacturer Sourcing",
-            description: "No distributor markup. Container-direct supply from global brands.",
-          },
-          {
-            title: "SANS-Compliant Operations",
-            description: "Full quality control reports matching regional regulatory frameworks.",
-          },
-          {
-            title: "Single-Point Accountability",
-            description: "Procurement, logistics, and installation managed under one contract.",
-          },
-        ];
+        {
+          title: "Direct Manufacturer Sourcing",
+          description: "No distributor markup. Container-direct supply from global brands.",
+        },
+        {
+          title: "SANS-Compliant Operations",
+          description: "Full quality control reports matching regional regulatory frameworks.",
+        },
+        {
+          title: "Single-Point Accountability",
+          description: "Procurement, logistics, and installation managed under one contract.",
+        },
+      ];
 
   const whatWeDeliverTitle = templateData?.whatWeDeliverTitle || "What We Deliver — At Speed";
   const whatWeDeliverItems: BulletItem[] =
     templateData?.whatWeDeliver && templateData.whatWeDeliver.length > 0
       ? templateData.whatWeDeliver
       : [
-          {
-            title: "Resin-to-Roll Traceability",
-            description: "Complete documentation, laboratory tests, and roll data sheets.",
-          },
-          {
-            title: "Custom Seam Layout Maps",
-            description: "Pre-installation design and post-handover as-built seaming layout plans.",
-          },
-          {
-            title: "Comprehensive QA Test Logs",
-            description: "Vacuum box, air pressure, and destructive tensiometer test records.",
-          },
-        ];
+        {
+          title: "Resin-to-Roll Traceability",
+          description: "Complete documentation, laboratory tests, and roll data sheets.",
+        },
+        {
+          title: "Custom Seam Layout Maps",
+          description: "Pre-installation design and post-handover as-built seaming layout plans.",
+        },
+        {
+          title: "Comprehensive QA Test Logs",
+          description: "Vacuum box, air pressure, and destructive tensiometer test records.",
+        },
+      ];
 
   const coverageTitle = templateData?.coverageTitle || "Pan-African Coverage & Stock Hubs";
   const coverageText =
@@ -100,10 +100,10 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.coverageBullets && templateData.coverageBullets.length > 0
       ? templateData.coverageBullets
       : [
-          "Core distribution yards in South Africa for regional dispatch",
-          "SADC Certificates of Origin issued to minimize import duties",
-          "Pre-cleared border files to eliminate customs delays",
-        ];
+        "Core distribution yards in South Africa for regional dispatch",
+        "SADC Certificates of Origin issued to minimize import duties",
+        "Pre-cleared border files to eliminate customs delays",
+      ];
   const coverageImage =
     templateData?.coverageImage ||
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80";
@@ -124,15 +124,15 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.directModelItems && templateData.directModelItems.length > 0
       ? templateData.directModelItems
       : [
-          {
-            title: "Direct Contact",
-            description: "Access to the logistics manager and site engineer directly.",
-          },
-          {
-            title: "Transparent Pricing",
-            description: "No distributor markup. Exact manufacturer costing.",
-          },
-        ];
+        {
+          title: "Direct Contact",
+          description: "Access to the logistics manager and site engineer directly.",
+        },
+        {
+          title: "Transparent Pricing",
+          description: "No distributor markup. Exact manufacturer costing.",
+        },
+      ];
 
   const packagingTitle = templateData?.packagingTitle || "Packaging & Transport Optimization";
   const packagingText =
@@ -142,10 +142,10 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.packagingItems && templateData.packagingItems.length > 0
       ? templateData.packagingItems
       : [
-          "Heavy-duty end caps to protect roll cores from impact",
-          "Extra-wrap UV protection layer for outdoor seaport storage",
-          "Container stuffing blueprints (20' / 40' / HC) to optimize volume",
-        ];
+        "Heavy-duty end caps to protect roll cores from impact",
+        "Extra-wrap UV protection layer for outdoor seaport storage",
+        "Container stuffing blueprints (20' / 40' / HC) to optimize volume",
+      ];
 
   const afcftaTitle = templateData?.afcftaTitle || "AfCFTA & SADC: Smarter Cross-Border Moves";
   const afcftaText =
@@ -155,27 +155,27 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.afcftaItems && templateData.afcftaItems.length > 0
       ? templateData.afcftaItems
       : [
-          "Registered exporter SADC Certificates of Origin",
-          "HS-code alignment on commercial invoices",
-          "Pre-alert clearances with border clearing agents",
-        ];
+        "Registered exporter SADC Certificates of Origin",
+        "HS-code alignment on commercial invoices",
+        "Pre-alert clearances with border clearing agents",
+      ];
 
   const playbookTitle = templateData?.playbookTitle || "Logistics Playbook";
   const playbookItems: BulletItem[] =
     templateData?.playbookItems && templateData.playbookItems.length > 0
       ? templateData.playbookItems
       : [
-          {
-            title: "Road Transit",
-            description:
-              "Dedicated flatbeds and tri-axles moving along regional African corridors.",
-          },
-          {
-            title: "Ocean Transit",
-            description:
-              "Direct shipment configurations into major ocean ports (Durban, Beira, Dar es Salaam).",
-          },
-        ];
+        {
+          title: "Road Transit",
+          description:
+            "Dedicated flatbeds and tri-axles moving along regional African corridors.",
+        },
+        {
+          title: "Ocean Transit",
+          description:
+            "Direct shipment configurations into major ocean ports (Durban, Beira, Dar es Salaam).",
+        },
+      ];
 
   // Stats Bar Content & Fallbacks
   const statsTitle = templateData?.statsTitle || "Pan-African Supply & Installation Support";
@@ -186,10 +186,10 @@ export function ServicePage({ data }: { data: any }) {
     templateData?.stats && templateData.stats.length > 0
       ? templateData.stats
       : [
-          { value: "15+", label: "African Countries Delivered" },
-          { value: "100%", label: "Traceability Reports" },
-          { value: "SANS 1526", label: "Installation Standards" },
-        ];
+        { value: "15+", label: "African Countries Delivered" },
+        { value: "100%", label: "Traceability Reports" },
+        { value: "SANS 1526", label: "Installation Standards" },
+      ];
 
   // Products & Downloads
   const productsTitle = templateData?.productsTitle || "Products Supplied";
@@ -563,7 +563,7 @@ export function ServicePage({ data }: { data: any }) {
       </div>
 
       {/* ─── Bottom Stats Bar (Premium Earthy Texture) ─────────────────────────── */}
-      <section className="bg-[#4D3626] text-white py-16 relative overflow-hidden">
+      <section className="bg-black/90 text-white py-16 relative overflow-hidden">
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:24px_24px]" />
 

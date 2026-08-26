@@ -158,11 +158,10 @@ export function TopSellingProductsSlider({
               to="/catalogue/$slug"
               params={{ slug: product.slug }}
               onClick={closeMenus}
-              className={`absolute inset-0 group block overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl hover:border-primary bg-stone-950 transition-all duration-700 ease-in-out ${
-                isActive
-                  ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
-                  : "opacity-0 translate-x-6 scale-98 pointer-events-none z-0"
-              }`}
+              className={`absolute inset-0 group block overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl hover:border-primary bg-stone-950 transition-all duration-700 ease-in-out ${isActive
+                ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
+                : "opacity-0 translate-x-6 scale-98 pointer-events-none z-0"
+                }`}
             >
               {product.image ? (
                 <ProgressiveImage
@@ -212,9 +211,8 @@ export function TopSellingProductsSlider({
                   e.stopPropagation();
                   setCurrentIndex(i);
                 }}
-                className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                  i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
-                }`}
+                className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
+                  }`}
               />
             ))}
           </div>
@@ -223,9 +221,8 @@ export function TopSellingProductsSlider({
         {products.length > 1 ? (
           <div
             key={`${currentIndex}-${isHovered}`}
-            className={`absolute bottom-0 left-0 right-0 h-1 bg-primary z-20 ${
-              isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
-            }`}
+            className={`absolute bottom-0 left-0 right-0 h-1 bg-primary z-20 ${isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
+              }`}
             style={{
               animationDuration: "5000ms",
             }}
@@ -300,11 +297,10 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                       to={item.to}
                       params={item.params}
                       onClick={closeMenus}
-                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${
-                        isActive
-                          ? "bg-accent text-primary translate-x-1.5"
-                          : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
-                      }`}
+                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${isActive
+                        ? "bg-accent text-primary translate-x-1.5"
+                        : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
+                        }`}
                     >
                       {Icon && (
                         <Icon
@@ -561,12 +557,12 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 1: Supply */}
             <RLink
               to="/$slug"
-              params={{ slug: "supply" }}
+              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
-                <Package className="h-4 w-4 text-primary transition-colors duration-300" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
+                <Package className="h-4 w-4 transition-colors duration-300" />
               </div>
               <span>Supply</span>
             </RLink>
@@ -576,12 +572,12 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 2: Delivery */}
             <RLink
               to="/$slug"
-              params={{ slug: "logistics" }}
+              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
-                <Globe className="h-4 w-4 text-primary transition-colors duration-300" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
+                <Globe className="h-4 w-4 transition-colors duration-300" />
               </div>
               <span>30+ country delivery</span>
             </RLink>
@@ -591,12 +587,12 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 3: Installation */}
             <RLink
               to="/$slug"
-              params={{ slug: "installation" }}
+              params={{ slug: "gse-hdpe-liner-installer-africa" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background border border-border shadow-sm group-hover/step:border-primary group-hover/step:bg-accent/10 transition-all duration-300">
-                <Wrench className="h-4 w-4 text-primary transition-colors duration-300" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
+                <Wrench className="h-4 w-4 transition-colors duration-300" />
               </div>
               <span>IAGI-aligned installation</span>
             </RLink>
@@ -610,9 +606,9 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
-                <ShieldCheck className="h-4 w-4" />
+                <ShieldCheck className="h-4 w-4 transition-colors duration-300" />
               </div>
-              <span className="font-semibold text-primary">Quality assurance</span>
+              <span>Quality assurance</span>
             </RLink>
           </div>
         </div>
