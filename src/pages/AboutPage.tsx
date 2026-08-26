@@ -184,9 +184,15 @@ export function AboutPage() {
                   <h4 className="font-bold uppercase tracking-wider text-white mb-2">
                     {contact.headOfficeTitle}
                   </h4>
-                  <p className="text-sm text-surface-dark-foreground/80 leading-relaxed whitespace-pre-line">
+                  <a
+                    href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-surface-dark-foreground/80 leading-relaxed whitespace-pre-line hover:text-primary transition-colors inline-block cursor-pointer"
+                    title="Open location in Google Maps"
+                  >
                     {contact.headOfficeAddress}
-                  </p>
+                  </a>
                 </div>
               </div>
 

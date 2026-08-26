@@ -75,19 +75,23 @@ const PLATFORM_ICONS: Record<SocialPlatform, React.ComponentType<{ className?: s
 function BrandEditor({
   description,
   address,
+  addressMapUrl,
   onDescriptionChange,
   onAddressChange,
+  onAddressMapUrlChange,
 }: {
   description: string;
   address?: string;
+  addressMapUrl?: string;
   onDescriptionChange: (value: string) => void;
   onAddressChange: (value: string) => void;
+  onAddressMapUrlChange: (value: string) => void;
 }) {
   return (
     <div className="space-y-6">
       <SectionHeading>Brand Description &amp; Address</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        This description and address appear directly below the logo in the footer.
+        This description, physical address and map link appear directly below the logo in the footer.
       </p>
       <div>
         <FieldLabel hint="Maximum ~200 characters recommended for clean formatting">
@@ -107,7 +111,18 @@ function BrandEditor({
         <Input
           value={address ?? ""}
           onChange={(e) => onAddressChange(e.target.value)}
-          placeholder="7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"
+          placeholder="7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa"
+          className="text-sm"
+        />
+      </div>
+      <div>
+        <FieldLabel hint="Google Maps URL opened when clicking the footer address">
+          Google Maps URL
+        </FieldLabel>
+        <Input
+          value={addressMapUrl ?? ""}
+          onChange={(e) => onAddressMapUrlChange(e.target.value)}
+          placeholder="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
           className="text-sm"
         />
       </div>
@@ -579,6 +594,7 @@ export function FooterBuilderTab() {
       const merged: FooterContent = {
         brandDescription: val.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
         address: val.address ?? DEFAULT_FOOTER_CONTENT.address,
+        addressMapUrl: val.addressMapUrl ?? DEFAULT_FOOTER_CONTENT.addressMapUrl,
         socialLinks: val.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
         certifications: val.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
         copyrightText: val.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
@@ -683,8 +699,10 @@ export function FooterBuilderTab() {
             <BrandEditor
               description={content.brandDescription}
               address={content.address}
+              addressMapUrl={content.addressMapUrl}
               onDescriptionChange={(v) => update({ brandDescription: v })}
               onAddressChange={(v) => update({ address: v })}
+              onAddressMapUrlChange={(v) => update({ addressMapUrl: v })}
             />
           </TabsContent>
 

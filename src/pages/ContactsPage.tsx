@@ -519,11 +519,17 @@ function OfficeDetailsAndServices({
                 <div className="text-sm">{headOffice.company}</div>
               </DetailRow>
               <DetailRow icon={MapPin} label="Address">
-                <div className="text-sm space-y-0.5">
+                <a
+                  href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm space-y-0.5 hover:text-primary transition-colors inline-block cursor-pointer"
+                  title="Open location in Google Maps"
+                >
                   {headOffice.address.map((l) => (
                     <div key={l}>{l}</div>
                   ))}
-                </div>
+                </a>
               </DetailRow>
               <DetailRow icon={Phone} label="Phone">
                 <a

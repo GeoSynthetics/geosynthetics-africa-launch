@@ -227,9 +227,15 @@ export function Footer() {
             <div className="mt-4 space-y-2 text-xs text-surface-dark-foreground/75 max-w-[260px]">
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <span className="leading-snug">
-                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, South Africa"}
-                </span>
+                <a
+                  href={footerContent.addressMapUrl || "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="leading-snug hover:text-primary transition-colors cursor-pointer"
+                  title="Open location in Google Maps"
+                >
+                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa"}
+                </a>
               </div>
               <div className="flex items-center gap-2.5 pt-1">
                 <Phone className="h-3.5 w-3.5 text-primary shrink-0" />

@@ -283,19 +283,25 @@ export function HeroSlider({
                 </a>
 
                 {/* Location / HQ */}
-                <div className="flex items-start gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-white/[0.12] transition-all duration-300">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-primary border border-white/20 shrink-0 mt-0.5 shadow-sm">
-                    <MapPin className="h-4 w-4 text-primary" />
+                <a
+                  href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link cursor-pointer"
+                  title="Open Johannesburg HQ in Google Maps"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0 mt-0.5 shadow-sm">
+                    <MapPin className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400">
+                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
                       Johannesburg HQ
                     </div>
-                    <div className="text-xs sm:text-sm font-semibold text-white/90 leading-snug">
+                    <div className="text-xs sm:text-sm font-semibold text-white/90 group-hover/link:text-primary transition-colors leading-snug">
                       7 Tamar Avenue, Lea Glen, Randburg, South Africa
                     </div>
                   </div>
-                </div>
+                </a>
               </div>
             </div>
           </div>

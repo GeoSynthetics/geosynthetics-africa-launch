@@ -518,7 +518,15 @@ export function CountryPage({ data }: { data: any }) {
                 {template.address && (
                   <div className="flex items-start gap-3">
                     <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    <span>{template.address}</span>
+                    <a
+                      href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors cursor-pointer"
+                      title="Open location in Google Maps"
+                    >
+                      {template.address}
+                    </a>
                   </div>
                 )}
                 {template.phone && (
