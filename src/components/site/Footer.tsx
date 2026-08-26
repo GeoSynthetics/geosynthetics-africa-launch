@@ -92,43 +92,43 @@ export function Footer() {
   const productMenu = menus.find((m) => m.key === "products");
   const products = productMenu
     ? [
-        ...productMenu.columns.primary.slice(0, 6).map((c) => ({
-          label: c.label,
-          to: c.to,
-          params: c.params,
-        })),
-        { label: "All Products", to: "/products" },
-      ]
+      ...productMenu.columns.primary.slice(0, 6).map((c) => ({
+        label: c.label,
+        to: c.to,
+        params: c.params,
+      })),
+      { label: "All Products", to: "/products" },
+    ]
     : [];
 
   const applicationMenu = menus.find((m) => m.key === "applications");
   const applications = applicationMenu
     ? [
-        ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
-          label: c.label,
-          to: c.to,
-          params: c.params,
-        })),
-        { label: "All Applications", to: "/applications" },
-      ]
+      ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
+        label: c.label,
+        to: c.to,
+        params: c.params,
+      })),
+      { label: "All Applications", to: "/applications" },
+    ]
     : [];
 
   const serviceMenu = menus.find((m) => m.key === "services");
   const services = serviceMenu
     ? serviceMenu.columns.primary.map((s) => ({
-        label: s.label,
-        to: s.to,
-        params: s.params,
-      }))
+      label: s.label,
+      to: s.to,
+      params: s.params,
+    }))
     : [];
 
   const industryMenu = menus.find((m) => m.key === "industries");
   const industries = industryMenu
     ? industryMenu.columns.primary.map((i) => ({
-        label: i.label,
-        to: i.to,
-        params: i.params,
-      }))
+      label: i.label,
+      to: i.to,
+      params: i.params,
+    }))
     : [];
 
   const columns = footerContent.columns || DEFAULT_FOOTER_CONTENT.columns || [];
@@ -320,7 +320,7 @@ export function Footer() {
             <br className="md:hidden" />{" "}
             <a
               className="text-primary-foreground hover:text-primary transition whitespace-nowrap"
-              href="https://kavaradigital.online"
+              href="https://kavaradigital.com"
               target="_blank"
               rel="noopener noreferrer"
             >
