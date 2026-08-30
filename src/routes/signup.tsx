@@ -2,12 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, Lock, User, Building2, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, Building2, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { AuthLayout } from "@/components/site/AuthLayout";
 
 import { useForm } from "react-hook-form";
@@ -38,10 +37,52 @@ const schema = z.object({
   password: z.string().min(8, "At least 8 characters").max(72),
 });
 
+function AuthenticatingOverlay() {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 gap-4 animate-auth-fade-in">
+      <Loader2 className="h-8 w-8 text-primary animate-spin" />
+      <div className="text-center space-y-1">
+        <p className="font-display text-lg font-bold uppercase tracking-tight">
+          Setting up your account
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Loading your dashboard…
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ConfirmationSentPanel() {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 gap-5 animate-auth-fade-in">
+      <div className="p-3 rounded-full bg-emerald-500/10">
+        <CheckCircle2 className="h-10 w-10 text-emerald-600" />
+      </div>
+      <div className="text-center space-y-2">
+        <h2 className="font-display text-2xl font-bold uppercase tracking-tight">
+          Check your email
+        </h2>
+        <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+          We&apos;ve sent a confirmation link to your inbox. Click it to activate your account.
+        </p>
+      </div>
+      <Link
+        to="/login"
+        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline transition-colors"
+      >
+        Go to Sign In
+        <ArrowRight className="h-3.5 w-3.5" />
+      </Link>
+    </div>
+  );
+}
+
 function SignupPage() {
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAuth();
   const [submitting, setSubmitting] = useState(false);
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -60,7 +101,7 @@ function SignupPage() {
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setSubmitting(true);
     const redirectTo = typeof window !== "undefined" ? window.location.origin : undefined;
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
       options: {
@@ -71,149 +112,167 @@ function SignupPage() {
         },
       },
     });
-    setSubmitting(false);
+
     if (error) {
+      setSubmitting(false);
       toast.error(error.message);
       return;
     }
+
+    // If auto-confirmed (active session returned), keep submitting=true
+    // and let the useEffect above navigate once isAuthenticated flips.
+    if (data.session) {
+      toast.success("Account created successfully.");
+      return;
+    }
+
+    // Email confirmation required — show in-place confirmation panel.
+    setSubmitting(false);
+    setConfirmationSent(true);
     toast.success("Account created. Check your email to confirm.");
-    navigate({ to: "/login" });
   };
+
+  const showAuthenticatingOverlay = submitting && !confirmationSent;
 
   return (
     <AuthLayout>
-      {/* Heading */}
-      <div className="mb-8">
-        <h1 className="font-display text-4xl font-bold uppercase tracking-tight">Create Account</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Save quotes, track BOQs, and access gated technical resources.
-        </p>
-      </div>
+      {confirmationSent ? (
+        <ConfirmationSentPanel />
+      ) : showAuthenticatingOverlay ? (
+        <AuthenticatingOverlay />
+      ) : (
+        <>
+          {/* Heading */}
+          <div className="mb-8">
+            <h1 className="font-display text-4xl font-bold uppercase tracking-tight">Create Account</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Save quotes, track BOQs, and access gated technical resources.
+            </p>
+          </div>
 
-      {/* Form */}
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <FormField
-            control={form.control}
-            name="fullName"
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel className="text-sm font-medium">Full name</FormLabel>
-                <div className="relative mt-1.5">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <FormControl>
-                    <Input placeholder="John Doe" className="h-11 pl-10" {...field} />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Form */}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm font-medium">Full name</FormLabel>
+                    <div className="relative mt-1.5">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <FormControl>
+                        <Input placeholder="John Doe" className="h-11 pl-10" {...field} />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="company"
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel className="text-sm font-medium">
-                  Company <span className="text-muted-foreground font-normal ml-1">(optional)</span>
-                </FormLabel>
-                <div className="relative mt-1.5">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <FormControl>
-                    <Input placeholder="Acme Construction Ltd." className="h-11 pl-10" {...field} />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="company"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm font-medium">
+                      Company <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+                    </FormLabel>
+                    <div className="relative mt-1.5">
+                      <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <FormControl>
+                        <Input placeholder="Acme Construction Ltd." className="h-11 pl-10" {...field} />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel className="text-sm font-medium">Email address</FormLabel>
-                <div className="relative mt-1.5">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <FormControl>
-                    <Input
-                      type="email"
-                      autoComplete="email"
-                      placeholder="you@company.com"
-                      className="h-11 pl-10"
-                      {...field}
-                    />
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm font-medium">Email address</FormLabel>
+                    <div className="relative mt-1.5">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <FormControl>
+                        <Input
+                          type="email"
+                          autoComplete="email"
+                          placeholder="you@company.com"
+                          className="h-11 pl-10"
+                          {...field}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel className="text-sm font-medium">Password</FormLabel>
-                <div className="relative mt-1.5">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                  <FormControl>
-                    <Input
-                      type="password"
-                      autoComplete="new-password"
-                      placeholder="••••••••"
-                      className="h-11 pl-10"
-                      {...field}
-                    />
-                  </FormControl>
-                </div>
-                <p className="mt-1.5 text-xs text-muted-foreground">Minimum 8 characters.</p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm font-medium">Password</FormLabel>
+                    <div className="relative mt-1.5">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <FormControl>
+                        <Input
+                          type="password"
+                          autoComplete="new-password"
+                          placeholder="••••••••"
+                          className="h-11 pl-10"
+                          {...field}
+                        />
+                      </FormControl>
+                    </div>
+                    <p className="mt-1.5 text-xs text-muted-foreground">Minimum 8 characters.</p>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <Button
-            type="submit"
-            disabled={submitting}
-            className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
-          >
-            {submitting ? (
-              "Creating…"
-            ) : (
-              <span className="flex items-center justify-center gap-2">
-                Create Account
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            )}
-          </Button>
-        </form>
-      </Form>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full h-11 bg-primary hover:bg-primary-hover hover:cursor-pointer uppercase font-bold tracking-wide transition-transform active:scale-[0.98]"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  Create Account
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </Button>
+            </form>
+          </Form>
 
-      {/* Divider */}
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-3 text-muted-foreground tracking-wider">or</span>
-        </div>
-      </div>
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-3 text-muted-foreground tracking-wider">or</span>
+            </div>
+          </div>
 
-      {/* Footer link */}
-      <p className="text-sm text-center text-muted-foreground">
-        Already have an account?{" "}
-        <Link
-          to="/login"
-          className="text-primary font-semibold hover:underline inline-flex items-center gap-1 transition-colors"
-        >
-          Sign in
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      </p>
+          {/* Footer link */}
+          <p className="text-sm text-center text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-primary font-semibold hover:underline inline-flex items-center gap-1 transition-colors"
+            >
+              Sign in
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </p>
+        </>
+      )}
     </AuthLayout>
   );
 }
+

@@ -1,11 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import {
   Outlet,
   Link,
   createRootRoute,
   HeadContent,
   Scripts,
-  useNavigate,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
@@ -13,7 +12,7 @@ import { Footer } from "@/components/site/Footer";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { AuthProvider, useAuth } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { WebSiteSchema } from "@/components/seo/WebSiteSchema";
 import { CookieConsent } from "@/components/site/CookieConsent";
@@ -118,29 +117,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AuthRedirectHandler() {
-  const { isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
-  const wasAuthenticatedRef = useRef(false);
-
-  useEffect(() => {
-    if (loading) return;
-    if (isAuthenticated) {
-      wasAuthenticatedRef.current = true;
-    } else if (wasAuthenticatedRef.current) {
-      wasAuthenticatedRef.current = false;
-      navigate({ to: "/login" });
-    }
-  }, [isAuthenticated, loading, navigate]);
-
-  return null;
-}
-
 function RootComponent() {
   return (
     <AuthProvider>
       <QuickQuoteProvider>
-        <AuthRedirectHandler />
         <OrganizationSchema />
         <WebSiteSchema />
         <div className="flex min-h-screen flex-col">

@@ -181,12 +181,19 @@ export function ProductDetailPage() {
     return [];
   }, [product.compatible_systems, familyData?.types]);
 
+function getValidSelectionGuideUrl(rawUrl?: string | null): string {
+  if (!rawUrl || rawUrl.includes("boq-uploads")) {
+    return "/resources/installation-guides";
+  }
+  return rawUrl;
+}
+
   const documentGrid = useMemo(() => {
     return [
       {
         label: "Product Selection Guide",
         desc: "Compare performance properties across the entire category hierarchy before specifying.",
-        url: product.product_categories?.selection_guide_url || null,
+        url: getValidSelectionGuideUrl(product.product_categories?.selection_guide_url),
         tag: "CATEGORY GUIDE",
       },
       {
@@ -802,14 +809,24 @@ export function ProductDetailPage() {
                       </div>
 
                       {doc.url ? (
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
-                        >
-                          Download document <Download className="h-3.5 w-3.5" />
-                        </a>
+                        doc.url.startsWith("/") ? (
+                          <Link
+                            to="/resources/$category"
+                            params={{ category: "installation-guides" }}
+                            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
+                          >
+                            View guides <ChevronRight className="h-3.5 w-3.5" />
+                          </Link>
+                        ) : (
+                          <a
+                            href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
+                          >
+                            Download document <Download className="h-3.5 w-3.5" />
+                          </a>
+                        )
                       ) : doc.isAnchor ? (
                         <button
                           type="button"
@@ -1046,25 +1063,38 @@ export function ProductDetailPage() {
                   </ul>
 
                   {/* Selection Guide Link */}
-                  {product.product_categories?.selection_guide_url && (
-                    <div className="mt-4 pt-3.5 border-t border-border/60">
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="w-full bg-background border-border text-foreground hover:bg-surface hover:text-primary font-bold uppercase tracking-wider text-[11px] h-9 transition-all duration-200 shadow-sm"
-                      >
-                        <a
-                          href={product.product_categories.selection_guide_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                  {(() => {
+                    const rawGuide = product.product_categories?.selection_guide_url;
+                    const guideUrl = getValidSelectionGuideUrl(rawGuide);
+                    const isExternal =
+                      guideUrl.startsWith("http://") || guideUrl.startsWith("https://");
+
+                    return (
+                      <div className="mt-4 pt-3.5 border-t border-border/60">
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="w-full bg-background border-border text-foreground hover:bg-surface hover:text-primary font-bold uppercase tracking-wider text-[11px] h-9 transition-all duration-200 shadow-sm"
                         >
-                          <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
-                          View Product Selection Guide
-                        </a>
-                      </Button>
-                    </div>
-                  )}
+                          {isExternal ? (
+                            <a href={guideUrl} target="_blank" rel="noopener noreferrer">
+                              <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
+                              View Product Selection Guide
+                            </a>
+                          ) : (
+                            <Link
+                              to="/resources/$category"
+                              params={{ category: "installation-guides" }}
+                            >
+                              <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
+                              View Product Selection Guide
+                            </Link>
+                          )}
+                        </Button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 

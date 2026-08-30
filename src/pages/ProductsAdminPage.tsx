@@ -61,6 +61,8 @@ interface Manufacturer {
 interface ProductCategory {
   id: string;
   name: string;
+  slug?: string;
+  selection_guide_url?: string | null;
 }
 
 interface KeyFeature {
@@ -182,6 +184,73 @@ export function ProductsAdminPage() {
   const [editing, setEditing] = useState<Partial<Product>>(empty);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [catGuidesOpen, setCatGuidesOpen] = useState(false);
+  const [catGuides, setCatGuides] = useState<ProductCategory[]>([]);
+  const [uploadingDocField, setUploadingDocField] = useState<string | null>(null);
+
+  const openCatGuidesModal = () => {
+    setCatGuides(cats.map((c) => ({ ...c })));
+    setCatGuidesOpen(true);
+  };
+
+  const handleUpdateCatGuide = async (catId: string, url: string) => {
+    try {
+      const trimmed = url.trim() || null;
+      const { error } = await supabase
+        .from("product_categories")
+        .update({ selection_guide_url: trimmed })
+        .eq("id", catId);
+      if (error) throw error;
+      setCats((prev) =>
+        prev.map((c) => (c.id === catId ? { ...c, selection_guide_url: trimmed } : c)),
+      );
+      setCatGuides((prev) =>
+        prev.map((c) => (c.id === catId ? { ...c, selection_guide_url: trimmed } : c)),
+      );
+      toast.success("Category selection guide updated");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update category guide");
+    }
+  };
+
+  const handleUploadCatGuideFile = async (catId: string, file: File) => {
+    try {
+      const ts = Date.now();
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `manual/${ts}-${safe}`;
+      const { error: upErr } = await supabase.storage
+        .from("technical-docs")
+        .upload(path, file, { upsert: false, contentType: file.type || "application/pdf" });
+      if (upErr) throw upErr;
+
+      const { data } = supabase.storage.from("technical-docs").getPublicUrl(path);
+      const url = data.publicUrl;
+      await handleUpdateCatGuide(catId, url);
+    } catch (err: any) {
+      toast.error(err.message || "Upload failed");
+    }
+  };
+
+  const handleUploadProductDoc = async (field: keyof Product, folder: string, file: File) => {
+    setUploadingDocField(field as string);
+    try {
+      const ts = Date.now();
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${folder}/${ts}-${safe}`;
+      const { error: upErr } = await supabase.storage
+        .from("technical-docs")
+        .upload(path, file, { upsert: false, contentType: file.type || "application/pdf" });
+      if (upErr) throw upErr;
+
+      const { data } = supabase.storage.from("technical-docs").getPublicUrl(path);
+      setEditing((s) => ({ ...s, [field]: data.publicUrl }));
+      toast.success(`Document uploaded for ${String(field).replace(/_/g, " ")}`);
+    } catch (err: any) {
+      toast.error(err.message || "Document upload failed");
+    } finally {
+      setUploadingDocField(null);
+    }
+  };
 
   const { handleSlugChange, handleSlugBlur } = useSlugSync({
     title: editing.name || "",
@@ -398,7 +467,7 @@ export function ProductsAdminPage() {
         ? supabase.from("manufacturers").select("id, name").order("name")
         : Promise.resolve({ data: mans }),
       cats.length === 0
-        ? supabase.from("product_categories").select("id, name").order("name")
+        ? supabase.from("product_categories").select("id, name, slug, selection_guide_url").order("name")
         : Promise.resolve({ data: cats }),
       supabase
         .from("site_config")
@@ -609,6 +678,15 @@ export function ProductsAdminPage() {
         </div>
         <div className="ml-auto flex items-center gap-2">
           <span className="text-xs text-muted-foreground">Total: {total}</span>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={openCatGuidesModal}
+            className="border-border text-xs font-bold uppercase tracking-wider h-9 hover:bg-primary/5 hover:text-primary transition"
+          >
+            <FileText className="h-4 w-4 mr-1.5 text-primary" />
+            Category Guides
+          </Button>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button
@@ -1620,12 +1698,28 @@ export function ProductsAdminPage() {
                         </h4>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label
-                              htmlFor="p-doc-tds"
-                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
-                            >
-                              Technical Data Sheet (TDS)
-                            </Label>
+                            <div className="flex items-center justify-between">
+                              <Label
+                                htmlFor="p-doc-tds"
+                                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                              >
+                                Technical Data Sheet (TDS)
+                              </Label>
+                              <label className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-1">
+                                <Upload className="h-3 w-3" />
+                                {uploadingDocField === "datasheet_url" ? "Uploading..." : "Upload File"}
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx"
+                                  className="hidden"
+                                  disabled={uploadingDocField === "datasheet_url"}
+                                  onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) void handleUploadProductDoc("datasheet_url", "tds", f);
+                                  }}
+                                />
+                              </label>
+                            </div>
                             <Input
                               id="p-doc-tds"
                               type="url"
@@ -1638,12 +1732,28 @@ export function ProductsAdminPage() {
                             />
                           </div>
                           <div>
-                            <Label
-                              htmlFor="p-doc-install"
-                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
-                            >
-                              Installation Guide / Statement
-                            </Label>
+                            <div className="flex items-center justify-between">
+                              <Label
+                                htmlFor="p-doc-install"
+                                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                              >
+                                Installation Guide / Statement
+                              </Label>
+                              <label className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-1">
+                                <Upload className="h-3 w-3" />
+                                {uploadingDocField === "installation_guide_url" ? "Uploading..." : "Upload File"}
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx"
+                                  className="hidden"
+                                  disabled={uploadingDocField === "installation_guide_url"}
+                                  onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) void handleUploadProductDoc("installation_guide_url", "manual", f);
+                                  }}
+                                />
+                              </label>
+                            </div>
                             <Input
                               id="p-doc-install"
                               type="url"
@@ -1661,12 +1771,28 @@ export function ProductsAdminPage() {
                         </div>
                         <div className="grid grid-cols-2 gap-4 mt-4">
                           <div>
-                            <Label
-                              htmlFor="p-doc-qa"
-                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
-                            >
-                              QA/QC Site Checklist PDF
-                            </Label>
+                            <div className="flex items-center justify-between">
+                              <Label
+                                htmlFor="p-doc-qa"
+                                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                              >
+                                QA/QC Site Checklist PDF
+                              </Label>
+                              <label className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-1">
+                                <Upload className="h-3 w-3" />
+                                {uploadingDocField === "qa_checklist_url" ? "Uploading..." : "Upload File"}
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx"
+                                  className="hidden"
+                                  disabled={uploadingDocField === "qa_checklist_url"}
+                                  onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) void handleUploadProductDoc("qa_checklist_url", "tds", f);
+                                  }}
+                                />
+                              </label>
+                            </div>
                             <Input
                               id="p-doc-qa"
                               type="url"
@@ -1679,12 +1805,28 @@ export function ProductsAdminPage() {
                             />
                           </div>
                           <div>
-                            <Label
-                              htmlFor="p-doc-chem"
-                              className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
-                            >
-                              Chemical Resistance / Accessories Guide
-                            </Label>
+                            <div className="flex items-center justify-between">
+                              <Label
+                                htmlFor="p-doc-chem"
+                                className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                              >
+                                Chemical Resistance / Accessories Guide
+                              </Label>
+                              <label className="text-[10px] font-bold text-primary hover:underline cursor-pointer flex items-center gap-1">
+                                <Upload className="h-3 w-3" />
+                                {uploadingDocField === "chemical_resistance_url" ? "Uploading..." : "Upload File"}
+                                <input
+                                  type="file"
+                                  accept=".pdf,.doc,.docx"
+                                  className="hidden"
+                                  disabled={uploadingDocField === "chemical_resistance_url"}
+                                  onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) void handleUploadProductDoc("chemical_resistance_url", "tds", f);
+                                  }}
+                                />
+                              </label>
+                            </div>
                             <Input
                               id="p-doc-chem"
                               type="url"
@@ -1993,6 +2135,69 @@ export function ProductsAdminPage() {
           </div>
         </div>
       </div>
+      <Dialog open={catGuidesOpen} onOpenChange={setCatGuidesOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col p-0 overflow-hidden bg-card border border-border shadow-xl rounded-xl">
+          <DialogHeader className="px-6 py-4 border-b border-border shrink-0">
+            <DialogTitle className="font-display font-bold uppercase tracking-tight text-lg flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
+              Category Product Selection Guides
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <p className="text-xs text-muted-foreground">
+              Configure or upload Category Selection Guides. These guides appear on product detail pages for products in each respective category.
+            </p>
+            <div className="divide-y divide-border border rounded-lg overflow-hidden bg-background">
+              {catGuides.map((cat) => (
+                <div key={cat.id} className="p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-foreground">{cat.name}</span>
+                    <label className="text-xs font-bold text-primary hover:underline cursor-pointer flex items-center gap-1">
+                      <Upload className="h-3.5 w-3.5" />
+                      Upload PDF
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) void handleUploadCatGuideFile(cat.id, f);
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="url"
+                      placeholder="https://… or /resources/installation-guides"
+                      value={cat.selection_guide_url ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setCatGuides((prev) =>
+                          prev.map((c) => (c.id === cat.id ? { ...c, selection_guide_url: val } : c)),
+                        );
+                      }}
+                      className="text-xs font-mono h-8"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={() => void handleUpdateCatGuide(cat.id, cat.selection_guide_url ?? "")}
+                      className="h-8 text-xs font-bold uppercase tracking-wider shrink-0 bg-primary hover:bg-primary/90 text-white"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <DialogFooter className="px-6 py-3 border-t border-border bg-muted/40 shrink-0">
+            <Button variant="outline" size="sm" onClick={() => setCatGuidesOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <DeleteConfirmationDialog
         isOpen={!!productToDelete}
         onOpenChange={(open) => !open && setProductToDelete(null)}

@@ -1,7 +1,6 @@
-import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, Navigate } from "@tanstack/react-router";
 import { ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -77,31 +76,6 @@ function AdminLayoutSkeleton() {
 }
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: async ({ location }) => {
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
-
-    const { data: rolesData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.session.user.id);
-
-    const roles = rolesData?.map((r) => r.role) || [];
-    const isStaff = roles.includes("staff") || roles.includes("admin");
-
-    if (!isStaff) {
-      throw redirect({
-        to: "/",
-      });
-    }
-  },
   head: () => ({
     meta: [{ title: "Admin — Geosynthetics Africa" }, { name: "robots", content: "noindex" }],
   }),
@@ -117,7 +91,9 @@ function AdminLayout() {
     return <AdminLayoutSkeleton />;
   }
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" search={{ redirect: "/admin" }} replace />;
+  }
 
   if (!isStaff) {
     return (

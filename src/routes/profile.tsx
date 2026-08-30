@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -20,17 +20,6 @@ import {
 } from "@/components/ui/form";
 
 export const Route = createFileRoute("/profile")({
-  beforeLoad: async ({ location }) => {
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
-  },
   component: ProfilePage,
   head: () => ({
     meta: [
@@ -52,7 +41,6 @@ const passwordSchema = z
 
 function ProfilePage() {
   const { user, loading, isAuthenticated, roles } = useAuth();
-  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof passwordSchema>>({
@@ -64,8 +52,7 @@ function ProfilePage() {
   });
 
   if (!loading && !isAuthenticated) {
-    void navigate({ to: "/login" });
-    return null;
+    return <Navigate to="/login" search={{ redirect: "/profile" }} replace />;
   }
 
   const handlePasswordUpdate = async (values: z.infer<typeof passwordSchema>) => {

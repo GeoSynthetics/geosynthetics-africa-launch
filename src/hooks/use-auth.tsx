@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Avoid redundant role fetches and page unmounts/reloads if already loaded for this user
+    // Avoid redundant role fetches if already loaded for this user
     if (loadedUserIdRef.current === userId) {
       setRolesLoaded(true);
       return;
@@ -69,11 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       const newUserId = newSession?.user?.id ?? null;
-      // Defer extra Supabase calls to avoid deadlocks inside the callback.
       if (newUserId) {
         if (loadedUserIdRef.current !== newUserId) {
           setRolesLoaded(false);
-          setTimeout(() => void loadRoles(newUserId), 0);
+          void loadRoles(newUserId);
         }
       } else {
         setRoles([]);
@@ -111,6 +110,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin: roles.includes("admin"),
       hasRole: (r) => roles.includes(r),
       signOut: async () => {
+        loadedUserIdRef.current = null;
+        setRoles([]);
+        setRolesLoaded(true);
+        setSession(null);
         await supabase.auth.signOut();
       },
       refreshRoles: async () => {
