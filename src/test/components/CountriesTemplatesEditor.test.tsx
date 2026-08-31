@@ -153,4 +153,42 @@ describe("CountriesTemplatesEditor Component", () => {
       lastCall.value["gse-hdpe-liner-smooth-geomembrane-supplier-south-africa"].featuredProductIds
     ).toEqual(["prod-1", "prod-2", "prod-3"]);
   });
+
+  it("allows switching to another country and configuring its featured products", async () => {
+    render(<CountriesTemplatesEditor />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Pan-African Country & Regional Templates")).toBeInTheDocument();
+    });
+
+    // Click Botswana in the country sidebar
+    const botswanaCard = screen.getByText("Botswana");
+    fireEvent.click(botswanaCard);
+
+    // Switch to QA/QC tab for Botswana
+    const qaqcTab = screen.getByRole("tab", { name: /^qa\/qc$/i });
+    fireEvent.pointerDown(qaqcTab, { button: 0 });
+    fireEvent.mouseDown(qaqcTab, { button: 0 });
+    fireEvent.pointerUp(qaqcTab, { button: 0 });
+    fireEvent.mouseUp(qaqcTab, { button: 0 });
+    fireEvent.click(qaqcTab);
+
+    expect(await screen.findByText("Featured Products Offered in this Country")).toBeInTheDocument();
+
+    // Select prod-3 for Botswana
+    fireEvent.click(screen.getByText("Select Prod 3"));
+
+    // Save changes
+    const saveButton = screen.getByRole("button", { name: /save all country templates/i });
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockUpsert).toHaveBeenCalled();
+    });
+
+    const lastCall = mockUpsert.mock.calls[0][0];
+    expect(lastCall.key).toBe("template_countries");
+    const botswanaKey = "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier";
+    expect(lastCall.value[botswanaKey].featuredProductIds).toContain("prod-3");
+  });
 });

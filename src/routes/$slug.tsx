@@ -136,7 +136,23 @@ export async function loadCountryData(customSlug: string) {
     }
   }
 
-  if (linkedProducts.length === 0 && !countryTemplate?.featuredProductIds) {
+  if (linkedProducts.length === 0) {
+    try {
+      const { data: defaultProds } = await supabase
+        .from("products_public")
+        .select(
+          "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
+        )
+        .limit(3);
+      if (defaultProds && defaultProds.length > 0) {
+        linkedProducts = defaultProds;
+      }
+    } catch {
+      // ignore fallback error
+    }
+  }
+
+  if (linkedProducts.length === 0) {
     linkedProducts = [
       {
         id: "hdpe-smooth",

@@ -71,6 +71,24 @@ export function CountryPage({ data }: { data: any }) {
           }
         }
 
+        if (matched.length === 0) {
+          if (initialLinkedProducts && initialLinkedProducts.length > 0) {
+            matched = initialLinkedProducts;
+          } else {
+            try {
+              const { data: fallbackCatalog } = await supabase
+                .from("products_public")
+                .select("id, name, slug, short_description, image_url, images")
+                .limit(3);
+              if (fallbackCatalog && fallbackCatalog.length > 0) {
+                matched = fallbackCatalog;
+              }
+            } catch {
+              // ignore
+            }
+          }
+        }
+
         if (matched.length > 0) {
           matched.sort((a, b) => {
             const idxA = ids.indexOf(a.id) !== -1 ? ids.indexOf(a.id) : ids.indexOf(a.slug);
