@@ -41,7 +41,7 @@ export function ProductSelector({ onSelect, excludeIds }: ProductSelectorProps) 
       const { data, error } = await supabase
         .from("products")
         .select(
-          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
+          "id, name, slug, image_url, short_description, product_categories(slug, name)",
         )
         .order("name");
 
@@ -63,7 +63,7 @@ export function ProductSelector({ onSelect, excludeIds }: ProductSelectorProps) 
 
   const filteredProducts = React.useMemo(() => {
     if (!excludeIds || excludeIds.length === 0) return products;
-    return products.filter((p) => !excludeIds.includes(p.id));
+    return products.filter((p) => !excludeIds.includes(p.id) && !excludeIds.includes(p.slug));
   }, [products, excludeIds]);
 
   return (

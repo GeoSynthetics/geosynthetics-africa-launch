@@ -22,6 +22,10 @@ export function mergeCountryTemplatesWithDefaults(
     merged[key] = {
       ...base,
       ...val,
+      featuredProductIds:
+        val.featuredProductIds !== undefined
+          ? val.featuredProductIds
+          : base.featuredProductIds || [],
       faqs: val.faqs !== undefined ? val.faqs : base.faqs || [],
       seo: {
         ...(base.seo || { title: "", description: "", keywords: "" }),

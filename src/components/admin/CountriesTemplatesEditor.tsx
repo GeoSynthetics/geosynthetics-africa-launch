@@ -15,6 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Globe,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { DeleteConfirmationDialog } from "@/components/ui/delete-confirmation-dialog";
 import { toast } from "sonner";
@@ -52,6 +54,23 @@ export function CountriesTemplatesEditor() {
   const [newCountryName, setNewCountryName] = useState("");
   const [showNewDialog, setShowNewDialog] = useState(false);
   const [slugToDelete, setSlugToDelete] = useState<string | null>(null);
+  const [allProducts, setAllProducts] = useState<
+    Array<{ id: string; name: string; slug: string; image_url?: string | null }>
+  >([]);
+
+  // ── Load Products Catalog for Auto-complete & Badge Details ──
+  useEffect(() => {
+    async function loadProducts() {
+      const { data, error } = await supabase
+        .from("products")
+        .select("id, name, slug, image_url")
+        .order("name");
+      if (!error && data) {
+        setAllProducts(data);
+      }
+    }
+    loadProducts();
+  }, []);
 
   // ── Load Templates from Supabase ──
   const loadTemplates = useCallback(async () => {
@@ -60,19 +79,19 @@ export function CountriesTemplatesEditor() {
       const merged = await fetchCountryTemplates();
       setAllData(merged);
       const keys = Object.keys(merged);
-      if (keys.length > 0 && (!activeSlug || !merged[activeSlug])) {
-        setActiveSlug(keys[0]);
+      if (keys.length > 0) {
+        setActiveSlug((prev) => (!prev || !merged[prev] ? keys[0] : prev));
       }
     } catch (err: any) {
       console.error("Error loading country templates:", err);
       toast.error("Failed to load country templates. Using defaults.");
       setAllData(DEFAULT_COUNTRY_TEMPLATES);
-      setActiveSlug(Object.keys(DEFAULT_COUNTRY_TEMPLATES)[0]);
+      setActiveSlug((prev) => (!prev ? Object.keys(DEFAULT_COUNTRY_TEMPLATES)[0] : prev));
     } finally {
       setLoading(false);
       setDirty(false);
     }
-  }, [activeSlug]);
+  }, []);
 
   useEffect(() => {
     loadTemplates();
@@ -653,17 +672,120 @@ export function CountriesTemplatesEditor() {
                       placeholder="SANS 1526, GRI-GM13, ASTM D6392"
                     />
                   </div>
-                  <div>
-                    <FieldLabel>Featured Products Selector</FieldLabel>
-                    <ProductSelector
-                      onSelect={(prod: ProductData) => {
-                        const current = currentItem.featuredProductIds || [];
-                        if (!current.includes(prod.id)) {
-                          updateCurrentField("featuredProductIds", [...current, prod.id]);
-                        }
-                      }}
-                      excludeIds={currentItem.featuredProductIds || []}
-                    />
+                  <div className="pt-2 border-t border-border space-y-3">
+                    <div>
+                      <FieldLabel hint="Select products available in this region to feature on the country landing page.">
+                        Featured Products Offered in this Country
+                      </FieldLabel>
+                    </div>
+
+                    <div className="space-y-2 max-w-xl">
+                      {(currentItem.featuredProductIds || []).map((pId, idx) => {
+                        const pData = allProducts.find((p) => p.id === pId || p.slug === pId);
+                        const isFirst = idx === 0;
+                        const isLast = idx === (currentItem.featuredProductIds || []).length - 1;
+
+                        return (
+                          <div
+                            key={`${pId}-${idx}`}
+                            className="flex items-center justify-between p-2.5 bg-background border border-border rounded-lg text-xs font-semibold shadow-xs gap-3"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              {pData?.image_url ? (
+                                <img
+                                  src={pData.image_url}
+                                  alt={pData.name}
+                                  className="w-8 h-8 object-cover rounded border border-border shrink-0"
+                                />
+                              ) : (
+                                <div className="w-8 h-8 bg-muted rounded flex items-center justify-center text-[10px] text-muted-foreground shrink-0">
+                                  📦
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <p className="truncate text-foreground font-bold">
+                                  {pData ? pData.name : pId}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground font-mono truncate">
+                                  {pData ? pData.slug : pId}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1 shrink-0">
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                disabled={isFirst}
+                                className="h-6 w-6 text-muted-foreground hover:text-foreground cursor-pointer disabled:opacity-30"
+                                onClick={() => {
+                                  const list = [...(currentItem.featuredProductIds || [])];
+                                  const temp = list[idx - 1];
+                                  list[idx - 1] = list[idx];
+                                  list[idx] = temp;
+                                  updateCurrentField("featuredProductIds", list);
+                                }}
+                                title="Move Up"
+                              >
+                                <ArrowUp className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                disabled={isLast}
+                                className="h-6 w-6 text-muted-foreground hover:text-foreground cursor-pointer disabled:opacity-30"
+                                onClick={() => {
+                                  const list = [...(currentItem.featuredProductIds || [])];
+                                  const temp = list[idx + 1];
+                                  list[idx + 1] = list[idx];
+                                  list[idx] = temp;
+                                  updateCurrentField("featuredProductIds", list);
+                                }}
+                                title="Move Down"
+                              >
+                                <ArrowDown className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                onClick={() => {
+                                  const list = (currentItem.featuredProductIds || []).filter(
+                                    (_, i) => i !== idx
+                                  );
+                                  updateCurrentField("featuredProductIds", list);
+                                }}
+                                title="Remove Product"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {(!currentItem.featuredProductIds ||
+                        currentItem.featuredProductIds.length === 0) && (
+                        <p className="text-xs text-muted-foreground italic py-1">
+                          No featured products selected. Select products below to feature them on this country page.
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="max-w-xl pt-1">
+                      <ProductSelector
+                        onSelect={(prod: ProductData) => {
+                          const current = currentItem.featuredProductIds || [];
+                          if (!current.includes(prod.id) && !current.includes(prod.slug)) {
+                            updateCurrentField("featuredProductIds", [...current, prod.id]);
+                          }
+                        }}
+                        excludeIds={currentItem.featuredProductIds || []}
+                      />
+                    </div>
                   </div>
                 </TabsContent>
 

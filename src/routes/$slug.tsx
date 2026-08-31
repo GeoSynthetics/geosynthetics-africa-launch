@@ -87,31 +87,70 @@ export async function loadCountryData(customSlug: string) {
   let linkedProducts: any[] = [];
   if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
     try {
-      const { data: prodData } = await supabase
-        .from("products")
-        .select("id, name, slug, short_description, image, hero_image_url")
-        .in("id", countryTemplate.featuredProductIds);
-      linkedProducts = prodData || [];
+      const ids = countryTemplate.featuredProductIds.filter(Boolean);
+      const { data: prodData, error } = await supabase
+        .from("products_public")
+        .select(
+          "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
+        )
+        .in("id", ids);
+
+      let matched = (!error && prodData) ? [...prodData] : [];
+      if (matched.length < ids.length) {
+        const { data: slugData } = await supabase
+          .from("products_public")
+          .select(
+            "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
+          )
+          .in("slug", ids);
+        if (slugData && slugData.length > 0) {
+          const existingIds = new Set(matched.map((p) => p.id));
+          for (const sp of slugData) {
+            if (!existingIds.has(sp.id)) {
+              matched.push(sp);
+            }
+          }
+        }
+      }
+
+      if (matched.length === 0) {
+        const { data: directData } = await supabase
+          .from("products")
+          .select("id, name, slug, short_description, image_url, images")
+          .in("id", ids);
+        if (directData && directData.length > 0) {
+          matched = directData;
+        }
+      }
+
+      if (matched.length > 0) {
+        matched.sort((a, b) => {
+          const idxA = ids.indexOf(a.id) !== -1 ? ids.indexOf(a.id) : ids.indexOf(a.slug);
+          const idxB = ids.indexOf(b.id) !== -1 ? ids.indexOf(b.id) : ids.indexOf(b.slug);
+          return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+        });
+      }
+      linkedProducts = matched;
     } catch (err) {
       console.error("Error loading products for country template:", err);
     }
   }
 
-  if (linkedProducts.length === 0) {
+  if (linkedProducts.length === 0 && !countryTemplate?.featuredProductIds) {
     linkedProducts = [
       {
         id: "hdpe-smooth",
         name: "GSE Smooth HDPE Geomembrane",
         slug: "gse-hdpe-liner-smooth-geomembrane",
         short_description: "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
-        image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
+        image_url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
       },
       {
         id: "bidim-geotextile",
         name: "Bidim Non-Woven Geotextile",
         slug: "bidim-non-woven-continuous-filament-geotextile",
         short_description: "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
-        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
+        image_url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
       },
     ];
   }

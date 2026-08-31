@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Globe,
@@ -15,6 +15,7 @@ import {
   Award,
   Package,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
@@ -25,8 +26,71 @@ import type { CountryTemplate } from "@/types/country-template";
 import { useCountryTemplate } from "@/hooks/use-country-templates";
 
 export function CountryPage({ data }: { data: any }) {
-  const { countryTemplate: initialTemplate, linkedProducts = [], caseStudies = [] } = data;
+  const { countryTemplate: initialTemplate, linkedProducts: initialLinkedProducts = [], caseStudies = [] } = data;
   const template: CountryTemplate | null = useCountryTemplate(initialTemplate, initialTemplate?.slug);
+  const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadFeaturedProducts() {
+      if (!template?.featuredProductIds || template.featuredProductIds.length === 0) {
+        setLinkedProducts([]);
+        return;
+      }
+
+      const ids = template.featuredProductIds.filter(Boolean);
+      try {
+        const { data: prodData, error } = await supabase
+          .from("products_public")
+          .select("id, name, slug, short_description, image_url, images")
+          .in("id", ids);
+
+        let matched = (!error && prodData) ? [...prodData] : [];
+        if (matched.length < ids.length) {
+          const { data: slugData } = await supabase
+            .from("products_public")
+            .select("id, name, slug, short_description, image_url, images")
+            .in("slug", ids);
+          if (slugData && slugData.length > 0) {
+            const existingIds = new Set(matched.map((p) => p.id));
+            for (const sp of slugData) {
+              if (!existingIds.has(sp.id)) {
+                matched.push(sp);
+              }
+            }
+          }
+        }
+
+        if (matched.length === 0) {
+          const { data: directData } = await supabase
+            .from("products")
+            .select("id, name, slug, short_description, image_url, images")
+            .in("id", ids);
+          if (directData && directData.length > 0) {
+            matched = directData;
+          }
+        }
+
+        if (matched.length > 0) {
+          matched.sort((a, b) => {
+            const idxA = ids.indexOf(a.id) !== -1 ? ids.indexOf(a.id) : ids.indexOf(a.slug);
+            const idxB = ids.indexOf(b.id) !== -1 ? ids.indexOf(b.id) : ids.indexOf(b.slug);
+            return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+          });
+        }
+
+        if (isMounted) {
+          setLinkedProducts(matched);
+        }
+      } catch (err) {
+        console.error("Error loading products for country template:", err);
+      }
+    }
+
+    if (template?.featuredProductIds) {
+      loadFeaturedProducts();
+    }
+  }, [template?.featuredProductIds]);
 
   const { open: openQuickQuote } = useQuickQuote();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -401,6 +465,7 @@ export function CountryPage({ data }: { data: any }) {
                   <div className="h-44 overflow-hidden bg-muted relative">
                     <img
                       src={
+                        prod.image_url ||
                         prod.image ||
                         prod.hero_image_url ||
                         "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80"
