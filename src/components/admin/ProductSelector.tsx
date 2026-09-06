@@ -38,14 +38,26 @@ export function ProductSelector({ onSelect, excludeIds }: ProductSelectorProps) 
   React.useEffect(() => {
     async function loadProducts() {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
+      let { data, error } = await supabase
+        .from("products_public")
         .select(
           "id, name, slug, image_url, short_description, product_categories(slug, name)",
         )
         .order("name");
 
-      if (!error && data) {
+      if (error || !data || data.length === 0) {
+        const fallbackRes = await supabase
+          .from("products")
+          .select(
+            "id, name, slug, image_url, short_description, product_categories(slug, name)",
+          )
+          .order("name");
+        if (fallbackRes.data && fallbackRes.data.length > 0) {
+          data = fallbackRes.data;
+        }
+      }
+
+      if (data) {
         // Map the data correctly to handle the relation
         const mapped: ProductData[] = data.map((d: any) => ({
           ...d,

@@ -51,7 +51,7 @@ vi.mock("@/integrations/supabase/client", () => {
             upsert: mockUpsert,
           };
         }
-        if (table === "products") {
+        if (table === "products" || table === "products_public") {
           return {
             select: vi.fn().mockReturnValue({
               order: vi.fn().mockResolvedValue({ data: mockProducts, error: null }),

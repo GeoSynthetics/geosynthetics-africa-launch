@@ -61,11 +61,22 @@ export function CountriesTemplatesEditor() {
   // ── Load Products Catalog for Auto-complete & Badge Details ──
   useEffect(() => {
     async function loadProducts() {
-      const { data, error } = await supabase
-        .from("products")
+      let { data, error } = await supabase
+        .from("products_public")
         .select("id, name, slug, image_url")
         .order("name");
-      if (!error && data) {
+
+      if (error || !data || data.length === 0) {
+        const fallbackRes = await supabase
+          .from("products")
+          .select("id, name, slug, image_url")
+          .order("name");
+        if (fallbackRes.data && fallbackRes.data.length > 0) {
+          data = fallbackRes.data;
+        }
+      }
+
+      if (data) {
         setAllProducts(data);
       }
     }
@@ -398,16 +409,27 @@ export function CountriesTemplatesEditor() {
                     Slug: /{currentItem.slug}
                   </p>
                 </div>
-                <a
-                  href={`/${currentItem.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline bg-primary/10 px-3 py-1.5 rounded-md self-start"
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                  View Live Page
-                  <ExternalLink className="h-3 w-3" />
-                </a>
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <a
+                    href={`/${currentItem.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline bg-primary/10 px-3 py-1.5 rounded-md"
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                    View Live Page
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                  <Button
+                    onClick={handleSave}
+                    disabled={saving}
+                    size="sm"
+                    className="gap-1.5 font-bold h-8 text-xs"
+                  >
+                    {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                    Save Template
+                  </Button>
+                </div>
               </div>
 
               {/* Form Tabs */}
@@ -703,11 +725,18 @@ export function CountriesTemplatesEditor() {
                                 </div>
                               )}
                               <div className="min-w-0">
-                                <p className="truncate text-foreground font-bold">
-                                  {pData ? pData.name : pId}
-                                </p>
+                                <div className="flex items-center gap-1.5">
+                                  <p className="truncate text-foreground font-bold">
+                                    {pData ? pData.name : pId}
+                                  </p>
+                                  {!pData && (
+                                    <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/10 text-amber-600 font-normal">
+                                      Unmatched
+                                    </span>
+                                  )}
+                                </div>
                                 <p className="text-[10px] text-muted-foreground font-mono truncate">
-                                  {pData ? pData.slug : pId}
+                                  {pData ? pData.slug : "Legacy identifier — please remove or re-select"}
                                 </p>
                               </div>
                             </div>
@@ -785,6 +814,23 @@ export function CountriesTemplatesEditor() {
                         }}
                         excludeIds={currentItem.featuredProductIds || []}
                       />
+                    </div>
+
+                    <div className="flex items-center justify-between max-w-xl pt-2">
+                      <Button
+                        onClick={handleSave}
+                        disabled={saving}
+                        size="sm"
+                        className="gap-1.5 font-bold h-8 text-xs"
+                      >
+                        {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                        Save Featured Products
+                      </Button>
+                      {dirty && (
+                        <span className="text-[11px] font-semibold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                          Unsaved changes
+                        </span>
+                      )}
                     </div>
                   </div>
                 </TabsContent>

@@ -8,6 +8,7 @@ import { loadApplicationData, ApplicationCategorySkeleton } from "@/routes/appli
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
 import { fetchCountryTemplates } from "@/hooks/use-country-templates";
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 /**
  * Lazy-load map: original path → lazy component.
@@ -83,54 +84,11 @@ export async function loadCountryData(customSlug: string) {
       null;
   }
 
-  // Fetch linked products
+  // Fetch linked products safely without PostgreSQL UUID syntax errors
   let linkedProducts: any[] = [];
   if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
     try {
-      const ids = countryTemplate.featuredProductIds.filter(Boolean);
-      const { data: prodData, error } = await supabase
-        .from("products_public")
-        .select(
-          "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
-        )
-        .in("id", ids);
-
-      let matched = (!error && prodData) ? [...prodData] : [];
-      if (matched.length < ids.length) {
-        const { data: slugData } = await supabase
-          .from("products_public")
-          .select(
-            "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
-          )
-          .in("slug", ids);
-        if (slugData && slugData.length > 0) {
-          const existingIds = new Set(matched.map((p) => p.id));
-          for (const sp of slugData) {
-            if (!existingIds.has(sp.id)) {
-              matched.push(sp);
-            }
-          }
-        }
-      }
-
-      if (matched.length === 0) {
-        const { data: directData } = await supabase
-          .from("products")
-          .select("id, name, slug, short_description, image_url, images")
-          .in("id", ids);
-        if (directData && directData.length > 0) {
-          matched = directData;
-        }
-      }
-
-      if (matched.length > 0) {
-        matched.sort((a, b) => {
-          const idxA = ids.indexOf(a.id) !== -1 ? ids.indexOf(a.id) : ids.indexOf(a.slug);
-          const idxB = ids.indexOf(b.id) !== -1 ? ids.indexOf(b.id) : ids.indexOf(b.slug);
-          return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
-        });
-      }
-      linkedProducts = matched;
+      linkedProducts = await fetchProductsByIdsOrSlugs(countryTemplate.featuredProductIds);
     } catch (err) {
       console.error("Error loading products for country template:", err);
     }

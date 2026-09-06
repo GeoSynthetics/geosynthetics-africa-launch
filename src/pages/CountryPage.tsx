@@ -24,6 +24,7 @@ import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { GeoGrid } from "@/components/site/shapes";
 import type { CountryTemplate } from "@/types/country-template";
 import { useCountryTemplate } from "@/hooks/use-country-templates";
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 export function CountryPage({ data }: { data: any }) {
   const { countryTemplate: initialTemplate, linkedProducts: initialLinkedProducts = [], caseStudies = [] } = data;
@@ -38,67 +39,14 @@ export function CountryPage({ data }: { data: any }) {
         return;
       }
 
-      const ids = template.featuredProductIds.filter(Boolean);
       try {
-        const { data: prodData, error } = await supabase
-          .from("products_public")
-          .select("id, name, slug, short_description, image_url, images")
-          .in("id", ids);
-
-        let matched = (!error && prodData) ? [...prodData] : [];
-        if (matched.length < ids.length) {
-          const { data: slugData } = await supabase
-            .from("products_public")
-            .select("id, name, slug, short_description, image_url, images")
-            .in("slug", ids);
-          if (slugData && slugData.length > 0) {
-            const existingIds = new Set(matched.map((p) => p.id));
-            for (const sp of slugData) {
-              if (!existingIds.has(sp.id)) {
-                matched.push(sp);
-              }
-            }
-          }
-        }
-
-        if (matched.length === 0) {
-          const { data: directData } = await supabase
-            .from("products")
-            .select("id, name, slug, short_description, image_url, images")
-            .in("id", ids);
-          if (directData && directData.length > 0) {
-            matched = directData;
-          }
-        }
-
-        if (matched.length === 0) {
-          if (initialLinkedProducts && initialLinkedProducts.length > 0) {
-            matched = initialLinkedProducts;
-          } else {
-            try {
-              const { data: fallbackCatalog } = await supabase
-                .from("products_public")
-                .select("id, name, slug, short_description, image_url, images")
-                .limit(3);
-              if (fallbackCatalog && fallbackCatalog.length > 0) {
-                matched = fallbackCatalog;
-              }
-            } catch {
-              // ignore
-            }
-          }
-        }
-
-        if (matched.length > 0) {
-          matched.sort((a, b) => {
-            const idxA = ids.indexOf(a.id) !== -1 ? ids.indexOf(a.id) : ids.indexOf(a.slug);
-            const idxB = ids.indexOf(b.id) !== -1 ? ids.indexOf(b.id) : ids.indexOf(b.slug);
-            return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
-          });
-        }
-
+        const matched = await fetchProductsByIdsOrSlugs(template.featuredProductIds);
         if (isMounted) {
-          setLinkedProducts(matched);
+          if (matched.length > 0) {
+            setLinkedProducts(matched);
+          } else if (initialLinkedProducts && initialLinkedProducts.length > 0) {
+            setLinkedProducts(initialLinkedProducts);
+          }
         }
       } catch (err) {
         console.error("Error loading products for country template:", err);
@@ -108,7 +56,7 @@ export function CountryPage({ data }: { data: any }) {
     if (template?.featuredProductIds) {
       loadFeaturedProducts();
     }
-  }, [template?.featuredProductIds]);
+  }, [template?.featuredProductIds, initialLinkedProducts]);
 
   const { open: openQuickQuote } = useQuickQuote();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
