@@ -314,6 +314,9 @@ export function PageTemplatesAdminPage() {
       "gcls",
       "drainage-composites",
       "erosion-control",
+      "damp-proofing",
+      "dewatering-systems",
+      "gabion-baskets",
       "accessories",
     ];
     if (parentCategories.includes(slug)) {

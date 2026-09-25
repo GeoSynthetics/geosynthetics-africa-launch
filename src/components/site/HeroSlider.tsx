@@ -1,21 +1,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
-import { Upload, Phone, ChevronLeft, ChevronRight, Mail, MapPin } from "lucide-react";
+import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrainageMesh, MembraneFold } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
 import { type HeroSection, type HeroSlide, isVideoUrl } from "@/types/homepage";
+import { HeroProjectForm } from "@/components/site/HeroProjectForm";
+import type { RegionItem } from "@/types/regionalCoverage";
 
 interface HeroSliderProps {
   hero: HeroSection;
   onOpenQuote: () => void;
   autoPlayInterval?: number;
+  regions?: RegionItem[] | null;
 }
 
 export function HeroSlider({
   hero,
   onOpenQuote,
   autoPlayInterval = hero.autoPlayInterval ?? 5000,
+  regions,
 }: HeroSliderProps) {
   // Normalize slides list (supporting both simple string URLs and HeroSlide objects)
   const activeSlides = React.useMemo(() => {
@@ -152,7 +156,7 @@ export function HeroSlider({
       <div className="relative z-20 container-page py-16 md:py-24 my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Main Hero Headline & Copy */}
-          <div className="lg:col-span-7 xl:col-span-8">
+          <div className="lg:col-span-7 xl:col-span-7">
             {/* Headline */}
             <h1
               key={`headline-${currentIndex}`}
@@ -223,87 +227,9 @@ export function HeroSlider({
             </div>
           </div>
 
-          {/* Right Banner Quick Contacts Panel (Ultra-Modern Glassmorphism Card) */}
-          <div className="lg:col-span-5 xl:col-span-4 animate-hero-text animation-delay-300">
-            <div className="relative overflow-hidden rounded-2xl glassmorphic-card p-6 sm:p-7 space-y-5 transition-all duration-500 hover:border-primary/60 hover:shadow-[0_20px_50px_rgba(220,38,38,0.25)] group">
-              {/* Subtle Ambient Radial Light Flares inside the Card */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/35 transition-all duration-700" />
-              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Card Header Bar */}
-              <div className="relative z-10 flex items-center justify-between border-b border-white/15 pb-4">
-                <span className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-2.5">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
-                  </span>
-                  Quick Contacts
-                </span>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-white/80 bg-white/10 border border-white/15 backdrop-blur-md uppercase tracking-wider shadow-sm">
-                  Direct Line
-                </span>
-              </div>
-
-              {/* Quick Contacts Items */}
-              <div className="relative z-10 space-y-3.5">
-                {/* Phone Contact */}
-                <a
-                  href="tel:+27710939964"
-                  className="flex items-center gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0">
-                    <Phone className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
-                      Phone / Call Direct
-                    </div>
-                    <div className="text-sm sm:text-base font-extrabold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
-                      +27 71 093 9964
-                    </div>
-                  </div>
-                </a>
-
-                {/* Email Contact */}
-                <a
-                  href="mailto:sales@geosynthetics.co.za"
-                  className="flex items-center gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0">
-                    <Mail className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
-                      Email Sales Team
-                    </div>
-                    <div className="text-sm sm:text-base font-extrabold tracking-wide text-white group-hover/link:text-primary transition-colors truncate">
-                      sales@geosynthetics.co.za
-                    </div>
-                  </div>
-                </a>
-
-                {/* Location / HQ */}
-                <a
-                  href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-4 p-3.5 rounded-xl glassmorphic-item hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group/link cursor-pointer"
-                  title="Open Johannesburg HQ in Google Maps"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/20 text-primary border border-primary/30 group-hover/link:bg-primary group-hover/link:text-white group-hover/link:shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all duration-300 shrink-0 mt-0.5 shadow-sm">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-wider font-bold text-zinc-400 group-hover/link:text-zinc-300 transition-colors">
-                      Johannesburg HQ
-                    </div>
-                    <div className="text-xs sm:text-sm font-semibold text-white/90 group-hover/link:text-primary transition-colors leading-snug">
-                      7 Tamar Avenue, Lea Glen, Randburg, South Africa
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
+          {/* Right Banner Pan-African Start Your Project Form */}
+          <div className="lg:col-span-5 xl:col-span-5 animate-hero-text animation-delay-300 flex justify-center lg:justify-end w-full">
+            <HeroProjectForm regions={regions} />
           </div>
         </div>
       </div>

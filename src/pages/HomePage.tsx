@@ -82,8 +82,13 @@ export function HomePage() {
 
   return (
     <>
-      {/* Hero Slider */}
-      <HeroSlider hero={hero} onOpenQuote={open} autoPlayInterval={hero.autoPlayInterval} />
+      {/* Hero Slider with Pan-African Project Form */}
+      <HeroSlider
+        hero={hero}
+        onOpenQuote={open}
+        autoPlayInterval={hero.autoPlayInterval}
+        regions={(loaderData as any)?.regionalCoverage}
+      />
 
       {/* Trust strip */}
       <section className="border-b border-border bg-background">

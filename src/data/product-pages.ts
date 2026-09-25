@@ -42,6 +42,9 @@ export const DEFAULT_IMAGES: Record<string, string> = {
   gcls: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80",
   "drainage-composites": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80",
   "erosion-control": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80",
+  "damp-proofing": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80",
+  "dewatering-systems": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80",
+  "gabion-baskets": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&q=80",
   accessories: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80",
 };
 
@@ -720,7 +723,10 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
     gcls: "GCLs",
     "drainage-composites": "Drainage Composites",
     "erosion-control": "Erosion Control",
-    accessories: "Accessories",
+    "damp-proofing": "Damp Proofing",
+    "dewatering-systems": "Dewatering Systems",
+    "gabion-baskets": "Gabion Baskets",
+    accessories: "Tools & Accessories",
   };
 
   const label =
@@ -745,6 +751,12 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       "High-flow geocomposites, geonets, and drainage boards engineered to provide rapid liquid transmission and structural relief.",
     "erosion-control":
       "Natural and synthetic blankets, turf reinforcement mats, and coir logs engineered for vegetative reinforcement and immediate slope stabilization.",
+    "damp-proofing":
+      "Heavy-duty SABS-certified damp-proof membranes and under-slab moisture protection barriers engineered for residential, commercial, and industrial foundations.",
+    "dewatering-systems":
+      "High-capacity porous geotextile tubes and filtration bags engineered for rapid sludge consolidation, industrial effluent dewatering, and sediment control.",
+    "gabion-baskets":
+      "Galvanized and PVC-coated double-twisted wire mesh gabion baskets and Reno mattresses engineered for retaining walls, channel linings, and erosion prevention.",
     accessories:
       "Professional welding rods, bentonite paste, seaming tape, and specialized installation equipment to guarantee seam integrity and waterproofing.",
   };
@@ -784,6 +796,21 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       "Erosion Control products provide immediate surface protection and soil stability against heavy rainfall, wind, and run-off while encouraging successful vegetation growth on slopes and embankments.",
       "Our solutions range from 100% natural, biodegradable coir blankets and straw mats for temporary protection, to high-performance, non-degradable Turf Reinforcement Mats (TRMs) for severe high-velocity flow channels.",
       "Specifically engineered to establish sustainable green infrastructure, these systems deliver reliable, environmentally friendly stabilization.",
+    ],
+    "damp-proofing": [
+      "Damp Proofing membranes and construction sheeting provide essential moisture barrier protection beneath concrete floor slabs, preventing ingress of ground moisture and harmful soil contaminants.",
+      "Manufactured to SABS specifications, our range includes virgin and recycled multi-layer polyethylene membranes designed for high puncture resistance during concrete pours and long-term structural protection.",
+      "Suitable for residential, commercial, and critical industrial flooring installations across Africa where water ingress must be strictly prevented.",
+    ],
+    "dewatering-systems": [
+      "Dewatering Systems utilize engineered high-strength permeable geotextiles fabricated into tubular containers or bags to dewater high-moisture industrial sludge, municipal waste, and dredged materials.",
+      "As slurry is pumped in with appropriate flocculants, water drains freely through the geotextile weave while solids are retained and compacted, reducing disposal volume and environmental risk.",
+      "Our dewatering solutions are widely utilized in African mining tailings, river dredging, wastewater treatment, and construction sites.",
+    ],
+    "gabion-baskets": [
+      "Gabion Baskets are heavily galvanized, PVC-coated steel wire mesh containers filled with stone or rock to form flexible, permeable, and monolithic structures for civil engineering applications.",
+      "Engineered to withstand hydrostatic pressure behind retaining structures, gabions provide natural drainage, absorb wave impact, and blend into natural environments over time.",
+      "Widely deployed across Africa for slope stabilization, river bank protection, channel linings, highway culverts, and architectural retaining walls.",
     ],
     accessories: [
       "Geosynthetic installation accessories comprise a specialized selection of raw materials, joint sealants, seaming tapes, and testing equipment necessary to successfully install and verify barrier systems.",
@@ -924,6 +951,48 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
         name: "Coir Logs",
         description:
           "Densely packed coconut fiber logs designed to reduce water velocity along banks and shorelines.",
+      },
+    ],
+    "damp-proofing": [
+      {
+        name: "250 Micron Jumbo SABS Sheeting",
+        description: "Heavy-duty under-slab damp proof membrane conforming to SABS standards for concrete floors.",
+      },
+      {
+        name: "Under-Slab Vapour Barrier",
+        description: "High puncture-resistant barrier restricting moisture and radon gas migration into slabs.",
+      },
+      {
+        name: "Damp Proof Course (DPC)",
+        description: "Flexible embossed polyethylene strip for horizontal mortar joints in masonry walls.",
+      },
+    ],
+    "dewatering-systems": [
+      {
+        name: "Geotextile Dewatering Tubes",
+        description: "Large-circumference porous containers for municipal and mining sludge containment.",
+      },
+      {
+        name: "Sludge Dewatering Bags",
+        description: "High-permeability geotextile bags for localized pump and drain operations.",
+      },
+      {
+        name: "Sediment Filter Bags",
+        description: "In-line stormwater and discharge filter bags capturing suspended solids on civil sites.",
+      },
+    ],
+    "gabion-baskets": [
+      {
+        name: "Woven Mesh Gabions",
+        description: "Double-twisted hexagonal mesh baskets coated with Zinc and PVC for maximum corrosion endurance.",
+      },
+      {
+        name: "Welded Mesh Gabions",
+        description: "Dimensionally stable welded wire mesh units ideal for architectural and landscaping walls.",
+      },
+      {
+        name: "Reno Mattresses",
+        description: "Thin, flexible mattress gabions designed for canal revetments and river bed scour protection.",
       },
     ],
     accessories: [
@@ -1247,6 +1316,48 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
         image: heroImage,
       },
     ],
+    "damp-proofing": [
+      {
+        name: "250 Micron Jumbo SABS Construction Sheet",
+        spec: "250 Micron / 6m x 30m rolls",
+        desc: "SABS compliant heavy-duty green sheeting for under-slab moisture protection.",
+        image: heroImage,
+      },
+      {
+        name: "Damp Proof Membrane (DPM)",
+        spec: "Heavy Duty Embossed",
+        desc: "Polyethylene damp-proof membrane preventing capillary moisture migration.",
+        image: heroImage,
+      },
+    ],
+    "dewatering-systems": [
+      {
+        name: "High-Capacity Geotextile Dewatering Tube",
+        spec: "Custom circumference up to 15m",
+        desc: "High-strength woven geotextile tube for industrial slurry consolidation.",
+        image: heroImage,
+      },
+      {
+        name: "Mobile Sludge Dewatering Bag",
+        spec: "3m x 5m standard size",
+        desc: "Rapid deployable dewatering bag for construction site runoff and sediment trap.",
+        image: heroImage,
+      },
+    ],
+    "gabion-baskets": [
+      {
+        name: "Galvanized Woven Gabion Basket",
+        spec: "2m x 1m x 1m / 80x100mm mesh",
+        desc: "Heavy galvanized wire mesh basket with internal diaphragms for retaining walls.",
+        image: heroImage,
+      },
+      {
+        name: "Heavy-Duty Reno Mattress",
+        spec: "6m x 2m x 0.3m thickness",
+        desc: "Low-profile flexible mattress for canal bank revetments and bridge scour protection.",
+        image: heroImage,
+      },
+    ],
     accessories: [
       {
         name: "HDPE Extrusion Welding Rod",
@@ -1306,6 +1417,24 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       "Temporary and permanent matrices specified for flow velocity",
       "Non-toxic and 100% safe for wildlife and surrounding soils",
     ],
+    "damp-proofing": [
+      "Manufactured from high-grade virgin and recycled polyethylene polymers",
+      "Complies with SABS 952-1985 Type C construction specifications",
+      "High puncture and tear resistance preventing damage during rebar placement",
+      "Provides continuous, long-term barrier against ground moisture and vapor",
+    ],
+    "dewatering-systems": [
+      "Engineered high-tensile polypropylene woven geotextile fabric",
+      "Optimum apparent opening size (AOS) for high flow rate and sediment retention",
+      "Dramatically reduces disposal and transportation volume of wet slurry",
+      "Rapid deployment with standard slurry pump and manifold attachments",
+    ],
+    "gabion-baskets": [
+      "Double-twisted hexagonal mesh preventing unraveling if individual wires are severed",
+      "Heavy zinc-galvanized or PVC-coated wire ensuring 25+ years corrosion resistance",
+      "Monolithic, flexible structure capable of accommodating differential ground settlement",
+      "Free-draining permeable design eliminates dangerous hydrostatic water buildup",
+    ],
     accessories: [
       "Certified raw materials matching core geosynthetic systems",
       "Ensures seamless and leak-free panel seaming and closures",
@@ -1349,6 +1478,21 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       { label: "Materials", value: "Coir, Straw, Polypropylene" },
       { label: "Life Expectancy", value: "12 months to Permanent" },
       { label: "Slope Gradients", value: "1:1 and steeper limits" },
+    ],
+    "damp-proofing": [
+      { label: "Standards", value: "SABS 952-1985 Type C" },
+      { label: "Thickness", value: "250 Micron (0.25mm) standard" },
+      { label: "Roll Sizes", value: "3m / 6m width x 30m length" },
+    ],
+    "dewatering-systems": [
+      { label: "Tensile Strength", value: "Up to 200 kN/m" },
+      { label: "AOS Pore Size", value: "0.2mm - 0.45mm" },
+      { label: "Application", value: "Sludge, Tailings & Sediment" },
+    ],
+    "gabion-baskets": [
+      { label: "Coating", value: "Class A Galv / Zinc-Alu / PVC" },
+      { label: "Mesh Size", value: "80mm x 100mm standard" },
+      { label: "Wire Diameter", value: "2.7mm - 3.4mm heavy-duty" },
     ],
     accessories: [
       { label: "Welding Resins", value: "Solmax matches GSE liners" },
@@ -1573,11 +1717,29 @@ export async function getProductPageContent(
     "gcls",
     "drainage-composites",
     "erosion-control",
+    "damp-proofing",
+    "dewatering-systems",
+    "gabion-baskets",
     "accessories",
   ];
 
   if (parentCategories.includes(slug)) {
     return generateParentCategoryFallback(slug);
+  }
+
+  // Dynamic fallback: verify if slug exists in product_categories DB table
+  try {
+    const { data: dbCat } = await supabase
+      .from("product_categories")
+      .select("id, name, slug")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (dbCat) {
+      return generateParentCategoryFallback(slug);
+    }
+  } catch (err) {
+    console.error("[getProductPageContent] Dynamic DB category check error:", err);
   }
 
   return null;

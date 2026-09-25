@@ -722,6 +722,62 @@ export function QuotesAdminPage() {
                       </p>
                     </section>
 
+                    {selected.project_description?.includes("ROUTED TO: Mamadou Coulibaly") && (
+                      <div className="p-3 rounded-lg border border-amber-500/30 bg-amber-500/10 flex items-center justify-between gap-3">
+                        <div className="text-xs">
+                          <span className="font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider text-[11px]">
+                            West Africa Regional Routing
+                          </span>
+                          <p className="text-muted-foreground mt-0.5">
+                            Assigned to Mamadou Coulibaly (Abidjan Hub, Côte d'Ivoire)
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          asChild
+                          variant="outline"
+                          className="border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 text-xs shrink-0"
+                        >
+                          <a
+                            href={`mailto:civ@geosynthetics.co.za?subject=Fwd: Project Request from ${encodeURIComponent(selected.contact_name)}&body=${encodeURIComponent(
+                              `Dear Mamadou,\n\nPlease follow up on this project request from ${selected.contact_name}:\n\nContact: ${selected.contact_email} / ${selected.contact_phone || "N/A"}\n\nScope:\n${messageText}`,
+                            )}`}
+                          >
+                            <Mail className="h-3.5 w-3.5 mr-1.5" />
+                            Email Mamadou
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+
+                    {selected.project_description?.includes("ROUTED TO: South Africa Sales Desk") && (
+                      <div className="p-3 rounded-lg border border-red-500/30 bg-red-500/10 flex items-center justify-between gap-3">
+                        <div className="text-xs">
+                          <span className="font-bold text-red-600 dark:text-red-400 uppercase tracking-wider text-[11px]">
+                            South Africa Desk Routing
+                          </span>
+                          <p className="text-muted-foreground mt-0.5">
+                            Assigned to South Africa Sales Operations Desk
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          asChild
+                          variant="outline"
+                          className="border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 text-xs shrink-0"
+                        >
+                          <a
+                            href={`mailto:sales@geosynthetics.co.za?subject=Fwd: Project Request from ${encodeURIComponent(selected.contact_name)}&body=${encodeURIComponent(
+                              `Team,\n\nPlease follow up on this South Africa project request from ${selected.contact_name}:\n\nContact: ${selected.contact_email} / ${selected.contact_phone || "N/A"}\n\nScope:\n${messageText}`,
+                            )}`}
+                          >
+                            <Mail className="h-3.5 w-3.5 mr-1.5" />
+                            Email SA Desk
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+
                     <section>
                       <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
                         Attachments

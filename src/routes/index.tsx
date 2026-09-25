@@ -4,12 +4,15 @@ import { HomePage } from "@/pages/HomePage";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const [seoRes, hpRes, caseStudiesRes] = await Promise.all([
+    const [seoRes, hpRes, regionalRes, caseStudiesRes] = await Promise.all([
       supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle(),
       supabase.from("site_config").select("value").eq("key", "homepage_content").maybeSingle(),
+      supabase.from("site_config").select("value").eq("key", "regional_coverage").maybeSingle(),
       supabase
         .from("case_studies")
-        .select("id, slug, title, hero_image_url, sector, country, location, scale, summary, products_used, service_type, project_year")
+        .select(
+          "id, slug, title, hero_image_url, sector, country, location, scale, summary, products_used, service_type, project_year",
+        )
         .eq("status", "published")
         .order("project_year", { ascending: false })
         .order("created_at", { ascending: false }),
@@ -19,6 +22,7 @@ export const Route = createFileRoute("/")({
     return {
       seo: seoMap["/"] || null,
       hp: hpRes.data?.value || null,
+      regionalCoverage: (regionalRes.data?.value as any[]) || null,
       caseStudies: caseStudiesRes.data || [],
     };
   },
