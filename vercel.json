@@ -2,5 +2,44 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "bun run build:vercel",
   "installCommand": "bun install",
-  "framework": null
+  "framework": null,
+  "redirects": [
+    {
+      "source": "/product/:slug/",
+      "destination": "/catalogue/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/:slug",
+      "destination": "/catalogue/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/products-we-supply/",
+      "destination": "/catalogue",
+      "statusCode": 301
+    },
+    {
+      "source": "/products-we-supply",
+      "destination": "/catalogue",
+      "statusCode": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "geosynthetics-africa.vercel.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ]
 }

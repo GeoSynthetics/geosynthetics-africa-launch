@@ -4,6 +4,7 @@ import { SERVICES } from "@/components/site/mega-menu-data";
 import { ServicePage } from "@/pages/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DEFAULT_SERVICES_TEMPLATES, type ServiceTemplate } from "@/types/service-template";
 
 export async function loadServiceData(slug: string) {
   // Per-slug fallback hero images — kept in sync with the static SERVICE_CONTENT map in ServicePage.tsx
@@ -48,12 +49,84 @@ export async function loadServiceData(slug: string) {
     tmpl = templates[slug];
   }
 
-  let templateData = null;
+  const defaultTemplate = DEFAULT_SERVICES_TEMPLATES[slug] || null;
+
+  let templateData: ServiceTemplate | null = null;
   if (tmpl) {
     templateData = {
+      ...(defaultTemplate || {}),
       ...tmpl,
-      heroImage: tmpl.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO,
+      title: tmpl.title || defaultTemplate?.title || "",
+      description: tmpl.description || defaultTemplate?.description || "",
+      heroImage:
+        tmpl.heroImage || defaultTemplate?.heroImage || FALLBACK_HEROES[slug] || DEFAULT_HERO,
+      badge: tmpl.badge || defaultTemplate?.badge,
+      overviewParagraphs:
+        tmpl.overviewParagraphs && tmpl.overviewParagraphs.length > 0
+          ? tmpl.overviewParagraphs
+          : defaultTemplate?.overviewParagraphs || [],
+      whyChooseTitle: tmpl.whyChooseTitle || defaultTemplate?.whyChooseTitle,
+      whyChoose:
+        tmpl.whyChoose && tmpl.whyChoose.length > 0
+          ? tmpl.whyChoose
+          : defaultTemplate?.whyChoose || [],
+      whatWeDeliverTitle: tmpl.whatWeDeliverTitle || defaultTemplate?.whatWeDeliverTitle,
+      whatWeDeliver:
+        tmpl.whatWeDeliver && tmpl.whatWeDeliver.length > 0
+          ? tmpl.whatWeDeliver
+          : defaultTemplate?.whatWeDeliver || [],
+      coverageTitle: tmpl.coverageTitle || defaultTemplate?.coverageTitle,
+      coverageText: tmpl.coverageText || defaultTemplate?.coverageText,
+      coverageBullets:
+        tmpl.coverageBullets && tmpl.coverageBullets.length > 0
+          ? tmpl.coverageBullets
+          : defaultTemplate?.coverageBullets || [],
+      coverageImage: tmpl.coverageImage || defaultTemplate?.coverageImage,
+      coverageCaption: tmpl.coverageCaption || defaultTemplate?.coverageCaption,
+      sidebarImage:
+        tmpl.sidebarImage || defaultTemplate?.sidebarImage || FALLBACK_HEROES[slug] || DEFAULT_HERO,
+      sidebarCaption: tmpl.sidebarCaption || defaultTemplate?.sidebarCaption,
+      directModelTitle: tmpl.directModelTitle || defaultTemplate?.directModelTitle,
+      directModelText: tmpl.directModelText || defaultTemplate?.directModelText,
+      directModelItems:
+        tmpl.directModelItems && tmpl.directModelItems.length > 0
+          ? tmpl.directModelItems
+          : defaultTemplate?.directModelItems || [],
+      packagingTitle: tmpl.packagingTitle || defaultTemplate?.packagingTitle,
+      packagingText: tmpl.packagingText || defaultTemplate?.packagingText,
+      packagingItems:
+        tmpl.packagingItems && tmpl.packagingItems.length > 0
+          ? tmpl.packagingItems
+          : defaultTemplate?.packagingItems || [],
+      afcftaTitle: tmpl.afcftaTitle || defaultTemplate?.afcftaTitle,
+      afcftaText: tmpl.afcftaText || defaultTemplate?.afcftaText,
+      afcftaItems:
+        tmpl.afcftaItems && tmpl.afcftaItems.length > 0
+          ? tmpl.afcftaItems
+          : defaultTemplate?.afcftaItems || [],
+      playbookTitle: tmpl.playbookTitle || defaultTemplate?.playbookTitle,
+      playbookItems:
+        tmpl.playbookItems && tmpl.playbookItems.length > 0
+          ? tmpl.playbookItems
+          : defaultTemplate?.playbookItems || [],
+      statsTitle: tmpl.statsTitle || defaultTemplate?.statsTitle,
+      statsDescription: tmpl.statsDescription || defaultTemplate?.statsDescription,
+      stats: tmpl.stats && tmpl.stats.length > 0 ? tmpl.stats : defaultTemplate?.stats || [],
+      productsTitle: tmpl.productsTitle || defaultTemplate?.productsTitle,
+      products:
+        tmpl.products && tmpl.products.length > 0 ? tmpl.products : defaultTemplate?.products || [],
+      downloadsTitle: tmpl.downloadsTitle || defaultTemplate?.downloadsTitle,
+      downloads:
+        tmpl.downloads && tmpl.downloads.length > 0
+          ? tmpl.downloads
+          : defaultTemplate?.downloads || [],
+      seo: {
+        ...(defaultTemplate?.seo || { title: "", description: "", keywords: "" }),
+        ...(tmpl.seo || {}),
+      },
     };
+  } else if (defaultTemplate) {
+    templateData = { ...defaultTemplate };
   } else if (matchedItem && matchedItem.pageContent) {
     // Legacy fallback if no template exists but hierarchy pageContent has some fields
     const pc = matchedItem.pageContent;
@@ -81,7 +154,7 @@ export async function loadServiceData(slug: string) {
         if (pc.heroImage) templateData.heroImage = pc.heroImage;
         if (pc.seo) {
           templateData.seo = {
-            ...(templateData.seo || {}),
+            ...(templateData.seo || { title: "", description: "", keywords: "" }),
             ...pc.seo,
           };
         }

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { QuoteCard } from "@/components/site/QuoteCard";
 import {
   Accordion,
   AccordionContent,
@@ -24,6 +25,24 @@ import {
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { GeoGrid } from "@/components/site/shapes";
+
+const LEGACY_SLUG_MAP: Record<string, string> = {
+  mining: "mining-systems",
+  waste: "waste-landfills",
+  water: "water-containment",
+  power: "roads-infrastructure",
+};
+
+function resolveApplicationSlug(rawSlug?: string): { isDirectPath: boolean; pathOrSlug: string } {
+  if (!rawSlug) return { isDirectPath: false, pathOrSlug: "applications" };
+  if (rawSlug.startsWith("/")) {
+    return { isDirectPath: true, pathOrSlug: rawSlug };
+  }
+  const mapped = LEGACY_SLUG_MAP[rawSlug] || rawSlug;
+  return { isDirectPath: false, pathOrSlug: mapped };
+}
 
 export function ProductCategoryPage() {
   const { category, content } = Route.useLoaderData();
@@ -33,8 +52,15 @@ export function ProductCategoryPage() {
 
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Products", url: "https://geosynthetics.co.za/products" },
+          { name: content.label, url: `https://geosynthetics.co.za/products/${category}` },
+        ]}
+      />
       <section
-        className="bg-surface-dark text-surface-dark-foreground relative"
+        className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.95), rgba(10,10,12,0.7)), url(${heroImage})`,
           backgroundSize: "cover",
@@ -105,15 +131,15 @@ export function ProductCategoryPage() {
         </div>
       </section>
 
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.05} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 grid lg:grid-cols-12 gap-12">
           {/* Main Content Area */}
           <div className="lg:col-span-8 space-y-16">
             {/* Description */}
             <div>
               <h2 className="font-display text-xl font-bold uppercase mb-4 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> This is a comprehensive description of the{" "}
-                {content.label}
+                <span className="text-primary">|</span> About {content.label}
               </h2>
               <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
                 {splitIntoParagraphs(content.description).map((paragraph, idx) => (
@@ -125,33 +151,49 @@ export function ProductCategoryPage() {
             </div>
 
             {/* Applications */}
-            <div>
-              <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> Common Applications and Engineering Use
-                Cases
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {content.applications.map((app, i) => (
-                  <div
-                    key={i}
-                    className="border border-border p-5 rounded hover:border-primary/50 transition bg-surface"
-                  >
-                    <h3 className="font-bold text-sm uppercase tracking-wide mb-2">{app.label}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                      {app.description ||
-                        `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
-                    </p>
-                    <Link
-                      to="/$slug"
-                      params={{ slug: app.slug }}
-                      className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
-                    >
-                      Read More <ChevronRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                ))}
+            {content.applications && content.applications.length > 0 && (
+              <div>
+                <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
+                  <span className="text-primary">|</span> Common Applications and Engineering Use
+                  Cases
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {content.applications.map((app, i) => {
+                    const { isDirectPath, pathOrSlug } = resolveApplicationSlug(app.slug);
+                    return (
+                      <div
+                        key={i}
+                        className="border border-border p-5 rounded hover:border-primary/50 transition bg-surface"
+                      >
+                        <h3 className="font-bold text-sm uppercase tracking-wide mb-2">
+                          {app.label}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                          {app.description ||
+                            `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
+                        </p>
+                        {isDirectPath ? (
+                          <Link
+                            to={pathOrSlug}
+                            className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
+                          >
+                            Read More <ChevronRight className="h-3 w-3" />
+                          </Link>
+                        ) : (
+                          <Link
+                            to="/$slug"
+                            params={{ slug: pathOrSlug }}
+                            className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
+                          >
+                            Read More <ChevronRight className="h-3 w-3" />
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Properties Table */}
             {content.propertiesTable && (
@@ -401,13 +443,23 @@ export function ProductCategoryPage() {
                   ))}
                 </div>
                 <div className="mt-4">
-                  <Link
-                    to="/catalogue"
-                    search={{ q: content.label, cats: [], mans: [], sort: "newest" }}
-                    className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1"
-                  >
-                    View Full Catalogue <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  {(() => {
+                    const filters = getCatalogueFiltersForSubcategory(category.slug);
+                    return (
+                      <Link
+                        to="/catalogue"
+                        search={{
+                          q: filters.q,
+                          cats: filters.catSlug ? [filters.catSlug] : [],
+                          mans: [],
+                          sort: "newest",
+                        }}
+                        className="text-sm text-primary hover:underline font-bold uppercase tracking-wider flex items-center gap-1"
+                      >
+                        View Full Catalogue <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -485,105 +537,12 @@ export function ProductCategoryPage() {
             </div>
 
             {/* BOQ Upload Form */}
-            <div>
-              <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                <span className="text-primary">|</span> BOQ Upload to Specific Sales
-              </h2>
-              <div className="bg-surface p-6 rounded border border-border">
-                <p className="text-sm text-muted-foreground mb-6">
-                  Upload your Bill of Quantities (BOQ) for a tailored quotation. Our sales team will
-                  review your requirements and provide a competitive pricing schedule.
-                </p>
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Full Name <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Company <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="Company Name"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Email Address <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="name@company.com"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                        placeholder="+27 12 345 6789"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1 pt-2">
-                    <label className="text-xs font-bold uppercase tracking-wide text-foreground">
-                      Upload BOQ Document (PDF, Excel) <span className="text-primary">*</span>
-                    </label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition bg-background cursor-pointer">
-                      <Download className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
-                      <span className="text-sm text-muted-foreground block">
-                        Click to upload or drag and drop
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-primary hover:bg-primary-hover font-bold uppercase tracking-wider mt-4"
-                  >
-                    Submit BOQ for Review
-                  </Button>
-                </form>
-              </div>
-            </div>
-
-            {/* Bottom FAQs duplicate from screenshot layout */}
-            {content.faqs && (
-              <div>
-                <h2 className="font-display text-xl font-bold uppercase mb-6 text-foreground flex items-center gap-3">
-                  <span className="text-primary">|</span> Explore More Questions about{" "}
-                  {content.label}
-                </h2>
-                <Accordion type="single" collapsible className="w-full">
-                  {content.faqs
-                    .slice()
-                    .reverse()
-                    .map((faq, i) => (
-                      <AccordionItem key={i} value={`more-item-${i}`} className="border-border">
-                        <AccordionTrigger className="text-left font-bold text-sm uppercase hover:text-primary transition-colors hover:no-underline px-4 bg-surface/50 data-[state=open]:bg-primary/10 data-[state=open]:text-primary rounded-t mt-2">
-                          {faq.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground px-4 pt-4 pb-6 leading-relaxed">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                </Accordion>
-              </div>
-            )}
+            <QuoteCard
+              contextId={content.slug}
+              contextLabel={content.label}
+              heading="BOQ Upload to Specific Sales"
+              description="Upload your Bill of Quantities (BOQ) or drawings for a tailored quotation. Our sales team will review your requirements and provide a competitive pricing schedule."
+            />
           </div>
 
           {/* Sidebar Area */}
@@ -613,13 +572,24 @@ export function ProductCategoryPage() {
                 </h3>
                 <ul className="space-y-1">
                   <li>
-                    <Link
-                      to="/catalogue"
-                      search={{ q: category.label, cats: [], mans: [], sort: "newest" }}
-                      className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium"
-                    >
-                      Catalogue Products <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </Link>
+                    {(() => {
+                      const filters = getCatalogueFiltersForSubcategory(category.slug);
+                      return (
+                        <Link
+                          to="/catalogue"
+                          search={{
+                            q: filters.q,
+                            cats: filters.catSlug ? [filters.catSlug] : [],
+                            mans: [],
+                            sort: "newest",
+                          }}
+                          className="flex items-center justify-between p-2 rounded hover:bg-accent hover:text-primary transition text-sm font-medium"
+                        >
+                          Catalogue Products{" "}
+                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                      );
+                    })()}
                   </li>
                   <li>
                     <Link
@@ -678,38 +648,38 @@ export function ProductCategoryPage() {
                 </ul>
               </div>
 
-              {/* Stats Box */}
+              {/* Claims Box */}
               <div className="rounded bg-surface-dark text-white p-6 grid grid-cols-2 gap-4 divide-x divide-white/10 text-center">
                 <div className="px-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    900<span className="text-lg">+</span>
+                  <div className="text-xl md:text-2xl font-display font-bold text-primary mb-1">
+                    1 of 5
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Projects
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    IAGI installer members
                   </div>
                 </div>
                 <div className="px-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    15<span className="text-lg">+</span>
+                  <div className="text-xl md:text-2xl font-display font-bold text-primary mb-1">
+                    One scope
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Countries
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    Supply, install, certify
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
+                  <div className="text-2xl md:text-3xl font-display font-bold text-primary mb-1">
                     30<span className="text-lg">+</span>
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Experts
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    Countries served
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
-                  <div className="text-3xl font-display font-bold text-primary mb-1">
-                    20<span className="text-lg">+</span>
+                  <div className="text-2xl md:text-3xl font-display font-bold text-primary mb-1">
+                    100<span className="text-lg">%</span>
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-white/70 font-medium">
-                    Years
+                  <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
+                    QA Testing
                   </div>
                 </div>
               </div>
@@ -744,4 +714,75 @@ export function ProductCategoryPage() {
       <PartnerStrip />
     </>
   );
+}
+
+export function getCatalogueFiltersForSubcategory(slug: string): { q: string; catSlug: string } {
+  const mapping: Record<string, { q: string; catSlug: string }> = {
+    // Geomembranes
+    "hdpe-geomembranes": { q: "HDPE", catSlug: "geomembranes" },
+    "lldpe-geomembranes": { q: "LLDPE", catSlug: "geomembranes" },
+    "pvc-geomembranes": { q: "PVC", catSlug: "geomembranes" },
+    "epdm-geomembranes": { q: "EPDM", catSlug: "geomembranes" },
+    "pp-geomembranes": { q: "PP Geomembrane", catSlug: "geomembranes" },
+    "textured-geomembranes": { q: "EVA", catSlug: "geomembranes" },
+    "speciality-geomembranes": { q: "CSPE", catSlug: "geomembranes" },
+    "floating-cover-geomembranes": { q: "Floating Cover", catSlug: "geomembranes" },
+    "hdpe-coated-bentonite-geosynthetic-clay-liners": { q: "GCL", catSlug: "geomembranes" },
+    "reinforced-sodium-bentonite-geosynthetic-clay-liners": { q: "GCL", catSlug: "geomembranes" },
+    "tiltex-concrete-gccm-liner": { q: "Tiltex", catSlug: "geomembranes" },
+
+    // Geotextiles
+    "pp-root-barrier": { q: "Root Barrier", catSlug: "geotextiles" },
+    "pp-polytape-silt-fence": { q: "Silt Fence", catSlug: "geotextiles" },
+    "pp-weedblock-ground-cover": { q: "Ground Cover", catSlug: "geotextiles" },
+    "polypropylene-woven-geotextiles": { q: "Woven", catSlug: "geotextiles" },
+    "polypropylene-non-woven-geotextiles": { q: "Nonwoven", catSlug: "geotextiles" },
+    "geotextile-sand-bags": { q: "Sand", catSlug: "geotextiles" },
+    "woven-geotextile-sand-bags": { q: "Sand", catSlug: "geotextiles" },
+
+    // Geogrids
+    "biaxial-geogrids": { q: "Biaxial", catSlug: "geogrids" },
+    "triaxial-geogrids": { q: "Triaxial", catSlug: "geogrids" },
+    "uniaxial-geogrids": { q: "Uniaxial", catSlug: "geogrids" },
+    "composite-geogrids": { q: "Composite", catSlug: "geogrids" },
+    "multi-axial-geogrids": { q: "InterAx", catSlug: "geogrids" },
+    "glass-asphalt-geogrid": { q: "Asphalt", catSlug: "geogrids" },
+
+    // Erosion Control / Geocells / Gravel & Grass
+    "geostrata-hdpe-geocells": { q: "Geocell", catSlug: "erosion-control" },
+    "polycell-polypropylene-geocells": { q: "Geocell", catSlug: "erosion-control" },
+    "coir-fibre-soil-blankets": { q: "Coir", catSlug: "erosion-control" },
+    "envirowool-soil-erosion-blankets": { q: "EnviroWool", catSlug: "erosion-control" },
+    "straw-cellulose-erosion-blanket": { q: "Straw", catSlug: "erosion-control" },
+    "jute-soil-erosion-saver-control-blanket": { q: "Jute", catSlug: "erosion-control" },
+    "bera-grass-fix": { q: "Grass Fix", catSlug: "erosion-control" },
+    "bera-gravel-fix": { q: "Gravel Fix", catSlug: "erosion-control" },
+    "bera-stable-fix": { q: "Stable Fix", catSlug: "erosion-control" },
+
+    // Gabions
+    "galvanised-woven-gabion-baskets": { q: "Gabion", catSlug: "gabion-baskets" },
+    "square-weld-mesh-gabion-baskets": { q: "Weldmesh", catSlug: "gabion-baskets" },
+    "river-reno-matresses": { q: "Reno", catSlug: "gabion-baskets" },
+
+    // Dewatering / Sediment Control
+    "geotube-dewatering-systems": { q: "Geotube", catSlug: "dewatering-systems" },
+    "flowtex-dewatering-tubes-bags": { q: "FlowTex", catSlug: "dewatering-systems" },
+    "geo-curtain-silt-turbidity-curtains": { q: "Silt Curtain", catSlug: "dewatering-systems" },
+
+    // Drainage Composites / Pipes
+    "cable-ducting-pipes": { q: "Duct", catSlug: "drainage-composites" },
+    "subsoil-drainage-pipes": { q: "Subsoil", catSlug: "drainage-composites" },
+    "structured-wall-pipes": { q: "Structured", catSlug: "drainage-composites" },
+    "dimpled-drainage-boards": { q: "Dimpled", catSlug: "drainage-composites" },
+    "leak-detection-drainage-sheets": { q: "Leak", catSlug: "drainage-composites" },
+    "dpc-damp-proof-membranes-construction-plastic-sheeting-": {
+      q: "DPC",
+      catSlug: "damp-proofing",
+    },
+
+    // Accessories
+    accessories: { q: "", catSlug: "accessories" },
+  };
+
+  return mapping[slug] || { q: "", catSlug: "" };
 }

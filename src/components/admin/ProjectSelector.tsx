@@ -19,6 +19,8 @@ export interface ProjectData {
   slug: string;
   hero_image_url?: string | null;
   country?: string | null;
+  sector?: string | null;
+  scale?: string | null;
   project_year?: number | string | null;
 }
 
@@ -45,7 +47,9 @@ export function ProjectSelector({
       try {
         const { data, error } = await supabase
           .from("case_studies")
-          .select("id, title, slug, hero_image_url, country, project_year")
+          .select("id, title, slug, hero_image_url, country, sector, scale, project_year")
+          .eq("status", "published")
+          .order("project_year", { ascending: false })
           .order("title");
 
         if (!error && data) {
@@ -63,7 +67,7 @@ export function ProjectSelector({
 
   const filteredProjects = React.useMemo(() => {
     if (!excludeIds || excludeIds.length === 0) return projects;
-    return projects.filter((p) => !excludeIds.includes(p.id));
+    return projects.filter((p) => !excludeIds.includes(p.id) && !excludeIds.includes(p.slug));
   }, [projects, excludeIds]);
 
   return (
@@ -74,7 +78,7 @@ export function ProjectSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0" align="start">
+      <PopoverContent className="w-[340px] p-0" align="end">
         <Command>
           <CommandInput placeholder="Search case studies..." />
           <CommandList>
@@ -83,14 +87,34 @@ export function ProjectSelector({
               {filteredProjects.map((project) => (
                 <CommandItem
                   key={project.id}
-                  value={project.title}
+                  value={`${project.title} ${project.country || ""} ${project.sector || ""}`}
                   onSelect={() => {
                     onSelect(project);
                     setOpen(false);
                   }}
+                  className="flex items-center gap-2 py-2 cursor-pointer"
                 >
-                  <Search className="mr-2 h-4 w-4 opacity-50" />
-                  {project.title}
+                  <div className="h-7 w-9 rounded bg-muted overflow-hidden shrink-0 border border-border/50">
+                    {project.hero_image_url ? (
+                      <img
+                        src={project.hero_image_url}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-[8px] text-muted-foreground">
+                        <Search className="h-3 w-3 opacity-40" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-xs truncate">{project.title}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">
+                      {[project.country, project.sector, project.project_year]
+                        .filter(Boolean)
+                        .join(" • ")}
+                    </p>
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>

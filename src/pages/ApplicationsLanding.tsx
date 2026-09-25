@@ -6,6 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
+import { GeoGrid } from "@/components/site/shapes";
 
 export function ApplicationsLanding() {
   const { templates, hierarchy } = useLoaderData({ from: "/applications/" }) as {
@@ -61,7 +62,8 @@ export function ApplicationsLanding() {
         description={heroDescription}
         image={heroImage}
       />
-      <section className="bg-background border-b border-border">
+      <section className="relative isolate overflow-hidden bg-background border-b border-border">
+        <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {applicationsItems.map((c: any) => {

@@ -19,21 +19,28 @@ let _fetchPromise: Promise<SeoMap> | null = null;
  * Returns a map from original route path → SEO entry.
  */
 export async function fetchSeoPages(): Promise<SeoMap> {
-  if (_cache) return _cache;
-  if (_fetchPromise) return _fetchPromise;
+  const isServer = typeof window === "undefined";
+  if (!isServer && _cache) return _cache;
+  if (!isServer && _fetchPromise) return _fetchPromise;
 
-  _fetchPromise = (async () => {
+  const fetchPromise = (async () => {
     const { data } = await supabase
       .from("site_config")
       .select("value")
       .eq("key", "seo_pages")
       .maybeSingle();
     const map = (data?.value as SeoMap) ?? {};
-    _cache = map;
+    if (!isServer) {
+      _cache = map;
+    }
     return map;
   })();
 
-  return _fetchPromise;
+  if (!isServer) {
+    _fetchPromise = fetchPromise;
+  }
+
+  return fetchPromise;
 }
 
 /** Invalidate the in-memory cache (call after admin saves). */

@@ -1,4 +1,11 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { useEffect } from "react";
+import {
+  Outlet,
+  Link,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+} from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -7,6 +14,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
+import { WebSiteSchema } from "@/components/seo/WebSiteSchema";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { TrackingLoader } from "@/components/site/TrackingLoader";
 import { QuickQuoteProvider } from "@/hooks/use-quick-quote";
@@ -14,6 +22,8 @@ import { QuickQuoteModal } from "@/components/site/QuickQuoteModal";
 import "@/lib/i18n";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
+import { fetchDynamicMenus } from "@/hooks/use-dynamic-menus";
+import { fetchFooterContent } from "@/hooks/use-footer-content";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -39,10 +49,18 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+  loader: async () => {
+    const [megaMenu, footerContent] = await Promise.all([
+      fetchDynamicMenus(),
+      fetchFooterContent(),
+    ]);
+    return { megaMenu, footerContent };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "robots", content: "index, follow" },
       { title: "Geosynthetics Africa" },
       { name: "description", content: "Africa's Integrated Geosynthetics Execution Platform." },
       { property: "og:title", content: "Geosynthetics Africa" },
@@ -104,6 +122,7 @@ function RootComponent() {
     <AuthProvider>
       <QuickQuoteProvider>
         <OrganizationSchema />
+        <WebSiteSchema />
         <div className="flex min-h-screen flex-col">
           <Header />
           <main className="flex-1">

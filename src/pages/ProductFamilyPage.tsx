@@ -13,6 +13,7 @@ import {
 import { splitIntoParagraphs, cn } from "@/lib/utils";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 import { mockProductFamilyData as mockData } from "@/mocks/productFamilyMocks";
 function mapFamilyData(
@@ -28,10 +29,10 @@ function mapFamilyData(
     heroImage: familyData.heroImage || familyData.heroImageUrl || "",
     subtitle: familyData.subtitle || "",
     stats: familyData.stats || {
-      projects: "900+",
-      countries: "15+",
-      experts: "30+",
-      years: "20+",
+      projects: "1 of 5",
+      countries: "30+",
+      experts: "One scope",
+      years: "100%",
     },
     technicalSpecText: Array.isArray(familyData.description)
       ? familyData.description.join("\n\n")
@@ -212,6 +213,14 @@ export function ProductFamilyPage() {
 
   return (
     <div className="bg-background relative">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://geosynthetics.co.za" },
+          { name: "Products", url: "https://geosynthetics.co.za/products" },
+          { name: dynamicCategoryName, url: `https://geosynthetics.co.za/products/${category}` },
+          { name: data.title || dynamicFamilyName, url: `https://geosynthetics.co.za/products/${category}/${family}` },
+        ]}
+      />
       {/* Hero Section */}
       <section
         className="bg-surface-dark text-white relative"
@@ -285,38 +294,53 @@ export function ProductFamilyPage() {
         {/* Stats Row */}
         <div className="border-t border-white/10 relative z-10 bg-black/20">
           <div className="container-page grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.projects || mockData.stats.projects}
+            <Link
+              to="/$slug"
+              params={{ slug: "supply" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                Supply
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Projects
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Direct Sourcing
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.countries || mockData.stats.countries}
+            </Link>
+            <Link
+              to="/$slug"
+              params={{ slug: "logistics" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                30+
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Countries
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Country Delivery
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.experts || mockData.stats.experts}
+            </Link>
+            <Link
+              to="/$slug"
+              params={{ slug: "installation" }}
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105 leading-none md:leading-normal">
+                IAGI-Aligned
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Experts
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Installation
               </div>
-            </div>
-            <div className="py-6 px-4 text-center">
-              <div className="font-display text-3xl font-bold text-primary">
-                {data.stats?.years || mockData.stats.years}
+            </Link>
+            <Link
+              to="/quality-assurance"
+              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
+                Quality
               </div>
-              <div className="text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Years
+              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
+                Assurance
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -551,52 +575,12 @@ export function ProductFamilyPage() {
         {/* Sidebar Area */}
         <aside className="lg:col-span-4 space-y-12">
           {/* Request For Quote Form */}
-          <div className="bg-surface border-t-4 border-t-primary border-x border-b border-border p-6 rounded-b shadow-sm sticky top-[160px]">
-            <h3 className="font-display text-xl font-bold uppercase tracking-wide text-foreground mb-2">
-              Request For Quote
-            </h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Need pricing for {data.title}? Our sales engineers are ready to assist you.
-            </p>
-
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Full Name"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Email <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="email"
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  placeholder="Email Address"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Project Details
-                </label>
-                <textarea
-                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary min-h-[100px] resize-none"
-                  placeholder="Quantity, location, application..."
-                ></textarea>
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-hover font-bold uppercase tracking-wider"
-              >
-                Submit Request
-              </Button>
-            </form>
-          </div>
+          <QuoteCard
+            contextId={family}
+            contextLabel={data.title}
+            heading="Request For Quote"
+            description={`Need pricing for ${data.title}? Our sales engineers are ready to assist you.`}
+          />
         </aside>
       </div>
 

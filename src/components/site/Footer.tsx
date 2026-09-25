@@ -1,42 +1,46 @@
 import { useState } from "react";
-import { Linkedin, Facebook, Instagram, Youtube } from "lucide-react";
+import {
+  Linkedin,
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+  MessageCircle,
+  Music2,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
 import { Link, type LinkComponentProps } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { usePageSlugs } from "@/hooks/use-page-slugs";
 import { useDynamicMegaMenus } from "@/hooks/use-dynamic-menus";
+import { useFooterContent } from "@/hooks/use-footer-content";
 import { useTranslation } from "react-i18next";
+import { type FooterSocialLink, DEFAULT_FOOTER_CONTENT } from "@/types/footer";
 
-const RESOURCES = [
-  { label: "Datasheets", to: "/resources" },
-  { label: "Installation Guides", to: "/resources" },
-  { label: "QA Checklists", to: "/quality-assurance" },
-  { label: "Technical Articles", to: "/resources" },
-  { label: "Videos", to: "/resources" },
-  { label: "FAQs", to: "/resources" },
-];
+const PLATFORM_ICONS: Record<
+  FooterSocialLink["platform"],
+  React.ComponentType<{ className?: string }>
+> = {
+  linkedin: Linkedin,
+  facebook: Facebook,
+  instagram: Instagram,
+  youtube: Youtube,
+  twitter: Twitter,
+  whatsapp: MessageCircle,
+  tiktok: Music2,
+};
 
-const COMPANY = [
-  { label: "About Us", to: "/about" },
-  { label: "Careers", to: "/" },
-  { label: "News", to: "/resources" },
-  { label: "Sustainability", to: "/" },
-  { label: "Privacy Policy", to: "/" },
-  { label: "Terms & Conditions", to: "/" },
-];
-
-const CERTIFICATIONS = [
-  "IAGI Member - One of only 5 in Africa",
-  "B-BBEE Level 2",
-  "Pan-African Logistics",
-  "QA/QC Certified",
-];
-
-const SOCIAL_LINKS = [
-  { Icon: Linkedin, label: "LinkedIn", href: "#" },
-  { Icon: Facebook, label: "Facebook", href: "#" },
-  { Icon: Instagram, label: "Instagram", href: "#" },
-  { Icon: Youtube, label: "YouTube", href: "#" },
-];
+const PLATFORM_LABELS: Record<FooterSocialLink["platform"], string> = {
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  twitter: "X / Twitter",
+  whatsapp: "WhatsApp",
+  tiktok: "TikTok",
+};
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
@@ -78,6 +82,7 @@ export function Footer() {
   const [email, setEmail] = useState("");
   const { resolve } = usePageSlugs();
   const { menus } = useDynamicMegaMenus();
+  const footerContent = useFooterContent();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,125 +92,199 @@ export function Footer() {
   const productMenu = menus.find((m) => m.key === "products");
   const products = productMenu
     ? [
-        ...productMenu.columns.primary.slice(0, 6).map((c) => ({
-          label: c.label,
-          to: c.to,
-          params: c.params,
-        })),
-        { label: "All Products", to: "/products" },
-      ]
+      ...productMenu.columns.primary.slice(0, 6).map((c) => ({
+        label: c.label,
+        to: c.to,
+        params: c.params,
+      })),
+      { label: "All Products", to: "/products" },
+    ]
     : [];
 
   const applicationMenu = menus.find((m) => m.key === "applications");
   const applications = applicationMenu
     ? [
-        ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
-          label: c.label,
-          to: c.to,
-          params: c.params,
-        })),
-        { label: "All Applications", to: "/applications" },
-      ]
+      ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
+        label: c.label,
+        to: c.to,
+        params: c.params,
+      })),
+      { label: "All Applications", to: "/applications" },
+    ]
     : [];
 
   const serviceMenu = menus.find((m) => m.key === "services");
   const services = serviceMenu
     ? serviceMenu.columns.primary.map((s) => ({
-        label: s.label,
-        to: s.to,
-        params: s.params,
-      }))
+      label: s.label,
+      to: s.to,
+      params: s.params,
+    }))
     : [];
 
   const industryMenu = menus.find((m) => m.key === "industries");
   const industries = industryMenu
     ? industryMenu.columns.primary.map((i) => ({
-        label: i.label,
-        to: i.to,
-        params: i.params,
-      }))
+      label: i.label,
+      to: i.to,
+      params: i.params,
+    }))
     : [];
 
-  // Resolve custom slugs for core page links
-  const company = COMPANY.map((item) => {
-    let key = "footer.aboutUs";
-    if (item.label === "Careers") key = "footer.careers";
-    if (item.label === "News") key = "footer.news";
-    if (item.label === "Sustainability") key = "footer.sustainability";
-    if (item.label === "Privacy Policy") key = "footer.privacyPolicy";
-    if (item.label === "Terms & Conditions") key = "footer.termsConditions";
+  const columns = footerContent.columns || DEFAULT_FOOTER_CONTENT.columns || [];
+
+  const dynamicCols = columns.map((col) => {
+    let items: { label: string; to: string; params?: Record<string, string> }[] = [];
+    if (col.type === "custom") {
+      items = (col.links || []).map((link) => {
+        const isNews = link.label === "News";
+        const itemLabel = isNews ? "Blog" : link.label;
+        const itemTo = isNews ? "/blog" : link.to;
+
+        let key = `footer.${itemLabel.toLowerCase()}`;
+        if (itemLabel === "About Us") key = "footer.aboutUs";
+        if (itemLabel === "Careers") key = "footer.careers";
+        if (itemLabel === "News" || itemLabel === "Blog") key = "footer.blog";
+        if (itemLabel === "Sustainability") key = "footer.sustainability";
+        if (itemLabel === "Privacy Policy") key = "footer.privacyPolicy";
+        if (itemLabel === "Terms & Conditions") key = "footer.termsConditions";
+        if (itemLabel === "Datasheets") key = "footer.datasheets";
+        if (itemLabel === "Installation Guides") key = "footer.installationGuides";
+        if (itemLabel === "QA Checklists") key = "footer.qaChecklists";
+        if (itemLabel === "Technical Articles") key = "footer.technicalArticles";
+        if (itemLabel === "Videos") key = "footer.videos";
+        if (itemLabel === "FAQs") key = "footer.faqs";
+
+        return {
+          label: t(key, itemLabel),
+          to: resolve(itemTo),
+          params: link.params,
+        };
+      });
+    } else if (col.type === "products") {
+      items = products;
+    } else if (col.type === "applications") {
+      items = applications;
+    } else if (col.type === "services") {
+      items = services;
+    } else if (col.type === "industries") {
+      items = industries;
+    } else if (col.type === "countries") {
+      items = (col.links || []).map((link) => ({
+        label: link.label,
+        to: resolve(link.to),
+        params: link.params,
+      }));
+    }
     return {
-      label: t(key, item.label),
-      to: resolve(item.to),
+      title: col.title,
+      type: col.type,
+      items,
     };
   });
 
-  const resources = RESOURCES.map((item) => {
-    let key = "footer.datasheets";
-    if (item.label === "Installation Guides") key = "footer.installationGuides";
-    if (item.label === "QA Checklists") key = "footer.qaChecklists";
-    if (item.label === "Technical Articles") key = "footer.technicalArticles";
-    if (item.label === "Videos") key = "footer.videos";
-    if (item.label === "FAQs") key = "footer.faqs";
-    return {
-      label: t(key, item.label),
-      to: resolve(item.to),
-    };
-  });
-
-  const certificationsMapped = CERTIFICATIONS.map((cert) => {
-    let key = "topbar.iagi";
-    if (cert === "B-BBEE Level 2") key = "topbar.bbbee";
-    if (cert === "Pan-African Logistics") key = "topbar.logistics";
-    if (cert === "QA/QC Certified") key = "topbar.qa";
-    return t(key, cert);
-  });
+  const getTranslatedTitle = (title: string, type: string) => {
+    if (type === "products") {
+      return title === "Products" ? t("nav.products", title) : title;
+    }
+    if (type === "applications") {
+      return title === "Applications" ? t("nav.applications", title) : title;
+    }
+    if (type === "services") {
+      return title === "Services" ? t("nav.services", title) : title;
+    }
+    if (type === "industries") {
+      return title === "Industries" ? t("nav.industries", title) : title;
+    }
+    if (type === "custom") {
+      if (title === "Resources") return t("footer.resources", title);
+      if (title === "Company") return t("footer.company", title);
+      return t(`footer.colTitle.${title.toLowerCase()}`, title);
+    }
+    return title;
+  };
 
   return (
     <footer className="bg-surface-dark text-surface-dark-foreground">
       {/* Main footer grid */}
       <div className="w-full px-6 lg:px-10 xl:px-16 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-x-6 gap-y-8">
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-[repeat(var(--cols-count),_minmax(0,_1fr))] gap-x-6 gap-y-8"
+          style={
+            {
+              "--cols-count": 2 + columns.length + 1,
+            } as React.CSSProperties
+          }
+        >
           {/* Brand column — spans 2 cols */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Logo variant="light" />
-            <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[220px]">
-              {t(
-                "footer.desc",
-                "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
-              )}
+            <p className="mt-3 text-xs text-surface-dark-foreground/60 leading-relaxed max-w-[240px]">
+              {footerContent.brandDescription}
             </p>
-            <div className="mt-5 flex items-center gap-2">
-              {SOCIAL_LINKS.map(({ Icon, label, href }) => (
+
+            {/* Address & Quick Contact Info */}
+            <div className="mt-4 space-y-2 text-xs text-surface-dark-foreground/75 max-w-[260px]">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <a
-                  key={label}
-                  href={href}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-dark-foreground/20 text-surface-dark-foreground/70 hover:bg-primary hover:border-primary hover:text-white transition"
-                  aria-label={label}
+                  href={footerContent.addressMapUrl || "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="leading-snug hover:text-primary transition-colors cursor-pointer"
+                  title="Open location in Google Maps"
                 >
-                  <Icon className="h-3.5 w-3.5" />
+                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa"}
                 </a>
-              ))}
+              </div>
+              <div className="flex items-center gap-2.5 pt-1">
+                <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
+                <a
+                  href="tel:+27710939964"
+                  className="hover:text-primary transition-colors font-medium"
+                >
+                  +27 71 093 9964
+                </a>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
+                <a
+                  href="mailto:sales@geosynthetics.co.za"
+                  className="hover:text-primary transition-colors font-medium"
+                >
+                  sales@geosynthetics.co.za
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center gap-2">
+              {footerContent.socialLinks.map((link) => {
+                const Icon = PLATFORM_ICONS[link.platform] ?? Linkedin;
+                const label = PLATFORM_LABELS[link.platform] ?? link.platform;
+                return (
+                  <a
+                    key={`${link.platform}-${link.url}`}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-surface-dark-foreground/20 text-surface-dark-foreground/70 hover:bg-primary hover:border-primary hover:text-white transition"
+                    aria-label={label}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          {/* Products */}
-          <FooterCol title={t("nav.products", "Products")} items={products} />
-
-          {/* Applications */}
-          <FooterCol title={t("nav.applications", "Applications")} items={applications} />
-
-          {/* Industries */}
-          <FooterCol title={t("nav.industries", "Industries")} items={industries} />
-
-          {/* Services */}
-          <FooterCol title={t("nav.services", "Services")} items={services} />
-
-          {/* Resources */}
-          <FooterCol title={t("footer.resources", "Resources")} items={resources} />
-
-          {/* Company */}
-          <FooterCol title={t("footer.company", "Company")} items={company} />
+          {/* Dynamic Columns */}
+          {dynamicCols.map((col, idx) => (
+            <FooterCol
+              key={`${col.title}-${idx}`}
+              title={getTranslatedTitle(col.title, col.type)}
+              items={col.items}
+            />
+          ))}
 
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 min-w-0">
@@ -242,16 +321,12 @@ export function Footer() {
       <div className="border-t border-surface-dark-foreground/10">
         <div className="w-full px-6 lg:px-10 xl:px-16 flex flex-col-reverse md:flex-row items-center justify-between gap-5 md:gap-3 py-6 md:py-4 text-[11px] text-surface-dark-foreground/50 text-center md:text-left">
           <div className="leading-relaxed">
-            {t(
-              "footer.copyright",
-              "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
-              { year: new Date().getFullYear() },
-            )}{" "}
+            {footerContent.copyrightText.replace("{{year}}", String(new Date().getFullYear()))}{" "}
             <span className="hidden md:inline">|</span>
             <br className="md:hidden" />{" "}
             <a
               className="text-primary-foreground hover:text-primary transition whitespace-nowrap"
-              href="https://kavaradigital.online"
+              href="https://kavaradigital.com"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -259,7 +334,7 @@ export function Footer() {
             </a>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-y-2 md:gap-y-0">
-            {certificationsMapped.map((cert, idx) => (
+            {footerContent.certifications.map((cert, idx) => (
               <span key={cert} className="flex items-center uppercase tracking-wider text-center">
                 {idx > 0 && <span className="mx-2 md:mx-3 text-surface-dark-foreground/30">|</span>}
                 <span>{cert}</span>

@@ -28,6 +28,7 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ProductSelector } from "./ProductSelector";
+import { ScrollableTabsHeader } from "./ScrollableTabsHeader";
 import { useSlugSync } from "@/hooks/use-slug-sync";
 import { ImagePicker } from "./ImagePicker";
 import {
@@ -43,10 +44,25 @@ import {
 
 // Reusable Sub-components for Form Layouts
 
+interface StatCounter {
+  id: string;
+  value: string;
+  label: string;
+}
+
+interface AfricanCountryReach {
+  id: string;
+  flag: string;
+  name: string;
+  count: number;
+}
+
 interface ProjectsLandingContent {
   title: string;
   description: string;
   heroImage: string;
+  stats?: StatCounter[];
+  countries?: AfricanCountryReach[];
   seo?: {
     title: string;
     description: string;
@@ -59,6 +75,26 @@ const defaultLandingContent = (): ProjectsLandingContent => ({
   description:
     "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.",
   heroImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+  stats: [
+    { id: "stat-1", value: "340+", label: "Projects delivered" },
+    { id: "stat-2", value: "17", label: "African countries" },
+    { id: "stat-3", value: "28M m²", label: "Geosynthetics installed" },
+    { id: "stat-4", value: "20+", label: "Years experience" },
+  ],
+  countries: [
+    { id: "country-1", flag: "🇿🇦", name: "South Africa", count: 218 },
+    { id: "country-2", flag: "🇨🇩", name: "DRC", count: 34 },
+    { id: "country-3", flag: "🇲🇱", name: "Mali", count: 18 },
+    { id: "country-4", flag: "🇿🇲", name: "Zambia", count: 14 },
+    { id: "country-5", flag: "🇬🇭", name: "Ghana", count: 11 },
+    { id: "country-6", flag: "🇰🇪", name: "Kenya", count: 9 },
+    { id: "country-7", flag: "🇹🇿", name: "Tanzania", count: 8 },
+    { id: "country-8", flag: "🇿🇼", name: "Zimbabwe", count: 7 },
+    { id: "country-9", flag: "🇲🇿", name: "Mozambique", count: 6 },
+    { id: "country-10", flag: "🇳🇦", name: "Namibia", count: 6 },
+    { id: "country-11", flag: "🇦🇴", name: "Angola", count: 5 },
+    { id: "country-12", flag: "🇬🇬", name: "Guinea", count: 4 },
+  ],
   seo: {
     title: "Projects — 340+ engineered geosynthetic projects across Africa | Geosynthetics Africa",
     description:
@@ -132,6 +168,8 @@ export function ProjectsTemplatesEditor() {
       setEditingLanding({
         ...defaultLandingContent(),
         ...landingContent,
+        stats: landingContent?.stats || defaultLandingContent().stats || [],
+        countries: landingContent?.countries || defaultLandingContent().countries || [],
         seo: {
           title: landingContent?.seo?.title || defaultLandingContent().seo?.title || "",
           description:
@@ -146,11 +184,11 @@ export function ProjectsTemplatesEditor() {
   // Handle activeTab switching between landing vs normal project tabs
   useEffect(() => {
     if (activeId === "__landing") {
-      if (activeTab !== "landing" && activeTab !== "seo") {
+      if (activeTab !== "landing" && activeTab !== "seo" && activeTab !== "stats_reach") {
         setActiveTab("landing");
       }
     } else {
-      if (activeTab === "landing" || activeTab === "seo") {
+      if (activeTab === "landing" || activeTab === "seo" || activeTab === "stats_reach") {
         setActiveTab("hero");
       }
     }
@@ -172,6 +210,49 @@ export function ProjectsTemplatesEditor() {
       },
     }));
     setDirty(true);
+  };
+
+  const handleAddStat = () => {
+    const newStats = [...(editingLanding.stats || [])];
+    newStats.push({
+      id: `stat-${Date.now()}`,
+      value: "100+",
+      label: "New Stat Metric",
+    });
+    setLandingField("stats", newStats);
+  };
+
+  const handleUpdateStat = (index: number, field: string, value: string) => {
+    const newStats = [...(editingLanding.stats || [])];
+    newStats[index] = { ...newStats[index], [field]: value };
+    setLandingField("stats", newStats);
+  };
+
+  const handleRemoveStat = (index: number) => {
+    const newStats = (editingLanding.stats || []).filter((_, i) => i !== index);
+    setLandingField("stats", newStats);
+  };
+
+  const handleAddCountry = () => {
+    const newCountries = [...(editingLanding.countries || [])];
+    newCountries.push({
+      id: `country-${Date.now()}`,
+      flag: "🌍",
+      name: "New Country",
+      count: 0,
+    });
+    setLandingField("countries", newCountries);
+  };
+
+  const handleUpdateCountry = (index: number, field: string, value: any) => {
+    const newCountries = [...(editingLanding.countries || [])];
+    newCountries[index] = { ...newCountries[index], [field]: value };
+    setLandingField("countries", newCountries);
+  };
+
+  const handleRemoveCountry = (index: number) => {
+    const newCountries = (editingLanding.countries || []).filter((_, i) => i !== index);
+    setLandingField("countries", newCountries);
   };
 
   const handleConfirmDelete = () => {
@@ -268,6 +349,10 @@ export function ProjectsTemplatesEditor() {
         route: "1,200 km",
         borders: "2 borders",
         ontime: "100%",
+        kpi_demurrage_free: "100%",
+        kpi_frontier_delays: "0 Days",
+        kpi_sealed_consignments: "12 Trucks",
+        kpi_ontime_laydown: "100%",
         route_steps: [],
         documents: [],
       },
@@ -305,8 +390,11 @@ export function ProjectsTemplatesEditor() {
     toast.success(`Project "${blankProject.title}" template created. Edit it and click Save.`);
   };
 
-  // â”€â”€ Delete Project â”€â”€
+  // ─── Delete Project ───
   const handleDelete = async (id: string, title: string) => {
+    // Clear product links first to prevent FK constraint violations
+    await supabase.from("case_study_products").delete().eq("case_study_id", id);
+
     const { error } = await supabase.from("case_studies").delete().eq("id", id);
     if (error) {
       toast.error("Failed to delete project: " + error.message);
@@ -350,6 +438,33 @@ export function ProjectsTemplatesEditor() {
       if (error) {
         toast.error("Save failed: " + error.message);
       } else {
+        // Sync case_study_products relationship
+        try {
+          // Delete existing product links for this case study
+          await supabase.from("case_study_products").delete().eq("case_study_id", active.id);
+
+          // Get product IDs linked in products_used
+          const productIds = (active.products_used || [])
+            .map((item: any) => item.productId)
+            .filter(Boolean);
+
+          if (productIds.length > 0) {
+            const links = productIds.map((pId: string) => ({
+              case_study_id: active.id,
+              product_id: pId,
+            }));
+
+            const { error: linkErr } = await supabase.from("case_study_products").insert(links);
+
+            if (linkErr) {
+              console.error("Error linking products:", linkErr);
+              toast.error("Failed to link products: " + linkErr.message);
+            }
+          }
+        } catch (err) {
+          console.error("Exception syncing case study products:", err);
+        }
+
         toast.success(`Project template "${active.title}" saved successfully!`);
         setDirty(false);
         load();
@@ -621,24 +736,30 @@ export function ProjectsTemplatesEditor() {
 
                 {/* Landing page editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                  <div className="px-6 border-b border-border bg-surface/10 shrink-0">
+                  <ScrollableTabsHeader>
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
+                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start flex-nowrap shrink-0 w-max">
                         <TabsTrigger
                           value="landing"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Hero & Details
                         </TabsTrigger>
                         <TabsTrigger
+                          value="stats_reach"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          Stats & Reach
+                        </TabsTrigger>
+                        <TabsTrigger
                           value="seo"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           SEO Settings
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
-                  </div>
+                  </ScrollableTabsHeader>
 
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
@@ -676,6 +797,166 @@ export function ProjectsTemplatesEditor() {
                               value={editingLanding.heroImage ?? ""}
                               onChange={(val) => setLandingField("heroImage", val)}
                             />
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* STATS & REACH TAB */}
+                      <TabsContent
+                        value="stats_reach"
+                        className="space-y-8 m-0 focus-visible:outline-none"
+                      >
+                        {/* Section 1: Counter Metrics */}
+                        <div>
+                          <div className="flex items-center justify-between mb-4">
+                            <SectionHeading>Stats Ribbon Counter Metrics</SectionHeading>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleAddStat}
+                              className="h-8 text-xs gap-1.5 cursor-pointer"
+                            >
+                              <Plus className="h-3.5 w-3.5" /> Add Metric
+                            </Button>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {(editingLanding.stats || []).map((stat, idx) => (
+                              <div
+                                key={stat.id || idx}
+                                className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3"
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => handleRemoveStat(idx)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+
+                                <div className="space-y-3">
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Stat Value / Number
+                                    </label>
+                                    <Input
+                                      value={stat.value}
+                                      onChange={(e) =>
+                                        handleUpdateStat(idx, "value", e.target.value)
+                                      }
+                                      placeholder="e.g. 340+"
+                                      className="text-xs font-mono font-bold"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Stat Label
+                                    </label>
+                                    <Input
+                                      value={stat.label}
+                                      onChange={(e) =>
+                                        handleUpdateStat(idx, "label", e.target.value)
+                                      }
+                                      placeholder="e.g. Projects delivered"
+                                      className="text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {(editingLanding.stats || []).length === 0 && (
+                              <p className="text-xs text-muted-foreground italic col-span-2">
+                                No stats defined. Click Add Metric.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Section 2: Country Reach Grid */}
+                        <div className="border-t border-border pt-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <SectionHeading>Pan-African Reach Flag Statistics</SectionHeading>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={handleAddCountry}
+                              className="h-8 text-xs gap-1.5 cursor-pointer"
+                            >
+                              <Plus className="h-3.5 w-3.5" /> Add Country
+                            </Button>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {(editingLanding.countries || []).map((c, idx) => (
+                              <div
+                                key={c.id || idx}
+                                className="border border-border rounded-xl p-4 bg-surface/30 relative space-y-3"
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="absolute top-2 right-2 h-6 w-6 text-destructive hover:bg-destructive/10 cursor-pointer"
+                                  onClick={() => handleRemoveCountry(idx)}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-4 gap-2">
+                                    <div className="col-span-1 space-y-1">
+                                      <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                        Flag
+                                      </label>
+                                      <Input
+                                        value={c.flag}
+                                        onChange={(e) =>
+                                          handleUpdateCountry(idx, "flag", e.target.value)
+                                        }
+                                        placeholder="🇿🇦"
+                                        className="text-xs text-center"
+                                      />
+                                    </div>
+                                    <div className="col-span-3 space-y-1">
+                                      <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                        Country Name
+                                      </label>
+                                      <Input
+                                        value={c.name}
+                                        onChange={(e) =>
+                                          handleUpdateCountry(idx, "name", e.target.value)
+                                        }
+                                        placeholder="e.g. South Africa"
+                                        className="text-xs"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground block">
+                                      Project Count
+                                    </label>
+                                    <Input
+                                      type="number"
+                                      value={c.count}
+                                      onChange={(e) =>
+                                        handleUpdateCountry(
+                                          idx,
+                                          "count",
+                                          parseInt(e.target.value) || 0,
+                                        )
+                                      }
+                                      placeholder="0"
+                                      className="text-xs font-mono"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {(editingLanding.countries || []).length === 0 && (
+                              <p className="text-xs text-muted-foreground italic col-span-3">
+                                No countries defined. Click Add Country.
+                              </p>
+                            )}
                           </div>
                         </div>
                       </TabsContent>
@@ -757,48 +1038,70 @@ export function ProjectsTemplatesEditor() {
 
                 {/* Subpage editing tabs */}
                 <div className="flex-1 flex flex-col overflow-hidden">
-                  <div className="px-6 border-b border-border bg-surface/10 shrink-0">
+                  <ScrollableTabsHeader>
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start overflow-x-auto max-w-full no-scrollbar">
+                      <TabsList className="bg-transparent h-10 gap-0 p-0 border-b-0 rounded-none justify-start flex-nowrap shrink-0 w-max">
                         <TabsTrigger
                           value="hero"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Identity & Hero
                         </TabsTrigger>
                         <TabsTrigger
                           value="brief"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Brief & Body
                         </TabsTrigger>
                         <TabsTrigger
                           value="products"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Products Used
                         </TabsTrigger>
                         <TabsTrigger
                           value="compliance"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Spec Conformity
                         </TabsTrigger>
                         <TabsTrigger
                           value="testimonial"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
                         >
                           Testimonial
                         </TabsTrigger>
+                        {active.service_type === "supply_install" && (
+                          <>
+                            <TabsTrigger
+                              value="sequence"
+                              className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                            >
+                              Installation Sequence
+                            </TabsTrigger>
+                            <TabsTrigger
+                              value="qa"
+                              className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                            >
+                              QA & QC
+                            </TabsTrigger>
+                          </>
+                        )}
+                        <TabsTrigger
+                          value="gallery"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider"
+                        >
+                          Project Gallery
+                        </TabsTrigger>
                         <TabsTrigger
                           value="scopedetails"
-                          className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-primary"
+                          className="shrink-0 whitespace-nowrap rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none bg-transparent py-2.5 px-4 text-xs font-bold uppercase tracking-wider text-primary"
                         >
-                          Technical Scope
+                          {active.service_type === "supply_install" ? "Installation Challenge" : "Technical Scope"}
                         </TabsTrigger>
                       </TabsList>
                     </Tabs>
-                  </div>
+                  </ScrollableTabsHeader>
 
                   <div className="flex-1 overflow-y-auto p-6">
                     <Tabs value={activeTab} className="h-full">
@@ -1085,8 +1388,8 @@ export function ProjectsTemplatesEditor() {
                           <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-1.5">
-                                <FieldLabel hint="Welders count/crews (e.g. '14 Certified')">
-                                  Field Welders
+                                <FieldLabel hint="Resources or welders count/crews (e.g. 'REACH (EC 1907/2006)' or '14 Certified')">
+                                  Resources
                                 </FieldLabel>
                                 <Input
                                   value={active.qa_details?.welders || ""}
@@ -1150,39 +1453,8 @@ export function ProjectsTemplatesEditor() {
                                 />
                               </div>
                             </div>
-
-                            <div className="space-y-4">
-                              <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
-                                Field Quality Control Checklist
-                              </FieldLabel>
-                              <ChecklistEditor
-                                list={active.qa_details?.checklist || []}
-                                onChange={(checklist) =>
-                                  setField("qa_details", {
-                                    ...active.qa_details,
-                                    checklist,
-                                  })
-                                }
-                              />
-                            </div>
-
-                            <div className="space-y-4">
-                              <FieldLabel hint="Upload or paste on-site verification photos with captions">
-                                Installation Work Photos
-                              </FieldLabel>
-                              <PhotosEditor
-                                photos={active.qa_details?.photos || []}
-                                onChange={(photos) =>
-                                  setField("qa_details", {
-                                    ...active.qa_details,
-                                    photos,
-                                  })
-                                }
-                              />
-                            </div>
                           </div>
                         )}
-
                         {/* 2. SUPPLY ONLY SPECIFIC FIELDS */}
                         {active.service_type === "supply_only" && (
                           <div className="space-y-6">
@@ -1242,6 +1514,70 @@ export function ProjectsTemplatesEditor() {
                                     setField("logistics_details", {
                                       ...active.logistics_details,
                                       ontime: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                            </div>
+
+                            {/* KPI Metrics Row */}
+                            <div className="grid grid-cols-4 gap-4 border-t border-border pt-4">
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Demurrage Free percentage (e.g., '100%')">
+                                  KPI: Demurrage Free
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_demurrage_free || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_demurrage_free: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Frontier delays average (e.g., '0 Days')">
+                                  KPI: Frontier Delays
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_frontier_delays || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_frontier_delays: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: Sealed consignments count (e.g., '12 Trucks')">
+                                  KPI: Sealed Consignments
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_sealed_consignments || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_sealed_consignments: e.target.value,
+                                    })
+                                  }
+                                  className="text-sm font-semibold"
+                                />
+                              </div>
+                              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                                <FieldLabel hint="KPI: On-Time laydown index (e.g., '100%')">
+                                  KPI: On-Time Laydown
+                                </FieldLabel>
+                                <Input
+                                  value={active.logistics_details?.kpi_ontime_laydown || ""}
+                                  onChange={(e) =>
+                                    setField("logistics_details", {
+                                      ...active.logistics_details,
+                                      kpi_ontime_laydown: e.target.value,
                                     })
                                   }
                                   className="text-sm font-semibold text-primary"
@@ -1497,6 +1833,120 @@ export function ProjectsTemplatesEditor() {
                           </div>
                         )}
                       </TabsContent>
+                      {/* INSTALLATION SEQUENCE TAB */}
+                      <TabsContent
+                        value="sequence"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>Installation Sequence</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="The 4 steps of the installation sequence shown on the project page">
+                            Installation Sequence Steps (Steps 1–4)
+                          </FieldLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {Array.from({ length: 4 }).map((_, stepIdx) => {
+                              const step = (active.qa_details?.sequence || [])[stepIdx] || {
+                                title: "",
+                                description: "",
+                              };
+                              return (
+                                <div
+                                  key={stepIdx}
+                                  className="p-3 border border-border rounded-lg bg-surface/20 space-y-2"
+                                >
+                                  <div className="font-display font-bold text-xs uppercase text-primary">
+                                    Step {stepIdx + 1}
+                                  </div>
+                                  <div className="space-y-1">
+                                    <MicroLabel>Step Title</MicroLabel>
+                                    <Input
+                                      value={step.title || ""}
+                                      placeholder={`e.g. Step ${stepIdx + 1} Title`}
+                                      onChange={(e) => {
+                                        const seq = [...(active.qa_details?.sequence || [])];
+                                        while (seq.length <= stepIdx)
+                                          seq.push({ title: "", description: "" });
+                                        seq[stepIdx] = {
+                                          ...seq[stepIdx],
+                                          title: e.target.value,
+                                        };
+                                        setField("qa_details", {
+                                          ...active.qa_details,
+                                          sequence: seq,
+                                        });
+                                      }}
+                                      className="h-8 text-xs"
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <MicroLabel>Step Description</MicroLabel>
+                                    <Input
+                                      value={step.description || ""}
+                                      placeholder={`e.g. Step ${stepIdx + 1} Description`}
+                                      onChange={(e) => {
+                                        const seq = [...(active.qa_details?.sequence || [])];
+                                        while (seq.length <= stepIdx)
+                                          seq.push({ title: "", description: "" });
+                                        seq[stepIdx] = {
+                                          ...seq[stepIdx],
+                                          description: e.target.value,
+                                        };
+                                        setField("qa_details", {
+                                          ...active.qa_details,
+                                          sequence: seq,
+                                        });
+                                      }}
+                                      className="h-8 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* QA & QC TAB */}
+                      <TabsContent
+                        value="qa"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>QA & QC</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="Detailed QA/QC SANS checklist logs (visual check, destructive tests, trial welds etc.)">
+                            Field Quality Control Checklist
+                          </FieldLabel>
+                          <ChecklistEditor
+                            list={active.qa_details?.checklist || []}
+                            onChange={(checklist) =>
+                              setField("qa_details", {
+                                ...active.qa_details,
+                                checklist,
+                              })
+                            }
+                          />
+                        </div>
+                      </TabsContent>
+
+                      {/* PROJECT GALLERY TAB */}
+                      <TabsContent
+                        value="gallery"
+                        className="space-y-6 m-0 focus-visible:outline-none"
+                      >
+                        <SectionHeading>Project Gallery</SectionHeading>
+                        <div className="space-y-4">
+                          <FieldLabel hint="Upload or paste on-site verification photos with captions">
+                            Project Photos
+                          </FieldLabel>
+                          <PhotosEditor
+                            photos={active.gallery || []}
+                            onChange={(photos) =>
+                              setField("gallery", photos)
+                            }
+                          />
+                        </div>
+                      </TabsContent>
+
                     </Tabs>
                   </div>
                 </div>
@@ -1824,38 +2274,29 @@ function ChecklistEditor({
 // â”€â”€â”€ Photos / Gallery Sub-editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PhotosEditor({ photos, onChange }: { photos: any[]; onChange: (photos: any[]) => void }) {
   const { add, updateByKey, remove } = useListEditor(photos, onChange, () => ({
-    url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
-    caption: "Photo caption description",
+    url: "",
+    caption: "",
   }));
 
   return (
     <div className="space-y-3">
       <div className="grid sm:grid-cols-2 gap-4">
         {photos.map((ph, idx) => (
-          <ItemCard key={idx} className="flex flex-col group">
+          <ItemCard key={idx} className="flex flex-col group pt-6">
             <ItemDeleteButton onClick={() => remove(idx)} />
-            {ph.url && (
-              <div
-                className="aspect-[4/3] rounded overflow-hidden bg-cover bg-center border border-border"
-                style={{ backgroundImage: `url(${ph.url})` }}
+            <div className="space-y-3 flex-grow">
+              <ImagePicker
+                label="Photo URL"
+                value={ph.url || ""}
+                onChange={(val) => updateByKey(idx, "url", val)}
+                placeholder="https://..."
               />
-            )}
-            <div className="space-y-2 flex-grow">
-              <div>
-                <MicroLabel>Photo URL</MicroLabel>
-                <Input
-                  value={ph.url || ""}
-                  onChange={(e) => updateByKey(idx, "url", e.target.value)}
-                  className="h-7 text-xs font-mono"
-                  placeholder="https://images.unsplash.com/..."
-                />
-              </div>
-              <div>
+              <div className="space-y-1">
                 <MicroLabel>Caption</MicroLabel>
                 <Input
                   value={ph.caption || ""}
                   onChange={(e) => updateByKey(idx, "caption", e.target.value)}
-                  className="h-7 text-xs font-semibold"
+                  className="h-9 text-xs font-semibold"
                   placeholder="e.g. Subgrade compaction acceptance test"
                 />
               </div>

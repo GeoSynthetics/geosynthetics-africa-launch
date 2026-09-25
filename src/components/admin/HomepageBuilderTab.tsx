@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ImagePicker } from "./ImagePicker";
+import { ProjectSelector } from "./ProjectSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +16,10 @@ import {
   CheckCircle2,
   GripVertical,
   Home,
+  ArrowUp,
+  ArrowDown,
+  ExternalLink,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SectionHeading, FieldLabel } from "./TemplateEditorShared";
@@ -29,6 +34,8 @@ import {
   type OfficeLocation,
   type ProjectCard,
   type GsaStep,
+  type HeroSlide,
+  isVideoUrl,
 } from "@/types/homepage";
 
 const SUPABASE_KEY = "homepage_content";
@@ -169,9 +176,192 @@ function HeroEditor({
         />
       </div>
 
+      <div>
+        <FieldLabel>Slide Auto-Play Interval (milliseconds)</FieldLabel>
+        <Input
+          type="number"
+          min={1000}
+          step={500}
+          value={data.autoPlayInterval ?? 5000}
+          onChange={(e) => {
+            const val = parseInt(e.target.value, 10);
+            set("autoPlayInterval", isNaN(val) ? undefined : val);
+          }}
+          placeholder="5000"
+          className="text-sm w-48"
+        />
+        <p className="text-[10px] text-muted-foreground mt-1">
+          The duration each slide remains visible before transitioning to the next (e.g. 5000 = 5
+          seconds).
+        </p>
+      </div>
+
+      {/* Hero Carousel Multi-Media Manager */}
+      <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-bold uppercase tracking-wide">Hero Carousel Media (Images & Videos)</h4>
+            <p className="text-xs text-muted-foreground">
+              Add high-resolution image URLs (.png, .jpg, .webp) or MP4/WebM video URLs to display in the homepage Hero slider.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const current = data.sliderImages || [];
+              set("sliderImages", [
+                ...current,
+                {
+                  image: "",
+                  titlePrefix: "",
+                  titleAccent: "",
+                  titleSuffix: "",
+                  subtitle: "",
+                  description: "",
+                },
+              ]);
+            }}
+            className="text-xs cursor-pointer"
+          >
+            <Plus className="h-3.5 w-3.5 mr-1" /> Add Slide Media
+          </Button>
+        </div>
+
+        {(!data.sliderImages || data.sliderImages.length === 0) && (
+          <p className="text-xs text-muted-foreground italic py-2">
+            No carousel media added yet. Click "Add Slide Media" above to configure your homepage hero slider.
+          </p>
+        )}
+
+        {(data.sliderImages || []).map((slide, index) => {
+          const isStr = typeof slide === "string";
+          const slideObj = isStr
+            ? {
+                image: slide,
+                titlePrefix: "",
+                titleAccent: "",
+                titleSuffix: "",
+                subtitle: "",
+                description: "",
+              }
+            : slide;
+
+          const updateSlideField = (key: keyof HeroSlide, val: any) => {
+            const updated = [...(data.sliderImages || [])];
+            const currentObj =
+              typeof updated[index] === "string"
+                ? {
+                    image: updated[index] as string,
+                    titlePrefix: "",
+                    titleAccent: "",
+                    titleSuffix: "",
+                    subtitle: "",
+                    description: "",
+                  }
+                : { ...(updated[index] as HeroSlide) };
+            currentObj[key] = val;
+            updated[index] = currentObj;
+            set("sliderImages", updated);
+          };
+
+          return (
+            <div
+              key={index}
+              className="flex items-start gap-4 p-4 border rounded-md bg-background shadow-sm"
+            >
+              <span className="text-xs font-bold text-muted-foreground mt-2 shrink-0 font-mono">
+                #{String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="flex-1 space-y-4">
+                <ImageUploadField
+                  label={`Slide ${index + 1} Image URL / Upload`}
+                  value={slideObj.image}
+                  onChange={(val) => updateSlideField("image", val)}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Prefix (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titlePrefix || ""}
+                      onChange={(e) => updateSlideField("titlePrefix", e.target.value)}
+                      placeholder="e.g. Africa's Integrated"
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Accent / Red (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titleAccent || ""}
+                      onChange={(e) => updateSlideField("titleAccent", e.target.value)}
+                      placeholder="e.g. Geosynthetics"
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Title Suffix (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.titleSuffix || ""}
+                      onChange={(e) => updateSlideField("titleSuffix", e.target.value)}
+                      placeholder="e.g. Execution Platform"
+                      className="text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Subtitle / Tagline (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.subtitle || ""}
+                      onChange={(e) => updateSlideField("subtitle", e.target.value)}
+                      placeholder="e.g. Designed. Supplied. Installed. Tested. Certified."
+                      className="text-xs"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel className="text-[10px] uppercase tracking-wider opacity-85">
+                      Description / Subtext (Optional)
+                    </FieldLabel>
+                    <Input
+                      value={slideObj.description || ""}
+                      onChange={(e) => updateSlideField("description", e.target.value)}
+                      placeholder="e.g. Complete engineered systems for containment..."
+                      className="text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 shrink-0 mt-6 cursor-pointer"
+                onClick={() => {
+                  const updated = (data.sliderImages || []).filter((_, i) => i !== index);
+                  set("sliderImages", updated);
+                }}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          );
+        })}
+      </div>
+
       <ImageUploadField
-        label="Hero Background Image"
-        hint="Upload/link a high-resolution background image"
+        label="Hero Primary Fallback Image"
+        hint="Used as fallback when carousel images are empty"
         value={data.bgImage}
         onChange={(v) => set("bgImage", v)}
       />
@@ -1037,20 +1227,71 @@ function ProjectsEditor({
     val: HomepageContent["projects"][K],
   ) => onChange({ ...data, [key]: val });
 
-  const addCard = () =>
-    set("cards", [
-      ...data.cards,
-      { id: `proj-${Date.now()}`, image: "", tag: "", title: "", location: "", systemDetails: "" },
-    ]);
-  const removeCard = (i: number) =>
+  const [availableProjects, setAvailableProjects] = useState<any[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+
+  // Load published case studies from Supabase
+  useEffect(() => {
+    async function loadDbProjects() {
+      setLoadingProjects(true);
+      try {
+        const { data: dbData, error } = await supabase
+          .from("case_studies")
+          .select("id, title, slug, hero_image_url, country, location, sector, scale, project_year")
+          .eq("status", "published")
+          .order("project_year", { ascending: false })
+          .order("title");
+
+        if (!error && dbData) {
+          setAvailableProjects(dbData);
+        }
+      } catch (err) {
+        console.error("Failed to load project templates:", err);
+      } finally {
+        setLoadingProjects(false);
+      }
+    }
+    loadDbProjects();
+  }, []);
+
+  const featuredIds: string[] = data.featuredProjectIds || [];
+
+  // Match selected projects in the exact order configured
+  const selectedProjects = useMemo(() => {
+    return featuredIds
+      .map((id) => availableProjects.find((p) => p.id === id || p.slug === id))
+      .filter(Boolean);
+  }, [featuredIds, availableProjects]);
+
+  const handleAddProject = (project: { id: string }) => {
+    if (!featuredIds.includes(project.id)) {
+      set("featuredProjectIds", [...featuredIds, project.id]);
+    }
+  };
+
+  const handleRemoveProject = (id: string) => {
     set(
-      "cards",
-      data.cards.filter((_, idx) => idx !== i),
+      "featuredProjectIds",
+      featuredIds.filter((fid) => fid !== id),
     );
-  const updateCard = (i: number, patch: Partial<ProjectCard>) => {
-    const n = [...data.cards];
-    n[i] = { ...n[i], ...patch };
-    set("cards", n);
+  };
+
+  const handleMoveUp = (index: number) => {
+    if (index <= 0) return;
+    const next = [...featuredIds];
+    const temp = next[index - 1];
+    next[index - 1] = next[index];
+    next[index] = temp;
+    set("featuredProjectIds", next);
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index >= featuredIds.length - 1) return;
+    const next = [...featuredIds];
+    const temp = next[index + 1];
+    next[index + 1] = next[index];
+    next[index] = temp;
+    set("featuredProjectIds", next);
   };
 
   return (
@@ -1082,79 +1323,116 @@ function ProjectsEditor({
             <Input
               value={data.ctaUrl}
               onChange={(e) => set("ctaUrl", e.target.value)}
-              placeholder="/resources"
+              placeholder="/projects"
               className="text-sm font-mono"
             />
           </div>
         </div>
       </div>
 
-      <div className="border-t border-border pt-4">
-        <div className="flex items-center justify-between mb-3">
-          <FieldLabel>Project Cards ({data.cards.length})</FieldLabel>
-          <Button variant="outline" size="sm" onClick={addCard} className="gap-1 text-xs h-7">
-            <Plus className="h-3 w-3" /> Add Project
-          </Button>
-        </div>
-        <div className="space-y-3">
-          {data.cards.map((card, i) => (
-            <CollapsibleCard
-              key={card.id}
-              index={i}
-              title={card.title}
-              onRemove={() => removeCard(i)}
-            >
-              <ImageUploadField
-                label="Project Cover Photo"
-                value={card.image}
-                onChange={(v) => updateCard(i, { image: v })}
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <FieldLabel>Category Tag</FieldLabel>
-                  <Input
-                    value={card.tag}
-                    onChange={(e) => updateCard(i, { tag: e.target.value })}
-                    placeholder="RESERVOIR LINING"
-                    className="text-sm"
-                  />
-                </div>
-                <div>
-                  <FieldLabel>Location</FieldLabel>
-                  <Input
-                    value={card.location}
-                    onChange={(e) => updateCard(i, { location: e.target.value })}
-                    placeholder="South Africa"
-                    className="text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <FieldLabel>Project Name</FieldLabel>
-                <Input
-                  value={card.title}
-                  onChange={(e) => updateCard(i, { title: e.target.value })}
-                  placeholder="BRANDVLEI RESERVOIR LINING"
-                  className="text-sm"
-                />
-              </div>
-              <div>
-                <FieldLabel>System Details</FieldLabel>
-                <Input
-                  value={card.systemDetails}
-                  onChange={(e) => updateCard(i, { systemDetails: e.target.value })}
-                  placeholder="HDPE Lining System"
-                  className="text-sm"
-                />
-              </div>
-            </CollapsibleCard>
-          ))}
-          {data.cards.length === 0 && (
-            <p className="text-xs text-muted-foreground italic">
-              No project cards yet — click Add Project.
+      {/* Featured Projects Dynamic Selector */}
+      <div className="border-t border-border pt-5 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <FieldLabel>Featured Showcase Projects ({selectedProjects.length})</FieldLabel>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Select case studies from your Project Templates to showcase on the homepage.
             </p>
-          )}
+          </div>
+          <ProjectSelector
+            onSelect={(proj) => handleAddProject(proj)}
+            excludeIds={featuredIds}
+            placeholder="+ Select Project to Feature"
+            className="text-xs h-8"
+          />
         </div>
+
+        {selectedProjects.length === 0 && (
+          <div className="rounded border border-dashed border-border/80 bg-muted/20 p-4 text-center">
+            <Briefcase className="h-6 w-6 text-muted-foreground mx-auto mb-1.5 opacity-60" />
+            <p className="text-xs font-semibold">No specific projects selected</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5 max-w-md mx-auto">
+              The homepage will automatically showcase the 3 latest published case studies from your Projects Templates. You can pick specific ones above to customize the order.
+            </p>
+          </div>
+        )}
+
+        {selectedProjects.length > 0 && (
+          <div className="space-y-2.5">
+            {selectedProjects.map((project, i) => (
+              <div
+                key={project.id}
+                className="flex items-center gap-3 p-3 bg-surface border border-border rounded-lg group hover:border-border/80 transition-colors"
+              >
+                <div className="flex items-center justify-center h-6 w-6 rounded bg-primary/10 text-primary font-bold text-xs shrink-0">
+                  #{i + 1}
+                </div>
+
+                <div className="h-12 w-16 rounded overflow-hidden bg-muted shrink-0 border border-border/50">
+                  {project.hero_image_url ? (
+                    <img
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-[10px] text-muted-foreground">
+                      No img
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm truncate flex items-center gap-2">
+                    <span>{project.title}</span>
+                    {project.sector && (
+                      <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                        {project.sector}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                    {project.country && <span>📍 {project.country}</span>}
+                    {project.scale && <span>⚙ {project.scale}</span>}
+                    <span className="font-mono text-[10px] opacity-70">/projects/{project.slug}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={i === 0}
+                    onClick={() => handleMoveUp(i)}
+                    className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                    title="Move Up"
+                  >
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={i === selectedProjects.length - 1}
+                    onClick={() => handleMoveDown(i)}
+                    className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                    title="Move Down"
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveProject(project.id)}
+                    className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                    title="Remove from showcase"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Catalogue Callout Box */}
@@ -1165,7 +1443,7 @@ function ProjectsEditor({
           <Input
             value={data.catalogueBoxHeading}
             onChange={(e) => set("catalogueBoxHeading", e.target.value)}
-            placeholder="EXPLORE OUR CATALOGUE"
+            placeholder="SPEC IT FROM THE CATALOGUE"
             className="text-sm"
           />
         </div>

@@ -20,6 +20,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
@@ -32,6 +33,7 @@ import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
@@ -39,6 +41,7 @@ import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assur
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
@@ -49,6 +52,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPagesSeoRouteImport } from './routes/admin.pages-seo'
 import { Route as AdminPageTemplatesRouteImport } from './routes/admin.page-templates'
 import { Route as AdminMediaCenterRouteImport } from './routes/admin.media-center'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ProductsCategoryIndexRouteImport } from './routes/products.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
@@ -108,6 +112,11 @@ const IndustriesRoute = IndustriesRouteImport.update({
 const ContactsRoute = ContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApplicationsRoute = ApplicationsRouteImport.update({
@@ -170,6 +179,11 @@ const CatalogueIndexRoute = CatalogueIndexRouteImport.update({
   path: '/catalogue/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
 const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -204,6 +218,11 @@ const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
   id: '/catalogue/$slug',
   path: '/catalogue/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const ApplicationsCategoryRoute = ApplicationsCategoryRouteImport.update({
   id: '/$category',
@@ -255,6 +274,11 @@ const AdminMediaCenterRoute = AdminMediaCenterRouteImport.update({
   path: '/media-center',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ResourcesCategoryIndexRoute = ResourcesCategoryIndexRouteImport.update({
   id: '/$category/',
   path: '/$category/',
@@ -287,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
+  '/blog': typeof BlogRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
@@ -298,6 +323,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
@@ -308,6 +334,7 @@ export interface FileRoutesByFullPath {
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -315,6 +342,7 @@ export interface FileRoutesByFullPath {
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
@@ -338,6 +366,7 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
@@ -348,6 +377,7 @@ export interface FileRoutesByTo {
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -355,6 +385,7 @@ export interface FileRoutesByTo {
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/applications': typeof ApplicationsIndexRoute
+  '/blog': typeof BlogIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
   '/industries': typeof IndustriesIndexRoute
   '/products': typeof ProductsIndexRoute
@@ -375,6 +406,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
+  '/blog': typeof BlogRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
@@ -386,6 +418,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
   '/admin/pages-seo': typeof AdminPagesSeoRoute
@@ -396,6 +429,7 @@ export interface FileRoutesById {
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
@@ -403,6 +437,7 @@ export interface FileRoutesById {
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
+  '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
@@ -424,6 +459,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/applications'
+    | '/blog'
     | '/contacts'
     | '/industries'
     | '/login'
@@ -435,6 +471,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
@@ -445,6 +482,7 @@ export interface FileRouteTypes {
     | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
+    | '/blog/$slug'
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
@@ -452,6 +490,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
+    | '/blog/'
     | '/catalogue/'
     | '/industries/'
     | '/products/'
@@ -475,6 +514,7 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
@@ -485,6 +525,7 @@ export interface FileRouteTypes {
     | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
+    | '/blog/$slug'
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
@@ -492,6 +533,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/admin'
     | '/applications'
+    | '/blog'
     | '/catalogue'
     | '/industries'
     | '/products'
@@ -511,6 +553,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/applications'
+    | '/blog'
     | '/contacts'
     | '/industries'
     | '/login'
@@ -522,6 +565,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
     | '/admin/pages-seo'
@@ -532,6 +576,7 @@ export interface FileRouteTypes {
     | '/admin/tracking'
     | '/admin/users'
     | '/applications/$category'
+    | '/blog/$slug'
     | '/catalogue/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
@@ -539,6 +584,7 @@ export interface FileRouteTypes {
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
+    | '/blog/'
     | '/catalogue/'
     | '/industries/'
     | '/products/'
@@ -559,6 +605,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
+  BlogRoute: typeof BlogRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   IndustriesRoute: typeof IndustriesRouteWithChildren
   LoginRoute: typeof LoginRoute
@@ -657,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/applications': {
       id: '/applications'
       path: '/applications'
@@ -741,6 +795,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogueIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/applications/': {
       id: '/applications/'
       path: '/'
@@ -789,6 +850,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/catalogue/$slug'
       preLoaderRoute: typeof CatalogueSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/applications/$category': {
       id: '/applications/$category'
@@ -860,6 +928,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMediaCenterRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/resources/$category/': {
       id: '/resources/$category/'
       path: '/$category'
@@ -899,6 +974,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminBlogRoute: typeof AdminBlogRoute
   AdminMediaCenterRoute: typeof AdminMediaCenterRoute
   AdminPageTemplatesRoute: typeof AdminPageTemplatesRoute
   AdminPagesSeoRoute: typeof AdminPagesSeoRoute
@@ -912,6 +988,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBlogRoute: AdminBlogRoute,
   AdminMediaCenterRoute: AdminMediaCenterRoute,
   AdminPageTemplatesRoute: AdminPageTemplatesRoute,
   AdminPagesSeoRoute: AdminPagesSeoRoute,
@@ -939,6 +1016,18 @@ const ApplicationsRouteChildren: ApplicationsRouteChildren = {
 const ApplicationsRouteWithChildren = ApplicationsRoute._addFileChildren(
   ApplicationsRouteChildren,
 )
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface IndustriesRouteChildren {
   IndustriesSlugRoute: typeof IndustriesSlugRoute
@@ -1017,6 +1106,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
+  BlogRoute: BlogRouteWithChildren,
   ContactsRoute: ContactsRoute,
   IndustriesRoute: IndustriesRouteWithChildren,
   LoginRoute: LoginRoute,

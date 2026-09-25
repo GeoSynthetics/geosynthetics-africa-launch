@@ -5,21 +5,31 @@ import * as Icons from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { HexCell } from "@/components/site/shapes";
 
-export function IndustriesLanding() {
-  const { templates, hierarchy } = useLoaderData({ from: "/industries/" }) as {
-    templates: Record<string, any>;
-    hierarchy: any;
-  };
+export function IndustriesLanding({
+  data,
+}: {
+  data?: { templates?: Record<string, any>; hierarchy?: any };
+} = {}) {
+  const routeData = useLoaderData({ strict: false }) as any;
+  const templates = data?.templates || routeData?.templates || {};
+  const hierarchy = data?.hierarchy || routeData?.hierarchy || null;
 
   const landing = templates?.["__landing"] || {};
+  const eyebrow = landing.eyebrow || landing.heroEyebrow || "Industries";
   const heroTitle =
-    landing.title || "High-Performance Geosynthetic Solutions for African Industries";
+    landing.title ||
+    landing.landingTitle ||
+    "High-Performance Geosynthetic Solutions for African Industries";
   const heroDescription =
     landing.description ||
+    landing.landingSubtitle ||
     "Tailored containment, stabilisation, and erosion control systems engineered for the environmental and operational demands of Africa's key industrial sectors.";
   const heroImage =
-    landing.heroImage || "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
+    landing.heroImage ||
+    landing.landingHeroImage ||
+    "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80";
 
   const industriesItems = useMemo(() => {
     if (hierarchy?.items && hierarchy.items.length > 0) {
@@ -28,10 +38,10 @@ export function IndustriesLanding() {
     // Fallback in case hierarchy is missing
     return Object.entries(templates || {})
       .filter(([key]) => key !== "__landing")
-      .map(([slug, data]: [string, any]) => ({
+      .map(([slug, itemData]: [string, any]) => ({
         id: slug,
         slug,
-        label: data.title || slug,
+        label: itemData.title || slug,
         icon: "Building2",
         to: "/industries/$slug",
         params: { slug },
@@ -60,12 +70,13 @@ export function IndustriesLanding() {
   return (
     <>
       <PageHero
-        eyebrow="Industries"
+        eyebrow={eyebrow}
         title={heroTitle}
         description={heroDescription}
         image={heroImage}
       />
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={15} opacity={0.06} color="var(--primary)" spread="wide" />
         <div className="container-page py-16 md:py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {industriesItems.map((s: any) => {

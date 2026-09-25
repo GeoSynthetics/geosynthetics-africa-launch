@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLoaderData } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { megaMenus, type MegaMenuConfig } from "@/components/site/mega-menu-data";
 import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-utils";
@@ -25,10 +26,11 @@ function getDynamicCategoryIcon(slug: string): string {
 }
 
 export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
-  if (_cache) return Promise.resolve(_cache);
-  if (_fetchPromise) return _fetchPromise;
+  const isServer = typeof window === "undefined";
+  if (!isServer && _cache) return Promise.resolve(_cache);
+  if (!isServer && _fetchPromise) return _fetchPromise;
 
-  _fetchPromise = (async () => {
+  const fetchPromise = (async () => {
     const SECTION_KEYS = ["applications", "products", "services", "industries"] as const;
     const keysToFetch = [
       ...SECTION_KEYS.map((k) => `hierarchy_${k}`),
@@ -47,7 +49,9 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       const dbCategories = dbCategoriesRes.data;
 
       if (!data || data.length === 0) {
-        _cache = megaMenus;
+        if (!isServer) {
+          _cache = megaMenus;
+        }
         return megaMenus;
       }
 
@@ -101,7 +105,9 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       }).filter(Boolean);
 
       if (sections.length === 0) {
-        _cache = megaMenus;
+        if (!isServer) {
+          _cache = megaMenus;
+        }
         return megaMenus;
       }
 
@@ -314,7 +320,9 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
         };
       });
 
-      _cache = builtMenus;
+      if (!isServer) {
+        _cache = builtMenus;
+      }
       return builtMenus;
     } catch (error) {
       console.error("Error loading dynamic menus:", error);
@@ -322,7 +330,11 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
     }
   })();
 
-  return _fetchPromise;
+  if (!isServer) {
+    _fetchPromise = fetchPromise;
+  }
+
+  return fetchPromise;
 }
 
 export function invalidateDynamicMenusCache() {
@@ -331,15 +343,9 @@ export function invalidateDynamicMenusCache() {
 }
 
 export function useDynamicMegaMenus() {
-  const [menus, setMenus] = useState<typeof megaMenus>(() => _cache ?? megaMenus);
-  const [isLoading, setIsLoading] = useState(!_cache);
-
-  useEffect(() => {
-    fetchDynamicMenus().then((builtMenus) => {
-      setMenus(builtMenus);
-      setIsLoading(false);
-    });
-  }, []);
-
-  return { menus, isLoading };
+  const rootData = useLoaderData({ from: "__root__" }) as
+    | { megaMenu: MegaMenuConfig[] }
+    | undefined;
+  const menus = rootData?.megaMenu ?? _cache ?? megaMenus;
+  return { menus, isLoading: false };
 }

@@ -8,6 +8,7 @@
     "qualityAssurance": "Garantia de Qualidade",
     "catalogue": "Catálogo",
     "resources": "Recursos",
+    "blog": "Blog",
     "contacts": "Contatos",
     "uploadBoq": "Enviar a BOQ do Projeto",
     "partnerPortal": "Portal do Parceiro",
@@ -24,6 +25,7 @@
   "footer": {
     "resources": "Recursos",
     "company": "Empresa",
+    "blog": "Blog",
     "newsletterTitle": "Inscreva-se na nossa newsletter",
     "newsletterDesc": "Receba as últimas atualizações, estudos de caso e artigos técnicos.",
     "newsletterPlaceholder": "Digite seu endereço de e-mail",

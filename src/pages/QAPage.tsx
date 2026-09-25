@@ -17,6 +17,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
   if (!name) return FileCheck;
@@ -116,7 +117,7 @@ export function QAPage() {
     <>
       {/* ============ HERO SECTION ============ */}
       <section
-        className="relative bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-14 overflow-hidden border-b border-[#2A2A2A]"
+        className="relative isolate bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111] text-white pt-10 pb-14 overflow-hidden border-b border-[#2A2A2A]"
         style={
           heroImage
             ? {
@@ -127,6 +128,7 @@ export function QAPage() {
             : undefined
         }
       >
+        <DrainageMesh opacity={0.14} color="#ffffff" lineSpacing={40} />
         {heroImage && <div className="absolute inset-0 bg-black/75 pointer-events-none" />}
         {/* Decorative top line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -197,7 +199,8 @@ export function QAPage() {
       </section>
 
       {/* ============ QA PILLARS GRID ============ */}
-      <section className="bg-background border-b border-border">
+      <section className="relative isolate overflow-hidden bg-background border-b border-border">
+        <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 md:py-20">
           <div className="text-center mb-12">
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">

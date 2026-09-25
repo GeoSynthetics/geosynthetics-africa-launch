@@ -8,6 +8,7 @@
     "qualityAssurance": "Quality Assurance",
     "catalogue": "Catalogue",
     "resources": "Resources",
+    "blog": "Blog",
     "contacts": "Contacts",
     "uploadBoq": "Upload Project BOQ",
     "partnerPortal": "Partner Portal",
@@ -24,6 +25,7 @@
   "footer": {
     "resources": "Resources",
     "company": "Company",
+    "blog": "Blog",
     "newsletterTitle": "Subscribe to our newsletter",
     "newsletterDesc": "Get the latest updates, case studies and technical articles.",
     "newsletterPlaceholder": "Enter your email address",

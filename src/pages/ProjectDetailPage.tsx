@@ -152,9 +152,7 @@ export function ProjectDetailPage() {
         <section className="relative bg-gradient-to-br from-[#1C1917] via-[#2F1B0F] to-[#121111] text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]">
           {/* Stylized Africa silhouette */}
           <div className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[340px] h-[340px] opacity-15 pointer-events-none text-primary">
-            <svg viewBox="0 0 320 380" fill="currentColor" className="w-full h-full">
-              <path d="M145 15c-25 5-50 20-65 40-20 25-30 55-25 85 5 20 20 40 35 50 10 10 15 20 10 35-5 15-10 35 0 50 10 15 30 20 50 25 15 5 25 10 30 25 5 15 15 20 30 20 15 0 25-10 30-25 5-25 0-50-10-70-10-25-20-50-15-75 5-25 20-45 15-75-5-30-30-55-60-65-15-5-30-5-25-20z" />
-            </svg>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#ffffff" d="M201.56 19.495l-87.79 9.131-73.745 94.814v52.676l56.186 61.805 64.615-13.344 49.164 9.832-10.535 37.926 33.711 61.103-16.855 42.842 39.79 116.225 53.62-8.768 49.164-55.484 4.213-38.629 31.605-23.879-6.322-69.531 83.594-106.994-51.989 7.263-79.363-138.359-125.016-8.428-14.046-30.2zm252.346 319.8l-14.402 20.86-13.408.496c-11.849 24.321-12.598 38.019-13.907 66.547l17.383 4.471 21.852-52.147 2.482-40.226z"></path></g></svg>
           </div>
 
           <div className="container-page relative z-10">
@@ -185,7 +183,7 @@ export function ProjectDetailPage() {
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.98] tracking-tight max-w-4xl text-white mb-6">
               {project.scale || "340 t"} liner,{" "}
               <span className="text-primary">
-                {project.logistics_details?.route || "3,420 km"} route, 4 borders
+                {project.logistics_details?.route || "3,420 km"}
               </span>{" "}
               — delivered on time.
             </h1>
@@ -377,7 +375,7 @@ export function ProjectDetailPage() {
             </div>
 
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.98] tracking-tight max-w-4xl text-white mb-6">
-              {project.title} — {project.scale} Composite lining.
+              {project.title} — {project.scale}
             </h1>
             <p className="max-w-3xl text-sm md:text-base text-white/80 leading-relaxed mb-8">
               {project.summary}
@@ -403,7 +401,7 @@ export function ProjectDetailPage() {
               </div>
               <div className="p-4 border-r border-white/5 flex flex-col">
                 <span className="text-[9px] font-bold uppercase tracking-wider text-white/60 mb-1">
-                  Field Welders
+                  Resources
                 </span>
                 <span className="font-display font-extrabold text-sm text-white uppercase">
                   {project.qa_details?.welders || "14 Certified"}
@@ -466,14 +464,14 @@ export function ProjectDetailPage() {
                 <span className="w-1.5 h-6 bg-primary rounded-full" />
                 Case Study Brief
               </h2>
-              <div className="text-base leading-relaxed text-muted-foreground font-medium border-l-2 border-primary/25 pl-4 mb-6">
+              <div className="text-base leading-relaxed text-muted-foreground font-medium border-l-2 border-primary/25 pl-4 mb-6 whitespace-pre-line">
                 {project.body}
               </div>
 
-              {/* Install Hero Photo Strip */}
-              {project.service_type === "supply_install" && project.qa_details?.photos && (
+              {/* Install Hero Photo Strip / Gallery */}
+              {(project.gallery?.length > 0 || project.qa_details?.photos?.length > 0) && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6">
-                  {project.qa_details.photos.map((p: any, idx: number) => (
+                  {[...(project.gallery || []), ...(project.qa_details?.photos || [])].map((p: any, idx: number) => (
                     <div
                       key={idx}
                       className="aspect-[4/3] relative rounded overflow-hidden group border border-border"
@@ -505,7 +503,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     The Logistics Challenge
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.logistics_details?.challenge_description ||
                       "Kolwezi is approximately 3,420 km by road from the Port of Durban, crossing four sovereign customs regimes — South Africa, Botswana, Zambia, and into the Democratic Republic of the Congo. demurrages are common, and mismatched documentation packages represent significant hold windows."}
                   </p>
@@ -514,7 +512,7 @@ export function ProjectDetailPage() {
                       {project.logistics_details?.challenge_callout_title ||
                         "Zero-Tolerance Documentation Control"}
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                       {project.logistics_details?.challenge_callout_body ||
                         "Material transits cross border checkpoints with daily checks. A single spelling discrepancy on SADC Certificates of Origin or SGS pre-shipment inspections can trigger multi-week detentions. The client specified a logistics provider with pre-clearance capabilities."}
                     </p>
@@ -620,7 +618,7 @@ export function ProjectDetailPage() {
                     <h3 className="font-display font-extrabold text-sm uppercase text-primary tracking-wider mb-2">
                       Technical Independence Statement
                     </h3>
-                    <p className="text-xs text-white/80 leading-relaxed max-w-2xl">
+                    <p className="text-xs text-white/80 leading-relaxed max-w-2xl whitespace-pre-line">
                       {project.service_details?.independence_statement}
                     </p>
                   </div>
@@ -632,7 +630,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Forensic Methodology Protocol
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.challenge_description ||
                       "To comply with SANS and voluntary GISTM guidelines, GSA engineers executed a five-stage forensic examination of the in-service geomembrane composite."}
                   </p>
@@ -673,7 +671,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Laboratory Testing Programme
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.testing_description ||
                       "Our laboratory matrix focused on chemical antioxidant levels, thickness degradation, and environmental stress cracking resistance under high pressures."}
                   </p>
@@ -711,7 +709,7 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     Forensic Findings Register
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.service_details?.findings_description ||
                       "Visual checks and testing coupons yielded three discrete findings which were registered in the environmental plan."}
                   </p>
@@ -772,11 +770,11 @@ export function ProjectDetailPage() {
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
                     The Installation Challenge
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.qa_details?.challenge_description ||
                       "Taiings storage facilities are exposed to complex mechanical loading, high chemical pH acidity, and thermal swelling forces. Double-liner composite system installation requires highly accurate wedge-welding and extensive field CQA logs."}
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                     {project.qa_details?.challenge_approach ||
                       "Our team managed the complete sequence — clearing clay subgrade, deploying geosynthetic clay liners (GCL) to prevent leakage, installing smooth and textured HDPE geomembranes, and laying drainage geocomposites to manage hydrostatic heads."}
                   </p>
@@ -786,53 +784,49 @@ export function ProjectDetailPage() {
                 <section id="sequence" className="scroll-mt-28 space-y-4">
                   <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
                     <span className="w-1.5 h-6 bg-primary rounded-full" />
-                    Installation Sequence Sequence
+                    Installation Sequence
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        1
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Subgrade Accept
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Clay base compaction and clearance check.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        2
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        GCL Deploy
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Bentonite sealing layer rolled out on subgrade.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        3
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Wedge Welding
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Dual-track fusion welds with thermal wedges.
-                      </p>
-                    </div>
-                    <div className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center">
-                      <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
-                        4
-                      </div>
-                      <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
-                        Air Pressure Test
-                      </h4>
-                      <p className="text-[10px] text-muted-foreground leading-normal">
-                        Double seam channels locked and pressure tested.
-                      </p>
-                    </div>
+                    {(() => {
+                      const defaultSequence = [
+                        {
+                          title: "Subgrade Accept",
+                          description: "Clay base compaction and clearance check.",
+                        },
+                        {
+                          title: "GCL Deploy",
+                          description: "Bentonite sealing layer rolled out on subgrade.",
+                        },
+                        {
+                          title: "Wedge Welding",
+                          description: "Dual-track fusion welds with thermal wedges.",
+                        },
+                        {
+                          title: "Air Pressure Test",
+                          description: "Double seam channels locked and pressure tested.",
+                        },
+                      ];
+                      const sequence =
+                        project.qa_details?.sequence && project.qa_details.sequence.length > 0
+                          ? project.qa_details.sequence
+                          : defaultSequence;
+                      return sequence.map((step: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="bg-surface rounded-xl border border-border p-4 hover:border-primary transition group text-center"
+                        >
+                          <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mx-auto mb-3 font-display font-black">
+                            {idx + 1}
+                          </div>
+                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground mb-1">
+                            {step.title}
+                          </h4>
+                          <p className="text-[10px] text-muted-foreground leading-normal">
+                            {step.description}
+                          </p>
+                        </div>
+                      ));
+                    })()}
                   </div>
                 </section>
 
@@ -872,93 +866,93 @@ export function ProjectDetailPage() {
             {/* Products Supplied / Used list */}
             {(project.service_type === "supply_only" ||
               project.service_type === "supply_install") && (
-              <section id="products" className="scroll-mt-28 space-y-4">
-                <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
-                  <span className="w-1.5 h-6 bg-primary rounded-full" />
-                  {project.service_type === "supply_only"
-                    ? "Products Supplied"
-                    : "Products Used in Project"}
-                </h2>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {project.service_type === "supply_only"
-                    ? "The following certified products were supplied from our European partner mills and delivered directly to SADC laydown."
-                    : "The following certified products were supplied from our European partner mills and deployed by GSA crews on site."}
-                </p>
+                <section id="products" className="scroll-mt-28 space-y-4">
+                  <h2 className="font-display text-2xl font-bold uppercase text-foreground flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-primary rounded-full" />
+                    {project.service_type === "supply_only"
+                      ? "Products Supplied"
+                      : "Products Used in Project"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {project.service_type === "supply_only"
+                      ? "The following certified products were supplied and delivered directly to SADC laydown."
+                      : "The following certified products were supplied and deployed by GSA crews on site."}
+                  </p>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {project.products_used?.map((p: any, idx: number) => {
-                    const dbProd = p.productId
-                      ? dbProducts.find((db) => db.id === p.productId)
-                      : null;
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {project.products_used?.map((p: any, idx: number) => {
+                      const dbProd = p.productId
+                        ? dbProducts.find((db) => db.id === p.productId)
+                        : null;
 
-                    if (dbProd) {
+                      if (dbProd) {
+                        return (
+                          <Link
+                            key={idx}
+                            to="/catalogue/$slug"
+                            params={{ slug: dbProd.slug }}
+                            className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
+                          >
+                            <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
+                              {dbProd.image_url ? (
+                                <img
+                                  src={dbProd.image_url}
+                                  alt={dbProd.name}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <Layers className="h-6 w-6" />
+                              )}
+                            </div>
+                            <div className="flex-grow min-w-0">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
+                                {p.category || dbProd.product_categories?.name}
+                              </span>
+                              <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
+                                {dbProd.name}
+                              </h4>
+                              <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                                Quantity: {p.qty}
+                              </div>
+                              {dbProd.short_description && (
+                                <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
+                                  {dbProd.short_description}
+                                </p>
+                              )}
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
+                          </Link>
+                        );
+                      }
+
                       return (
                         <Link
                           key={idx}
-                          to="/catalogue/$slug"
-                          params={{ slug: dbProd.slug }}
+                          to="/catalogue"
+                          search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
                           className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
                         >
                           <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                            {dbProd.image_url ? (
-                              <img
-                                src={dbProd.image_url}
-                                alt={dbProd.name}
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              <Layers className="h-6 w-6" />
-                            )}
+                            <Layers className="h-6 w-6" />
                           </div>
                           <div className="flex-grow min-w-0">
                             <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                              {p.category || dbProd.product_categories?.name}
+                              {p.category}
                             </span>
-                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5 truncate">
-                              {dbProd.name}
+                            <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
+                              {p.name}
                             </h4>
-                            <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                            <div className="text-[10px] text-muted-foreground font-mono mt-1">
                               Quantity: {p.qty}
                             </div>
-                            {dbProd.short_description && (
-                              <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-1 font-medium leading-normal">
-                                {dbProd.short_description}
-                              </p>
-                            )}
                           </div>
                           <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
                         </Link>
                       );
-                    }
-
-                    return (
-                      <Link
-                        key={idx}
-                        to="/catalogue"
-                        search={{ q: p.name, cats: [], mans: [], sort: "newest" }}
-                        className="group flex gap-4 border border-border rounded-xl p-4 bg-surface hover:border-primary transition"
-                      >
-                        <div className="h-16 w-16 shrink-0 rounded bg-surface-dark overflow-hidden relative flex items-center justify-center text-primary border border-border group-hover:scale-102 transition duration-200">
-                          <Layers className="h-6 w-6" />
-                        </div>
-                        <div className="flex-grow min-w-0">
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-primary">
-                            {p.category}
-                          </span>
-                          <h4 className="font-display text-xs font-extrabold uppercase text-foreground group-hover:text-primary transition leading-tight mt-0.5">
-                            {p.name}
-                          </h4>
-                          <div className="text-[10px] text-muted-foreground font-mono mt-1">
-                            Quantity: {p.qty}
-                          </div>
-                        </div>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+                    })}
+                  </div>
+                </section>
+              )}
 
             {/* Spec Compliance table */}
             <section id="compliance" className="scroll-mt-28 space-y-4">
@@ -1015,14 +1009,16 @@ export function ProjectDetailPage() {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
-                    <div className="font-display text-2xl font-black text-primary mb-1">100%</div>
+                    <div className="font-display text-2xl font-black text-primary mb-1">
+                      {project.logistics_details?.kpi_demurrage_free || "100%"}
+                    </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Demurrage Free
                     </div>
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
                     <div className="font-display text-2xl font-black text-foreground mb-1">
-                      0 Days
+                      {project.logistics_details?.kpi_frontier_delays || "0 Days"}
                     </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Frontier Delays
@@ -1030,14 +1026,16 @@ export function ProjectDetailPage() {
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
                     <div className="font-display text-2xl font-black text-foreground mb-1">
-                      12 Trucks
+                      {project.logistics_details?.kpi_sealed_consignments || "12 Trucks"}
                     </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       Sealed Consignments
                     </div>
                   </div>
                   <div className="bg-[#FAFAF8] border border-border rounded p-4 text-center">
-                    <div className="font-display text-2xl font-black text-primary mb-1">100%</div>
+                    <div className="font-display text-2xl font-black text-primary mb-1">
+                      {project.logistics_details?.kpi_ontime_laydown || "100%"}
+                    </div>
                     <div className="text-[9px] font-bold uppercase text-muted-foreground tracking-wider">
                       On-Time laydown
                     </div>

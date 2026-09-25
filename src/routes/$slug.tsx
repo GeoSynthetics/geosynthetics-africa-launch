@@ -6,6 +6,9 @@ import { loadServiceData, ServiceDetailSkeleton } from "@/routes/services.$slug"
 import { loadIndustryData, IndustryDetailSkeleton } from "@/routes/industries.$slug";
 import { loadApplicationData, ApplicationCategorySkeleton } from "@/routes/applications.$category";
 import { supabase } from "@/integrations/supabase/client";
+import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
+import { fetchCountryTemplates } from "@/hooks/use-country-templates";
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 /**
  * Lazy-load map: original path → lazy component.
@@ -33,6 +36,9 @@ const PAGE_COMPONENTS: Record<string, React.LazyExoticComponent<React.ComponentT
   "/projects": lazy(() =>
     import("@/pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage })),
   ),
+  "/industries": lazy(() =>
+    import("@/pages/IndustriesLanding").then((m) => ({ default: m.IndustriesLanding })),
+  ),
 };
 
 const ServicePageLazy = lazy(() =>
@@ -44,6 +50,118 @@ const IndustryPageLazy = lazy(() =>
 const ApplicationCategoryPageLazy = lazy(() =>
   import("@/pages/ApplicationCategoryPage").then((m) => ({ default: m.ApplicationCategoryPage })),
 );
+const CountryPageLazy = lazy(() =>
+  import("@/pages/CountryPage").then((m) => ({ default: m.CountryPage })),
+);
+
+export async function loadCountryData(customSlug: string) {
+  let countryTemplate: CountryTemplate | null = null;
+
+  try {
+    const templates = await fetchCountryTemplates();
+    countryTemplate =
+      templates[customSlug] ||
+      Object.values(templates).find((t) => t.slug === customSlug) ||
+      null;
+
+    if (!countryTemplate) {
+      const countryMeta = COUNTRY_SEO_MAP[customSlug];
+      if (countryMeta) {
+        countryTemplate =
+          Object.values(templates).find(
+            (t) => t.country.toLowerCase() === countryMeta.country.toLowerCase(),
+          ) || null;
+      }
+    }
+  } catch (err) {
+    console.error("Error reading country templates:", err);
+  }
+
+  if (!countryTemplate) {
+    countryTemplate =
+      DEFAULT_COUNTRY_TEMPLATES[customSlug] ||
+      Object.values(DEFAULT_COUNTRY_TEMPLATES).find((t) => t.slug === customSlug) ||
+      null;
+  }
+
+  // Fetch linked products safely without PostgreSQL UUID syntax errors
+  let linkedProducts: any[] = [];
+  if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
+    try {
+      linkedProducts = await fetchProductsByIdsOrSlugs(countryTemplate.featuredProductIds);
+    } catch (err) {
+      console.error("Error loading products for country template:", err);
+    }
+  }
+
+  if (linkedProducts.length === 0) {
+    try {
+      const { data: defaultProds } = await supabase
+        .from("products_public")
+        .select(
+          "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
+        )
+        .limit(3);
+      if (defaultProds && defaultProds.length > 0) {
+        linkedProducts = defaultProds;
+      }
+    } catch {
+      // ignore fallback error
+    }
+  }
+
+  if (linkedProducts.length === 0) {
+    linkedProducts = [
+      {
+        id: "hdpe-smooth",
+        name: "GSE Smooth HDPE Geomembrane",
+        slug: "gse-hdpe-liner-smooth-geomembrane",
+        short_description: "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
+        image_url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
+      },
+      {
+        id: "bidim-geotextile",
+        name: "Bidim Non-Woven Geotextile",
+        slug: "bidim-non-woven-continuous-filament-geotextile",
+        short_description: "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
+        image_url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
+      },
+    ];
+  }
+
+  // Fetch featured case studies
+  let caseStudies: any[] = [];
+  try {
+    const countryName = countryTemplate?.country || "";
+    if (countryName) {
+      const { data: cData } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url")
+        .eq("status", "published")
+        .ilike("country", `%${countryName}%`)
+        .limit(3);
+      caseStudies = cData || [];
+    }
+
+    if (caseStudies.length === 0) {
+      const { data: fallbackData } = await supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url")
+        .eq("status", "published")
+        .order("project_year", { ascending: false })
+        .limit(3);
+      caseStudies = fallbackData || [];
+    }
+  } catch (err) {
+    console.error("Error loading case studies for country:", err);
+  }
+
+  return {
+    countryTemplate,
+    linkedProducts,
+    caseStudies,
+  };
+}
 
 const COUNTRY_SEO_MAP: Record<
   string,
@@ -146,44 +264,10 @@ export const Route = createFileRoute("/$slug")({
   loader: async ({ params }) => {
     const customSlug = params.slug;
 
-    // Check if it's a country-specific SEO page slug
-    if (COUNTRY_SEO_MAP[customSlug]) {
-      const countryData = COUNTRY_SEO_MAP[customSlug];
-      const originalPath = "/contacts";
-
-      const { data: contentData } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "contacts_page_content")
-        .maybeSingle();
-      const { data: regionalData } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "regional_coverage")
-        .maybeSingle();
-
-      const { data: caseStudies } = await supabase
-        .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url")
-        .eq("status", "published")
-        .order("project_year", { ascending: false })
-        .order("created_at", { ascending: false })
-        .limit(3);
-
-      return {
-        type: "core" as const,
-        originalPath,
-        seo: {
-          title: countryData.title,
-          description: countryData.description,
-          keywords: countryData.keywords,
-          pageLabel: `Contact — ${countryData.country}`,
-        },
-        country: countryData.country,
-        content: contentData?.value || null,
-        regionalCoverage: regionalData?.value || null,
-        caseStudies: caseStudies || [],
-      };
+    // Check if it's a country-specific SEO page slug or country template
+    const countryLoaderData = await loadCountryData(customSlug);
+    if (countryLoaderData.countryTemplate) {
+      return { type: "country" as const, loaderData: countryLoaderData };
     }
 
     // 1. Try resolving to custom SEO path for static core pages first
@@ -214,6 +298,15 @@ export const Route = createFileRoute("/$slug")({
           .order("created_at", { ascending: false })
           .limit(3);
         extraData.caseStudies = caseStudies || [];
+      } else if (originalPath === "/industries") {
+        const { data: rows } = await supabase
+          .from("site_config")
+          .select("key, value")
+          .in("key", ["template_industries", "hierarchy_industries"]);
+        extraData.templates =
+          (rows?.find((r) => r.key === "template_industries")?.value as Record<string, any>) || {};
+        extraData.hierarchy =
+          (rows?.find((r) => r.key === "hierarchy_industries")?.value as any) || null;
       }
       return { type: "core" as const, originalPath, seo, ...extraData };
     }
@@ -368,6 +461,26 @@ export const Route = createFileRoute("/$slug")({
       };
     }
 
+    if (loaderData.type === "country") {
+      const { countryTemplate } = loaderData.loaderData;
+      const title =
+        countryTemplate?.seo?.title ||
+        `${countryTemplate?.country || "Pan-African"} Geosynthetics Supplier — Geosynthetics Africa`;
+      const description =
+        countryTemplate?.seo?.description ||
+        `High-performance geosynthetic solutions, material supply, installation and QA/QC in ${countryTemplate?.country}.`;
+      const meta: any[] = [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ];
+      if (countryTemplate?.seo?.keywords) {
+        meta.push({ name: "keywords", content: countryTemplate.seo.keywords });
+      }
+      return { meta };
+    }
+
     // Fallback for core SEO pages
     const seo = (loaderData as any).seo;
     if (!seo) return { meta: [] };
@@ -415,6 +528,20 @@ function CustomSlugPage() {
     );
   }
 
+  if (loaderData.type === "country") {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex min-h-[60vh] items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        }
+      >
+        <CountryPageLazy data={loaderData.loaderData} />
+      </Suspense>
+    );
+  }
+
   const { originalPath } = loaderData as any;
   const PageComponent = PAGE_COMPONENTS[originalPath];
 
@@ -434,7 +561,7 @@ function CustomSlugPage() {
         </div>
       }
     >
-      <PageComponent />
+      <PageComponent data={loaderData} />
     </Suspense>
   );
 }

@@ -79,6 +79,7 @@ export function ProductDetailPage() {
     Route.useLoaderData();
   const { open } = useQuickQuote();
   const [activeTab, setActiveTab] = useState("overview");
+  const [quoteMessage, setQuoteMessage] = useState("");
   const [headerH, setHeaderH] = useState(96);
   const [tabsVisible, setTabsVisible] = useState(true);
   const tabsScrollRef = useRef<HTMLDivElement | null>(null);
@@ -137,7 +138,7 @@ export function ProductDetailPage() {
       value:
         product.roll_width ||
         (familyData?.technicalHighlights?.[1]?.value &&
-        familyData.technicalHighlights[1].label.toLowerCase().includes("width")
+          familyData.technicalHighlights[1].label.toLowerCase().includes("width")
           ? familyData.technicalHighlights[1].value
           : null),
     },
@@ -147,7 +148,7 @@ export function ProductDetailPage() {
       value:
         product.roll_length ||
         (familyData?.technicalHighlights?.[2]?.value &&
-        familyData.technicalHighlights[2].label.toLowerCase().includes("length")
+          familyData.technicalHighlights[2].label.toLowerCase().includes("length")
           ? familyData.technicalHighlights[2].value
           : null),
     },
@@ -180,17 +181,24 @@ export function ProductDetailPage() {
     return [];
   }, [product.compatible_systems, familyData?.types]);
 
+function getValidSelectionGuideUrl(rawUrl?: string | null): string {
+  if (!rawUrl || rawUrl.includes("boq-uploads")) {
+    return "/resources/installation-guides";
+  }
+  return rawUrl;
+}
+
   const documentGrid = useMemo(() => {
     return [
       {
         label: "Product Selection Guide",
         desc: "Compare performance properties across the entire category hierarchy before specifying.",
-        url: product.product_categories?.selection_guide_url || null,
+        url: getValidSelectionGuideUrl(product.product_categories?.selection_guide_url),
         tag: "CATEGORY GUIDE",
       },
       {
         label: "Installation & Method Statement",
-        desc: "Standard procedures, wedge welding temperatures, and panel deployment guidance.",
+        desc: "Standard deployment procedures, installation specifications, and field application method statements.",
         url: product.installation_guide_url || null,
         tag: "INSTALLATION",
         isAnchor:
@@ -200,7 +208,7 @@ export function ProductDetailPage() {
       },
       {
         label: "QA/QC Site Checklist",
-        desc: "Field testing procedures, pressure test logs, and seam verification guidelines.",
+        desc: "Field quality control procedures, inspection checklists, and testing standards to verify installation integrity.",
         url: product.qa_checklist_url || null,
         tag: "QUALITY CHECKLIST",
       },
@@ -212,7 +220,7 @@ export function ProductDetailPage() {
       },
       {
         label: "Chemical Resistance / Accessories Guide",
-        desc: "Chemical compatibility matrix and list of accessories needed for seam connection.",
+        desc: "Chemical compatibility matrix and list of auxiliary materials needed for installation.",
         url: product.chemical_resistance_url || null,
         tag: "ACCESSORIES GUIDE",
       },
@@ -299,11 +307,11 @@ export function ProductDetailPage() {
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
           ...(product.product_categories?.name
             ? [
-                {
-                  name: product.product_categories.name,
-                  url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
-                },
-              ]
+              {
+                name: product.product_categories.name,
+                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+              },
+            ]
             : []),
           { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
         ]}
@@ -340,32 +348,32 @@ export function ProductDetailPage() {
               },
               ...(product.product_categories?.name
                 ? [
-                    product.product_categories.slug
-                      ? {
-                          label: product.product_categories.name,
-                          to: "/products/$category",
-                          params: { category: product.product_categories.slug },
-                        }
-                      : {
-                          label: product.product_categories.name,
-                          to: "/catalogue",
-                          search: {
-                            q: "",
-                            cats: [product.product_categories.id],
-                            mans: [],
-                            sort: "newest",
-                          },
-                        },
-                  ]
+                  product.product_categories.slug
+                    ? {
+                      label: product.product_categories.name,
+                      to: "/products/$category",
+                      params: { category: product.product_categories.slug },
+                    }
+                    : {
+                      label: product.product_categories.name,
+                      to: "/catalogue",
+                      search: {
+                        q: "",
+                        cats: [product.product_categories.id],
+                        mans: [],
+                        sort: "newest",
+                      },
+                    },
+                ]
                 : []),
               ...(product.manufacturers?.name
                 ? [
-                    {
-                      label: product.manufacturers.name,
-                      to: "/catalogue",
-                      search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
-                    },
-                  ]
+                  {
+                    label: product.manufacturers.name,
+                    to: "/catalogue",
+                    search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
+                  },
+                ]
                 : []),
               { label: product.name },
             ]}
@@ -512,7 +520,7 @@ export function ProductDetailPage() {
                         <li key={r.label} className="flex items-center gap-3 py-2.5 text-sm">
                           <r.icon className="h-4 w-4 text-primary shrink-0" />
                           <span className="text-muted-foreground w-24">{r.label}</span>
-                          <span className="font-medium text-foreground">{r.value}</span>
+                          <span className="font-medium text-foreground text-xs">{r.value}</span>
                         </li>
                       ))}
                     </ul>
@@ -631,7 +639,7 @@ export function ProductDetailPage() {
                         Standard Method Statement
                       </h3>
                     </div>
-                    <div className="space-y-4 text-sm leading-relaxed text-foreground/80">
+                    <div className="space-y-4 text-md leading-relaxed text-foreground/80">
                       {splitIntoParagraphs(familyData.installationSpecs).map(
                         (spec: string, i: number) => (
                           <p key={i}>{spec}</p>
@@ -678,36 +686,57 @@ export function ProductDetailPage() {
                     </h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    To ensure certified waterproof integrity, the following field quality control
-                    procedures must be completed by the contractor:
+                    To ensure certified performance and long-term integrity, the following field
+                    quality control procedures must be completed by the contractor:
                   </p>
                   <ul className="space-y-2.5 text-xs text-foreground/85">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Subgrade Acceptance:</strong> Smooth, compacted, free of sharp stone
-                        protrusions (&gt;10mm) and standing water.
+                        <strong>Subgrade/Foundation Acceptance:</strong> Surface smooth, compacted,
+                        free of sharp protrusions (&gt;10mm), vegetation, and standing water.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Trial Welds:</strong> Mandatory trial seams completed at start of
-                        shift and after breaks to calibrate welding wedges.
+                        <strong>Material Verification:</strong> Roll, panel, or unit batch numbers
+                        and certificates of conformance checked against approved specifications
+                        before installation.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Non-Destructive Testing:</strong> 100% of double-track fusion seams
-                        tested via air channel pressure testing.
+                        <strong>Installation Compliance:</strong> Placement, overlap, anchoring,
+                        jointing, or connection method (welding, lacing, interlocking, mechanical,
+                        or solvent joints) verified per manufacturer's installation guide for the
+                        specific product.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                       <span>
-                        <strong>Destructive Shear & Peel:</strong> Coupons cut and tested on-site
-                        using a calibrated tensiometer.
+                        <strong>Joint &amp; Connection Testing:</strong> 100% visual inspection of
+                        all seams, laps, or connections, plus non-destructive testing (e.g., air
+                        channel, vacuum box, or pressure testing) where applicable to the product
+                        type.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span>
+                        <strong>Destructive/Performance Sampling:</strong> Representative samples or
+                        connections tested on-site or at an accredited lab (shear, peel, tensile, or
+                        pull-out strength) to confirm performance meets spec.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span>
+                        <strong>Damage &amp; Curing Inspection:</strong> Full surface check for
+                        punctures, tears, UV degradation, or (for cementitious products) correct
+                        hydration/curing prior to backfilling or cover placement.
                       </span>
                     </li>
                   </ul>
@@ -771,23 +800,33 @@ export function ProductDetailPage() {
                             {hasUrl ? "PDF DOCUMENT" : "REQUEST ON DEMAND"}
                           </span>
                         </div>
-                        <h3 className="text-sm font-bold text-foreground mb-1 leading-snug">
+                        <h3 className="text-lg font-bold text-foreground mb-1 leading-snug">
                           {doc.label}
                         </h3>
-                        <p className="text-xs text-muted-foreground leading-normal mb-4">
+                        <p className="text-sm text-muted-foreground leading-normal mb-4">
                           {doc.desc}
                         </p>
                       </div>
 
                       {doc.url ? (
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
-                        >
-                          Download document <Download className="h-3.5 w-3.5" />
-                        </a>
+                        doc.url.startsWith("/") ? (
+                          <Link
+                            to="/resources/$category"
+                            params={{ category: "installation-guides" }}
+                            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
+                          >
+                            View guides <ChevronRight className="h-3.5 w-3.5" />
+                          </Link>
+                        ) : (
+                          <a
+                            href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start"
+                          >
+                            Download document <Download className="h-3.5 w-3.5" />
+                          </a>
+                        )
                       ) : doc.isAnchor ? (
                         <button
                           type="button"
@@ -800,14 +839,9 @@ export function ProductDetailPage() {
                         <button
                           type="button"
                           onClick={() => {
-                            const quoteMessage = `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`;
-                            const messageEl = document.querySelector(
-                              'textarea[placeholder*="Message"]',
-                            ) as HTMLTextAreaElement;
-                            if (messageEl) {
-                              messageEl.value = quoteMessage;
-                              messageEl.dispatchEvent(new Event("input", { bubbles: true }));
-                            }
+                            setQuoteMessage(
+                              `Hi, I am interested in ${product.name} and would like to request the ${doc.label}. Please email me the details.`,
+                            );
                             scrollTo("quote");
                           }}
                           className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover transition mt-2 self-start cursor-pointer"
@@ -859,7 +893,8 @@ export function ProductDetailPage() {
                       </div>
                       <div className="px-4 pb-4">
                         <Link
-                          to="/resources"
+                          to="/projects/$slug"
+                          params={{ slug: cs.slug } as any}
                           className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-primary group-hover:text-primary-hover transition"
                         >
                           View Case Study <ChevronRight className="h-3 w-3" />
@@ -918,11 +953,11 @@ export function ProductDetailPage() {
                 </p>
                 <div className="mt-4 space-y-3 text-xs font-medium">
                   <a
-                    href="tel:+27117940974"
+                    href="tel:+27710939964"
                     className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
                   >
                     <Phone className="h-4 w-4 text-primary shrink-0" />
-                    +27 11 794 0974
+                    +27 71 093 9964
                   </a>
                   <a
                     href="mailto:sales@geosynthetics.co.za"
@@ -972,7 +1007,11 @@ export function ProductDetailPage() {
               )}
 
               {/* Quote form */}
-              <QuoteCard contextId={product.id} contextLabel={product.name} />
+              <QuoteCard
+                contextId={product.id}
+                contextLabel={product.name}
+                initialMessage={quoteMessage}
+              />
 
               {/* Alternative Solutions */}
               {alternatives.length > 0 && (
@@ -1024,25 +1063,38 @@ export function ProductDetailPage() {
                   </ul>
 
                   {/* Selection Guide Link */}
-                  {product.product_categories?.selection_guide_url && (
-                    <div className="mt-4 pt-3.5 border-t border-border/60">
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="w-full bg-background border-border text-foreground hover:bg-surface hover:text-primary font-bold uppercase tracking-wider text-[11px] h-9 transition-all duration-200 shadow-sm"
-                      >
-                        <a
-                          href={product.product_categories.selection_guide_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                  {(() => {
+                    const rawGuide = product.product_categories?.selection_guide_url;
+                    const guideUrl = getValidSelectionGuideUrl(rawGuide);
+                    const isExternal =
+                      guideUrl.startsWith("http://") || guideUrl.startsWith("https://");
+
+                    return (
+                      <div className="mt-4 pt-3.5 border-t border-border/60">
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="w-full bg-background border-border text-foreground hover:bg-surface hover:text-primary font-bold uppercase tracking-wider text-[11px] h-9 transition-all duration-200 shadow-sm"
                         >
-                          <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
-                          View Product Selection Guide
-                        </a>
-                      </Button>
-                    </div>
-                  )}
+                          {isExternal ? (
+                            <a href={guideUrl} target="_blank" rel="noopener noreferrer">
+                              <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
+                              View Product Selection Guide
+                            </a>
+                          ) : (
+                            <Link
+                              to="/resources/$category"
+                              params={{ category: "installation-guides" }}
+                            >
+                              <FileText className="mr-1.5 h-3.5 w-3.5 text-primary" />
+                              View Product Selection Guide
+                            </Link>
+                          )}
+                        </Button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
@@ -1134,23 +1186,20 @@ function Strip({
           {title} information will appear here once added.
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {items.slice(0, 5).map((it, i) => (
             <div
               key={i}
               className="rounded border border-border bg-card overflow-hidden hover:border-primary transition"
             >
-              <div className="aspect-[4/3] bg-surface overflow-hidden">
-                {it.image_url ? (
-                  <img src={it.image_url} alt={it.title} className="h-full w-full object-cover" />
-                ) : null}
-              </div>
-              <div className="p-3">
-                <div className="font-display text-xs font-bold uppercase leading-tight">
-                  {it.title}
+              <div className="p-5">
+                <div className="font-display text-sm font-bold uppercase leading-tight">
+                  <h5 className="text-lg">{it.title}</h5>
                 </div>
                 {it.subtitle && (
-                  <div className="text-[11px] text-muted-foreground mt-1">{it.subtitle}</div>
+                  <div className="text-sm leading-relaxed text-muted-foreground mt-2">
+                    <p>{it.subtitle}</p>
+                  </div>
                 )}
               </div>
             </div>

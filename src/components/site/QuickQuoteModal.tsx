@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
+import { sendQuoteEmailFn } from "@/lib/brevo";
 import { useTranslation } from "react-i18next";
 
 const ALLOWED_TYPES = [
@@ -196,6 +197,19 @@ export function QuickQuoteModal() {
         break;
       }
       if (lastError) throw new Error(lastError.message);
+
+      // Trigger Brevo transactional email notifications (non-blocking)
+      void sendQuoteEmailFn({
+        data: {
+          contactName: name.trim(),
+          contactEmail: email.trim(),
+          contactPhone: phone.trim(),
+          company: company.trim() || undefined,
+          country: country || undefined,
+          productName: productName || undefined,
+          projectDescription: baseDescription,
+        },
+      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
       handleClose();

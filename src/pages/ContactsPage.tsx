@@ -1,6 +1,16 @@
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   MapPin,
   Phone,
@@ -27,6 +37,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
+import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/brevo";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
@@ -42,6 +54,8 @@ import {
   DEFAULT_CONTACTS_PAGE_CONTENT,
 } from "@/types/contacts";
 import * as LucideIcons from "lucide-react";
+import { DrainageMesh, FiberStrand } from "@/components/site/shapes";
+import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
 
 const getIconComponent = (
   name: string | undefined,
@@ -50,8 +64,6 @@ const getIconComponent = (
   if (!name) return fallback;
   return (LucideIcons as any)[name] || fallback;
 };
-
-import { DEFAULT_REGIONAL_COVERAGE } from "@/types/regionalCoverage";
 
 import { mockContactsCaseStudies as CASE_STUDIES } from "@/mocks/contactsMocks";
 
@@ -268,6 +280,7 @@ export function ContactsPage() {
 
   return (
     <>
+      <LocalBusinessSchema />
       <ContactsHero hero={hero} headOffice={headOffice} />
       <OfficeDetailsAndServices headOffice={headOffice} officeServices={officeServices} />
       <MapAndCoverage
@@ -328,9 +341,10 @@ function CountrySeoLinks() {
 function ContactsHero({ hero, headOffice }: { hero: ContactHero; headOffice: ContactHeadOffice }) {
   return (
     <section
-      className="relative overflow-hidden bg-surface-dark text-surface-dark-foreground"
+      className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
       style={{ minHeight: "420px" }}
     >
+      <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
       {/* Full-bleed background image with left-heavy gradient */}
       <div
         className="absolute inset-0"
@@ -505,11 +519,17 @@ function OfficeDetailsAndServices({
                 <div className="text-sm">{headOffice.company}</div>
               </DetailRow>
               <DetailRow icon={MapPin} label="Address">
-                <div className="text-sm space-y-0.5">
+                <a
+                  href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm space-y-0.5 hover:text-primary transition-colors inline-block cursor-pointer"
+                  title="Open location in Google Maps"
+                >
                   {headOffice.address.map((l) => (
                     <div key={l}>{l}</div>
                   ))}
-                </div>
+                </a>
               </DetailRow>
               <DetailRow icon={Phone} label="Phone">
                 <a
@@ -784,7 +804,7 @@ function MapAndCoverage({
 }
 
 /* -------------------- Forms (BOQ + Quick contact) -------------------- */
-function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
+export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const { user } = useAuth();
   const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -816,6 +836,43 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         }))
       : CASE_STUDIES;
 
+  // Zod forms initialization
+  type BoqValues = z.infer<typeof boqSchema>;
+  type QuickValues = z.infer<typeof quickSchema>;
+
+  const boqForm = useForm<BoqValues>({
+    resolver: zodResolver(boqSchema),
+    defaultValues: {
+      name: "",
+      company: "",
+      email: user?.email ?? "",
+      phone: "",
+      country: "",
+      message: "",
+    },
+  });
+
+  const quickForm = useForm<QuickValues>({
+    resolver: zodResolver(quickSchema),
+    defaultValues: {
+      name: "",
+      email: user?.email ?? "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  useEffect(() => {
+    if (user?.email) {
+      if (!boqForm.getValues("email")) {
+        boqForm.setValue("email", user.email);
+      }
+      if (!quickForm.getValues("email")) {
+        quickForm.setValue("email", user.email);
+      }
+    }
+  }, [user?.email, boqForm, quickForm]);
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = Array.from(e.target.files ?? []);
     if (!incoming.length) return;
@@ -838,21 +895,7 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const removeFile = (idx: number) => setFiles((prev) => prev.filter((_, i) => i !== idx));
 
-  const onBoqSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = boqSchema.safeParse({
-      name: fd.get("name"),
-      company: fd.get("company") || undefined,
-      email: fd.get("email"),
-      phone: fd.get("phone") || undefined,
-      country: fd.get("country") || undefined,
-      message: fd.get("message"),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form.");
-      return;
-    }
+  const onBoqSubmit = async (values: BoqValues) => {
     setBoqSubmitting(true);
     try {
       const ownerKey = user?.id ?? "anonymous";
@@ -869,15 +912,15 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       }
 
       const messageWithMeta =
-        `${parsed.data.message}` +
-        (parsed.data.country ? `\n\n[country] ${parsed.data.country}` : "") +
-        (uploadedPaths.length ? `\n\n[attachments]\n${uploadedPaths.join("\n")}` : "");
+        `${values.message}` +
+        (values.country ? `${values.country}` : "") +
+        (uploadedPaths.length ? `${uploadedPaths.join("\n")}` : "");
 
       const { error: insertErr } = await supabase.from("quote_requests").insert({
-        contact_name: parsed.data.name,
-        contact_email: parsed.data.email,
-        contact_phone: parsed.data.phone ?? null,
-        company: parsed.data.company ?? null,
+        contact_name: values.name,
+        contact_email: values.email,
+        contact_phone: values.phone ?? null,
+        company: values.company ?? null,
         project_description: messageWithMeta,
         boq_file_path: uploadedPaths[0] ?? null,
         user_id: user?.id ?? null,
@@ -885,8 +928,27 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (insertErr) throw insertErr;
 
+      // Trigger Brevo transactional email notifications (non-blocking)
+      void sendQuoteEmailFn({
+        data: {
+          contactName: values.name,
+          contactEmail: values.email,
+          contactPhone: values.phone ?? undefined,
+          company: values.company ?? undefined,
+          country: values.country ?? undefined,
+          projectDescription: messageWithMeta,
+        },
+      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
-      (e.target as HTMLFormElement).reset();
+      boqForm.reset({
+        name: "",
+        company: "",
+        email: user?.email ?? "",
+        phone: "",
+        country: "",
+        message: "",
+      });
       setFiles([]);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not submit. Please try again.");
@@ -895,34 +957,38 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     }
   };
 
-  const onQuickSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = quickSchema.safeParse({
-      name: fd.get("name"),
-      email: fd.get("email"),
-      phone: fd.get("phone") || undefined,
-      message: fd.get("message"),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check the form.");
-      return;
-    }
+  const onQuickSubmit = async (values: QuickValues) => {
     setQuickSubmitting(true);
     try {
       const { error } = await supabase.from("quote_requests").insert({
-        contact_name: parsed.data.name,
-        contact_email: parsed.data.email,
-        contact_phone: parsed.data.phone ?? null,
+        contact_name: values.name,
+        contact_email: values.email,
+        contact_phone: values.phone ?? null,
         company: null,
-        project_description: `[quick contact]\n${parsed.data.message}`,
+        project_description: `${values.message}`,
         boq_file_path: null,
         user_id: user?.id ?? null,
         status: "new",
       });
       if (error) throw error;
+
+      // Trigger Brevo transactional email notifications (non-blocking)
+      void sendContactEmailFn({
+        data: {
+          contactName: values.name,
+          contactEmail: values.email,
+          contactPhone: values.phone ?? undefined,
+          message: `${values.message}`,
+        },
+      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+
       toast.success("Inquiry sent — thank you!");
-      (e.target as HTMLFormElement).reset();
+      quickForm.reset({
+        name: "",
+        email: user?.email ?? "",
+        phone: "",
+        message: "",
+      });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not submit. Please try again.");
     } finally {
@@ -933,9 +999,8 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   return (
     <section className="bg-background">
       <div className="container-page py-12">
-        {/* 3-column layout: Case Studies | BOQ Form | Quick Contact */}
         <div className="grid lg:grid-cols-12 gap-8">
-          {/* LEFT: Project Experience / Case Studies ΓÇö compact horizontal cards */}
+          {/* LEFT: Project Experience */}
           <div className="lg:col-span-4 order-2 lg:order-1">
             <h2 className="font-display text-base font-bold uppercase tracking-wide mb-4">
               Project Experience In The Region
@@ -946,14 +1011,12 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                   key={c.name}
                   className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
                 >
-                  {/* Thumbnail */}
                   <div
                     className="w-28 shrink-0 bg-cover bg-center"
                     style={{ backgroundImage: `url(${c.image})` }}
                     role="img"
                     aria-label={c.name}
                   />
-                  {/* Content */}
                   <div className="p-3 flex flex-col justify-between min-w-0">
                     <div>
                       <div className="font-display text-sm font-bold uppercase leading-tight">
@@ -989,156 +1052,259 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
             </div>
           </div>
 
-          {/* RIGHT: 2-column sub-grid ΓÇö BOQ Form + Quick Contact side-by-side */}
+          {/* RIGHT: Forms */}
           <div className="lg:col-span-8 order-1 lg:order-2">
             <div className="grid lg:grid-cols-2 gap-6 items-start">
-              {/* RIGHT-LEFT: BOQ Upload Form */}
+              {/* BOQ Upload Form */}
               <div id="boq-form">
                 <div className="rounded border border-border bg-card p-5 md:p-6">
                   <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-5">
                     Upload Your BOQ / Drawings
                   </h2>
-                  <form onSubmit={onBoqSubmit} className="space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <Field id="name" label="Full Name" required>
-                        <Input id="name" name="name" required maxLength={120} />
-                      </Field>
-                      <Field id="company" label="Company">
-                        <Input id="company" name="company" maxLength={160} />
-                      </Field>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Field id="email" label="Email" required>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          required
-                          maxLength={255}
-                          defaultValue={user?.email ?? ""}
+                  <Form {...boqForm}>
+                    <form onSubmit={boqForm.handleSubmit(onBoqSubmit)} className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Full Name <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input maxLength={120} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
-                      </Field>
-                      <Field id="phone" label="Phone" required>
-                        <Input id="phone" name="phone" type="tel" required maxLength={40} />
-                      </Field>
-                    </div>
-                    <Field id="country" label="Project Location / Country">
-                      <Input
-                        id="country"
+                        <FormField
+                          control={boqForm.control}
+                          name="company"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                Company
+                              </FormLabel>
+                              <FormControl>
+                                <Input maxLength={160} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Email <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="email" maxLength={255} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={boqForm.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Phone <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="tel" maxLength={40} {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={boqForm.control}
                         name="country"
-                        maxLength={120}
-                        placeholder="Select country"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Project Location / Country
+                            </FormLabel>
+                            <FormControl>
+                              <Input maxLength={120} placeholder="Select country" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Field id="message" label="Message / Project Description">
-                      <Textarea
-                        id="message"
+                      <FormField
+                        control={boqForm.control}
                         name="message"
-                        rows={3}
-                        required
-                        maxLength={2000}
-                        placeholder="Tell us about your project..."
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Message / Project Description
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                rows={3}
+                                maxLength={2000}
+                                placeholder="Tell us about your project..."
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
 
-                    <label className="block rounded border-2 border-dashed border-border bg-surface p-4 text-center cursor-pointer hover:border-primary transition">
-                      <Upload className="h-6 w-6 text-primary mx-auto" />
-                      <div className="mt-1.5 text-sm font-semibold">
-                        Drag & drop your BOQ or drawings here
-                      </div>
-                      <div className="text-xs text-primary underline">or click to browse files</div>
-                      <div className="mt-1 text-xs text-muted-foreground">
-                        PDF, DWG, DOC, XLS (Max 20MB)
-                      </div>
-                      <input
-                        ref={fileRef}
-                        type="file"
-                        multiple
-                        className="sr-only"
-                        accept={ALLOWED_EXT.join(",")}
-                        onChange={onFileChange}
-                      />
-                    </label>
+                      <label className="block rounded border-2 border-dashed border-border bg-surface p-4 text-center cursor-pointer hover:border-primary transition">
+                        <Upload className="h-6 w-6 text-primary mx-auto" />
+                        <div className="mt-1.5 text-sm font-semibold">
+                          Drag & drop your BOQ or drawings here
+                        </div>
+                        <div className="text-xs text-primary underline">
+                          or click to browse files
+                        </div>
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          PDF, DWG, DOC, XLS (Max 20MB)
+                        </div>
+                        <input
+                          ref={fileRef}
+                          type="file"
+                          multiple
+                          className="sr-only"
+                          accept={ALLOWED_EXT.join(",")}
+                          onChange={onFileChange}
+                        />
+                      </label>
 
-                    {files.length > 0 && (
-                      <ul className="space-y-1.5">
-                        {files.map((f, idx) => (
-                          <li
-                            key={`${f.name}-${idx}`}
-                            className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
-                          >
-                            <span className="flex items-center gap-2 min-w-0">
-                              <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
-                              <span className="truncate">{f.name}</span>
-                              <span className="text-xs text-muted-foreground shrink-0">
-                                {(f.size / 1024 / 1024).toFixed(2)} MB
-                              </span>
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile(idx)}
-                              className="text-xs text-muted-foreground hover:text-primary"
+                      {files.length > 0 && (
+                        <ul className="space-y-1.5">
+                          {files.map((f, idx) => (
+                            <li
+                              key={`${f.name}-${idx}`}
+                              className="flex items-center justify-between rounded border border-border bg-surface px-3 py-2 text-sm"
                             >
-                              Remove
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                              <span className="flex items-center gap-2 min-w-0">
+                                <FileCheck2 className="h-4 w-4 text-primary shrink-0" />
+                                <span className="truncate">{f.name}</span>
+                                <span className="text-xs text-muted-foreground shrink-0">
+                                  {(f.size / 1024 / 1024).toFixed(2)} MB
+                                </span>
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile(idx)}
+                                className="text-xs text-muted-foreground hover:text-primary"
+                              >
+                                Remove
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
 
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={boqSubmitting}
-                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-                    >
-                      {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
-                    </Button>
-                  </form>
+                      <Button
+                        type="submit"
+                        size="lg"
+                        disabled={boqSubmitting}
+                        className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide cursor-pointer"
+                      >
+                        {boqSubmitting ? "Submitting…" : "Submit & Get Proposal"}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
               </div>
 
-              {/* RIGHT-RIGHT: Quick Contact + Immediate Assistance */}
+              {/* Quick Contact */}
               <aside id="quick-contact" className="space-y-4">
                 <div className="rounded border border-border bg-card p-5 md:p-6">
                   <h2 className="font-display text-lg font-bold uppercase tracking-wide mb-4">
                     Quick Contact
                   </h2>
-                  <form onSubmit={onQuickSubmit} className="space-y-3">
-                    <Field id="q-name" label="Full Name" required>
-                      <Input id="q-name" name="name" required maxLength={120} />
-                    </Field>
-                    <Field id="q-email" label="Email" required>
-                      <Input
-                        id="q-email"
+                  <Form {...quickForm}>
+                    <form onSubmit={quickForm.handleSubmit(onQuickSubmit)} className="space-y-3">
+                      <FormField
+                        control={quickForm.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Full Name <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input maxLength={120} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
                         name="email"
-                        type="email"
-                        required
-                        maxLength={255}
-                        defaultValue={user?.email ?? ""}
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Email <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="email" maxLength={255} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Field id="q-phone" label="Phone">
-                      <Input id="q-phone" name="phone" type="tel" maxLength={40} />
-                    </Field>
-                    <Field id="q-message" label="Message">
-                      <Textarea
-                        id="q-message"
+                      <FormField
+                        control={quickForm.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Phone
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="tel" maxLength={40} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
                         name="message"
-                        rows={4}
-                        required
-                        maxLength={2000}
-                        placeholder="How can we help?"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Message <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                rows={4}
+                                maxLength={2000}
+                                placeholder="How can we help?"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </Field>
-                    <Button
-                      type="submit"
-                      disabled={quickSubmitting}
-                      className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide"
-                    >
-                      {quickSubmitting ? "Sending…" : "Send Inquiry"}
-                    </Button>
-                  </form>
+                      <Button
+                        type="submit"
+                        disabled={quickSubmitting}
+                        className="w-full bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide cursor-pointer"
+                      >
+                        {quickSubmitting ? "Sending…" : "Send Inquiry"}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
 
                 <div className="rounded bg-surface-dark text-surface-dark-foreground p-5">
@@ -1189,27 +1355,6 @@ function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function Field({
-  id,
-  label,
-  required,
-  children,
-}: {
-  id: string;
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label htmlFor={id} className="text-xs font-semibold uppercase tracking-wide">
-        {label} {required && <span className="text-primary">*</span>}
-      </Label>
-      <div className="mt-1.5">{children}</div>
-    </div>
   );
 }
 

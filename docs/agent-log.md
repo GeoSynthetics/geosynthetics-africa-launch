@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-09-25 20:08 (UTC+1)
+
+- **Feature**: Resolve Branch Merge Conflicts Between `development` and `main`
+- **Problem**: The `development` branch could not automatically merge into `main` on GitHub due to conflicts in `ContactsPage.tsx`, `HomePage.tsx`, `catalogue.index.tsx`, `index.tsx`, and `homepage.ts` introduced by parallel upstream features (case study dynamic showcases, `HeroSlider` background carousel, and `CataloguePage` component extraction).
+- **Solution**: Merged `origin/main` into `development`, seamlessly integrated `HeroProjectForm` and regional routing within `HeroSlider`, retained dynamic case studies and regional coverage loaders in `routes/index.tsx`, removed redundant imports in `ContactsPage.tsx`, preserved modular `CataloguePage` delegation in `catalogue.index.tsx`, and verified with complete passing test suite (37 files, 141 tests) and successful Vite SSR production build.
+
 ## 2026-09-25 15:52 (UTC+1)
 
 - **Feature**: Pan-African Hero Project Form & Dynamic Regional Lead Routing (West Africa / SA)

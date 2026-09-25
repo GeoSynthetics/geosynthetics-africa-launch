@@ -4,10 +4,10 @@ export const mockProductFamilyData = {
   subtitle:
     "GSE HD is a smooth, high quality, high density polyethylene (HDPE) geomembrane produced from specially formulated, virgin polyethylene resin. This polyethylene resin is designed specifically for flexible geomembrane applications.",
   stats: {
-    projects: "900+",
-    countries: "15+",
-    experts: "30+",
-    years: "20+",
+    projects: "1 of 5",
+    countries: "30+",
+    experts: "One scope",
+    years: "100%",
   },
   technicalSpecText:
     "GSE HD is a smooth, high quality, high density polyethylene (HDPE) geomembrane produced from specially formulated, virgin polyethylene resin. This polyethylene resin is designed specifically for flexible geomembrane applications. It contains approximately 97.5% polyethylene, 2.5% carbon black and trace amounts of antioxidants and heat stabilizers; no other additives, fillers or extenders are used. GSE HD has outstanding chemical resistance, mechanical properties, environmental stress crack resistance, dimensional stability and thermal aging characteristics. GSE HD has excellent resistance to UV radiation and is suitable for exposed conditions. These product specifications meet or exceed GRI-GM13.",

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Upload,
@@ -12,12 +13,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import {
+  MembraneFold,
+  GeoGrid,
+  HexCell,
+  DrainageMesh,
+  FiberStrand,
+} from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
 import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage";
 import { Route } from "@/routes/index";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
-
-import { HeroProjectForm } from "@/components/site/HeroProjectForm";
+import { HeroSlider } from "@/components/site/HeroSlider";
 
 export function HomePage() {
   const loaderData = Route.useLoaderData();
@@ -39,76 +46,49 @@ export function HomePage() {
   const projects = { ...DEFAULT_HOMEPAGE_CONTENT.projects, ...content.projects };
   const boqBanner = { ...DEFAULT_HOMEPAGE_CONTENT.boqBanner, ...content.boqBanner };
 
+  const caseStudies = ((loaderData as any)?.caseStudies || []) as Array<{
+    id: string;
+    slug: string;
+    title: string;
+    hero_image_url?: string | null;
+    sector?: string | null;
+    country?: string | null;
+    location?: string | null;
+    scale?: string | null;
+    summary?: string | null;
+    products_used?: any;
+    service_type?: string | null;
+    project_year?: number | string | null;
+  }>;
+
+  // Derive showcased projects dynamically from published case studies
+  const showcasedProjects = useMemo(() => {
+    if (!caseStudies || caseStudies.length === 0) return [];
+
+    const featuredIds: string[] = projects.featuredProjectIds || [];
+    if (featuredIds.length > 0) {
+      const matched = featuredIds
+        .map((id) => caseStudies.find((cs) => cs.id === id || cs.slug === id))
+        .filter(Boolean) as typeof caseStudies;
+
+      if (matched.length > 0) {
+        const remaining = caseStudies.filter((cs) => !matched.some((m) => m.id === cs.id));
+        return [...matched, ...remaining].slice(0, 3);
+      }
+    }
+
+    return caseStudies.slice(0, 3);
+  }, [caseStudies, projects.featuredProjectIds]);
+
   return (
     <>
-      {/* Hero */}
-      <section
-        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.76) 45%, rgba(8,8,10,0.45) 100%), url(${hero.bgImage || heroInstallation})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="container-page py-16 md:py-20 lg:py-24">
-          <div className="grid lg:grid-cols-12 gap-10 xl:gap-14 items-center">
-            {/* Left: Headlines, Pan-African proposition, and action buttons */}
-            <div className="lg:col-span-7 max-w-2xl">
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[1.05] tracking-tight">
-                {hero.headlinePrefix}{" "}
-                <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
-                {hero.headlineSuffix}
-              </h1>
-              <p className="mt-5 text-base md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90">
-                {hero.tagline}
-              </p>
-              <p className="mt-4 text-sm md:text-base text-surface-dark-foreground/75 leading-relaxed">
-                {hero.subtext}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                {hero.btn1Text && (
-                  <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0"
-                    onClick={() => open()}
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    {hero.btn1Text}
-                  </Button>
-                )}
-                {hero.btn2Text && (
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                  >
-                    <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
-                  </Button>
-                )}
-                {hero.btn3Text && (
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                  >
-                    <Link to={hero.btn3Url as any}>
-                      <Phone className="mr-2 h-4 w-4" />
-                      {hero.btn3Text}
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {/* Right: New Start Your Project Form (replacing South Africa-localized card) */}
-            <div className="lg:col-span-5 flex justify-center lg:justify-end w-full">
-              <HeroProjectForm regions={loaderData?.regionalCoverage} />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider with Pan-African Project Form */}
+      <HeroSlider
+        hero={hero}
+        onOpenQuote={open}
+        autoPlayInterval={hero.autoPlayInterval}
+        regions={(loaderData as any)?.regionalCoverage}
+      />
 
       {/* Trust strip */}
       <section className="border-b border-border bg-background">
@@ -140,8 +120,9 @@ export function HomePage() {
       </section>
 
       {/* GSA Difference + 5 step process */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20 grid lg:grid-cols-12 gap-10">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.07} color="var(--primary)" gridSize={8} />
+        <div className="relative container-page py-16 md:py-20 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">
               {gsaDifference.subtitle}
@@ -206,8 +187,9 @@ export function HomePage() {
       </section>
 
       {/* Engineered systems */}
-      <section className="bg-surface">
-        <div className="container-page py-16 md:py-20">
+      <section className="relative isolate overflow-hidden bg-surface">
+        <HexCell count={15} opacity={0.06} color="var(--primary)" spread="wide" />
+        <div className="relative container-page py-16 md:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {engineeredSystems.sectionTitle}
@@ -258,8 +240,9 @@ export function HomePage() {
       />
 
       {/* Services + dark verification panel */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20 grid lg:grid-cols-12 gap-8">
+      <section className="relative isolate overflow-hidden bg-background">
+        <DrainageMesh opacity={0.06} color="var(--foreground)" lineSpacing={50} />
+        <div className="relative container-page py-16 md:py-20 grid lg:grid-cols-12 gap-8">
           <div className="lg:col-span-7">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
               <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
@@ -328,8 +311,9 @@ export function HomePage() {
       </section>
 
       {/* Stats + Pan-African */}
-      <section className="bg-surface-dark text-surface-dark-foreground">
-        <div className="container-page py-16 grid lg:grid-cols-12 gap-10 items-center">
+      <section className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground">
+        <FiberStrand opacity={0.1} color="#ffffff" clusterCount={6} />
+        <div className="relative container-page py-16 grid lg:grid-cols-12 gap-10 items-center">
           {/* Left stats column — spans 4 on large screens */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             {presence.stats.map((s, idx) => (
@@ -421,8 +405,9 @@ export function HomePage() {
       </section>
 
       {/* Case studies + catalogue teaser */}
-      <section className="bg-background">
-        <div className="container-page py-16 md:py-20">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={8} opacity={0.05} color="var(--foreground)" spread="tight" />
+        <div className="relative container-page py-16 md:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
             <h2 className="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {projects.sectionTitle}
@@ -435,32 +420,78 @@ export function HomePage() {
             </Link>
           </div>
           <div className="grid lg:grid-cols-4 gap-5">
-            {projects.cards.map((c, idx) => (
-              <article
-                key={c.id || idx}
-                className="group rounded overflow-hidden border border-border bg-card lg:col-span-1"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={
-                      c.image ||
-                      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
-                    }
-                    alt={c.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                    {c.tag}
-                  </span>
-                </div>
-                <div className="p-4">
-                  <div className="font-display text-base font-bold uppercase">{c.title}</div>
-                  <div className="mt-2 text-xs text-muted-foreground">📍 {c.location}</div>
-                  <div className="text-xs text-muted-foreground">⚙ {c.systemDetails}</div>
-                </div>
-              </article>
-            ))}
+            {showcasedProjects.map((c) => {
+              const tag =
+                c.sector ||
+                (c.service_type ? c.service_type.replace(/_/g, " ") : "PROJECT");
+              const locationText =
+                [c.location, c.country].filter(Boolean).join(", ") ||
+                c.country ||
+                c.location ||
+                "Pan-Africa";
+              const systemDetails =
+                c.scale ||
+                (Array.isArray(c.products_used) && c.products_used[0]?.name
+                  ? c.products_used[0].name
+                  : c.summary) ||
+                "Engineered Geosynthetic System";
+
+              return (
+                <article
+                  key={c.id}
+                  className="group rounded overflow-hidden border border-border bg-card lg:col-span-1 flex flex-col transition-all duration-300 hover:border-primary/50 hover:shadow-md"
+                >
+                  <Link
+                    to="/projects/$slug"
+                    params={{ slug: c.slug }}
+                    className="block relative aspect-[4/3] overflow-hidden bg-muted"
+                  >
+                    <img
+                      src={
+                        c.hero_image_url ||
+                        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+                      }
+                      alt={c.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded shadow-sm">
+                      {tag}
+                    </span>
+                  </Link>
+                  <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link
+                        to="/projects/$slug"
+                        params={{ slug: c.slug }}
+                        className="font-display text-base font-bold uppercase hover:text-primary transition-colors line-clamp-2 block"
+                      >
+                        {c.title}
+                      </Link>
+                      {locationText && (
+                        <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+                          <span>📍</span> {locationText}
+                        </div>
+                      )}
+                      {systemDetails && (
+                        <div className="mt-1 text-xs text-muted-foreground flex items-start gap-1 line-clamp-2">
+                          <span>⚙</span> <span>{systemDetails}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <Link
+                        to="/projects/$slug"
+                        params={{ slug: c.slug }}
+                        className="text-xs font-semibold text-primary inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                      >
+                        View Case Study <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
             <div className="rounded bg-surface-dark text-surface-dark-foreground p-6 lg:col-span-1 flex flex-col">
               <h3 className="font-display text-lg font-bold uppercase">
                 {projects.catalogueBoxHeading}

@@ -5,6 +5,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { GeoGrid } from "@/components/site/shapes";
 
 export function IndustryPage({ data }: { data: any }) {
   const loaderData = data;
@@ -39,7 +40,7 @@ export function IndustryPage({ data }: { data: any }) {
   return (
     <>
       <section
-        className="bg-surface-dark text-surface-dark-foreground"
+        className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.4)), url(${heroImage})`,
           backgroundSize: "cover",
@@ -55,7 +56,8 @@ export function IndustryPage({ data }: { data: any }) {
         </div>
       </section>
 
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8">
             <h2 className="font-display text-2xl font-bold uppercase mb-6">

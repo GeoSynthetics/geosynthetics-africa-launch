@@ -48,9 +48,8 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        // Derive base URL from the incoming request so it works on any host
-        const url = new URL(request.url);
-        const baseUrl = `${url.protocol}//${url.host}`;
+        // Always use the canonical production base URL for sitemap entries
+        const baseUrl = "https://geosynthetics.co.za";
         const now = today();
 
         const urls: string[] = [];
@@ -155,6 +154,32 @@ export const Route = createFileRoute("/sitemap.xml")({
           }
         } catch {
           // Silently skip if Supabase is unreachable — static routes are still included
+        }
+
+        /* ── 5b. Published blog posts from Supabase ──────────── */
+        try {
+          const { data: blogPosts } = await supabase
+            .from("blog_posts")
+            .select("slug, published_at")
+            .eq("status", "published")
+            .order("published_at", { ascending: false });
+
+          if (blogPosts) {
+            for (const post of blogPosts) {
+              const lastmod = post.published_at
+                ? new Date(post.published_at).toISOString().split("T")[0]
+                : now;
+              urls.push(
+                urlEntry(`${baseUrl}/blog/${post.slug}`, {
+                  lastmod,
+                  changefreq: "monthly",
+                  priority: 0.6,
+                }),
+              );
+            }
+          }
+        } catch {
+          // Silently skip if Supabase is unreachable
         }
 
         /* ── 6. Custom SEO slug pages ─────────────────────────── */

@@ -150,8 +150,15 @@ export function ResourcesAdminPage() {
       toast.success(editing.id ? "Resource updated" : "Resource created");
       setOpen(false);
       void load();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Save failed");
+    } catch (err: any) {
+      const msg = err?.message || (err instanceof Error ? err.message : "Save failed");
+      if (typeof msg === "string" && msg.includes("invalid input value for enum resource_type")) {
+        toast.error(
+          "Database enum needs to be updated. Please run the SQL migration: ALTER TYPE public.resource_type ADD VALUE IF NOT EXISTS 'manual';",
+        );
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSaving(false);
     }
@@ -357,8 +364,8 @@ export function ResourcesAdminPage() {
               filtered.map((r) => (
                 <TableRow key={r.id}>
                   <TableCell className="font-semibold">{r.title}</TableCell>
-                  <TableCell className="text-xs uppercase tracking-wide text-muted-foreground">
-                    {r.type}
+                  <TableCell className="text-xs font-medium text-muted-foreground">
+                    {TYPE_LABELS[r.type] || r.type}
                   </TableCell>
                   <TableCell className="text-sm">
                     {r.file_path ? (

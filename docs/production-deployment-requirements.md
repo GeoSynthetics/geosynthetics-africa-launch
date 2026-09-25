@@ -36,13 +36,13 @@ A separate Supabase instance is required for production to isolate client data, 
 
 ---
 
-### 3. Email Infrastructure (Resend)
+### 3. Email Infrastructure (Brevo / Resend)
 
 Used to send quote request confirmations and notify sales when new BOQs are uploaded:
 
-- [ ] **Resend Account**: Sign up at [Resend](https://resend.com) using the primary business or admin email.
-- [ ] **Domain Verification**: Add the domain in Resend and add the generated DNS records (DKIM/SPF/MX) to the domain registrar to verify sending authority.
-- [ ] **API Key**: Generate a production API key (formatted as `re_...`).
+- [ ] **Email Provider Account**: Sign up at [Brevo](https://www.brevo.com) (formerly Sendinblue) or [Resend](https://resend.com).
+- [ ] **Sender Authentication / Domain Verification**: Add domain or single sender email address in Brevo/Resend.
+- [ ] **API Key / SMTP Credentials**: Generate an API key (Brevo API v3 key `xkeysib-...` or Resend `re_...`).
 - [ ] **Receiving Email**: Confirm the notification inbox (e.g., `sales@geosynthetics.co.za`).
 
 ---

@@ -47,6 +47,31 @@ export interface ProjectCard {
   systemDetails: string; // e.g. "HDPE Lining System"
 }
 
+export interface HeroSlide {
+  image: string;
+  mediaType?: "image" | "video";
+  titlePrefix?: string;
+  titleAccent?: string;
+  titleSuffix?: string;
+  subtitle?: string;
+  description?: string;
+}
+
+export function isVideoUrl(url: string, explicitType?: "image" | "video"): boolean {
+  if (explicitType === "video") return true;
+  if (explicitType === "image") return false;
+  if (!url) return false;
+  const cleanUrl = url.toLowerCase().split("?")[0].split("#")[0];
+  return (
+    cleanUrl.endsWith(".mp4") ||
+    cleanUrl.endsWith(".webm") ||
+    cleanUrl.endsWith(".ogv") ||
+    cleanUrl.endsWith(".mov") ||
+    cleanUrl.includes("video/upload") ||
+    cleanUrl.includes("/video/")
+  );
+}
+
 export interface HeroSection {
   headlinePrefix: string; // e.g. "Africa's Integrated"
   headlineAccent: string; // e.g. "Geosynthetics"
@@ -54,6 +79,8 @@ export interface HeroSection {
   tagline: string; // e.g. "Designed. Supplied. Installed. Tested. Certified."
   subtext: string; // e.g. "Complete engineered systems for containment..."
   bgImage: string; // image URL or blank
+  sliderImages?: (string | HeroSlide)[]; // multiple hero background images/configs for carousel
+  autoPlayInterval?: number; // Configurable slide auto-play interval duration in ms
   btn1Text: string; // Primary button text
   btn1Url: string; // Primary button url
   btn2Text: string; // Secondary button text
@@ -125,12 +152,12 @@ export interface HomepageContent {
     mapAsset: string; // image URL
   };
 
-  // § 8 – Case Studies / Projects
+  // § 8 – Case Studies / Projects Showcase (Dynamic from case_studies)
   projects: {
     sectionTitle: string;
     ctaText: string;
     ctaUrl: string;
-    cards: ProjectCard[];
+    featuredProjectIds?: string[];
     catalogueBoxHeading: string;
     catalogueBoxContent: string;
     catalogueSearchPlaceholder: string;
@@ -159,6 +186,13 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     subtext:
       "HDPE liners, geotextiles, geogrids, GCLs, geocells and gabions supplied and installed across Africa — for TSFs, dams, landfills and roads. One contract from mill certificate to final sign-off, by our own certified crews. 15+ million m² across 30+ countries.",
     bgImage: "",
+    sliderImages: [
+      "",
+      "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1600&q=80",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=80",
+      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80",
+    ],
+    autoPlayInterval: 5000,
     btn1Text: "Upload Project BOQ!",
     btn1Url: "/contacts",
     btn2Text: "Speak to an Engineer",
@@ -382,36 +416,11 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     sectionTitle: "PROVEN ON PROJECTS ACROSS AFRICA",
     ctaText: "VIEW ALL CASE STUDIES",
     ctaUrl: "/projects",
-    cards: [
-      {
-        id: "brandvlei",
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
-        tag: "RESERVOIR LINING",
-        title: "BRANDVLEI RESERVOIR LINING",
-        location: "South Africa",
-        systemDetails: "HDPE Lining System",
-      },
-      {
-        id: "tsf",
-        image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&q=80",
-        tag: "TSF LINING SYSTEM",
-        title: "TSF LINING SYSTEM",
-        location: "Ghana",
-        systemDetails: "HDPE + Geotextile Protection",
-      },
-      {
-        id: "floating",
-        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-        tag: "FLOATING COVER",
-        title: "FLOATING COVER SYSTEM",
-        location: "Zimbabwe",
-        systemDetails: "15,000 m² Installed",
-      },
-    ],
-    catalogueBoxHeading: "EXPLORE OUR CATALOGUE",
+    featuredProjectIds: [],
+    catalogueBoxHeading: "SPEC IT FROM THE CATALOGUE",
     catalogueBoxContent:
-      "Search, filter and explore over 200 engineered materials for every application.",
-    catalogueSearchPlaceholder: "Search products, applications, standards…",
+      "Search 200+ engineered materials by product, application or standard. Datasheets and GRI/ASTM specifications on every item.",
+    catalogueSearchPlaceholder: "HDPE 1.5mm, heap leach pad, GRI-GM13…",
     catalogueCtaText: "VIEW FULL CATALOGUE →",
     catalogueCtaUrl: "/catalogue",
   },

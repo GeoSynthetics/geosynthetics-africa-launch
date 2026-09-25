@@ -29,7 +29,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   {
     slug: "installation-guides",
     title: "Installation Guides",
-    desc: "Step-by-step installation procedures.",
+    desc: "Step-by-step installation procedures and technical manuals.",
     icon: BookOpen,
     types: ["manual"],
   },

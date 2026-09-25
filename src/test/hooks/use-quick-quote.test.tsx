@@ -60,6 +60,23 @@ describe("useQuickQuote hook & Provider", () => {
     expect(result.current.productId).toBeNull();
   });
 
+  it("should ignore non-string arguments such as SyntheticEvent objects", () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <QuickQuoteProvider>{children}</QuickQuoteProvider>
+    );
+
+    const { result } = renderHook(() => useQuickQuote(), { wrapper });
+
+    act(() => {
+      // Simulate click event being passed directly as parameter
+      (result.current.open as any)({ _reactName: "onClick", type: "click" });
+    });
+
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.productName).toBeNull();
+    expect(result.current.productId).toBeNull();
+  });
+
   it("should reset state correctly when close is called", () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <QuickQuoteProvider>{children}</QuickQuoteProvider>

@@ -1,10 +1,11 @@
-import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Link, Outlet, Navigate } from "@tanstack/react-router";
 import { ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AdminThemeProvider } from "@/components/admin/AdminThemeProvider";
+import { AdminFloatingThemeToggle } from "@/components/admin/AdminFloatingThemeToggle";
 
 function AdminLayoutSkeleton() {
   return (
@@ -85,20 +86,14 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   const { loading, rolesLoaded, isAuthenticated, isStaff } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (!loading && rolesLoaded && !isAuthenticated) {
-      navigate({ to: "/login", search: { redirect: location.href } });
-    }
-  }, [loading, rolesLoaded, isAuthenticated, navigate, location.href]);
 
   if (loading || !rolesLoaded) {
     return <AdminLayoutSkeleton />;
   }
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" search={{ redirect: "/admin" }} replace />;
+  }
 
   if (!isStaff) {
     return (
@@ -116,15 +111,18 @@ function AdminLayout() {
   }
 
   return (
-    <section className="bg-surface min-h-[70vh]">
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 py-6 lg:py-10">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
-          <AdminNav />
-          <div className="flex-1 w-full min-w-0 bg-card border border-border/50 rounded-2xl p-4 md:p-6 lg:p-8 min-h-[600px] shadow-sm">
-            <Outlet />
+    <AdminThemeProvider>
+      <section className="bg-surface min-h-[70vh] relative">
+        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 py-6 lg:py-10">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
+            <AdminNav />
+            <div className="flex-1 w-full min-w-0 bg-card border border-border/50 rounded-2xl p-4 md:p-6 lg:p-8 min-h-[600px] shadow-sm">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+        <AdminFloatingThemeToggle />
+      </section>
+    </AdminThemeProvider>
   );
 }

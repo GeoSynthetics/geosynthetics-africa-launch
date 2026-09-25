@@ -543,6 +543,25 @@ export function ContentEditorPanel({
               </div>
 
               <div className="border-t border-border pt-6">
+                <PairsEditor
+                  label="Common Applications and Engineering Use Cases"
+                  items={(page.applications ?? []) as any[]}
+                  fields={[
+                    { key: "label", label: "Application Name", placeholder: "e.g. Mining Systems" },
+                    { key: "slug", label: "Application Slug / URL", placeholder: "e.g. mining-systems" },
+                    {
+                      key: "description",
+                      label: "Short Description",
+                      placeholder: "How this product is used in this application…",
+                      multiline: true,
+                    },
+                  ]}
+                  onChange={(v) => setPage({ applications: v as any })}
+                  newItem={{ label: "", slug: "", description: "" } as any}
+                />
+              </div>
+
+              <div className="border-t border-border pt-6">
                 <SectionsEditor
                   sections={page.sections || []}
                   onChange={(v) => setPage({ sections: v })}

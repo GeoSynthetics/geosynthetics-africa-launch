@@ -4,25 +4,12 @@ import { Route } from "@/routes/projects.index";
 import { MapPin, ChevronRight, Grid, List, ArrowUpDown, ArrowRight } from "lucide-react";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
+import { DrainageMesh, HexCell } from "@/components/site/shapes";
 
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
-// GSA African reach country data (as perJames' Continent Band mockup)
-const AFRICAN_COUNTRIES = [
-  { flag: "🇿🇦", name: "South Africa", count: 218 },
-  { flag: "🇨🇩", name: "DRC", count: 34 },
-  { flag: "🇲🇱", name: "Mali", count: 18 },
-  { flag: "🇿🇲", name: "Zambia", count: 14 },
-  { flag: "🇬🇭", name: "Ghana", count: 11 },
-  { flag: "🇰🇪", name: "Kenya", count: 9 },
-  { flag: "🇹🇿", name: "Tanzania", count: 8 },
-  { flag: "🇿🇼", name: "Zimbabwe", count: 7 },
-  { flag: "🇲🇿", name: "Mozambique", count: 6 },
-  { flag: "🇳🇦", name: "Namibia", count: 6 },
-  { flag: "🇦🇴", name: "Angola", count: 5 },
-  { flag: "🇬🇬", name: "Guinea", count: 4 },
-];
+// Handled dynamically via Projects Landing Page config
 
 interface ProductUsed {
   name: string;
@@ -56,6 +43,47 @@ export function ProjectsPage() {
     landing.description ||
     "Every project listed below was designed, supplied, installed, tested, or certified by Geosynthetics Africa. Filter by industry, application, product, or country to find reference designs that match your scope — or upload your tender pack for comparables.";
   const heroImage = landing.heroImage || "";
+
+  const stats = landing.stats || [
+    { id: "stat-1", value: "340+", label: "Projects delivered" },
+    { id: "stat-2", value: "17", label: "African countries" },
+    { id: "stat-3", value: "28M m²", label: "Geosynthetics installed" },
+    { id: "stat-4", value: "20+", label: "Years experience" },
+  ];
+
+  const countries = landing.countries || [
+    { id: "country-1", flag: "🇿🇦", name: "South Africa", count: 218 },
+    { id: "country-2", flag: "🇨🇩", name: "DRC", count: 34 },
+    { id: "country-3", flag: "🇲🇱", name: "Mali", count: 18 },
+    { id: "country-4", flag: "🇿🇲", name: "Zambia", count: 14 },
+    { id: "country-5", flag: "🇬🇭", name: "Ghana", count: 11 },
+    { id: "country-6", flag: "🇰🇪", name: "Kenya", count: 9 },
+    { id: "country-7", flag: "🇹🇿", name: "Tanzania", count: 8 },
+    { id: "country-8", flag: "🇿🇼", name: "Zimbabwe", count: 7 },
+    { id: "country-9", flag: "🇲🇿", name: "Mozambique", count: 6 },
+    { id: "country-10", flag: "🇳🇦", name: "Namibia", count: 6 },
+    { id: "country-11", flag: "🇦🇴", name: "Angola", count: 5 },
+    { id: "country-12", flag: "🇬🇬", name: "Guinea", count: 4 },
+  ];
+
+  // Helper utility to style non-digit accents in red
+  const renderStatValue = (val: string) => {
+    const parts = val.split(/(\+|M)/g);
+    return (
+      <>
+        {parts.map((p, i) => {
+          if (p === "+" || p === "M") {
+            return (
+              <span key={i} className="text-primary">
+                {p}
+              </span>
+            );
+          }
+          return p;
+        })}
+      </>
+    );
+  };
 
   // --- Display States ---
   const [sortOption, setSortOption] = useState("recent"); // 'recent', 'scale', 'featured', 'country'
@@ -93,7 +121,7 @@ export function ProjectsPage() {
       {/* ============ HERO SECTION ============ */}
       <section
         className={cn(
-          "relative text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
+          "relative isolate text-white pt-10 pb-12 overflow-hidden border-b border-[#2A2A2A]",
           heroImage
             ? "bg-surface-dark"
             : "bg-gradient-to-br from-[#0B0B0C] via-[#161515] to-[#121111]",
@@ -108,6 +136,7 @@ export function ProjectsPage() {
             : undefined
         }
       >
+        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         {/* Decorative elements */}
         {!heroImage && (
           <>
@@ -131,38 +160,25 @@ export function ProjectsPage() {
 
           {/* Stats Ribbon */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border-t border-b border-white/10 mt-6 bg-black/10 backdrop-blur-sm">
-            <div className="p-6 border-r border-b md:border-b-0 border-white/5 flex flex-col justify-center">
-              <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
-                340<span className="text-primary">+</span>
+            {stats.map((s: { id: string; value: string; label: string }, idx: number) => (
+              <div
+                key={s.id || idx}
+                className={cn(
+                  "p-6 flex flex-col justify-center border-white/5",
+                  idx === 0 && "border-r border-b md:border-b-0",
+                  idx === 1 && "border-r border-b md:border-b-0",
+                  idx === 2 && "border-r",
+                  idx === 3 && "",
+                )}
+              >
+                <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
+                  {renderStatValue(s.value)}
+                </div>
+                <div className="text-[9px] font-bold uppercase tracking-wider text-white/60">
+                  {s.label}
+                </div>
               </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider text-white/60">
-                Projects delivered
-              </div>
-            </div>
-            <div className="p-6 border-r border-b md:border-b-0 border-white/5 flex flex-col justify-center">
-              <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
-                17
-              </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider text-white/60">
-                African countries
-              </div>
-            </div>
-            <div className="p-6 border-r border-white/5 flex flex-col justify-center">
-              <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
-                28<span className="text-primary">M</span> m²
-              </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider text-white/60">
-                Geosynthetics installed
-              </div>
-            </div>
-            <div className="p-6 flex flex-col justify-center">
-              <div className="font-display font-black text-3xl md:text-4xl text-white leading-none mb-1">
-                20<span className="text-primary">+</span>
-              </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider text-white/60">
-                Years experience
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -173,7 +189,6 @@ export function ProjectsPage() {
           Showing{" "}
           <span className="text-primary font-black">{filteredCaseStudies.length} projects</span>
         </div>
-
         <div className="flex flex-wrap items-center gap-4 shrink-0">
           {/* View Mode Switcher */}
           <div className="flex border border-border rounded overflow-hidden h-8">
@@ -216,7 +231,8 @@ export function ProjectsPage() {
       </div>
 
       {/* ============ PROJECTS GRID ============ */}
-      <section className="bg-background">
+      <section className="relative isolate overflow-hidden bg-background">
+        <HexCell count={14} opacity={0.05} color="var(--primary)" spread="wide" />
         <div className="container-page pb-20">
           {viewMode === "list" ? (
             <div className="space-y-3">
@@ -397,22 +413,24 @@ export function ProjectsPage() {
 
           <div className="lg:col-span-8">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-[1px] bg-white/10 p-[1px] rounded border border-white/5 overflow-hidden">
-              {AFRICAN_COUNTRIES.map((c, i) => (
-                <div
-                  key={i}
-                  className="bg-foreground p-4 hover:bg-white/5 transition flex flex-col justify-between group h-24"
-                >
-                  <div className="text-2xl">{c.flag}</div>
-                  <div className="mt-2">
-                    <div className="text-[10px] font-bold uppercase tracking-wide text-white group-hover:text-primary transition">
-                      {c.name}
-                    </div>
-                    <div className="text-[9px] text-primary font-extrabold mt-0.5">
-                      {c.count} projects
+              {countries.map(
+                (c: { id: string; flag: string; name: string; count: number }, i: number) => (
+                  <div
+                    key={c.id || i}
+                    className="bg-foreground p-4 hover:bg-white/5 transition flex flex-col justify-between group h-24"
+                  >
+                    <div className="text-2xl">{c.flag}</div>
+                    <div className="mt-2">
+                      <div className="text-[10px] font-bold uppercase tracking-wide text-white group-hover:text-primary transition">
+                        {c.name}
+                      </div>
+                      <div className="text-[9px] text-primary font-extrabold mt-0.5">
+                        {c.count} projects
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </div>

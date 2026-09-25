@@ -7,6 +7,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { DrainageMesh } from "@/components/site/shapes";
 
 // Helper to render Lucide icons dynamically by string name
 function IconRenderer({ name, className }: { name: string; className?: string }) {
@@ -65,7 +66,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           }),
         );
 
-  const assistancePhone = templateData?.assistancePhone || "+27 11 794 0974";
+  const assistancePhone = templateData?.assistancePhone || "+27 71 093 9964";
   const assistanceEmail = templateData?.assistanceEmail || "sales@geosynthetics.co.za";
 
   const componentsTitle = templateData?.componentsTitle || "Typical System Components";
@@ -143,13 +144,14 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
     <div className="bg-background relative">
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}
       <section
-        className="bg-surface-dark text-white relative"
+        className="relative isolate overflow-hidden bg-surface-dark text-white"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.9), rgba(10,10,12,0.55)), url(${heroImage})`,
+          backgroundImage: `linear-gradient(to right, rgba(15,15,18,0.9), rgba(15,15,18,0.55)), url(${heroImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
+        <DrainageMesh opacity={0.12} color="#ffffff" lineSpacing={40} />
         <div className="container-page py-16 md:py-24 relative z-10">
           <Breadcrumbs
             items={[
