@@ -92,6 +92,24 @@ const CATEGORY_SIBLINGS: Record<string, SiblingEntry[]> = {
     { name: "Silt Fences", slug: "silt-fences" },
     { name: "Gabions & Mattresses", slug: "gabions-and-mattresses" },
   ],
+  "damp-proofing": [
+    { name: "DPM Sheeting", slug: "dpm-sheeting" },
+    { name: "Under-Slab Membranes", slug: "under-slab-membranes" },
+    { name: "Damp Proof Course", slug: "damp-proof-course" },
+    { name: "Self-Adhesive Bitumen", slug: "self-adhesive-bitumen" },
+  ],
+  "dewatering-systems": [
+    { name: "Geotextile Dewatering Tubes", slug: "geotextile-dewatering-tubes" },
+    { name: "Sludge Dewatering Bags", slug: "sludge-dewatering-bags" },
+    { name: "High-Flow Dewatering Bags", slug: "high-flow-dewatering-bags" },
+    { name: "Sediment Filter Bags", slug: "sediment-filter-bags" },
+  ],
+  "gabion-baskets": [
+    { name: "Woven Mesh Gabions", slug: "woven-mesh-gabions" },
+    { name: "Welded Mesh Gabions", slug: "welded-mesh-gabions" },
+    { name: "Reno Mattresses", slug: "reno-mattresses" },
+    { name: "Rockfall Netting", slug: "rockfall-netting" },
+  ],
   accessories: [
     { name: "Welding Rods", slug: "welding-rods" },
     { name: "Bentonite Paste", slug: "bentonite-paste" },

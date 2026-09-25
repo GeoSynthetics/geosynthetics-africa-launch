@@ -7,6 +7,23 @@ import { buildMegaMenuFromHierarchy, getDefaultSections } from "@/lib/hierarchy-
 let _cache: MegaMenuConfig[] | null = null;
 let _fetchPromise: Promise<MegaMenuConfig[]> | null = null;
 
+function getDynamicCategoryIcon(slug: string): string {
+  const iconMap: Record<string, string> = {
+    geomembranes: "Layers",
+    geotextiles: "Grid3x3",
+    geogrids: "Grid2x2",
+    geocells: "Hexagon",
+    gcls: "Sheet",
+    "drainage-composites": "Waves",
+    "erosion-control": "Mountain",
+    "damp-proofing": "ShieldCheck",
+    "dewatering-systems": "Droplets",
+    "gabion-baskets": "Boxes",
+    accessories: "Wrench",
+  };
+  return iconMap[slug] || "Layers";
+}
+
 export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
   if (_cache) return Promise.resolve(_cache);
   if (_fetchPromise) return _fetchPromise;
@@ -21,10 +38,13 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
     ];
 
     try {
-      const { data } = await supabase
-        .from("site_config")
-        .select("key, value")
-        .in("key", keysToFetch);
+      const [siteConfigRes, dbCategoriesRes] = await Promise.all([
+        supabase.from("site_config").select("key, value").in("key", keysToFetch),
+        supabase.from("product_categories").select("id, name, slug").order("name"),
+      ]);
+
+      const data = siteConfigRes.data;
+      const dbCategories = dbCategoriesRes.data;
 
       if (!data || data.length === 0) {
         _cache = megaMenus;
@@ -35,10 +55,49 @@ export function fetchDynamicMenus(): Promise<MegaMenuConfig[]> {
       const sections = SECTION_KEYS.map((key) => {
         const row = data.find((d) => d.key === `hierarchy_${key}`);
         const dbVal = row?.value as any;
-        if (dbVal && Array.isArray(dbVal.items)) {
-          return dbVal;
+        let section =
+          dbVal && Array.isArray(dbVal.items)
+            ? { ...dbVal }
+            : defaults.find((d: any) => d.key === key);
+
+        // Dynamically reconcile products section with live categories from product_categories table
+        if (
+          key === "products" &&
+          section &&
+          Array.isArray(section.items) &&
+          dbCategories &&
+          dbCategories.length > 0
+        ) {
+          const items = [...section.items];
+          for (const dbCat of dbCategories) {
+            if (!dbCat.slug) continue;
+            const existingIndex = items.findIndex(
+              (item: any) =>
+                item.slug === dbCat.slug ||
+                item.id === dbCat.slug ||
+                item.params?.category === dbCat.slug,
+            );
+            if (existingIndex >= 0) {
+              items[existingIndex] = {
+                ...items[existingIndex],
+                label: dbCat.name,
+              };
+            } else {
+              items.push({
+                id: dbCat.slug,
+                slug: dbCat.slug,
+                label: dbCat.name,
+                icon: getDynamicCategoryIcon(dbCat.slug),
+                to: "/products/$category",
+                params: { category: dbCat.slug },
+                children: [],
+              });
+            }
+          }
+          section = { ...section, items };
         }
-        return defaults.find((d: any) => d.key === key);
+
+        return section;
       }).filter(Boolean);
 
       if (sections.length === 0) {

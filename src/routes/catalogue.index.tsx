@@ -107,6 +107,7 @@ interface CatalogueProduct {
 interface FilterOption {
   id: string;
   name: string;
+  slug?: string | null;
 }
 
 function formatZAR(n: number) {
@@ -149,7 +150,7 @@ function CataloguePage() {
   useEffect(() => {
     void (async () => {
       const [c, m] = await Promise.all([
-        supabase.from("product_categories").select("id, name").order("name"),
+        supabase.from("product_categories").select("id, name, slug").order("name"),
         supabase.from("manufacturers").select("id, name").order("name"),
       ]);
       setCategories((c.data ?? []) as FilterOption[]);
@@ -248,7 +249,13 @@ function CataloguePage() {
           `name.ilike.%${escaped}%,short_description.ilike.%${escaped}%,sku.ilike.%${escaped}%`,
         );
       }
-      if (selectedCats.length > 0) query = query.in("category_id", selectedCats);
+      if (selectedCats.length > 0) {
+        const resolvedCats = selectedCats.map((catKey) => {
+          const match = categories.find((c) => c.id === catKey || c.slug === catKey);
+          return match ? match.id : catKey;
+        });
+        query = query.in("category_id", resolvedCats);
+      }
       if (selectedMans.length > 0) query = query.in("manufacturer_id", selectedMans);
       if (instock) query = query.gt("stock_quantity", 0);
       if (onsale && isAuthenticated) query = query.not("sale_price", "is", null);
@@ -270,7 +277,7 @@ function CataloguePage() {
       setLoading(false);
       setInitialLoad(false);
     },
-    [q, selectedCats, selectedMans, sort, instock, onsale, isAuthenticated],
+    [q, selectedCats, selectedMans, sort, instock, onsale, isAuthenticated, categories],
   );
 
   // Reset and reload when filters/sort change
@@ -467,7 +474,14 @@ function CataloguePage() {
                   <AccordionContent className="pt-2">
                     <FilterGroup
                       options={categories}
-                      selected={new Set(selectedCats)}
+                      selected={
+                        new Set(
+                          selectedCats.flatMap((catKey) => {
+                            const match = categories.find((c) => c.id === catKey || c.slug === catKey);
+                            return match ? [match.id, catKey] : [catKey];
+                          }),
+                        )
+                      }
                       onToggle={toggleCat}
                       placeholder="Search categories..."
                     />
@@ -519,18 +533,19 @@ function CataloguePage() {
                   </Badge>
                 )}
 
-                {selectedCats.map((catId) => {
-                  const catName = categories.find((c) => c.id === catId)?.name || "Category";
+                {selectedCats.map((catKey) => {
+                  const match = categories.find((c) => c.id === catKey || c.slug === catKey);
+                  const catName = match?.name || "Category";
                   return (
                     <Badge
-                      key={catId}
+                      key={catKey}
                       variant="secondary"
                       className="gap-1 py-1 pl-2.5 pr-1.5 text-xs font-normal bg-card hover:bg-card border border-border"
                     >
                       {catName}
                       <button
                         type="button"
-                        onClick={() => toggleCat(catId)}
+                        onClick={() => toggleCat(catKey)}
                         className="ml-1 rounded-full p-0.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <X className="h-3 w-3" />
