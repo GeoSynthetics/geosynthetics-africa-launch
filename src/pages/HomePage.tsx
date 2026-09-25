@@ -17,6 +17,8 @@ import { type HomepageContent, DEFAULT_HOMEPAGE_CONTENT } from "@/types/homepage
 import { Route } from "@/routes/index";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 
+import { HeroProjectForm } from "@/components/site/HeroProjectForm";
+
 export function HomePage() {
   const loaderData = Route.useLoaderData();
   const { open } = useQuickQuote();
@@ -41,60 +43,68 @@ export function HomePage() {
     <>
       {/* Hero */}
       <section
-        className="relative bg-surface-dark text-surface-dark-foreground"
+        className="relative bg-surface-dark text-surface-dark-foreground overflow-hidden"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.85) 0%, rgba(8,8,10,0.55) 50%, rgba(8,8,10,0.2) 100%), url(${hero.bgImage || heroInstallation})`,
+          backgroundImage: `linear-gradient(to right, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.76) 45%, rgba(8,8,10,0.45) 100%), url(${hero.bgImage || heroInstallation})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="container-page py-20 md:py-32">
-          <div className="max-w-3xl">
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight">
-              {hero.headlinePrefix}{" "}
-              <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
-              {hero.headlineSuffix}
-            </h1>
-            <p className="mt-6 text-lg md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90">
-              {hero.tagline}
-            </p>
-            <p className="mt-4 text-sm md:text-base text-surface-dark-foreground/75 max-w-xl">
-              {hero.subtext}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {hero.btn1Text && (
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0"
-                  onClick={() => open()}
-                >
-                  <Upload className="mr-2 h-4 w-4" />
-                  {hero.btn1Text}
-                </Button>
-              )}
-              {hero.btn2Text && (
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
-                </Button>
-              )}
-              {hero.btn3Text && (
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
-                >
-                  <Link to={hero.btn3Url as any}>
-                    <Phone className="mr-2 h-4 w-4" />
-                    {hero.btn3Text}
-                  </Link>
-                </Button>
-              )}
+        <div className="container-page py-16 md:py-20 lg:py-24">
+          <div className="grid lg:grid-cols-12 gap-10 xl:gap-14 items-center">
+            {/* Left: Headlines, Pan-African proposition, and action buttons */}
+            <div className="lg:col-span-7 max-w-2xl">
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[1.05] tracking-tight">
+                {hero.headlinePrefix}{" "}
+                <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
+                {hero.headlineSuffix}
+              </h1>
+              <p className="mt-5 text-base md:text-xl font-display uppercase tracking-wide text-surface-dark-foreground/90">
+                {hero.tagline}
+              </p>
+              <p className="mt-4 text-sm md:text-base text-surface-dark-foreground/75 leading-relaxed">
+                {hero.subtext}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {hero.btn1Text && (
+                  <Button
+                    size="lg"
+                    className="bg-primary hover:bg-primary-hover text-primary-foreground uppercase font-bold tracking-wide cursor-pointer border-0"
+                    onClick={() => open()}
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {hero.btn1Text}
+                  </Button>
+                )}
+                {hero.btn2Text && (
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+                  >
+                    <Link to={hero.btn2Url as any}>{hero.btn2Text}</Link>
+                  </Button>
+                )}
+                {hero.btn3Text && (
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="bg-transparent border-surface-dark-foreground/40 text-surface-dark-foreground hover:bg-surface-dark-foreground hover:text-surface-dark uppercase font-bold tracking-wide"
+                  >
+                    <Link to={hero.btn3Url as any}>
+                      <Phone className="mr-2 h-4 w-4" />
+                      {hero.btn3Text}
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Right: New Start Your Project Form (replacing South Africa-localized card) */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end w-full">
+              <HeroProjectForm regions={loaderData?.regionalCoverage} />
             </div>
           </div>
         </div>

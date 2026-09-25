@@ -4,15 +4,17 @@ import { HomePage } from "@/pages/HomePage";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
-    const [seoRes, hpRes] = await Promise.all([
+    const [seoRes, hpRes, regionalRes] = await Promise.all([
       supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle(),
       supabase.from("site_config").select("value").eq("key", "homepage_content").maybeSingle(),
+      supabase.from("site_config").select("value").eq("key", "regional_coverage").maybeSingle(),
     ]);
 
     const seoMap = (seoRes.data?.value as Record<string, any>) || {};
     return {
       seo: seoMap["/"] || null,
       hp: hpRes.data?.value || null,
+      regionalCoverage: (regionalRes.data?.value as any[]) || null,
     };
   },
   head: ({ loaderData }) => {

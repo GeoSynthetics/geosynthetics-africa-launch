@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-09-25 15:52 (UTC+1)
+
+- **Feature**: Pan-African Hero Project Form & Dynamic Regional Lead Routing (West Africa / SA)
+- **Problem**: The hero section featured a South Africa-localized quick contact card (+27 phone, sales@geosynthetics.co.za, Randburg HQ address) which conflicted with the company's Pan-African positioning, lacked an interactive project submission form in the hero, and had no automated routing mechanism to forward West African inquiries to regional director Mamadou Coulibaly in Côte d'Ivoire vs South African inquiries to the Johannesburg operations desk.
+- **Solution**: Replaced the localized hero card with a modern glassmorphic `HeroProjectForm` ("START YOUR PROJECT / ALL OF AFRICA") that dynamically sources regions from the database/defaults, supports BOQ and technical drawing file uploads (up to 20MB) to Supabase Storage, logs submissions into `quote_requests`, dispatches transactional notifications via Brevo, and automatically routes South Africa requests to `sales@geosynthetics.co.za` while forwarding West African requests (Côte d'Ivoire, Ghana, Mali, Burkina Faso, Senegal, Guinea) to Mamadou Coulibaly (`civ@geosynthetics.co.za`). Also enhanced the Quotes Admin interface to highlight regional routing flags and provide direct email actions.
+
 ## 2026-09-23 16:43 (UTC+1)
 
 - **Feature**: Product Categories Unification Across Catalogue, Products & Navigation

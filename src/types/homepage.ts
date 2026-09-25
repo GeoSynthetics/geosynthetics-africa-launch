@@ -152,19 +152,19 @@ export interface HomepageContent {
 
 export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
   hero: {
-    headlinePrefix: "Africa's Integrated",
-    headlineAccent: "Geosynthetics",
-    headlineSuffix: "Execution Platform",
-    tagline: "Designed. Supplied. Installed. Tested. Certified.",
+    headlinePrefix: "Geosynthetics",
+    headlineAccent: "Supply,",
+    headlineSuffix: "Installation & QA/QC Across Africa",
+    tagline: "One Contract. One Crew. One Signature.",
     subtext:
-      "Complete engineered systems for containment, drainage, reinforcement and protection — delivered across Africa with global best-in-class materials and certified execution.",
+      "HDPE liners, geotextiles, geogrids, GCLs, geocells and gabions supplied and installed across Africa — for TSFs, dams, landfills and roads. One contract from mill certificate to final sign-off, by our own certified crews. 15+ million m² across 30+ countries.",
     bgImage: "",
-    btn1Text: "Upload Project BOQ",
+    btn1Text: "Upload Project BOQ!",
     btn1Url: "/contacts",
-    btn2Text: "Request Material Supply",
+    btn2Text: "Speak to an Engineer",
     btn2Url: "/contacts",
-    btn3Text: "Speak to Technical Team",
-    btn3Url: "/contacts",
+    btn3Text: "",
+    btn3Url: "",
   },
   gsaDifference: {
     subtitle: "The GSA Difference",
