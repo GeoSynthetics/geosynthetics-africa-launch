@@ -104,14 +104,54 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
     setSearchInput(q);
   }, [q]);
 
-  // Load filter options once (only product categories)
+  // Load filter options once (matched to Products Menu from site_config)
   useEffect(() => {
     void (async () => {
-      const { data } = await supabase
-        .from("product_categories")
-        .select("id, name, slug")
-        .order("name");
-      setCategories((data ?? []) as FilterOption[]);
+      const [configRes, dbCatsRes] = await Promise.all([
+        supabase.from("site_config").select("value").eq("key", "hierarchy_products").maybeSingle(),
+        supabase.from("product_categories").select("id, name, slug").order("name"),
+      ]);
+
+      const dbCategories = (dbCatsRes.data ?? []) as FilterOption[];
+      const menuItems = (configRes.data?.value?.items as Array<{
+        id: string;
+        label: string;
+        slug?: string;
+      }>) ?? [];
+
+      if (menuItems.length > 0) {
+        // Map menu items so Catalogue filter options match the Products Menu exactly
+        const mappedCategories: FilterOption[] = menuItems.map((item) => {
+          const itemSlug = (item.slug || item.id || "").toLowerCase();
+          const itemId = (item.id || "").toLowerCase();
+
+          // Find matching DB category by slug, id, or normalized name
+          const matchedDbCat = dbCategories.find((c) => {
+            const cSlug = c.slug.toLowerCase();
+            return (
+              cSlug === itemSlug ||
+              cSlug === itemId ||
+              itemSlug.includes(cSlug) ||
+              cSlug.includes(itemSlug) ||
+              (itemId === "accessories" && cSlug === "gabion-baskets") ||
+              (itemSlug === "gabion-baskets" && cSlug === "gabion-baskets") ||
+              (itemSlug === "dewatering-systems" && cSlug === "dewatering-systems") ||
+              (itemSlug.includes("gcl") && cSlug === "gcls") ||
+              (itemSlug.includes("concrete") && cSlug === "damp-proofing")
+            );
+          });
+
+          return {
+            id: matchedDbCat ? matchedDbCat.id : item.id,
+            name: item.label,
+            slug: item.slug || item.id,
+          };
+        });
+
+        setCategories(mappedCategories);
+      } else {
+        setCategories(dbCategories);
+      }
     })();
   }, []);
 
@@ -129,7 +169,9 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
             }
             const found = categories.find(
               (c) =>
-                c.slug === cat || c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
+                c.slug === cat ||
+                c.id === cat ||
+                c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
             );
             return found ? found.id : null;
           })

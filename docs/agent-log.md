@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-09-26 17:15 (UTC+1)
+
+- **Feature**: Revert Mega Menu & Align Catalogue Filters to Products Menu
+- **Problem**: A previous unification update dynamically reconciled database categories into the Products Mega Menu, which injected "Tools & Accessories" and duplicate "GCLs" while overwriting the client's custom CMS menu labels in `hierarchy_products`. Meanwhile, the Catalogue page displayed raw database categories instead of matching the custom Products Menu navigation.
+- **Solution**: Reverted [`use-dynamic-menus.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/hooks/use-dynamic-menus.ts), [`mega-menu-data.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/mega-menu-data.ts), and [`hierarchy-utils.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/lib/hierarchy-utils.ts) to their previous state prior to the reconciliation changes, preserving the client's custom categories and labels intact. Updated [`CataloguePage.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/CataloguePage.tsx) to source category filters directly from `hierarchy_products` with dynamic mapping to database category UUIDs, ensuring the Catalogue filters match the Products Menu exactly.
+
 ## 2026-09-26 12:15 (UTC+1)
 
 - **Feature**: Hero Section Glassmorphic Darkish Transparent Form & UX Hover Feedback

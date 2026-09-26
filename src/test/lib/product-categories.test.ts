@@ -11,14 +11,11 @@ describe("Product Categories Unification", () => {
     { slug: "gcls", label: "GCLs" },
     { slug: "drainage-composites", label: "Drainage Composites" },
     { slug: "erosion-control", label: "Erosion Control" },
-    { slug: "damp-proofing", label: "Damp Proofing" },
-    { slug: "dewatering-systems", label: "Dewatering Systems" },
-    { slug: "gabion-baskets", label: "Gabion Baskets" },
-    { slug: "accessories", label: "Tools & Accessories" },
+    { slug: "accessories", label: "Accessories" },
   ];
 
-  it("PRODUCT_CATEGORIES contains all 11 unified categories matching database", () => {
-    expect(PRODUCT_CATEGORIES).toHaveLength(11);
+  it("PRODUCT_CATEGORIES contains the 8 default categories", () => {
+    expect(PRODUCT_CATEGORIES).toHaveLength(8);
 
     for (const expected of EXPECTED_CATEGORIES) {
       const found = PRODUCT_CATEGORIES.find((c) => c.slug === expected.slug);
@@ -27,11 +24,11 @@ describe("Product Categories Unification", () => {
     }
   });
 
-  it("getDefaultSections includes all 11 categories in products hierarchy", () => {
+  it("getDefaultSections includes default categories in products hierarchy", () => {
     const sections = getDefaultSections();
     const productsSection = sections.find((s) => s.key === "products");
     expect(productsSection).toBeDefined();
-    expect(productsSection?.items).toHaveLength(11);
+    expect(productsSection?.items).toHaveLength(8);
 
     for (const expected of EXPECTED_CATEGORIES) {
       const item = productsSection?.items.find((i) => i.slug === expected.slug);
