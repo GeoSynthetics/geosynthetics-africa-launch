@@ -71,10 +71,7 @@ export const PRODUCT_CATEGORIES = [
   { slug: "gcls", label: "GCLs", icon: "Sheet" },
   { slug: "drainage-composites", label: "Drainage Composites", icon: "Waves" },
   { slug: "erosion-control", label: "Erosion Control", icon: "Mountain" },
-  { slug: "damp-proofing", label: "Damp Proofing", icon: "ShieldCheck" },
-  { slug: "dewatering-systems", label: "Dewatering Systems", icon: "Droplets" },
-  { slug: "gabion-baskets", label: "Gabion Baskets", icon: "Boxes" },
-  { slug: "accessories", label: "Tools & Accessories", icon: "Wrench" },
+  { slug: "accessories", label: "Accessories", icon: "Wrench" },
 ];
 
 export const APPLICATION_CATEGORIES = [
@@ -486,110 +483,9 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
         quickActions,
       };
 
-    case "damp-proofing":
-      return {
-        secondaryTitle: "Damp Proofing",
-        secondary: [
-          { label: "DPM Sheeting", ...productFamilyLink("damp-proofing", "dpm-sheeting") },
-          { label: "Under-Slab Membranes", ...productFamilyLink("damp-proofing", "under-slab-membranes") },
-          { label: "Damp Proof Course (DPC)", ...productFamilyLink("damp-proofing", "damp-proof-course") },
-          { label: "Self-Adhesive Bitumen", ...productFamilyLink("damp-proofing", "self-adhesive-bitumen") },
-          { label: "All Damp Proofing", ...productLink("damp-proofing") },
-        ],
-        featuredTitle: "Popular Products",
-        featuredKind: "product" as const,
-        featured: [
-          {
-            label: "250 Micron Jumbo SABS Construction Sheet",
-            spec: "250 Micron / Heavy Duty",
-            ...productFamilyLink("damp-proofing", "250-micron-jumbo-sabs-construction-sheet"),
-          },
-          {
-            label: "Damp Proof Membrane (DPM)",
-            spec: "SABS Compliant",
-            ...productFamilyLink("damp-proofing", "damp-proof-membrane-dpm"),
-          },
-          {
-            label: "Sub-Slab Vapour Barrier",
-            spec: "High Puncture Resistance",
-            ...productFamilyLink("damp-proofing", "sub-slab-vapour-barrier"),
-          },
-        ] as MegaProductItem[],
-        quickActionsTitle: "Quick Actions",
-        quickActions,
-      };
-
-    case "dewatering-systems":
-      return {
-        secondaryTitle: "Dewatering Systems",
-        secondary: [
-          {
-            label: "Geotextile Dewatering Tubes",
-            ...productFamilyLink("dewatering-systems", "geotextile-dewatering-tubes"),
-          },
-          {
-            label: "Sludge Dewatering Bags",
-            ...productFamilyLink("dewatering-systems", "sludge-dewatering-bags"),
-          },
-          {
-            label: "High-Flow Dewatering Bags",
-            ...productFamilyLink("dewatering-systems", "high-flow-dewatering-bags"),
-          },
-          {
-            label: "Sediment Filter Bags",
-            ...productFamilyLink("dewatering-systems", "sediment-filter-bags"),
-          },
-          { label: "All Dewatering Systems", ...productLink("dewatering-systems") },
-        ],
-        featuredTitle: "Popular Products",
-        featuredKind: "product" as const,
-        featured: [
-          {
-            label: "High-Capacity Geotextile Dewatering Tube",
-            spec: "Custom Circumference",
-            ...productFamilyLink("dewatering-systems", "high-capacity-geotextile-dewatering-tube"),
-          },
-          {
-            label: "Sludge & Slurry Dewatering Bag",
-            spec: "Rapid Filtration",
-            ...productFamilyLink("dewatering-systems", "sludge-and-slurry-dewatering-bag"),
-          },
-        ] as MegaProductItem[],
-        quickActionsTitle: "Quick Actions",
-        quickActions,
-      };
-
-    case "gabion-baskets":
-      return {
-        secondaryTitle: "Gabion Baskets",
-        secondary: [
-          { label: "Woven Mesh Gabions", ...productFamilyLink("gabion-baskets", "woven-mesh-gabions") },
-          { label: "Welded Mesh Gabions", ...productFamilyLink("gabion-baskets", "welded-mesh-gabions") },
-          { label: "Reno Mattresses", ...productFamilyLink("gabion-baskets", "reno-mattresses") },
-          { label: "Rockfall Netting", ...productFamilyLink("gabion-baskets", "rockfall-netting") },
-          { label: "All Gabion Baskets", ...productLink("gabion-baskets") },
-        ],
-        featuredTitle: "Popular Products",
-        featuredKind: "product" as const,
-        featured: [
-          {
-            label: "Galvanized Woven Gabion Basket",
-            spec: "Zinc/PVC Coated",
-            ...productFamilyLink("gabion-baskets", "galvanized-woven-gabion-basket"),
-          },
-          {
-            label: "Heavy-Duty Reno Mattress",
-            spec: "Erosion Protection",
-            ...productFamilyLink("gabion-baskets", "heavy-duty-reno-mattress"),
-          },
-        ] as MegaProductItem[],
-        quickActionsTitle: "Quick Actions",
-        quickActions,
-      };
-
     case "accessories":
       return {
-        secondaryTitle: "Tools & Accessories",
+        secondaryTitle: "Accessories",
         secondary: [
           { label: "Welding Rods", ...productFamilyLink("accessories", "welding-rods") },
           { label: "Bentonite Paste", ...productFamilyLink("accessories", "bentonite-paste") },
@@ -597,7 +493,7 @@ function generateProductContent(categorySlug: string, categoryLabel: string) {
           { label: "Seaming Tapes", ...productFamilyLink("accessories", "seaming-tapes") },
           { label: "Extrusion Welders", ...productFamilyLink("accessories", "extrusion-welders") },
           { label: "Testing Equipment", ...productFamilyLink("accessories", "testing-equipment") },
-          { label: "All Tools & Accessories", ...productLink("accessories") },
+          { label: "All Accessories", ...productLink("accessories") },
         ],
         featuredTitle: "Popular Products",
         featuredKind: "product" as const,
