@@ -17,10 +17,9 @@
     "signOut": "Sair"
   },
   "topbar": {
-    "iagi": "Membro IAGI - Um dos 5 únicos na África",
-    "bbbee": "Nível B-BBEE 2",
-    "qa": "Certificação QA/QC",
-    "logistics": "Logística Pan-Africana"
+    "iagi": "Membro Instalador IAGI",
+    "crews": "Equipes em toda a África",
+    "delivery": "Entregue no local"
   },
   "footer": {
     "resources": "Recursos",

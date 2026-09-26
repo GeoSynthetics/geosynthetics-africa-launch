@@ -135,10 +135,13 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
     const { routedTo } = submissionResult;
     return (
       <div
-        className={`w-full max-w-[440px] xl:max-w-[460px] rounded-2xl bg-zinc-950/90 backdrop-blur-md border border-white/10 p-6 sm:p-7 text-white shadow-2xl transition-all ${className}`}
+        className={`w-full max-w-[440px] xl:max-w-[460px] rounded-2xl bg-zinc-950/70 backdrop-blur-xl border border-white/15 p-6 sm:p-7 text-white shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-300 ${className}`}
       >
-        <div className="flex flex-col items-center text-center py-4">
-          <div className="h-14 w-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 animate-in zoom-in-90 duration-300">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent pointer-events-none rounded-2xl" />
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col items-center text-center py-4">
+          <div className="h-14 w-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 animate-in zoom-in-90 duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
             <CheckCircle2 className="h-7 w-7" />
           </div>
 
@@ -150,7 +153,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             We've Received Your Request
           </h3>
 
-          <div className="bg-zinc-900/80 rounded-xl p-4 border border-white/10 w-full text-left my-4 text-xs space-y-2">
+          <div className="bg-zinc-900/60 backdrop-blur-md rounded-xl p-4 border border-white/15 w-full text-left my-4 text-xs space-y-2 shadow-inner">
             <div className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">
               Assigned Regional Desk
             </div>
@@ -172,13 +175,13 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             type="button"
             variant="outline"
             onClick={resetForm}
-            className="mt-2 w-full bg-transparent border-white/20 text-white hover:bg-white/10 uppercase font-bold tracking-wider text-xs h-10"
+            className="mt-2 w-full bg-white/[0.05] hover:bg-white/[0.12] border-white/20 hover:border-white/40 text-white uppercase font-bold tracking-wider text-xs h-10 rounded-xl transition-all cursor-pointer"
           >
             Submit Another Project
           </Button>
         </div>
 
-        <div className="pt-4 mt-2 border-t border-white/10 text-center">
+        <div className="relative z-10 pt-4 mt-2 border-t border-white/10 text-center">
           <div className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase flex items-center justify-center gap-2">
             <span>SUPPLY</span>
             <span className="text-primary font-bold">•</span>
@@ -200,10 +203,13 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
   // -------------------------------------------------------------
   return (
     <div
-      className={`w-full max-w-[440px] xl:max-w-[460px] rounded-2xl bg-zinc-950/85 backdrop-blur-md border border-white/10 p-5 sm:p-6 text-white shadow-2xl ${className}`}
+      className={`w-full max-w-[440px] xl:max-w-[460px] rounded-2xl bg-zinc-950/70 backdrop-blur-xl border border-white/15 p-5 sm:p-6 text-white shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-300 ${className}`}
     >
+      {/* Glassmorphic Ambient Sheen & Subtle Red Glow */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] via-white/[0.02] to-transparent pointer-events-none rounded-2xl" />
+      <div className="absolute -top-20 -right-20 w-44 h-44 bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
       {/* Header: Red glowing status beacon + "ALL OF AFRICA" badge */}
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="relative z-10 flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -213,17 +219,17 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             START YOUR PROJECT
           </span>
         </div>
-        <span className="px-2.5 py-0.5 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-wider text-zinc-300 bg-white/5">
+        <span className="px-2.5 py-0.5 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-wider text-zinc-300 bg-white/5 backdrop-blur-sm">
           ALL OF AFRICA
         </span>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3.5">
+      <form onSubmit={handleSubmit} className="relative z-10 space-y-3.5">
         {/* WHAT DO YOU NEED? */}
-        <div>
+        <div className="group/field">
           <label
             htmlFor="hero-need"
-            className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5"
+            className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
           >
             WHAT DO YOU NEED?
           </label>
@@ -233,7 +239,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             value={need}
             onChange={(e) => setNeed(e.target.value)}
             placeholder="Supply and install: geogrid basal reinforcement, 40 km haul road, DRC"
-            className="w-full bg-white text-zinc-900 border border-zinc-200 placeholder:text-zinc-400 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none font-normal leading-relaxed"
+            className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white placeholder:text-zinc-400 rounded-xl p-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 resize-none font-normal leading-relaxed cursor-text"
             required
           />
         </div>
@@ -241,10 +247,10 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
         {/* 2-Column Row: REGION & EMAIL OR PHONE */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* REGION (dynamically loaded from our regions/countries list) */}
-          <div>
+          <div className="group/field">
             <label
               htmlFor="hero-region"
-              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5"
+              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
             >
               REGION
             </label>
@@ -253,10 +259,10 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                 id="hero-region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="w-full bg-white text-zinc-900 border border-zinc-200 rounded-md h-10 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 font-normal appearance-none cursor-pointer pr-8"
+                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal appearance-none cursor-pointer pr-9 [&>option]:bg-zinc-900 [&>option]:text-white [&>optgroup]:bg-zinc-950 [&>optgroup]:text-zinc-400"
                 required
               >
-                <option value="" disabled>
+                <option value="" disabled className="text-zinc-400">
                   Select region
                 </option>
                 <optgroup label="Operating Regional Hubs">
@@ -283,7 +289,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                   <option value="Other African Country">Other African Country</option>
                 </optgroup>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-zinc-600">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 group-hover/field:text-white transition-colors duration-200">
                 <svg
                   className="h-4 w-4"
                   fill="none"
@@ -302,10 +308,10 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
           </div>
 
           {/* EMAIL OR PHONE */}
-          <div>
+          <div className="group/field">
             <label
               htmlFor="hero-contact"
-              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5"
+              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
             >
               EMAIL OR PHONE
             </label>
@@ -315,7 +321,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               placeholder="name@company.co"
-              className="w-full bg-white text-zinc-900 border border-zinc-200 placeholder:text-zinc-400 rounded-md h-10 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 font-normal"
+              className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white placeholder:text-zinc-400 rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal cursor-text"
               required
             />
           </div>
@@ -340,13 +346,13 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                 const dropped = e.dataTransfer.files?.[0] ?? null;
                 handleFileSelect(dropped);
               }}
-              className="border border-white/15 hover:border-white/30 bg-zinc-900/60 hover:bg-zinc-900/90 rounded-xl p-3 flex items-center gap-3 transition-colors cursor-pointer group"
+              className="border border-white/15 hover:border-red-500/50 bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur-md rounded-xl p-3 flex items-center gap-3 transition-all duration-200 cursor-pointer group hover:shadow-[0_0_20px_rgba(239,68,68,0.12)]"
             >
-              <div className="h-10 w-10 rounded-lg border border-red-500/30 bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 group-hover:bg-red-500/20 transition-colors">
+              <div className="h-10 w-10 rounded-lg border border-red-500/30 bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 group-hover:bg-red-500/20 group-hover:scale-105 group-hover:border-red-500/60 transition-all duration-200">
                 <Upload className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold text-white group-hover:text-red-400 transition-colors">
+                <div className="text-sm font-semibold text-white group-hover:text-red-400 transition-colors duration-200">
                   Attach BOQ or drawings
                 </div>
                 <div className="text-[11px] text-zinc-400 truncate">
@@ -355,7 +361,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
               </div>
             </div>
           ) : (
-            <div className="border border-red-500/40 bg-zinc-900/90 rounded-xl p-3 flex items-center justify-between gap-3">
+            <div className="border border-red-500/40 bg-zinc-900/70 backdrop-blur-md rounded-xl p-3 flex items-center justify-between gap-3 shadow-inner">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="h-9 w-9 rounded-lg border border-red-500/40 bg-red-500/15 flex items-center justify-center text-red-400 shrink-0">
                   <FileText className="h-4 w-4" />
@@ -372,7 +378,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
               <button
                 type="button"
                 onClick={removeFile}
-                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors shrink-0 cursor-pointer"
                 title="Remove attachment"
               >
                 <X className="h-4 w-4" />
@@ -385,7 +391,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
         <Button
           type="submit"
           disabled={submitting}
-          className="w-full bg-white text-zinc-950 hover:bg-zinc-100 font-bold uppercase tracking-wider py-5 rounded-md flex items-center justify-center gap-2 text-sm shadow-md transition-all cursor-pointer border-0 mt-1"
+          className="w-full bg-white text-zinc-950 hover:bg-zinc-100 hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] font-bold uppercase tracking-wider h-12 rounded-xl flex items-center justify-center gap-2 text-sm shadow-md transition-all duration-200 cursor-pointer border-0 mt-1 active:scale-[0.99] group/btn"
         >
           {submitting ? (
             <>
@@ -395,14 +401,14 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
           ) : (
             <>
               <span>SEND REQUEST</span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-200" />
             </>
           )}
         </Button>
       </form>
 
       {/* Footer / Trust Guarantee Strip */}
-      <div className="pt-4 mt-4 border-t border-white/10 text-center">
+      <div className="relative z-10 pt-4 mt-4 border-t border-white/10 text-center">
         <div className="text-[11px] font-bold tracking-widest text-zinc-300 uppercase flex items-center justify-center gap-2">
           <span>SUPPLY</span>
           <span className="text-red-500 font-bold">•</span>

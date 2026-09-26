@@ -17,10 +17,9 @@
     "signOut": "Sign out"
   },
   "topbar": {
-    "iagi": "IAGI Member - One of only 5 in Africa",
-    "bbbee": "B-BBEE Level 2",
-    "qa": "QA/QC Certified",
-    "logistics": "Pan-African Logistics"
+    "iagi": "IAGI Installer Member",
+    "crews": "Crews across Africa",
+    "delivery": "Delivered to site"
   },
   "footer": {
     "resources": "Resources",
