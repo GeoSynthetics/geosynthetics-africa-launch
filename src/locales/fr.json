@@ -17,10 +17,9 @@
     "signOut": "Déconnexion"
   },
   "topbar": {
-    "iagi": "Membre de l'IAGI - L'un des 5 seuls en Afrique",
-    "bbbee": "Niveau B-BBEE 2",
-    "qa": "Certifié QA/QC",
-    "logistics": "Logistique Panafricaine"
+    "iagi": "Membre Installateur de l'IAGI",
+    "crews": "Équipes à travers l'Afrique",
+    "delivery": "Livré sur site"
   },
   "footer": {
     "resources": "Ressources",

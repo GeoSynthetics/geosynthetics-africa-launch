@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import {
   Award,
-  ShieldCheck,
+  Users,
   Truck,
+  ShieldCheck,
   ChevronDown,
   User as UserIcon,
   LogOut,
   Upload,
-  Phone,
   Mail,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -25,10 +25,9 @@ import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "./LanguageSelector";
 
 const items = [
-  { icon: Award, key: "topbar.iagi", defaultLabel: "IAGI Member - One of only 5 in Africa" },
-  { icon: ShieldCheck, key: "topbar.bbbee", defaultLabel: "B-BBEE Level 2" },
-  { icon: ShieldCheck, key: "topbar.qa", defaultLabel: "QA/QC Certified" },
-  { icon: Truck, key: "topbar.logistics", defaultLabel: "Pan-African Logistics" },
+  { icon: Award, key: "topbar.iagi", defaultLabel: "IAGI Installer Member" },
+  { icon: Users, key: "topbar.crews", defaultLabel: "Crews across Africa" },
+  { icon: Truck, key: "topbar.delivery", defaultLabel: "Delivered to site" },
 ];
 
 function PartnerPortalLink() {
@@ -134,26 +133,17 @@ export function TopBar() {
         {/* Mobile perks slider */}
         <MobilePerksSlider />
 
-        {/* Right side: Phone & Email, Upload BOQ, Partner Portal, Language Selector */}
+        {/* Right side: Email, Upload BOQ, Partner Portal, Language Selector */}
         <div className="flex items-center gap-3 sm:gap-4 md:gap-5 ml-auto">
-          {/* Phone & Email contacts */}
+          {/* Email contact */}
           <div className="hidden md:flex items-center gap-4 border-r border-white/15 pr-4">
             <a
-              href="tel:+27710939964"
-              className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
-              title="Call Us"
-            >
-              <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span>+27 71 093 9964</span>
-            </a>
-
-            <a
-              href="mailto:sales@geosynthetics.co.za"
+              href="mailto:sales@geosyntheticsafrica.com"
               className="flex items-center gap-1.5 opacity-90 hover:opacity-100 hover:text-primary transition whitespace-nowrap font-medium text-[11px]"
               title="Email Sales"
             >
               <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span>sales@geosynthetics.co.za</span>
+              <span>sales@geosyntheticsafrica.com</span>
             </a>
           </div>
 

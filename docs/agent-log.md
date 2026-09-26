@@ -1,5 +1,17 @@
 # Agent Log
 
+## 2026-09-26 12:15 (UTC+1)
+
+- **Feature**: Hero Section Glassmorphic Darkish Transparent Form & UX Hover Feedback
+- **Problem**: The hero section project form inputs (`WHAT DO YOU NEED?` textarea, `REGION` dropdown, and `EMAIL OR PHONE` input) featured stark solid white backgrounds that clashed with the hero slider background and lacked modern glassmorphic transparency and interactive UX hover feedback.
+- **Solution**: Refactored [`HeroProjectForm`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/HeroProjectForm.tsx) to feature a modern, darkish transparent glassmorphic UI (`bg-zinc-950/70`, `backdrop-blur-xl`, border ambient sheens, and subtle red radial glow), converted all inputs and dropdowns into semi-transparent frosted elements (`bg-white/[0.06]`) with responsive UX hover interactions (`hover:bg-white/[0.1]`, `hover:border-white/40`, `hover:shadow-[0_0_15px_rgba(255,255,255,0.07)]`), enhanced focus glows, styled the native `<select>` dropdown menu options with dark contrast, and added unit tests in [`HeroProjectForm.test.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/test/components/HeroProjectForm.test.tsx).
+
+## 2026-09-26 12:10 (UTC+1)
+
+- **Feature**: Pan-African Top Ribbon & Contact Updates
+- **Problem**: The top ribbon displayed domestic South African credentials (B-BBEE Level 2 and QA/QC certifications) and a single South African phone number (+27 71 093 9964) alongside a `.co.za` domain email, conflicting with the brand's continental Pan-African export positioning and multi-country contact model.
+- **Solution**: Updated `TopBar.tsx` and i18n localization bundles (`en.json`, `fr.json`, `pt.json`) by removing the domestic B-BBEE badge, QA/QC badge, and SA phone link, adding continental perks ("IAGI Installer Member", "Crews across Africa", and "Delivered to site"), and updating the contact email to `sales@geosyntheticsafrica.com`.
+
 ## 2026-09-25 20:08 (UTC+1)
 
 - **Feature**: Resolve Branch Merge Conflicts Between `development` and `main`
