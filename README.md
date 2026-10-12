@@ -1,4 +1,4 @@
-# Geosynthetics Africa — Platform
+# Geosynthetics Africa — Website Platform
 
 Africa's Integrated Geosynthetics Execution Platform. A high-performance B2B portal that replaces the legacy WordPress site with a headless architecture, serving civil engineers, contractors and global manufacturing partners (Solmax, Thrace, Tensar) across the continent.
 
