@@ -240,19 +240,19 @@ export function Footer() {
               <div className="flex items-center gap-2.5 pt-1">
                 <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
                 <a
-                  href="tel:+27710939964"
+                  href={`tel:${(footerContent.phone || "+27 71 093 9964").replace(/\s+/g, "")}`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  +27 71 093 9964
+                  {footerContent.phone || "+27 71 093 9964"}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
                 <a
-                  href="mailto:sales@geosynthetics.co.za"
+                  href={`mailto:${footerContent.email || "sales@geosynthetics.co.za"}`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  sales@geosynthetics.co.za
+                  {footerContent.email || "sales@geosynthetics.co.za"}
                 </a>
               </div>
             </div>

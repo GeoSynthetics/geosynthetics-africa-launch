@@ -63,8 +63,8 @@ describe("FooterBuilderTab Component", () => {
       expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
     });
 
-    // Check if brand details loaded
-    expect(screen.getByText("Brand Details")).toBeInTheDocument();
+    // Check if brand & address details tab loaded
+    expect(screen.getByText(/brand & address details/i)).toBeInTheDocument();
 
     // Switch to Navigation Columns tab
     const colsTabTrigger = screen.getByRole("tab", { name: /columns/i });

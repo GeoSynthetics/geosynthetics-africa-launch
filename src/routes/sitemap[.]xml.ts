@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
 import {
   PRODUCT_CATEGORIES,
   APPLICATION_CATEGORIES,
@@ -74,6 +75,10 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/catalogue", changefreq: "weekly", priority: 0.8 },
           { path: "/resources", changefreq: "weekly", priority: 0.7 },
           { path: "/contacts", changefreq: "monthly", priority: 0.7 },
+          { path: "/careers", changefreq: "monthly", priority: 0.6 },
+          { path: "/sustainability", changefreq: "monthly", priority: 0.6 },
+          { path: "/privacy-policy", changefreq: "yearly", priority: 0.5 },
+          { path: "/terms-and-conditions", changefreq: "yearly", priority: 0.5 },
         ];
 
         for (const page of staticPages) {
@@ -208,11 +213,30 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Silently skip
         }
 
+        /* ── 6b. Admin-created company / blank pages ──────────── */
+        try {
+          const staticPaths = new Set(staticPages.map((page) => page.path));
+          const companyTemplates = await fetchCompanyPageTemplates();
+          for (const template of Object.values(companyTemplates)) {
+            if (!template.slug || staticPaths.has(`/${template.slug}`)) continue;
+            urls.push(
+              urlEntry(`${baseUrl}/${template.slug}`, {
+                lastmod: template.updatedAt ? template.updatedAt.split("T")[0] : now,
+                changefreq: "monthly",
+                priority: 0.5,
+              }),
+            );
+          }
+        } catch {
+          // Silently skip — default company pages remain listed as static routes
+        }
+
         /* ── 7. Country-specific SEO slug pages ───────────────── */
         const countrySlugs = [
           "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
           "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
           "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+          "zimbabwe-geosynthetics-supplier-contact",
           "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
           "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
           "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",

@@ -58,5 +58,15 @@ describe("HeroProjectForm Component", () => {
     const contactInput = screen.getByLabelText(/email or phone/i) as HTMLInputElement;
     fireEvent.change(contactInput, { target: { value: "lead@miningcompany.africa" } });
     expect(contactInput.value).toBe("lead@miningcompany.africa");
+
+    const regionSelect = screen.getByLabelText(/region/i) as HTMLSelectElement;
+    expect(screen.getByRole("option", { name: "Southern Africa" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "West Africa" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "East Africa" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Central Africa" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "North Africa" })).toBeInTheDocument();
+
+    fireEvent.change(regionSelect, { target: { value: "Southern Africa" } });
+    expect(regionSelect.value).toBe("Southern Africa");
   });
 });

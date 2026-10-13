@@ -93,9 +93,10 @@ export function RegionalCoverageBuilderTab() {
         scrollWheelZoom: true,
       });
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; CARTO &copy; OpenStreetMap",
-        maxZoom: 20,
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+        maxZoom: 19,
       }).addTo(map);
 
       // Create a marker that can be moved

@@ -56,11 +56,27 @@ describe("Regional Routing Service & Coverage Classification", () => {
       expect(ghanaResult.targetName).toBe(MAMADOU_COULIBALY_CONTACT.name);
     });
 
-    it("should route South Africa inquiries to the South Africa Desk", () => {
+    it("should route South Africa and Southern Africa inquiries to the South Africa Desk", () => {
       const saResult = resolveRegionalRouting("South Africa");
       expect(saResult.isSouthAfrica).toBe(true);
       expect(saResult.isWestAfrica).toBe(false);
       expect(saResult.targetEmail).toBe(SOUTH_AFRICA_CONTACT.email);
+
+      const southernResult = resolveRegionalRouting("Southern Africa");
+      expect(southernResult.isSouthAfrica).toBe(true);
+      expect(southernResult.isWestAfrica).toBe(false);
+      expect(southernResult.targetEmail).toBe(SOUTH_AFRICA_CONTACT.email);
+    });
+
+    it("should route East Africa, Central Africa, and North Africa to their corridors", () => {
+      const eastResult = resolveRegionalRouting("East Africa");
+      expect(eastResult.targetName).toContain("East Africa");
+
+      const centralResult = resolveRegionalRouting("Central Africa");
+      expect(centralResult.targetName).toContain("Central Africa");
+
+      const northResult = resolveRegionalRouting("North Africa");
+      expect(northResult.targetName).toContain("North Africa");
     });
 
     it("should resolve other countries to their respective regional desk or fallback", () => {

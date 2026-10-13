@@ -32,6 +32,14 @@ interface HeroProjectFormProps {
   className?: string;
 }
 
+export const SIMPLIFIED_AFRICAN_REGIONS = [
+  "Southern Africa",
+  "West Africa",
+  "East Africa",
+  "Central Africa",
+  "North Africa",
+] as const;
+
 export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProps) {
   const [need, setNeed] = useState("");
   const [region, setRegion] = useState("");
@@ -41,19 +49,6 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
   const [submissionResult, setSubmissionResult] = useState<HeroSubmissionResult | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Region options: merge preloaded dynamic regions or fallback to DEFAULT_REGIONAL_COVERAGE
-  const availableRegions =
-    regions && Array.isArray(regions) && regions.length > 0 ? regions : DEFAULT_REGIONAL_COVERAGE;
-
-  // Additional West African regional options to ensure complete Pan-African coverage
-  const additionalWestAfrican = [
-    { country: "Senegal", code: "SEN" },
-    { country: "Mali", code: "MLI" },
-    { country: "Burkina Faso", code: "BFA" },
-    { country: "Guinea", code: "GIN" },
-    { country: "Nigeria", code: "NGA" },
-  ];
 
   const handleFileSelect = (incomingFile: File | null) => {
     if (!incomingFile) return;
@@ -259,35 +254,17 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                 id="hero-region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal appearance-none cursor-pointer pr-9 [&>option]:bg-zinc-900 [&>option]:text-white [&>optgroup]:bg-zinc-950 [&>optgroup]:text-zinc-400"
+                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal appearance-none cursor-pointer pr-9 [&>option]:bg-zinc-900 [&>option]:text-white"
                 required
               >
                 <option value="" disabled className="text-zinc-400">
                   Select region
                 </option>
-                <optgroup label="Operating Regional Hubs">
-                  {availableRegions.map((r) => (
-                    <option key={r.code || r.country} value={r.country}>
-                      {r.flag ? `${r.flag} ` : ""}
-                      {r.country} {r.isWestAfrica ? "(West Africa)" : ""}
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Other West African Territories">
-                  {additionalWestAfrican
-                    .filter((wa) => !availableRegions.some((r) => r.country === wa.country))
-                    .map((wa) => (
-                      <option key={wa.code} value={wa.country}>
-                        {wa.country} (West Africa)
-                      </option>
-                    ))}
-                </optgroup>
-                <optgroup label="Other African Territories">
-                  <option value="Pan-African (Multiple Countries)">
-                    Pan-African / Cross-Border
+                {SIMPLIFIED_AFRICAN_REGIONS.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
                   </option>
-                  <option value="Other African Country">Other African Country</option>
-                </optgroup>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 group-hover/field:text-white transition-colors duration-200">
                 <svg

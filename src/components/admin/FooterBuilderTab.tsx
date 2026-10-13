@@ -76,22 +76,30 @@ function BrandEditor({
   description,
   address,
   addressMapUrl,
+  phone,
+  email,
   onDescriptionChange,
   onAddressChange,
   onAddressMapUrlChange,
+  onPhoneChange,
+  onEmailChange,
 }: {
   description: string;
   address?: string;
   addressMapUrl?: string;
+  phone?: string;
+  email?: string;
   onDescriptionChange: (value: string) => void;
   onAddressChange: (value: string) => void;
   onAddressMapUrlChange: (value: string) => void;
+  onPhoneChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
 }) {
   return (
     <div className="space-y-6">
-      <SectionHeading>Brand Description &amp; Address</SectionHeading>
+      <SectionHeading>Brand Description, Physical Address &amp; Contact Info</SectionHeading>
       <p className="text-xs text-muted-foreground">
-        This description, physical address and map link appear directly below the logo in the footer.
+        This description, physical address, Google Maps link, phone number, and email appear directly in the footer brand column.
       </p>
       <div>
         <FieldLabel hint="Maximum ~200 characters recommended for clean formatting">
@@ -105,13 +113,13 @@ function BrandEditor({
         />
       </div>
       <div>
-        <FieldLabel hint="Physical address displayed below brand description">
+        <FieldLabel hint="Physical address displayed below brand description in footer">
           Physical Address
         </FieldLabel>
         <Input
           value={address ?? ""}
           onChange={(e) => onAddressChange(e.target.value)}
-          placeholder="7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa"
+          placeholder="11 Lily Street, Fisantekraal, Durbanville, Cape Town, 7550, South Africa"
           className="text-sm"
         />
       </div>
@@ -125,6 +133,30 @@ function BrandEditor({
           placeholder="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
           className="text-sm"
         />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <FieldLabel hint="Phone number displayed in footer">
+            Contact Phone
+          </FieldLabel>
+          <Input
+            value={phone ?? ""}
+            onChange={(e) => onPhoneChange(e.target.value)}
+            placeholder="+27 71 093 9964"
+            className="text-sm"
+          />
+        </div>
+        <div>
+          <FieldLabel hint="Email address displayed in footer">
+            Contact Email
+          </FieldLabel>
+          <Input
+            value={email ?? ""}
+            onChange={(e) => onEmailChange(e.target.value)}
+            placeholder="sales@geosynthetics.co.za"
+            className="text-sm"
+          />
+        </div>
       </div>
     </div>
   );
@@ -561,7 +593,7 @@ function NavigationColumnsEditor({
 let footerContentCache: FooterContent | null = null;
 
 const TABS = [
-  { id: "brand", label: "Brand Details" },
+  { id: "brand", label: "Brand & Address Details" },
   { id: "social", label: "Social Links" },
   { id: "columns", label: "Navigation Columns" },
   { id: "certifications", label: "Certifications" },
@@ -595,6 +627,8 @@ export function FooterBuilderTab() {
         brandDescription: val.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
         address: val.address ?? DEFAULT_FOOTER_CONTENT.address,
         addressMapUrl: val.addressMapUrl ?? DEFAULT_FOOTER_CONTENT.addressMapUrl,
+        phone: val.phone ?? DEFAULT_FOOTER_CONTENT.phone,
+        email: val.email ?? DEFAULT_FOOTER_CONTENT.email,
         socialLinks: val.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
         certifications: val.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
         copyrightText: val.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
@@ -700,9 +734,13 @@ export function FooterBuilderTab() {
               description={content.brandDescription}
               address={content.address}
               addressMapUrl={content.addressMapUrl}
+              phone={content.phone}
+              email={content.email}
               onDescriptionChange={(v) => update({ brandDescription: v })}
               onAddressChange={(v) => update({ address: v })}
               onAddressMapUrlChange={(v) => update({ addressMapUrl: v })}
+              onPhoneChange={(v) => update({ phone: v })}
+              onEmailChange={(v) => update({ email: v })}
             />
           </TabsContent>
 

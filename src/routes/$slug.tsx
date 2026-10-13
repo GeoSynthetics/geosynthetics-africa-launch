@@ -8,6 +8,8 @@ import { loadApplicationData, ApplicationCategorySkeleton } from "@/routes/appli
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
 import { fetchCountryTemplates } from "@/hooks/use-country-templates";
+import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
+import { DEFAULT_COMPANY_PAGE_TEMPLATES } from "@/types/company-page-template";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 /**
@@ -52,6 +54,9 @@ const ApplicationCategoryPageLazy = lazy(() =>
 );
 const CountryPageLazy = lazy(() =>
   import("@/pages/CountryPage").then((m) => ({ default: m.CountryPage })),
+);
+const GenericContentPageLazy = lazy(() =>
+  import("@/pages/GenericContentPage").then((m) => ({ default: m.GenericContentPage })),
 );
 
 export async function loadCountryData(customSlug: string) {
@@ -192,14 +197,23 @@ const COUNTRY_SEO_MAP: Record<
     keywords:
       "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
   },
+  "zimbabwe-geosynthetics-supplier-contact": {
+    country: "Zimbabwe",
+    title:
+      "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
+    description:
+      "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
+    keywords:
+      "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
+  },
   "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control": {
     country: "Zimbabwe",
     title:
-      "Zimbabwe River Rehabilitation & JuteSoilLock 292 Erosion Control | Geosynthetics Africa",
+      "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
     description:
-      "Erosion control, river rehabilitation, and JuteSoilLock 292 supply and installation in Zimbabwe. Technical support and logistics cleared to Harare.",
+      "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
     keywords:
-      "Zimbabwe river rehabilitation, JuteSoilLock 292, erosion control Zimbabwe, Harare geosynthetics",
+      "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
   },
   "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier": {
     country: "Zambia",
@@ -405,10 +419,44 @@ export const Route = createFileRoute("/$slug")({
       return { type: "application" as const, loaderData };
     }
 
+    // 5. Check if it's a Company / Generic blank page template (e.g. careers, sustainability, privacy-policy, terms-and-conditions, or admin-created blank page)
+    try {
+      const companyTemplates = await fetchCompanyPageTemplates();
+      const matchedCompanyTemplate =
+        companyTemplates[customSlug] ||
+        Object.values(companyTemplates).find((t) => t.slug === customSlug) ||
+        (customSlug === "terms" ? companyTemplates["terms-and-conditions"] : null) ||
+        (customSlug === "privacy" ? companyTemplates["privacy-policy"] : null) ||
+        DEFAULT_COMPANY_PAGE_TEMPLATES[customSlug] ||
+        null;
+
+      if (matchedCompanyTemplate) {
+        return { type: "company" as const, template: matchedCompanyTemplate, slug: customSlug };
+      }
+    } catch (err) {
+      console.error("Error checking company templates in $slug:", err);
+    }
+
     throw notFound();
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
+
+    if ((loaderData as any).type === "company") {
+      const template = (loaderData as any).template;
+      const title = template?.seo?.title || `${template?.title || "Page"} — Geosynthetics Africa`;
+      const description = template?.seo?.description || template?.heroDescription || "";
+      const meta = [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ];
+      if (template?.seo?.keywords) {
+        meta.push({ name: "keywords", content: template.seo.keywords });
+      }
+      return { meta };
+    }
 
     if (loaderData.type === "service") {
       const { service, templateData } = loaderData.loaderData;
@@ -538,6 +586,20 @@ function CustomSlugPage() {
         }
       >
         <CountryPageLazy data={loaderData.loaderData} />
+      </Suspense>
+    );
+  }
+
+  if (loaderData.type === "company") {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex min-h-[60vh] items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        }
+      >
+        <GenericContentPageLazy slug={loaderData.slug} initialTemplate={loaderData.template} />
       </Suspense>
     );
   }

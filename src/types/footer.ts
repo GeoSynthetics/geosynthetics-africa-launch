@@ -26,6 +26,12 @@ export interface FooterContent {
   /** Physical address displayed below brand description in footer */
   address?: string;
 
+  /** Contact phone number displayed below address */
+  phone?: string;
+
+  /** Contact email address displayed below phone */
+  email?: string;
+
   /** Google Maps link opened when clicking the address */
   addressMapUrl?: string;
 
@@ -46,6 +52,8 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   brandDescription:
     "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
   address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa",
+  phone: "+27 71 093 9964",
+  email: "sales@geosynthetics.co.za",
   addressMapUrl: "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8",
   socialLinks: [
     { platform: "linkedin", url: "#" },
@@ -89,7 +97,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
         { label: "Geosynthetics South Africa →", to: "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
         { label: "Geosynthetics Botswana →", to: "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
         { label: "Geosynthetics Tanzania →", to: "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
-        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
+        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-geosynthetics-supplier-contact" },
         { label: "Geosynthetics Zambia →", to: "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
         { label: "Geosynthetics Democratic Republic of Congo (DRC) →", to: "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier" },
         { label: "Geosynthetics Kenya →", to: "/kenya-geosynthetics-supplier-contact" },
@@ -118,11 +126,11 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
       type: "custom",
       links: [
         { label: "About Us", to: "/about" },
-        { label: "Careers", to: "/" },
+        { label: "Careers", to: "/careers" },
         { label: "Blog", to: "/blog" },
-        { label: "Sustainability", to: "/" },
-        { label: "Privacy Policy", to: "/" },
-        { label: "Terms & Conditions", to: "/" },
+        { label: "Sustainability", to: "/sustainability" },
+        { label: "Privacy Policy", to: "/privacy-policy" },
+        { label: "Terms & Conditions", to: "/terms-and-conditions" },
       ],
     },
   ],

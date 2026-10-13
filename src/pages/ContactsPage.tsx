@@ -142,11 +142,10 @@ function RegionalMap({
 
     leafletInstanceRef.current = map;
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
-      maxZoom: 20,
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+      maxZoom: 19,
     }).addTo(map);
 
     const pinColor = "rgb(225, 29, 72)";
@@ -300,7 +299,7 @@ function CountrySeoLinks() {
     { name: "South Africa", slug: "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
     { name: "Botswana", slug: "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
     { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
-    { name: "Zimbabwe", slug: "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control" },
+    { name: "Zimbabwe", slug: "zimbabwe-geosynthetics-supplier-contact" },
     { name: "Zambia", slug: "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
     {
       name: "Democratic Republic of Congo (DRC)",

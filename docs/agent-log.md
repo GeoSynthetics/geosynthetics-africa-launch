@@ -1,5 +1,27 @@
 # Agent Log
 
+## 2026-10-13 18:10 (UTC+1)
+
+- **Feature**: Sitemap inclusion for admin-created company/blank pages
+- **Problem**: Blank pages created in the Company & Blank Pages editor were not listed in `sitemap.xml`.
+- **Solution**: [`sitemap[.]xml.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/routes/sitemap[.]xml.ts) now reads `template_company_pages` via `fetchCompanyPageTemplates` and emits each slug (using `updatedAt` as lastmod), skipping slugs already listed as static routes.
+
+## 2026-10-13 15:45 (UTC+1)
+
+- **Feature**: Map Tiles Fix, Zimbabwe Slug Canonicalization, Footer Contact Controls, Simplified Continental Regions & DB-Backed Company Templates
+- **Problem**: 
+  1. Regional Leaflet maps displayed "API KEY REQUIRED" watermark errors due to deprecated CARTO anonymous tile endpoints.
+  2. The Zimbabwe Pan-African coverage card pointed to an old project case study slug (`/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control`) rather than the canonical country supplier page.
+  3. The footer address, phone, and email lacked dedicated form controls in the Site Builder dashboard.
+  4. The Hero project form Region dropdown had an overly fragmented list instead of the 5 requested continental African regions.
+  5. Company pages (Careers, Sustainability, Privacy Policy, Terms & Conditions) had no DB-backed page templates or admin interface to create and persist blank pages.
+- **Solution**:
+  1. Switched map tile providers in [`ContactsPage.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/ContactsPage.tsx) and [`RegionalCoverageBuilderTab.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/admin/RegionalCoverageBuilderTab.tsx) to free OpenStreetMap tiles (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`).
+  2. Standardized Zimbabwe's canonical route to `/zimbabwe-geosynthetics-supplier-contact`, added backward-compatible URL aliasing in [`$slug.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/routes/$slug.tsx), and updated site configs and sitemap generators.
+  3. Added address, Google Maps link, phone number, and email inputs to [`FooterBuilderTab.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/admin/FooterBuilderTab.tsx) under "Brand & Address Details", and rendered them dynamically in [`Footer.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/Footer.tsx).
+  4. Simplified Hero project form region options in [`HeroProjectForm.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/HeroProjectForm.tsx) to `Southern Africa`, `West Africa`, `East Africa`, `Central Africa`, and `North Africa`, and updated regional lead routing algorithms and tests.
+  5. Implemented complete DB-backed template architecture for company and custom blank pages: [`company-page-template.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/types/company-page-template.ts), [`use-company-page-templates.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/hooks/use-company-page-templates.ts), [`CompanyTemplatesEditor.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/admin/CompanyTemplatesEditor.tsx), [`GenericContentPage.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/pages/GenericContentPage.tsx), and registered them under Page Templates admin and TanStack dynamic router.
+
 ## 2026-09-26 17:15 (UTC+1)
 
 - **Feature**: Revert Mega Menu & Align Catalogue Filters to Products Menu

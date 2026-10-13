@@ -377,7 +377,7 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
         name: "Zimbabwe",
         type: "REGIONAL OFFICE",
         linkUrl:
-          "https://geosynthetics.co.za/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control/",
+          "https://geosynthetics.co.za/zimbabwe-geosynthetics-supplier-contact/",
       },
       {
         id: "zm",

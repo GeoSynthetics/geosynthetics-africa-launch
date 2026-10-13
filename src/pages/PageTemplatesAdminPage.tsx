@@ -45,6 +45,7 @@ import { ApplicationsTemplatesEditor } from "@/components/admin/ApplicationsTemp
 import { ServicesTemplatesEditor } from "@/components/admin/ServicesTemplatesEditor";
 import { IndustriesTemplatesEditor } from "@/components/admin/IndustriesTemplatesEditor";
 import { CountriesTemplatesEditor } from "@/components/admin/CountriesTemplatesEditor";
+import { CompanyTemplatesEditor } from "@/components/admin/CompanyTemplatesEditor";
 import {
   SectionHeading,
   FieldLabel,
@@ -67,7 +68,7 @@ const SUPABASE_KEY = "template_product_categories";
 
 export function PageTemplatesAdminPage() {
   const [editorType, setEditorType] = useState<
-    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries" | "countries"
+    "products" | "projects" | "quality-assurance" | "applications" | "services" | "industries" | "countries" | "company"
   >("products");
   const [allData, setAllData] = useState<Record<string, ProductPageContent>>({});
   const [activeSlug, setActiveSlug] = useState<string>("");
@@ -653,6 +654,17 @@ export function PageTemplatesAdminPage() {
         >
           Country Templates
         </button>
+        <button
+          onClick={() => setEditorType("company")}
+          className={cn(
+            "pb-3 px-6 text-sm font-bold border-b-2 transition-all uppercase tracking-wider cursor-pointer",
+            editorType === "company"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground",
+          )}
+        >
+          Company &amp; Blank Pages
+        </button>
       </div>
 
       {editorType === "projects" ? (
@@ -667,6 +679,8 @@ export function PageTemplatesAdminPage() {
         <IndustriesTemplatesEditor />
       ) : editorType === "countries" ? (
         <CountriesTemplatesEditor />
+      ) : editorType === "company" ? (
+        <CompanyTemplatesEditor />
       ) : (
         <>
           {/* ── Header ── */}

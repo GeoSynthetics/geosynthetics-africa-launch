@@ -297,6 +297,7 @@ export function isSouthAfricanRegion(regionOrCountry: string): boolean {
   const normalized = regionOrCountry.toLowerCase().trim();
   return (
     normalized.includes("south africa") ||
+    normalized.includes("southern africa") ||
     normalized === "rsa" ||
     normalized === "za" ||
     normalized === "zaf"
@@ -326,10 +327,41 @@ export function resolveRegionalRouting(regionOrCountry: string): {
   if (isSouthAfricanRegion(regionOrCountry)) {
     return {
       targetEmail: SOUTH_AFRICA_CONTACT.email,
-      targetName: "South Africa Sales Desk",
+      targetName: "Southern Africa Operations Desk",
       targetRole: "Johannesburg HQ",
       isWestAfrica: false,
       isSouthAfrica: true,
+    };
+  }
+
+  const normalized = (regionOrCountry || "").toLowerCase().trim();
+  if (normalized.includes("east africa") || normalized.includes("east")) {
+    return {
+      targetEmail: SOUTH_AFRICA_CONTACT.email,
+      targetName: "East Africa Operations Desk",
+      targetRole: "Nairobi & Dar es Salaam Logistics Corridor",
+      isWestAfrica: false,
+      isSouthAfrica: false,
+    };
+  }
+
+  if (normalized.includes("central africa") || normalized.includes("central")) {
+    return {
+      targetEmail: SOUTH_AFRICA_CONTACT.email,
+      targetName: "Central Africa Operations Desk",
+      targetRole: "Katanga & DRC Mining Corridor",
+      isWestAfrica: false,
+      isSouthAfrica: false,
+    };
+  }
+
+  if (normalized.includes("north africa") || normalized.includes("north")) {
+    return {
+      targetEmail: SOUTH_AFRICA_CONTACT.email,
+      targetName: "North Africa Operations Desk",
+      targetRole: "Pan-African Desk",
+      isWestAfrica: false,
+      isSouthAfrica: false,
     };
   }
 

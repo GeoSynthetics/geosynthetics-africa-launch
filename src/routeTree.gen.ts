@@ -15,9 +15,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as QualityAssuranceRouteImport } from './routes/quality-assurance'
@@ -26,6 +28,8 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SustainabilityRouteImport } from './routes/sustainability'
+import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminMediaCenterRouteImport } from './routes/admin.media-center'
@@ -89,6 +93,11 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactsRoute = ContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
@@ -102,6 +111,11 @@ const IndustriesRoute = IndustriesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -142,6 +156,16 @@ const SignupRoute = SignupRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SustainabilityRoute = SustainabilityRouteImport.update({
+  id: '/sustainability',
+  path: '/sustainability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
+  id: '/terms-and-conditions',
+  path: '/terms-and-conditions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -312,9 +336,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
+  '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/quality-assurance': typeof QualityAssuranceRouteWithChildren
@@ -323,6 +349,8 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sustainability': typeof SustainabilityRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
@@ -360,12 +388,16 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
+  '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
   '/login': typeof LoginRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sustainability': typeof SustainabilityRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
@@ -407,9 +439,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/applications': typeof ApplicationsRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
+  '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
   '/projects': typeof ProjectsRouteWithChildren
   '/quality-assurance': typeof QualityAssuranceRouteWithChildren
@@ -418,6 +452,8 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/sustainability': typeof SustainabilityRoute
+  '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
   '/admin/page-templates': typeof AdminPageTemplatesRoute
@@ -460,9 +496,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/blog'
+    | '/careers'
     | '/contacts'
     | '/industries'
     | '/login'
+    | '/privacy-policy'
     | '/profile'
     | '/projects'
     | '/quality-assurance'
@@ -471,6 +509,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/sustainability'
+    | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
@@ -508,12 +548,16 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug'
     | '/about'
+    | '/careers'
     | '/contacts'
     | '/login'
+    | '/privacy-policy'
     | '/profile'
     | '/robots.txt'
     | '/signup'
     | '/sitemap.xml'
+    | '/sustainability'
+    | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
@@ -554,9 +598,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/applications'
     | '/blog'
+    | '/careers'
     | '/contacts'
     | '/industries'
     | '/login'
+    | '/privacy-policy'
     | '/profile'
     | '/projects'
     | '/quality-assurance'
@@ -565,6 +611,8 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/sitemap.xml'
+    | '/sustainability'
+    | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
     | '/admin/page-templates'
@@ -606,9 +654,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   ApplicationsRoute: typeof ApplicationsRouteWithChildren
   BlogRoute: typeof BlogRouteWithChildren
+  CareersRoute: typeof CareersRoute
   ContactsRoute: typeof ContactsRoute
   IndustriesRoute: typeof IndustriesRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProfileRoute: typeof ProfileRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
   QualityAssuranceRoute: typeof QualityAssuranceRouteWithChildren
@@ -617,6 +667,8 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SustainabilityRoute: typeof SustainabilityRoute
+  TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
@@ -669,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contacts': {
       id: '/contacts'
       path: '/contacts'
@@ -688,6 +747,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -744,6 +810,20 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sustainability': {
+      id: '/sustainability'
+      path: '/sustainability'
+      fullPath: '/sustainability'
+      preLoaderRoute: typeof SustainabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-and-conditions': {
+      id: '/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof TermsAndConditionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1107,9 +1187,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   ApplicationsRoute: ApplicationsRouteWithChildren,
   BlogRoute: BlogRouteWithChildren,
+  CareersRoute: CareersRoute,
   ContactsRoute: ContactsRoute,
   IndustriesRoute: IndustriesRouteWithChildren,
   LoginRoute: LoginRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProfileRoute: ProfileRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
   QualityAssuranceRoute: QualityAssuranceRouteWithChildren,
@@ -1118,6 +1200,8 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SustainabilityRoute: SustainabilityRoute,
+  TermsAndConditionsRoute: TermsAndConditionsRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
