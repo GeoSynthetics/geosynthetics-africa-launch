@@ -1,3 +1,4 @@
+import { GROUP_COMPANIES } from "@/lib/business-info";
 import { useState } from "react";
 import {
   Linkedin,
@@ -316,6 +317,29 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Group companies: country company websites in the Geosynthetics Africa group */}
+      {GROUP_COMPANIES.length > 0 && (
+        <div className="border-t border-surface-dark-foreground/10">
+          <div className="w-full px-6 lg:px-10 xl:px-16 py-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-wider text-surface-dark-foreground/60">
+            <span className="font-bold text-surface-dark-foreground/80">Geosynthetics Africa Group</span>
+            {GROUP_COMPANIES.map((c) => (
+              <a
+                key={c.url}
+                href={c.url}
+                target="_blank"
+                rel="noopener"
+                className="hover:text-primary transition"
+              >
+                {c.name} &#8599;
+              </a>
+            ))}
+            <a href="/countries" className="hover:text-primary transition">
+              All countries we serve &rarr;
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Bottom bar */}
       <div className="border-t border-surface-dark-foreground/10">

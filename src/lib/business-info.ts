@@ -83,3 +83,13 @@ export const AFRICAN_COUNTRY_CODES = [
   "ZM",
   "ZW",
 ] as const;
+
+/**
+ * Country companies in the Geosynthetics Africa group, each with its own
+ * website. Linked from the footer and listed as sub-organisations in the
+ * Organization schema so search engines see one group, not competitors.
+ * Add each country company's website here as it goes live.
+ */
+export const GROUP_COMPANIES: { name: string; url: string; country: string }[] = [
+  { name: "Geosynthetics South Africa", url: "https://geosynthetics.co.za", country: "South Africa" },
+];
