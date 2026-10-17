@@ -1,5 +1,6 @@
 import { JsonLd } from "./JsonLd";
 import { SITE_URL } from "@/lib/site-url";
+import { BUSINESS, AFRICAN_COUNTRY_CODES } from "@/lib/business-info";
 
 /**
  * Global Organization structured data.
@@ -13,38 +14,27 @@ export function OrganizationSchema() {
     <JsonLd
       data={{
         "@type": "Organization",
-        name: "Geosynthetics Africa",
-        legalName: "Geosynthetics Africa (Pty) Ltd",
+        name: BUSINESS.name,
+        legalName: BUSINESS.legalName,
         url: SITE_URL,
         logo: `${SITE_URL}/logo-512.png`,
-        description:
-          "Africa's Integrated Geosynthetics Execution Platform — supply, installation, QA/QC testing and logistics for geomembranes, geotextiles, geogrids and engineered lining systems.",
+        description: BUSINESS.description,
         address: {
           "@type": "PostalAddress",
-          streetAddress: "7 Tamar Avenue, Lea Glen",
-          addressLocality: "Randburg, Johannesburg",
-          postalCode: "2191",
-          addressCountry: "ZA",
+          ...BUSINESS.address,
         },
         contactPoint: [
           {
             "@type": "ContactPoint",
-            telephone: "+27-78-1355-926",
+            telephone: BUSINESS.telephone,
             contactType: "sales",
-            email: "sales@geosyntheticsafrica.com",
+            email: BUSINESS.email,
             availableLanguage: ["English"],
-            areaServed: ["ZA", "BW", "NA", "ZW", "MZ", "ZM"],
+            areaServed: [...AFRICAN_COUNTRY_CODES],
           },
         ],
         sameAs: [],
-        areaServed: {
-          "@type": "Place",
-          name: "Southern Africa",
-        },
-        foundingLocation: {
-          "@type": "Place",
-          name: "Johannesburg, South Africa",
-        },
+        areaServed: { "@type": "Continent", name: "Africa" },
         knowsAbout: [
           "Geomembranes",
           "Geotextiles",
