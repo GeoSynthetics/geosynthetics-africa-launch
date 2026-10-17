@@ -45,6 +45,16 @@
       "statusCode": 301
     },
     {
+      "source": "/zimbabwe-geosynthetics-supplier-contact/",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/zimbabwe-geosynthetics-supplier-contact",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
       "source": "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier/",
       "destination": "/zambia-geosynthetics-supplier-installer",
       "statusCode": 301
@@ -121,6 +131,16 @@
     },
     {
       "source": "/gcl-liner-installation-contractors-africa",
+      "destination": "/services/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation/",
+      "destination": "/services/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation",
       "destination": "/services/gcl-installation-contractor-africa",
       "statusCode": 301
     },

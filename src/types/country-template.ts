@@ -307,9 +307,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
     },
   },
-  "zimbabwe-geosynthetics-supplier-contact": {
+  "zimbabwe-geosynthetics-supplier-installer": {
     country: "Zimbabwe",
-    slug: "zimbabwe-geosynthetics-supplier-contact",
+    slug: "zimbabwe-geosynthetics-supplier-installer",
     flag: "🇿🇼",
     code: "ZWE",
     title: "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles & Mining Solutions",
