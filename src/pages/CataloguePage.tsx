@@ -628,14 +628,11 @@ function FilterGroup({
   onToggle: (id: string) => void;
   placeholder?: string;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredOptions = options.filter((o) =>
     o.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  const visible = expanded ? filteredOptions : filteredOptions.slice(0, 8);
 
   return (
     <div className="flex flex-col">
@@ -666,8 +663,8 @@ function FilterGroup({
           {searchQuery ? "No matching options" : "None available"}
         </div>
       ) : (
-        <ul className="space-y-2 text-sm max-h-[300px] overflow-y-auto pr-1">
-          {visible.map((o) => (
+        <ul className="space-y-2 text-sm">
+          {filteredOptions.map((o) => (
             <li key={o.id} className="flex items-center space-x-2.5 py-0.5">
               <Checkbox
                 id={`filter-${o.id}`}
@@ -689,15 +686,6 @@ function FilterGroup({
         </ul>
       )}
 
-      {filteredOptions.length > 8 && (
-        <button
-          type="button"
-          onClick={() => setExpanded((s) => !s)}
-          className="mt-2 text-xs font-bold text-primary hover:text-primary-hover hover:underline inline-flex items-center w-fit transition-colors py-1"
-        >
-          {expanded ? "Show less" : `Show ${filteredOptions.length - 8} more`}
-        </button>
-      )}
     </div>
   );
 }
