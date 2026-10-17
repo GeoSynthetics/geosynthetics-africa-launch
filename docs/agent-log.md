@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-17 12:00 (UTC+1)
+
+- **Feature**: geosyntheticsafrica.com as its own indexable site + finish the 13 URL renames
+- **Problem**: The sitemap, robots.txt, canonicals, JSON-LD and breadcrumbs hardcoded geosynthetics.co.za (robots.txt even blocked crawling on the Africa domain). The earlier slug rename only touched code: the CMS rows in `site_config` kept the old service, application and country slugs, so the new URLs 404'd and menus/footer linked to old URLs. Zimbabwe used `-contact` instead of the requested `-installer`, and the DB GCL slug `/gcl-liner-installation` had no redirect.
+- **Solution**: Added [`site-url.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/lib/site-url.ts) as the single site-URL setting used by the sitemap, robots.txt, canonicals, schema and breadcrumbs. Moved Zimbabwe to `/zimbabwe-geosynthetics-supplier-installer` with 301s from `-contact` and the old jutesoillock URL, added the `/gcl-liner-installation` 301, fixed the service breadcrumb schema URL, and added migration `20261017120000_rename_africa_slugs.sql` (backup table, exact-token slug rename across 10 `site_config` keys, homepage office link off .co.za).
+
 ## 2026-10-17 02:20 (UTC+1)
 
 - **Feature**: Canonical product families shared by catalogue, product pages and admin

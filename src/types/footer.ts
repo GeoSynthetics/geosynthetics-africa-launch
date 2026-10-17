@@ -97,7 +97,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
         { label: "Geosynthetics South Africa →", to: "/south-africa-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Botswana →", to: "/botswana-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Tanzania →", to: "/tanzania-geosynthetics-supplier-installer" },
-        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-geosynthetics-supplier-contact" },
+        { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Zambia →", to: "/zambia-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Democratic Republic of Congo (DRC) →", to: "/drc-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Kenya →", to: "/kenya-geosynthetics-supplier-contact" },

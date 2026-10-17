@@ -197,7 +197,7 @@ const COUNTRY_SEO_MAP: Record<
     keywords:
       "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
   },
-  "zimbabwe-geosynthetics-supplier-contact": {
+  "zimbabwe-geosynthetics-supplier-installer": {
     country: "Zimbabwe",
     title:
       "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",

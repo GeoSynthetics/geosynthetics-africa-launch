@@ -237,7 +237,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           "south-africa-geosynthetics-supplier-installer",
           "botswana-geosynthetics-supplier-installer",
           "tanzania-geosynthetics-supplier-installer",
-          "zimbabwe-geosynthetics-supplier-contact",
+          "zimbabwe-geosynthetics-supplier-installer",
           "zambia-geosynthetics-supplier-installer",
           "drc-geosynthetics-supplier-installer",
           "kenya-geosynthetics-supplier-contact",

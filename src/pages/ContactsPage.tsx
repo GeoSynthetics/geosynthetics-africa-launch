@@ -299,7 +299,7 @@ function CountrySeoLinks() {
     { name: "South Africa", slug: "south-africa-geosynthetics-supplier-installer" },
     { name: "Botswana", slug: "botswana-geosynthetics-supplier-installer" },
     { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-installer" },
-    { name: "Zimbabwe", slug: "zimbabwe-geosynthetics-supplier-contact" },
+    { name: "Zimbabwe", slug: "zimbabwe-geosynthetics-supplier-installer" },
     { name: "Zambia", slug: "zambia-geosynthetics-supplier-installer" },
     {
       name: "Democratic Republic of Congo (DRC)",
