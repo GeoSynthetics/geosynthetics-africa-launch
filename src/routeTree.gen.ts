@@ -28,6 +28,14 @@ import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SiteMapRouteImport } from './routes/site-map'
+import { Route as SitemapCatalogueDotxmlRouteImport } from './routes/sitemap-catalogue[.]xml'
+import { Route as SitemapCountriesDotxmlRouteImport } from './routes/sitemap-countries[.]xml'
+import { Route as SitemapFrDotxmlRouteImport } from './routes/sitemap-fr[.]xml'
+import { Route as SitemapInsightsDotxmlRouteImport } from './routes/sitemap-insights[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
+import { Route as SitemapPtDotxmlRouteImport } from './routes/sitemap-pt[.]xml'
+import { Route as SitemapSolutionsDotxmlRouteImport } from './routes/sitemap-solutions[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SustainabilityRouteImport } from './routes/sustainability'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
@@ -163,6 +171,46 @@ const ServicesRoute = ServicesRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteMapRoute = SiteMapRouteImport.update({
+  id: '/site-map',
+  path: '/site-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCatalogueDotxmlRoute = SitemapCatalogueDotxmlRouteImport.update({
+  id: '/sitemap-catalogue.xml',
+  path: '/sitemap-catalogue.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCountriesDotxmlRoute = SitemapCountriesDotxmlRouteImport.update({
+  id: '/sitemap-countries.xml',
+  path: '/sitemap-countries.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapFrDotxmlRoute = SitemapFrDotxmlRouteImport.update({
+  id: '/sitemap-fr.xml',
+  path: '/sitemap-fr.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapInsightsDotxmlRoute = SitemapInsightsDotxmlRouteImport.update({
+  id: '/sitemap-insights.xml',
+  path: '/sitemap-insights.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPtDotxmlRoute = SitemapPtDotxmlRouteImport.update({
+  id: '/sitemap-pt.xml',
+  path: '/sitemap-pt.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapSolutionsDotxmlRoute = SitemapSolutionsDotxmlRouteImport.update({
+  id: '/sitemap-solutions.xml',
+  path: '/sitemap-solutions.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -391,6 +439,14 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -445,6 +501,14 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -508,6 +572,14 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -572,6 +644,14 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -626,6 +706,14 @@ export interface FileRouteTypes {
     | '/profile'
     | '/robots.txt'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -688,6 +776,14 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -751,6 +847,14 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
+  SiteMapRoute: typeof SiteMapRoute
+  SitemapCatalogueDotxmlRoute: typeof SitemapCatalogueDotxmlRoute
+  SitemapCountriesDotxmlRoute: typeof SitemapCountriesDotxmlRoute
+  SitemapFrDotxmlRoute: typeof SitemapFrDotxmlRoute
+  SitemapInsightsDotxmlRoute: typeof SitemapInsightsDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
+  SitemapPtDotxmlRoute: typeof SitemapPtDotxmlRoute
+  SitemapSolutionsDotxmlRoute: typeof SitemapSolutionsDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SustainabilityRoute: typeof SustainabilityRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
@@ -901,6 +1005,62 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/site-map': {
+      id: '/site-map'
+      path: '/site-map'
+      fullPath: '/site-map'
+      preLoaderRoute: typeof SiteMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-catalogue.xml': {
+      id: '/sitemap-catalogue.xml'
+      path: '/sitemap-catalogue.xml'
+      fullPath: '/sitemap-catalogue.xml'
+      preLoaderRoute: typeof SitemapCatalogueDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-countries.xml': {
+      id: '/sitemap-countries.xml'
+      path: '/sitemap-countries.xml'
+      fullPath: '/sitemap-countries.xml'
+      preLoaderRoute: typeof SitemapCountriesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-fr.xml': {
+      id: '/sitemap-fr.xml'
+      path: '/sitemap-fr.xml'
+      fullPath: '/sitemap-fr.xml'
+      preLoaderRoute: typeof SitemapFrDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-insights.xml': {
+      id: '/sitemap-insights.xml'
+      path: '/sitemap-insights.xml'
+      fullPath: '/sitemap-insights.xml'
+      preLoaderRoute: typeof SitemapInsightsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pt.xml': {
+      id: '/sitemap-pt.xml'
+      path: '/sitemap-pt.xml'
+      fullPath: '/sitemap-pt.xml'
+      preLoaderRoute: typeof SitemapPtDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-solutions.xml': {
+      id: '/sitemap-solutions.xml'
+      path: '/sitemap-solutions.xml'
+      fullPath: '/sitemap-solutions.xml'
+      preLoaderRoute: typeof SitemapSolutionsDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -1340,6 +1500,14 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
+  SiteMapRoute: SiteMapRoute,
+  SitemapCatalogueDotxmlRoute: SitemapCatalogueDotxmlRoute,
+  SitemapCountriesDotxmlRoute: SitemapCountriesDotxmlRoute,
+  SitemapFrDotxmlRoute: SitemapFrDotxmlRoute,
+  SitemapInsightsDotxmlRoute: SitemapInsightsDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
+  SitemapPtDotxmlRoute: SitemapPtDotxmlRoute,
+  SitemapSolutionsDotxmlRoute: SitemapSolutionsDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SustainabilityRoute: SustainabilityRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,

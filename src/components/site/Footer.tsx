@@ -341,6 +341,9 @@ export function Footer() {
             <a href="/countries" className="hover:text-primary transition">
               All countries we serve &rarr;
             </a>
+            <a href="/site-map" className="hover:text-primary transition">
+              Site map
+            </a>
           </div>
         </div>
       )}
