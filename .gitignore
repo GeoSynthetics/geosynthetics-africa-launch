@@ -38,3 +38,7 @@ dist-ssr
 .env
 .env*
 supabase/.temp/
+# Local Supabase debug scripts (not for commit; test-perms.ts writes to the DB)
+scripts/check-product-*.ts
+scripts/inspect-*.ts
+scripts/test-*.ts
