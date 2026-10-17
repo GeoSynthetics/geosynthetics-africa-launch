@@ -24,6 +24,7 @@ import {
 import { IconPicker } from "./IconPicker";
 import { ImagePicker } from "./ImagePicker";
 import { useSlugSync } from "@/hooks/use-slug-sync";
+import { defaultQaForFamily } from "@/data/product-qa-defaults";
 
 export function stripHtml(html: string | null | undefined): string {
   if (!html) return "";
@@ -206,6 +207,8 @@ export function ContentEditorPanel({
 
   const isProductNode = sectionKey === "products";
   const isNonProductNode = !isProductNode;
+  // Pre-fill QA fields with the built-in default for this family until edited
+  const qaDefault = isProductNode ? defaultQaForFamily(data.slug, data.id) : null;
 
   const setPage = (p: Partial<PageContent>) =>
     setData((prev) => ({ ...prev, pageContent: { ...(prev as any).pageContent, ...p } }));
@@ -508,7 +511,11 @@ export function ContentEditorPanel({
                 <>
                   <PairsEditor
                     label="QA/QC Checklist (product pages in this family)"
-                    items={(page.qaChecklist ?? []) as any[]}
+                    items={
+                      (page.qaChecklist?.length
+                        ? page.qaChecklist
+                        : (qaDefault?.checklist ?? [])) as any[]
+                    }
                     fields={[
                       { key: "title", label: "Check" },
                       { key: "description", label: "Requirement", multiline: true },
@@ -517,7 +524,9 @@ export function ContentEditorPanel({
                   />
                   <ListEditor
                     label="Manufacturing Standards & Certificates"
-                    items={page.qaStandards ?? []}
+                    items={
+                      page.qaStandards?.length ? page.qaStandards : (qaDefault?.standards ?? [])
+                    }
                     onChange={(v) => setPage({ qaStandards: v })}
                     placeholder="e.g. GRI-GM13, ASTM D5199"
                   />

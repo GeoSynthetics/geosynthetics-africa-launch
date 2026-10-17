@@ -155,4 +155,20 @@ describe("ProductDetailPage - Linked Projects", () => {
     expect(screen.getByText("EN 10223-3")).toBeInTheDocument();
     expect(screen.queryByText(/Subgrade\/Foundation/)).not.toBeInTheDocument();
   });
+
+  it("falls back to the built-in checklist for the product's family", () => {
+    vi.mocked(Route.useLoaderData).mockReturnValue({
+      product: { ...baseProduct, family_slug: "hdpe-geomembranes" },
+      alternatives: [],
+      systemComponents: [],
+      familyData: {},
+      caseStudies: [],
+    } as any);
+
+    render(<ProductDetailPage />);
+
+    expect(screen.getByText("Field QA/QC Checklist")).toBeInTheDocument();
+    expect(screen.getByText("Non-Destructive Seam Testing:")).toBeInTheDocument();
+    expect(screen.getByText("GRI-GM19 seam strength requirements")).toBeInTheDocument();
+  });
 });

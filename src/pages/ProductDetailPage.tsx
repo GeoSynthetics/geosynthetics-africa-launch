@@ -1,3 +1,4 @@
+import { defaultQaForFamily } from "@/data/product-qa-defaults";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -81,11 +82,13 @@ export function ProductDetailPage() {
     Route.useLoaderData();
 
   // QA/QC is specific to each product family: only show what Site Builder holds for it
+  // (Site Builder first, then the built-in default for the family)
+  const qaDefault = defaultQaForFamily(product.family_slug);
   const qaChecklist: { title: string; description: string }[] = (
-    familyData?.qaChecklist ?? []
+    familyData?.qaChecklist?.length ? familyData.qaChecklist : (qaDefault?.checklist ?? [])
   ).filter((i: any) => i?.title?.trim() || i?.description?.trim());
   const qaStandards: string[] = [
-    ...(familyData?.qaStandards ?? []),
+    ...(familyData?.qaStandards?.length ? familyData.qaStandards : (qaDefault?.standards ?? [])),
     ...(product.standard ? [product.standard] : []),
   ].filter((v: string, idx: number, all: string[]) => v?.trim() && all.indexOf(v) === idx);
   const hasQa = qaChecklist.length > 0 || qaStandards.length > 0 || !!product.qa_checklist_url;

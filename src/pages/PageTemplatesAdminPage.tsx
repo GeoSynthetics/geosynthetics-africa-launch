@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { defaultQaForFamily } from "@/data/product-qa-defaults";
 import { SEED_CATEGORIES, type ProductPageContent } from "@/data/product-pages";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1446,11 +1447,16 @@ export function PageTemplatesAdminPage() {
                           <SectionHeading>QA &amp; Testing</SectionHeading>
                           <p className="text-xs text-muted-foreground mb-4">
                             Shown in the QA &amp; Testing section of every product page in this
-                            family. Leave empty to hide that section.
+                            family. Pre-filled with the built-in checklist for this product type;
+                            edit and save to replace it.
                           </p>
                           <PairsEditor
                             label="Field QA/QC checklist"
-                            items={(active.qaChecklist ?? []) as any[]}
+                            items={
+                              (active.qaChecklist?.length
+                                ? active.qaChecklist
+                                : (defaultQaForFamily(activeSlug)?.checklist ?? [])) as any[]
+                            }
                             fields={[
                               { key: "title", label: "Check" },
                               { key: "description", label: "Requirement", multiline: true },
@@ -1460,7 +1466,11 @@ export function PageTemplatesAdminPage() {
                           />
                           <StringListEditor
                             label="Manufacturing standards & certificates"
-                            items={active.qaStandards ?? []}
+                            items={
+                              active.qaStandards?.length
+                                ? active.qaStandards
+                                : (defaultQaForFamily(activeSlug)?.standards ?? [])
+                            }
                             onChange={(v) => set("qaStandards", v)}
                             placeholder="e.g. GRI-GM13, ASTM D5199"
                           />
