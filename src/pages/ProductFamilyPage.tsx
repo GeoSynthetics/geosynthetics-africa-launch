@@ -16,6 +16,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 import { mockProductFamilyData as mockData } from "@/mocks/productFamilyMocks";
+import { SITE_URL } from "@/lib/site-url";
 function mapFamilyData(
   familyData: any,
   category: string,
@@ -215,10 +216,10 @@ export function ProductFamilyPage() {
     <div className="bg-background relative">
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://geosynthetics.co.za" },
-          { name: "Products", url: "https://geosynthetics.co.za/products" },
-          { name: dynamicCategoryName, url: `https://geosynthetics.co.za/products/${category}` },
-          { name: data.title || dynamicFamilyName, url: `https://geosynthetics.co.za/products/${category}/${family}` },
+          { name: "Home", url: SITE_URL },
+          { name: "Products", url: `${SITE_URL}/products` },
+          { name: dynamicCategoryName, url: `${SITE_URL}/products/${category}` },
+          { name: data.title || dynamicFamilyName, url: `${SITE_URL}/products/${category}/${family}` },
         ]}
       />
       {/* Hero Section */}

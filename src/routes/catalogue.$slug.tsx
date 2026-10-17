@@ -172,9 +172,7 @@ export const Route = createFileRoute("/catalogue/$slug")({
             ]
           : []),
       ],
-      links: p
-        ? [{ rel: "canonical", href: `https://geosynthetics.co.za/catalogue/${p.slug}` }]
-        : [],
+      // Canonical link is added for every page by the root route (src/routes/__root.tsx).
     };
   },
   errorComponent: ({ error }) => (

@@ -53,7 +53,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
     "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
   address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa",
   phone: "+27 71 093 9964",
-  email: "sales@geosynthetics.co.za",
+  email: "sales@geosyntheticsafrica.com",
   addressMapUrl: "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8",
   socialLinks: [
     { platform: "linkedin", url: "#" },

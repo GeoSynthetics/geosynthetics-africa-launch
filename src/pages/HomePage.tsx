@@ -384,8 +384,9 @@ export function HomePage() {
                     <a
                       key={o.id || idx}
                       href={o.linkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(/^https?:\/\//i.test(o.linkUrl || "")
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       className="block h-full"
                     >
                       {cardContent}

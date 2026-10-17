@@ -153,7 +153,7 @@ function BrandEditor({
           <Input
             value={email ?? ""}
             onChange={(e) => onEmailChange(e.target.value)}
-            placeholder="sales@geosynthetics.co.za"
+            placeholder="sales@geosyntheticsafrica.com"
             className="text-sm"
           />
         </div>

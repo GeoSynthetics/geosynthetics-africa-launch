@@ -12,6 +12,7 @@ import {
   generateContactAdminEmail,
   formatReference,
 } from "./email-templates";
+import { SITE_URL } from "@/lib/site-url";
 
 export interface EmailRecipient {
   email: string;
@@ -97,7 +98,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   const adminEmail = process.env.NOTIFICATION_TO_EMAIL || process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
-  const siteUrl = process.env.VITE_SITE_URL;
+  const siteUrl = SITE_URL;
 
   const customerHtml = generateQuoteCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateQuoteAdminEmail({ ...params, reference, siteUrl });
@@ -105,7 +106,7 @@ export async function dispatchQuoteEmails(params: SendQuoteEmailParams): Promise
   // Send to customer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "Geosynthetics Sales Team" },
+    replyTo: { email: adminEmail ?? "sales@geosyntheticsafrica.com", name: "Geosynthetics Sales Team" },
     subject: `Quote request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });
@@ -162,7 +163,7 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
   const adminEmail = process.env.NOTIFICATION_TO_EMAIL || process.env.VITE_NOTIFICATION_TO_EMAIL;
 
   const reference = formatReference(params.reference);
-  const siteUrl = process.env.VITE_SITE_URL;
+  const siteUrl = SITE_URL;
 
   const customerHtml = generateContactCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateContactAdminEmail({ ...params, reference, siteUrl });
@@ -170,7 +171,7 @@ export async function dispatchContactEmails(params: SendContactEmailParams): Pro
   // Send confirmation to the enquirer
   await sendBrevoEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
-    replyTo: { email: adminEmail ?? "sales@geosynthetics.co.za", name: "Geosynthetics Sales Team" },
+    replyTo: { email: adminEmail ?? "sales@geosyntheticsafrica.com", name: "Geosynthetics Sales Team" },
     subject: `We received your message — Geosynthetics Africa (REF ${reference})`,
     htmlContent: customerHtml,
   });

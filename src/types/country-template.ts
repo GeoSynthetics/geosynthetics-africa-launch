@@ -150,7 +150,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     hubName: "Johannesburg HQ",
     address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa",
     phone: "+27 71 093 9964",
-    email: "sales@geosynthetics.co.za",
+    email: "sales@geosyntheticsafrica.com",
     coords: [-26.2041, 28.0473],
     faqs: [
       {

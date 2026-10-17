@@ -31,6 +31,7 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { findProductFamily } from "@/lib/product-families";
 import { Route } from "@/routes/catalogue.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { SITE_URL } from "@/lib/site-url";
 
 interface KeyFeature {
   label: string;
@@ -312,17 +313,17 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://geosynthetics.co.za/" },
-          { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
+          { name: "Home", url: `${SITE_URL}/` },
+          { name: "Catalogue", url: `${SITE_URL}/catalogue` },
           ...(productFamily?.label || product.product_categories?.name
             ? [
               {
                 name: productFamily?.label || product.product_categories!.name,
-                url: `https://geosynthetics.co.za/products/${productFamily?.slug || product.product_categories?.slug || (productFamily?.label || product.product_categories!.name).toLowerCase().replace(/\s+/g, "-")}`,
+                url: `${SITE_URL}/products/${productFamily?.slug || product.product_categories?.slug || (productFamily?.label || product.product_categories!.name).toLowerCase().replace(/\s+/g, "-")}`,
               },
             ]
             : []),
-          { name: product.name, url: `https://geosynthetics.co.za/catalogue/${product.slug}` },
+          { name: product.name, url: `${SITE_URL}/catalogue/${product.slug}` },
         ]}
       />
 
@@ -969,11 +970,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                     +27 71 093 9964
                   </a>
                   <a
-                    href="mailto:sales@geosynthetics.co.za"
+                    href="mailto:sales@geosyntheticsafrica.com"
                     className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
                   >
                     <Mail className="h-4 w-4 text-primary shrink-0" />
-                    sales@geosynthetics.co.za
+                    sales@geosyntheticsafrica.com
                   </a>
                 </div>
                 <Button

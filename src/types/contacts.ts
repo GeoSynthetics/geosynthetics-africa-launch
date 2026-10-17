@@ -22,7 +22,7 @@ export interface ContactHeadOffice {
   contactPerson: string; // e.g. "James Chabata"
   contactRole: string; // e.g. "Sales Admin Manager"
   phone: string; // e.g. "+27 78 1355 926"
-  email: string; // e.g. "sales@geosynthetics.co.za"
+  email: string; // e.g. "sales@geosyntheticsafrica.com"
   hours: string[]; // e.g. ["Mon - Fri: 08:00 - 17:00", "Saturday: Closed", "Sunday: Closed"]
   mapEmbedUrl: string; // e.g. "https://www.google.com/maps..."
 }
@@ -57,7 +57,7 @@ export const DEFAULT_CONTACTS_PAGE_CONTENT: ContactsPageContent = {
     contactPerson: "James Chabata",
     contactRole: "Sales Admin Manager",
     phone: "+27 78 1355 926",
-    email: "sales@geosynthetics.co.za",
+    email: "sales@geosyntheticsafrica.com",
     hours: ["Mon - Fri: 08:00 - 17:00", "Saturday: Closed", "Sunday: Closed"],
     mapEmbedUrl:
       "https://www.google.com/maps?q=7+Tamar+Avenue,+Lea+Glen,+Randburg,+Johannesburg&output=embed",

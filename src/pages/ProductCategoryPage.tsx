@@ -28,6 +28,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { GeoGrid } from "@/components/site/shapes";
 import { getCatalogueFiltersForSlug } from "@/lib/product-families";
+import { SITE_URL } from "@/lib/site-url";
 
 const LEGACY_SLUG_MAP: Record<string, string> = {
   mining: "mining-systems",
@@ -55,9 +56,9 @@ export function ProductCategoryPage() {
     <>
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://geosynthetics.co.za" },
-          { name: "Products", url: "https://geosynthetics.co.za/products" },
-          { name: content.label, url: `https://geosynthetics.co.za/products/${category}` },
+          { name: "Home", url: SITE_URL },
+          { name: "Products", url: `${SITE_URL}/products` },
+          { name: content.label, url: `${SITE_URL}/products/${category}` },
         ]}
       />
       <section

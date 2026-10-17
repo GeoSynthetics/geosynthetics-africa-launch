@@ -13,7 +13,7 @@ export const DEFAULT_REGIONAL_COVERAGE = [
     subtitle: "Southern Africa Regional Hub",
     address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191",
     phone: "+27 78 1355 926",
-    email: "sales@geosynthetics.co.za",
+    email: "sales@geosyntheticsafrica.com",
     services: "Full Supply, Installation & QA/QC Hub",
     transit: "Same day / Next day dispatch",
     routes: "Direct distribution across all 9 provinces.",

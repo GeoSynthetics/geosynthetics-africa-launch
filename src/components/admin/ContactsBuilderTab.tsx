@@ -207,7 +207,7 @@ function HeadOfficeEditor({
           <Input
             value={data.email}
             onChange={(e) => set("email", e.target.value)}
-            placeholder="sales@geosynthetics.co.za"
+            placeholder="sales@geosyntheticsafrica.com"
             className="text-sm"
           />
         </div>
