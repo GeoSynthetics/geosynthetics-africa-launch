@@ -41,6 +41,7 @@ import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as ApiEmailStatusRouteImport } from './routes/api.email-status'
 import { Route as ApiImportImageRouteImport } from './routes/api.import-image'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
@@ -224,6 +225,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiEmailStatusRoute = ApiEmailStatusRouteImport.update({
+  id: '/api/email-status',
+  path: '/api/email-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiImportImageRoute = ApiImportImageRouteImport.update({
   id: '/api/import-image',
   path: '/api/import-image',
@@ -367,6 +373,7 @@ export interface FileRoutesByFullPath {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -415,6 +422,7 @@ export interface FileRoutesByTo {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -472,6 +480,7 @@ export interface FileRoutesById {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -530,6 +539,7 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
@@ -578,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
@@ -681,6 +693,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SustainabilityRoute: typeof SustainabilityRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  ApiEmailStatusRoute: typeof ApiEmailStatusRoute
   ApiImportImageRoute: typeof ApiImportImageRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
@@ -915,6 +928,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/api/email-status': {
+      id: '/api/email-status'
+      path: '/api/email-status'
+      fullPath: '/api/email-status'
+      preLoaderRoute: typeof ApiEmailStatusRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/import-image': {
       id: '/api/import-image'
@@ -1222,6 +1242,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SustainabilityRoute: SustainabilityRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  ApiEmailStatusRoute: ApiEmailStatusRoute,
   ApiImportImageRoute: ApiImportImageRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,

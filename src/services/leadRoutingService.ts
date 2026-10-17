@@ -1,4 +1,7 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { getEmailConfig } from "@/lib/email-config";
 import {
   resolveRegionalRouting,
   MAMADOU_COULIBALY_CONTACT,
@@ -40,7 +43,7 @@ function parseContact(contactInput: string): { email: string; phone: string | nu
   // If contains digits and phone format
   const isLikelyPhone = /^[\d\s+\-()]{6,}$/.test(trimmed);
   if (isLikelyPhone) {
-    return { email: `${trimmed.replace(/[^\d+]/g, "")}@phone-inquiry.geosynthetics.co.za`, phone: trimmed };
+    return { email: `${trimmed.replace(/[^\d+]/g, "")}@phone-inquiry.geosyntheticsafrica.com`, phone: trimmed };
   }
 
   // If user typed both email and phone or name
@@ -54,37 +57,32 @@ function parseContact(contactInput: string): { email: string; phone: string | nu
   return { email: trimmed, phone: null };
 }
 
+const heroEmailSchema = z.object({
+  toEmail: z.string(),
+  toName: z.string(),
+  customerContact: z.string(),
+  customerEmail: z.string(),
+  customerPhone: z.string().nullable(),
+  region: z.string(),
+  projectNeed: z.string(),
+  attachmentUrl: z.string().nullable().optional(),
+  attachmentName: z.string().nullable().optional(),
+  routingRole: z.string(),
+  isWestAfrica: z.boolean(),
+});
+
 /**
  * Sends transactional email notification via Brevo API.
+ * Runs on the server only, so the Brevo key never reaches the browser.
  */
-async function sendNotificationEmail(params: {
-  toEmail: string;
-  toName: string;
-  fromEmail: string;
-  customerContact: string;
-  customerEmail: string;
-  customerPhone: string | null;
-  region: string;
-  projectNeed: string;
-  attachmentUrl?: string | null;
-  attachmentName?: string | null;
-  routingRole: string;
-  isWestAfrica: boolean;
-}): Promise<boolean> {
-  const apiKey =
-    (typeof process !== "undefined" && process.env?.BREVO_API_KEY) ||
-    import.meta.env.VITE_BREVO_API_KEY ||
-    "";
+async function sendNotificationEmail(params: z.infer<typeof heroEmailSchema>): Promise<boolean> {
+  const { apiKey, fromEmail, notifyEmail: generalNotificationEmail } = getEmailConfig();
+  const p = { ...params, fromEmail };
 
   if (!apiKey) {
-    console.warn("Brevo API key not configured; skipping email dispatch.");
+    console.error("[Brevo] BREVO_API_KEY is not set; project request email not sent.");
     return false;
   }
-
-  const generalNotificationEmail =
-    (typeof process !== "undefined" && process.env?.NOTIFICATION_TO_EMAIL) ||
-    import.meta.env.VITE_NOTIFICATION_TO_EMAIL ||
-    "info@geosynthetics.co.za";
 
   const routingTag = params.isWestAfrica
     ? "[West Africa — Mamadou Coulibaly, Côte d'Ivoire]"
@@ -191,11 +189,11 @@ async function sendNotificationEmail(params: {
     const payload: Record<string, unknown> = {
       sender: {
         name: "Geosynthetics Africa Project Desk",
-        email: params.fromEmail,
+        email: p.fromEmail,
       },
       to: toList,
       replyTo: {
-        email: params.customerEmail.includes("@phone-inquiry") ? params.fromEmail : params.customerEmail,
+        email: params.customerEmail.includes("@phone-inquiry") ? p.fromEmail : params.customerEmail,
         name: params.customerContact,
       },
       subject: emailSubject,
@@ -228,6 +226,10 @@ async function sendNotificationEmail(params: {
     return false;
   }
 }
+
+const sendHeroNotificationFn = createServerFn({ method: "POST" })
+  .inputValidator(heroEmailSchema)
+  .handler(async ({ data }) => ({ success: await sendNotificationEmail(data) }));
 
 /**
  * Handles the complete lifecycle of a Hero Project Request submission:
@@ -357,26 +359,38 @@ export async function submitHeroProjectRequest(
     // Don't completely fail if database insert was blocked by permissions — attempt notification
   }
 
-  // 4. Dispatch Email Notification
-  const fromEmail =
-    (typeof process !== "undefined" && process.env?.BREVO_FROM_EMAIL) ||
-    import.meta.env.VITE_BREVO_FROM_EMAIL ||
-    "info@geosynthetics.co.za";
+  // 4. Dispatch Email Notification (server side)
+  let emailSent = false;
+  try {
+    const result = await sendHeroNotificationFn({
+      data: {
+        toEmail: routing.targetEmail,
+        toName: routing.targetName,
+        customerContact: contact,
+        customerEmail: email,
+        customerPhone: phone,
+        region,
+        projectNeed: need,
+        attachmentUrl: publicFileUrl,
+        attachmentName: fileName,
+        routingRole: routing.targetRole,
+        isWestAfrica: routing.isWestAfrica,
+      },
+    });
+    emailSent = result.success;
+  } catch (err) {
+    console.error("Project request email failed:", err);
+  }
 
-  void sendNotificationEmail({
-    toEmail: routing.targetEmail,
-    toName: routing.targetName,
-    fromEmail,
-    customerContact: contact,
-    customerEmail: email,
-    customerPhone: phone,
-    region,
-    projectNeed: need,
-    attachmentUrl: publicFileUrl,
-    attachmentName: fileName,
-    routingRole: routing.targetRole,
-    isWestAfrica: routing.isWestAfrica,
-  });
+  if (!emailSent && lastError) {
+    return {
+      success: false,
+      message: "Sorry, your request could not be sent. Please email sales@geosyntheticsafrica.com.",
+      routedTo: routing,
+      attachmentPath: uploadedFilePath,
+      quoteId,
+    };
+  }
 
   return {
     success: true,

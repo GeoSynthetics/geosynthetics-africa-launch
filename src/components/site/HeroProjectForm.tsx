@@ -105,6 +105,10 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
         file,
       });
 
+      if (!result.success) {
+        toast.error(result.message);
+        return;
+      }
       setSubmissionResult(result);
       toast.success(result.message);
     } catch (err: any) {
