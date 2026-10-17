@@ -233,13 +233,12 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         /* ── 7. Country-specific SEO slug pages ───────────────── */
         const countrySlugs = [
-          "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
-          "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
-          "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+          "south-africa-geosynthetics-supplier-installer",
+          "botswana-geosynthetics-supplier-installer",
+          "tanzania-geosynthetics-supplier-installer",
           "zimbabwe-geosynthetics-supplier-contact",
-          "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
-          "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
-          "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+          "zambia-geosynthetics-supplier-installer",
+          "drc-geosynthetics-supplier-installer",
           "kenya-geosynthetics-supplier-contact",
           "cote-divoire-geosynthetics-supplier-contact",
           "mozambique-geosynthetics-supplier-contact",

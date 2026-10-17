@@ -81,9 +81,9 @@ export interface CountryTemplate {
 }
 
 export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
-  "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa": {
+  "south-africa-geosynthetics-supplier-installer": {
     country: "South Africa",
-    slug: "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
+    slug: "south-africa-geosynthetics-supplier-installer",
     flag: "🇿🇦",
     code: "RSA",
     title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa",
@@ -169,9 +169,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
     },
   },
-  "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier": {
+  "botswana-geosynthetics-supplier-installer": {
     country: "Botswana",
-    slug: "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
+    slug: "botswana-geosynthetics-supplier-installer",
     flag: "🇧🇼",
     code: "BWA",
     title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier",
@@ -240,9 +240,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
     },
   },
-  "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids": {
+  "tanzania-geosynthetics-supplier-installer": {
     country: "Tanzania",
-    slug: "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+    slug: "tanzania-geosynthetics-supplier-installer",
     flag: "🇹🇿",
     code: "TZA",
     title: "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles & Geogrids",
@@ -374,76 +374,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
     },
   },
-  "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control": {
-    country: "Zimbabwe",
-    slug: "zimbabwe-geosynthetics-supplier-contact",
-    flag: "🇿🇼",
-    code: "ZWE",
-    title: "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles & Mining Solutions",
-    description:
-      "Specialized supplier of HDPE geomembranes, geotextiles, geogrids, GCLs, and erosion control solutions in Zimbabwe.",
-    badge: "Zimbabwe Infrastructure & Mining Containment",
-    heroImage: "https://images.unsplash.com/photo-1503694978374-8a2fa68f5981?w=1920&q=80",
-    supplyTitle: "Beitbridge Corridor Logistics to Harare & Bulawayo",
-    supplyDescription:
-      "Efficient road freight via Beitbridge border post with full ZIMRA tax and customs clearance support.",
-    supplyHighlights: [
-      {
-        title: "Fast Cross-Border Dispatch",
-        description: "2-4 day transit time from Johannesburg warehouse directly to project sites.",
-      },
-    ],
-    transitTime: "2 - 4 Days (Road Freight)",
-    logisticsRoutes: "Johannesburg → Beitbridge → Bulawayo / Harare / Mutare",
-    customsInfo: "ZIMRA clearance, CD1 forms, and SADC preferential trade certificates.",
-    installationTitle: "Erosion Control & Dam/TSF Lining Field Support",
-    installationDescription:
-      "Expert installation supervision for mining containment, agricultural dams, and erosion control.",
-    installationHighlights: [
-      {
-        title: "Certified Master Seamers",
-        description: "Specialized crews equipped for high-spec mining and water containment projects.",
-      },
-    ],
-    masterSeamersCount: "4 Specialized Crews",
-    equipmentMobilization: "48 Hours to Harare",
-    qaqcTitle: "Erosion Control & Liner Testing Standards",
-    qaqcDescription:
-      "Field quality assurance verifying tensile integrity, anchoring security, and seam quality.",
-    qaqcHighlights: [
-      {
-        title: "Site Anchor Trench & Seam Inspections",
-        description: "Strict quality control for river channels, tailings dams, and heap leach pads.",
-      },
-    ],
-    complianceStandards: ["ZIMRA Clearance", "ASTM D4595", "GRI-GM13", "SANS 1526"],
-    featuredProductIds: [
-      "hdpe-smooth-geomembrane-liner-gri-gm13-1-5mm-gse-hd",
-      "mirafi-s51-virgin-pp-nonwoven-geotextile-200gsm-3m-x-180m-roll",
-    ],
-    featuredProjectSlugs: [],
-    officeTitle: "Harare Operations Hub",
-    hubName: "Harare Hub",
-    address: "55 Coventry Road, Workington, Harare, Zimbabwe",
-    phone: "+27 71 093 9964",
-    email: "zimbabwe@geosynthetics.co.za",
-    coords: [-17.8252, 31.0335],
-    faqs: [
-      {
-        question: "What geosynthetics do you supply in Zimbabwe?",
-        answer: "We supply HDPE geomembranes, Bidim geotextiles, GCL bentonite liners, biaxial/uniaxial geogrids, and biodegradable erosion control blankets with direct customs clearance into Zimbabwe.",
-      },
-    ],
-    seo: {
-      title: "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
-      description:
-        "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
-      keywords: "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
-    },
-  },
-  "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier": {
+  "zambia-geosynthetics-supplier-installer": {
     country: "Zambia",
-    slug: "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
+    slug: "zambia-geosynthetics-supplier-installer",
     flag: "🇿🇲",
     code: "ZMB",
     title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier",
@@ -508,9 +441,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
     },
   },
-  "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier": {
+  "drc-geosynthetics-supplier-installer": {
     country: "Democratic Republic of Congo (DRC)",
-    slug: "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+    slug: "drc-geosynthetics-supplier-installer",
     flag: "🇨🇩",
     code: "COD",
     title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier",

@@ -296,14 +296,14 @@ export function ContactsPage() {
 
 function CountrySeoLinks() {
   const links = [
-    { name: "South Africa", slug: "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa" },
-    { name: "Botswana", slug: "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier" },
-    { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids" },
+    { name: "South Africa", slug: "south-africa-geosynthetics-supplier-installer" },
+    { name: "Botswana", slug: "botswana-geosynthetics-supplier-installer" },
+    { name: "Tanzania", slug: "tanzania-geosynthetics-supplier-installer" },
     { name: "Zimbabwe", slug: "zimbabwe-geosynthetics-supplier-contact" },
-    { name: "Zambia", slug: "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier" },
+    { name: "Zambia", slug: "zambia-geosynthetics-supplier-installer" },
     {
       name: "Democratic Republic of Congo (DRC)",
-      slug: "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+      slug: "drc-geosynthetics-supplier-installer",
     },
     { name: "Kenya", slug: "kenya-geosynthetics-supplier-contact" },
     { name: "Côte d'Ivoire", slug: "cote-divoire-geosynthetics-supplier-contact" },

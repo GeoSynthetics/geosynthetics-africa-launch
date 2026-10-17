@@ -5,6 +5,136 @@
   "framework": null,
   "redirects": [
     {
+      "source": "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa/",
+      "destination": "/south-africa-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
+      "destination": "/south-africa-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids/",
+      "destination": "/tanzania-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids",
+      "destination": "/tanzania-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier/",
+      "destination": "/botswana-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier",
+      "destination": "/botswana-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control/",
+      "destination": "/zimbabwe-geosynthetics-supplier-contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
+      "destination": "/zimbabwe-geosynthetics-supplier-contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier/",
+      "destination": "/zambia-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier",
+      "destination": "/zambia-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier/",
+      "destination": "/drc-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier",
+      "destination": "/drc-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/gse-hdpe-liner-installer-africa/",
+      "destination": "/geomembrane-liner-installation-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gse-hdpe-liner-installer-africa",
+      "destination": "/geomembrane-liner-installation-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/floating-cover-systems-africa/",
+      "destination": "/floating-cover-installation-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/floating-cover-systems-africa",
+      "destination": "/floating-cover-installation-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gabion-basket-installation/",
+      "destination": "/gabion-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gabion-basket-installation",
+      "destination": "/gabion-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/channel-lining-gccm-installation-africa/",
+      "destination": "/gccm-channel-lining-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/channel-lining-gccm-installation-africa",
+      "destination": "/gccm-channel-lining-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/geocell-installations-africa/",
+      "destination": "/geocell-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/geocell-installations-africa",
+      "destination": "/geocell-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation-contractors-africa/",
+      "destination": "/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation-contractors-africa",
+      "destination": "/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/drainage-filtration/",
+      "destination": "/drainage-filtration-systems-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/drainage-filtration",
+      "destination": "/drainage-filtration-systems-africa",
+      "statusCode": 301
+    },
+    {
       "source": "/product/:slug/",
       "destination": "/catalogue/:slug",
       "statusCode": 301

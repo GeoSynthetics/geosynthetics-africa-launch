@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-13 18:50 (UTC+1)
+
+- **Feature**: Renamed 13 page URLs to stop competing with geosynthetics.co.za.
+- **Problem**: Country and service pages shared identical slugs with the legacy .co.za site (duplicate-URL SEO conflict).
+- **Solution**: Updated the code-referenced slugs (country SEO map, templates, footer, contacts, mega menu, sitemap, test) and added 301 redirects (with/without trailing slash) for all 13 old URLs in vercel.json. The 6 service slugs live only in the CMS database and must be renamed there. Zimbabwe keeps its existing canonical `/zimbabwe-geosynthetics-supplier-contact`: the duplicate template/SEO entry for the old case-study alias was removed and the old URL now 301s to the canonical page.
+
 ## 2026-10-13 18:25 (UTC+1)
 
 - **Feature**: Restore arrow-key page scrolling after header interaction

@@ -5,9 +5,9 @@ import { CountriesTemplatesEditor } from "@/components/admin/CountriesTemplatesE
 import { invalidateCountryTemplatesCache } from "@/hooks/use-country-templates";
 
 const mockCountries = {
-  "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa": {
+  "south-africa-geosynthetics-supplier-installer": {
     country: "South Africa",
-    slug: "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa",
+    slug: "south-africa-geosynthetics-supplier-installer",
     flag: "🇿🇦",
     code: "RSA",
     title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa",
@@ -150,7 +150,7 @@ describe("CountriesTemplatesEditor Component", () => {
     const lastCall = mockUpsert.mock.calls[0][0];
     expect(lastCall.key).toBe("template_countries");
     expect(
-      lastCall.value["gse-hdpe-liner-smooth-geomembrane-supplier-south-africa"].featuredProductIds
+      lastCall.value["south-africa-geosynthetics-supplier-installer"].featuredProductIds
     ).toEqual(["prod-1", "prod-2", "prod-3"]);
   });
 
@@ -188,7 +188,7 @@ describe("CountriesTemplatesEditor Component", () => {
 
     const lastCall = mockUpsert.mock.calls[0][0];
     expect(lastCall.key).toBe("template_countries");
-    const botswanaKey = "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier";
+    const botswanaKey = "botswana-geosynthetics-supplier-installer";
     expect(lastCall.value[botswanaKey].featuredProductIds).toContain("prod-3");
   });
 });

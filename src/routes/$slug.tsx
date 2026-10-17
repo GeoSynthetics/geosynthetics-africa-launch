@@ -172,7 +172,7 @@ const COUNTRY_SEO_MAP: Record<
   string,
   { country: string; title: string; description: string; keywords: string }
 > = {
-  "gse-hdpe-liner-smooth-geomembrane-supplier-south-africa": {
+  "south-africa-geosynthetics-supplier-installer": {
     country: "South Africa",
     title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa | Geosynthetics Africa",
     description:
@@ -180,7 +180,7 @@ const COUNTRY_SEO_MAP: Record<
     keywords:
       "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
   },
-  "botswana-geomembranes-hdpe-geotextiles-geogrids-supplier": {
+  "botswana-geosynthetics-supplier-installer": {
     country: "Botswana",
     title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier | Geosynthetics Africa",
     description:
@@ -188,7 +188,7 @@ const COUNTRY_SEO_MAP: Record<
     keywords:
       "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
   },
-  "tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids": {
+  "tanzania-geosynthetics-supplier-installer": {
     country: "Tanzania",
     title:
       "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
@@ -206,23 +206,14 @@ const COUNTRY_SEO_MAP: Record<
     keywords:
       "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
   },
-  "zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control": {
-    country: "Zimbabwe",
-    title:
-      "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
-    description:
-      "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
-    keywords:
-      "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
-  },
-  "zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier": {
+  "zambia-geosynthetics-supplier-installer": {
     country: "Zambia",
     title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier | Geosynthetics Africa",
     description:
       "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
     keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
   },
-  "drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier": {
+  "drc-geosynthetics-supplier-installer": {
     country: "Democratic Republic of Congo (DRC)",
     title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier | Geosynthetics Africa",
     description:

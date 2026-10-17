@@ -587,7 +587,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 3: Installation */}
             <RLink
               to="/$slug"
-              params={{ slug: "gse-hdpe-liner-installer-africa" }}
+              params={{ slug: "geomembrane-liner-installation-africa" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
