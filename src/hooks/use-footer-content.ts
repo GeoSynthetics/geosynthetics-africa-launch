@@ -17,6 +17,8 @@ function mergeWithDefaults(partial: Partial<FooterContent>): FooterContent {
     brandDescription: partial.brandDescription ?? DEFAULT_FOOTER_CONTENT.brandDescription,
     address: partial.address ?? DEFAULT_FOOTER_CONTENT.address,
     addressMapUrl: partial.addressMapUrl ?? DEFAULT_FOOTER_CONTENT.addressMapUrl,
+    phone: partial.phone || DEFAULT_FOOTER_CONTENT.phone,
+    email: partial.email || DEFAULT_FOOTER_CONTENT.email,
     socialLinks: partial.socialLinks ?? DEFAULT_FOOTER_CONTENT.socialLinks,
     certifications: partial.certifications ?? DEFAULT_FOOTER_CONTENT.certifications,
     copyrightText: partial.copyrightText ?? DEFAULT_FOOTER_CONTENT.copyrightText,
@@ -84,8 +86,7 @@ export function updateFooterCache(content: FooterContent) {
 
 export function useFooterContent(): FooterContent {
   const rootData = useLoaderData({ from: "__root__" }) as
-    | { footerContent: FooterContent }
-    | undefined;
+    { footerContent: FooterContent } | undefined;
 
   const [, rerender] = useState(0);
 

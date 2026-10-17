@@ -71,8 +71,8 @@ export function ApplicationsLanding() {
               return (
                 <Link
                   key={c.slug || c.id}
-                  to="/$slug"
-                  params={{ slug: c.slug || c.id }}
+                  to="/applications/$category"
+                  params={{ category: c.slug || c.id }}
                   className="group relative rounded-xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer"
                 >
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom rounded-l-xl" />

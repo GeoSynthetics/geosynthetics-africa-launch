@@ -556,7 +556,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
           <div className="flex flex-wrap items-center gap-y-3 gap-x-2 md:gap-x-4 lg:gap-x-6 text-xs md:text-sm text-foreground/90 font-semibold">
             {/* Step 1: Supply */}
             <RLink
-              to="/$slug"
+              to="/services/$slug"
               params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
@@ -571,7 +571,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
             {/* Step 2: Delivery */}
             <RLink
-              to="/$slug"
+              to="/services/$slug"
               params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
@@ -586,7 +586,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
             {/* Step 3: Installation */}
             <RLink
-              to="/$slug"
+              to="/services/$slug"
               params={{ slug: "geomembrane-liner-installation-africa" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"

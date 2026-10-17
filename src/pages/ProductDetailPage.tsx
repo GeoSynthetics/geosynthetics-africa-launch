@@ -963,11 +963,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                 </p>
                 <div className="mt-4 space-y-3 text-xs font-medium">
                   <a
-                    href="tel:+27710939964"
+                    href="tel:+27723430868"
                     className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
                   >
                     <Phone className="h-4 w-4 text-primary shrink-0" />
-                    +27 71 093 9964
+                    +27 72 343 0868
                   </a>
                   <a
                     href="mailto:sales@geosyntheticsafrica.com"

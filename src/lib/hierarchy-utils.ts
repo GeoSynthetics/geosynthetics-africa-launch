@@ -19,13 +19,29 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
         primary: section.items.map((item) => {
           let targetTo = item.to;
           let targetParams = item.params;
-          if (
-            section.key === "services" ||
-            section.key === "industries" ||
-            section.key === "applications"
-          ) {
-            targetTo = "/$slug";
+          // Section pages live under their section, addressed by the page's own slug
+          if (section.key === "services") {
+            targetTo = "/services/$slug";
             targetParams = { slug: item.slug || item.id };
+          } else if (section.key === "industries") {
+            targetTo = "/industries/$slug";
+            targetParams = { slug: item.slug || item.id };
+          } else if (section.key === "applications") {
+            targetTo = "/applications/$category";
+            targetParams = { category: item.slug || item.id };
+          }
+
+          // Product families link by slug, so menu URLs match their canonical pages
+          const childLink = (c: any) =>
+            section.key === "products" && c.to === "/products/$category/$family"
+              ? {
+                  label: c.label,
+                  to: c.to,
+                  params: { category: item.slug || item.id, family: c.slug || c.id },
+                }
+              : { label: c.label, to: c.to, params: c.params };
+          if (section.key === "products" && item.to === "/products/$category") {
+            targetParams = { category: item.slug || item.id };
           }
 
           return {
@@ -40,11 +56,7 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                   secondary:
                     item.megaFallback.secondary && item.megaFallback.secondary.length > 0
                       ? item.megaFallback.secondary
-                      : (item.children || []).map((c) => ({
-                          label: c.label,
-                          to: c.to,
-                          params: c.params,
-                        })),
+                      : (item.children || []).map(childLink),
                   featuredTitle: item.megaFallback.featuredTitle ?? "Featured",
                   featuredKind: item.megaFallback.featuredKind ?? "product",
                   featured: item.megaFallback.featured ?? [],
@@ -58,11 +70,7 @@ export function buildMegaMenuFromHierarchy(sections: HierarchySection[]): MegaMe
                 }
               : {
                   secondaryTitle: item.label,
-                  secondary: (item.children || []).map((c) => ({
-                    label: c.label,
-                    to: c.to,
-                    params: c.params,
-                  })),
+                  secondary: (item.children || []).map(childLink),
                   featuredTitle: "Featured",
                   featuredKind: "product" as const,
                   featured: [],

@@ -1,4 +1,5 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/components/site/mega-menu-data";
@@ -39,7 +40,9 @@ export async function loadServiceData(slug: string) {
   }
 
   const hierarchy = (hierarchyRow?.value as any) || {};
-  const matchedItem = hierarchy.items?.find((item: any) => item.slug === slug || item.id === slug);
+  const matchedItem =
+    hierarchy.items?.find((item: any) => item.slug === slug) ||
+    hierarchy.items?.find((item: any) => item.id === slug);
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then slug)
   let tmpl = null;
@@ -279,15 +282,17 @@ export function ServiceDetailSkeleton() {
 }
 
 export const Route = createFileRoute("/services/$slug")({
-  ssr: false,
-  beforeLoad: ({ params }) => {
-    throw redirect({
-      to: "/$slug",
-      params: { slug: params.slug },
-      statusCode: 301,
-    });
+  loader: async ({ params }) => {
+    // Internal ids and old addresses redirect to the page's own slug
+    const hierarchies = await fetchSectionHierarchies();
+    const target = await canonicalSectionRedirect("services", params.slug, hierarchies);
+    if (target) throw redirect({ href: target, statusCode: 301 });
+
+    const data = await loadServiceData(params.slug);
+    const inHierarchy = !!findItem(hierarchies.services, params.slug);
+    if (!inHierarchy && !data?.templateData) throw notFound();
+    return data;
   },
-  loader: ({ params }) => loadServiceData(params.slug),
   pendingComponent: ServiceDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {
