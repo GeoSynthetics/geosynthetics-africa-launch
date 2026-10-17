@@ -6,7 +6,8 @@
 -- the new URLs returned 404 and menus/footer still linked to the old URLs.
 --
 -- Apply in the Supabase SQL editor. Safe to re-run (replacements are exact
--- quoted tokens and become no-ops once applied).
+-- quoted tokens and become no-ops once applied). The script enables RLS on
+-- the only table it creates, so no "Run and enable RLS" choice is needed.
 --
 -- ── Optional preview (run on its own first) ─────────────────────────────
 -- Counts of old tokens (should be > 0 before) and new tokens already present
@@ -47,9 +48,18 @@ WHERE key IN ('hierarchy_services', 'template_services', 'hierarchy_applications
   'template_applications', 'template_countries', 'footer_content', 'homepage_content',
   'template_industries', 'hierarchy_products', 'template_product_categories');
 
--- 2. Old → new slug map
-CREATE TEMP TABLE slug_renames (old_slug text, new_slug text) ON COMMIT DROP;
-INSERT INTO slug_renames (old_slug, new_slug) VALUES
+-- Backup is admin-only: RLS on with no policies hides it from the anon /
+-- authenticated API keys (the SQL editor still reads it for rollback)
+ALTER TABLE public.site_config_backup_20261017 ENABLE ROW LEVEL SECURITY;
+
+-- 2 + 3. Replace exact quoted tokens: "old", "/old" and "/old/" (slugs, ids,
+--    params, template keys and internal link paths). The old → new map is
+--    inline (no temp table) so the SQL editor's RLS prompt can't break it.
+DO $$
+DECLARE
+  r record;
+BEGIN
+  FOR r IN SELECT * FROM (VALUES
   -- Services
   ('gse-hdpe-liner-installer-africa', 'geomembrane-liner-installation-africa'),
   ('floating-cover-systems-africa', 'floating-cover-installation-africa'),
@@ -66,15 +76,8 @@ INSERT INTO slug_renames (old_slug, new_slug) VALUES
   ('zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control', 'zimbabwe-geosynthetics-supplier-installer'),
   ('zimbabwe-geosynthetics-supplier-contact', 'zimbabwe-geosynthetics-supplier-installer'),
   ('zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier', 'zambia-geosynthetics-supplier-installer'),
-  ('drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier', 'drc-geosynthetics-supplier-installer');
-
--- 3. Replace exact quoted tokens: "old", "/old" and "/old/" (slugs, ids,
---    params, template keys and internal link paths)
-DO $$
-DECLARE
-  r record;
-BEGIN
-  FOR r IN SELECT old_slug, new_slug FROM slug_renames LOOP
+  ('drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier', 'drc-geosynthetics-supplier-installer')
+  ) AS renames(old_slug, new_slug) LOOP
     UPDATE public.site_config
     SET value = replace(replace(replace(value::text,
           '"/' || r.old_slug || '/"', '"/' || r.new_slug || '"'),
