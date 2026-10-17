@@ -1,10 +1,7 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import { sectionPathForTopLevelSlug } from "@/lib/section-paths";
 import { resolveSlugToPath, fetchSeoPages } from "@/hooks/use-page-slugs";
 import { lazy, Suspense } from "react";
-import { SERVICES, INDUSTRIES, APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
-import { loadServiceData, ServiceDetailSkeleton } from "@/routes/services.$slug";
-import { loadIndustryData, IndustryDetailSkeleton } from "@/routes/industries.$slug";
-import { loadApplicationData, ApplicationCategorySkeleton } from "@/routes/applications.$category";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
 import { fetchCountryTemplates } from "@/hooks/use-country-templates";
@@ -43,15 +40,6 @@ const PAGE_COMPONENTS: Record<string, React.LazyExoticComponent<React.ComponentT
   ),
 };
 
-const ServicePageLazy = lazy(() =>
-  import("@/pages/ServicePage").then((m) => ({ default: m.ServicePage })),
-);
-const IndustryPageLazy = lazy(() =>
-  import("@/pages/IndustryPage").then((m) => ({ default: m.IndustryPage })),
-);
-const ApplicationCategoryPageLazy = lazy(() =>
-  import("@/pages/ApplicationCategoryPage").then((m) => ({ default: m.ApplicationCategoryPage })),
-);
 const CountryPageLazy = lazy(() =>
   import("@/pages/CountryPage").then((m) => ({ default: m.CountryPage })),
 );
@@ -65,9 +53,7 @@ export async function loadCountryData(customSlug: string) {
   try {
     const templates = await fetchCountryTemplates();
     countryTemplate =
-      templates[customSlug] ||
-      Object.values(templates).find((t) => t.slug === customSlug) ||
-      null;
+      templates[customSlug] || Object.values(templates).find((t) => t.slug === customSlug) || null;
 
     if (!countryTemplate) {
       const countryMeta = COUNTRY_SEO_MAP[customSlug];
@@ -121,14 +107,16 @@ export async function loadCountryData(customSlug: string) {
         id: "hdpe-smooth",
         name: "GSE Smooth HDPE Geomembrane",
         slug: "gse-hdpe-liner-smooth-geomembrane",
-        short_description: "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
+        short_description:
+          "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
         image_url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
       },
       {
         id: "bidim-geotextile",
         name: "Bidim Non-Woven Geotextile",
         slug: "bidim-non-woven-continuous-filament-geotextile",
-        short_description: "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
+        short_description:
+          "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
         image_url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
       },
     ];
@@ -203,8 +191,7 @@ const COUNTRY_SEO_MAP: Record<
       "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
     description:
       "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
-    keywords:
-      "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
+    keywords: "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
   },
   "zambia-geosynthetics-supplier-installer": {
     country: "Zambia",
@@ -272,6 +259,11 @@ export const Route = createFileRoute("/$slug")({
     // Check if it's a country-specific SEO page slug or country template
     const countryLoaderData = await loadCountryData(customSlug);
     if (countryLoaderData.countryTemplate) {
+      // One address per country: alternative slugs redirect to the page's own slug
+      const countrySlug = countryLoaderData.countryTemplate.slug;
+      if (countrySlug && countrySlug !== customSlug) {
+        throw redirect({ href: `/${countrySlug}`, statusCode: 301 });
+      }
       return { type: "country" as const, loaderData: countryLoaderData };
     }
 
@@ -316,98 +308,12 @@ export const Route = createFileRoute("/$slug")({
       return { type: "core" as const, originalPath, seo, ...extraData };
     }
 
-    // 2. Check if it's a Service subpage (static fallback or dynamic CMS)
-    const isStaticService = SERVICES.some((s) => s.slug === customSlug);
-    let isDynamicService = false;
-    try {
-      const { data } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "hierarchy_services")
-        .maybeSingle();
-      const items = (data?.value as any)?.items || [];
-      isDynamicService = items.some(
-        (item: any) => item.slug === customSlug || item.id === customSlug,
-      );
-
-      if (!isDynamicService) {
-        const { data: templatesData } = await supabase
-          .from("site_config")
-          .select("value")
-          .eq("key", "template_services")
-          .maybeSingle();
-        const templates = (templatesData?.value as Record<string, any>) || {};
-        isDynamicService = !!templates[customSlug];
-      }
-    } catch (err) {
-      console.error("Error reading hierarchy_services/template_services:", err);
-    }
-
-    if (isStaticService || isDynamicService) {
-      const loaderData = await loadServiceData(customSlug);
-      return { type: "service" as const, loaderData };
-    }
-
-    // 3. Check if it's an Industry subpage (static fallback or dynamic CMS)
-    const isStaticIndustry = INDUSTRIES.some((i) => i.slug === customSlug);
-    let isDynamicIndustry = false;
-    try {
-      const { data } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "hierarchy_industries")
-        .maybeSingle();
-      const items = (data?.value as any)?.items || [];
-      isDynamicIndustry = items.some(
-        (item: any) => item.slug === customSlug || item.id === customSlug,
-      );
-
-      if (!isDynamicIndustry) {
-        const { data: templatesData } = await supabase
-          .from("site_config")
-          .select("value")
-          .eq("key", "template_industries")
-          .maybeSingle();
-        const templates = (templatesData?.value as Record<string, any>) || {};
-        isDynamicIndustry = !!templates[customSlug];
-      }
-    } catch (err) {
-      console.error("Error reading hierarchy_industries/template_industries:", err);
-    }
-
-    if (isStaticIndustry || isDynamicIndustry) {
-      const loaderData = await loadIndustryData(customSlug);
-      return { type: "industry" as const, loaderData };
-    }
-
-    // 4. Check if it's an Application subpage (static fallback or dynamic CMS)
-    const isStaticApp = APPLICATION_CATEGORIES.some((a) => a.slug === customSlug);
-    let isDynamicApp = false;
-    try {
-      const { data } = await supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "hierarchy_applications")
-        .maybeSingle();
-      const items = (data?.value as any)?.items || [];
-      isDynamicApp = items.some((item: any) => item.slug === customSlug || item.id === customSlug);
-
-      if (!isDynamicApp) {
-        const { data: templatesData } = await supabase
-          .from("site_config")
-          .select("value")
-          .eq("key", "template_applications")
-          .maybeSingle();
-        const templates = (templatesData?.value as Record<string, any>) || {};
-        isDynamicApp = !!templates[customSlug];
-      }
-    } catch (err) {
-      console.error("Error reading hierarchy_applications/template_applications:", err);
-    }
-
-    if (isStaticApp || isDynamicApp) {
-      const loaderData = await loadApplicationData(customSlug);
-      return { type: "application" as const, loaderData };
+    // 2. Applications, services and industries now live under their section
+    //    (/applications/…, /services/…, /industries/…). Old top-level addresses
+    //    and internal ids redirect there permanently.
+    const sectionTarget = await sectionPathForTopLevelSlug(customSlug);
+    if (sectionTarget) {
+      throw redirect({ href: sectionTarget, statusCode: 301 });
     }
 
     // 5. Check if it's a Company / Generic blank page template (e.g. careers, sustainability, privacy-policy, terms-and-conditions, or admin-created blank page)
@@ -447,57 +353,6 @@ export const Route = createFileRoute("/$slug")({
         meta.push({ name: "keywords", content: template.seo.keywords });
       }
       return { meta };
-    }
-
-    if (loaderData.type === "service") {
-      const { service, templateData } = loaderData.loaderData;
-      const label = service.label;
-      const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description =
-        templateData?.seo?.description ||
-        `Professional ${label.toLowerCase()} services by Geosynthetics Africa.`;
-      return {
-        meta: [
-          { title },
-          { name: "description", content: description },
-          { property: "og:title", content: title },
-          { property: "og:description", content: description },
-        ],
-      };
-    }
-
-    if (loaderData.type === "industry") {
-      const { industry, templateData } = loaderData.loaderData;
-      const label = industry.label;
-      const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description =
-        templateData?.seo?.description ||
-        `High-performance geosynthetic solutions for the ${label.toLowerCase()} sector.`;
-      return {
-        meta: [
-          { title },
-          { name: "description", content: description },
-          { property: "og:title", content: title },
-          { property: "og:description", content: description },
-        ],
-      };
-    }
-
-    if (loaderData.type === "application") {
-      const { category, templateData } = loaderData.loaderData;
-      const label = category.label;
-      const title = templateData?.seo?.title || `${label} — Geosynthetics Africa`;
-      const description =
-        templateData?.seo?.description ||
-        `Explore our advanced ${label.toLowerCase()} applications and projects.`;
-      return {
-        meta: [
-          { title },
-          { name: "description", content: description },
-          { property: "og:title", content: title },
-          { property: "og:description", content: description },
-        ],
-      };
     }
 
     if (loaderData.type === "country") {
@@ -542,30 +397,6 @@ export const Route = createFileRoute("/$slug")({
 
 function CustomSlugPage() {
   const loaderData = Route.useLoaderData();
-
-  if (loaderData.type === "service") {
-    return (
-      <Suspense fallback={<ServiceDetailSkeleton />}>
-        <ServicePageLazy data={loaderData.loaderData} />
-      </Suspense>
-    );
-  }
-
-  if (loaderData.type === "industry") {
-    return (
-      <Suspense fallback={<IndustryDetailSkeleton />}>
-        <IndustryPageLazy data={loaderData.loaderData} />
-      </Suspense>
-    );
-  }
-
-  if (loaderData.type === "application") {
-    return (
-      <Suspense fallback={<ApplicationCategorySkeleton />}>
-        <ApplicationCategoryPageLazy data={loaderData.loaderData} />
-      </Suspense>
-    );
-  }
 
   if (loaderData.type === "country") {
     return (

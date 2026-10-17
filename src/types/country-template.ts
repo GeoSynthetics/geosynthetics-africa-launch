@@ -149,7 +149,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Johannesburg Head Office & Technical Center",
     hubName: "Johannesburg HQ",
     address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "sales@geosyntheticsafrica.com",
     coords: [-26.2041, 28.0473],
     faqs: [
@@ -224,7 +224,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Gaborone Distribution & Logistics Hub",
     hubName: "Gaborone Logistics Hub",
     address: "Plot 22017, Gaborone West Industrial, Gaborone, Botswana",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "botswana@geosynthetics.co.za",
     coords: [-24.6282, 25.9231],
     faqs: [
@@ -291,7 +291,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Dar es Salaam Regional Office",
     hubName: "Dar es Salaam Hub",
     address: "Kurasini Industrial Area, Dar es Salaam, Tanzania",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "tanzania@geosynthetics.co.za",
     coords: [-6.7924, 39.2083],
     faqs: [
@@ -358,7 +358,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Harare Operations Hub",
     hubName: "Harare Hub",
     address: "55 Coventry Road, Workington, Harare, Zimbabwe",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "zimbabwe@geosynthetics.co.za",
     coords: [-17.8252, 31.0335],
     faqs: [
@@ -425,7 +425,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Kitwe / Lusaka Regional Logistics Hub",
     hubName: "Kitwe Logistics Hub",
     address: "Heavy Industrial Area, Kitwe, Copperbelt, Zambia",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "zambia@geosynthetics.co.za",
     coords: [-12.8024, 28.2132],
     faqs: [
@@ -492,7 +492,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Kolwezi / Lubumbashi Operations Center",
     hubName: "Kolwezi Hub",
     address: "Route de Likasi, Lubumbashi / Kolwezi, Lualaba, DRC",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "drc@geosynthetics.co.za",
     coords: [-11.6609, 27.4794],
     faqs: [
@@ -559,7 +559,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Nairobi Regional Hub",
     hubName: "Nairobi Hub",
     address: "Mombasa Road, Industrial Area, Nairobi, Kenya",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "kenya@geosynthetics.co.za",
     coords: [-1.2921, 36.8219],
     faqs: [
@@ -626,7 +626,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Abidjan Regional Hub",
     hubName: "Abidjan Hub",
     address: "Zone Industrielle de Yopougon, Abidjan, Côte d'Ivoire",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "civ@geosynthetics.co.za",
     coords: [5.36, -4.0083],
     faqs: [
@@ -693,7 +693,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Maputo Regional Hub",
     hubName: "Maputo Hub",
     address: "Avenida 24 de Julho, Maputo, Mozambique",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "mozambique@geosynthetics.co.za",
     coords: [-25.9692, 32.5732],
     faqs: [
@@ -760,7 +760,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Accra / Tarkwa Regional Hub",
     hubName: "Accra Hub",
     address: "Spintex Road, Accra / Tarkwa Mining District, Ghana",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "ghana@geosynthetics.co.za",
     coords: [5.6037, -0.187],
     faqs: [
@@ -827,7 +827,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     officeTitle: "Windhoek Distribution Center",
     hubName: "Windhoek Hub",
     address: "12 Edison Street, Southern Industrial Area, Windhoek, Namibia",
-    phone: "+27 71 093 9964",
+    phone: "+27 72 343 0868",
     email: "namibia@geosynthetics.co.za",
     coords: [-22.5609, 17.0658],
     faqs: [

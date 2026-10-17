@@ -206,7 +206,7 @@ export function ServicePage({ data }: { data: any }) {
         items={[
           { name: "Home", url: SITE_URL },
           { name: "Services", url: `${SITE_URL}/services` },
-          { name: title, url: `${SITE_URL}/${service.slug}` },
+          { name: title, url: `${SITE_URL}/services/${service.slug}` },
         ]}
       />
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}

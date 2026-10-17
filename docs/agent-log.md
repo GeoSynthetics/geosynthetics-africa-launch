@@ -4,7 +4,7 @@
 
 - **Feature**: Finish the 13 URL renames (CMS data, Zimbabwe, GCL)
 - **Problem**: The slug rename in `daa8c9f` only changed code; the `site_config` CMS rows kept the old service, application and country slugs, so the new URLs 404'd and menus/footer linked to old URLs. Zimbabwe used `-contact` instead of the requested `-installer` (both URLs served the same page), and the real CMS GCL slug `/gcl-liner-installation` had no redirect.
-- **Solution**: Added migration `20261017120000_rename_africa_slugs.sql` (already applied: backup table with RLS, exact-token rename of 14 slugs across 10 `site_config` keys, homepage office link off .co.za). Moved Zimbabwe to `/zimbabwe-geosynthetics-supplier-installer` with 301s from `-contact` and the old jutesoillock URL, added the `/gcl-liner-installation` 301, and made the service breadcrumb schema use the live `/<slug>` URL.
+- **Solution**: Added migration `20261017120000_rename_africa_slugs.sql` (already applied: backup table with RLS, exact-token rename of 14 slugs across 10 `site_config` keys, homepage office link off .co.za). Moved Zimbabwe to `/zimbabwe-geosynthetics-supplier-installer` with 301s from `-contact` and the old jutesoillock URL, and added the `/gcl-liner-installation` 301 to `/services/gcl-installation-contractor-africa`. The code default Zimbabwe template now uses the `-installer` key, so the sitemap (built from country templates) lists Zimbabwe once instead of under both slugs.
 
 ## 2026-10-17 02:20 (UTC+1)
 

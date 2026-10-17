@@ -76,82 +76,82 @@
     },
     {
       "source": "/gse-hdpe-liner-installer-africa/",
-      "destination": "/geomembrane-liner-installation-africa",
+      "destination": "/services/geomembrane-liner-installation-africa",
       "statusCode": 301
     },
     {
       "source": "/gse-hdpe-liner-installer-africa",
-      "destination": "/geomembrane-liner-installation-africa",
+      "destination": "/services/geomembrane-liner-installation-africa",
       "statusCode": 301
     },
     {
       "source": "/floating-cover-systems-africa/",
-      "destination": "/floating-cover-installation-africa",
+      "destination": "/services/floating-cover-installation-africa",
       "statusCode": 301
     },
     {
       "source": "/floating-cover-systems-africa",
-      "destination": "/floating-cover-installation-africa",
+      "destination": "/services/floating-cover-installation-africa",
       "statusCode": 301
     },
     {
       "source": "/gabion-basket-installation/",
-      "destination": "/gabion-installation-contractor-africa",
+      "destination": "/services/gabion-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/gabion-basket-installation",
-      "destination": "/gabion-installation-contractor-africa",
+      "destination": "/services/gabion-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/channel-lining-gccm-installation-africa/",
-      "destination": "/gccm-channel-lining-contractor-africa",
+      "destination": "/services/gccm-channel-lining-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/channel-lining-gccm-installation-africa",
-      "destination": "/gccm-channel-lining-contractor-africa",
+      "destination": "/services/gccm-channel-lining-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/geocell-installations-africa/",
-      "destination": "/geocell-installation-contractor-africa",
+      "destination": "/services/geocell-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/geocell-installations-africa",
-      "destination": "/geocell-installation-contractor-africa",
+      "destination": "/services/geocell-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/gcl-liner-installation-contractors-africa/",
-      "destination": "/gcl-installation-contractor-africa",
+      "destination": "/services/gcl-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/gcl-liner-installation-contractors-africa",
-      "destination": "/gcl-installation-contractor-africa",
+      "destination": "/services/gcl-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/gcl-liner-installation/",
-      "destination": "/gcl-installation-contractor-africa",
+      "destination": "/services/gcl-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/gcl-liner-installation",
-      "destination": "/gcl-installation-contractor-africa",
+      "destination": "/services/gcl-installation-contractor-africa",
       "statusCode": 301
     },
     {
       "source": "/drainage-filtration/",
-      "destination": "/drainage-filtration-systems-africa",
+      "destination": "/applications/drainage-filtration-systems-africa",
       "statusCode": 301
     },
     {
       "source": "/drainage-filtration",
-      "destination": "/drainage-filtration-systems-africa",
+      "destination": "/applications/drainage-filtration-systems-africa",
       "statusCode": 301
     },
     {

@@ -142,7 +142,7 @@ function BrandEditor({
           <Input
             value={phone ?? ""}
             onChange={(e) => onPhoneChange(e.target.value)}
-            placeholder="+27 71 093 9964"
+            placeholder="+27 72 343 0868"
             className="text-sm"
           />
         </div>
