@@ -175,6 +175,10 @@ export function Footer() {
         to: resolve(link.to),
         params: link.params,
       }));
+      // Always end the countries column with the full list of countries served
+      if (!items.some((i) => i.to === "/countries")) {
+        items = [...items, { label: "All countries →", to: "/countries" }];
+      }
     }
     return {
       title: col.title,
