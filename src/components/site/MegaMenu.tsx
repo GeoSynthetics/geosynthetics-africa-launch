@@ -323,9 +323,9 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
         {/* Secondary list or Most Specified Product */}
         <div className="col-span-3">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
+          {/* <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
             {isServiceOrAppOrIndustry ? "Most Specified" : displayData.secondaryTitle}
-          </h4>
+          </h4> */}
           {isServiceOrAppOrIndustry ? (
             <TopSellingProductsSlider
               products={

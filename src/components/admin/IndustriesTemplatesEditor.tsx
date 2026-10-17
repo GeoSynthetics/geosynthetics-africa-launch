@@ -1226,13 +1226,6 @@ export function IndustriesTemplatesEditor() {
         </div>
       </div>
 
-      {/* Success indicator */}
-      {!dirty && Object.keys(allData).length > 0 && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400">
-          <CheckCircle2 className="h-3.5 w-3.5" />
-          All changes saved to Supabase
-        </div>
-      )}
       <DeleteConfirmationDialog
         isOpen={!!industryToDelete}
         onOpenChange={(open) => !open && setIndustryToDelete(null)}
