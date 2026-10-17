@@ -50,11 +50,15 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
+import { Route as FrIndexRouteImport } from './routes/fr.index'
+import { Route as FrSlugRouteImport } from './routes/fr.$slug'
 import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as PtIndexRouteImport } from './routes/pt.index'
+import { Route as PtSlugRouteImport } from './routes/pt.$slug'
 import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
 import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
@@ -271,6 +275,16 @@ const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
   path: '/catalogue/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FrIndexRoute = FrIndexRouteImport.update({
+  id: '/fr/',
+  path: '/fr/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FrSlugRoute = FrSlugRouteImport.update({
+  id: '/fr/$slug',
+  path: '/fr/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -295,6 +309,16 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
+} as any)
+const PtIndexRoute = PtIndexRouteImport.update({
+  id: '/pt/',
+  path: '/pt/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PtSlugRoute = PtSlugRouteImport.update({
+  id: '/pt/$slug',
+  path: '/pt/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const QualityAssuranceIndexRoute = QualityAssuranceIndexRouteImport.update({
   id: '/',
@@ -385,17 +409,21 @@ export interface FileRoutesByFullPath {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/fr/': typeof FrIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/pt/': typeof PtIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -435,17 +463,21 @@ export interface FileRoutesByTo {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/fr': typeof FrIndexRoute
   '/industries': typeof IndustriesIndexRoute
   '/products': typeof ProductsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/pt': typeof PtIndexRoute
   '/quality-assurance': typeof QualityAssuranceIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/services': typeof ServicesIndexRoute
@@ -494,17 +526,21 @@ export interface FileRoutesById {
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/fr/': typeof FrIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/pt/': typeof PtIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -554,17 +590,21 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
     | '/blog/'
     | '/catalogue/'
+    | '/fr/'
     | '/industries/'
     | '/products/'
     | '/projects/'
+    | '/pt/'
     | '/quality-assurance/'
     | '/resources/'
     | '/services/'
@@ -604,17 +644,21 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin'
     | '/applications'
     | '/blog'
     | '/catalogue'
+    | '/fr'
     | '/industries'
     | '/products'
     | '/projects'
+    | '/pt'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -662,17 +706,21 @@ export interface FileRouteTypes {
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
     | '/blog/'
     | '/catalogue/'
+    | '/fr/'
     | '/industries/'
     | '/products/'
     | '/projects/'
+    | '/pt/'
     | '/quality-assurance/'
     | '/resources/'
     | '/services/'
@@ -709,8 +757,12 @@ export interface RootRouteChildren {
   ApiEmailStatusRoute: typeof ApiEmailStatusRoute
   ApiImportImageRoute: typeof ApiImportImageRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
+  FrSlugRoute: typeof FrSlugRoute
+  PtSlugRoute: typeof PtSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
+  FrIndexRoute: typeof FrIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  PtIndexRoute: typeof PtIndexRoute
   ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
   ApiStorageBucketSplatRoute: typeof ApiStorageBucketSplatRoute
@@ -1005,6 +1057,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogueSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fr/': {
+      id: '/fr/'
+      path: '/fr'
+      fullPath: '/fr/'
+      preLoaderRoute: typeof FrIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fr/$slug': {
+      id: '/fr/$slug'
+      path: '/fr/$slug'
+      fullPath: '/fr/$slug'
+      preLoaderRoute: typeof FrSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/industries/': {
       id: '/industries/'
       path: '/'
@@ -1039,6 +1105,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
+    }
+    '/pt/': {
+      id: '/pt/'
+      path: '/pt'
+      fullPath: '/pt/'
+      preLoaderRoute: typeof PtIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pt/$slug': {
+      id: '/pt/$slug'
+      path: '/pt/$slug'
+      fullPath: '/pt/$slug'
+      preLoaderRoute: typeof PtSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/quality-assurance/': {
       id: '/quality-assurance/'
@@ -1266,8 +1346,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiEmailStatusRoute: ApiEmailStatusRoute,
   ApiImportImageRoute: ApiImportImageRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
+  FrSlugRoute: FrSlugRoute,
+  PtSlugRoute: PtSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
+  FrIndexRoute: FrIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  PtIndexRoute: PtIndexRoute,
   ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
   ApiStorageBucketSplatRoute: ApiStorageBucketSplatRoute,

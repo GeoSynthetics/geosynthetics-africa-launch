@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { langFromPath, switchLanguagePath, type SiteLang } from "@/i18n/localized-pages";
 import { Globe, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,11 +17,15 @@ const languages = [
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();
-  const currentLang = i18n.language?.split("-")[0] || "en";
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const currentLang = langFromPath(pathname);
   const selectedLang = languages.find((lang) => lang.code === currentLang) || languages[0];
 
+  // Go to the same page in the chosen language (or that language's home page)
   const handleLanguageChange = (langCode: string) => {
     void i18n.changeLanguage(langCode);
+    void navigate({ to: switchLanguagePath(pathname, langCode as SiteLang) } as any);
   };
 
   return (

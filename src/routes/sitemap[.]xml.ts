@@ -1,3 +1,4 @@
+import { LOCALIZED_PAGES, localizedPath } from "@/i18n/localized-pages";
 import { createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/site-url";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,6 +100,17 @@ export const Route = createFileRoute("/sitemap.xml")({
               lastmod: now,
               changefreq: page.changefreq,
               priority: page.priority,
+            }),
+          );
+        }
+
+        /* ── French and Portuguese pages ── */
+        for (const page of LOCALIZED_PAGES) {
+          urls.push(
+            urlEntry(`${baseUrl}${localizedPath(page)}`, {
+              lastmod: now,
+              changefreq: "monthly",
+              priority: page.slug ? 0.7 : 0.9,
             }),
           );
         }
