@@ -1,15 +1,18 @@
-import { createRouter, useRouter } from "@tanstack/react-router";
+import { createRouter, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { getErrorMessage } from "./lib/error-message";
 import { routeTree } from "./routeTree.gen";
 
-function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function DefaultErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
+
+  const errorMessage = getErrorMessage(error);
 
   useEffect(() => {
     const isChunkError =
-      error.message?.includes("Failed to fetch dynamically imported module") ||
-      error.message?.includes("Importing a module script failed") ||
-      error.message?.includes("error loading dynamically imported module");
+      errorMessage.includes("Failed to fetch dynamically imported module") ||
+      errorMessage.includes("Importing a module script failed") ||
+      errorMessage.includes("error loading dynamically imported module");
 
     if (isChunkError) {
       const lastReload = sessionStorage.getItem("gsa-chunk-reload-time");
@@ -20,7 +23,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
         window.location.reload();
       }
     }
-  }, [error]);
+  }, [errorMessage]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -45,9 +48,9 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
         <p className="mt-2 text-sm text-muted-foreground">
           An unexpected error occurred. Please try again.
         </p>
-        {import.meta.env.DEV && error.message && (
+        {import.meta.env.DEV && errorMessage && (
           <pre className="mt-4 max-h-40 overflow-auto rounded-md bg-muted p-3 text-left font-mono text-xs text-destructive">
-            {error.message}
+            {errorMessage}
           </pre>
         )}
         <div className="mt-6 flex items-center justify-center gap-3">

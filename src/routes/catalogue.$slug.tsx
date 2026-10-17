@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { getErrorMessage } from "@/lib/error-message";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ProductDetailPage } from "@/pages";
@@ -179,7 +180,7 @@ export const Route = createFileRoute("/catalogue/$slug")({
   errorComponent: ({ error }) => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-2xl font-bold uppercase">Something went wrong</h1>
-      <p className="mt-2 text-muted-foreground">{error.message}</p>
+      <p className="mt-2 text-muted-foreground">{getErrorMessage(error)}</p>
       <Button asChild className="mt-6">
         <Link to="/catalogue" search={{ q: "", cats: [], mans: [], sort: "newest" }}>
           Back to catalogue

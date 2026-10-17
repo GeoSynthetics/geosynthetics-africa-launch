@@ -1,4 +1,5 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
 import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
@@ -340,7 +341,7 @@ export const Route = createFileRoute("/applications/$category")({
   errorComponent: ({ error }) => (
     <div className="container-page py-20 text-center">
       <h1 className="font-display text-2xl font-bold uppercase">Something went wrong</h1>
-      <p className="mt-2 text-muted-foreground">{error.message}</p>
+      <p className="mt-2 text-muted-foreground">{getErrorMessage(error)}</p>
     </div>
   ),
   notFoundComponent: () => (
