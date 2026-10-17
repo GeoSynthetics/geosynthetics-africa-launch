@@ -10,6 +10,9 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+const PUBLIC_CACHE = "public, max-age=0, s-maxage=300, stale-while-revalidate=86400";
+const NO_STORE = "private, no-store";
+
 export default defineConfig(({ mode }) => {
   // Load env variables (Vite loads from process.cwd() .env by default)
   const env = loadEnv(mode, process.cwd(), "");
@@ -57,7 +60,22 @@ export default defineConfig(({ mode }) => {
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
       tailwindcss(),
       tanstackStart(),
-      nitro(),
+      nitro({
+        // Serve public pages from Vercel's CDN: cached for 5 minutes, then
+        // refreshed in the background, so visitors never wait for a full
+        // server render. Site Builder edits appear within about 5 minutes.
+        routeRules: {
+          "/**": { headers: { "cache-control": PUBLIC_CACHE } },
+          "/sitemap.xml": { headers: { "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" } },
+          "/admin": { headers: { "cache-control": NO_STORE } },
+          "/admin/**": { headers: { "cache-control": NO_STORE } },
+          "/api/**": { headers: { "cache-control": NO_STORE } },
+          "/_serverFn/**": { headers: { "cache-control": NO_STORE } },
+          "/login": { headers: { "cache-control": NO_STORE } },
+          "/signup": { headers: { "cache-control": NO_STORE } },
+          "/profile": { headers: { "cache-control": NO_STORE } },
+        },
+      }),
       viteReact(),
     ],
   };
