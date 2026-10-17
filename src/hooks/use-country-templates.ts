@@ -34,6 +34,19 @@ export function mergeCountryTemplatesWithDefaults(
     } as CountryTemplate;
   }
 
+  // One page per country: drop a built-in default when Site Builder already
+  // has a page for the same country under a different slug.
+  const savedCountries = new Set(
+    Object.keys(remote)
+      .map((key) => merged[key]?.country?.trim().toLowerCase())
+      .filter(Boolean) as string[],
+  );
+  for (const key of Object.keys(DEFAULT_COUNTRY_TEMPLATES)) {
+    if (key in remote) continue;
+    const country = DEFAULT_COUNTRY_TEMPLATES[key].country?.trim().toLowerCase();
+    if (country && savedCountries.has(country)) delete merged[key];
+  }
+
   return merged;
 }
 

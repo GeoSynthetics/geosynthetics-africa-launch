@@ -308,7 +308,7 @@ export function ProductFamilyPage() {
             </Link>
             <Link
               to="/services/$slug"
-              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
+              params={{ slug: "delivery-logistics-africa" }}
               className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
             >
               <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
