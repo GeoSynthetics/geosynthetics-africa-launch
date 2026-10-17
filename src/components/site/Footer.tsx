@@ -249,10 +249,10 @@ export function Footer() {
               <div className="flex items-center gap-2.5">
                 <Mail className="h-3.5 w-3.5 text-primary shrink-0" />
                 <a
-                  href={`mailto:${footerContent.email || "sales@geosynthetics.co.za"}`}
+                  href={`mailto:${footerContent.email || "sales@geosyntheticsafrica.com"}`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  {footerContent.email || "sales@geosynthetics.co.za"}
+                  {footerContent.email || "sales@geosyntheticsafrica.com"}
                 </a>
               </div>
             </div>

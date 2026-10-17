@@ -31,7 +31,7 @@ export function OrganizationSchema() {
             "@type": "ContactPoint",
             telephone: "+27-78-1355-926",
             contactType: "sales",
-            email: "sales@geosynthetics.co.za",
+            email: "sales@geosyntheticsafrica.com",
             availableLanguage: ["English"],
             areaServed: ["ZA", "BW", "NA", "ZW", "MZ", "ZM"],
           },

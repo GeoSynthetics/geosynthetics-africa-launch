@@ -970,11 +970,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                     +27 71 093 9964
                   </a>
                   <a
-                    href="mailto:sales@geosynthetics.co.za"
+                    href="mailto:sales@geosyntheticsafrica.com"
                     className="flex items-center gap-2.5 text-foreground hover:text-primary transition"
                   >
                     <Mail className="h-4 w-4 text-primary shrink-0" />
-                    sales@geosynthetics.co.za
+                    sales@geosyntheticsafrica.com
                   </a>
                 </div>
                 <Button

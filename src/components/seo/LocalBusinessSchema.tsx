@@ -16,7 +16,7 @@ export function LocalBusinessSchema() {
         name: "Geosynthetics Africa",
         url: SITE_URL,
         telephone: "+27-78-1355-926",
-        email: "sales@geosynthetics.co.za",
+        email: "sales@geosyntheticsafrica.com",
         address: {
           "@type": "PostalAddress",
           streetAddress: "7 Tamar Avenue, Lea Glen",
