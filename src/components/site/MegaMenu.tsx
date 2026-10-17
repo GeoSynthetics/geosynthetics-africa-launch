@@ -557,7 +557,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 1: Supply */}
             <RLink
               to="/services/$slug"
-              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
+              params={{ slug: "delivery-logistics-africa" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >
@@ -572,7 +572,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
             {/* Step 2: Delivery */}
             <RLink
               to="/services/$slug"
-              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
+              params={{ slug: "delivery-logistics-africa" }}
               onClick={closeMenus}
               className="flex items-center gap-2.5 hover:text-primary group/step transition-colors duration-300"
             >

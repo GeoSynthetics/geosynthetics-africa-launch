@@ -2,7 +2,13 @@ import { describe, it, expect, vi } from "vitest";
 
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { from: vi.fn() } }));
 
-import { canonicalProductPath, findItem, sectionPath } from "@/lib/section-paths";
+import {
+  canonicalProductPath,
+  canonicalSectionRedirect,
+  findItem,
+  sectionPath,
+  sectionPathForTopLevelSlug,
+} from "@/lib/section-paths";
 
 const industries = [
   { id: "construction-infrastructure", slug: "mining-minerals-processing" },
@@ -42,5 +48,31 @@ describe("section-paths", () => {
     expect(canonicalProductPath(products, "accessories", "fixing-pins")?.path).toBe(
       "/products/gabion-baskets/river-reno-matresses",
     );
+  });
+
+  it("redirects a renamed slug even while its old template still exists", async () => {
+    const hierarchies: any = {
+      applications: [],
+      industries: [],
+      services: [{ id: "pan-african-logistics-delivery", slug: "delivery-logistics-africa" }],
+      templates: {
+        applications: new Set(),
+        industries: new Set(),
+        services: new Set(["hdpe-liners-geotextiles-gcl-geogrids-delivery-afric"]),
+      },
+    };
+    expect(
+      await canonicalSectionRedirect(
+        "services",
+        "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric",
+        hierarchies,
+      ),
+    ).toBe("/services/delivery-logistics-africa");
+    expect(
+      await canonicalSectionRedirect("services", "delivery-logistics-africa", hierarchies),
+    ).toBeNull();
+    expect(
+      await sectionPathForTopLevelSlug("hdpe-liners-geotextiles-gcl-geogrids-delivery-afric"),
+    ).toBe("/services/delivery-logistics-africa");
   });
 });
