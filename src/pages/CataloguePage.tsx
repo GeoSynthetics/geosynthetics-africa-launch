@@ -89,6 +89,9 @@ function formatZAR(n: number) {
   }).format(n);
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const NO_MATCH_ID = "00000000-0000-0000-0000-000000000000";
+
 export function CataloguePage({ search, catalogueContent }: CataloguePageProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -155,6 +158,9 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
             return found ? found.id : null;
           })
           .filter((x): x is string => x !== null);
+
+        // Nothing to change (e.g. a category with no database id): avoid a navigation loop
+        if (resolvedCats.join(",") === selectedCats.join(",")) return;
 
         void navigate({
           to: ".",
@@ -258,13 +264,24 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
         );
       }
       if (selectedCats.length > 0) {
+        // Filters may arrive as category slugs (e.g. from a product family page's
+        // "catalogue" link) before they are resolved to database ids. Wait for the
+        // category list rather than sending a slug where the database expects a UUID.
+        if (categories.length === 0 && selectedCats.some((c) => !UUID_RE.test(c))) {
+          return;
+        }
+
         const selectedCatIds = new Set<string>();
         const selectedChildSlugs = new Set<string>();
 
-        for (const catId of selectedCats) {
-          selectedCatIds.add(catId);
+        for (const value of selectedCats) {
+          if (UUID_RE.test(value)) selectedCatIds.add(value);
           const matched = categories.find(
-            (c) => c.id === catId || c.dbCategoryIds?.includes(catId),
+            (c) =>
+              c.id === value ||
+              c.slug === value ||
+              c.familyId === value ||
+              c.dbCategoryIds?.includes(value),
           );
           if (matched) {
             matched.dbCategoryIds?.forEach((id: string) => selectedCatIds.add(id));
@@ -272,7 +289,8 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
           }
         }
 
-        const catIdsArr = Array.from(selectedCatIds);
+        // Only real UUIDs go to the category_id filter
+        const catIdsArr = Array.from(selectedCatIds).filter((id) => UUID_RE.test(id));
         const childSlugsArr = Array.from(selectedChildSlugs);
 
         if (catIdsArr.length > 0 && childSlugsArr.length > 0) {
@@ -281,6 +299,11 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
           );
         } else if (catIdsArr.length > 0) {
           query = query.in("category_id", catIdsArr);
+        } else if (childSlugsArr.length > 0) {
+          query = query.in("family_slug", childSlugsArr);
+        } else {
+          // Unknown category: show no products instead of every product
+          query = query.eq("id", NO_MATCH_ID);
         }
       }
 
@@ -301,7 +324,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
       setLoading(false);
       setInitialLoad(false);
     },
-    [q, selectedCats, sort],
+    [q, selectedCats, sort, categories],
   );
 
   // Reset and reload when filters/sort change
@@ -310,7 +333,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
     setHasMore(true);
     void fetchPage(0, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, sort, selectedCats.join(",")]);
+  }, [q, sort, selectedCats.join(","), categories.length]);
 
   // Infinite scroll observer
   useEffect(() => {
