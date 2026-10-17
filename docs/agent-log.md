@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-13 18:25 (UTC+1)
+
+- **Feature**: Restore arrow-key page scrolling after header interaction
+- **Problem**: ArrowUp/ArrowDown stopped scrolling the page after the header was clicked or focused, because Radix NavigationMenu called `preventDefault` on those keys while focus stayed in the header.
+- **Solution**: Added a capture-phase `keydown` handler in [`Header.tsx`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/components/site/Header.tsx) that stops propagation of vertical arrow keys when focus is inside the header and no menu is open.
+
 ## 2026-10-13 18:10 (UTC+1)
 
 - **Feature**: Sitemap inclusion for admin-created company/blank pages

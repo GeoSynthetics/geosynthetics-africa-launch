@@ -165,6 +165,15 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
       }
     };
 
+    const handleScrollKeyCapture = (e: KeyboardEvent) => {
+      const isVerticalScrollKey = e.key === "ArrowDown" || e.key === "ArrowUp";
+      const isFocusInsideHeader = (e.target as HTMLElement | null)?.closest?.("header");
+      if (isVerticalScrollKey && isFocusInsideHeader && !value) {
+        // Prevents Radix NavigationMenu from calling preventDefault, which would block page scrolling
+        e.stopPropagation();
+      }
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && value) {
         setValue("");
@@ -195,12 +204,14 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
     // capture:true fires before Radix can handle the event
     window.addEventListener("pointerdown", handleOutsideClick, true);
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("keydown", handleScrollKeyCapture, true);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("focusin", handleFocusIn);
 
     return () => {
       window.removeEventListener("pointerdown", handleOutsideClick, true);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("keydown", handleScrollKeyCapture, true);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("focusin", handleFocusIn);
       if (timeoutRef.current) {
