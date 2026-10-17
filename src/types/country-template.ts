@@ -1,3 +1,5 @@
+import { EXPANSION_COUNTRY_TEMPLATES } from "@/data/country-expansion";
+
 // ─── Country & Regional Page Template Types ─────────────────────────
 // Stored in Supabase site_config under key: "template_countries"
 
@@ -843,4 +845,6 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       keywords: "Namibia geosynthetics, Windhoek geomembrane supplier, uranium mining lining Namibia",
     },
   },
+  // Priority markets added in src/data/country-expansion.ts
+  ...EXPANSION_COUNTRY_TEMPLATES,
 };

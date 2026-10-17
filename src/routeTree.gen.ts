@@ -17,6 +17,7 @@ import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CountriesRouteImport } from './routes/countries'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
@@ -103,6 +104,11 @@ const CareersRoute = CareersRouteImport.update({
 const ContactsRoute = ContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CountriesRoute = CountriesRouteImport.update({
+  id: '/countries',
+  path: '/countries',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndustriesRoute = IndustriesRouteImport.update({
@@ -350,6 +356,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -404,6 +411,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -457,6 +465,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -516,6 +525,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contacts'
+    | '/countries'
     | '/industries'
     | '/login'
     | '/privacy-policy'
@@ -570,6 +580,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/careers'
     | '/contacts'
+    | '/countries'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -622,6 +633,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contacts'
+    | '/countries'
     | '/industries'
     | '/login'
     | '/privacy-policy'
@@ -680,6 +692,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
   ContactsRoute: typeof ContactsRoute
+  CountriesRoute: typeof CountriesRoute
   IndustriesRoute: typeof IndustriesRouteWithChildren
   LoginRoute: typeof LoginRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -759,6 +772,13 @@ declare module '@tanstack/react-router' {
       path: '/contacts'
       fullPath: '/contacts'
       preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/countries': {
+      id: '/countries'
+      path: '/countries'
+      fullPath: '/countries'
+      preLoaderRoute: typeof CountriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/industries': {
@@ -1229,6 +1249,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
   ContactsRoute: ContactsRoute,
+  CountriesRoute: CountriesRoute,
   IndustriesRoute: IndustriesRouteWithChildren,
   LoginRoute: LoginRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
