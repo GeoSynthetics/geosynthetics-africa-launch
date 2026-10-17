@@ -32,6 +32,7 @@ import {
   Play,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ExternalImageMigrator } from "@/components/admin/ExternalImageMigrator";
 
 interface StorageFile {
   name: string;
@@ -561,6 +562,9 @@ export function MediaCenterPage() {
           </div>
         </div>
       )}
+
+      {/* Copy images still hot-linked from the old WordPress site */}
+      <ExternalImageMigrator />
 
       {/* Upload Zone & Form Panel */}
       <div className="grid md:grid-cols-3 gap-6">
