@@ -26,6 +26,11 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { type CataloguePageContent, DEFAULT_CATALOGUE_PAGE_CONTENT } from "@/types/catalogue";
+import {
+  reconcileCategoriesWithFamilies,
+  findProductFamily,
+  type ReconciledCategory,
+} from "@/lib/product-families";
 
 const PAGE_SIZE = 6;
 
@@ -62,6 +67,9 @@ export interface FilterOption {
   id: string;
   name: string;
   slug?: string | null;
+  familyId?: string;
+  childSlugs?: string[];
+  dbCategoryIds?: string[];
 }
 
 export interface CataloguePageProps {
@@ -104,7 +112,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
     setSearchInput(q);
   }, [q]);
 
-  // Load filter options once (matched to Products Menu from site_config)
+  // Load filter options once (matched to Products Menu from site_config and canonical product families)
   useEffect(() => {
     void (async () => {
       const [configRes, dbCatsRes] = await Promise.all([
@@ -112,46 +120,15 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
         supabase.from("product_categories").select("id, name, slug").order("name"),
       ]);
 
-      const dbCategories = (dbCatsRes.data ?? []) as FilterOption[];
+      const dbCategories = (dbCatsRes.data ?? []) as Array<{ id: string; name: string; slug: string | null }>;
       const menuItems = (configRes.data?.value?.items as Array<{
         id: string;
         label: string;
         slug?: string;
       }>) ?? [];
 
-      if (menuItems.length > 0) {
-        // Map menu items so Catalogue filter options match the Products Menu exactly
-        const mappedCategories: FilterOption[] = menuItems.map((item) => {
-          const itemSlug = (item.slug || item.id || "").toLowerCase();
-          const itemId = (item.id || "").toLowerCase();
-
-          // Find matching DB category by slug, id, or normalized name
-          const matchedDbCat = dbCategories.find((c) => {
-            const cSlug = c.slug.toLowerCase();
-            return (
-              cSlug === itemSlug ||
-              cSlug === itemId ||
-              itemSlug.includes(cSlug) ||
-              cSlug.includes(itemSlug) ||
-              (itemId === "accessories" && cSlug === "gabion-baskets") ||
-              (itemSlug === "gabion-baskets" && cSlug === "gabion-baskets") ||
-              (itemSlug === "dewatering-systems" && cSlug === "dewatering-systems") ||
-              (itemSlug.includes("gcl") && cSlug === "gcls") ||
-              (itemSlug.includes("concrete") && cSlug === "damp-proofing")
-            );
-          });
-
-          return {
-            id: matchedDbCat ? matchedDbCat.id : item.id,
-            name: item.label,
-            slug: item.slug || item.id,
-          };
-        });
-
-        setCategories(mappedCategories);
-      } else {
-        setCategories(dbCategories);
-      }
+      const reconciled = reconcileCategoriesWithFamilies(dbCategories, menuItems);
+      setCategories(reconciled);
     })();
   }, []);
 
@@ -167,10 +144,12 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
             if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat)) {
               return cat;
             }
+            const fam = findProductFamily(cat);
             const found = categories.find(
               (c) =>
                 c.slug === cat ||
                 c.id === cat ||
+                (fam && (c.slug === fam.slug || c.id === fam.id || c.familyId === fam.id)) ||
                 c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
             );
             return found ? found.id : null;
@@ -279,7 +258,30 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
         );
       }
       if (selectedCats.length > 0) {
-        query = query.in("category_id", selectedCats);
+        const selectedCatIds = new Set<string>();
+        const selectedChildSlugs = new Set<string>();
+
+        for (const catId of selectedCats) {
+          selectedCatIds.add(catId);
+          const matched = categories.find(
+            (c) => c.id === catId || c.dbCategoryIds?.includes(catId),
+          );
+          if (matched) {
+            matched.dbCategoryIds?.forEach((id: string) => selectedCatIds.add(id));
+            matched.childSlugs?.forEach((slug: string) => selectedChildSlugs.add(slug));
+          }
+        }
+
+        const catIdsArr = Array.from(selectedCatIds);
+        const childSlugsArr = Array.from(selectedChildSlugs);
+
+        if (catIdsArr.length > 0 && childSlugsArr.length > 0) {
+          query = query.or(
+            `category_id.in.(${catIdsArr.join(",")}),family_slug.in.(${childSlugsArr.join(",")})`,
+          );
+        } else if (catIdsArr.length > 0) {
+          query = query.in("category_id", catIdsArr);
+        }
       }
 
       const { data, error, count } = await query;

@@ -28,6 +28,7 @@ import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { QuoteCard } from "@/components/site/QuoteCard";
+import { findProductFamily } from "@/lib/product-families";
 import { Route } from "@/routes/catalogue.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
@@ -95,6 +96,14 @@ export function ProductDetailPage() {
   }, []);
 
   const heroImg = product.image_url || product.images?.[0] || null;
+
+  const productFamily = useMemo(
+    () =>
+      findProductFamily(
+        product.family_slug || product.product_categories?.slug || product.product_categories?.name,
+      ),
+    [product.family_slug, product.product_categories],
+  );
 
   const features = useMemo(() => {
     if (product.key_features && product.key_features.length > 0) {
@@ -295,7 +304,7 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
         slug={product.slug}
         image={heroImg}
         sku={product.sku}
-        category={product.product_categories?.name}
+        category={productFamily?.label || product.product_categories?.name}
         manufacturer={product.manufacturers?.name}
         price={product.price}
         inStock={(product.stock_quantity ?? 0) > 0}
@@ -305,11 +314,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
         items={[
           { name: "Home", url: "https://geosynthetics.co.za/" },
           { name: "Catalogue", url: "https://geosynthetics.co.za/catalogue" },
-          ...(product.product_categories?.name
+          ...(productFamily?.label || product.product_categories?.name
             ? [
               {
-                name: product.product_categories.name,
-                url: `https://geosynthetics.co.za/products/${product.product_categories.slug || product.product_categories.name.toLowerCase().replace(/\s+/g, "-")}`,
+                name: productFamily?.label || product.product_categories!.name,
+                url: `https://geosynthetics.co.za/products/${productFamily?.slug || product.product_categories?.slug || (productFamily?.label || product.product_categories!.name).toLowerCase().replace(/\s+/g, "-")}`,
               },
             ]
             : []),
@@ -346,20 +355,20 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                 to: "/catalogue",
                 search: { q: "", cats: [], mans: [], sort: "newest" },
               },
-              ...(product.product_categories?.name
+              ...(productFamily?.label || product.product_categories?.name
                 ? [
-                  product.product_categories.slug
+                  (productFamily?.slug || product.product_categories?.slug)
                     ? {
-                      label: product.product_categories.name,
+                      label: productFamily?.label || product.product_categories!.name,
                       to: "/products/$category",
-                      params: { category: product.product_categories.slug },
+                      params: { category: (productFamily?.slug || product.product_categories?.slug)! },
                     }
                     : {
-                      label: product.product_categories.name,
+                      label: productFamily?.label || product.product_categories!.name,
                       to: "/catalogue",
                       search: {
                         q: "",
-                        cats: [product.product_categories.id],
+                        cats: product.product_categories?.id ? [product.product_categories.id] : [],
                         mans: [],
                         sort: "newest",
                       },
@@ -381,9 +390,9 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
           />
 
           <div className="mt-8 max-w-2xl">
-            {product.product_categories?.name && (
+            {(productFamily?.label || product.product_categories?.name) && (
               <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-4">
-                {product.product_categories.name}
+                {productFamily?.label || product.product_categories?.name}
               </p>
             )}
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight leading-[1.05]">
@@ -1019,11 +1028,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                   <div className="flex items-center gap-2.5 mb-1.5 text-primary">
                     <ArrowLeftRight className="h-4.5 w-4.5 shrink-0" />
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Alternative {product.product_categories?.name || "Solutions"}
+                      Alternative {productFamily?.label || product.product_categories?.name || "Solutions"}
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
-                    Other {product.product_categories?.name?.toLowerCase() || "products"} in this
+                    Other {productFamily?.label?.toLowerCase() || product.product_categories?.name?.toLowerCase() || "products"} in this
                     category. See our Product Selection Guide before specifying.
                   </p>
                   <ul className="space-y-2.5">
@@ -1104,13 +1113,13 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                   <div className="flex items-center gap-2.5 mb-1.5 text-emerald-800 dark:text-emerald-500">
                     <Puzzle className="h-4.5 w-4.5 shrink-0" />
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Complete the {product.product_categories?.name?.replace(/s$/, "") || "Lining"}{" "}
+                      Complete the {productFamily?.label?.replace(/s$/, "") || product.product_categories?.name?.replace(/s$/, "") || "Lining"}{" "}
                       System
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
                     Components and services typically specified to successfully install this{" "}
-                    {product.product_categories?.name?.toLowerCase().replace(/s$/, "") || "liner"}.
+                    {productFamily?.label?.toLowerCase().replace(/s$/, "") || product.product_categories?.name?.toLowerCase().replace(/s$/, "") || "liner"}.
                   </p>
                   <ul className="space-y-2.5">
                     {systemComponents.map((sys) => {

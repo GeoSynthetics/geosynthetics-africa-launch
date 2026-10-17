@@ -53,6 +53,10 @@ import { slugify } from "@/lib/utils";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 import { ProductSelector } from "@/components/admin/ProductSelector";
 import { useSlugSync } from "@/hooks/use-slug-sync";
+import {
+  reconcileCategoriesWithFamilies,
+  findProductFamily,
+} from "@/lib/product-families";
 
 interface Manufacturer {
   id: string;
@@ -461,27 +465,43 @@ export function ProductsAdminPage() {
     const to = from + pageSize - 1;
     query = query.range(from, to);
 
-    const [products, manufacturers, categories, templateDataResult] = await Promise.all([
-      query,
-      mans.length === 0
-        ? supabase.from("manufacturers").select("id, name").order("name")
-        : Promise.resolve({ data: mans }),
-      cats.length === 0
-        ? supabase.from("product_categories").select("id, name, slug, selection_guide_url").order("name")
-        : Promise.resolve({ data: cats }),
-      supabase
-        .from("site_config")
-        .select("value")
-        .eq("key", "template_product_categories")
-        .maybeSingle(),
-    ]);
+    const [products, manufacturers, categories, templateDataResult, hierarchyDataResult] =
+      await Promise.all([
+        query,
+        mans.length === 0
+          ? supabase.from("manufacturers").select("id, name").order("name")
+          : Promise.resolve({ data: mans }),
+        cats.length === 0
+          ? supabase
+              .from("product_categories")
+              .select("id, name, slug, selection_guide_url")
+              .order("name")
+          : Promise.resolve({ data: cats }),
+        supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "template_product_categories")
+          .maybeSingle(),
+        supabase
+          .from("site_config")
+          .select("value")
+          .eq("key", "hierarchy_products")
+          .maybeSingle(),
+      ]);
 
     if (products.error) toast.error(products.error.message);
     setRows((products.data ?? []) as Product[]);
     setTotal(products.count ?? 0);
 
     if (mans.length === 0 && manufacturers.data) setMans(manufacturers.data as Manufacturer[]);
-    if (cats.length === 0 && categories.data) setCats(categories.data as ProductCategory[]);
+    if (cats.length === 0 && categories.data) {
+      const hierarchyItems = (hierarchyDataResult.data?.value?.items as any[]) ?? [];
+      const reconciled = reconcileCategoriesWithFamilies(
+        categories.data as ProductCategory[],
+        hierarchyItems,
+      );
+      setCats(reconciled as any);
+    }
 
     // Process product families templates
     const { data: templateData } = templateDataResult;
@@ -835,7 +855,13 @@ export function ProductsAdminPage() {
                             Main Category
                           </Label>
                           <Select
-                            value={editing.category_id ?? "none"}
+                            value={
+                              cats.find(
+                                (c) =>
+                                  c.id === editing.category_id ||
+                                  (c as any).dbCategoryIds?.includes(editing.category_id),
+                              )?.id ?? (editing.category_id || "none")
+                            }
                             onValueChange={(v) =>
                               setEditing((s) => ({ ...s, category_id: v === "none" ? null : v }))
                             }
@@ -859,9 +885,29 @@ export function ProductsAdminPage() {
                           </Label>
                           <Select
                             value={editing.family_slug ?? "none"}
-                            onValueChange={(v) =>
-                              setEditing((s) => ({ ...s, family_slug: v === "none" ? null : v }))
-                            }
+                            onValueChange={(v) => {
+                              const nextFamily = v === "none" ? null : v;
+                              let nextCatId = editing.category_id;
+                              if (nextFamily) {
+                                const famDef = findProductFamily(nextFamily);
+                                if (famDef) {
+                                  const matchingCat = cats.find(
+                                    (c) =>
+                                      c.slug === famDef.slug ||
+                                      c.id === famDef.id ||
+                                      (c as any).familyId === famDef.id,
+                                  );
+                                  if (matchingCat) {
+                                    nextCatId = matchingCat.id;
+                                  }
+                                }
+                              }
+                              setEditing((s) => ({
+                                ...s,
+                                family_slug: nextFamily,
+                                category_id: nextCatId,
+                              }));
+                            }}
                           >
                             <SelectTrigger className="mt-1.5 w-full bg-primary/5 border-primary/20 text-primary font-semibold">
                               <SelectValue placeholder="Select Family…" />
@@ -2044,7 +2090,13 @@ export function ProductsAdminPage() {
                     {p.sku ?? "—"}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {cats.find((c) => c.id === p.category_id)?.name ?? "—"}
+                    {cats.find(
+                      (c) =>
+                        c.id === p.category_id ||
+                        (c as any).dbCategoryIds?.includes(p.category_id),
+                    )?.name ??
+                      (p.family_slug ? findProductFamily(p.family_slug)?.label : null) ??
+                      "—"}
                   </TableCell>
                   <TableCell className="text-right text-sm font-medium tabular-nums text-foreground">
                     {p.sale_price != null ? (

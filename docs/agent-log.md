@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-17 02:20 (UTC+1)
+
+- **Feature**: Canonical product families shared by catalogue, product pages and admin
+- **Problem**: The catalogue filters, subcategory filter map, product detail labels and admin category picker each matched DB `product_categories` to the 11 Products-menu families with their own ad-hoc rules, so they drifted apart.
+- **Solution**: Added [`product-families.ts`](file:///c:/Users/pc/dev/work-dev/geosynthetics-africa-launch/src/lib/product-families.ts) (11 families keyed to the `hierarchy_products` menu ids, with legacy slugs, child slugs and search keywords) plus `reconcileCategoriesWithFamilies`, `findProductFamily` and `getCatalogueFiltersForSlug`. The catalogue now filters by family (DB category ids or child `family_slug`), ProductCategoryPage delegates its subcategory map, ProductDetailPage shows the family label in breadcrumbs, schema and headings, and the products admin lists families and sets the main category when a family is picked. Each DB category maps to exactly one family (Tools & Accessories → Geosynthetic Sand Containers).
+
 ## 2026-10-13 18:50 (UTC+1)
 
 - **Feature**: Renamed 13 page URLs to stop competing with geosynthetics.co.za.
