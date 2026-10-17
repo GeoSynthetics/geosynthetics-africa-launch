@@ -79,6 +79,17 @@ const TABS = [
 export function ProductDetailPage() {
   const { product, alternatives, systemComponents, familyData, caseStudies } =
     Route.useLoaderData();
+
+  // QA/QC is specific to each product family: only show what Site Builder holds for it
+  const qaChecklist: { title: string; description: string }[] = (
+    familyData?.qaChecklist ?? []
+  ).filter((i: any) => i?.title?.trim() || i?.description?.trim());
+  const qaStandards: string[] = [
+    ...(familyData?.qaStandards ?? []),
+    ...(product.standard ? [product.standard] : []),
+  ].filter((v: string, idx: number, all: string[]) => v?.trim() && all.indexOf(v) === idx);
+  const hasQa = qaChecklist.length > 0 || qaStandards.length > 0 || !!product.qa_checklist_url;
+  const tabs = TABS.filter((t) => t.id !== "qa" || hasQa);
   const { open } = useQuickQuote();
   const [activeTab, setActiveTab] = useState("overview");
   const [quoteMessage, setQuoteMessage] = useState("");
@@ -241,8 +252,8 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
   useEffect(() => {
     const handler = () => {
       const threshold = headerH + 80;
-      let current = TABS[0].id;
-      for (const t of TABS) {
+      let current = tabs[0].id;
+      for (const t of tabs) {
         const el = document.getElementById(t.id);
         if (!el) continue;
         const top = el.getBoundingClientRect().top;
@@ -255,7 +266,7 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
       setActiveTab(current);
 
       // Hide tabs when scrolled past the bottom of the last section
-      const lastEl = document.getElementById(TABS[TABS.length - 1].id);
+      const lastEl = document.getElementById(tabs[tabs.length - 1].id);
       if (lastEl) {
         const bottom = lastEl.getBoundingClientRect().bottom;
         setTabsVisible(bottom > threshold);
@@ -268,14 +279,14 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
       window.removeEventListener("scroll", handler);
       window.removeEventListener("resize", handler);
     };
-  }, [headerH]);
+  }, [headerH, hasQa]);
 
   // Mobile: keep the active tab's "page of 3" in view as the user scrolls
   useEffect(() => {
     const container = tabsScrollRef.current;
     if (!container) return;
     if (window.matchMedia("(min-width: 768px)").matches) return;
-    const idx = TABS.findIndex((t) => t.id === activeTab);
+    const idx = tabs.findIndex((t) => t.id === activeTab);
     if (idx < 0) return;
     const page = Math.floor(idx / 3);
     const left = page * container.clientWidth;
@@ -483,7 +494,7 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
               "md:gap-1",
             )}
           >
-            {TABS.map((t) => (
+            {tabs.map((t) => (
               <button
                 key={t.id}
                 type="button"
@@ -682,108 +693,71 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
               )}
             </div>
 
-            {/* QA & Testing */}
-            <div id="qa">
-              <h2 className="font-display text-2xl font-bold uppercase mb-5">
-                Quality Assurance & Testing
-              </h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="rounded-xl border border-border bg-card p-6 space-y-4">
-                  <div className="flex items-center gap-3 text-primary">
-                    <ShieldCheck className="h-6 w-6" />
-                    <h3 className="font-display text-lg font-bold uppercase">
-                      Field QA/QC Checklist
-                    </h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    To ensure certified performance and long-term integrity, the following field
-                    quality control procedures must be completed by the contractor:
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-foreground/85">
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Subgrade/Foundation Acceptance:</strong> Surface smooth, compacted,
-                        free of sharp protrusions (&gt;10mm), vegetation, and standing water.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Material Verification:</strong> Roll, panel, or unit batch numbers
-                        and certificates of conformance checked against approved specifications
-                        before installation.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Installation Compliance:</strong> Placement, overlap, anchoring,
-                        jointing, or connection method (welding, lacing, interlocking, mechanical,
-                        or solvent joints) verified per manufacturer's installation guide for the
-                        specific product.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Joint &amp; Connection Testing:</strong> 100% visual inspection of
-                        all seams, laps, or connections, plus non-destructive testing (e.g., air
-                        channel, vacuum box, or pressure testing) where applicable to the product
-                        type.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Destructive/Performance Sampling:</strong> Representative samples or
-                        connections tested on-site or at an accredited lab (shear, peel, tensile, or
-                        pull-out strength) to confirm performance meets spec.
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                      <span>
-                        <strong>Damage &amp; Curing Inspection:</strong> Full surface check for
-                        punctures, tears, UV degradation, or (for cementitious products) correct
-                        hydration/curing prior to backfilling or cover placement.
-                      </span>
-                    </li>
-                  </ul>
-                </div>
+            {/* QA & Testing — content comes from the product family in Site Builder */}
+            {hasQa && (
+              <div id="qa">
+                <h2 className="font-display text-2xl font-bold uppercase mb-5">
+                  Quality Assurance & Testing
+                </h2>
+                <div className={cn("grid gap-6", qaChecklist.length > 0 && "md:grid-cols-2")}>
+                  {qaChecklist.length > 0 && (
+                    <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+                      <div className="flex items-center gap-3 text-primary">
+                        <ShieldCheck className="h-6 w-6" />
+                        <h3 className="font-display text-lg font-bold uppercase">
+                          Field QA/QC Checklist
+                        </h3>
+                      </div>
+                      <ul className="space-y-2.5 text-xs text-foreground/85">
+                        {qaChecklist.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5">
+                            <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                            <span>
+                              {item.title && <strong>{item.title}:</strong>} {item.description}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                <div className="rounded-xl border border-border bg-card p-6 space-y-4 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-primary">
-                      <Scroll className="h-6 w-6" />
-                      <h3 className="font-display text-lg font-bold uppercase">
-                        Manufacturing Standards
-                      </h3>
+                  {(qaStandards.length > 0 || product.qa_checklist_url) && (
+                    <div className="rounded-xl border border-border bg-card p-6 space-y-4 flex flex-col justify-between">
+                      {qaStandards.length > 0 && (
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3 text-primary">
+                            <Scroll className="h-6 w-6" />
+                            <h3 className="font-display text-lg font-bold uppercase">
+                              Manufacturing Standards
+                            </h3>
+                          </div>
+                          <ul className="space-y-2 text-sm">
+                            {qaStandards.map((std, idx) => (
+                              <li
+                                key={idx}
+                                className="bg-surface border border-border rounded-lg p-3 text-xs leading-normal"
+                              >
+                                {std}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {product.qa_checklist_url && (
+                        <Button
+                          asChild
+                          className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9"
+                        >
+                          <a href={product.qa_checklist_url} target="_blank" rel="noopener noreferrer">
+                            <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist (PDF)
+                          </a>
+                        </Button>
+                      )}
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      This product is supplied with full Mill Test Certificates (MTC) proving
-                      compliance to strict international specifications (ASTM, ISO, and GRI).
-                    </p>
-                    <div className="bg-surface border border-border rounded-lg p-3 text-xs leading-normal">
-                      <strong>Standard Conformance:</strong>{" "}
-                      {product.standard ||
-                        familyData?.technicalHighlights?.[0]?.value ||
-                        "ASTM & ISO Standard Compliant"}
-                    </div>
-                  </div>
-                  {product.qa_checklist_url && (
-                    <Button
-                      asChild
-                      className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9"
-                    >
-                      <a href={product.qa_checklist_url} target="_blank" rel="noopener noreferrer">
-                        <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist (PDF)
-                      </a>
-                    </Button>
                   )}
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Documents Grid */}
             <div id="documents">

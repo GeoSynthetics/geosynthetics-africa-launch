@@ -71,6 +71,10 @@ export interface PageContent {
   benefits?: { title: string; description: string }[];
   faqs?: FAQ[];
   installationSpecs?: string[];
+  /** Field QA/QC checklist shown on every product page in this family */
+  qaChecklist?: { title: string; description: string }[];
+  /** Manufacturing standards / certificates for this family, one per line */
+  qaStandards?: string[];
   projectReferences?: ProjectReference[];
   popularProducts?: { name: string; spec: string; desc: string; image?: string }[];
   applications?: { label: string; slug: string; description?: string }[];

@@ -559,7 +559,7 @@ export function PageTemplatesAdminPage() {
     { id: "types", label: "Types" },
     { id: "benefits", label: "Benefits" },
     { id: "faqs", label: "FAQs" },
-    { id: "installation", label: "Installation" },
+    { id: "installation", label: "Installation & QA" },
     { id: "products", label: "Products" },
     { id: "projects", label: "Projects" },
     { id: "apps", label: "Applications" },
@@ -1441,6 +1441,28 @@ export function PageTemplatesAdminPage() {
                             onChange={(v) => set("installationSpecs", v)}
                             multiline
                             placeholder="Describe installation requirements in detail…"
+                          />
+
+                          <SectionHeading>QA &amp; Testing</SectionHeading>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Shown in the QA &amp; Testing section of every product page in this
+                            family. Leave empty to hide that section.
+                          </p>
+                          <PairsEditor
+                            label="Field QA/QC checklist"
+                            items={(active.qaChecklist ?? []) as any[]}
+                            fields={[
+                              { key: "title", label: "Check" },
+                              { key: "description", label: "Requirement", multiline: true },
+                            ]}
+                            onChange={(v) => set("qaChecklist", v as any)}
+                            newItem={{ title: "", description: "" } as any}
+                          />
+                          <StringListEditor
+                            label="Manufacturing standards & certificates"
+                            items={active.qaStandards ?? []}
+                            onChange={(v) => set("qaStandards", v)}
+                            placeholder="e.g. GRI-GM13, ASTM D5199"
                           />
                         </TabsContent>
 

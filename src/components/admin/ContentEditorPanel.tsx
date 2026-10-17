@@ -504,6 +504,26 @@ export function ContentEditorPanel({
                 placeholder="Spec details..."
               />
 
+              {isProductNode && (
+                <>
+                  <PairsEditor
+                    label="QA/QC Checklist (product pages in this family)"
+                    items={(page.qaChecklist ?? []) as any[]}
+                    fields={[
+                      { key: "title", label: "Check" },
+                      { key: "description", label: "Requirement", multiline: true },
+                    ]}
+                    onChange={(v) => setPage({ qaChecklist: v as any })}
+                  />
+                  <ListEditor
+                    label="Manufacturing Standards & Certificates"
+                    items={page.qaStandards ?? []}
+                    onChange={(v) => setPage({ qaStandards: v })}
+                    placeholder="e.g. GRI-GM13, ASTM D5199"
+                  />
+                </>
+              )}
+
               <PairsEditor
                 label="Project References"
                 items={(page.projectReferences ?? []) as any[]}
