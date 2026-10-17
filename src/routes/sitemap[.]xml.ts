@@ -2,12 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/site-url";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
-import {
-  PRODUCT_CATEGORIES,
-  APPLICATION_CATEGORIES,
-  SERVICES,
-  INDUSTRIES,
-} from "@/components/site/mega-menu-data";
+import { SECTION_KEYS, sectionPath } from "@/lib/section-paths";
+import { fetchCountryTemplates } from "@/hooks/use-country-templates";
+import { DEFAULT_COUNTRY_TEMPLATES } from "@/types/country-template";
 
 /* ------------------------------------------------------------------ */
 /* Helper: build a single <url> entry                                  */
@@ -79,6 +76,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/applications", changefreq: "weekly", priority: 0.9 },
           { path: "/services", changefreq: "monthly", priority: 0.9 },
           { path: "/projects", changefreq: "monthly", priority: 0.7 },
+          { path: "/industries", changefreq: "monthly", priority: 0.8 },
+          { path: "/blog", changefreq: "weekly", priority: 0.7 },
           {
             path: "/quality-assurance",
             changefreq: "monthly",
@@ -103,48 +102,61 @@ export const Route = createFileRoute("/sitemap.xml")({
           );
         }
 
-        /* ── 2. Product category pages ────────────────────────── */
-        for (const cat of PRODUCT_CATEGORIES) {
-          urls.push(
-            urlEntry(`${baseUrl}/products/${cat.slug}`, {
-              lastmod: now,
-              changefreq: "weekly",
-              priority: 0.7,
-            }),
-          );
-        }
+        /* ── 2–4. Products, applications, services, industries ── */
+        // Built from the Site Builder hierarchies so the sitemap always lists
+        // exactly the URLs the menus link to.
+        try {
+          const { data: hierarchyRows } = await supabase
+            .from("site_config")
+            .select("key, value")
+            .in("key", [
+              "hierarchy_products",
+              "hierarchy_applications",
+              "hierarchy_services",
+              "hierarchy_industries",
+            ]);
+          const itemsFor = (key: string): any[] =>
+            ((hierarchyRows || []).find((r) => r.key === key)?.value as any)?.items || [];
+          const slugOf = (item: any): string => item?.slug || item?.id;
 
-        /* ── 3. Application category pages ────────────────────── */
-        for (const cat of APPLICATION_CATEGORIES) {
-          urls.push(
-            urlEntry(`${baseUrl}/${cat.slug}`, {
-              lastmod: now,
-              changefreq: "monthly",
-              priority: 0.7,
-            }),
-          );
-        }
+          for (const cat of itemsFor("hierarchy_products")) {
+            const catSlug = slugOf(cat);
+            if (!catSlug) continue;
+            urls.push(
+              urlEntry(`${baseUrl}/products/${catSlug}`, {
+                lastmod: now,
+                changefreq: "weekly",
+                priority: 0.7,
+              }),
+            );
+            for (const family of cat.children || []) {
+              const familySlug = slugOf(family);
+              if (!familySlug) continue;
+              urls.push(
+                urlEntry(`${baseUrl}/products/${catSlug}/${familySlug}`, {
+                  lastmod: now,
+                  changefreq: "weekly",
+                  priority: 0.6,
+                }),
+              );
+            }
+          }
 
-        /* ── 4. Service detail pages ──────────────────────────── */
-        for (const svc of SERVICES) {
-          urls.push(
-            urlEntry(`${baseUrl}/${svc.slug}`, {
-              lastmod: now,
-              changefreq: "monthly",
-              priority: 0.7,
-            }),
-          );
-        }
-
-        /* ── 4b. Industry pages ───────────────────────────────── */
-        for (const ind of INDUSTRIES) {
-          urls.push(
-            urlEntry(`${baseUrl}/${ind.slug}`, {
-              lastmod: now,
-              changefreq: "monthly",
-              priority: 0.7,
-            }),
-          );
+          for (const section of SECTION_KEYS) {
+            for (const item of itemsFor(`hierarchy_${section}`)) {
+              const slug = slugOf(item);
+              if (!slug) continue;
+              urls.push(
+                urlEntry(`${baseUrl}${sectionPath(section, slug)}`, {
+                  lastmod: now,
+                  changefreq: "monthly",
+                  priority: 0.7,
+                }),
+              );
+            }
+          }
+        } catch {
+          // Silently skip if Supabase is unreachable
         }
 
         /* ── 5. Dynamic catalogue product pages from Supabase ── */
@@ -269,20 +281,21 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Silently skip — default company pages remain listed as static routes
         }
 
-        /* ── 7. Country-specific SEO slug pages ───────────────── */
-        const countrySlugs = [
-          "south-africa-geosynthetics-supplier-installer",
-          "botswana-geosynthetics-supplier-installer",
-          "tanzania-geosynthetics-supplier-installer",
-          "zimbabwe-geosynthetics-supplier-contact",
-          "zambia-geosynthetics-supplier-installer",
-          "drc-geosynthetics-supplier-installer",
-          "kenya-geosynthetics-supplier-contact",
-          "cote-divoire-geosynthetics-supplier-contact",
-          "mozambique-geosynthetics-supplier-contact",
-          "ghana-geosynthetics-supplier-contact",
-          "namibia-geosynthetics-supplier-contact",
-        ];
+        /* ── 7. Country pages ──────────────────────────────────── */
+        let countrySlugs: string[] = [];
+        try {
+          const countryTemplates = await fetchCountryTemplates();
+          countrySlugs = Object.entries(countryTemplates)
+            .map(([key, t]: [string, any]) => t?.slug || key)
+            .filter(Boolean);
+        } catch {
+          // fall back to the default country pages below
+        }
+        if (countrySlugs.length === 0) {
+          countrySlugs = Object.entries(DEFAULT_COUNTRY_TEMPLATES).map(
+            ([key, t]: [string, any]) => t?.slug || key,
+          );
+        }
 
         for (const slug of countrySlugs) {
           urls.push(

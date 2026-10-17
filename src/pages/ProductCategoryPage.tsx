@@ -183,8 +183,8 @@ export function ProductCategoryPage() {
                           </Link>
                         ) : (
                           <Link
-                            to="/$slug"
-                            params={{ slug: pathOrSlug }}
+                            to="/applications/$category"
+                            params={{ category: pathOrSlug }}
                             className="text-xs font-bold text-primary hover:underline uppercase flex items-center gap-1"
                           >
                             Read More <ChevronRight className="h-3 w-3" />

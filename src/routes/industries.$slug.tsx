@@ -1,4 +1,5 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { INDUSTRIES } from "@/components/site/mega-menu-data";
@@ -41,7 +42,9 @@ export async function loadIndustryData(slug: string) {
   }
 
   const hierarchy = (hierarchyRow?.value as any) || {};
-  const matchedItem = hierarchy.items?.find((item: any) => item.slug === slug || item.id === slug);
+  const matchedItem =
+    hierarchy.items?.find((item: any) => item.slug === slug) ||
+    hierarchy.items?.find((item: any) => item.id === slug);
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then slug)
   let tmpl = null;
@@ -257,15 +260,17 @@ export function IndustryDetailSkeleton() {
 }
 
 export const Route = createFileRoute("/industries/$slug")({
-  ssr: false,
-  beforeLoad: ({ params }) => {
-    throw redirect({
-      to: "/$slug",
-      params: { slug: params.slug },
-      statusCode: 301,
-    });
+  loader: async ({ params }) => {
+    // Internal ids and old addresses redirect to the page's own slug
+    const hierarchies = await fetchSectionHierarchies();
+    const target = await canonicalSectionRedirect("industries", params.slug, hierarchies);
+    if (target) throw redirect({ href: target, statusCode: 301 });
+
+    const data = await loadIndustryData(params.slug);
+    const inHierarchy = !!findItem(hierarchies.industries, params.slug);
+    if (!inHierarchy && !data?.templateData) throw notFound();
+    return data;
   },
-  loader: ({ params }) => loadIndustryData(params.slug),
   pendingComponent: IndustryDetailSkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {

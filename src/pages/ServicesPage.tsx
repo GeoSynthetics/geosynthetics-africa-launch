@@ -235,7 +235,7 @@ export function ServicesPage() {
               return (
                 <Link
                   key={s.slug || s.id}
-                  to="/$slug"
+                  to="/services/$slug"
                   params={{ slug: s.slug || s.id }}
                   className="group relative rounded-xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer"
                 >

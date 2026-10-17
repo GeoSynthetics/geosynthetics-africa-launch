@@ -69,7 +69,11 @@ vi.mock("@/integrations/supabase/client", () => {
 
     then(resolve: any) {
       let data: any = [];
-      if (this.table === "case_studies") {
+      if (this.table === "site_config" && Array.isArray(this.filters.key)) {
+        data = this.filters.key
+          .filter((key: string) => mockDb[key as keyof typeof mockDb] !== undefined)
+          .map((key: string) => ({ key, value: mockDb[key as keyof typeof mockDb] }));
+      } else if (this.table === "case_studies") {
         if (this.filters.sector) {
           data = mockDb.case_studies.filter(
             (cs) => cs.sector === this.filters.sector && cs.status === "published",
@@ -108,15 +112,23 @@ describe("Dynamic Route Loaders", () => {
   });
 
   describe("applications.$category loader", () => {
-    it("should fallback to default values when no template or hierarchy matches", async () => {
-      const result = await (ApplicationsRoute.options.loader as any)({
-        params: { category: "non-existent-category" },
-      } as any);
+    it("should return a 404 when no template or hierarchy matches", async () => {
+      await expect(
+        (ApplicationsRoute.options.loader as any)({
+          params: { category: "non-existent-category" },
+        } as any),
+      ).rejects.toMatchObject({ isNotFound: true });
+    });
 
-      expect(result.category.slug).toBe("non-existent-category");
-      expect(result.templateData).toBeNull();
-      expect(result.caseStudies).toEqual([]);
-      expect(result.linkedProducts).toEqual([]);
+    it("should redirect a retired application address to its replacement page", async () => {
+      await expect(
+        (ApplicationsRoute.options.loader as any)({
+          params: { category: "water-containment" },
+        } as any),
+      ).rejects.toMatchObject({
+        status: 301,
+        options: { href: "/applications/reservoir-dam-lining" },
+      });
     });
 
     it("should load template matching categorySlug when hierarchy is empty", async () => {

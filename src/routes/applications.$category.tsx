@@ -1,4 +1,5 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
@@ -41,9 +42,9 @@ export async function loadApplicationData(categorySlug: string) {
   }
 
   const hierarchy = (hierarchyRow?.value as any) || {};
-  const matchedItem = hierarchy.items?.find(
-    (item: any) => item.slug === categorySlug || item.id === categorySlug,
-  );
+  const matchedItem =
+    hierarchy.items?.find((item: any) => item.slug === categorySlug) ||
+    hierarchy.items?.find((item: any) => item.id === categorySlug);
 
   // Determine which template to load (prioritize matchedItem's slug, fallback to matchedItem's id, and then categorySlug)
   let tmpl = null;
@@ -305,15 +306,17 @@ export function ApplicationCategorySkeleton() {
 }
 
 export const Route = createFileRoute("/applications/$category")({
-  ssr: false,
-  beforeLoad: ({ params }) => {
-    throw redirect({
-      to: "/$slug",
-      params: { slug: params.category },
-      statusCode: 301,
-    });
+  loader: async ({ params }) => {
+    // Internal ids and old addresses redirect to the page's own slug
+    const hierarchies = await fetchSectionHierarchies();
+    const target = await canonicalSectionRedirect("applications", params.category, hierarchies);
+    if (target) throw redirect({ href: target, statusCode: 301 });
+
+    const data = await loadApplicationData(params.category);
+    const inHierarchy = !!findItem(hierarchies.applications, params.category);
+    if (!inHierarchy && !data?.templateData) throw notFound();
+    return data;
   },
-  loader: ({ params }) => loadApplicationData(params.category),
   pendingComponent: ApplicationCategorySkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {

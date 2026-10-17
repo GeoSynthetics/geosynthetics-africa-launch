@@ -66,7 +66,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           }),
         );
 
-  const assistancePhone = templateData?.assistancePhone || "+27 71 093 9964";
+  const assistancePhone = templateData?.assistancePhone || "+27 72 343 0868";
   const assistanceEmail = templateData?.assistanceEmail || "sales@geosyntheticsafrica.com";
 
   const componentsTitle = templateData?.componentsTitle || "Typical System Components";

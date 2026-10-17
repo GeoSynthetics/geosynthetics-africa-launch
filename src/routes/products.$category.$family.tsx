@@ -1,11 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { canonicalProductPath, fetchProductHierarchy } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { ProductFamilyPage } from "@/pages/ProductFamilyPage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-async function loadProductFamily(category: string, family: string) {
+async function loadProductFamily(category: string, family: string, familyId?: string) {
   const { data, error } = await supabase
     .from("site_config")
     .select("value")
@@ -18,7 +19,8 @@ async function loadProductFamily(category: string, family: string) {
 
   // The value is expected to be a map of familySlug -> templateData
   const templates = (data?.value as Record<string, any>) || {};
-  const familyData = templates[family] || null;
+  // Templates are keyed by the family's slug or, for older entries, its id
+  const familyData = templates[family] || (familyId ? templates[familyId] : null) || null;
 
   // Fetch dynamic case studies that are linked to products belonging to this product family
   let dynamicCaseStudies: any[] = [];
@@ -163,8 +165,18 @@ function ProductFamilySkeleton() {
 }
 
 export const Route = createFileRoute("/products/$category/$family")({
-  ssr: false,
-  loader: ({ params }) => loadProductFamily(params.category, params.family),
+  loader: async ({ params }) => {
+    // Category and family ids redirect to their own slugs
+    const resolved = canonicalProductPath(
+      await fetchProductHierarchy(),
+      params.category,
+      params.family,
+    );
+    if (resolved && resolved.path !== `/products/${params.category}/${params.family}`) {
+      throw redirect({ href: resolved.path, statusCode: 301 });
+    }
+    return loadProductFamily(params.category, params.family, resolved?.family?.id);
+  },
   pendingComponent: ProductFamilySkeleton,
   pendingMs: 0,
   head: ({ loaderData }) => {

@@ -296,8 +296,7 @@ export function ProductFamilyPage() {
         <div className="border-t border-white/10 relative z-10 bg-black/20">
           <div className="container-page grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
             <Link
-              to="/$slug"
-              params={{ slug: "supply" }}
+              to="/services"
               className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
             >
               <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
@@ -308,8 +307,8 @@ export function ProductFamilyPage() {
               </div>
             </Link>
             <Link
-              to="/$slug"
-              params={{ slug: "logistics" }}
+              to="/services/$slug"
+              params={{ slug: "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric" }}
               className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
             >
               <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
@@ -320,8 +319,8 @@ export function ProductFamilyPage() {
               </div>
             </Link>
             <Link
-              to="/$slug"
-              params={{ slug: "installation" }}
+              to="/services/$slug"
+              params={{ slug: "geomembrane-liner-installation-africa" }}
               className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
             >
               <div className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105 leading-none md:leading-normal">
@@ -700,8 +699,8 @@ export function ProductFamilyPage() {
                   <li key={idx}>
                     {app.slug ? (
                       <Link
-                        to="/$slug"
-                        params={{ slug: app.slug }}
+                        to="/applications/$category"
+                        params={{ category: app.slug }}
                         className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition"
                       >
                         <ArrowRight className="h-4 w-4 text-primary shrink-0" />
@@ -730,7 +729,7 @@ export function ProductFamilyPage() {
                 {(data.industries || []).map((ind: any, idx: number) => (
                   <Link
                     key={idx}
-                    to="/$slug"
+                    to="/industries/$slug"
                     params={{ slug: ind.slug }}
                     className="group flex flex-col justify-between p-4 border border-border bg-surface rounded hover:border-primary hover:bg-accent transition"
                   >

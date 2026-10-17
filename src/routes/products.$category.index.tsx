@@ -1,4 +1,5 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import { canonicalProductPath, fetchProductHierarchy } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { ProductCategoryPage } from "@/pages/ProductCategoryPage";
@@ -94,6 +95,11 @@ function ProductCategorySkeleton() {
 
 export const Route = createFileRoute("/products/$category/")({
   loader: async ({ params }) => {
+    // Category ids and old names redirect to the category's own slug
+    const resolved = canonicalProductPath(await fetchProductHierarchy(), params.category);
+    if (resolved && resolved.path !== `/products/${params.category}`) {
+      throw redirect({ href: resolved.path, statusCode: 301 });
+    }
     const content = await getProductPageContent(params.category);
     if (!content) throw notFound();
     return { category: { slug: params.category, label: content.label }, content };

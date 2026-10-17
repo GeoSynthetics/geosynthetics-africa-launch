@@ -240,10 +240,10 @@ export function Footer() {
               <div className="flex items-center gap-2.5 pt-1">
                 <Phone className="h-3.5 w-3.5 text-primary shrink-0" />
                 <a
-                  href={`tel:${(footerContent.phone || "+27 71 093 9964").replace(/\s+/g, "")}`}
+                  href={`tel:${(footerContent.phone || "+27 72 343 0868").replace(/\s+/g, "")}`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  {footerContent.phone || "+27 71 093 9964"}
+                  {footerContent.phone || "+27 72 343 0868"}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
