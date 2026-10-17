@@ -87,6 +87,8 @@ export const Route = createRootRoute({
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "robots", content: "index, follow" },
+        // Google Search Console ownership verification
+        { name: "google-site-verification", content: "T7knp4FMktwKJG-JPgszp4-j5_1oqvIEQqng1cz-Pq4" },
         { title: "Geosynthetics Africa" },
         { name: "description", content: "Africa's Integrated Geosynthetics Execution Platform." },
         { property: "og:title", content: "Geosynthetics Africa" },
