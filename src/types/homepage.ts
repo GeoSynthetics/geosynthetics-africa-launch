@@ -374,7 +374,7 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
         id: "zw",
         name: "Zimbabwe",
         type: "REGIONAL OFFICE",
-        linkUrl: "/zimbabwe-geosynthetics-supplier-contact",
+        linkUrl: "/zimbabwe-geosynthetics-supplier-installer",
       },
       {
         id: "zm",

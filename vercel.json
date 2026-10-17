@@ -36,12 +36,22 @@
     },
     {
       "source": "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control/",
-      "destination": "/zimbabwe-geosynthetics-supplier-contact",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
       "statusCode": 301
     },
     {
       "source": "/zimbabwe-river-rehabilitation-jutesoillock-292-erosion-control",
-      "destination": "/zimbabwe-geosynthetics-supplier-contact",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/zimbabwe-geosynthetics-supplier-contact/",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
+      "statusCode": 301
+    },
+    {
+      "source": "/zimbabwe-geosynthetics-supplier-contact",
+      "destination": "/zimbabwe-geosynthetics-supplier-installer",
       "statusCode": 301
     },
     {
@@ -121,6 +131,16 @@
     },
     {
       "source": "/gcl-liner-installation-contractors-africa",
+      "destination": "/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation/",
+      "destination": "/gcl-installation-contractor-africa",
+      "statusCode": 301
+    },
+    {
+      "source": "/gcl-liner-installation",
       "destination": "/gcl-installation-contractor-africa",
       "statusCode": 301
     },
