@@ -109,4 +109,66 @@ describe("ProductDetailPage - Linked Projects", () => {
     const link = screen.getByRole("link", { name: /View Case Study/i });
     expect(link).toHaveAttribute("href", "/projects/gold-mine-tsf-lining");
   });
+
+  const baseProduct = {
+    id: "prod-1",
+    name: "Gabion Basket",
+    slug: "gabion-basket",
+    key_features: [],
+    specifications: [],
+    compatible_systems: [],
+    downloads: [],
+  };
+
+  it("hides QA & Testing when the product family has no QA content", () => {
+    vi.mocked(Route.useLoaderData).mockReturnValue({
+      product: baseProduct,
+      alternatives: [],
+      systemComponents: [],
+      familyData: {},
+      caseStudies: [],
+    } as any);
+
+    render(<ProductDetailPage />);
+
+    expect(screen.queryByText("Field QA/QC Checklist")).not.toBeInTheDocument();
+    expect(screen.queryByText("Quality Assurance & Testing")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "QA & Testing" })).not.toBeInTheDocument();
+  });
+
+  it("shows the family's own QA checklist and standards", () => {
+    vi.mocked(Route.useLoaderData).mockReturnValue({
+      product: baseProduct,
+      alternatives: [],
+      systemComponents: [],
+      familyData: {
+        qaChecklist: [{ title: "Mesh check", description: "Wire diameter verified." }],
+        qaStandards: ["EN 10223-3"],
+      },
+      caseStudies: [],
+    } as any);
+
+    render(<ProductDetailPage />);
+
+    expect(screen.getByText("Field QA/QC Checklist")).toBeInTheDocument();
+    expect(screen.getByText("Mesh check:")).toBeInTheDocument();
+    expect(screen.getByText("EN 10223-3")).toBeInTheDocument();
+    expect(screen.queryByText(/Subgrade\/Foundation/)).not.toBeInTheDocument();
+  });
+
+  it("falls back to the built-in checklist for the product's family", () => {
+    vi.mocked(Route.useLoaderData).mockReturnValue({
+      product: { ...baseProduct, family_slug: "hdpe-geomembranes" },
+      alternatives: [],
+      systemComponents: [],
+      familyData: {},
+      caseStudies: [],
+    } as any);
+
+    render(<ProductDetailPage />);
+
+    expect(screen.getByText("Field QA/QC Checklist")).toBeInTheDocument();
+    expect(screen.getByText("Non-Destructive Seam Testing:")).toBeInTheDocument();
+    expect(screen.getByText("GRI-GM19 seam strength requirements")).toBeInTheDocument();
+  });
 });

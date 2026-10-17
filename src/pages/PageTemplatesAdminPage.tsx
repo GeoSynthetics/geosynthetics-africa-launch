@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { defaultQaForFamily } from "@/data/product-qa-defaults";
 import { SEED_CATEGORIES, type ProductPageContent } from "@/data/product-pages";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -559,7 +560,7 @@ export function PageTemplatesAdminPage() {
     { id: "types", label: "Types" },
     { id: "benefits", label: "Benefits" },
     { id: "faqs", label: "FAQs" },
-    { id: "installation", label: "Installation" },
+    { id: "installation", label: "Installation & QA" },
     { id: "products", label: "Products" },
     { id: "projects", label: "Projects" },
     { id: "apps", label: "Applications" },
@@ -1441,6 +1442,37 @@ export function PageTemplatesAdminPage() {
                             onChange={(v) => set("installationSpecs", v)}
                             multiline
                             placeholder="Describe installation requirements in detail…"
+                          />
+
+                          <SectionHeading>QA &amp; Testing</SectionHeading>
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Shown in the QA &amp; Testing section of every product page in this
+                            family. Pre-filled with the built-in checklist for this product type;
+                            edit and save to replace it.
+                          </p>
+                          <PairsEditor
+                            label="Field QA/QC checklist"
+                            items={
+                              (active.qaChecklist?.length
+                                ? active.qaChecklist
+                                : (defaultQaForFamily(activeSlug)?.checklist ?? [])) as any[]
+                            }
+                            fields={[
+                              { key: "title", label: "Check" },
+                              { key: "description", label: "Requirement", multiline: true },
+                            ]}
+                            onChange={(v) => set("qaChecklist", v as any)}
+                            newItem={{ title: "", description: "" } as any}
+                          />
+                          <StringListEditor
+                            label="Manufacturing standards & certificates"
+                            items={
+                              active.qaStandards?.length
+                                ? active.qaStandards
+                                : (defaultQaForFamily(activeSlug)?.standards ?? [])
+                            }
+                            onChange={(v) => set("qaStandards", v)}
+                            placeholder="e.g. GRI-GM13, ASTM D5199"
                           />
                         </TabsContent>
 
