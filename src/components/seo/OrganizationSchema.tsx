@@ -1,4 +1,5 @@
 import { JsonLd } from "./JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * Global Organization structured data.
@@ -14,7 +15,7 @@ export function OrganizationSchema() {
         "@type": "Organization",
         name: "Geosynthetics Africa",
         legalName: "Geosynthetics Africa (Pty) Ltd",
-        url: "https://geosynthetics.co.za",
+        url: SITE_URL,
         logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/4a931b85-67d6-4d84-8611-c5fe69e8ab12",
         description:
           "Africa's Integrated Geosynthetics Execution Platform — supply, installation, QA/QC testing and logistics for geomembranes, geotextiles, geogrids and engineered lining systems.",

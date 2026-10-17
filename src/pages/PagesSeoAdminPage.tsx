@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SeoAnalyzer } from "@/components/admin/SeoAnalyzer";
 import { invalidateSeoCache } from "@/hooks/use-page-slugs";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SITE_URL } from "@/lib/site-url";
 
 const CORE_PAGES = [
   { path: "/", label: "Home" },
@@ -273,7 +274,7 @@ export function PagesSeoAdminPage() {
                   <Label htmlFor="seo-url-slug">URL Slug</Label>
                   <div className="flex items-center gap-0">
                     <span className="inline-flex items-center h-9 px-3 rounded-l-md border border-r-0 border-border bg-muted text-xs text-muted-foreground font-mono select-none">
-                      geosynthetics.co.za/
+                      {new URL(SITE_URL).host}/
                     </span>
                     <Input
                       id="seo-url-slug"
@@ -393,7 +394,7 @@ export function PagesSeoAdminPage() {
                 metaDescription: currentData.description,
                 keywords: currentData.keywords,
                 shortDescription: currentData.description, // Use meta desc as short desc for pages
-                siteHost: "geosynthetics.co.za",
+                siteHost: new URL(SITE_URL).host,
               }}
             />
           </div>

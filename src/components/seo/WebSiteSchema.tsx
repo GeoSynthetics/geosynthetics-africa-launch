@@ -1,4 +1,5 @@
 import { JsonLd } from "./JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * WebSite structured data with SearchAction.
@@ -15,12 +16,12 @@ export function WebSiteSchema() {
       data={{
         "@type": "WebSite",
         name: "Geosynthetics Africa",
-        url: "https://geosynthetics.co.za",
+        url: SITE_URL,
         potentialAction: {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: "https://geosynthetics.co.za/catalogue?q={search_term_string}",
+            urlTemplate: `${SITE_URL}/catalogue?q={search_term_string}`,
           },
           "query-input": "required name=search_term_string",
         },

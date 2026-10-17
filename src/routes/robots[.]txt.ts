@@ -1,10 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-function isProductionHost(requestHost: string | null): boolean {
-  if (!requestHost) return false;
-  const hostname = requestHost.split(":")[0].toLowerCase();
-  return hostname === "geosynthetics.co.za" || hostname === "www.geosynthetics.co.za";
-}
+import { SITE_URL, isProductionHost } from "@/lib/site-url";
 
 export const Route = createFileRoute("/robots.txt")({
   server: {
@@ -29,7 +24,6 @@ Disallow: /
           });
         }
 
-        const productionSiteUrl = "https://geosynthetics.co.za";
         const robots = `# Geosynthetics Africa — robots.txt
 # https://www.robotstxt.org/robotstxt.html
 
@@ -44,7 +38,7 @@ Disallow: /signup
 Disallow: /profile
 
 # Sitemap location
-Sitemap: ${productionSiteUrl}/sitemap.xml
+Sitemap: ${SITE_URL}/sitemap.xml
 `;
 
         return new Response(robots, {

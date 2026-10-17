@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ProductDetailPage } from "@/pages";
 import { getProductDetail } from "@/lib/catalogue.functions";
+import { SITE_URL } from "@/lib/site-url";
 
 function ProductDetailSkeleton() {
   return (
@@ -173,7 +174,7 @@ export const Route = createFileRoute("/catalogue/$slug")({
           : []),
       ],
       links: p
-        ? [{ rel: "canonical", href: `https://geosynthetics.co.za/catalogue/${p.slug}` }]
+        ? [{ rel: "canonical", href: `${SITE_URL}/catalogue/${p.slug}` }]
         : [],
     };
   },

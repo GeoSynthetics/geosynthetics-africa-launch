@@ -1195,7 +1195,7 @@ function PresenceEditor({
                   <Input
                     value={office.linkUrl || ""}
                     onChange={(e) => updateOffice(i, { linkUrl: e.target.value })}
-                    placeholder="e.g. https://geosynthetics.co.za/..."
+                    placeholder="e.g. /south-africa-geosynthetics-supplier-installer"
                     className="text-sm h-8 font-mono"
                   />
                 </div>

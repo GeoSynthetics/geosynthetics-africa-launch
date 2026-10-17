@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { CheckCircle2, AlertTriangle, XCircle, Globe } from "lucide-react";
+import { SITE_URL } from "@/lib/site-url";
 
 export interface SeoInput {
   type?: "product" | "page";
@@ -257,7 +258,7 @@ export function SeoAnalyzer({ input }: { input: SeoInput }) {
     input.shortDescription?.trim() ||
     "—"
   ).slice(0, 160);
-  const host = input.siteHost ?? "geosynthetics.co.za";
+  const host = input.siteHost ?? new URL(SITE_URL).host;
   const slug = input.slug?.trim() || (isPage ? "page" : "product-slug");
   const url = isPage
     ? slug === ""

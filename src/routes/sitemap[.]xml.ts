@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
+import { SITE_URL } from "@/lib/site-url";
 import {
   PRODUCT_CATEGORIES,
   APPLICATION_CATEGORIES,
@@ -48,9 +49,9 @@ function today(): string {
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: async ({ request }) => {
+      GET: async () => {
         // Always use the canonical production base URL for sitemap entries
-        const baseUrl = "https://geosynthetics.co.za";
+        const baseUrl = SITE_URL;
         const now = today();
 
         const urls: string[] = [];
