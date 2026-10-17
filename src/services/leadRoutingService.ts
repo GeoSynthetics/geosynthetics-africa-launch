@@ -115,7 +115,7 @@ async function sendNotificationEmail(params: {
         <div class="header">
           <span class="badge">${params.isWestAfrica ? "West Africa Regional Desk" : "South Africa Operations HQ"}</span>
           <h1 class="title">New Hero Project Inquiry</h1>
-          <p class="lead-meta">Received via geosynthetics.co.za Hero Start Project Form</p>
+          <p class="lead-meta">Received via the geosyntheticsafrica.com Start Project form</p>
         </div>
 
         <div class="detail-group">

@@ -1,4 +1,5 @@
 import { JsonLd } from "./JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 interface BlogPostingSchemaProps {
   title: string;
@@ -26,7 +27,7 @@ export function BlogPostingSchema({
   updatedAt,
   authorName,
 }: BlogPostingSchemaProps) {
-  const articleUrl = `https://geosynthetics.co.za/blog/${slug}`;
+  const articleUrl = `${SITE_URL}/blog/${slug}`;
 
   const schema: Record<string, unknown> = {
     "@type": "BlogPosting",
@@ -37,7 +38,7 @@ export function BlogPostingSchema({
     publisher: {
       "@type": "Organization",
       name: "Geosynthetics Africa",
-      url: "https://geosynthetics.co.za",
+      url: SITE_URL,
     },
   };
 

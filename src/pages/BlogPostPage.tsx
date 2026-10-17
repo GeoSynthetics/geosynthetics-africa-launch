@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { HexCell } from "@/components/site/shapes";
+import { SITE_URL } from "@/lib/site-url";
 
 export function BlogPostPage() {
   const { post, products, prevPost, nextPost } = Route.useLoaderData();
@@ -72,9 +73,9 @@ export function BlogPostPage() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://geosynthetics.co.za" },
-          { name: "Blog", url: "https://geosynthetics.co.za/blog" },
-          { name: post.title, url: `https://geosynthetics.co.za/blog/${post.slug}` },
+          { name: "Home", url: SITE_URL },
+          { name: "Blog", url: `${SITE_URL}/blog` },
+          { name: post.title, url: `${SITE_URL}/blog/${post.slug}` },
         ]}
       />
       {/* Article Header Hero */}

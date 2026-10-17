@@ -35,7 +35,7 @@ export interface OfficeLocation {
   id: string;
   name: string; // e.g. "South Africa"
   type: string; // e.g. "HQ", "REGIONAL OFFICE"
-  linkUrl?: string; // e.g. "https://geosynthetics.co.za/..."
+  linkUrl?: string; // e.g. "/zambia-geosynthetics-supplier-installer"
 }
 
 export interface ProjectCard {
@@ -356,58 +356,57 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
         id: "za",
         name: "South Africa",
         type: "HQ",
-        linkUrl:
-          "https://geosynthetics.co.za/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa/",
+        linkUrl: "/south-africa-geosynthetics-supplier-installer",
       },
       {
         id: "gh",
         name: "Ghana",
         type: "WEST AFRICA MINING HUB",
-        linkUrl: "https://geosynthetics.co.za/",
+        linkUrl: "/ghana-geosynthetics-supplier-contact",
       },
       {
         id: "tz",
         name: "Tanzania",
         type: "EAST AFRICA REGIONAL HUB",
-        linkUrl:
-          "https://geosynthetics.co.za/tanzania-geosynthetics-supplier-hdpe-liners-geotextiles-geogrids/",
+        linkUrl: "/tanzania-geosynthetics-supplier-installer",
       },
       {
         id: "zw",
         name: "Zimbabwe",
         type: "REGIONAL OFFICE",
-        linkUrl:
-          "https://geosynthetics.co.za/zimbabwe-geosynthetics-supplier-contact/",
+        linkUrl: "/zimbabwe-geosynthetics-supplier-contact",
       },
       {
         id: "zm",
         name: "Zambia",
         type: "",
-        linkUrl:
-          "https://geosynthetics.co.za/zambia-hdpe-liners-bidim-geotextiles-geogrids-supplier/",
+        linkUrl: "/zambia-geosynthetics-supplier-installer",
       },
       {
         id: "cgo",
         name: "Democratic Republic of Congo (DRC)",
         type: "",
-        linkUrl:
-          "https://geosynthetics.co.za/drc-congo-geosynthetics-bidim-hdpe-geomembranes-supplier/",
+        linkUrl: "/drc-geosynthetics-supplier-installer",
       },
-      { id: "ke", name: "Kenya", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      { id: "ke", name: "Kenya", type: "", linkUrl: "/kenya-geosynthetics-supplier-contact" },
       {
         id: "ci",
         name: "Côte d'Ivoire",
         type: "",
-        linkUrl: "https://geosynthetics.co.za/contact/",
+        linkUrl: "/cote-divoire-geosynthetics-supplier-contact",
       },
-      { id: "mz", name: "Mozambique", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
-      { id: "na", name: "Namibia", type: "", linkUrl: "https://geosynthetics.co.za/contact/" },
+      {
+        id: "mz",
+        name: "Mozambique",
+        type: "",
+        linkUrl: "/mozambique-geosynthetics-supplier-contact",
+      },
+      { id: "na", name: "Namibia", type: "", linkUrl: "/namibia-geosynthetics-supplier-contact" },
       {
         id: "bw",
         name: "Botswana",
         type: "",
-        linkUrl:
-          "https://geosynthetics.co.za/botswana-geomembranes-hdpe-geotextiles-geogrids-supplier/",
+        linkUrl: "/botswana-geosynthetics-supplier-installer",
       },
     ],
     mapAsset: "",

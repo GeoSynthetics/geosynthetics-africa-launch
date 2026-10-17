@@ -1,4 +1,5 @@
 import { JsonLd } from "./JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 interface ProductSchemaProps {
   name: string;
@@ -32,7 +33,7 @@ export function ProductSchema({
   inStock,
   material,
 }: ProductSchemaProps) {
-  const productUrl = `https://geosynthetics.co.za/catalogue/${slug}`;
+  const productUrl = `${SITE_URL}/catalogue/${slug}`;
 
   const schema: Record<string, unknown> = {
     "@type": "Product",

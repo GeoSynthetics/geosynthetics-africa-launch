@@ -1,4 +1,5 @@
 import { JsonLd } from "./JsonLd";
+import { SITE_URL } from "@/lib/site-url";
 
 /**
  * LocalBusiness structured data for the Contacts page.
@@ -13,7 +14,7 @@ export function LocalBusinessSchema() {
       data={{
         "@type": "LocalBusiness",
         name: "Geosynthetics Africa",
-        url: "https://geosynthetics.co.za",
+        url: SITE_URL,
         telephone: "+27-78-1355-926",
         email: "sales@geosynthetics.co.za",
         address: {

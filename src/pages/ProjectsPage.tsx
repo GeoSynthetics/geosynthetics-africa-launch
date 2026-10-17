@@ -255,11 +255,11 @@ export function ProjectsPage() {
                       {cs.title}
                     </span>
                     <span className="text-xs text-muted-foreground ml-3">
-                      📍 {cs.location}, {cs.country}
+                      📍 {[cs.location, cs.country].filter(Boolean).join(", ")}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 text-xs mt-2 sm:mt-0 font-medium">
-                    <span className="text-muted-foreground">{cs.scale || "—"}</span>
+                    {cs.scale && <span className="text-muted-foreground">{cs.scale}</span>}
                     <span className="font-bold text-primary flex items-center gap-1">
                       View <ChevronRight className="h-3 w-3" />
                     </span>
@@ -331,7 +331,7 @@ export function ProjectsPage() {
                     <div className="p-6 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary mb-2">
-                          {cs.sector || "Sector"} · {cs.project_year || "2024"}
+                          {[cs.sector, cs.project_year].filter(Boolean).join(" · ")}
                         </div>
                         <h3 className="font-display text-lg font-bold uppercase tracking-tight text-foreground group-hover:text-primary transition-colors duration-150 leading-tight mb-2">
                           {cs.title}

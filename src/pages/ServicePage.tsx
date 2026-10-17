@@ -7,6 +7,7 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { GeoGrid, HexCell, FiberStrand } from "@/components/site/shapes";
+import { SITE_URL } from "@/lib/site-url";
 
 // Interface Definitions for Type Safety
 interface BulletItem {
@@ -203,9 +204,9 @@ export function ServicePage({ data }: { data: any }) {
     <div className="bg-background">
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://geosynthetics.co.za" },
-          { name: "Services", url: "https://geosynthetics.co.za/services" },
-          { name: title, url: `https://geosynthetics.co.za/services/${service.slug}` },
+          { name: "Home", url: SITE_URL },
+          { name: "Services", url: `${SITE_URL}/services` },
+          { name: title, url: `${SITE_URL}/services/${service.slug}` },
         ]}
       />
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}

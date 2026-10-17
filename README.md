@@ -63,7 +63,11 @@ VITE_SUPABASE_URL=https://<your-project>.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_xxx
 SUPABASE_URL=https://<your-project>.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_xxx
+# Optional: the live public address. Defaults to https://www.geosyntheticsafrica.com
+VITE_CANONICAL_SITE_URL=https://www.geosyntheticsafrica.com
 ```
+
+The site address is defined once in `src/lib/site-url.ts`. Canonical tags, og:url, the sitemap, robots.txt, JSON-LD schema and email links all read it. robots.txt only allows crawling when the request host is that domain (www or bare); every other host (Vercel previews, localhost) is served `Disallow: /`.
 
 The **service role key** must NOT live in `.env`. Add it as a runtime secret named `SB_SERVICE_ROLE_KEY` (or `SUPABASE_SERVICE_ROLE_KEY`). It is read server-side only by `src/integrations/supabase/client.server.ts`.
 

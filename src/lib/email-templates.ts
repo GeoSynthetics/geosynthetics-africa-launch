@@ -3,6 +3,7 @@
  * Clean Code implementation strictly adhering to SRP, DRY, and explicit self-documenting layout rendering.
  * Matches stakeholder specification: gsa-quote-confirmation-email.html
  */
+import { SITE_URL } from "@/lib/site-url";
 
 export interface BaseEmailParams {
   contactName: string;
@@ -26,7 +27,7 @@ export interface ContactEmailParams extends BaseEmailParams {
   subject?: string;
 }
 
-const DEFAULT_SITE_URL = "https://geosynthetics.co.za";
+const DEFAULT_SITE_URL = SITE_URL;
 const DEFAULT_BREVO_IMG_HOST = "https://img.emailer.geosynthetics.co.za";
 
 /**

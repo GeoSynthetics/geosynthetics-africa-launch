@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/site-url";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
 import {
@@ -37,6 +38,17 @@ function escapeXml(s: string): string {
     .replace(/'/g, "&apos;");
 }
 
+/** Keep the first entry for each <loc>, so a page listed by two sources appears once */
+function dedupeEntries(entries: string[]): string[] {
+  const seen = new Set<string>();
+  return entries.filter((entry) => {
+    const loc = entry.match(/<loc>([^<]+)<\/loc>/)?.[1] ?? entry;
+    if (seen.has(loc)) return false;
+    seen.add(loc);
+    return true;
+  });
+}
+
 /** Today's date in YYYY-MM-DD format */
 function today(): string {
   return new Date().toISOString().split("T")[0];
@@ -50,7 +62,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async ({ request }) => {
         // Always use the canonical production base URL for sitemap entries
-        const baseUrl = "https://geosynthetics.co.za";
+        const baseUrl = SITE_URL;
         const now = today();
 
         const urls: string[] = [];
@@ -187,6 +199,32 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Silently skip if Supabase is unreachable
         }
 
+        /* ── 5c. Published project case studies ──────────────── */
+        try {
+          const { data: projects } = await supabase
+            .from("case_studies")
+            .select("slug, published_at")
+            .eq("status", "published");
+
+          if (projects) {
+            for (const project of projects) {
+              if (!project.slug) continue;
+              const lastmod = project.published_at
+                ? new Date(project.published_at).toISOString().split("T")[0]
+                : now;
+              urls.push(
+                urlEntry(`${baseUrl}/projects/${project.slug}`, {
+                  lastmod,
+                  changefreq: "monthly",
+                  priority: 0.6,
+                }),
+              );
+            }
+          }
+        } catch {
+          // Silently skip if Supabase is unreachable
+        }
+
         /* ── 6. Custom SEO slug pages ─────────────────────────── */
         try {
           const { data: seoConfig } = await supabase
@@ -262,7 +300,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-${urls.join("\n")}
+${dedupeEntries(urls).join("\n")}
 </urlset>`;
 
         return new Response(sitemap, {

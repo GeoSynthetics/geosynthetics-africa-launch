@@ -82,7 +82,7 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("Custom Step 4 Desc")).toBeInTheDocument();
   });
 
-  it("should fall back to default sequence steps if sequence is not defined in qa_details", () => {
+  it("should hide the installation sequence if sequence is not defined in qa_details", () => {
     const mockProject = {
       id: "project-123",
       title: "Custom Lining Project",
@@ -99,16 +99,13 @@ describe("ProjectDetailPage - Installation Sequence", () => {
 
     render(<ProjectDetailPage />);
 
-    // Check default sequence steps are rendered as fallback
-    expect(screen.getByText("Subgrade Accept")).toBeInTheDocument();
-    expect(screen.getByText("Clay base compaction and clearance check.")).toBeInTheDocument();
-    expect(screen.getByText("Air Pressure Test")).toBeInTheDocument();
-    expect(
-      screen.getByText("Double seam channels locked and pressure tested."),
-    ).toBeInTheDocument();
+    // No invented placeholder steps: the section is hidden when no steps are entered
+    expect(screen.queryByText("Installation Sequence")).not.toBeInTheDocument();
+    expect(screen.queryByText("Subgrade Accept")).not.toBeInTheDocument();
+    expect(screen.queryByText("Air Pressure Test")).not.toBeInTheDocument();
   });
 
-  it("should fall back to default sequence steps if sequence is an empty array in qa_details", () => {
+  it("should hide the installation sequence if sequence is an empty array in qa_details", () => {
     const mockProject = {
       id: "project-123",
       title: "Custom Lining Project",
@@ -127,13 +124,10 @@ describe("ProjectDetailPage - Installation Sequence", () => {
 
     render(<ProjectDetailPage />);
 
-    // Check default sequence steps are rendered as fallback
-    expect(screen.getByText("Subgrade Accept")).toBeInTheDocument();
-    expect(screen.getByText("Clay base compaction and clearance check.")).toBeInTheDocument();
-    expect(screen.getByText("Air Pressure Test")).toBeInTheDocument();
-    expect(
-      screen.getByText("Double seam channels locked and pressure tested."),
-    ).toBeInTheDocument();
+    // No invented placeholder steps: the section is hidden when no steps are entered
+    expect(screen.queryByText("Installation Sequence")).not.toBeInTheDocument();
+    expect(screen.queryByText("Subgrade Accept")).not.toBeInTheDocument();
+    expect(screen.queryByText("Air Pressure Test")).not.toBeInTheDocument();
   });
 
   it("should render the field label as 'Resources' and not 'Field Welders', mapping to project.qa_details.welders", () => {
@@ -203,7 +197,7 @@ describe("ProjectDetailPage - Installation Sequence", () => {
     expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
   });
 
-  it("should fall back to default Logistics Performance KPIs if they are not defined in logistics_details when using supply_only service_type", () => {
+  it("should hide the Logistics Performance KPIs if they are not defined in logistics_details when using supply_only service_type", () => {
     const mockProject = {
       id: "project-456",
       title: "Supply Only Case Study",
@@ -220,19 +214,57 @@ describe("ProjectDetailPage - Installation Sequence", () => {
 
     render(<ProjectDetailPage />);
 
-    // Assert that the Logistics Performance KPIs section header is rendered
-    expect(screen.getByText("Logistics Performance KPIs")).toBeInTheDocument();
+    // No invented figures are shown
+    expect(screen.queryByText("Logistics Performance KPIs")).not.toBeInTheDocument();
+    expect(screen.queryByText("0 Days")).not.toBeInTheDocument();
+    expect(screen.queryByText("12 Trucks")).not.toBeInTheDocument();
+    expect(screen.queryByText("3,420 km")).not.toBeInTheDocument();
+  });
 
-    // Assert that default fallbacks are rendered
-    const onetimeElements = screen.getAllByText("100%");
-    expect(onetimeElements.length).toBeGreaterThanOrEqual(2);
-    expect(screen.getByText("0 Days")).toBeInTheDocument();
-    expect(screen.getByText("12 Trucks")).toBeInTheDocument();
+  it("should hide placeholder dashes and invented copy for a supply_only project with partial data", () => {
+    const mockProject = {
+      id: "project-789",
+      title: "HDPE Geomembrane Supply – Ikongwe Iron Ore Mine, Botswana",
+      location: "Ikongwe",
+      country: "Botswana",
+      project_year: 2026,
+      sector: "Mining",
+      scale: "61,600 m²",
+      service_type: "supply_only",
+      summary: "Supply of 61,600 m² of GSE HDPE geomembrane.",
+      logistics_details: {
+        tonnage: "—",
+        route: "—",
+        borders: "—",
+        ontime: "—",
+        kpi_demurrage_free: "—",
+        route_steps: [{ stage: "Workflow 01", name: "Order preparation", desc: "Verify grades." }],
+      },
+      spec_compliance: [],
+    };
 
-    // Assert that the labels are rendered
-    expect(screen.getByText("Demurrage Free")).toBeInTheDocument();
-    expect(screen.getByText("Frontier Delays")).toBeInTheDocument();
-    expect(screen.getByText("Sealed Consignments")).toBeInTheDocument();
-    expect(screen.getByText("On-Time laydown")).toBeInTheDocument();
+    vi.mocked(Route.useLoaderData).mockReturnValue({ project: mockProject });
+
+    render(<ProjectDetailPage />);
+
+    // Headline is the project title plus scale, never "— — delivered on time"
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
+      "HDPE Geomembrane Supply – Ikongwe Iron Ore Mine, Botswana — 61,600 m²",
+    );
+    expect(screen.queryByText(/delivered on time/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("—")).not.toBeInTheDocument();
+    expect(screen.queryByText("Distance Route")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Rotterdam/)).not.toBeInTheDocument();
+    // Empty spec table and empty KPI section are hidden
+    expect(screen.queryByText(/Specification Conformity/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Logistics Performance KPIs")).not.toBeInTheDocument();
+    // Real route steps still render
+    expect(screen.getByText("Order preparation")).toBeInTheDocument();
+    // The fake download button is replaced by a contact link
+    expect(screen.queryByText("Download Delivery Pack")).not.toBeInTheDocument();
+    expect(screen.getByText("Request Project Documents").closest("a")).toHaveAttribute(
+      "href",
+      "/contacts",
+    );
   });
 });
