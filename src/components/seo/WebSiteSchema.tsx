@@ -1,5 +1,5 @@
 import { JsonLd } from "./JsonLd";
-import { SITE_URL } from "@/lib/site-url";
+import { SITE_URL, ORGANIZATION_ID } from "@/lib/site-url";
 
 /**
  * WebSite structured data with SearchAction.
@@ -15,8 +15,11 @@ export function WebSiteSchema() {
     <JsonLd
       data={{
         "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
         name: "Geosynthetics Africa",
         url: SITE_URL,
+        publisher: { "@id": ORGANIZATION_ID },
+        inLanguage: ["en", "fr", "pt"],
         potentialAction: {
           "@type": "SearchAction",
           target: {

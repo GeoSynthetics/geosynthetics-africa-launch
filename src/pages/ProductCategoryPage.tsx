@@ -16,12 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { QuoteCard } from "@/components/site/QuoteCard";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { cn, splitIntoParagraphs } from "@/lib/utils";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -291,18 +286,12 @@ export function ProductCategoryPage() {
                   <span className="text-primary">|</span> Frequently Asked Questions about{" "}
                   {content.label}
                 </h2>
-                <Accordion type="single" collapsible className="w-full">
-                  {content.faqs.map((faq, i) => (
-                    <AccordionItem key={i} value={`item-${i}`} className="border-border">
-                      <AccordionTrigger className="text-left font-bold text-sm uppercase hover:text-primary transition-colors hover:no-underline px-4 bg-surface/50 data-[state=open]:bg-primary/10 data-[state=open]:text-primary rounded-t mt-2">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground px-4 pt-4 pb-6 leading-relaxed">
-                        {faq.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+                <FaqAccordion
+                  items={content.faqs}
+                  itemClassName="border-b border-border"
+                  questionClassName="font-bold text-sm uppercase hover:text-primary transition-colors px-4 bg-surface/50 group-open:bg-primary/10 group-open:text-primary rounded-t mt-2"
+                  answerClassName="text-muted-foreground px-4 pt-4 pb-6 leading-relaxed"
+                />
               </div>
             )}
 

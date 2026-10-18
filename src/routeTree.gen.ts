@@ -19,6 +19,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as CountriesRouteImport } from './routes/countries'
 import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -126,6 +127,11 @@ const CountriesRoute = CountriesRouteImport.update({
 const IndustriesRoute = IndustriesRouteImport.update({
   id: '/industries',
   path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -430,6 +436,7 @@ export interface FileRoutesByFullPath {
   '/contacts': typeof ContactsRoute
   '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -496,6 +503,7 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
   '/countries': typeof CountriesRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -563,6 +571,7 @@ export interface FileRoutesById {
   '/contacts': typeof ContactsRoute
   '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -635,6 +644,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/countries'
     | '/industries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -701,6 +711,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contacts'
     | '/countries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -767,6 +778,7 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/countries'
     | '/industries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -838,6 +850,7 @@ export interface RootRouteChildren {
   ContactsRoute: typeof ContactsRoute
   CountriesRoute: typeof CountriesRoute
   IndustriesRoute: typeof IndustriesRouteWithChildren
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   LoginRoute: typeof LoginRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProfileRoute: typeof ProfileRoute
@@ -942,6 +955,13 @@ declare module '@tanstack/react-router' {
       path: '/industries'
       fullPath: '/industries'
       preLoaderRoute: typeof IndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1491,6 +1511,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactsRoute: ContactsRoute,
   CountriesRoute: CountriesRoute,
   IndustriesRoute: IndustriesRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   LoginRoute: LoginRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProfileRoute: ProfileRoute,

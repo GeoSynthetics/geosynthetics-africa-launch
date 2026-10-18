@@ -5,12 +5,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 import { DEFAULT_SERVICES_TEMPLATES } from "@/types/service-template";
@@ -365,22 +360,13 @@ export function ServicesPage() {
             </p>
           </div>
 
-          <Accordion type="single" collapsible className="w-full space-y-3">
-            {faqsList.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                value={`faq-${i}`}
-                className="border border-border rounded-lg bg-card px-6 py-2 transition hover:border-muted-foreground/30"
-              >
-                <AccordionTrigger className="text-left font-display font-bold uppercase text-sm md:text-base tracking-wide hover:no-underline hover:text-primary transition-colors py-4">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4 pt-1">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <FaqAccordion
+            items={faqsList}
+            className="space-y-3"
+            itemClassName="border border-border rounded-lg bg-card px-6 py-2 transition hover:border-muted-foreground/30"
+            questionClassName="font-display font-bold uppercase text-sm md:text-base tracking-wide hover:text-primary transition-colors py-4"
+            answerClassName="text-sm text-muted-foreground leading-relaxed pb-4 pt-1"
+          />
         </div>
       </section>
 
