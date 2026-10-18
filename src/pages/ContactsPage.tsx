@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
+import { EXPANSION_COUNTRY_TEMPLATES } from "@/data/country-expansion";
 import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/brevo";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
@@ -310,6 +311,7 @@ function CountrySeoLinks() {
     { name: "Mozambique", slug: "mozambique-geosynthetics-supplier-contact" },
     { name: "Ghana", slug: "ghana-geosynthetics-supplier-contact" },
     { name: "Namibia", slug: "namibia-geosynthetics-supplier-contact" },
+    ...Object.values(EXPANSION_COUNTRY_TEMPLATES).map((t) => ({ name: t.country, slug: t.slug })),
   ];
 
   return (
@@ -331,6 +333,12 @@ function CountrySeoLinks() {
             </RLink>
           ))}
         </div>
+        <RLink
+          to="/countries"
+          className="mt-5 inline-flex text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-hover"
+        >
+          View all countries we serve &rarr;
+        </RLink>
       </div>
     </section>
   );

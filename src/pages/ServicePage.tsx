@@ -6,6 +6,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { ServiceSchema } from "@/components/seo/ServiceSchema";
 import { GeoGrid, HexCell, FiberStrand } from "@/components/site/shapes";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -208,6 +209,13 @@ export function ServicePage({ data }: { data: any }) {
           { name: "Services", url: `${SITE_URL}/services` },
           { name: title, url: `${SITE_URL}/services/${service.slug}` },
         ]}
+      />
+      <ServiceSchema
+        name={title}
+        description={description}
+        path={`/services/${service.slug}`}
+        serviceType={service.label}
+        image={heroImage}
       />
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}
       <section

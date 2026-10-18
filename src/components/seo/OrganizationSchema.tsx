@@ -1,6 +1,7 @@
 import { JsonLd } from "./JsonLd";
-import { SITE_URL } from "@/lib/site-url";
-import { BUSINESS, AFRICAN_COUNTRY_CODES } from "@/lib/business-info";
+import { SITE_URL, ORGANIZATION_ID } from "@/lib/site-url";
+import { BUSINESS, AFRICAN_COUNTRY_CODES, GROUP_COMPANIES } from "@/lib/business-info";
+import { useFooterContent } from "@/hooks/use-footer-content";
 
 /**
  * Global Organization structured data.
@@ -10,15 +11,25 @@ import { BUSINESS, AFRICAN_COUNTRY_CODES } from "@/lib/business-info";
  * @see https://developers.google.com/search/docs/appearance/structured-data/organization
  */
 export function OrganizationSchema() {
+  const footer = useFooterContent();
+  // Real social profile URLs from Site Builder → Footer (placeholders "#" are skipped)
+  const sameAs = (footer?.socialLinks || [])
+    .map((l) => l.url)
+    .filter((url) => /^https?:\/\//.test(url || ""));
   return (
     <JsonLd
       data={{
         "@type": "Organization",
+        "@id": ORGANIZATION_ID,
         name: BUSINESS.name,
         legalName: BUSINESS.legalName,
         url: SITE_URL,
         logo: `${SITE_URL}/logo-512.png`,
         description: BUSINESS.description,
+        email: BUSINESS.email,
+        telephone: BUSINESS.telephone,
+        foundingDate: BUSINESS.foundingDate,
+        memberOf: BUSINESS.memberOf.map((m) => ({ "@type": "Organization", ...m })),
         address: {
           "@type": "PostalAddress",
           ...BUSINESS.address,
@@ -29,11 +40,17 @@ export function OrganizationSchema() {
             telephone: BUSINESS.telephone,
             contactType: "sales",
             email: BUSINESS.email,
-            availableLanguage: ["English"],
+            availableLanguage: ["English", "French", "Portuguese"],
             areaServed: [...AFRICAN_COUNTRY_CODES],
           },
         ],
-        sameAs: [],
+        sameAs,
+        subOrganization: GROUP_COMPANIES.map((c) => ({
+          "@type": "Organization",
+          name: c.name,
+          url: c.url,
+          address: { "@type": "PostalAddress", addressCountry: c.country },
+        })),
         areaServed: { "@type": "Continent", name: "Africa" },
         knowsAbout: [
           "Geomembranes",

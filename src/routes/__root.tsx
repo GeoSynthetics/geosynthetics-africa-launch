@@ -1,5 +1,13 @@
+import {
+  Outlet,
+  Link,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { alternatesFor, langFromPath, LANG_LABELS } from "@/i18n/localized-pages";
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -58,11 +66,29 @@ export const Route = createRootRoute({
     // string) becomes the canonical URL on the live domain.
     const pathname = matches[matches.length - 1]?.pathname ?? "/";
     const canonicalUrl = absoluteUrl(pathname);
+    // hreflang: link every language version of this page to the others
+    const alternates = alternatesFor(pathname);
+    const hreflangLinks = alternates.length
+      ? [
+          ...alternates.map((a) => ({
+            rel: "alternate",
+            hrefLang: LANG_LABELS[a.lang].hreflang,
+            href: absoluteUrl(a.path),
+          })),
+          {
+            rel: "alternate",
+            hrefLang: "x-default",
+            href: absoluteUrl(alternates.find((a) => a.lang === "en")!.path),
+          },
+        ]
+      : [];
     return {
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "robots", content: "index, follow" },
+        // Google Search Console ownership verification
+        { name: "google-site-verification", content: "T7knp4FMktwKJG-JPgszp4-j5_1oqvIEQqng1cz-Pq4" },
         { title: "Geosynthetics Africa" },
         { name: "description", content: "Africa's Integrated Geosynthetics Execution Platform." },
         { property: "og:title", content: "Geosynthetics Africa" },
@@ -86,6 +112,7 @@ export const Route = createRootRoute({
       ],
       links: [
         { rel: "canonical", href: canonicalUrl },
+        ...hreflangLinks,
         { rel: "stylesheet", href: appCss },
         { rel: "sitemap", type: "application/xml", href: "/sitemap.xml" },
         { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -103,7 +130,9 @@ export const Route = createRootRoute({
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
-  const currentLang = i18n.language || "en";
+  // The page language follows the URL: /fr/... is French, /pt/... Portuguese
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const currentLang = langFromPath(pathname);
   return (
     <html lang={currentLang}>
       <head>
@@ -118,6 +147,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  // Menus and labels follow the language of the page being viewed
+  useEffect(() => {
+    const lang = langFromPath(pathname);
+    if ((i18n.language || "en").split("-")[0] !== lang) void i18n.changeLanguage(lang);
+  }, [pathname]);
+
   return (
     <AuthProvider>
       <QuickQuoteProvider>

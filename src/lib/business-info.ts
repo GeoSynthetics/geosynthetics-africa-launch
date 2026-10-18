@@ -24,6 +24,15 @@ export const BUSINESS = {
   },
   description:
     "Africa's Integrated Geosynthetics Execution Platform — supply, installation, QA/QC testing and logistics for geomembranes, geotextiles, geogrids and engineered lining systems.",
+  /** Year the business started (About page: "Geosynthetics specialist since 2016"). */
+  foundingDate: "2016",
+  /** Industry bodies the business belongs to. */
+  memberOf: [
+    {
+      name: "International Association of Geosynthetic Installers (IAGI)",
+      url: "https://www.iagi.org",
+    },
+  ],
 } as const;
 
 /** ISO 3166-1 alpha-2 codes for all 54 African countries. */
@@ -83,3 +92,17 @@ export const AFRICAN_COUNTRY_CODES = [
   "ZM",
   "ZW",
 ] as const;
+
+/**
+ * Country companies in the Geosynthetics Africa group, each with its own
+ * website. Linked from the footer and listed as sub-organisations in the
+ * Organization schema so search engines see one group, not competitors.
+ * Add each country company's website here as it goes live.
+ */
+export const GROUP_COMPANIES: { name: string; url: string; country: string }[] = [
+  {
+    name: "Geosynthetics South Africa",
+    url: "https://geosynthetics.co.za",
+    country: "South Africa",
+  },
+];

@@ -56,6 +56,19 @@ export async function loadCountryData(customSlug: string) {
       templates[customSlug] || Object.values(templates).find((t) => t.slug === customSlug) || null;
 
     if (!countryTemplate) {
+      // Old built-in address for a country whose page now has another slug
+      const builtIn =
+        DEFAULT_COUNTRY_TEMPLATES[customSlug] ||
+        Object.values(DEFAULT_COUNTRY_TEMPLATES).find((t) => t.slug === customSlug);
+      if (builtIn) {
+        countryTemplate =
+          Object.values(templates).find(
+            (t) => t.country?.toLowerCase() === builtIn.country.toLowerCase(),
+          ) || null;
+      }
+    }
+
+    if (!countryTemplate) {
       const countryMeta = COUNTRY_SEO_MAP[customSlug];
       if (countryMeta) {
         countryTemplate =

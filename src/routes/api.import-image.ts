@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { isExternalUploadUrl } from "@/lib/external-images";
 
 /**
- * GET /api/import-image?url=https://geosynthetics.com/wp-content/uploads/...
+ * GET /api/import-image?url=https://geosynthetics.co.za/wp-content/uploads/...
  *
  * Server-side download used by the admin "Move old-site images" tool, because
  * the browser cannot read files from the old site directly (CORS).
- * Only files under geosynthetics.com/wp-content/uploads/ are allowed, so this
+ * Only files under geosynthetics.co.za/wp-content/uploads/ are allowed, so this
  * is not an open proxy.
  */
 const MAX_BYTES = 25 * 1024 * 1024;
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/api/import-image")({
       GET: async ({ request }) => {
         const target = new URL(request.url).searchParams.get("url") || "";
         if (!isExternalUploadUrl(target)) {
-          return new Response("Only geosynthetics.com uploads can be imported", { status: 400 });
+          return new Response("Only geosynthetics.co.za uploads can be imported", { status: 400 });
         }
 
         try {

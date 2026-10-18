@@ -20,6 +20,8 @@ export interface ProductPageContent {
   benefits?: { title: string; description: string }[];
   faqs?: { question: string; answer: string }[];
   installationSpecs?: string[];
+  qaChecklist?: { title: string; description: string }[];
+  qaStandards?: string[];
   projectReferences?: {
     name: string;
     location: string;

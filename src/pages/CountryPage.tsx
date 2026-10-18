@@ -22,6 +22,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { GeoGrid } from "@/components/site/shapes";
+import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 import type { CountryTemplate } from "@/types/country-template";
 import { useCountryTemplate } from "@/hooks/use-country-templates";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
@@ -607,6 +608,7 @@ export function CountryPage({ data }: { data: any }) {
               </p>
             </div>
 
+            <FAQPageSchema items={template.faqs} />
             <div className="space-y-3">
               {template.faqs.map((faq, idx) => {
                 const isOpen = activeFaq === idx;
@@ -616,7 +618,10 @@ export function CountryPage({ data }: { data: any }) {
                     className="border border-border rounded-xl bg-card overflow-hidden transition"
                   >
                     <button
+                      type="button"
                       onClick={() => toggleFaq(idx)}
+                      aria-expanded={isOpen}
+                      aria-controls={`country-faq-${idx}`}
                       className="w-full flex items-center justify-between p-4 text-left font-semibold text-sm text-foreground hover:text-primary transition"
                     >
                       <span>{faq.question}</span>
@@ -626,11 +631,14 @@ export function CountryPage({ data }: { data: any }) {
                         }`}
                       />
                     </button>
-                    {isOpen && (
-                      <div className="px-4 pb-4 text-xs text-muted-foreground leading-relaxed border-t border-border/50 pt-3">
-                        {faq.answer}
-                      </div>
-                    )}
+                    {/* Always rendered (hidden when closed) so crawlers can read every answer */}
+                    <div
+                      id={`country-faq-${idx}`}
+                      hidden={!isOpen}
+                      className="px-4 pb-4 text-xs text-muted-foreground leading-relaxed border-t border-border/50 pt-3"
+                    >
+                      {faq.answer}
+                    </div>
                   </div>
                 );
               })}

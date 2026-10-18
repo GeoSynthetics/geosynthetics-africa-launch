@@ -26,11 +26,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { type CataloguePageContent, DEFAULT_CATALOGUE_PAGE_CONTENT } from "@/types/catalogue";
-import {
-  reconcileCategoriesWithFamilies,
-  findProductFamily,
-  type ReconciledCategory,
-} from "@/lib/product-families";
+import { reconcileCategoriesWithFamilies, findProductFamily } from "@/lib/product-families";
 
 const PAGE_SIZE = 6;
 
@@ -89,6 +85,8 @@ function formatZAR(n: number) {
   }).format(n);
 }
 
+const NO_MATCH_ID = "00000000-0000-0000-0000-000000000000";
+
 export function CataloguePage({ search, catalogueContent }: CataloguePageProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -112,7 +110,9 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
     setSearchInput(q);
   }, [q]);
 
-  // Load filter options once (matched to Products Menu from site_config and canonical product families)
+  // Load filter options once: one option per category in the Products menu (Site Builder).
+  // Each option carries the ids and slugs of its families, because products are
+  // grouped by family (family_slug), which is what the menu and category pages show.
   useEffect(() => {
     void (async () => {
       const [configRes, dbCatsRes] = await Promise.all([
@@ -120,52 +120,80 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
         supabase.from("product_categories").select("id, name, slug").order("name"),
       ]);
 
-      const dbCategories = (dbCatsRes.data ?? []) as Array<{ id: string; name: string; slug: string | null }>;
-      const menuItems = (configRes.data?.value?.items as Array<{
+      const dbCategories = (dbCatsRes.data ?? []) as Array<{
+        id: string;
+        name: string;
+        slug: string | null;
+      }>;
+      const menuItems = ((configRes.data?.value as any)?.items ?? []) as Array<{
         id: string;
         label: string;
         slug?: string;
-      }>) ?? [];
+        children?: Array<{ id: string; slug?: string }>;
+      }>;
 
+      // Database category ids per menu category, so old links that pass a UUID still work
       const reconciled = reconcileCategoriesWithFamilies(dbCategories, menuItems);
-      setCategories(reconciled);
+
+      const options: FilterOption[] = menuItems.map((item) => {
+        const slug = item.slug || item.id;
+        const match = reconciled.find((r) => r.slug === slug || r.familyId === item.id);
+        const familyKeys = new Set<string>();
+        for (const child of item.children || []) {
+          if (child.id) familyKeys.add(child.id);
+          if (child.slug) familyKeys.add(child.slug);
+        }
+        return {
+          id: slug,
+          name: item.label,
+          slug,
+          familyId: item.id,
+          childSlugs: Array.from(familyKeys),
+          dbCategoryIds: match?.dbCategoryIds ?? [],
+        };
+      });
+
+      setCategories(options.length > 0 ? options : reconciled);
     })();
   }, []);
 
-  // Resolve category slugs in URL to UUIDs dynamically
+  // Normalise category filters in the URL (database ids, old names, family slugs)
+  // to the menu category's slug, so links and filter chips stay consistent.
   useEffect(() => {
-    if (categories.length > 0 && selectedCats.length > 0) {
-      const hasSlugs = selectedCats.some(
-        (cat) => !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat),
-      );
-      if (hasSlugs) {
-        const resolvedCats = selectedCats
-          .map((cat) => {
-            if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat)) {
-              return cat;
-            }
-            const fam = findProductFamily(cat);
-            const found = categories.find(
+    if (categories.length === 0 || selectedCats.length === 0) return;
+    const resolvedCats = Array.from(
+      new Set(
+        selectedCats
+          .map((value) => {
+            if (categories.some((c) => c.id === value)) return value;
+            const byKnownId = categories.find(
               (c) =>
-                c.slug === cat ||
-                c.id === cat ||
-                (fam && (c.slug === fam.slug || c.id === fam.id || c.familyId === fam.id)) ||
-                c.name.toLowerCase().replace(/\s+/g, "-") === cat.toLowerCase(),
+                c.familyId === value ||
+                c.dbCategoryIds?.includes(value) ||
+                c.childSlugs?.includes(value),
             );
-            return found ? found.id : null;
+            if (byKnownId) return byKnownId.id;
+            const fam = findProductFamily(value);
+            const byFamily = fam
+              ? categories.find((c) => c.id === fam.slug || c.familyId === fam.id)
+              : undefined;
+            return byFamily ? byFamily.id : null;
           })
-          .filter((x): x is string => x !== null);
+          .filter((x): x is string => x !== null),
+      ),
+    );
 
-        void navigate({
-          to: ".",
-          search: (prev: Record<string, unknown>) => ({
-            ...prev,
-            cats: resolvedCats,
-          }),
-          replace: true,
-        });
-      }
-    }
+    // Nothing to change: avoid a navigation loop
+    if (resolvedCats.join(",") === selectedCats.join(",")) return;
+
+    void navigate({
+      to: ".",
+      search: (prev: Record<string, unknown>) => ({
+        ...prev,
+        cats: resolvedCats,
+      }),
+      replace: true,
+    });
   }, [categories, selectedCats, navigate]);
 
   // Debounce search input -> URL
@@ -258,29 +286,30 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
         );
       }
       if (selectedCats.length > 0) {
-        const selectedCatIds = new Set<string>();
-        const selectedChildSlugs = new Set<string>();
-
-        for (const catId of selectedCats) {
-          selectedCatIds.add(catId);
-          const matched = categories.find(
-            (c) => c.id === catId || c.dbCategoryIds?.includes(catId),
-          );
-          if (matched) {
-            matched.dbCategoryIds?.forEach((id: string) => selectedCatIds.add(id));
-            matched.childSlugs?.forEach((slug: string) => selectedChildSlugs.add(slug));
-          }
+        // Wait for the category list before filtering, so a category name is never
+        // sent to the database where it expects an id.
+        if (categories.length === 0) {
+          return;
         }
 
-        const catIdsArr = Array.from(selectedCatIds);
-        const childSlugsArr = Array.from(selectedChildSlugs);
-
-        if (catIdsArr.length > 0 && childSlugsArr.length > 0) {
-          query = query.or(
-            `category_id.in.(${catIdsArr.join(",")}),family_slug.in.(${childSlugsArr.join(",")})`,
+        // A product belongs to a category when its family is one of that category's families
+        const familyKeys = new Set<string>();
+        for (const value of selectedCats) {
+          const matched = categories.find(
+            (c) =>
+              c.id === value ||
+              c.slug === value ||
+              c.familyId === value ||
+              c.dbCategoryIds?.includes(value),
           );
-        } else if (catIdsArr.length > 0) {
-          query = query.in("category_id", catIdsArr);
+          matched?.childSlugs?.forEach((key: string) => familyKeys.add(key));
+        }
+
+        if (familyKeys.size > 0) {
+          query = query.in("family_slug", Array.from(familyKeys));
+        } else {
+          // Unknown category: show no products instead of every product
+          query = query.eq("id", NO_MATCH_ID);
         }
       }
 
@@ -301,7 +330,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
       setLoading(false);
       setInitialLoad(false);
     },
-    [q, selectedCats, sort],
+    [q, selectedCats, sort, categories],
   );
 
   // Reset and reload when filters/sort change
@@ -310,7 +339,7 @@ export function CataloguePage({ search, catalogueContent }: CataloguePageProps) 
     setHasMore(true);
     void fetchPage(0, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, sort, selectedCats.join(",")]);
+  }, [q, sort, selectedCats.join(","), categories.length]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -599,14 +628,11 @@ function FilterGroup({
   onToggle: (id: string) => void;
   placeholder?: string;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredOptions = options.filter((o) =>
     o.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  const visible = expanded ? filteredOptions : filteredOptions.slice(0, 8);
 
   return (
     <div className="flex flex-col">
@@ -637,8 +663,8 @@ function FilterGroup({
           {searchQuery ? "No matching options" : "None available"}
         </div>
       ) : (
-        <ul className="space-y-2 text-sm max-h-[300px] overflow-y-auto pr-1">
-          {visible.map((o) => (
+        <ul className="space-y-2 text-sm">
+          {filteredOptions.map((o) => (
             <li key={o.id} className="flex items-center space-x-2.5 py-0.5">
               <Checkbox
                 id={`filter-${o.id}`}
@@ -660,15 +686,6 @@ function FilterGroup({
         </ul>
       )}
 
-      {filteredOptions.length > 8 && (
-        <button
-          type="button"
-          onClick={() => setExpanded((s) => !s)}
-          className="mt-2 text-xs font-bold text-primary hover:text-primary-hover hover:underline inline-flex items-center w-fit transition-colors py-1"
-        >
-          {expanded ? "Show less" : `Show ${filteredOptions.length - 8} more`}
-        </button>
-      )}
     </div>
   );
 }

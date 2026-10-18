@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { CataloguePage } from "@/pages/CataloguePage";
 
@@ -30,6 +30,11 @@ function parseList(v: unknown): string[] {
 }
 
 export const Route = createFileRoute("/catalogue/")({
+  // Default filters stay out of the URL, so /catalogue is served directly
+  // instead of redirecting to /catalogue?q=&cats=[]&mans=[]&sort=relevant
+  search: {
+    middlewares: [stripSearchParams({ q: "", cats: [], mans: [], sort: "relevant" })],
+  },
   validateSearch: (raw: Record<string, unknown>): CatalogueSearch => {
     const sort =
       typeof raw.sort === "string" && VALID_SORTS.has(raw.sort)

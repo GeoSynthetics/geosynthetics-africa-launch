@@ -17,7 +17,9 @@ import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CountriesRouteImport } from './routes/countries'
 import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -27,6 +29,14 @@ import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SiteMapRouteImport } from './routes/site-map'
+import { Route as SitemapCatalogueDotxmlRouteImport } from './routes/sitemap-catalogue[.]xml'
+import { Route as SitemapCountriesDotxmlRouteImport } from './routes/sitemap-countries[.]xml'
+import { Route as SitemapFrDotxmlRouteImport } from './routes/sitemap-fr[.]xml'
+import { Route as SitemapInsightsDotxmlRouteImport } from './routes/sitemap-insights[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
+import { Route as SitemapPtDotxmlRouteImport } from './routes/sitemap-pt[.]xml'
+import { Route as SitemapSolutionsDotxmlRouteImport } from './routes/sitemap-solutions[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SustainabilityRouteImport } from './routes/sustainability'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
@@ -41,6 +51,7 @@ import { Route as AdminResourcesRouteImport } from './routes/admin.resources'
 import { Route as AdminSiteBuilderRouteImport } from './routes/admin.site-builder'
 import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as ApiEmailStatusRouteImport } from './routes/api.email-status'
 import { Route as ApiImportImageRouteImport } from './routes/api.import-image'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
@@ -48,11 +59,15 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CatalogueIndexRouteImport } from './routes/catalogue.index'
 import { Route as CatalogueSlugRouteImport } from './routes/catalogue.$slug'
+import { Route as FrIndexRouteImport } from './routes/fr.index'
+import { Route as FrSlugRouteImport } from './routes/fr.$slug'
 import { Route as IndustriesIndexRouteImport } from './routes/industries.index'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as PtIndexRouteImport } from './routes/pt.index'
+import { Route as PtSlugRouteImport } from './routes/pt.$slug'
 import { Route as QualityAssuranceIndexRouteImport } from './routes/quality-assurance.index'
 import { Route as QualityAssuranceSlugRouteImport } from './routes/quality-assurance.$slug'
 import { Route as ResourcesIndexRouteImport } from './routes/resources.index'
@@ -104,9 +119,19 @@ const ContactsRoute = ContactsRouteImport.update({
   path: '/contacts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CountriesRoute = CountriesRouteImport.update({
+  id: '/countries',
+  path: '/countries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndustriesRoute = IndustriesRouteImport.update({
   id: '/industries',
   path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -152,6 +177,46 @@ const ServicesRoute = ServicesRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteMapRoute = SiteMapRouteImport.update({
+  id: '/site-map',
+  path: '/site-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCatalogueDotxmlRoute = SitemapCatalogueDotxmlRouteImport.update({
+  id: '/sitemap-catalogue.xml',
+  path: '/sitemap-catalogue.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCountriesDotxmlRoute = SitemapCountriesDotxmlRouteImport.update({
+  id: '/sitemap-countries.xml',
+  path: '/sitemap-countries.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapFrDotxmlRoute = SitemapFrDotxmlRouteImport.update({
+  id: '/sitemap-fr.xml',
+  path: '/sitemap-fr.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapInsightsDotxmlRoute = SitemapInsightsDotxmlRouteImport.update({
+  id: '/sitemap-insights.xml',
+  path: '/sitemap-insights.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPtDotxmlRoute = SitemapPtDotxmlRouteImport.update({
+  id: '/sitemap-pt.xml',
+  path: '/sitemap-pt.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapSolutionsDotxmlRoute = SitemapSolutionsDotxmlRouteImport.update({
+  id: '/sitemap-solutions.xml',
+  path: '/sitemap-solutions.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -224,6 +289,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiEmailStatusRoute = ApiEmailStatusRouteImport.update({
+  id: '/api/email-status',
+  path: '/api/email-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiImportImageRoute = ApiImportImageRouteImport.update({
   id: '/api/import-image',
   path: '/api/import-image',
@@ -259,6 +329,16 @@ const CatalogueSlugRoute = CatalogueSlugRouteImport.update({
   path: '/catalogue/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FrIndexRoute = FrIndexRouteImport.update({
+  id: '/fr/',
+  path: '/fr/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FrSlugRoute = FrSlugRouteImport.update({
+  id: '/fr/$slug',
+  path: '/fr/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -283,6 +363,16 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
+} as any)
+const PtIndexRoute = PtIndexRouteImport.update({
+  id: '/pt/',
+  path: '/pt/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PtSlugRoute = PtSlugRouteImport.update({
+  id: '/pt/$slug',
+  path: '/pt/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const QualityAssuranceIndexRoute = QualityAssuranceIndexRouteImport.update({
   id: '/',
@@ -344,7 +434,9 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -354,6 +446,14 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -367,21 +467,26 @@ export interface FileRoutesByFullPath {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/fr/': typeof FrIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/pt/': typeof PtIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -397,11 +502,21 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -415,21 +530,26 @@ export interface FileRoutesByTo {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/applications': typeof ApplicationsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catalogue': typeof CatalogueIndexRoute
+  '/fr': typeof FrIndexRoute
   '/industries': typeof IndustriesIndexRoute
   '/products': typeof ProductsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/pt': typeof PtIndexRoute
   '/quality-assurance': typeof QualityAssuranceIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/services': typeof ServicesIndexRoute
@@ -449,7 +569,9 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contacts': typeof ContactsRoute
+  '/countries': typeof CountriesRoute
   '/industries': typeof IndustriesRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/login': typeof LoginRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/profile': typeof ProfileRoute
@@ -459,6 +581,14 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
+  '/site-map': typeof SiteMapRoute
+  '/sitemap-catalogue.xml': typeof SitemapCatalogueDotxmlRoute
+  '/sitemap-countries.xml': typeof SitemapCountriesDotxmlRoute
+  '/sitemap-fr.xml': typeof SitemapFrDotxmlRoute
+  '/sitemap-insights.xml': typeof SitemapInsightsDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap-pt.xml': typeof SitemapPtDotxmlRoute
+  '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
@@ -472,21 +602,26 @@ export interface FileRoutesById {
   '/admin/site-builder': typeof AdminSiteBuilderRoute
   '/admin/tracking': typeof AdminTrackingRoute
   '/admin/users': typeof AdminUsersRoute
+  '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
+  '/fr/$slug': typeof FrSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/pt/$slug': typeof PtSlugRoute
   '/quality-assurance/$slug': typeof QualityAssuranceSlugRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catalogue/': typeof CatalogueIndexRoute
+  '/fr/': typeof FrIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/pt/': typeof PtIndexRoute
   '/quality-assurance/': typeof QualityAssuranceIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/services/': typeof ServicesIndexRoute
@@ -507,7 +642,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contacts'
+    | '/countries'
     | '/industries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -517,6 +654,14 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -530,21 +675,26 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
     | '/blog/'
     | '/catalogue/'
+    | '/fr/'
     | '/industries/'
     | '/products/'
     | '/projects/'
+    | '/pt/'
     | '/quality-assurance/'
     | '/resources/'
     | '/services/'
@@ -560,11 +710,21 @@ export interface FileRouteTypes {
     | '/about'
     | '/careers'
     | '/contacts'
+    | '/countries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
     | '/robots.txt'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -578,21 +738,26 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin'
     | '/applications'
     | '/blog'
     | '/catalogue'
+    | '/fr'
     | '/industries'
     | '/products'
     | '/projects'
+    | '/pt'
     | '/quality-assurance'
     | '/resources'
     | '/services'
@@ -611,7 +776,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contacts'
+    | '/countries'
     | '/industries'
+    | '/llms.txt'
     | '/login'
     | '/privacy-policy'
     | '/profile'
@@ -621,6 +788,14 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/services'
     | '/signup'
+    | '/site-map'
+    | '/sitemap-catalogue.xml'
+    | '/sitemap-countries.xml'
+    | '/sitemap-fr.xml'
+    | '/sitemap-insights.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap-pt.xml'
+    | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
     | '/terms-and-conditions'
@@ -634,21 +809,26 @@ export interface FileRouteTypes {
     | '/admin/site-builder'
     | '/admin/tracking'
     | '/admin/users'
+    | '/api/email-status'
     | '/api/import-image'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
+    | '/fr/$slug'
     | '/industries/$slug'
     | '/projects/$slug'
+    | '/pt/$slug'
     | '/quality-assurance/$slug'
     | '/services/$slug'
     | '/admin/'
     | '/applications/'
     | '/blog/'
     | '/catalogue/'
+    | '/fr/'
     | '/industries/'
     | '/products/'
     | '/projects/'
+    | '/pt/'
     | '/quality-assurance/'
     | '/resources/'
     | '/services/'
@@ -668,7 +848,9 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
   ContactsRoute: typeof ContactsRoute
+  CountriesRoute: typeof CountriesRoute
   IndustriesRoute: typeof IndustriesRouteWithChildren
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   LoginRoute: typeof LoginRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProfileRoute: typeof ProfileRoute
@@ -678,13 +860,26 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
+  SiteMapRoute: typeof SiteMapRoute
+  SitemapCatalogueDotxmlRoute: typeof SitemapCatalogueDotxmlRoute
+  SitemapCountriesDotxmlRoute: typeof SitemapCountriesDotxmlRoute
+  SitemapFrDotxmlRoute: typeof SitemapFrDotxmlRoute
+  SitemapInsightsDotxmlRoute: typeof SitemapInsightsDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
+  SitemapPtDotxmlRoute: typeof SitemapPtDotxmlRoute
+  SitemapSolutionsDotxmlRoute: typeof SitemapSolutionsDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SustainabilityRoute: typeof SustainabilityRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
+  ApiEmailStatusRoute: typeof ApiEmailStatusRoute
   ApiImportImageRoute: typeof ApiImportImageRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
+  FrSlugRoute: typeof FrSlugRoute
+  PtSlugRoute: typeof PtSlugRoute
   CatalogueIndexRoute: typeof CatalogueIndexRoute
+  FrIndexRoute: typeof FrIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  PtIndexRoute: typeof PtIndexRoute
   ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
   ApiStorageBucketSplatRoute: typeof ApiStorageBucketSplatRoute
@@ -748,11 +943,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/countries': {
+      id: '/countries'
+      path: '/countries'
+      fullPath: '/countries'
+      preLoaderRoute: typeof CountriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/industries': {
       id: '/industries'
       path: '/industries'
       fullPath: '/industries'
       preLoaderRoute: typeof IndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -816,6 +1025,62 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/site-map': {
+      id: '/site-map'
+      path: '/site-map'
+      fullPath: '/site-map'
+      preLoaderRoute: typeof SiteMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-catalogue.xml': {
+      id: '/sitemap-catalogue.xml'
+      path: '/sitemap-catalogue.xml'
+      fullPath: '/sitemap-catalogue.xml'
+      preLoaderRoute: typeof SitemapCatalogueDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-countries.xml': {
+      id: '/sitemap-countries.xml'
+      path: '/sitemap-countries.xml'
+      fullPath: '/sitemap-countries.xml'
+      preLoaderRoute: typeof SitemapCountriesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-fr.xml': {
+      id: '/sitemap-fr.xml'
+      path: '/sitemap-fr.xml'
+      fullPath: '/sitemap-fr.xml'
+      preLoaderRoute: typeof SitemapFrDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-insights.xml': {
+      id: '/sitemap-insights.xml'
+      path: '/sitemap-insights.xml'
+      fullPath: '/sitemap-insights.xml'
+      preLoaderRoute: typeof SitemapInsightsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pt.xml': {
+      id: '/sitemap-pt.xml'
+      path: '/sitemap-pt.xml'
+      fullPath: '/sitemap-pt.xml'
+      preLoaderRoute: typeof SitemapPtDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-solutions.xml': {
+      id: '/sitemap-solutions.xml'
+      path: '/sitemap-solutions.xml'
+      fullPath: '/sitemap-solutions.xml'
+      preLoaderRoute: typeof SitemapSolutionsDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -916,6 +1181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/email-status': {
+      id: '/api/email-status'
+      path: '/api/email-status'
+      fullPath: '/api/email-status'
+      preLoaderRoute: typeof ApiEmailStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/import-image': {
       id: '/api/import-image'
       path: '/api/import-image'
@@ -965,6 +1237,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogueSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fr/': {
+      id: '/fr/'
+      path: '/fr'
+      fullPath: '/fr/'
+      preLoaderRoute: typeof FrIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fr/$slug': {
+      id: '/fr/$slug'
+      path: '/fr/$slug'
+      fullPath: '/fr/$slug'
+      preLoaderRoute: typeof FrSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/industries/': {
       id: '/industries/'
       path: '/'
@@ -999,6 +1285,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
+    }
+    '/pt/': {
+      id: '/pt/'
+      path: '/pt'
+      fullPath: '/pt/'
+      preLoaderRoute: typeof PtIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pt/$slug': {
+      id: '/pt/$slug'
+      path: '/pt/$slug'
+      fullPath: '/pt/$slug'
+      preLoaderRoute: typeof PtSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/quality-assurance/': {
       id: '/quality-assurance/'
@@ -1209,7 +1509,9 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
   ContactsRoute: ContactsRoute,
+  CountriesRoute: CountriesRoute,
   IndustriesRoute: IndustriesRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   LoginRoute: LoginRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProfileRoute: ProfileRoute,
@@ -1219,13 +1521,26 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
+  SiteMapRoute: SiteMapRoute,
+  SitemapCatalogueDotxmlRoute: SitemapCatalogueDotxmlRoute,
+  SitemapCountriesDotxmlRoute: SitemapCountriesDotxmlRoute,
+  SitemapFrDotxmlRoute: SitemapFrDotxmlRoute,
+  SitemapInsightsDotxmlRoute: SitemapInsightsDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
+  SitemapPtDotxmlRoute: SitemapPtDotxmlRoute,
+  SitemapSolutionsDotxmlRoute: SitemapSolutionsDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SustainabilityRoute: SustainabilityRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
+  ApiEmailStatusRoute: ApiEmailStatusRoute,
   ApiImportImageRoute: ApiImportImageRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
+  FrSlugRoute: FrSlugRoute,
+  PtSlugRoute: PtSlugRoute,
   CatalogueIndexRoute: CatalogueIndexRoute,
+  FrIndexRoute: FrIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  PtIndexRoute: PtIndexRoute,
   ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
   ApiStorageBucketSplatRoute: ApiStorageBucketSplatRoute,

@@ -502,7 +502,7 @@ export function ProjectsTemplatesEditor() {
             className="bg-primary hover:bg-primary-hover text-white font-bold uppercase tracking-wide gap-2 cursor-pointer border-0"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-            {saving ? "Savingâ€¦" : "Save Template"}
+            {saving ? "Saving…" : "Save Template"}
           </Button>
         </div>
       </div>

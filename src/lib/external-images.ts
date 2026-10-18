@@ -1,11 +1,11 @@
 /**
  * Helpers for finding and replacing images that are still hot-linked from the
- * old WordPress site (geosynthetics.com/wp-content/...). Used by the admin
+ * old WordPress site (geosynthetics.co.za/wp-content/...). Used by the admin
  * "Move old-site images" tool to copy them into the Media Center.
  */
 
 /** Hosts whose uploaded files may be copied into the Media Center. */
-export const EXTERNAL_IMAGE_HOSTS = ["geosynthetics.com", "www.geosynthetics.com"] as const;
+export const EXTERNAL_IMAGE_HOSTS = ["geosynthetics.co.za", "www.geosynthetics.co.za"] as const;
 
 const EXTERNAL_URL_RE =
   /https?:\/\/(?:www\.)?geosynthetics\.co\.za\/wp-content\/uploads\/[^\s"'<>()\\]+/gi;

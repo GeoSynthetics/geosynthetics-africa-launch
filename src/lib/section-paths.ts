@@ -33,7 +33,7 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, string> = {
   installation: "/services/geomembrane-liner-installation-africa",
   "qa-qc": "/quality-assurance",
   "design-support": "/services",
-  logistics: "/services/hdpe-liners-geotextiles-gcl-geogrids-delivery-afric",
+  logistics: "/services/delivery-logistics-africa",
   "after-sales": "/services",
   "channel-lining-installation-gccm-systems-across-africa":
     "/services/gccm-channel-lining-contractor-africa",
@@ -45,6 +45,15 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, string> = {
   "erosion-control": "/applications/slope-erosion-protection",
   "drainage-systems": "/applications/drainage-filtration-systems-africa",
   "mse-retaining-wall-geogrids": "/applications/retaining-wall-systems",
+};
+
+/**
+ * Pages whose slug was renamed in Site Builder: old slug -> current path.
+ * Checked before anything else, so the old address always redirects even
+ * though its template is still stored under the old name.
+ */
+export const RENAMED_SECTION_SLUGS: Record<string, string> = {
+  "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric": "/services/delivery-logistics-africa",
 };
 
 type HierarchyItem = { id: string; slug?: string; label?: string };
@@ -103,6 +112,8 @@ export async function canonicalSectionRedirect(
   param: string,
   hierarchies?: Hierarchies,
 ): Promise<string | null> {
+  const renamed = RENAMED_SECTION_SLUGS[param];
+  if (renamed && renamed !== sectionPath(section, param)) return renamed;
   const all = hierarchies ?? (await fetchSectionHierarchies());
   const item = findItem(all[section], param);
   if (item) {
@@ -122,6 +133,7 @@ export async function canonicalSectionRedirect(
  * was used both as an industry and an old application category.
  */
 export async function sectionPathForTopLevelSlug(slug: string): Promise<string | null> {
+  if (RENAMED_SECTION_SLUGS[slug]) return RENAMED_SECTION_SLUGS[slug];
   const all = await fetchSectionHierarchies();
   const order: SectionKey[] = ["industries", "services", "applications"];
   for (const section of order) {

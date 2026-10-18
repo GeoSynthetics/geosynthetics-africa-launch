@@ -35,6 +35,9 @@ export const SITE_URL: string = normalise(readEnvSiteUrl() || DEFAULT_SITE_URL);
 /** Hostname of the canonical site, e.g. www.geosyntheticsafrica.com */
 export const SITE_HOST: string = new URL(SITE_URL).hostname;
 
+/** Stable JSON-LD @id of the business, so Service/Product/WebSite schema can reference it. */
+export const ORGANIZATION_ID: string = `${SITE_URL}/#organization`;
+
 /** The canonical host plus its www / non-www twin — both serve the live site. */
 export const PRODUCTION_HOSTS: readonly string[] = (() => {
   const bare = SITE_HOST.replace(/^www\./, "");
