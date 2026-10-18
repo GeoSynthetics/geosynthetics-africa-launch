@@ -191,7 +191,7 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
       "7 Tamar Avenue, Lea Glen\nRandburg, Johannesburg, 2191\nSouth Africa",
     contactTitle: "Contact",
     contactDetails:
-      "E: info@geosynthetics.co.za\nSales: +27 78 1355 926\nAdmin: +27 11 083 8384",
+      "E: info@geosynthetics.com\nSales: +27 78 1355 926\nAdmin: +27 11 083 8384",
     operatingHoursTitle: "Operating Hours",
     operatingHoursDetails:
       "Monday – Friday: 08:00 AM – 17:00 PM\nWeekends: Closed on Saturday & Sunday",

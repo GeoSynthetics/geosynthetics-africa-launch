@@ -82,7 +82,7 @@ async function copyToMediaCenter(url: string): Promise<string> {
 }
 
 /**
- * Admin tool: finds images still loaded from geosynthetics.co.za, copies them into
+ * Admin tool: finds images still loaded from geosynthetics.com, copies them into
  * the Media Center and rewrites every reference to the new copy.
  */
 export function ExternalImageMigrator() {
@@ -168,7 +168,7 @@ export function ExternalImageMigrator() {
               Move old-site images
             </h3>
             <p className="text-xs text-muted-foreground max-w-2xl">
-              Finds images still loaded from geosynthetics.co.za, copies them into the Media Center
+              Finds images still loaded from geosynthetics.com, copies them into the Media Center
               and updates every product, page and project that uses them.
             </p>
           </div>

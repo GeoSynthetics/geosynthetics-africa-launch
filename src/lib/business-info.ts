@@ -3,7 +3,7 @@
  *
  * Keep these identical to the Geosynthetics Africa Google Business Profile
  * (name, address, phone), so Google treats the website and the profile as the
- * same business. Do not mix in the geosynthetics.co.za head-office details.
+ * same business. Do not mix in the geosynthetics.com head-office details.
  */
 export const BUSINESS = {
   name: "Geosynthetics Africa",

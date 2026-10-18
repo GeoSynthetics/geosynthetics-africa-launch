@@ -18,7 +18,7 @@ describe("RESOURCE_CATEGORIES utilities", () => {
 
   it("should reject non-video urls using VIDEO_HOST_RE", () => {
     const invalidUrls = [
-      "https://geosynthetics.co.za/datasheet.pdf",
+      "https://geosynthetics.com/datasheet.pdf",
       "https://example.com/installation-guide.docx",
       "https://github.com",
       "",

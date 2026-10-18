@@ -28,7 +28,7 @@ export interface ContactEmailParams extends BaseEmailParams {
 }
 
 const DEFAULT_SITE_URL = SITE_URL;
-const DEFAULT_BREVO_IMG_HOST = "https://img.emailer.geosynthetics.co.za";
+const DEFAULT_BREVO_IMG_HOST = "https://img.emailer.geosynthetics.com";
 
 /**
  * Resolves the authenticated Brevo image redirection host or site fallback URL.
@@ -38,7 +38,7 @@ export function getEmailImgHost(siteUrl: string = DEFAULT_SITE_URL): string {
   if (envHost && envHost.trim()) {
     return envHost.trim().replace(/\/$/, "");
   }
-  if (siteUrl && siteUrl.includes("geosynthetics.co.za")) {
+  if (siteUrl && siteUrl.includes("geosynthetics.com")) {
     return DEFAULT_BREVO_IMG_HOST;
   }
   return siteUrl.replace(/\/$/, "");
@@ -85,7 +85,7 @@ export function escapeHtml(text?: string): string {
 
 /**
  * Renders shared branded email header with Navy background, site logo image, brand title, and Amber accent line.
- * Uses Brevo's authenticated image redirection domain (img.emailer.geosynthetics.co.za).
+ * Uses Brevo's authenticated image redirection domain (img.emailer.geosynthetics.com).
  */
 function renderEmailHeader(siteUrl: string = DEFAULT_SITE_URL): string {
   const imgHost = getEmailImgHost(siteUrl);

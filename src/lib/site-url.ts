@@ -13,7 +13,9 @@ export const DEFAULT_SITE_URL = "https://www.geosyntheticsafrica.com";
 function readEnvSiteUrl(): string | undefined {
   let value: string | undefined;
   try {
-    value = (import.meta as any).env?.VITE_CANONICAL_SITE_URL as string | undefined;
+    // Static access only (no `?.` on env): otherwise Vite inlines every VITE_* var into the
+    // browser bundle. Throws outside Vite (e.g. Bun scripts), which the catch handles.
+    value = import.meta.env.VITE_CANONICAL_SITE_URL as string | undefined;
   } catch {
     value = undefined;
   }
