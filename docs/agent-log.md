@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-18 12:00 (UTC+1)
+
+- **Feature**: AI / search visibility: crawlable FAQs, richer schema, llms.txt, IndexNow
+- **Problem**: AI assistants and search engines couldn't read most FAQ answers (Radix accordions and the country FAQ only render an answer after a click, and most AI crawlers don't run JavaScript), service pages had no Service schema, the Organization had no stable `@id`/founding date/memberships, there was no `/llms.txt`, and Bing (which feeds ChatGPT search and Copilot) was only told about changes when it next crawled.
+- **Solution**: Added `FaqAccordion` (native `<details>`, answers always in the server HTML) plus `FAQPageSchema`, used on product category, product family, services landing and country pages (About page gets the schema; localized pages already had it). Added `ServiceSchema` on service pages with `provider` → `ORGANIZATION_ID`; Organization schema now has `@id`, email, telephone, `foundingDate` 2016 and IAGI `memberOf`; WebSite links to it as publisher. New `/llms.txt` route built from `collectSitemapEntries()`. IndexNow: public key file, `scripts/indexnow.mjs` (`npm run indexnow`) and a GitHub Action that submits the sitemap after each production deploy.
+
 ## 2026-10-17 20:00 (UTC+1)
 
 - **Feature**: Finish the 13 URL renames (CMS data, Zimbabwe, GCL)

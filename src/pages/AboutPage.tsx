@@ -6,6 +6,7 @@ import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/s
 import { useAboutContent } from "@/hooks/use-about-content";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 
 function DynamicCardIcon({ iconName, className }: { iconName: string; className?: string }) {
   const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.ShieldCheck;
@@ -125,6 +126,9 @@ export function AboutPage() {
           <h2 className="font-display text-2xl font-bold uppercase text-center mb-10">
             {faqs.title}
           </h2>
+          <FAQPageSchema
+            items={faqs.items.map((faq) => ({ question: faq.q, answer: faq.a }))}
+          />
           <div className="max-w-3xl mx-auto space-y-4">
             {faqs.items.map((faq, i) => (
               <div key={faq.id || i} className="bg-card border border-border p-6 rounded">

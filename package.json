@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "seed:related-groups": "bun run scripts/seed-related-groups.ts"
+    "seed:related-groups": "bun run scripts/seed-related-groups.ts",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.63.1",

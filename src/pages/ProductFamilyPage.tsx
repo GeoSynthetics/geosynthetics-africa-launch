@@ -4,12 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category.$family";
 import { ChevronRight, Download, FileText, BookOpen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { splitIntoParagraphs, cn } from "@/lib/utils";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -536,24 +531,17 @@ export function ProductFamilyPage() {
               <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
               Three Questions To Ask Before You Order
             </h2>
-            <Accordion type="single" collapsible className="w-full space-y-2">
-              {(data.questions || []).map((faq: any, i: number) => (
-                <AccordionItem
-                  key={i}
-                  value={`faq-${i}`}
-                  className="border border-border bg-surface rounded px-2"
-                >
-                  <AccordionTrigger className="text-left font-bold text-sm uppercase hover:text-primary transition-colors hover:no-underline px-2 py-4 data-[state=open]:text-primary">
-                    <div className="flex items-center gap-3">
-                      <span className="text-primary text-lg">{i + 1}.</span> {faq.q}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground px-10 pb-4 leading-relaxed">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <FaqAccordion
+              items={(data.questions || []).map((faq: any) => ({
+                question: faq.q,
+                answer: faq.a,
+              }))}
+              renderPrefix={(i) => <span className="text-primary text-lg">{i + 1}.</span>}
+              className="space-y-2"
+              itemClassName="border border-border bg-surface rounded px-2"
+              questionClassName="font-bold text-sm uppercase hover:text-primary transition-colors px-2 py-4 group-open:text-primary"
+              answerClassName="text-muted-foreground px-10 pb-4 leading-relaxed"
+            />
           </section>
 
           {/* Section: Specification for Design */}
