@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { sendHeroProjectEmailFn } from "@/lib/brevo";
+import { sendHeroProjectEmailFn } from "@/lib/email";
 import { resolveRegionalRouting, SOUTH_AFRICA_CONTACT } from "@/types/regionalCoverage";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,7 +61,7 @@ function parseContact(contactInput: string): { email: string; phone: string | nu
  * 1. Resolves dynamic regional routing (West Africa -> Mamadou Coulibaly; SA -> South Africa Desk).
  * 2. Uploads any attached BOQ/drawings to Supabase Storage.
  * 3. Records entry in Supabase `quote_requests` table.
- * 4. Dispatches transactional email through Brevo with routing and notifications.
+ * 4. Dispatches transactional email through Resend and notifications.
  */
 export async function submitHeroProjectRequest(
   submission: HeroProjectSubmission,
@@ -180,7 +180,7 @@ export async function submitHeroProjectRequest(
     // Don't fail yet if the insert was blocked by permissions — the email may still deliver the lead
   }
 
-  // 4. Dispatch email notifications server-side (the Brevo key must never reach the browser)
+  // 4. Dispatch email notifications server-side (the email API key must never reach the browser)
   const realEmail = email.endsWith(PHONE_PLACEHOLDER_DOMAIN) ? undefined : email;
   const notified = await sendHeroProjectEmailFn({
     data: {
@@ -195,7 +195,7 @@ export async function submitHeroProjectRequest(
   })
     .then((res) => res.notified)
     .catch((err) => {
-      console.error("[Brevo Email Trigger Error]:", err);
+      console.error("[Email Trigger Error]:", err);
       return false;
     });
 

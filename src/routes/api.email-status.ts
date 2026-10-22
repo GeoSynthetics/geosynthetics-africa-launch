@@ -4,8 +4,8 @@ import { getEmailConfig } from "@/lib/email-config";
 /**
  * GET /api/email-status
  *
- * Checks the form email setup without sending anything: whether the Brevo key
- * is set and accepted, and whether the sender address is verified in Brevo.
+ * Checks the form email setup without sending anything: whether the Resend key
+ * is set and accepted, and whether the sender's domain is verified in Resend.
  * Never returns the key itself.
  */
 export const Route = createFileRoute("/api/email-status")({
@@ -13,35 +13,44 @@ export const Route = createFileRoute("/api/email-status")({
     handlers: {
       GET: async () => {
         const { apiKey, fromEmail, notifyEmail } = getEmailConfig();
+        const senderDomain = fromEmail.split("@")[1]?.toLowerCase() || "";
         const status: Record<string, unknown> = {
+          provider: "resend",
           apiKeySet: Boolean(apiKey),
           fromEmail,
           notifyEmail,
           apiKeyAccepted: null,
-          senderVerified: null,
+          senderDomain,
+          senderDomainVerified: null,
         };
 
         if (apiKey) {
           try {
-            const headers = { accept: "application/json", "api-key": apiKey };
-            const account = await fetch("https://api.brevo.com/v3/account", { headers });
-            status.apiKeyAccepted = account.ok;
-            if (!account.ok) status.apiKeyError = `Brevo returned ${account.status}`;
-            if (account.ok) {
-              const res = await fetch("https://api.brevo.com/v3/senders", { headers });
-              const body = (await res.json().catch(() => ({}))) as {
-                senders?: { email: string; active: boolean }[];
-              };
-              const sender = body.senders?.find(
-                (x) => x.email.toLowerCase() === fromEmail.toLowerCase(),
-              );
-              status.senderVerified = sender ? sender.active : false;
-              status.verifiedSenders = (body.senders || [])
-                .filter((x) => x.active)
-                .map((x) => x.email);
+            const res = await fetch("https://api.resend.com/domains", {
+              headers: { Authorization: `Bearer ${apiKey}` },
+            });
+            const body = (await res.json().catch(() => ({}))) as {
+              name?: string;
+              message?: string;
+              data?: { name: string; status: string }[];
+            };
+
+            if (res.ok) {
+              status.apiKeyAccepted = true;
+              const domain = body.data?.find((d) => d.name.toLowerCase() === senderDomain);
+              status.senderDomainStatus = domain ? domain.status : "not added";
+              status.senderDomainVerified = domain ? domain.status === "verified" : false;
+              status.domainsInAccount = (body.data || []).map((d) => `${d.name} (${d.status})`);
+            } else if (body.name === "restricted_api_key") {
+              // A "sending access" key is valid but cannot list domains.
+              status.apiKeyAccepted = true;
+              status.note = "Key has sending access only, so the domain status cannot be checked here.";
+            } else {
+              status.apiKeyAccepted = false;
+              status.apiKeyError = `Resend returned ${res.status}${body.message ? `: ${body.message}` : ""}`;
             }
           } catch (error: any) {
-            status.apiKeyError = `Could not reach Brevo: ${error?.message || error}`;
+            status.apiKeyError = `Could not reach Resend: ${error?.message || error}`;
           }
         }
 

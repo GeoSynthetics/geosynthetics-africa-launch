@@ -17,20 +17,20 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-vi.mock("@/lib/brevo", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/brevo")>()),
+vi.mock("@/lib/email", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/email")>()),
   sendHeroProjectEmailFn,
 }));
 
 import { submitHeroProjectRequest } from "@/services/leadRoutingService";
-import { dispatchHeroProjectEmails } from "@/lib/brevo";
+import { dispatchHeroProjectEmails } from "@/lib/email";
 
 const fetchMock = vi.fn();
 
 beforeEach(() => {
   insertResult.current = { data: { id: "quote-123" }, error: null };
   sendHeroProjectEmailFn.mockReset().mockResolvedValue({ notified: true });
-  fetchMock.mockReset().mockResolvedValue(new Response(JSON.stringify({ messageId: "m1" })));
+  fetchMock.mockReset().mockResolvedValue(new Response(JSON.stringify({ id: "m1" })));
   vi.stubGlobal("fetch", fetchMock);
 });
 
@@ -40,7 +40,7 @@ afterEach(() => {
 });
 
 describe("submitHeroProjectRequest", () => {
-  it("sends the email through the server function, never Brevo from the browser", async () => {
+  it("sends the email through the server function, never the email API from the browser", async () => {
     const result = await submitHeroProjectRequest({
       need: "Geogrid for 40 km haul road",
       region: "Central Africa",
@@ -95,8 +95,8 @@ describe("submitHeroProjectRequest", () => {
 
 describe("dispatchHeroProjectEmails", () => {
   beforeEach(() => {
-    vi.stubEnv("BREVO_API_KEY", "test-key");
-    vi.stubEnv("BREVO_FROM_EMAIL", "notifications@example.com");
+    vi.stubEnv("RESEND_API_KEY", "test-key");
+    vi.stubEnv("EMAIL_FROM", "notifications@example.com");
     vi.stubEnv("NOTIFICATION_TO_EMAIL", "leads@example.com");
   });
 
@@ -112,10 +112,14 @@ describe("dispatchHeroProjectEmails", () => {
 
     expect(res.notified).toBe(true);
     const [team, customer] = sentBodies();
-    expect(team.to).toEqual([expect.objectContaining({ email: "leads@example.com" })]);
+    expect(fetchMock.mock.calls[0][0]).toBe("https://api.resend.com/emails");
+    expect(fetchMock.mock.calls[0][1].headers.Authorization).toBe("Bearer test-key");
+    expect(team.from).toBe("Geosynthetics Africa <notifications@example.com>");
+    expect(team.to).toEqual(["Geosynthetics Sales <leads@example.com>"]);
     expect(team.cc).toBeUndefined();
-    expect(team.replyTo.email).toBe("buyer@mine.co");
-    expect(customer.to).toEqual([expect.objectContaining({ email: "buyer@mine.co" })]);
+    expect(team.reply_to).toBe("buyer <buyer@mine.co>");
+    expect(team.html).toContain("Geomembrane for tailings dam");
+    expect(customer.to).toEqual(["buyer <buyer@mine.co>"]);
   });
 
   it("only notifies the team when the enquirer left a phone number", async () => {
@@ -127,10 +131,10 @@ describe("dispatchHeroProjectEmails", () => {
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(sentBodies()[0].to[0].email).toBe("leads@example.com");
+    expect(sentBodies()[0].to).toEqual(["Geosynthetics Sales <leads@example.com>"]);
   });
 
-  it("reports failure when Brevo rejects the team notification", async () => {
+  it("reports failure when Resend rejects the team notification", async () => {
     fetchMock.mockResolvedValue(new Response("unauthorised", { status: 401 }));
 
     const res = await dispatchHeroProjectEmails({
