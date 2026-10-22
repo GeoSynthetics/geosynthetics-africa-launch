@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
-import { sendQuoteEmailFn } from "@/lib/brevo";
+import { sendQuoteEmailFn } from "@/lib/email";
 
 const ALLOWED_TYPES = [
   ".pdf",
@@ -175,7 +175,7 @@ export function QuoteCard({
       }
       if (lastError) throw new Error(lastError.message);
 
-      // Trigger Brevo transactional email notifications (non-blocking)
+      // Trigger transactional email notifications (non-blocking)
       void sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
@@ -185,7 +185,7 @@ export function QuoteCard({
           productName: contextLabel || undefined,
           projectDescription: baseDescription,
         },
-      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+      }).catch((err) => console.warn("[Email Trigger Error]:", err));
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
       setName("");

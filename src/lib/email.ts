@@ -1,6 +1,6 @@
 /**
- * Brevo (formerly Sendinblue) Transactional Email Utility
- * Integrates with Brevo REST API v3 to send automated customer confirmations and admin notifications.
+ * Transactional email for the website forms, sent through Resend (resend.com).
+ * Sends the sales notification and the customer confirmation.
  */
 
 import { createServerFn } from "@tanstack/react-start";
@@ -41,51 +41,57 @@ export interface SendQuoteEmailParams {
   reference?: string;
 }
 
+/** Formats a recipient as Resend expects: `Name <email>` or just `email`. */
+function formatAddress({ email, name }: EmailRecipient): string {
+  const cleanName = (name || "").replace(/[<>"\r\n]/g, "").trim();
+  return cleanName ? `${cleanName} <${email}>` : email;
+}
+
 /**
- * Sends a transactional email using Brevo HTTP API v3.
+ * Sends a transactional email through the Resend API.
+ * Server-side only: the API key is read from the Vercel environment.
  */
-export async function sendBrevoEmail(
+export async function sendEmail(
   payload: SendEmailPayload,
 ): Promise<{ success: boolean; messageId?: string }> {
   const { apiKey, fromEmail, fromName } = getEmailConfig();
 
   if (!apiKey) {
-    console.warn("[Brevo] API key missing. Email sending skipped.");
+    console.error("[Email] RESEND_API_KEY is not set. Email not sent.");
     return { success: false };
   }
 
   try {
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        accept: "application/json",
-        "api-key": apiKey,
-        "content-type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: fromName, email: fromEmail },
-        to: payload.to,
-        ...(payload.cc?.length ? { cc: payload.cc } : {}),
-        replyTo: payload.replyTo,
+        from: formatAddress({ email: fromEmail, name: fromName }),
+        to: payload.to.map(formatAddress),
+        ...(payload.cc?.length ? { cc: payload.cc.map(formatAddress) } : {}),
+        ...(payload.replyTo ? { reply_to: formatAddress(payload.replyTo) } : {}),
         subject: payload.subject,
-        htmlContent: payload.htmlContent,
-        textContent: payload.textContent,
+        html: payload.htmlContent,
+        ...(payload.textContent ? { text: payload.textContent } : {}),
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`[Brevo API Error ${response.status}]:`, errorText);
+      console.error(`[Email] Resend API error ${response.status}:`, errorText);
       return { success: false };
     }
 
-    const result = (await response.json()) as { messageId?: string };
+    const result = (await response.json()) as { id?: string };
     console.log(
-      `[Brevo Email Sent Successfully] Message ID: ${result.messageId} to ${payload.to.map((t) => t.email).join(", ")}`,
+      `[Email] Sent via Resend. ID: ${result.id} to ${payload.to.map((t) => t.email).join(", ")}`,
     );
-    return { success: true, messageId: result.messageId };
+    return { success: true, messageId: result.id };
   } catch (err) {
-    console.error("[Brevo Email Exception]:", err);
+    console.error("[Email] Could not reach Resend:", err);
     return { success: false };
   }
 }
@@ -105,7 +111,7 @@ export async function dispatchQuoteEmails(
   const adminHtml = generateQuoteAdminEmail({ ...params, reference, siteUrl });
 
   // Notify the sales team first: this is the email that must arrive
-  const admin = await sendBrevoEmail({
+  const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     replyTo: { email: params.contactEmail, name: params.contactName },
     subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"}) — REF ${reference}`,
@@ -113,7 +119,7 @@ export async function dispatchQuoteEmails(
   });
 
   // Confirmation to the customer
-  const customer = await sendBrevoEmail({
+  const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
     subject: `Quote request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
@@ -136,7 +142,7 @@ const sendQuoteEmailParamsSchema = z.object({
 });
 
 /**
- * TanStack Start Server Function to trigger Brevo email dispatch safely from client components.
+ * TanStack Start Server Function to trigger email dispatch safely from client components.
  */
 export const sendQuoteEmailFn = createServerFn({ method: "POST" })
   .inputValidator(sendQuoteEmailParamsSchema)
@@ -172,7 +178,7 @@ export async function dispatchContactEmails(
   const adminHtml = generateContactAdminEmail({ ...params, reference, siteUrl });
 
   // Notify the sales team first: this is the email that must arrive
-  const admin = await sendBrevoEmail({
+  const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     replyTo: { email: params.contactEmail, name: params.contactName },
     subject: `[Quick Contact] ${params.contactName} — REF ${reference}`,
@@ -180,7 +186,7 @@ export async function dispatchContactEmails(
   });
 
   // Confirmation to the customer
-  const customer = await sendBrevoEmail({
+  const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
     subject: `We received your message — Geosynthetics Africa (REF ${reference})`,
@@ -252,7 +258,7 @@ export async function dispatchHeroProjectEmails(
   };
 
   // All enquiries go to the sales mailbox; the region is shown in the subject.
-  const { success: notified } = await sendBrevoEmail({
+  const { success: notified } = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     replyTo: params.contactEmail ? { email: params.contactEmail, name: contactName } : undefined,
     subject: `[New Project Request] ${params.region} — ${params.contact.slice(0, 40)} — REF ${reference}`,
@@ -260,7 +266,7 @@ export async function dispatchHeroProjectEmails(
   });
 
   if (params.contactEmail) {
-    await sendBrevoEmail({
+    await sendEmail({
       to: [{ email: params.contactEmail, name: contactName }],
       replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
       subject: `Project request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
@@ -282,7 +288,7 @@ const sendHeroProjectEmailParamsSchema = z.object({
 });
 
 /**
- * TanStack Start Server Function for the homepage hero form, so the Brevo key stays server-side.
+ * TanStack Start Server Function for the homepage hero form, so the email API key stays server-side.
  */
 export const sendHeroProjectEmailFn = createServerFn({ method: "POST" })
   .inputValidator(sendHeroProjectEmailParamsSchema)

@@ -30,10 +30,10 @@ export interface ContactEmailParams extends BaseEmailParams {
 const DEFAULT_SITE_URL = SITE_URL;
 
 /**
- * Resolves the authenticated Brevo image redirection host or site fallback URL.
+ * Resolves the host for email images: EMAIL_IMG_HOST if set, otherwise the site URL.
  */
 export function getEmailImgHost(siteUrl: string = DEFAULT_SITE_URL): string {
-  const envHost = process.env.BREVO_IMG_HOST || process.env.VITE_BREVO_IMG_HOST;
+  const envHost = process.env.EMAIL_IMG_HOST;
   if (envHost && envHost.trim()) {
     return envHost.trim().replace(/\/$/, "");
   }
@@ -81,7 +81,7 @@ export function escapeHtml(text?: string): string {
 
 /**
  * Renders shared branded email header with Navy background, site logo image, brand title, and Amber accent line.
- * Images load from the site itself unless BREVO_IMG_HOST is set.
+ * Images load from the site itself unless EMAIL_IMG_HOST is set.
  */
 function renderEmailHeader(siteUrl: string = DEFAULT_SITE_URL): string {
   const imgHost = getEmailImgHost(siteUrl);

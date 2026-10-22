@@ -16,8 +16,8 @@ vi.mock("@/hooks/use-auth", () => ({
   useAuth: () => ({ user: { id: "test-user-id", email: "test@example.com" } }),
 }));
 
-// Mock Brevo Server Functions
-vi.mock("@/lib/brevo", () => ({
+// Mock email server functions
+vi.mock("@/lib/email", () => ({
   sendQuoteEmailFn: vi.fn().mockResolvedValue({ success: true }),
   sendContactEmailFn: vi.fn().mockResolvedValue({ success: true }),
 }));
