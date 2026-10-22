@@ -22,6 +22,7 @@ export interface EmailRecipient {
 
 export interface SendEmailPayload {
   to: EmailRecipient[];
+  cc?: EmailRecipient[];
   subject: string;
   htmlContent: string;
   textContent?: string;
@@ -64,6 +65,7 @@ export async function sendBrevoEmail(
       body: JSON.stringify({
         sender: { name: fromName, email: fromEmail },
         to: payload.to,
+        ...(payload.cc?.length ? { cc: payload.cc } : {}),
         replyTo: payload.replyTo,
         subject: payload.subject,
         htmlContent: payload.htmlContent,
@@ -207,3 +209,81 @@ export const sendContactEmailFn = createServerFn({ method: "POST" })
     const result = await dispatchContactEmails(data);
     return { success: result.adminSent, ...result };
   });
+
+// ─── Hero "Start Your Project" Form ──────────────────────────────────────────
+
+export interface SendHeroProjectEmailParams {
+  need: string;
+  region: string;
+  contact: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  attachmentName?: string;
+  reference?: string;
+}
+
+/**
+ * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default sales@geosyntheticsafrica.com)
+ * and, when the enquirer left an email address, sends them a confirmation.
+ * Recipients are set here on the server so the client cannot choose them.
+ */
+export async function dispatchHeroProjectEmails(
+  params: SendHeroProjectEmailParams,
+): Promise<{ notified: boolean }> {
+  const adminEmail = getEmailConfig().notifyEmail;
+
+  const reference = formatReference(params.reference);
+  const siteUrl = SITE_URL;
+  const contactName = params.contact.split("@")[0].slice(0, 50) || params.contact;
+  const projectDescription = params.attachmentName
+    ? `${params.need}\n\nAttached BOQ / drawing: ${params.attachmentName}\nDownload it from ${siteUrl}/admin/quotes`
+    : params.need;
+
+  const templateParams = {
+    contactName,
+    contactEmail: params.contactEmail ?? "Not provided",
+    contactPhone: params.contactPhone,
+    country: params.region,
+    productName: `Hero Project Request — ${params.region}`,
+    projectDescription,
+    attachments: params.attachmentName,
+    reference,
+    siteUrl,
+  };
+
+  // All enquiries go to the sales mailbox; the region is shown in the subject.
+  const { success: notified } = await sendBrevoEmail({
+    to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
+    replyTo: params.contactEmail ? { email: params.contactEmail, name: contactName } : undefined,
+    subject: `[New Project Request] ${params.region} — ${params.contact.slice(0, 40)} — REF ${reference}`,
+    htmlContent: generateQuoteAdminEmail(templateParams),
+  });
+
+  if (params.contactEmail) {
+    await sendBrevoEmail({
+      to: [{ email: params.contactEmail, name: contactName }],
+      replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
+      subject: `Project request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
+      htmlContent: generateQuoteCustomerEmail(templateParams),
+    });
+  }
+
+  return { notified };
+}
+
+const sendHeroProjectEmailParamsSchema = z.object({
+  need: z.string().trim().min(1).max(5000),
+  region: z.string().trim().min(1).max(100),
+  contact: z.string().trim().min(1).max(200),
+  contactEmail: z.string().email().optional(),
+  contactPhone: z.string().max(50).optional(),
+  attachmentName: z.string().max(255).optional(),
+  reference: z.string().optional(),
+});
+
+/**
+ * TanStack Start Server Function for the homepage hero form, so the Brevo key stays server-side.
+ */
+export const sendHeroProjectEmailFn = createServerFn({ method: "POST" })
+  .inputValidator(sendHeroProjectEmailParamsSchema)
+  .handler(async ({ data }) => dispatchHeroProjectEmails(data));

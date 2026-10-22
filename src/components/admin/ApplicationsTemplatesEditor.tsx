@@ -1361,13 +1361,6 @@ export function ApplicationsTemplatesEditor() {
         </div>
       </div>
 
-      {/* Success indicator */}
-      {!dirty && Object.keys(allData).length > 0 && (
-        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-          <CheckCircle2 className="h-4 w-4" />
-          All changes saved to Supabase
-        </div>
-      )}
       <DeleteConfirmationDialog
         isOpen={!!appToDelete}
         onOpenChange={(open) => !open && setAppToDelete(null)}

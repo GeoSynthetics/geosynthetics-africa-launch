@@ -22,7 +22,7 @@ describe("site-url", () => {
 
   it("treats preview and old hosts as non-production", () => {
     expect(isProductionHost("geosynthetics-africa.vercel.app")).toBe(false);
-    expect(isProductionHost("geosynthetics.co.za")).toBe(false);
+    expect(isProductionHost("geosynthetics.com")).toBe(false);
     expect(isProductionHost("localhost:5173")).toBe(false);
     expect(isProductionHost(null)).toBe(false);
   });

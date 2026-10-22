@@ -739,7 +739,7 @@ export function QuotesAdminPage() {
                           className="border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 text-xs shrink-0"
                         >
                           <a
-                            href={`mailto:civ@geosynthetics.co.za?subject=Fwd: Project Request from ${encodeURIComponent(selected.contact_name)}&body=${encodeURIComponent(
+                            href={`mailto:sales@geosyntheticsafrica.com?subject=Fwd: Project Request from ${encodeURIComponent(selected.contact_name)}&body=${encodeURIComponent(
                               `Dear Mamadou,\n\nPlease follow up on this project request from ${selected.contact_name}:\n\nContact: ${selected.contact_email} / ${selected.contact_phone || "N/A"}\n\nScope:\n${messageText}`,
                             )}`}
                           >

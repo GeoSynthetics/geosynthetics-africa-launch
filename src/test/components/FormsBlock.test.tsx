@@ -43,7 +43,7 @@ describe("FormsBlock Component (React Hook Form)", () => {
     contactPerson: "James Chabata",
     contactRole: "Sales Admin Manager",
     phone: "+27 12 345 6789",
-    email: "test@geosynthetics.co.za",
+    email: "test@geosynthetics.com",
     hours: ["Mon - Fri: 08:00 - 17:00"],
     mapEmbedUrl: "https://maps.google.com",
   };

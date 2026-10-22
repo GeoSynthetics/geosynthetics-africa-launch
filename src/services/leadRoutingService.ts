@@ -1,12 +1,9 @@
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { getEmailConfig } from "@/lib/email-config";
-import {
-  resolveRegionalRouting,
-  MAMADOU_COULIBALY_CONTACT,
-  SOUTH_AFRICA_CONTACT,
-} from "@/types/regionalCoverage";
+import { sendHeroProjectEmailFn } from "@/lib/brevo";
+import { resolveRegionalRouting, SOUTH_AFRICA_CONTACT } from "@/types/regionalCoverage";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_PLACEHOLDER_DOMAIN = "@phone-inquiry.invalid";
 
 export interface HeroProjectSubmission {
   need: string;
@@ -34,16 +31,18 @@ export interface HeroSubmissionResult {
  */
 function parseContact(contactInput: string): { email: string; phone: string | null } {
   const trimmed = contactInput.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (emailRegex.test(trimmed)) {
+  if (EMAIL_REGEX.test(trimmed)) {
     return { email: trimmed, phone: null };
   }
 
   // If contains digits and phone format
   const isLikelyPhone = /^[\d\s+\-()]{6,}$/.test(trimmed);
   if (isLikelyPhone) {
-    return { email: `${trimmed.replace(/[^\d+]/g, "")}@phone-inquiry.geosyntheticsafrica.com`, phone: trimmed };
+    return {
+      email: `${trimmed.replace(/[^\d+]/g, "")}${PHONE_PLACEHOLDER_DOMAIN}`,
+      phone: trimmed,
+    };
   }
 
   // If user typed both email and phone or name
@@ -56,180 +55,6 @@ function parseContact(contactInput: string): { email: string; phone: string | nu
 
   return { email: trimmed, phone: null };
 }
-
-const heroEmailSchema = z.object({
-  toEmail: z.string(),
-  toName: z.string(),
-  customerContact: z.string(),
-  customerEmail: z.string(),
-  customerPhone: z.string().nullable(),
-  region: z.string(),
-  projectNeed: z.string(),
-  attachmentUrl: z.string().nullable().optional(),
-  attachmentName: z.string().nullable().optional(),
-  routingRole: z.string(),
-  isWestAfrica: z.boolean(),
-});
-
-/**
- * Sends transactional email notification via Brevo API.
- * Runs on the server only, so the Brevo key never reaches the browser.
- */
-async function sendNotificationEmail(params: z.infer<typeof heroEmailSchema>): Promise<boolean> {
-  const { apiKey, fromEmail, notifyEmail: generalNotificationEmail } = getEmailConfig();
-  const p = { ...params, fromEmail };
-
-  if (!apiKey) {
-    console.error("[Brevo] BREVO_API_KEY is not set; project request email not sent.");
-    return false;
-  }
-
-  const routingTag = params.isWestAfrica
-    ? "[West Africa — Mamadou Coulibaly, Côte d'Ivoire]"
-    : "[South Africa Sales Desk]";
-
-  const emailSubject = `🚀 New Project Request ${routingTag} — ${params.region}: ${params.customerContact.slice(0, 30)}`;
-
-  const htmlBody = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 24px; color: #1e293b; }
-        .card { background-color: #ffffff; border-radius: 12px; padding: 28px; max-width: 620px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; background-color: ${params.isWestAfrica ? '#fef3c7; color: #92400e;' : '#fee2e2; color: #991b1b;' } }
-        .header { border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px; }
-        .title { font-size: 20px; font-weight: 800; color: #0f172a; margin: 8px 0 4px 0; text-transform: uppercase; }
-        .lead-meta { font-size: 13px; color: #64748b; margin: 0; }
-        .detail-group { margin-bottom: 16px; }
-        .detail-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-        .detail-value { font-size: 15px; color: #1e293b; font-weight: 500; background-color: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-wrap; }
-        .footer { border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 24px; font-size: 12px; color: #94a3b8; text-align: center; }
-      </style>
-    </head>
-    <body>
-      <div class="card">
-        <div class="header">
-          <span class="badge">${params.isWestAfrica ? "West Africa Regional Desk" : "South Africa Operations HQ"}</span>
-          <h1 class="title">New Hero Project Inquiry</h1>
-          <p class="lead-meta">Received via the geosyntheticsafrica.com Start Project form</p>
-        </div>
-
-        <div class="detail-group">
-          <div class="detail-label">Assigned Representative / Desk</div>
-          <div class="detail-value" style="border-left: 4px solid #dc2626;">
-            <strong>${params.toName}</strong> (${params.routingRole})<br>
-            Direct: <a href="mailto:${params.toEmail}">${params.toEmail}</a>
-          </div>
-        </div>
-
-        <div class="detail-group">
-          <div class="detail-label">Selected Region / Country</div>
-          <div class="detail-value"><strong>${params.region}</strong></div>
-        </div>
-
-        <div class="detail-group">
-          <div class="detail-label">Client Contact Details</div>
-          <div class="detail-value">
-            <strong>${params.customerContact}</strong>
-            ${params.customerPhone ? `<br>Phone: <a href="tel:${params.customerPhone}">${params.customerPhone}</a>` : ""}
-            ${params.customerEmail ? `<br>Email: <a href="mailto:${params.customerEmail}">${params.customerEmail}</a>` : ""}
-          </div>
-        </div>
-
-        <div class="detail-group">
-          <div class="detail-label">Project Requirement / Scope</div>
-          <div class="detail-value">${params.projectNeed}</div>
-        </div>
-
-        ${
-          params.attachmentUrl
-            ? `
-        <div class="detail-group">
-          <div class="detail-label">Attached BOQ / Drawing</div>
-          <div class="detail-value">
-            📎 <a href="${params.attachmentUrl}" target="_blank" style="color: #dc2626; font-weight: bold; text-decoration: underline;">
-              ${params.attachmentName || "Download Attachment"}
-            </a>
-          </div>
-        </div>`
-            : ""
-        }
-
-        <div class="footer">
-          Geosynthetics Africa Platform · Pan-African Supply, Installation & QA/QC<br>
-          One Contract. One Crew. One Signature.
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
-
-  // Build recipient array (primary regional recipient + CC general mailbox)
-  const toList = [
-    { email: params.toEmail, name: params.toName },
-  ];
-
-  // If primary isn't info@, add info@ as CC or recipient
-  const ccList: Array<{ email: string; name?: string }> = [];
-  if (params.toEmail.toLowerCase() !== generalNotificationEmail.toLowerCase()) {
-    ccList.push({ email: generalNotificationEmail, name: "GSA Central Dispatch" });
-  }
-
-  // If West Africa, also ensure civ@geosynthetics.co.za receives it
-  if (params.isWestAfrica && params.toEmail.toLowerCase() !== MAMADOU_COULIBALY_CONTACT.email.toLowerCase()) {
-    ccList.push({
-      email: MAMADOU_COULIBALY_CONTACT.email,
-      name: MAMADOU_COULIBALY_CONTACT.name,
-    });
-  }
-
-  try {
-    const payload: Record<string, unknown> = {
-      sender: {
-        name: "Geosynthetics Africa Project Desk",
-        email: p.fromEmail,
-      },
-      to: toList,
-      replyTo: {
-        email: params.customerEmail.includes("@phone-inquiry") ? p.fromEmail : params.customerEmail,
-        name: params.customerContact,
-      },
-      subject: emailSubject,
-      htmlContent: htmlBody,
-    };
-
-    if (ccList.length > 0) {
-      payload.cc = ccList;
-    }
-
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "api-key": apiKey,
-        "Content-Type": "application/json",
-        accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.warn("Brevo API non-OK response:", response.status, errText);
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    console.warn("Brevo email transmission error (offline or network policy):", err);
-    return false;
-  }
-}
-
-const sendHeroNotificationFn = createServerFn({ method: "POST" })
-  .inputValidator(heroEmailSchema)
-  .handler(async ({ data }) => ({ success: await sendNotificationEmail(data) }));
 
 /**
  * Handles the complete lifecycle of a Hero Project Request submission:
@@ -259,7 +84,6 @@ export async function submitHeroProjectRequest(
 
   // 2. Upload attachment if present
   let uploadedFilePath: string | null = null;
-  let publicFileUrl: string | null = null;
   let fileName: string | null = null;
 
   if (file) {
@@ -276,8 +100,6 @@ export async function submitHeroProjectRequest(
         console.warn("Could not upload hero file attachment:", uploadError.message);
       } else {
         uploadedFilePath = path;
-        const { data: urlData } = supabase.storage.from("boq-uploads").getPublicUrl(path);
-        publicFileUrl = urlData?.publicUrl || null;
       }
     } catch (upErr) {
       console.warn("Storage upload exception:", upErr);
@@ -285,17 +107,16 @@ export async function submitHeroProjectRequest(
   }
 
   // 3. Save into Supabase `quote_requests` table
-  const routingDescriptionTag = routing.isWestAfrica
-    ? `[ROUTED TO: Mamadou Coulibaly (West Africa Regional Hub - ${routing.targetEmail})]`
-    : routing.isSouthAfrica
-      ? `[ROUTED TO: South Africa Sales Desk (${routing.targetEmail})]`
-      : `[ROUTED TO: ${routing.targetName} (${routing.targetEmail})]`;
+  // All requests go to the sales mailbox for now; the region is kept for reference.
+  const routingDescriptionTag = `[ROUTED TO: Sales (${SOUTH_AFRICA_CONTACT.email})]`;
 
   const fullDescription = `${need.trim()}\n\n${routingDescriptionTag}\n[region: ${region}]\n[contact: ${contact.trim()}]${
     uploadedFilePath ? `\n\n[attachments]\n${uploadedFilePath}` : ""
   }`;
 
-  const { data: sessionData } = await supabase.auth.getSession().catch(() => ({ data: { session: null } }));
+  const { data: sessionData } = await supabase.auth
+    .getSession()
+    .catch(() => ({ data: { session: null } }));
   const userId = sessionData.session?.user.id ?? null;
 
   const basePayload: Record<string, unknown> = {
@@ -356,49 +177,37 @@ export async function submitHeroProjectRequest(
 
   if (lastError) {
     console.error("Failed to insert quote request:", lastError);
-    // Don't completely fail if database insert was blocked by permissions — attempt notification
+    // Don't fail yet if the insert was blocked by permissions — the email may still deliver the lead
   }
 
-  // 4. Dispatch Email Notification (server side)
-  let emailSent = false;
-  try {
-    const result = await sendHeroNotificationFn({
-      data: {
-        toEmail: routing.targetEmail,
-        toName: routing.targetName,
-        customerContact: contact,
-        customerEmail: email,
-        customerPhone: phone,
-        region,
-        projectNeed: need,
-        attachmentUrl: publicFileUrl,
-        attachmentName: fileName,
-        routingRole: routing.targetRole,
-        isWestAfrica: routing.isWestAfrica,
-      },
+  // 4. Dispatch email notifications server-side (the Brevo key must never reach the browser)
+  const realEmail = email.endsWith(PHONE_PLACEHOLDER_DOMAIN) ? undefined : email;
+  const notified = await sendHeroProjectEmailFn({
+    data: {
+      need: need.trim(),
+      region,
+      contact: contact.trim(),
+      contactEmail: realEmail && EMAIL_REGEX.test(realEmail) ? realEmail : undefined,
+      contactPhone: phone ?? undefined,
+      attachmentName: uploadedFilePath ? (fileName ?? undefined) : undefined,
+      reference: quoteId ?? undefined,
+    },
+  })
+    .then((res) => res.notified)
+    .catch((err) => {
+      console.error("[Brevo Email Trigger Error]:", err);
+      return false;
     });
-    emailSent = result.success;
-  } catch (err) {
-    console.error("Project request email failed:", err);
-  }
 
-  if (!emailSent && lastError) {
-    return {
-      success: false,
-      message: "Sorry, your request could not be sent. Please email sales@geosyntheticsafrica.com.",
-      routedTo: routing,
-      attachmentPath: uploadedFilePath,
-      quoteId,
-    };
+  if (lastError && !notified) {
+    throw new Error(
+      "We couldn't send your request. Please try again or email sales@geosyntheticsafrica.com.",
+    );
   }
 
   return {
     success: true,
-    message: routing.isWestAfrica
-      ? `Request received! Forwarded directly to Mamadou Coulibaly in Côte d'Ivoire.`
-      : routing.isSouthAfrica
-        ? `Request received! Sent to our South Africa Operations Desk at ${SOUTH_AFRICA_CONTACT.email}.`
-        : `Request received! Forwarded to our ${routing.targetName}.`,
+    message: "Request received! Our sales team will be in touch within 24 hours.",
     routedTo: routing,
     attachmentPath: uploadedFilePath,
     quoteId,

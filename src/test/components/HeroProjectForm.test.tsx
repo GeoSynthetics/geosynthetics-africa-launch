@@ -9,7 +9,7 @@ vi.mock("@/services/leadRoutingService", () => ({
     routedTo: {
       targetName: "Mamadou Coulibaly",
       targetRole: "Regional Director - West Africa",
-      targetEmail: "civ@geosynthetics.co.za",
+      targetEmail: "sales@geosyntheticsafrica.com",
       isWestAfrica: true,
       country: "Ivory Coast",
     },

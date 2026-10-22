@@ -10,7 +10,7 @@
 
 - **Feature**: Finish the 13 URL renames (CMS data, Zimbabwe, GCL)
 - **Problem**: The slug rename in `daa8c9f` only changed code; the `site_config` CMS rows kept the old service, application and country slugs, so the new URLs 404'd and menus/footer linked to old URLs. Zimbabwe used `-contact` instead of the requested `-installer` (both URLs served the same page), and the real CMS GCL slug `/gcl-liner-installation` had no redirect.
-- **Solution**: Added migration `20261017120000_rename_africa_slugs.sql` (already applied: backup table with RLS, exact-token rename of 14 slugs across 10 `site_config` keys, homepage office link off .co.za). Moved Zimbabwe to `/zimbabwe-geosynthetics-supplier-installer` with 301s from `-contact` and the old jutesoillock URL, and added the `/gcl-liner-installation` 301 to `/services/gcl-installation-contractor-africa`. The code default Zimbabwe template now uses the `-installer` key, so the sitemap (built from country templates) lists Zimbabwe once instead of under both slugs.
+- **Solution**: Added migration `20261017120000_rename_africa_slugs.sql` (already applied: backup table with RLS, exact-token rename of 14 slugs across 10 `site_config` keys, homepage office link off .com). Moved Zimbabwe to `/zimbabwe-geosynthetics-supplier-installer` with 301s from `-contact` and the old jutesoillock URL, and added the `/gcl-liner-installation` 301 to `/services/gcl-installation-contractor-africa`. The code default Zimbabwe template now uses the `-installer` key, so the sitemap (built from country templates) lists Zimbabwe once instead of under both slugs.
 
 ## 2026-10-17 02:20 (UTC+1)
 
@@ -20,8 +20,8 @@
 
 ## 2026-10-13 18:50 (UTC+1)
 
-- **Feature**: Renamed 13 page URLs to stop competing with geosynthetics.co.za.
-- **Problem**: Country and service pages shared identical slugs with the legacy .co.za site (duplicate-URL SEO conflict).
+- **Feature**: Renamed 13 page URLs to stop competing with geosynthetics.com.
+- **Problem**: Country and service pages shared identical slugs with the legacy .com site (duplicate-URL SEO conflict).
 - **Solution**: Updated the code-referenced slugs (country SEO map, templates, footer, contacts, mega menu, sitemap, test) and added 301 redirects (with/without trailing slash) for all 13 old URLs in vercel.json. The 6 service slugs live only in the CMS database and must be renamed there. Zimbabwe keeps its existing canonical `/zimbabwe-geosynthetics-supplier-contact`: the duplicate template/SEO entry for the old case-study alias was removed and the old URL now 301s to the canonical page.
 
 ## 2026-10-13 18:25 (UTC+1)
@@ -67,7 +67,7 @@
 ## 2026-09-26 12:10 (UTC+1)
 
 - **Feature**: Pan-African Top Ribbon & Contact Updates
-- **Problem**: The top ribbon displayed domestic South African credentials (B-BBEE Level 2 and QA/QC certifications) and a single South African phone number (+27 71 093 9964) alongside a `.co.za` domain email, conflicting with the brand's continental Pan-African export positioning and multi-country contact model.
+- **Problem**: The top ribbon displayed domestic South African credentials (B-BBEE Level 2 and QA/QC certifications) and a single South African phone number (+27 71 093 9964) alongside a `.com` domain email, conflicting with the brand's continental Pan-African export positioning and multi-country contact model.
 - **Solution**: Updated `TopBar.tsx` and i18n localization bundles (`en.json`, `fr.json`, `pt.json`) by removing the domestic B-BBEE badge, QA/QC badge, and SA phone link, adding continental perks ("IAGI Installer Member", "Crews across Africa", and "Delivered to site"), and updating the contact email to `sales@geosyntheticsafrica.com`.
 
 ## 2026-09-25 20:08 (UTC+1)
@@ -79,8 +79,8 @@
 ## 2026-09-25 15:52 (UTC+1)
 
 - **Feature**: Pan-African Hero Project Form & Dynamic Regional Lead Routing (West Africa / SA)
-- **Problem**: The hero section featured a South Africa-localized quick contact card (+27 phone, sales@geosynthetics.co.za, Randburg HQ address) which conflicted with the company's Pan-African positioning, lacked an interactive project submission form in the hero, and had no automated routing mechanism to forward West African inquiries to regional director Mamadou Coulibaly in Côte d'Ivoire vs South African inquiries to the Johannesburg operations desk.
-- **Solution**: Replaced the localized hero card with a modern glassmorphic `HeroProjectForm` ("START YOUR PROJECT / ALL OF AFRICA") that dynamically sources regions from the database/defaults, supports BOQ and technical drawing file uploads (up to 20MB) to Supabase Storage, logs submissions into `quote_requests`, dispatches transactional notifications via Brevo, and automatically routes South Africa requests to `sales@geosynthetics.co.za` while forwarding West African requests (Côte d'Ivoire, Ghana, Mali, Burkina Faso, Senegal, Guinea) to Mamadou Coulibaly (`civ@geosynthetics.co.za`). Also enhanced the Quotes Admin interface to highlight regional routing flags and provide direct email actions.
+- **Problem**: The hero section featured a South Africa-localized quick contact card (+27 phone, sales@geosynthetics.com, Randburg HQ address) which conflicted with the company's Pan-African positioning, lacked an interactive project submission form in the hero, and had no automated routing mechanism to forward West African inquiries to regional director Mamadou Coulibaly in Côte d'Ivoire vs South African inquiries to the Johannesburg operations desk.
+- **Solution**: Replaced the localized hero card with a modern glassmorphic `HeroProjectForm` ("START YOUR PROJECT / ALL OF AFRICA") that dynamically sources regions from the database/defaults, supports BOQ and technical drawing file uploads (up to 20MB) to Supabase Storage, logs submissions into `quote_requests`, dispatches transactional notifications via Brevo, and automatically routes South Africa requests to `sales@geosynthetics.com` while forwarding West African requests (Côte d'Ivoire, Ghana, Mali, Burkina Faso, Senegal, Guinea) to Mamadou Coulibaly (`civ@geosynthetics.com`). Also enhanced the Quotes Admin interface to highlight regional routing flags and provide direct email actions.
 
 ## 2026-09-23 16:43 (UTC+1)
 

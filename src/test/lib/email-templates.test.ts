@@ -48,7 +48,7 @@ describe("Email Templates Engine", () => {
         attachments: ["blueprint.pdf", "site_specs.dwg"],
         reference: "GSA-2026-0147",
         date: "21 July 2026",
-        siteUrl: "https://geosynthetics.co.za",
+        siteUrl: "https://geosynthetics.com",
       });
 
       // Brand headers & palette
@@ -86,8 +86,8 @@ describe("Email Templates Engine", () => {
 
       // CTA & Important Links
       expect(html.toLowerCase()).toContain("explore the catalogue");
-      expect(html).toContain("https://geosynthetics.co.za/catalogue");
-      expect(html).toContain("https://geosynthetics.co.za/contacts");
+      expect(html).toContain("https://geosynthetics.com/catalogue");
+      expect(html).toContain("https://geosynthetics.com/contacts");
       expect(html).toContain("Geosynthetics Africa (Pty) Ltd");
     });
 
@@ -108,7 +108,7 @@ describe("Email Templates Engine", () => {
     it("should render admin notification with structured lead transmittal table", () => {
       const html = generateQuoteAdminEmail({
         contactName: "Alice Cooper",
-        contactEmail: "alice@geotech.co.za",
+        contactEmail: "alice@geotech.com",
         contactPhone: "+27 82 555 1234",
         company: "GeoTech Ltd",
         country: "South Africa",
@@ -120,7 +120,7 @@ describe("Email Templates Engine", () => {
       expect(html).toContain("Admin Notification");
       expect(html).toContain("New Web Lead: Alice Cooper");
       expect(html).toContain("GSA-2026-0888");
-      expect(html).toContain("alice@geotech.co.za");
+      expect(html).toContain("alice@geotech.com");
       expect(html).toContain("+27 82 555 1234");
       expect(html).toContain("GeoTech Ltd");
       expect(html).toContain("GCL Liner");
