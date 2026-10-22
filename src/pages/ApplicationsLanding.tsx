@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import * as Icons from "lucide-react";
+import { CheckCircle2Icon } from "lucide-react";
+import { resolveIcon as iconByName } from "@/components/icons/resolve-icon";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
@@ -46,12 +47,12 @@ export function ApplicationsLanding() {
   };
 
   const resolveIcon = (iconName: string) => {
-    const IconComp = (Icons as any)[iconName];
+    const IconComp = iconByName(iconName, CheckCircle2Icon);
     if (IconComp)
       return (
         <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
       );
-    return <Icons.CheckCircle2 className="h-6 w-6 text-primary" />;
+    return <CheckCircle2Icon className="h-6 w-6 text-primary" />;
   };
 
   return (

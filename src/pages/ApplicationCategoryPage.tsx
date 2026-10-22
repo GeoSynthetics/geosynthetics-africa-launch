@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import * as Icons from "lucide-react";
+import { ArrowRightIcon, CheckCircle2Icon, ChevronRightIcon, DownloadIcon, FileTextIcon, HelpCircleIcon, MailIcon, PhoneIcon } from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
@@ -11,9 +12,9 @@ import { DrainageMesh } from "@/components/site/shapes";
 
 // Helper to render Lucide icons dynamically by string name
 function IconRenderer({ name, className }: { name: string; className?: string }) {
-  const IconComponent = (Icons as any)[name];
+  const IconComponent = resolveIcon(name, HelpCircleIcon);
   if (!IconComponent) {
-    return <Icons.HelpCircle className={className} />;
+    return <HelpCircleIcon className={className} />;
   }
   return <IconComponent className={className} />;
 }
@@ -203,7 +204,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                 className="bg-transparent border-white/30 text-white hover:bg-white hover:text-surface-dark uppercase font-bold tracking-wide cursor-pointer"
               >
                 <a href={downloadGuideUrl} target="_blank" rel="noopener noreferrer">
-                  <Icons.Download className="h-4 w-4 mr-2" />
+                  <DownloadIcon className="h-4 w-4 mr-2" />
                   {downloadGuideLabel}
                 </a>
               </Button>
@@ -292,7 +293,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                       className="uppercase font-bold tracking-wider text-xs cursor-pointer"
                     >
                       <a href={componentsDrawingLink} target="_blank" rel="noopener noreferrer">
-                        View Detailed Drawing <Icons.ChevronRight className="h-4 w-4 ml-1" />
+                        View Detailed Drawing <ChevronRightIcon className="h-4 w-4 ml-1" />
                       </a>
                     </Button>
                   )}
@@ -419,7 +420,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                         </span>
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition mt-4 inline-flex items-center gap-1">
-                        View Product <Icons.ArrowRight className="h-3 w-3" />
+                        View Product <ArrowRightIcon className="h-3 w-3" />
                       </span>
                     </div>
                   </Link>
@@ -471,7 +472,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                         </p>
                       </div>
                       <span className="text-xs font-bold uppercase tracking-wider text-primary mt-4 flex items-center gap-1">
-                        View Case Study <Icons.ChevronRight className="h-3 w-3" />
+                        View Case Study <ChevronRightIcon className="h-3 w-3" />
                       </span>
                     </div>
                   </Link>
@@ -498,7 +499,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex h-10 w-10 items-center justify-center rounded bg-accent group-hover:bg-primary group-hover:text-white transition shrink-0">
-                        <Icons.FileText className="h-5 w-5" />
+                        <FileTextIcon className="h-5 w-5" />
                       </div>
                       <div>
                         <div className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition">
@@ -509,7 +510,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                         </div>
                       </div>
                     </div>
-                    <Icons.Download className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    <DownloadIcon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                   </a>
                 ))}
               </div>
@@ -533,7 +534,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                       key={idx}
                       className="flex items-start gap-2 text-xs text-muted-foreground leading-relaxed"
                     >
-                      <Icons.CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <CheckCircle2Icon className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                       <span>{kb}</span>
                     </li>
                   ))}
@@ -580,7 +581,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                     href={`tel:${assistancePhone}`}
                     className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition"
                   >
-                    <Icons.Phone className="h-4 w-4 text-primary shrink-0" />
+                    <PhoneIcon className="h-4 w-4 text-primary shrink-0" />
                     <span>{assistancePhone}</span>
                   </a>
                 )}
@@ -589,7 +590,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                     href={`mailto:${assistanceEmail}`}
                     className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition truncate"
                   >
-                    <Icons.Mail className="h-4 w-4 text-primary shrink-0" />
+                    <MailIcon className="h-4 w-4 text-primary shrink-0" />
                     <span className="truncate">{assistanceEmail}</span>
                   </a>
                 )}
@@ -606,7 +607,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                     document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
-                  Contact Our Team <Icons.ChevronRight className="ml-1 h-3.5 w-3.5" />
+                  Contact Our Team <ChevronRightIcon className="ml-1 h-3.5 w-3.5" />
                 </a>
               </Button>
             </div>
@@ -637,7 +638,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                     params={{ slug: featuredCaseStudy.slug }}
                     className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 cursor-pointer"
                   >
-                    View Case Study <Icons.ChevronRight className="h-3 w-3" />
+                    View Case Study <ChevronRightIcon className="h-3 w-3" />
                   </Link>
                 </div>
               </div>

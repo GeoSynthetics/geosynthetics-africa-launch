@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import * as Icons from "lucide-react";
+import { ArrowRightIcon, BoxIcon, CheckCircle2Icon, DownloadIcon, FileTextIcon, ScaleIcon, ShieldAlertIcon, ShieldIcon } from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
@@ -289,7 +290,7 @@ export function ServicePage({ data }: { data: any }) {
               {whyChooseItems.map((item, idx) => (
                 <div key={idx} className="flex gap-4 items-start">
                   <div className="h-6 w-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/10">
-                    <Icons.CheckCircle2 className="h-4 w-4" />
+                    <CheckCircle2Icon className="h-4 w-4" />
                   </div>
                   <div>
                     <h3 className="font-display font-bold uppercase text-sm tracking-wide text-foreground">
@@ -320,7 +321,7 @@ export function ServicePage({ data }: { data: any }) {
                 >
                   <div>
                     <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
-                      <Icons.Shield className="h-5 w-5" />
+                      <ShieldIcon className="h-5 w-5" />
                     </div>
                     <h3 className="font-display font-bold uppercase text-sm tracking-wide text-foreground">
                       {item.title}
@@ -351,7 +352,7 @@ export function ServicePage({ data }: { data: any }) {
                       key={idx}
                       className="flex gap-2.5 items-start text-xs text-muted-foreground leading-relaxed"
                     >
-                      <Icons.CheckCircle2 className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
+                      <CheckCircle2Icon className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                       <span>{bullet}</span>
                     </li>
                   ))}
@@ -412,7 +413,7 @@ export function ServicePage({ data }: { data: any }) {
                         </p>
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-primary group-hover:text-primary transition mt-2 inline-flex items-center gap-1">
-                        Specs & Catalog <Icons.ArrowRight className="h-3 w-3" />
+                        Specs & Catalog <ArrowRightIcon className="h-3 w-3" />
                       </span>
                     </div>
                   </Link>
@@ -439,7 +440,7 @@ export function ServicePage({ data }: { data: any }) {
                   >
                     <div className="flex items-center gap-4 min-w-0">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent group-hover:bg-primary group-hover:text-white transition shrink-0">
-                        <Icons.FileText className="h-5 w-5" />
+                        <FileTextIcon className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
                         <div className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition truncate">
@@ -450,7 +451,7 @@ export function ServicePage({ data }: { data: any }) {
                         </div>
                       </div>
                     </div>
-                    <Icons.Download className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 ml-2" />
+                    <DownloadIcon className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 ml-2" />
                   </a>
                 ))}
               </div>
@@ -481,7 +482,7 @@ export function ServicePage({ data }: { data: any }) {
               <div className="space-y-3 pt-2">
                 {directModelItems.map((item, idx) => (
                   <div key={idx} className="flex gap-2.5 items-start">
-                    <Icons.ShieldAlert className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
+                    <ShieldAlertIcon className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-tight text-foreground leading-none">
                         {item.title}
@@ -510,7 +511,7 @@ export function ServicePage({ data }: { data: any }) {
                     key={idx}
                     className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed"
                   >
-                    <Icons.Box className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <BoxIcon className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -530,7 +531,7 @@ export function ServicePage({ data }: { data: any }) {
                     key={idx}
                     className="flex gap-2 items-start text-[11px] text-muted-foreground leading-relaxed"
                   >
-                    <Icons.Scale className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <ScaleIcon className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}

@@ -10,7 +10,11 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-const PUBLIC_CACHE = "public, max-age=0, s-maxage=300, stale-while-revalidate=86400";
+// Pages: served from Vercel's CDN for an hour, then refreshed in the background
+// while visitors keep getting the cached copy for up to a week.
+const PUBLIC_CACHE = "public, max-age=0, s-maxage=3600, stale-while-revalidate=604800";
+// Images proxied from Supabase Storage: file names are unique, so cache for a year.
+const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
 const NO_STORE = "private, no-store";
 
 export default defineConfig(({ mode }) => {
@@ -61,15 +65,20 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       tanstackStart(),
       nitro({
-        // Serve public pages from Vercel's CDN: cached for 5 minutes, then
-        // refreshed in the background, so visitors never wait for a full
-        // server render. Site Builder edits appear within about 5 minutes.
+        // Run the server in Dublin, next to the Supabase database (eu-west-1,
+        // Ireland). The default, Washington D.C., put an Atlantic round trip on
+        // every database query.
+        vercel: { functions: { regions: ["dub1"] } },
+        // Serve public pages from Vercel's CDN (see PUBLIC_CACHE), so visitors
+        // rarely wait for a full server render. Site Builder edits appear
+        // within about an hour.
         routeRules: {
           "/**": { headers: { "cache-control": PUBLIC_CACHE } },
           "/sitemap.xml": { headers: { "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" } },
           "/admin": { headers: { "cache-control": NO_STORE } },
           "/admin/**": { headers: { "cache-control": NO_STORE } },
           "/api/**": { headers: { "cache-control": NO_STORE } },
+          "/api/storage/**": { headers: { "cache-control": IMMUTABLE } },
           "/_serverFn/**": { headers: { "cache-control": NO_STORE } },
           "/login": { headers: { "cache-control": NO_STORE } },
           "/signup": { headers: { "cache-control": NO_STORE } },
