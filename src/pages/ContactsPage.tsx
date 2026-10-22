@@ -39,7 +39,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { DEFAULT_REGIONAL_COVERAGE } from "@/lib/global-data";
 import { EXPANSION_COUNTRY_TEMPLATES } from "@/data/country-expansion";
-import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/brevo";
+import { sendQuoteEmailFn, sendContactEmailFn } from "@/lib/email";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
   to: string;
@@ -935,7 +935,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (insertErr) throw insertErr;
 
-      // Trigger Brevo transactional email notifications (non-blocking)
+      // Trigger transactional email notifications (non-blocking)
       void sendQuoteEmailFn({
         data: {
           contactName: values.name,
@@ -945,7 +945,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           country: values.country ?? undefined,
           projectDescription: messageWithMeta,
         },
-      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+      }).catch((err) => console.warn("[Email Trigger Error]:", err));
 
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
       boqForm.reset({
@@ -979,7 +979,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (error) throw error;
 
-      // Trigger Brevo transactional email notifications (non-blocking)
+      // Trigger transactional email notifications (non-blocking)
       void sendContactEmailFn({
         data: {
           contactName: values.name,
@@ -987,7 +987,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           contactPhone: values.phone ?? undefined,
           message: `${values.message}`,
         },
-      }).catch((err) => console.warn("[Brevo Email Trigger Error]:", err));
+      }).catch((err) => console.warn("[Email Trigger Error]:", err));
 
       toast.success("Inquiry sent — thank you!");
       quickForm.reset({

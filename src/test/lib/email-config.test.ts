@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { getEmailConfig, SALES_EMAIL } from "@/lib/email-config";
 
-const KEYS = ["NOTIFICATION_TO_EMAIL", "VITE_NOTIFICATION_TO_EMAIL", "BREVO_FROM_EMAIL", "VITE_BREVO_FROM_EMAIL"];
+const KEYS = ["NOTIFICATION_TO_EMAIL", "VITE_NOTIFICATION_TO_EMAIL", "EMAIL_FROM"];
 const saved = Object.fromEntries(KEYS.map((k) => [k, process.env[k]]));
 
 afterEach(() => {
@@ -22,7 +22,7 @@ describe("getEmailConfig", () => {
 
   it("uses the Vercel settings when present", () => {
     process.env.NOTIFICATION_TO_EMAIL = "leads@example.com";
-    process.env.BREVO_FROM_EMAIL = "noreply@example.com";
+    process.env.EMAIL_FROM = "noreply@example.com";
     const cfg = getEmailConfig();
     expect(cfg.notifyEmail).toBe("leads@example.com");
     expect(cfg.fromEmail).toBe("noreply@example.com");

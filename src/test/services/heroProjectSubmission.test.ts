@@ -17,13 +17,13 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-vi.mock("@/lib/brevo", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@/lib/brevo")>()),
+vi.mock("@/lib/email", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/email")>()),
   sendHeroProjectEmailFn,
 }));
 
 import { submitHeroProjectRequest } from "@/services/leadRoutingService";
-import { dispatchHeroProjectEmails } from "@/lib/brevo";
+import { dispatchHeroProjectEmails } from "@/lib/email";
 
 const fetchMock = vi.fn();
 
@@ -40,7 +40,7 @@ afterEach(() => {
 });
 
 describe("submitHeroProjectRequest", () => {
-  it("sends the email through the server function, never Brevo from the browser", async () => {
+  it("sends the email through the server function, never the email API from the browser", async () => {
     const result = await submitHeroProjectRequest({
       need: "Geogrid for 40 km haul road",
       region: "Central Africa",
@@ -130,7 +130,7 @@ describe("dispatchHeroProjectEmails", () => {
     expect(sentBodies()[0].to[0].email).toBe("sales@geosyntheticsafrica.com");
   });
 
-  it("reports failure when Brevo rejects the team notification", async () => {
+  it("reports failure when the email provider rejects the team notification", async () => {
     fetchMock.mockResolvedValue(new Response("unauthorised", { status: 401 }));
 
     const res = await dispatchHeroProjectEmails({
