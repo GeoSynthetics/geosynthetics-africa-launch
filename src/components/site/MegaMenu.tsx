@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useRouter, type LinkComponentProps } from "@tanstack/react-router";
-import * as LucideIcons from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 
 type AnyLinkProps = Omit<LinkComponentProps, "to" | "params"> & {
   to: string;
@@ -28,7 +28,7 @@ const getIconComponent = (
   fallback: React.ComponentType<{ className?: string }> = BookOpen,
 ): React.ComponentType<{ className?: string }> => {
   if (!name) return fallback;
-  return (LucideIcons as any)[name] || fallback;
+  return resolveIcon(name, fallback);
 };
 
 import { Skeleton } from "@/components/ui/skeleton";

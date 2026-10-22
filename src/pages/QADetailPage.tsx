@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import * as LucideIcons from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { Route } from "@/routes/quality-assurance.$slug";
 import {
   ChevronRight,
@@ -19,7 +19,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
   if (!name) return FileCheck;
-  return (LucideIcons as any)[name] || FileCheck;
+  return resolveIcon(name, FileCheck);
 };
 
 type ContentSection = {

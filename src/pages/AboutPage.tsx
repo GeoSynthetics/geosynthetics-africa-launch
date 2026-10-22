@@ -1,7 +1,8 @@
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { MapPin, Phone, Clock, Package } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import { ShieldCheckIcon } from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 import { useAboutContent } from "@/hooks/use-about-content";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import { Link } from "@tanstack/react-router";
 import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 
 function DynamicCardIcon({ iconName, className }: { iconName: string; className?: string }) {
-  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.ShieldCheck;
+  const IconComponent = resolveIcon(iconName, ShieldCheckIcon);
   return <IconComponent className={className} />;
 }
 

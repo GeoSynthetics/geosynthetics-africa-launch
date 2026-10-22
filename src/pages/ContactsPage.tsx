@@ -54,7 +54,7 @@ import {
   type ContactOfficeService,
   DEFAULT_CONTACTS_PAGE_CONTENT,
 } from "@/types/contacts";
-import * as LucideIcons from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { DrainageMesh, FiberStrand } from "@/components/site/shapes";
 import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
 
@@ -63,7 +63,7 @@ const getIconComponent = (
   fallback: React.ComponentType<{ className?: string }> = BookOpen,
 ): React.ComponentType<{ className?: string }> => {
   if (!name) return fallback;
-  return (LucideIcons as any)[name] || fallback;
+  return resolveIcon(name, fallback);
 };
 
 import { mockContactsCaseStudies as CASE_STUDIES } from "@/mocks/contactsMocks";

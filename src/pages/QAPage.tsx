@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Route } from "@/routes/quality-assurance.index";
-import * as LucideIcons from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import {
   ShieldCheck,
   FileCheck,
@@ -21,7 +21,7 @@ import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
   if (!name) return FileCheck;
-  return (LucideIcons as any)[name] || FileCheck;
+  return resolveIcon(name, FileCheck);
 };
 
 // Static brand content — these are core GSA brand pillars that don't change
