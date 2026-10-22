@@ -96,13 +96,13 @@ describe("submitHeroProjectRequest", () => {
 describe("dispatchHeroProjectEmails", () => {
   beforeEach(() => {
     vi.stubEnv("BREVO_API_KEY", "test-key");
-    vi.stubEnv("BREVO_FROM_EMAIL", "notifications@geosynthetics.com");
-    vi.stubEnv("NOTIFICATION_TO_EMAIL", "sales@geosynthetics.com");
+    vi.stubEnv("BREVO_FROM_EMAIL", "notifications@example.com");
+    vi.stubEnv("NOTIFICATION_TO_EMAIL", "leads@example.com");
   });
 
   const sentBodies = () => fetchMock.mock.calls.map(([, init]) => JSON.parse(init.body));
 
-  it("routes West Africa to the regional desk, CCs sales and confirms to the customer", async () => {
+  it("sends every region to the sales mailbox and confirms to the customer", async () => {
     const res = await dispatchHeroProjectEmails({
       need: "Geomembrane for tailings dam",
       region: "West Africa",
@@ -112,8 +112,8 @@ describe("dispatchHeroProjectEmails", () => {
 
     expect(res.notified).toBe(true);
     const [team, customer] = sentBodies();
-    expect(team.to).toEqual([expect.objectContaining({ email: "civ@geosynthetics.com" })]);
-    expect(team.cc).toEqual([expect.objectContaining({ email: "sales@geosynthetics.com" })]);
+    expect(team.to).toEqual([expect.objectContaining({ email: "leads@example.com" })]);
+    expect(team.cc).toBeUndefined();
     expect(team.replyTo.email).toBe("buyer@mine.co");
     expect(customer.to).toEqual([expect.objectContaining({ email: "buyer@mine.co" })]);
   });
@@ -127,7 +127,7 @@ describe("dispatchHeroProjectEmails", () => {
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(sentBodies()[0].to[0].email).toBe("sales@geosyntheticsafrica.com");
+    expect(sentBodies()[0].to[0].email).toBe("leads@example.com");
   });
 
   it("reports failure when Brevo rejects the team notification", async () => {

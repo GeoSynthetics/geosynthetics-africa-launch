@@ -3,7 +3,7 @@ import { sendHeroProjectEmailFn } from "@/lib/brevo";
 import { resolveRegionalRouting, SOUTH_AFRICA_CONTACT } from "@/types/regionalCoverage";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_PLACEHOLDER_DOMAIN = "@phone-inquiry.geosynthetics.com";
+const PHONE_PLACEHOLDER_DOMAIN = "@phone-inquiry.invalid";
 
 export interface HeroProjectSubmission {
   need: string;
@@ -107,11 +107,8 @@ export async function submitHeroProjectRequest(
   }
 
   // 3. Save into Supabase `quote_requests` table
-  const routingDescriptionTag = routing.isWestAfrica
-    ? `[ROUTED TO: Mamadou Coulibaly (West Africa Regional Hub - ${routing.targetEmail})]`
-    : routing.isSouthAfrica
-      ? `[ROUTED TO: South Africa Sales Desk (${routing.targetEmail})]`
-      : `[ROUTED TO: ${routing.targetName} (${routing.targetEmail})]`;
+  // All requests go to the sales mailbox for now; the region is kept for reference.
+  const routingDescriptionTag = `[ROUTED TO: Sales (${SOUTH_AFRICA_CONTACT.email})]`;
 
   const fullDescription = `${need.trim()}\n\n${routingDescriptionTag}\n[region: ${region}]\n[contact: ${contact.trim()}]${
     uploadedFilePath ? `\n\n[attachments]\n${uploadedFilePath}` : ""
@@ -210,11 +207,7 @@ export async function submitHeroProjectRequest(
 
   return {
     success: true,
-    message: routing.isWestAfrica
-      ? `Request received! Forwarded directly to Mamadou Coulibaly in Côte d'Ivoire.`
-      : routing.isSouthAfrica
-        ? `Request received! Sent to our South Africa Operations Desk at ${SOUTH_AFRICA_CONTACT.email}.`
-        : `Request received! Forwarded to our ${routing.targetName}.`,
+    message: "Request received! Our sales team will be in touch within 24 hours.",
     routedTo: routing,
     attachmentPath: uploadedFilePath,
     quoteId,

@@ -159,7 +159,7 @@ export function RegionalCoverageBuilderTab() {
       subtitle: "Regional Office",
       address: "Enter address here",
       phone: "+27 78 1355 926",
-      email: "info@geosynthetics.com",
+      email: "sales@geosyntheticsafrica.com",
       services: "Supply & Logistics",
       transit: "3 - 5 days",
       routes: "Johannesburg → Destination",

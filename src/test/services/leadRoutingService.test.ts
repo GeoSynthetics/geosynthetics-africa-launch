@@ -82,7 +82,7 @@ describe("Regional Routing Service & Coverage Classification", () => {
     it("should resolve other countries to their respective regional desk or fallback", () => {
       const zambiaResult = resolveRegionalRouting("Zambia");
       expect(zambiaResult.isWestAfrica).toBe(false);
-      expect(zambiaResult.targetEmail).toBe("zambia@geosynthetics.com");
+      expect(zambiaResult.targetEmail).toBe("sales@geosyntheticsafrica.com");
     });
   });
 });

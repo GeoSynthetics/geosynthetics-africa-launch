@@ -302,13 +302,13 @@ function CtaEditor({
       </div>
 
       <div>
-        <FieldLabel hint="Destination URL or mailto link (e.g. /contacts or mailto:careers@geosynthetics.com)">
+        <FieldLabel hint="Destination URL or mailto link (e.g. /contacts or mailto:sales@geosyntheticsafrica.com)">
           Button Link
         </FieldLabel>
         <Input
           value={cta.buttonLink}
           onChange={(e) => updateCta({ buttonLink: e.target.value })}
-          placeholder="e.g. /contacts or mailto:careers@geosynthetics.com"
+          placeholder="e.g. /contacts or mailto:sales@geosyntheticsafrica.com"
           className="text-sm"
         />
       </div>

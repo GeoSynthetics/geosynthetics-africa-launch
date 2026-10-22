@@ -72,7 +72,7 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
         heading: "How to Apply",
         body: "Send your CV and a brief cover letter describing your field experience or technical qualifications to our human resources desk. Please specify your country of residence and preferred operational role.",
         bullets: [
-          "Email your resume to careers@geosynthetics.com",
+          "Email your resume to sales@geosyntheticsafrica.com",
           "Include reference to any relevant engineering certifications or welding accreditations",
           "Applications are reviewed on a rolling basis by our regional management team",
         ],
@@ -82,7 +82,7 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
       heading: "Ready to Make an Impact?",
       text: "Submit your CV directly to our operations and human resources desk for current and upcoming African projects.",
       buttonLabel: "Email Careers Desk",
-      buttonLink: "mailto:careers@geosynthetics.com",
+      buttonLink: "mailto:sales@geosyntheticsafrica.com",
     },
     seo: {
       title: "Careers — Geosynthetics Africa",
@@ -180,7 +180,7 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
       {
         id: "privacy-contact",
         heading: "5. Contact Our Information Officer",
-        body: "If you have questions regarding this Privacy Policy or wish to request access or correction of your personal information, please contact our information officer at info@geosynthetics.com or write to our head office in Cape Town, South Africa.",
+        body: "If you have questions regarding this Privacy Policy or wish to request access or correction of your personal information, please contact our information officer at sales@geosyntheticsafrica.com or write to our head office in Cape Town, South Africa.",
       },
     ],
     seo: {

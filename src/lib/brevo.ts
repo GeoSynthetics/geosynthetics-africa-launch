@@ -13,7 +13,6 @@ import {
   formatReference,
 } from "./email-templates";
 import { SITE_URL } from "@/lib/site-url";
-import { resolveRegionalRouting } from "@/types/regionalCoverage";
 import { getEmailConfig } from "@/lib/email-config";
 
 export interface EmailRecipient {
@@ -224,15 +223,14 @@ export interface SendHeroProjectEmailParams {
 }
 
 /**
- * Notifies the regional desk for the selected region (CC the central mailbox) and,
- * when the enquirer left an email address, sends them a confirmation.
- * Recipients are resolved here on the server so the client cannot choose them.
+ * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default sales@geosyntheticsafrica.com)
+ * and, when the enquirer left an email address, sends them a confirmation.
+ * Recipients are set here on the server so the client cannot choose them.
  */
 export async function dispatchHeroProjectEmails(
   params: SendHeroProjectEmailParams,
 ): Promise<{ notified: boolean }> {
   const adminEmail = getEmailConfig().notifyEmail;
-  const routing = resolveRegionalRouting(params.region);
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
@@ -246,21 +244,16 @@ export async function dispatchHeroProjectEmails(
     contactEmail: params.contactEmail ?? "Not provided",
     contactPhone: params.contactPhone,
     country: params.region,
-    productName: `Hero Project Request — ${routing.targetName}`,
+    productName: `Hero Project Request — ${params.region}`,
     projectDescription,
     attachments: params.attachmentName,
     reference,
     siteUrl,
   };
 
-  const cc =
-    adminEmail && adminEmail.toLowerCase() !== routing.targetEmail.toLowerCase()
-      ? [{ email: adminEmail, name: "Geosynthetics Sales" }]
-      : undefined;
-
+  // All enquiries go to the sales mailbox; the region is shown in the subject.
   const { success: notified } = await sendBrevoEmail({
-    to: [{ email: routing.targetEmail, name: routing.targetName }],
-    cc,
+    to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     replyTo: params.contactEmail ? { email: params.contactEmail, name: contactName } : undefined,
     subject: `[New Project Request] ${params.region} — ${params.contact.slice(0, 40)} — REF ${reference}`,
     htmlContent: generateQuoteAdminEmail(templateParams),
@@ -269,7 +262,7 @@ export async function dispatchHeroProjectEmails(
   if (params.contactEmail) {
     await sendBrevoEmail({
       to: [{ email: params.contactEmail, name: contactName }],
-      replyTo: { email: routing.targetEmail, name: routing.targetName },
+      replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
       subject: `Project request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
       htmlContent: generateQuoteCustomerEmail(templateParams),
     });
