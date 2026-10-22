@@ -29,9 +29,36 @@ export function toCdnStorageUrls(text: string): string {
     : text;
 }
 
+/**
+ * After an admin saves anything (database row or uploaded file), refresh the
+ * CDN copy of the public pages so the change shows within seconds. Several
+ * saves in quick succession trigger one refresh.
+ */
+let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+function scheduleSiteCacheRefresh() {
+  if (typeof window === "undefined" || !window.location.pathname.startsWith("/admin")) return;
+  clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(() => {
+    import("@/lib/site-cache.functions")
+      .then((m) => m.refreshSiteCacheFn())
+      .catch((err) => console.warn("[Site cache] Refresh failed:", err));
+  }, 2000);
+}
+
+const WRITE_METHODS = new Set(["POST", "PATCH", "PUT", "DELETE"]);
+
 const cdnImageFetch: typeof fetch = async (input, init) => {
   const response = await fetch(input, init);
   const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+  const method = (init?.method || (input instanceof Request ? input.method : "GET")).toUpperCase();
+  if (
+    response.ok &&
+    WRITE_METHODS.has(method) &&
+    (url.includes("/rest/v1/") || url.includes("/storage/v1/object/")) &&
+    !url.includes("/rest/v1/rpc/")
+  ) {
+    scheduleSiteCacheRefresh();
+  }
   const contentType = response.headers.get("content-type") || "";
   if (!response.ok || !url.includes("/rest/v1/") || !contentType.includes("json")) {
     return response;
