@@ -11,7 +11,8 @@ import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 // Pages: served from Vercel's CDN for an hour, then refreshed in the background
-// while visitors keep getting the cached copy for up to a week.
+// while visitors keep getting the cached copy for up to a week. Admin saves
+// refresh them immediately via the "site-pages" cache tag.
 const PUBLIC_CACHE = "public, max-age=0, s-maxage=3600, stale-while-revalidate=604800";
 // Images proxied from Supabase Storage: file names are unique, so cache for a year.
 const IMMUTABLE = "public, max-age=31536000, s-maxage=31536000, immutable";
@@ -70,8 +71,8 @@ export default defineConfig(({ mode }) => {
         // every database query.
         vercel: { functions: { regions: ["dub1"] } },
         // Serve public pages from Vercel's CDN (see PUBLIC_CACHE), so visitors
-        // rarely wait for a full server render. Site Builder edits appear
-        // within about an hour.
+        // rarely wait for a full server render. Saving in the admin refreshes
+        // the cached pages straight away (src/lib/site-cache.functions.ts).
         routeRules: {
           "/**": { headers: { "cache-control": PUBLIC_CACHE } },
           "/sitemap.xml": { headers: { "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" } },
