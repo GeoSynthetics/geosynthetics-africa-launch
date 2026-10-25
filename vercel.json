@@ -5,6 +5,36 @@
   "framework": null,
   "redirects": [
     {
+      "source": "/products/concrete-mats-gccm",
+      "destination": "/products/waterproofing-concrete-protection",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextile-dewatering-systems",
+      "destination": "/products/dewatering-systems",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/private-residence-driveway-garden-path-redesign-motorbike-accessible-suds-surface",
+      "destination": "/projects/bera-gravel-fix-stabilisation-residential-cycle-path-and-driveway",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/ten-7m-20m-dewatering-tubes-zero-flocculants-large-scale-sludge-dewatering-in-durban",
+      "destination": "/projects/sludge-dewatering-in-durban-ten-7-m-20-m-tubes",
+      "statusCode": 301
+    },
+    {
+      "source": "/projects/zimbabwe-presidential-river-rehabilitation-210-000-m-of-spec-compliant-jutesoillock-292",
+      "destination": "/projects/river-rehabilitation-210-000-m-of-spec-compliant-jutesoillock-292",
+      "statusCode": 301
+    },
+    {
+      "source": "/applications/drainage-filtration",
+      "destination": "/applications/drainage-filtration-systems-africa",
+      "statusCode": 301
+    },
+    {
       "source": "/gse-hdpe-liner-smooth-geomembrane-supplier-south-africa/",
       "destination": "/south-africa-geosynthetics-supplier-installer",
       "statusCode": 301
