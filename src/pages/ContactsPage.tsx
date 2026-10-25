@@ -86,7 +86,7 @@ const RESOURCE_STRIP = [
     icon: FileText,
     title: "VIEW CASE STUDIES",
     subtitle: "Real project success",
-    to: "/resources",
+    to: "/projects",
   },
   { icon: BookOpen, title: "RESOURCES", subtitle: "Technical library", to: "/resources" },
 ];

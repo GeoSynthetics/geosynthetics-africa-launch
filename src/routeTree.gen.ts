@@ -39,6 +39,7 @@ import { Route as SitemapPtDotxmlRouteImport } from './routes/sitemap-pt[.]xml'
 import { Route as SitemapSolutionsDotxmlRouteImport } from './routes/sitemap-solutions[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SustainabilityRouteImport } from './routes/sustainability'
+import { Route as TechnicalCentreRouteImport } from './routes/technical-centre'
 import { Route as TermsAndConditionsRouteImport } from './routes/terms-and-conditions'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
@@ -227,6 +228,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SustainabilityRoute = SustainabilityRouteImport.update({
   id: '/sustainability',
   path: '/sustainability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechnicalCentreRoute = TechnicalCentreRouteImport.update({
+  id: '/technical-centre',
+  path: '/technical-centre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsAndConditionsRoute = TermsAndConditionsRouteImport.update({
@@ -456,6 +462,7 @@ export interface FileRoutesByFullPath {
   '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
+  '/technical-centre': typeof TechnicalCentreRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
@@ -519,6 +526,7 @@ export interface FileRoutesByTo {
   '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
+  '/technical-centre': typeof TechnicalCentreRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
@@ -591,6 +599,7 @@ export interface FileRoutesById {
   '/sitemap-solutions.xml': typeof SitemapSolutionsDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sustainability': typeof SustainabilityRoute
+  '/technical-centre': typeof TechnicalCentreRoute
   '/terms-and-conditions': typeof TermsAndConditionsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/media-center': typeof AdminMediaCenterRoute
@@ -664,6 +673,7 @@ export interface FileRouteTypes {
     | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
+    | '/technical-centre'
     | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
@@ -727,6 +737,7 @@ export interface FileRouteTypes {
     | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
+    | '/technical-centre'
     | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
@@ -798,6 +809,7 @@ export interface FileRouteTypes {
     | '/sitemap-solutions.xml'
     | '/sitemap.xml'
     | '/sustainability'
+    | '/technical-centre'
     | '/terms-and-conditions'
     | '/admin/blog'
     | '/admin/media-center'
@@ -870,6 +882,7 @@ export interface RootRouteChildren {
   SitemapSolutionsDotxmlRoute: typeof SitemapSolutionsDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SustainabilityRoute: typeof SustainabilityRoute
+  TechnicalCentreRoute: typeof TechnicalCentreRoute
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   ApiEmailStatusRoute: typeof ApiEmailStatusRoute
   ApiImportImageRoute: typeof ApiImportImageRoute
@@ -1095,6 +1108,13 @@ declare module '@tanstack/react-router' {
       path: '/sustainability'
       fullPath: '/sustainability'
       preLoaderRoute: typeof SustainabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technical-centre': {
+      id: '/technical-centre'
+      path: '/technical-centre'
+      fullPath: '/technical-centre'
+      preLoaderRoute: typeof TechnicalCentreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms-and-conditions': {
@@ -1531,6 +1551,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapSolutionsDotxmlRoute: SitemapSolutionsDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SustainabilityRoute: SustainabilityRoute,
+  TechnicalCentreRoute: TechnicalCentreRoute,
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   ApiEmailStatusRoute: ApiEmailStatusRoute,
   ApiImportImageRoute: ApiImportImageRoute,

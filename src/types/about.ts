@@ -87,13 +87,13 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
     eyebrow: "About Us",
     title: "Africa's Only Integrated Geosynthetics Execution Partner",
     description:
-      "Geosynthetics Africa is Africa's only integrated geosynthetic systems execution partner – delivering spec-compliant products, pan-African logistics, and QA/QC-certified installation as one accountable system.",
+      "Geosynthetics Africa supplies, fabricates and installs geosynthetic systems for African mining, water, waste and civil infrastructure, with documented quality controls for the agreed scope.",
     image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
   },
   accountability: {
     title: "One System. One Accountability.",
     description:
-      "We exist to eliminate the failure risk created by fragmented delivery models, where material supply, logistics, installation, and quality assurance are separated. We integrate the full geosynthetics lifecycle.",
+      "We coordinate material supply, fabrication, logistics and installation responsibilities around the approved specification, project programme and inspection plan.",
     cards: [
       {
         id: "1",
@@ -114,7 +114,7 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
         icon: "Cog",
         title: "QA/QC-Controlled Installation",
         description:
-          "Installation is where most geosynthetic systems fail - not because of materials, but because of execution. We eliminate this risk through controlled installation governed by qualified teams, defined welding procedures, continuous quality control, and independent testing. We don't install to complete scope - we install to certify performance.",
+          "Installation follows approved material-specific methods, qualified personnel, relevant inspections and applicable tests. Independent CQA interfaces and handover requirements are defined for the project.",
       },
     ],
   },
@@ -130,19 +130,19 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
         id: "cap-2",
         title: "Trusted Where Failure Is Not an Option",
         description:
-          "Geosynthetics Africa is one of only five IAGI Installer Members in Africa, trusted by engineers, EPC contractors and asset owners to deliver systems exactly as designed – from specification through to installation sign-off.",
+          "Geosynthetics Africa is an IAGI Installer Member, trusted by engineers, EPC contractors and asset owners to deliver systems exactly as designed – from specification through to installation sign-off.",
       },
       {
         id: "cap-3",
         title: "Geosynthetics Africa",
         description:
-          "One system and accountable. 100+ proven tracks on QA/QC certified installation delivered for leading mines across Africa.",
+          "More than 15 million m² installed across the Group, with materials supplied to over 30 countries.",
       },
     ],
     philosophyTitle: "Our Execution Philosophy",
-    philosophySubtitle: "We do not participate in fragmented delivery.",
-    philosophyImage:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
+    philosophySubtitle:
+      "Material supply, fabrication and installation coordinated to the agreed scope.",
+    philosophyImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
   },
   partners: {
     title: "Our Global Supply Partners",
@@ -155,8 +155,8 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
     items: [
       {
         id: "faq-1",
-        q: "Is Geosynthetics Africa an IAGI-Certified Installer?",
-        a: "Geosynthetics Africa is an IAGI Installer Member, ensuring every project meets global geomembrane welding and QA/QC standards. Our teams are factory-trained and certified, guaranteeing professional, leak-free installations that comply with GRI-GM13 and ASTM standards.",
+        q: "What does Group IAGI Installer Membership mean?",
+        a: "The Group is an IAGI Installer Member. Membership is distinct from individual technician certification. Installation methods, technician qualifications and test requirements are confirmed for the agreed project scope.",
       },
       {
         id: "faq-2",
@@ -182,26 +182,21 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
   },
   contact: {
     title: "Let's Start a Conversation",
-    subtitle:
-      "Reach out to our experts to discuss your specific project requirements.",
-    backgroundImage:
-      "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
+    subtitle: "Reach out to our experts to discuss your specific project requirements.",
+    backgroundImage: "https://images.unsplash.com/photo-1541888087405-eb81f5c6e8e7?w=1920&q=80",
     headOfficeTitle: "Head Office",
     headOfficeAddress:
-      "7 Tamar Avenue, Lea Glen\nRandburg, Johannesburg, 2191\nSouth Africa",
+      "11 Arum Lily Street, Fisantekraal Industrial\nDurbanville, Cape Town, Western Cape 7550\nSouth Africa",
     contactTitle: "Contact",
-    contactDetails:
-      "E: sales@geosyntheticsafrica.com\nSales: +27 78 1355 926\nAdmin: +27 11 083 8384",
+    contactDetails: "sales@geosyntheticsafrica.com\n+27 72 343 0868",
     operatingHoursTitle: "Operating Hours",
-    operatingHoursDetails:
-      "Monday – Friday: 08:00 AM – 17:00 PM\nWeekends: Closed on Saturday & Sunday",
+    operatingHoursDetails: "Monday – Friday: 08:30 – 16:30\nWeekends: Closed on Saturday & Sunday",
     formHeading: "Store Location & Directions",
-    formDescription:
-      "Visit our primary head office and logistics hub in Johannesburg.",
+    formDescription: "Visit our Cape Town head office by appointment.",
     mapEmbedUrl:
-      "https://www.google.com/maps?q=7+Tamar+Avenue,+Lea+Glen,+Randburg,+Johannesburg&output=embed",
+      "https://www.google.com/maps?q=11+Arum+Lily+Street,+Fisantekraal,+Durbanville,+Cape+Town&output=embed",
     mapHeading: "Store & Office Location",
-    mapDescription: "Visit our primary head office and distribution center in Johannesburg.",
+    mapDescription: "Visit our Cape Town head office by appointment.",
     catalogButtonText: "View Catalog Products",
     catalogButtonUrl: "/catalogue",
   },

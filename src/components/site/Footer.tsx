@@ -1,5 +1,5 @@
 import { GROUP_COMPANIES } from "@/lib/business-info";
-import { useState } from "react";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import {
   Linkedin,
   Facebook,
@@ -80,56 +80,51 @@ function FooterCol({
 
 export function Footer() {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
+  const { open } = useQuickQuote();
   const { resolve } = usePageSlugs();
   const { menus } = useDynamicMegaMenus();
   const footerContent = useFooterContent();
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    setEmail("");
-  };
-
   const productMenu = menus.find((m) => m.key === "products");
   const products = productMenu
     ? [
-      ...productMenu.columns.primary.slice(0, 6).map((c) => ({
-        label: c.label,
-        to: c.to,
-        params: c.params,
-      })),
-      { label: "All Products", to: "/products" },
-    ]
+        ...productMenu.columns.primary.slice(0, 6).map((c) => ({
+          label: c.label,
+          to: c.to,
+          params: c.params,
+        })),
+        { label: "All Products", to: "/products" },
+      ]
     : [];
 
   const applicationMenu = menus.find((m) => m.key === "applications");
   const applications = applicationMenu
     ? [
-      ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
-        label: c.label,
-        to: c.to,
-        params: c.params,
-      })),
-      { label: "All Applications", to: "/applications" },
-    ]
+        ...applicationMenu.columns.primary.slice(0, 6).map((c) => ({
+          label: c.label,
+          to: c.to,
+          params: c.params,
+        })),
+        { label: "All Applications", to: "/applications" },
+      ]
     : [];
 
   const serviceMenu = menus.find((m) => m.key === "services");
   const services = serviceMenu
     ? serviceMenu.columns.primary.map((s) => ({
-      label: s.label,
-      to: s.to,
-      params: s.params,
-    }))
+        label: s.label,
+        to: s.to,
+        params: s.params,
+      }))
     : [];
 
   const industryMenu = menus.find((m) => m.key === "industries");
   const industries = industryMenu
     ? industryMenu.columns.primary.map((i) => ({
-      label: i.label,
-      to: i.to,
-      params: i.params,
-    }))
+        label: i.label,
+        to: i.to,
+        params: i.params,
+      }))
     : [];
 
   const columns = footerContent.columns || DEFAULT_FOOTER_CONTENT.columns || [];
@@ -233,13 +228,17 @@ export function Footer() {
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <a
-                  href={footerContent.addressMapUrl || "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"}
+                  href={
+                    footerContent.addressMapUrl ||
+                    "https://www.google.com/maps/search/?api=1&query=11+Arum+Lily+Street+Fisantekraal+Durbanville+Cape+Town"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="leading-snug hover:text-primary transition-colors cursor-pointer"
                   title="Open location in Google Maps"
                 >
-                  {footerContent.address || "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa"}
+                  {footerContent.address ||
+                    "11 Arum Lily Street, Fisantekraal Industrial, Durbanville, Cape Town, 7550, South Africa"}
                 </a>
               </div>
               <div className="flex items-center gap-2.5 pt-1">
@@ -294,30 +293,26 @@ export function Footer() {
           {/* Newsletter */}
           <div className="col-span-2 md:col-span-2 lg:col-span-1 min-w-0">
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-surface-dark-foreground mb-3">
-              {t("footer.newsletterTitle", "Newsletter")}
+              {t("footer.technicalSupportTitle", "Technical Project Support")}
             </h4>
             <p className="text-xs text-surface-dark-foreground/60 leading-relaxed mb-3">
               {t(
-                "footer.newsletterDesc",
-                "Subscribe to our newsletter for latest updates and insights.",
+                "footer.technicalSupportDesc",
+                "Send your drawings, BOQ or specification for a project-specific material and delivery review.",
               )}
             </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t("footer.newsletterPlaceholder", "Enter your email")}
-                required
-                className="w-full rounded bg-surface-dark-foreground/10 border border-surface-dark-foreground/20 px-3 py-2 text-xs text-surface-dark-foreground placeholder:text-surface-dark-foreground/40 focus:outline-none focus:border-primary transition"
-              />
+            <div className="flex flex-col gap-3">
               <button
-                type="submit"
+                type="button"
+                onClick={() => open("Technical project review")}
                 className="w-full rounded bg-primary px-3 py-2 text-xs font-bold uppercase tracking-wider text-primary-foreground hover:bg-primary/90 transition"
               >
-                {t("footer.newsletterBtn", "Subscribe")}
+                {t("footer.discussProject", "Discuss Your Project")}
               </button>
-            </form>
+              <Link to="/technical-centre" className="text-xs text-primary hover:underline">
+                {t("footer.selectionGuides", "Browse selection guides →")}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -326,7 +321,9 @@ export function Footer() {
       {GROUP_COMPANIES.length > 0 && (
         <div className="border-t border-surface-dark-foreground/10">
           <div className="w-full px-6 lg:px-10 xl:px-16 py-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-wider text-surface-dark-foreground/60">
-            <span className="font-bold text-surface-dark-foreground/80">Geosynthetics Africa Group</span>
+            <span className="font-bold text-surface-dark-foreground/80">
+              Geosynthetics Africa Group
+            </span>
             {GROUP_COMPANIES.map((c) => (
               <a
                 key={c.url}
@@ -344,6 +341,9 @@ export function Footer() {
             <a href="/site-map" className="hover:text-primary transition">
               Site map
             </a>
+            <Link to="/technical-centre" className="hover:text-primary transition">
+              {t("nav.technicalCentre", "Technical Centre")}
+            </Link>
           </div>
         </div>
       )}

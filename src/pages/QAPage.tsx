@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { cn } from "@/lib/utils";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { DrainageMesh, GeoGrid } from "@/components/site/shapes";
 
@@ -34,7 +35,7 @@ const QA_PILLARS = [
   {
     icon: Wrench,
     title: "Installation Procedures",
-    desc: "Our team follows IAGI-certified installation procedures for every project — from subgrade preparation through final sign-off.",
+    desc: "Our crews follow approved material-specific methods, with defined inspection points from foundation acceptance to handover.",
   },
   {
     icon: Microscope,
@@ -54,13 +55,14 @@ const QA_PILLARS = [
   {
     icon: Award,
     title: "IAGI Standards",
-    desc: "As IAGI members (one of only 5 in Africa), our installation practices align with globally recognised international standards.",
+    desc: "The Group is an IAGI Installer Member. Installation methods, technician qualifications and acceptance records are confirmed for the relevant project scope.",
   },
 ];
 
 export function QAPage() {
-  const { qaDocuments = [], landingContent = null } = Route.useLoaderData() || {};
-  const landing = (landingContent as any) || {};
+  const { qaDocuments: rawDocuments = [], landingContent = null } = Route.useLoaderData() || {};
+  const qaDocuments = publicBusinessCopy(rawDocuments);
+  const landing = publicBusinessCopy((landingContent as any) || {});
 
   // Custom Hero section
   const heroTitle = landing.heroTitle || "No System Leaves\nSite Unverified.";
@@ -73,7 +75,7 @@ export function QAPage() {
       ? landing.heroChecklist
       : [
           "Material Verification — every product verified before installation",
-          "Installation Procedures — IAGI-certified methods on every project",
+          "Installation Procedures — approved methods for the specified material and project scope",
           "On-Site Quality Control — field inspections throughout installation",
           "Documentation & Compliance — full traceability and handover dossier",
         ];
@@ -92,10 +94,10 @@ export function QAPage() {
     landing.heroStats && landing.heroStats.length > 0
       ? landing.heroStats
       : [
-          { value: "340+", label: "Projects QA'd", accent: true },
-          { value: "17", label: "African Countries" },
-          { value: "100%", label: "Welds Tested" },
-          { value: "IAGI", label: "International Standard" },
+          { value: "15M+ m²", label: "Installed across the Group", accent: true },
+          { value: "30+", label: "Countries supplied" },
+          { value: "QA/QC", label: "Documented inspection and test records" },
+          { value: "IAGI", label: "Group Installer Member" },
         ];
 
   // Custom IAGI section
@@ -107,10 +109,10 @@ export function QAPage() {
     landing.iagiStats && landing.iagiStats.length > 0
       ? landing.iagiStats
       : [
-          { value: "17", label: "African Countries Covered" },
-          { value: "100%", label: "QA/QC Performed On All Installations" },
-          { value: "340+", label: "Projects Delivered" },
-          { value: "One of 5", label: "IAGI Members in Africa" },
+          { value: "30+", label: "Countries supplied" },
+          { value: "QA/QC", label: "Project-specific inspection records" },
+          { value: "15M+ m²", label: "Installed across the Group" },
+          { value: "IAGI", label: "Group Installer Member" },
         ];
 
   return (
@@ -144,7 +146,7 @@ export function QAPage() {
             <div className="lg:col-span-7">
               <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3 flex items-center gap-2">
                 <span className="w-6 h-[1.5px] bg-primary" />
-                IAGI Member · One of only 5 in Africa
+                Group IAGI Installer Member
               </div>
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[0.95] tracking-tight text-white mb-5 whitespace-pre-line">
                 {heroTitle}
@@ -360,7 +362,7 @@ export function QAPage() {
           <div className="lg:col-span-5">
             <div className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3 flex items-center gap-2">
               <span className="w-6 h-[1.5px] bg-primary" />
-              IAGI Member — One of only 5 in Africa
+              Group IAGI Installer Membership
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-extrabold uppercase leading-none text-white mb-4 whitespace-pre-line">
               {iagiTitle}

@@ -225,7 +225,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="hidden xl:flex self-stretch flex-1 justify-center items-stretch !max-w-none min-w-0"
+      className="hidden 2xl:flex self-stretch flex-1 justify-center items-stretch !max-w-none min-w-0"
     >
       <NavigationMenu
         value={value}
@@ -281,6 +281,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
               if (label === "Quality Assurance") return "nav.qualityAssurance";
               if (label === "Catalogue") return "nav.catalogue";
               if (label === "Resources") return "nav.resources";
+              if (label === "Technical Centre") return "nav.technicalCentre";
               if (label === "Blog") return "nav.blog";
               if (label === "Contacts") return "nav.contacts";
               return label;
@@ -345,7 +346,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="xl:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="2xl:hidden" aria-label="Open menu">
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
@@ -417,6 +418,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                 if (label === "Quality Assurance") return "nav.qualityAssurance";
                 if (label === "Catalogue") return "nav.catalogue";
                 if (label === "Resources") return "nav.resources";
+                if (label === "Technical Centre") return "nav.technicalCentre";
                 if (label === "Blog") return "nav.blog";
                 if (label === "Contacts") return "nav.contacts";
                 return label;
@@ -480,7 +482,7 @@ export function Header() {
     <div className="flex items-center gap-4 2xl:gap-6 px-5 h-[72px]">
       <Logo />
       <DesktopNav menus={menus} isLoading={isLoading} />
-      <div className="flex items-center gap-2 ml-auto xl:ml-0">
+      <div className="flex items-center gap-2 ml-auto 2xl:ml-0">
         <MobileNav menus={menus} isLoading={isLoading} />
       </div>
     </div>
@@ -488,17 +490,9 @@ export function Header() {
 
   return (
     <>
-      <div className="w-full relative z-40">
-        <TopBar />
-        <header className="bg-background border-b border-border">{headerContent}</header>
-      </div>
-
+      <TopBar />
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${
-          isScrolled
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-[100%] opacity-0 pointer-events-none"
-        }`}
+        className={`sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border ${isScrolled ? "shadow-sm" : ""}`}
       >
         {headerContent}
       </header>

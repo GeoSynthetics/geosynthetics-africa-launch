@@ -14,7 +14,8 @@
     "partnerPortal": "Partner Portal",
     "profile": "Profile",
     "admin": "Admin",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "technicalCentre": "Technical Centre"
   },
   "topbar": {
     "iagi": "IAGI Installer Member",
@@ -29,7 +30,11 @@
     "newsletterDesc": "Get the latest updates, case studies and technical articles.",
     "newsletterPlaceholder": "Enter your email address",
     "newsletterBtn": "Subscribe",
-    "copyright": "© {{year}} Geosynthetics Africa. All rights reserved."
+    "copyright": "© {{year}} Geosynthetics Africa. All rights reserved.",
+    "technicalSupportTitle": "Technical Project Support",
+    "technicalSupportDesc": "Send your drawings, BOQ or specification for a project-specific material and delivery review.",
+    "discussProject": "Discuss Your Project",
+    "selectionGuides": "Browse selection guides →"
   },
   "cookies": {
     "message": "We use cookies to improve your experience on our website.",

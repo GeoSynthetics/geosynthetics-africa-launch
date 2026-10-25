@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { Link } from "@tanstack/react-router";
 import {
   Globe,
@@ -28,8 +29,16 @@ import { useCountryTemplate } from "@/hooks/use-country-templates";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 export function CountryPage({ data }: { data: any }) {
-  const { countryTemplate: initialTemplate, linkedProducts: initialLinkedProducts = [], caseStudies = [] } = data;
-  const template: CountryTemplate | null = useCountryTemplate(initialTemplate, initialTemplate?.slug);
+  const {
+    countryTemplate: initialTemplate,
+    linkedProducts: initialLinkedProducts = [],
+    caseStudies = [],
+  } = data;
+  const rawTemplate = useCountryTemplate(initialTemplate, initialTemplate?.slug);
+  const template: CountryTemplate | null = useMemo(
+    () => publicBusinessCopy(rawTemplate),
+    [rawTemplate],
+  );
   const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
 
   useEffect(() => {
@@ -185,7 +194,7 @@ export function CountryPage({ data }: { data: any }) {
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
                   QA/QC Testing
                 </p>
-                <p className="text-sm font-bold text-foreground">100% Seam Verification</p>
+                <p className="text-sm font-bold text-foreground">Documented Installation QC</p>
               </div>
             </div>
 
@@ -198,7 +207,8 @@ export function CountryPage({ data }: { data: any }) {
                   Compliance
                 </p>
                 <p className="text-sm font-bold text-foreground">
-                  {(template.complianceStandards && template.complianceStandards[0]) || "SANS & ASTM"}
+                  {(template.complianceStandards && template.complianceStandards[0]) ||
+                    "SANS & ASTM"}
                 </p>
               </div>
             </div>
@@ -250,7 +260,9 @@ export function CountryPage({ data }: { data: any }) {
                   <div key={idx} className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-foreground text-sm">{bullet.title}: </span>
+                      <span className="font-semibold text-foreground text-sm">
+                        {bullet.title}:{" "}
+                      </span>
                       <span className="text-sm text-muted-foreground">{bullet.description}</span>
                     </div>
                   </div>
@@ -300,7 +312,7 @@ export function CountryPage({ data }: { data: any }) {
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   {template.installationCardDescription ||
-                    "Deployment of IAGI-certified welding crews with automated dual-track seamers for continuous air channel testing."}
+                    "Mobilisation of trained welding technicians with equipment and seam-test methods matched to the approved installation scope."}
                 </p>
               </div>
             </div>
@@ -312,29 +324,34 @@ export function CountryPage({ data }: { data: any }) {
               Field Installation & Contracting
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-              {template.installationTitle || `Certified Lining Installation in ${template.country}`}
+              {template.installationTitle ||
+                `Specialist Lining Installation in ${template.country}`}
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed">
               {template.installationDescription ||
-                `Our experienced field crews deploy automated hot wedge welders and extrusion guns to ensure fast, leak-free installation across heap leach pads, TSF dams, and reservoirs.`}
+                `Our field crews coordinate deployment, welding, seam testing and repair records against the approved specification and inspection plan for the agreed lining scope.`}
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-lg bg-card border border-border flex items-center gap-3">
                 <Clock className="h-6 w-6 text-primary shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-muted-foreground">Mobilization</h4>
+                  <h4 className="text-xs font-bold uppercase text-muted-foreground">
+                    Mobilization
+                  </h4>
                   <p className="text-sm font-bold text-foreground">
-                    {template.equipmentMobilization || "24 - 48 Hours"}
+                    {template.equipmentMobilization || "Planned per project"}
                   </p>
                 </div>
               </div>
               <div className="p-4 rounded-lg bg-card border border-border flex items-center gap-3">
                 <Award className="h-6 w-6 text-primary shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-muted-foreground">Master Seamers</h4>
+                  <h4 className="text-xs font-bold uppercase text-muted-foreground">
+                    Installation Capability
+                  </h4>
                   <p className="text-sm font-bold text-foreground">
-                    {template.masterSeamersCount || "IAGI Certified"}
+                    {template.masterSeamersCount || "Specialist installation crews"}
                   </p>
                 </div>
               </div>
@@ -346,7 +363,9 @@ export function CountryPage({ data }: { data: any }) {
                   <div key={idx} className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-foreground text-sm">{bullet.title}: </span>
+                      <span className="font-semibold text-foreground text-sm">
+                        {bullet.title}:{" "}
+                      </span>
                       <span className="text-sm text-muted-foreground">{bullet.description}</span>
                     </div>
                   </div>
@@ -389,7 +408,10 @@ export function CountryPage({ data }: { data: any }) {
           {template.qaqcHighlights && template.qaqcHighlights.length > 0 && (
             <div className="grid md:grid-cols-2 gap-6 pt-4 border-t border-border">
               {template.qaqcHighlights.map((highlight, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-card p-4 rounded-xl border border-border">
+                <div
+                  key={idx}
+                  className="flex items-start gap-3 bg-card p-4 rounded-xl border border-border"
+                >
                   <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-foreground text-sm">{highlight.title}</h4>
@@ -447,7 +469,9 @@ export function CountryPage({ data }: { data: any }) {
                         {prod.name || prod.label}
                       </h3>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                        {prod.short_description || prod.description || "High-performance geosynthetic lining system."}
+                        {prod.short_description ||
+                          prod.description ||
+                          "High-performance geosynthetic lining system."}
                       </p>
                     </div>
                     <Link
@@ -474,7 +498,8 @@ export function CountryPage({ data }: { data: any }) {
                   Featured Projects & Case Studies in {template.country}
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Proven containment, tailings dam, and infrastructure installations across Southern and Pan-Africa.
+                  Proven containment, tailings dam, and infrastructure installations across Southern
+                  and Pan-Africa.
                 </p>
               </div>
               <Link
@@ -564,7 +589,10 @@ export function CountryPage({ data }: { data: any }) {
                 {template.phone && (
                   <div className="flex items-center gap-3">
                     <Phone className="h-4 w-4 text-primary shrink-0" />
-                    <a href={`tel:${template.phone.replace(/\s+/g, "")}`} className="hover:text-primary transition">
+                    <a
+                      href={`tel:${template.phone.replace(/\s+/g, "")}`}
+                      className="hover:text-primary transition"
+                    >
                       {template.phone}
                     </a>
                   </div>

@@ -35,5 +35,9 @@ export const Route = createFileRoute("/applications/")({
       ],
     };
   },
-  component: ApplicationsLanding,
+  component: ApplicationsRoute,
 });
+
+function ApplicationsRoute() {
+  return <ApplicationsLanding data={Route.useLoaderData()} />;
+}

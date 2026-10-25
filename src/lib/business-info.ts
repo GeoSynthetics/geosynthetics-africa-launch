@@ -19,8 +19,8 @@ export const BUSINESS = {
   },
   openingHours: {
     dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    opens: "07:30",
-    closes: "17:00",
+    opens: "08:30",
+    closes: "16:30",
   },
   description:
     "Africa's Integrated Geosynthetics Execution Platform — supply, installation, QA/QC testing and logistics for geomembranes, geotextiles, geogrids and engineered lining systems.",

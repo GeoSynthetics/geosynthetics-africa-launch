@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
-import { Upload, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Upload, Phone, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrainageMesh, MembraneFold } from "@/components/site/shapes";
 import heroInstallation from "@/assets/hero-installation.png";
@@ -93,7 +93,12 @@ export function HeroSlider({
 
   // Auto-play interval
   useEffect(() => {
-    if (!isPlaying || activeSlides.length <= 1) return;
+    if (
+      !isPlaying ||
+      activeSlides.length <= 1 ||
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     const timer = setInterval(() => {
       nextSlide();
     }, autoPlayInterval);
@@ -107,7 +112,10 @@ export function HeroSlider({
       aria-labelledby="home-page-hero-heading"
       className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground min-h-[580px] md:min-h-[640px] flex flex-col justify-between"
       onMouseEnter={() => setIsPlaying(false)}
-      onMouseLeave={() => setIsPlaying(true)}
+      onMouseLeave={() =>
+        setIsPlaying(!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)
+      }
+      onFocusCapture={() => setIsPlaying(false)}
     >
       {/* Carousel Background Images & Videos */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -116,8 +124,11 @@ export function HeroSlider({
           return (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
-                } transform transition-transform duration-10000`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === currentIndex
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-105 pointer-events-none"
+              } transform transition-transform duration-10000`}
             >
               {isVideo ? (
                 <div className="absolute inset-0 overflow-hidden">
@@ -148,7 +159,6 @@ export function HeroSlider({
 
       {/* Shapes Overlay */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-
         <MembraneFold opacity={0.1} color="#ffffff" waveCount={5} />
       </div>
 
@@ -159,13 +169,12 @@ export function HeroSlider({
           <div className="lg:col-span-7 xl:col-span-7">
             {/* Headline */}
             <h1
-              key={`headline-${currentIndex}`}
               id="home-page-hero-heading"
               className="font-display text-4xl md:text-6xl lg:text-7xl font-bold uppercase leading-[1.05] tracking-tight text-white drop-shadow-sm animate-hero-text"
             >
-              {currentSlide.titlePrefix}{" "}
-              <span className="text-primary block md:inline">{currentSlide.titleAccent}</span>{" "}
-              {currentSlide.titleSuffix}
+              {hero.headlinePrefix}{" "}
+              <span className="text-primary block md:inline">{hero.headlineAccent}</span>{" "}
+              {hero.headlineSuffix}
             </h1>
 
             {/* Tagline */}
@@ -244,14 +253,23 @@ export function HeroSlider({
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${index === currentIndex ? "w-8 bg-primary" : "w-2 bg-white/40 hover:bg-white/70"
-                  }`}
+                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
+                  index === currentIndex ? "w-8 bg-primary" : "w-2 bg-white/40 hover:bg-white/70"
+                }`}
               />
             ))}
           </div>
 
           {/* Slide Counter & Prev/Next Navigation Controls */}
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsPlaying((value) => !value)}
+              aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 hover:bg-primary"
+            >
+              {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            </button>
             <span className="text-xs font-mono tracking-widest text-white/80 font-bold">
               {String(currentIndex + 1).padStart(2, "0")} /{" "}
               {String(activeSlides.length).padStart(2, "0")}

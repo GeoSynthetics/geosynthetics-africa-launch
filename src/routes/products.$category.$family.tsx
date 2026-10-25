@@ -194,8 +194,15 @@ export const Route = createFileRoute("/products/$category/$family")({
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
+    const rangeTitles: Record<string, string> = {
+      "bera-gravel-fix": "BERA Gravel Fix Systems Africa | Supply & Installation",
+      "bera-grass-fix": "BERA Grass Paving Systems Africa | Selection & Supply",
+      "studded-hdpe-concrete-liners-cpl": "Concrete Protection Liner Systems Africa | Studded HDPE",
+    };
     const title =
-      familyData?.seo?.title || `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
+      rangeTitles[family] ||
+      familyData?.seo?.title ||
+      `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
     const description =
       familyData?.seo?.description ||
       `Explore our premium ${familyLabel}, fully specified for African projects.`;

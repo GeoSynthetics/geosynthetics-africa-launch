@@ -260,7 +260,19 @@ export function HomePage() {
                 return (
                   <Link
                     key={s.id || idx}
-                    to="/services"
+                    to={
+                      /supply/i.test(s.title)
+                        ? "/products"
+                        : /qa|test/i.test(s.title)
+                          ? "/quality-assurance"
+                          : /design|specification/i.test(s.title)
+                            ? "/technical-centre"
+                            : /logistic|customs|freight/i.test(s.title)
+                              ? "/services/delivery-logistics-africa"
+                              : /installation/i.test(s.title)
+                                ? "/services/geomembrane-liner-installation-africa"
+                                : "/contacts"
+                    }
                     className="group rounded border border-border bg-background p-5 hover:border-primary transition"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded bg-accent text-primary group-hover:bg-primary group-hover:text-primary-foreground transition">
@@ -423,8 +435,7 @@ export function HomePage() {
           <div className="grid lg:grid-cols-4 gap-5">
             {showcasedProjects.map((c) => {
               const tag =
-                c.sector ||
-                (c.service_type ? c.service_type.replace(/_/g, " ") : "PROJECT");
+                c.sector || (c.service_type ? c.service_type.replace(/_/g, " ") : "PROJECT");
               const locationText =
                 [c.location, c.country].filter(Boolean).join(", ") ||
                 c.country ||

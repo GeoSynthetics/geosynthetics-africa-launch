@@ -10,6 +10,8 @@ import { FaqAccordion } from "@/components/site/FaqAccordion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { GeoGrid, HexCell, DrainageMesh, FiberStrand } from "@/components/site/shapes";
 import { DEFAULT_SERVICES_TEMPLATES } from "@/types/service-template";
+import { SERVICE_DELIVERY_PROFILES } from "@/data/service-delivery";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 
 interface CapabilityItem {
   icon: string;
@@ -76,11 +78,12 @@ const DEFAULT_CAPABILITIES: CapabilityItem[] = [
   {
     icon: "HardHat",
     title: "On-Site Installation Supervision",
-    description: "Certified QA/QC technicians managing local subcontractor performance.",
+    description:
+      "Installation supervision and agreed inspection responsibilities coordinated with the project team.",
   },
   {
     icon: "FileText",
-    title: "CQA Certification Reporting",
+    title: "QA/QC Handover Reporting",
     description: "Comprehensive handover packages compiling all test results and panel layouts.",
   },
 ];
@@ -89,22 +92,22 @@ const DEFAULT_FAQS: FaqItem[] = [
   {
     question: "Do you supply and install, or can we purchase materials only?",
     answer:
-      "We offer complete flexibility. We can supply materials directly to your site, provide installation services with our certified crews, or deliver a fully integrated supply-and-install package with full system certification.",
+      "Choose material supply, fabrication, installation or a coordinated package. The quotation defines delivery responsibilities, inspection requirements and handover documents.",
   },
   {
     question: "What international standards do your installation crews follow?",
     answer:
-      "Our installation teams are trained and certified. We adhere to GRI-GM13/17 standards for geomembranes and perform QA/QC testing in accordance with ASTM and SANS 1526 requirements.",
+      "Material specifications and installation tests are confirmed against the approved design and inspection plan. Geomembrane seam testing uses the applicable ASTM methods; other materials require their own installation controls.",
   },
   {
     question: "Can you issue SADC Certificates of Origin for cross-border shipments?",
     answer:
-      "Yes. As a registered exporter, we handle all customs clearance, HS-code classification, and provide SADC and AfCFTA Certificates of Origin to minimize duties for client projects across Africa.",
+      "We coordinate shipping and origin documentation for the destination and supplied material. Eligibility for preferential duties depends on origin rules, product classification and the importing country; confirm these during quotation.",
   },
   {
     question: "What quality documentation do we receive at project completion?",
     answer:
-      "We provide a comprehensive Construction Quality Assurance (CQA) handover package. This includes panel layout drawings, seam weld test logs (destructive and non-destructive), material data sheets, and official warranty certificates.",
+      "Documents follow the agreed scope: material references and submittals, fabrication or installation inspections, applicable test results, repair records and as-built information where required. Warranty terms and independent CQA responsibilities are agreed separately.",
   },
 ];
 
@@ -115,14 +118,14 @@ const WHY_WORK_WITH_US = [
       "We eliminate fingers-pointing between manufacturer, logistics provider, and installer. We own the entire chain.",
   },
   {
-    title: "100% QA/QC Traceability",
+    title: "Documented Quality Control",
     description:
-      "From resin to roll to welded seam, we track and document everything. You receive complete CQA packages.",
+      "Material references, relevant inspections, applicable tests and handover records are defined for the agreed scope.",
   },
   {
     title: "Pan-African Compliance",
     description:
-      "We clear customs smoothly, issue SADC Certificates of Origin, and comply with local content rules.",
+      "Destination requirements, origin documentation, delivery routes and site responsibilities are reviewed before dispatch.",
   },
   {
     title: "Proven Under Pressure",
@@ -137,11 +140,11 @@ export function ServicesPage() {
     hierarchy: any;
   };
 
-  const landing = templates?.["__landing"] || {};
+  const landing = publicBusinessCopy(templates?.["__landing"] || {});
   const heroTitle = landing.landingTitle || "One Partner. Full Accountability.";
   const heroDescription =
     landing.landingSubtitle ||
-    "From design through certification, our integrated services ensure system performance — not just material delivery.";
+    "Material supply, in-house fabrication, installation and cross-border delivery for African projects, supported by scope-specific quality controls and handover records.";
   const heroImage =
     landing.landingHeroImage ||
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
@@ -172,6 +175,8 @@ export function ServicesPage() {
   }, [hierarchy, templates]);
 
   const serviceDetails = (slug: string, fallbackLabel: string) => {
+    const profile = SERVICE_DELIVERY_PROFILES[slug];
+    if (profile) return { title: profile.title, description: profile.summary };
     const t = templates?.[slug] || DEFAULT_SERVICES_TEMPLATES[slug] || {};
     return {
       title: t.title || fallbackLabel,

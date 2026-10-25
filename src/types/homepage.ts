@@ -180,11 +180,11 @@ export interface HomepageContent {
 export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
   hero: {
     headlinePrefix: "Geosynthetics",
-    headlineAccent: "Supply,",
-    headlineSuffix: "Installation & QA/QC Across Africa",
-    tagline: "One Contract. One Crew. One Signature.",
+    headlineAccent: "Supply, Fabrication & Installation",
+    headlineSuffix: "Across Africa",
+    tagline: "Global Standards. African Execution.",
     subtext:
-      "HDPE liners, geotextiles, geogrids, GCLs, geocells and gabions supplied and installed across Africa — for TSFs, dams, landfills and roads. One contract from mill certificate to final sign-off, by our own certified crews. 15+ million m² across 30+ countries.",
+      "Geosynthetic material supply, manufacturing and fabrication, specialist installation and documented QA/QC for African projects. More than 15 million m² installed and materials supplied to over 30 countries across the Group's delivery footprint.",
     bgImage: "",
     sliderImages: [
       "",
@@ -193,7 +193,7 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
       "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80",
     ],
     autoPlayInterval: 5000,
-    btn1Text: "Upload Project BOQ!",
+    btn1Text: "Upload BOQ or Drawings",
     btn1Url: "/contacts",
     btn2Text: "Speak to an Engineer",
     btn2Url: "/contacts",
@@ -241,10 +241,10 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     ],
   },
   trustBadges: [
-    { icon: "", text: "IAGI MEMBER / One of only 5 in Africa" },
-    { icon: "", text: "B-BBEE Level 2 / Proudly South African" },
-    { icon: "", text: "Pan-African Logistics / Supply to all African countries" },
-    { icon: "", text: "QA/QC Certified / Tested. Assured. Certified." },
+    { icon: "", text: "GROUP IAGI INSTALLER MEMBER / Specialist installation capability" },
+    { icon: "", text: "15M+ m² INSTALLED / Group project experience" },
+    { icon: "", text: "30+ COUNTRIES SUPPLIED / African delivery footprint" },
+    { icon: "", text: "DOCUMENTED QA/QC / Materials, installation & handover" },
   ],
   engineeredSystems: {
     sectionTitle: "ENGINEERED SYSTEMS FOR EVERY APPLICATION",

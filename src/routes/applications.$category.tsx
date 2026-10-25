@@ -6,6 +6,12 @@ import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
 import { ApplicationCategoryPage } from "@/pages/ApplicationCategoryPage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DEFAULT_APPLICATION_TEMPLATES,
+  LEGACY_APPLICATION_TEMPLATE_IDS,
+  findApplication,
+} from "@/data/application-directory";
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
 export async function loadApplicationData(categorySlug: string) {
   // Per-slug fallback hero images so pages look great before James configures them
@@ -20,7 +26,7 @@ export async function loadApplicationData(categorySlug: string) {
     "agriculture-aquaculture":
       "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80",
   };
-  const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
+  const DEFAULT_HERO = "";
 
   // Load templates from Supabase first
   const { data: templateRow } = await supabase
@@ -52,7 +58,18 @@ export async function loadApplicationData(categorySlug: string) {
     tmpl = templates[matchedItem.slug] || templates[matchedItem.id];
   }
   if (!tmpl) {
-    tmpl = templates[categorySlug];
+    tmpl =
+      templates[categorySlug] ||
+      templates[LEGACY_APPLICATION_TEMPLATE_IDS[categorySlug]] ||
+      DEFAULT_APPLICATION_TEMPLATES[categorySlug];
+  }
+  if (tmpl && DEFAULT_APPLICATION_TEMPLATES[categorySlug]) {
+    tmpl = {
+      ...DEFAULT_APPLICATION_TEMPLATES[categorySlug],
+      ...tmpl,
+      deliveryProfile:
+        tmpl.deliveryProfile || DEFAULT_APPLICATION_TEMPLATES[categorySlug].deliveryProfile,
+    };
   }
 
   let templateData = null;
@@ -97,13 +114,17 @@ export async function loadApplicationData(categorySlug: string) {
   }
 
   const staticCat = APPLICATION_CATEGORIES.find((c) => c.slug === categorySlug);
+  const directoryEntry = findApplication(categorySlug);
   const label =
     matchedItem?.label ??
+    directoryEntry?.label ??
     staticCat?.label ??
     categorySlug
       .split("-")
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
+
+  if (templateData && directoryEntry && !matchedItem) templateData.title = directoryEntry.label;
 
   // Fetch dynamic case studies that match this application category
   let caseStudies: any[] = [];
@@ -139,20 +160,7 @@ export async function loadApplicationData(categorySlug: string) {
   let linkedProducts: any[] = [];
   if (templateData?.products && templateData.products.length > 0) {
     try {
-      const { data: prodsData, error: prodsError } = await supabase
-        .from("products_public")
-        .select(
-          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
-        )
-        .in("id", templateData.products);
-      if (!prodsError && prodsData) {
-        linkedProducts = prodsData.map((d: any) => ({
-          ...d,
-          product_categories: Array.isArray(d.product_categories)
-            ? d.product_categories[0]
-            : d.product_categories,
-        }));
-      }
+      linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
     } catch (e) {
       console.error("Failed to load template products:", e);
     }

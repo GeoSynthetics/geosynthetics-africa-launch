@@ -14,25 +14,20 @@
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_URL, absoluteUrl } from "@/lib/site-url";
 import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
-import { SECTION_KEYS, SECTION_LABELS, sectionPath } from "@/lib/section-paths";
+import {
+  SECTION_KEYS,
+  SECTION_LABELS,
+  sectionPath,
+  RENAMED_SECTION_SLUGS,
+} from "@/lib/section-paths";
 import { fetchCountryTemplates } from "@/hooks/use-country-templates";
 import { DEFAULT_COUNTRY_TEMPLATES } from "@/types/country-template";
 import { regionForCountry } from "@/data/country-expansion";
-import {
-  LOCALIZED_PAGES,
-  LANG_LABELS,
-  alternatesFor,
-  localizedPath,
-} from "@/i18n/localized-pages";
+import { APPLICATION_DIRECTORY } from "@/data/application-directory";
+import { LOCALIZED_PAGES, LANG_LABELS, alternatesFor, localizedPath } from "@/i18n/localized-pages";
 
 export type SitemapSection =
-  | "pages"
-  | "solutions"
-  | "catalogue"
-  | "insights"
-  | "countries"
-  | "fr"
-  | "pt";
+  "pages" | "solutions" | "catalogue" | "insights" | "countries" | "fr" | "pt";
 
 export const SITEMAP_SECTIONS: { key: SitemapSection; label: string }[] = [
   { key: "pages", label: "Company" },
@@ -66,6 +61,7 @@ const STATIC_PAGES: { path: string; title: string }[] = [
   { path: "/catalogue", title: "Product Catalogue" },
   { path: "/quality-assurance", title: "Quality Assurance" },
   { path: "/resources", title: "Resources" },
+  { path: "/technical-centre", title: "Technical Centre: Material Selection & QA/QC" },
   { path: "/blog", title: "Blog" },
   { path: "/contacts", title: "Contacts" },
   { path: "/careers", title: "Careers" },
@@ -100,6 +96,14 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
   const add = (e: SitemapEntry) => entries.push(e);
 
   for (const p of STATIC_PAGES) add({ ...p, section: "pages", group: "Company" });
+  for (const app of APPLICATION_DIRECTORY) {
+    add({
+      path: `/applications/${app.slug}`,
+      title: app.label,
+      section: "solutions",
+      group: "Applications",
+    });
+  }
 
   // Products, applications, services, industries — exactly what the menus link to
   try {
@@ -115,7 +119,12 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
       const catSlug = slugOf(cat);
       if (!catSlug) continue;
       const group = `Products — ${cat.label || catSlug}`;
-      add({ path: `/products/${catSlug}`, title: cat.label || catSlug, section: "solutions", group });
+      add({
+        path: `/products/${catSlug}`,
+        title: cat.label || catSlug,
+        section: "solutions",
+        group,
+      });
       for (const family of cat.children || []) {
         const familySlug = slugOf(family);
         if (!familySlug) continue;
@@ -130,7 +139,7 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
     for (const section of SECTION_KEYS) {
       for (const item of itemsFor(`hierarchy_${section}`)) {
         const slug = slugOf(item);
-        if (!slug) continue;
+        if (!slug || RENAMED_SECTION_SLUGS[slug]) continue;
         add({
           path: sectionPath(section, slug),
           title: item.label || slug,
@@ -158,7 +167,10 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
         section: "catalogue",
         group: "Product Catalogue",
         lastmod: day(p.updated_at),
-        images: uniqueImages([p.image_url, ...(Array.isArray(p.images) ? (p.images as unknown[]) : [])]),
+        images: uniqueImages([
+          p.image_url,
+          ...(Array.isArray(p.images) ? (p.images as unknown[]) : []),
+        ]),
       });
     }
   } catch {
@@ -227,10 +239,19 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
     // skip
   }
   try {
-    const { data } = await supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle();
+    const { data } = await supabase
+      .from("site_config")
+      .select("value")
+      .eq("key", "seo_pages")
+      .maybeSingle();
     for (const e of Object.values((data?.value as Record<string, any>) || {})) {
       if (e?.urlSlug) {
-        add({ path: `/${e.urlSlug}`, title: e.title || e.urlSlug, section: "pages", group: "Company" });
+        add({
+          path: `/${e.urlSlug}`,
+          title: e.title || e.urlSlug,
+          section: "pages",
+          group: "Company",
+        });
       }
     }
   } catch {

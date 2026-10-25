@@ -1,3 +1,4 @@
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
@@ -179,20 +180,7 @@ export async function loadServiceData(slug: string) {
   let linkedProducts: any[] = [];
   if (templateData?.products && templateData.products.length > 0) {
     try {
-      const { data: prodsData, error: prodsError } = await supabase
-        .from("products_public")
-        .select(
-          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
-        )
-        .in("id", templateData.products);
-      if (!prodsError && prodsData) {
-        linkedProducts = prodsData.map((d: any) => ({
-          ...d,
-          product_categories: Array.isArray(d.product_categories)
-            ? d.product_categories[0]
-            : d.product_categories,
-        }));
-      }
+      linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
     } catch (e) {
       console.error("Failed to load template products:", e);
     }

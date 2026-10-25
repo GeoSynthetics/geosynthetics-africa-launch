@@ -51,7 +51,7 @@ export interface FooterContent {
 export const DEFAULT_FOOTER_CONTENT: FooterContent = {
   brandDescription:
     "Africa's integrated geosynthetics platform delivering quality products, expert services and technical solutions.",
-  address: "7 Tamar Avenue, Lea Glen, Randburg, Johannesburg, 2191, South Africa",
+  address: "11 Arum Lily Street, Fisantekraal, Durbanville, Cape Town, 7550, South Africa",
   phone: "+27 72 343 0868",
   email: "sales@geosyntheticsafrica.com",
   addressMapUrl: "https://maps.app.goo.gl/dWqBYitmU8ziMmDd8",
@@ -62,10 +62,10 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
     { platform: "youtube", url: "#" },
   ],
   certifications: [
-    "IAGI Member - One of only 5 in Africa",
+    "Group IAGI Installer Member",
     "B-BBEE Level 2",
     "Pan-African Logistics",
-    "QA/QC Certified",
+    "Documented QA/QC",
   ],
   copyrightText: "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
   columns: [
@@ -94,14 +94,23 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
       title: "Pan-African Coverage & Regional Pages",
       type: "countries",
       links: [
-        { label: "Geosynthetics South Africa →", to: "/south-africa-geosynthetics-supplier-installer" },
+        {
+          label: "Geosynthetics South Africa →",
+          to: "/south-africa-geosynthetics-supplier-installer",
+        },
         { label: "Geosynthetics Botswana →", to: "/botswana-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Tanzania →", to: "/tanzania-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Zimbabwe →", to: "/zimbabwe-geosynthetics-supplier-installer" },
         { label: "Geosynthetics Zambia →", to: "/zambia-geosynthetics-supplier-installer" },
-        { label: "Geosynthetics Democratic Republic of Congo (DRC) →", to: "/drc-geosynthetics-supplier-installer" },
+        {
+          label: "Geosynthetics Democratic Republic of Congo (DRC) →",
+          to: "/drc-geosynthetics-supplier-installer",
+        },
         { label: "Geosynthetics Kenya →", to: "/kenya-geosynthetics-supplier-contact" },
-        { label: "Geosynthetics Côte d'Ivoire →", to: "/cote-divoire-geosynthetics-supplier-contact" },
+        {
+          label: "Geosynthetics Côte d'Ivoire →",
+          to: "/cote-divoire-geosynthetics-supplier-contact",
+        },
         { label: "Geosynthetics Mozambique →", to: "/mozambique-geosynthetics-supplier-contact" },
         { label: "Geosynthetics Ghana →", to: "/ghana-geosynthetics-supplier-contact" },
         { label: "Geosynthetics Namibia →", to: "/namibia-geosynthetics-supplier-contact" },

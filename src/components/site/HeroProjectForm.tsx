@@ -156,17 +156,14 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             <div className="text-zinc-400 font-bold uppercase tracking-wider text-[10px]">
               Assigned Regional Desk
             </div>
-            <div className="text-sm font-semibold text-white">
-              {routedTo.targetName}
-            </div>
+            <div className="text-sm font-semibold text-white">{routedTo.targetName}</div>
             <div className="text-xs text-zinc-300">
               {routedTo.targetRole} ·{" "}
-              <span className="text-primary font-mono">{routedTo.targetEmail}</span>
+              <span className="text-primary">sales@geosyntheticsafrica.com</span>
             </div>
             <div className="text-[11px] text-zinc-400 pt-1 border-t border-white/10">
-              {routedTo.isWestAfrica
-                ? "Directly assigned to Mamadou Coulibaly (Ivory Coast Regional Hub). Expect a technical response within 24 hours."
-                : "Assigned to our South Africa Operations Desk at Johannesburg HQ. Expect a technical response within 24 hours."}
+              Your enquiry has been routed to the team responsible for your project region. We will
+              review the information and contact you about the required scope.
             </div>
           </div>
 
@@ -190,7 +187,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
           </div>
           <div className="mt-2 text-[11px] text-zinc-400 flex items-center justify-center gap-1.5">
             <Lock className="h-3 w-3 text-zinc-400" />
-            <span>One team, one warranty · BOQs kept confidential</span>
+            <span>One coordinated scope · BOQs kept confidential</span>
           </div>
         </div>
       </div>
@@ -271,12 +268,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 group-hover/field:text-white transition-colors duration-200">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -348,9 +340,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
                   <FileText className="h-4 w-4" />
                 </div>
                 <div className="truncate">
-                  <div className="text-xs font-semibold text-white truncate">
-                    {file.name}
-                  </div>
+                  <div className="text-xs font-semibold text-white truncate">{file.name}</div>
                   <div className="text-[10px] text-zinc-400">
                     {(file.size / (1024 * 1024)).toFixed(2)} MB · Ready to upload
                   </div>
@@ -399,7 +389,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
         </div>
         <div className="mt-2 text-[11px] text-zinc-400 flex items-center justify-center gap-1.5">
           <Lock className="h-3 w-3 text-zinc-400" />
-          <span>One team, one warranty · BOQs kept confidential</span>
+          <span>One coordinated scope · BOQs kept confidential</span>
         </div>
       </div>
     </div>

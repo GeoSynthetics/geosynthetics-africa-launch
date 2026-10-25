@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLoaderData } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_ABOUT_PAGE_CONTENT, type AboutPageContent } from "@/types/about";
 
@@ -103,8 +104,9 @@ export function updateAboutCache(content: AboutPageContent) {
 }
 
 export function useAboutContent(): AboutPageContent {
+  const routeData = useLoaderData({ strict: false }) as { about?: AboutPageContent } | undefined;
   const [content, setContent] = useState<AboutPageContent>(
-    _cache ?? DEFAULT_ABOUT_PAGE_CONTENT
+    _cache ?? routeData?.about ?? DEFAULT_ABOUT_PAGE_CONTENT,
   );
 
   useEffect(() => {

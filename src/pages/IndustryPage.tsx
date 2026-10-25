@@ -6,13 +6,19 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { GeoGrid } from "@/components/site/shapes";
+import { INDUSTRY_DELIVERY_GUIDES } from "@/data/industry-delivery";
+import { APPLICATION_DIRECTORY } from "@/data/application-directory";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export function IndustryPage({ data }: { data: any }) {
   const loaderData = data;
   const { industry, templateData, caseStudies = [], keyProducts = [] } = loaderData;
+  const profile = INDUSTRY_DELIVERY_GUIDES[industry.slug];
+  const { open } = useQuickQuote();
 
   const title = templateData?.title || industry.label;
   const description =
+    profile?.summary ||
     templateData?.description ||
     `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
   const heroImage =
@@ -25,11 +31,16 @@ export function IndustryPage({ data }: { data: any }) {
     "Demand for rapid deployment and cost efficiency",
   ];
 
-  const applications = templateData?.content?.applications || [
-    "Containment Systems",
-    "Erosion Protection",
-    "Structural Reinforcement",
-  ];
+  const applications = profile
+    ? profile.applications.map((slug) => {
+        const app = APPLICATION_DIRECTORY.find((item) => item.slug === slug)!;
+        return { title: app.label, description: app.summary, link: "/applications/" + slug };
+      })
+    : templateData?.content?.applications || [
+        "Containment Systems",
+        "Erosion Protection",
+        "Structural Reinforcement",
+      ];
 
   const breadcrumbs = [
     { label: "Home", to: "/" },
@@ -53,6 +64,9 @@ export function IndustryPage({ data }: { data: any }) {
             {title}
           </h1>
           <p className="mt-4 max-w-2xl text-base text-surface-dark-foreground/80">{description}</p>
+          <Button className="mt-7" onClick={() => open(title)}>
+            Request a Project Proposal
+          </Button>
         </div>
       </section>
 
@@ -60,6 +74,33 @@ export function IndustryPage({ data }: { data: any }) {
         <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8">
+            {profile && (
+              <section className="mb-12 rounded-xl border border-border bg-surface/40 p-6 md:p-8">
+                <h2 className="font-display text-2xl font-bold uppercase">
+                  Technical Inputs for {title}
+                </h2>
+                <ul className="list-disc pl-5 mt-5 space-y-3 text-sm text-muted-foreground leading-relaxed">
+                  {profile.inputs.map((input) => (
+                    <li key={input}>{input}</li>
+                  ))}
+                </ul>
+                <h3 className="mt-7 font-bold text-sm">Our QA/QC & handover scope</h3>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                  {profile.quality}
+                </p>
+                <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                  We coordinate material supply, fabrication where required, cross-border delivery
+                  and agreed site work. The proposal identifies availability, delivery terms,
+                  inspection stages and handover responsibilities.
+                </p>
+                <Link
+                  to="/technical-centre"
+                  className="mt-5 inline-flex text-sm font-bold text-primary"
+                >
+                  Review material selection guidance →
+                </Link>
+              </section>
+            )}
             <h2 className="font-display text-2xl font-bold uppercase mb-6">
               Industry Challenges Solved
             </h2>
