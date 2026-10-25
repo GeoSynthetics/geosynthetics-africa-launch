@@ -36,30 +36,30 @@ const applicationDeliveryProfiles = [
     selection:
       "We align HDPE geomembranes, protection geotextiles, GCLs and drainage layers with your TSF drawings, tailings chemistry and construction sequence.",
     installation:
-      "Our lining crews coordinate accepted work fronts, panel deployment, daily trial welds, fusion and extrusion welding, anchorages and repairs.",
+      "Our lining crews accept each work front, deploy panels, run daily trial welds, complete fusion and extrusion welding, anchorages and repairs.",
     quality:
-      "Our installation QC links roll and panel numbers to welders, weld logs and test results. Air-channel testing to ASTM D5820, vacuum testing to ASTM D5641 and destructive peel/shear testing to ASTM D6392 are applied as specified for the seams. Repairs are mapped and retested before handover.",
-    why: "Bring liner supply, large-area installation and installation QA/QC into one coordinated package. Our 1.2 million m² lithium-mine TSF lining reference in Mali demonstrates delivery at project scale.",
+      "Our installation QC links roll and panel numbers to welders, weld logs and test results. Air-channel testing to ASTM D5820, vacuum testing to ASTM D5641 and destructive peel/shear testing to ASTM D6392 are applied to every seam to the approved plan. Repairs are mapped and retested before handover.",
+    why: "We supply the liner, install it at scale and sign the QA/QC, under one contract. Our 1.2 million m² lithium-mine TSF lining reference in Mali demonstrates delivery at project scale.",
   },
   {
     match: /heap leach/i,
     selection:
-      "We coordinate the geomembrane, protection and solution-collection material schedule around leach chemistry, ore loading and the pad construction phases.",
+      "We schedule the geomembrane, protection and solution-collection materials around leach chemistry, ore loading and the pad construction phases.",
     installation:
       "Our lining teams plan panel runs, sumps, perimeter anchors and phase tie-ins, then deploy and weld the barrier before protection and collection layers are placed.",
     quality:
       "We document roll and panel identity, trial welds, applicable air-channel and vacuum tests, destructive peel/shear samples, repairs and covering releases. Collection interfaces and penetrations are inspected before burial.",
-    why: "Source the barrier, protection and collection interfaces through one delivery team, with cross-border logistics and installation records coordinated around your mine programme.",
+    why: "We supply and install the barrier, protection and collection layers, with cross-border logistics and installation records planned around your mine programme.",
   },
   {
     match: /reservoir|dam lining/i,
     selection:
       "We review water use, reservoir geometry, substrate and penetration details to select the specified geomembrane and protection system, including product-specific drinking-water documentation where required.",
     installation:
-      "We coordinate basin preparation interfaces, liner deployment, welded or manufacturer-specified joints, pipe boots, structural terminations and the agreed filling sequence.",
+      "We accept the basin, deploy the liner, complete welded or manufacturer-specified joints, pipe boots and structural terminations, and release the reservoir for filling.",
     quality:
       "Our checks cover product identity, formation release, protection placement, joint tests appropriate to the membrane, repair close-out and penetration inspection. Panel maps and installation records form the handover package.",
-    why: "Work with a supplier and installer that connects the membrane to the practical details of your reservoir, from protection and pipe interfaces to documented completion.",
+    why: "We supply and install the membrane and every reservoir detail, from protection and pipe boots to documented completion.",
   },
   {
     match: /irrigation|canal/i,
@@ -69,7 +69,7 @@ const applicationDeliveryProfiles = [
       "We plan material lengths and deployment around isolated work fronts, then install the selected lining with its own joint, anchorage, infill or hydration requirements.",
     quality:
       "Our inspection plan follows the actual system: membrane weld checks, concrete-blanket joints and hydration, or geocell expansion, anchorage and infill. We document transitions, outlets and completion before return to service.",
-    why: "Procure the right lining and its installation support together, with delivery and work-front planning suited to African irrigation and water-transfer projects.",
+    why: "We supply and install the right lining, with delivery and work-front planning built for African irrigation and water-transfer projects.",
   },
   {
     match: /landfill|ash|bund/i,
@@ -78,35 +78,35 @@ const applicationDeliveryProfiles = [
     installation:
       "We sequence GCL placement, geomembrane deployment and welding, terminations and drainage interfaces so each barrier layer can be inspected before it is covered.",
     quality:
-      "Our records cover material traceability, GCL overlaps and confinement, trial welds, applicable seam tests, repairs, drainage checks and covering hold points. We coordinate our installer QC records with the appointed CQA team.",
-    why: "Coordinate the barrier package and its installation through one partner, with clear material traceability and layer-by-layer evidence for project acceptance.",
+      "Our records cover material traceability, GCL overlaps and confinement, trial welds, applicable seam tests, repairs, drainage checks and covering hold points. We work alongside any independent CQA the owner appoints.",
+    why: "We supply and install the full barrier package, with material traceability and layer-by-layer evidence for project acceptance.",
   },
   {
     match: /\bmse\b|reinforced slopes/i,
     selection:
       "We translate the approved reinforcement schedule into exact geogrid grades, lengths and quantities, with the facing connections, filters and drainage specified for the structure.",
     installation:
-      "We coordinate reinforcement deliveries and site checks by lift, including grid direction, length, elevation, facing connection and backfill placement.",
+      "We deliver reinforcement and check every lift: grid direction, length, elevation, facing connection and backfill placement.",
     quality:
       "Our inspection records track reinforcement grade and layer placement before burial, with connection checks, facing surveys, drainage inspections and the specified fill and compaction results.",
-    why: "Get grade-specific reinforcement supply and practical construction coordination for demanding crusher walls, bridge approaches and reinforced-soil structures.",
+    why: "We supply grade-specific reinforcement and support construction of crusher walls, bridge approaches and reinforced-soil structures.",
   },
   {
     match: /retaining/i,
     selection:
-      "We coordinate reinforcement geogrids, facing interfaces, filtration and drainage against the approved wall system, geometry and backfill specification.",
+      "We match reinforcement geogrids, facing interfaces, filtration and drainage to the approved wall system, geometry and backfill specification.",
     installation:
-      "Our agreed site scope follows the wall sequence: foundation release, facing, reinforcement connections, controlled fill lifts and drainage completion.",
+      "Our site work follows the wall sequence: foundation release, facing, reinforcement connections, controlled fill lifts and drainage completion.",
     quality:
       "We document material identity, grid orientation and length, layer elevations, connection checks, face alignment and drainage continuity, alongside specified backfill and compaction records.",
-    why: "Connect reinforcement procurement to the construction details that matter, with one team coordinating materials, delivery and the defined installation checks.",
+    why: "One team supplies the reinforcement, delivers it and carries out the installation checks.",
   },
   {
     match: /stabilisation|stabilization/i,
     selection:
       "We distinguish aggregate stabilisation, separation, confinement and tensile reinforcement, then match the geogrid, geotextile, geocell or paving grid to your approved build-up.",
     installation:
-      "We coordinate roll layout, overlaps, grid direction, initial aggregate cover and construction access with the earthworks team and the selected product requirements.",
+      "We set out roll layout, overlaps, grid direction, initial aggregate cover and construction access with the earthworks team, to each product's requirements.",
     quality:
       "Our checks cover exact product grade, formation acceptance, overlaps and orientation, damage before covering, fill placement and the specified layer and compaction records.",
     why: "Choose from stabilisation, separation and confinement materials through one supplier, with practical support that keeps product selection connected to site conditions and placement.",
@@ -116,27 +116,27 @@ const applicationDeliveryProfiles = [
     selection:
       "We match natural-fibre blankets, geocells and specified hard-armour linings to soil, slope geometry, runoff and the required vegetation or surface finish.",
     installation:
-      "We coordinate preparation, crest and toe details, anchorage, overlaps, infill and any product-specific hydration with the drainage and rehabilitation programme.",
+      "We prepare the surface and install crest and toe details, anchorage, overlaps, infill and any product-specific hydration, in step with the drainage and rehabilitation programme.",
     quality:
-      "Our inspections record product grade, surface preparation, soil contact, fixing patterns, geocell infill or concrete-blanket joint controls, and the agreed establishment and handover checks.",
+      "Our inspections record product grade, surface preparation, soil contact, fixing patterns, geocell infill or concrete-blanket joint controls, and our establishment and handover checks.",
     why: "Combine erosion-control product choice with installation planning for the actual slope, including drainage interfaces and the work needed to support establishment.",
   },
   {
     match: /drainage|filtration/i,
     selection:
-      "We coordinate filter geotextiles, drainage cores and collector pipes using soil-retention criteria, design flow, gradients, loading and outlet requirements.",
+      "We select filter geotextiles, drainage cores and collector pipes from soil-retention criteria, design flow, gradients, loading and outlet requirements.",
     installation:
       "We support continuous filter and drainage paths, core joins, pipe bedding and gradients, with pre-cover inspection of connections, cleanouts and outlets.",
     quality:
       "Our checks record product and roll identity, filtration and drainage submittals, overlaps, core orientation, pipe levels, outlet locations and protection before backfilling.",
-    why: "Source the filter, drainage and collection materials as a coordinated package, with technical selection and delivery linked to the complete flow path.",
+    why: "We supply the filter, drainage and collection materials as one package, selected and delivered for the complete flow path.",
   },
   {
     match: /coastal/i,
     selection:
-      "We review the shoreline or river design, foundation, filter requirements and specified container or gabion arrangement, then coordinate fabric, seams, fill and handling details.",
+      "We review the shoreline or river design, foundation, filter requirements and specified container or gabion arrangement, then set fabric, seams, fill and handling details.",
     installation:
-      "We coordinate fabrication, delivery and the agreed filling or placement scope, including foundation filters, container patterns, toe protection and specified gabion connections.",
+      "We fabricate, deliver, fill and place, including foundation filters, container patterns, toe protection and specified gabion connections.",
     quality:
       "Our controls cover fabric and unit identity, dimensions, specified seam checks, filter continuity, filling and handling. Where gabions are included, we inspect basket and coating specifications, connections and rock fill against the approved details.",
     why: "Access woven, nonwoven and multilayer sand-container fabrication, filters and specified gabion materials through one partner, with practical delivery and placement support across Africa.",
@@ -146,7 +146,7 @@ const applicationDeliveryProfiles = [
     selection:
       "We match foundation grids, separation and filtration fabrics, drainage and asphalt interlayers to their specific roles within your road or railway sections.",
     installation:
-      "We coordinate staged delivery and placement around earthworks, aggregate or ballast operations and paving, with product-specific layout, cover and bonding requirements.",
+      "We stage delivery and placement around earthworks, aggregate or ballast operations and paving, with product-specific layout, cover and bonding.",
     quality:
       "Our records cover product grades, prepared surfaces, laps and orientation, placement damage, initial cover and specified compaction or asphalt-interlayer bonding checks.",
     why: "Procure foundation, drainage and rehabilitation geosynthetics through one partner, with support that connects product selection to the transport structure and construction sequence.",
@@ -156,10 +156,10 @@ const applicationDeliveryProfiles = [
     selection:
       "We review representative feed data and trials to select slit-film, monofilament or composite dewatering bags and tubes, with dimensions, ports and seam requirements matched to the duty.",
     installation:
-      "We coordinate fabrication and delivery with the pad, filtrate collection and filling plan, and provide the agreed support for controlled filling and drainage cycles.",
+      "We fabricate and deliver to suit the pad, filtrate collection and filling plan, and manage controlled filling and drainage cycles on site.",
     quality:
-      "Our controls cover fabric and unit identity, fabrication dimensions, specified seam checks, trial results and filling limits. Filtrate and cake checks follow the agreed project targets and sampling plan.",
-    why: "Combine fabric selection and in-house fabrication with delivery and installation support, rather than procuring a bag without the feed, filling and filtrate context.",
+      "Our controls cover fabric and unit identity, fabrication dimensions, specified seam checks, trial results and filling limits. We check filtrate and cake against the project targets and sampling plan.",
+    why: "We select the fabric, fabricate in-house, deliver and run the filling, so the tube is built for your feed.",
   },
 ];
 
@@ -239,12 +239,12 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
       profile.match.test(`${category.label || ""} ${title}`),
     ) || {
       selection:
-        "We review drawings, operating conditions and the material schedule before confirming products and delivery scope.",
+        "We review your drawings, operating conditions and material schedule, then confirm the products and delivery plan.",
       installation:
-        "We agree installation responsibilities, work sequence and inspection stages with your project team before site work starts.",
+        "We set our work sequence and inspection stages with your project team before our crews start on site.",
       quality:
-        "Our records connect material identity, installation inspections, applicable tests and repair close-out to the agreed handover scope.",
-      why: "Coordinate technical selection, supply, African project delivery and the defined installation package through one accountable partner.",
+        "Our records connect material identity, installation inspections, test results and repair close-out in one handover dossier.",
+      why: "We select, supply, deliver and install through one accountable team.",
     };
   const directoryEntry = findApplication(category.slug);
   const relatedApplications = directoryEntry
@@ -449,16 +449,15 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
               How Geosynthetics Africa Delivers Across Africa
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8">
-              Choose material supply or an integrated supply, delivery, installation and QA/QC
-              scope. We coordinate the package around your site, specification and construction
-              programme.
+              Appoint us for material supply or an integrated supply, delivery, installation and
+              QA/QC package, planned around your site, specification and construction programme.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
               {[
                 { title: "Technical Selection & Scope", text: deliveryProfile.selection },
                 {
                   title: "Supply & Cross-Border Delivery",
-                  text: "We coordinate material schedules, packing, freight, customs documentation and delivery routes to your African project site. Availability, shipment sequencing and mobilisation are confirmed in your proposal.",
+                  text: "We schedule, pack and ship your materials, prepare the customs documents and deliver to your African project site. We confirm availability, shipment sequence and mobilisation in your proposal.",
                 },
                 { title: "Installation & Site Controls", text: deliveryProfile.installation },
                 { title: "Our QA/QC & Handover", text: deliveryProfile.quality },
@@ -477,18 +476,17 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li>
                   <strong className="text-foreground">African project experience.</strong> More than
-                  15 million m² installed and materials supplied to over 30 countries across the
-                  Group's delivery footprint.
+                  15 million m² installed across the Group and materials supplied to over 30
+                  countries.
                 </li>
                 <li>
-                  <strong className="text-foreground">One coordinated project scope.</strong>{" "}
-                  Technical selection, supply, fabrication where required, logistics and agreed
-                  installation responsibilities brought together from enquiry to handover.
+                  <strong className="text-foreground">One accountable team.</strong> We select,
+                  supply, manufacture where required, deliver and install, from enquiry to handover.
                 </li>
                 <li>
                   <strong className="text-foreground">Quality you can review.</strong> Defined
-                  inspection stages, material traceability and application-specific records, with
-                  our installer QC coordinated with independent CQA where appointed.
+                  inspection stages, material traceability and application-specific records, and we
+                  work alongside any independent CQA the owner appoints.
                 </li>
                 <li>
                   <strong className="text-foreground">Specialist installation capability.</strong>{" "}

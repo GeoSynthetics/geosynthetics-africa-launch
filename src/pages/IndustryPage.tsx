@@ -89,9 +89,9 @@ export function IndustryPage({ data }: { data: any }) {
                   {profile.quality}
                 </p>
                 <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-                  We coordinate material supply, fabrication where required, cross-border delivery
-                  and agreed site work. The proposal identifies availability, delivery terms,
-                  inspection stages and handover responsibilities.
+                  We supply, manufacture where required, deliver across borders and install with our
+                  own crews. Our proposal sets out availability, delivery terms, inspection stages
+                  and the handover records we provide.
                 </p>
                 <Link
                   to="/technical-centre"

@@ -87,7 +87,7 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
     eyebrow: "About Us",
     title: "Africa's Only Integrated Geosynthetics Execution Partner",
     description:
-      "Geosynthetics Africa supplies, fabricates and installs geosynthetic systems for African mining, water, waste and civil infrastructure, with documented quality controls for the agreed scope.",
+      "Geosynthetics Africa supplies, fabricates and installs geosynthetic systems for African mining, water, waste and civil infrastructure, with documented quality controls on every project.",
     image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
   },
   accountability: {
@@ -140,8 +140,7 @@ export const DEFAULT_ABOUT_PAGE_CONTENT: AboutPageContent = {
       },
     ],
     philosophyTitle: "Our Execution Philosophy",
-    philosophySubtitle:
-      "Material supply, fabrication and installation coordinated to the agreed scope.",
+    philosophySubtitle: "Manufacturing, supply and installation delivered by one team.",
     philosophyImage: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&q=80",
   },
   partners: {

@@ -1,7 +1,7 @@
 import { productImage } from "@/lib/product-imagery";
 import { prepareResourceLinks } from "@/lib/resource-links";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, FileText, Phone, Mail } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -10,6 +10,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { ServiceSchema } from "@/components/seo/ServiceSchema";
 import { serviceDeliveryFor } from "@/data/service-delivery";
+import { ServiceSectionBlock } from "@/components/site/ServiceSectionBlock";
 import { APPLICATION_DIRECTORY } from "@/data/application-directory";
 import { BUSINESS } from "@/lib/business-info";
 import { SITE_URL } from "@/lib/site-url";
@@ -34,10 +35,7 @@ export function ServicePage({ data }: { data: any }) {
     .map((slug) => APPLICATION_DIRECTORY.find((app) => app.slug === slug))
     .filter(Boolean);
   const sections = [
-    { id: "service-overview", label: "Overview" },
-    { id: "service-inputs", label: "Technical Inputs" },
-    { id: "service-installation", label: "Delivery & Installation" },
-    { id: "service-quality", label: "QA/QC & Handover" },
+    ...profile.sections.map((section) => ({ id: section.id, label: section.label })),
     { id: "service-resources", label: "Resources" },
     { id: "quote", label: "Project Enquiry" },
   ];
@@ -109,58 +107,9 @@ export function ServicePage({ data }: { data: any }) {
       </nav>
       <div className="container-page py-14 md:py-16 grid lg:grid-cols-12 gap-10 xl:gap-16">
         <div className="lg:col-span-8 space-y-14">
-          <section id="service-overview" className="scroll-mt-36">
-            <h2 className="font-display text-2xl font-bold uppercase">Our Service Scope</h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed">{profile.scope}</p>
-          </section>
-          <section id="service-inputs" className="scroll-mt-36 border-t border-border pt-10">
-            <h2 className="font-display text-2xl font-bold uppercase">
-              What We Review Before Quoting
-            </h2>
-            <ul className="mt-5 space-y-3">
-              {profile.inputs.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
-                  <CheckCircle2 className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section id="service-installation" className="scroll-mt-36 border-t border-border pt-10">
-            <h2 className="font-display text-2xl font-bold uppercase">How We Deliver the Work</h2>
-            <ol className="mt-6 grid md:grid-cols-2 gap-5">
-              {profile.controls.map((item, index) => (
-                <li key={item} className="border border-border rounded-xl p-6 bg-surface/30">
-                  <span className="text-primary font-display text-2xl font-bold">0{index + 1}</span>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{item}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-          <section id="service-quality" className="scroll-mt-36 border-t border-border pt-10">
-            <h2 className="font-display text-2xl font-bold uppercase">
-              Our QA/QC & Handover Records
-            </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
-              We define inspection responsibilities, applicable tests, acceptance criteria and hold
-              points before the relevant work begins. Installer QC is coordinated with the appointed
-              engineer and independent CQA team where engaged.
-            </p>
-            <ul className="mt-5 space-y-3">
-              {profile.records.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed">
-                  <FileText className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/quality-assurance"
-              className="mt-6 inline-flex gap-2 items-center text-primary text-sm font-bold"
-            >
-              Review our quality process <ArrowRight className="h-4 w-4" />
-            </Link>
-          </section>
+          {profile.sections.map((section, index) => (
+            <ServiceSectionBlock key={section.id} section={section} first={index === 0} />
+          ))}
           <section className="border-t border-border pt-10">
             <h2 className="font-display text-2xl font-bold uppercase">
               Why Choose Geosynthetics Africa
@@ -170,15 +119,15 @@ export function ServicePage({ data }: { data: any }) {
               {[
                 {
                   title: "African experience",
-                  text: "More than 15 million m² installed and materials supplied to over 30 countries across the Group's delivery footprint.",
+                  text: "More than 15 million m² installed across the Group and materials supplied to over 30 countries.",
                 },
                 {
-                  title: "Coordinated delivery",
-                  text: "Material selection, fabrication where required, freight and agreed site responsibilities connected from enquiry to handover.",
+                  title: "One accountable team",
+                  text: "We select, manufacture or supply, deliver and install, from enquiry to handover.",
                 },
                 {
-                  title: "Reviewable quality",
-                  text: "Material identification, relevant inspections, applicable tests and repair close-out compiled for your project team.",
+                  title: "Documented quality",
+                  text: "Mill certificates, our inspections, test results and repair close-out in one handover dossier.",
                 },
               ].map((item) => (
                 <div key={item.title} className="border border-border rounded-lg p-5">
@@ -239,9 +188,9 @@ export function ServicePage({ data }: { data: any }) {
                 Fabrication inspection checklist
               </h2>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Agree material traceability, dimensions, seam and weld acceptance criteria, handling
-                provisions and release records before production. Project test results and
-                certificates are provided against the ordered article and inspection plan.
+                We set material traceability, dimensions, seam and weld acceptance criteria,
+                handling provisions and release records before production, and issue test results
+                and certificates against every article we make.
               </p>
               <a
                 className="inline-block font-semibold text-primary"
@@ -261,8 +210,8 @@ export function ServicePage({ data }: { data: any }) {
               Technical Resources & Project Submittals
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Review published resources or request the current material data, fabrication details,
-              installation method and inspection plan relevant to your scope.
+              Download our published resources, or ask us for the current material data, fabrication
+              details, installation method and QA/QC plan for your project.
             </p>
             <div className="grid sm:grid-cols-2 gap-4 mt-5">
               {downloads.map((item: any, index: number) => (
@@ -298,8 +247,8 @@ export function ServicePage({ data }: { data: any }) {
           <div className="rounded-xl border border-border bg-surface/40 p-6">
             <h2 className="font-display text-xl font-bold uppercase">Discuss Your Project</h2>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              Send the destination, drawings, quantities and required date. We will review the scope
-              and clarify the material, delivery and site requirements.
+              Send us the destination, drawings, quantities and required date, and we will return a
+              proposal covering material, delivery and installation.
             </p>
             <a
               href={"tel:" + BUSINESS.telephone.replace(/[^+\d]/g, "")}
@@ -320,7 +269,7 @@ export function ServicePage({ data }: { data: any }) {
             contextId={service.slug}
             contextLabel={profile.title}
             heading="Request a Project Proposal"
-            description="Upload your BOQ or drawings and define the supply, delivery, fabrication or installation scope you need."
+            description="Upload your BOQ or drawings and tell us what you need: supply, manufacturing, delivery or installation."
           />
         </aside>
       </div>
