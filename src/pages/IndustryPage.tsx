@@ -7,6 +7,8 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { GeoGrid } from "@/components/site/shapes";
 import { INDUSTRY_DELIVERY_GUIDES } from "@/data/industry-delivery";
+import { INDUSTRY_PROFILES, industryProducts } from "@/data/industry-structures";
+import { ServiceSectionBlock } from "@/components/site/ServiceSectionBlock";
 import { APPLICATION_DIRECTORY } from "@/data/application-directory";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 
@@ -14,10 +16,13 @@ export function IndustryPage({ data }: { data: any }) {
   const loaderData = data;
   const { industry, templateData, caseStudies = [], keyProducts = [] } = loaderData;
   const profile = INDUSTRY_DELIVERY_GUIDES[industry.slug];
+  const built = INDUSTRY_PROFILES[industry.slug];
+  const builtProducts = built ? industryProducts(built) : [];
   const { open } = useQuickQuote();
 
   const title = templateData?.title || industry.label;
   const description =
+    built?.summary ||
     profile?.summary ||
     templateData?.description ||
     `High-performance geosynthetic solutions for the ${industry.label.toLowerCase()} sector.`;
@@ -74,11 +79,120 @@ export function IndustryPage({ data }: { data: any }) {
         <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
         <div className="container-page py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8">
+            {built && (
+              <>
+                <nav
+                  aria-label="Industry page sections"
+                  className="mb-10 flex gap-6 overflow-x-auto border-b border-border pb-4 text-xs font-bold uppercase whitespace-nowrap"
+                >
+                  <a href="#structures" className="hover:text-primary">
+                    What We Build
+                  </a>
+                  {built.sections.map((section) => (
+                    <a key={section.id} href={"#" + section.id} className="hover:text-primary">
+                      {section.label}
+                    </a>
+                  ))}
+                  <a href="#products" className="hover:text-primary">
+                    Products We Supply
+                  </a>
+                  <a href="#qaqc" className="hover:text-primary">
+                    QA/QC
+                  </a>
+                </nav>
+                <section id="structures" className="scroll-mt-36">
+                  <h2 className="font-display text-2xl md:text-3xl font-bold uppercase">
+                    {built.structuresTitle}
+                  </h2>
+                  <div className="mt-6 grid gap-5">
+                    {built.structures.map((structure, index) => (
+                      <article
+                        key={structure.name}
+                        className="rounded-xl border border-border bg-card p-5 md:p-6"
+                      >
+                        <div className="flex items-start gap-4">
+                          <span className="font-display text-2xl font-bold text-primary">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <div className="min-w-0">
+                            <h3 className="font-display text-lg font-bold uppercase leading-tight">
+                              {structure.name}
+                            </h3>
+                            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                              {structure.what}
+                            </p>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                              {structure.products.map((product) => (
+                                <a
+                                  key={product.href}
+                                  href={product.href}
+                                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:border-primary hover:text-primary"
+                                >
+                                  {product.label}
+                                </a>
+                              ))}
+                            </div>
+                            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs font-bold uppercase tracking-wider">
+                              {structure.application && (
+                                <a
+                                  href={"/applications/" + structure.application}
+                                  className="text-primary hover:underline"
+                                >
+                                  How we build it →
+                                </a>
+                              )}
+                              {structure.service && (
+                                <a
+                                  href={structure.service.href}
+                                  className="text-primary hover:underline"
+                                >
+                                  {structure.service.label} →
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+                {built.sections.map((section) => (
+                  <div key={section.id} className="mt-12">
+                    <ServiceSectionBlock section={section} first={false} />
+                  </div>
+                ))}
+                <section id="products" className="mt-12 scroll-mt-36 border-t border-border pt-10">
+                  <h2 className="font-display text-2xl font-bold uppercase">
+                    Products We Supply for {title}
+                  </h2>
+                  <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                    Every product below is in our catalogue and in the structures above. We supply,
+                    manufacture where required and install.
+                  </p>
+                  <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {builtProducts.map((product) => (
+                      <a
+                        key={product.href}
+                        href={product.href}
+                        className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4 text-sm font-semibold hover:border-primary min-h-[56px]"
+                      >
+                        {product.label}
+                        <ChevronRight className="h-4 w-4 shrink-0 text-primary" />
+                      </a>
+                    ))}
+                  </div>
+                </section>
+              </>
+            )}
             {profile && (
-              <section className="mb-12 rounded-xl border border-border bg-surface/40 p-6 md:p-8">
-                <h2 className="font-display text-2xl font-bold uppercase">
-                  Technical Inputs for {title}
-                </h2>
+              <section
+                id="qaqc"
+                className={
+                  "scroll-mt-36 mb-12 rounded-xl border border-border bg-surface/40 p-6 md:p-8" +
+                  (built ? " mt-12" : "")
+                }
+              >
+                <h2 className="font-display text-2xl font-bold uppercase">What We Need From You</h2>
                 <ul className="list-disc pl-5 mt-5 space-y-3 text-sm text-muted-foreground leading-relaxed">
                   {profile.inputs.map((input) => (
                     <li key={input}>{input}</li>
@@ -101,68 +215,74 @@ export function IndustryPage({ data }: { data: any }) {
                 </Link>
               </section>
             )}
-            <h2 className="font-display text-2xl font-bold uppercase mb-6">
-              Industry Challenges Solved
-            </h2>
-            <div className="space-y-4">
-              {challenges.map((challenge: string, i: number) => (
-                <div
-                  key={i}
-                  className="rounded border border-border bg-card p-6 flex items-start gap-4"
-                >
-                  <Factory className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-display text-lg font-bold">{challenge}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="font-display text-2xl font-bold uppercase mt-12 mb-6">
-              Key Applications in {title}
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-6">
-              {applications.map((app: any, i: number) => {
-                if (typeof app === "string") {
-                  return (
+            {!built && (
+              <>
+                <h2 className="font-display text-2xl font-bold uppercase mb-6">
+                  Industry Challenges Solved
+                </h2>
+                <div className="space-y-4">
+                  {challenges.map((challenge: string, i: number) => (
                     <div
                       key={i}
-                      className="border-l-2 border-primary pl-4 py-2 bg-card/40 rounded-r"
+                      className="rounded border border-border bg-card p-6 flex items-start gap-4"
                     >
-                      <div className="font-bold uppercase text-foreground">{app}</div>
+                      <Factory className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <div className="font-display text-lg font-bold">{challenge}</div>
+                      </div>
                     </div>
-                  );
-                }
+                  ))}
+                </div>
 
-                const heading = app.heading || app.title || "";
-                const desc = app.description || "";
-                const link = app.link || app.to || "";
+                <h2 className="font-display text-2xl font-bold uppercase mt-12 mb-6">
+                  Key Applications in {title}
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {applications.map((app: any, i: number) => {
+                    if (typeof app === "string") {
+                      return (
+                        <div
+                          key={i}
+                          className="border-l-2 border-primary pl-4 py-2 bg-card/40 rounded-r"
+                        >
+                          <div className="font-bold uppercase text-foreground">{app}</div>
+                        </div>
+                      );
+                    }
 
-                return (
-                  <div
-                    key={i}
-                    className="rounded border border-border bg-card p-6 flex flex-col justify-between hover:border-primary transition duration-200"
-                  >
-                    <div>
-                      <h3 className="font-display text-base font-bold uppercase text-foreground mb-2">
-                        {heading}
-                      </h3>
-                      {desc && (
-                        <p className="text-xs text-muted-foreground leading-relaxed mb-4">{desc}</p>
-                      )}
-                    </div>
-                    {link && (
-                      <Link
-                        to={link as any}
-                        className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 mt-auto"
+                    const heading = app.heading || app.title || "";
+                    const desc = app.description || "";
+                    const link = app.link || app.to || "";
+
+                    return (
+                      <div
+                        key={i}
+                        className="rounded border border-border bg-card p-6 flex flex-col justify-between hover:border-primary transition duration-200"
                       >
-                        Learn More <ChevronRight className="h-3.5 w-3.5" />
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                        <div>
+                          <h3 className="font-display text-base font-bold uppercase text-foreground mb-2">
+                            {heading}
+                          </h3>
+                          {desc && (
+                            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                              {desc}
+                            </p>
+                          )}
+                        </div>
+                        {link && (
+                          <Link
+                            to={link as any}
+                            className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 mt-auto"
+                          >
+                            Learn More <ChevronRight className="h-3.5 w-3.5" />
+                          </Link>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
 
             {/* Render any additional custom sections defined in the CMS */}
             {templateData?.content?.sections?.map((section: any, idx: number) => (
@@ -283,7 +403,7 @@ export function IndustryPage({ data }: { data: any }) {
               <QuoteCard
                 contextLabel={title}
                 heading="Discuss Your Project"
-                description={`Our engineers understand the specific demands of the ${title.toLowerCase()} sector.`}
+                description="Send us your drawings or BOQ and we will return a supply and installation proposal."
               />
               <Button
                 asChild
