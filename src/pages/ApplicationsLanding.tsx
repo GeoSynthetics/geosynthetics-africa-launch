@@ -1,101 +1,141 @@
-import { useMemo } from "react";
-import { Link, useLoaderData } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { CheckCircle2Icon } from "lucide-react";
-import { resolveIcon as iconByName } from "@/components/icons/resolve-icon";
+import { useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Layers, Search } from "lucide-react";
+import { resolveIcon } from "@/components/icons/resolve-icon";
 import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
-import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
-import { GeoGrid } from "@/components/site/shapes";
+import { APPLICATION_DIRECTORY, APPLICATION_GROUPS } from "@/data/application-directory";
 
-export function ApplicationsLanding() {
-  const { templates, hierarchy } = useLoaderData({ from: "/applications/" }) as {
-    templates: Record<string, any>;
-    hierarchy: any;
-  };
-
-  const landing = templates?.["__landing"] || {};
-  const heroTitle = landing.title || "Engineered Systems for Every Application";
-  const heroDescription =
-    landing.description ||
-    "From tailings storage to road stabilisation — full-system solutions, designed and certified for African operating conditions.";
-  const heroImage =
-    landing.heroImage || "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80";
-
-  const applicationsItems = useMemo(() => {
-    if (hierarchy?.items && hierarchy.items.length > 0) {
-      return hierarchy.items;
-    }
-    // Fallback if hierarchy is missing or empty
-    return APPLICATION_CATEGORIES.map((c) => ({
-      id: c.slug,
-      slug: c.slug,
-      label: c.label,
-      icon: c.icon || "Layers",
-    }));
-  }, [hierarchy]);
-
-  const categoryDetails = (slug: string, fallbackLabel: string) => {
-    const t = templates?.[slug] || {};
-    return {
-      title: t.title || fallbackLabel,
-      description:
-        t.description ||
-        `Engineered geosynthetic systems and installation solutions for ${fallbackLabel.toLowerCase()} across Africa.`,
-    };
-  };
-
-  const resolveIcon = (iconName: string) => {
-    const IconComp = iconByName(iconName, CheckCircle2Icon);
-    if (IconComp)
-      return (
-        <IconComp className="h-6 w-6 text-primary transition-transform duration-300 group-hover:scale-110" />
-      );
-    return <CheckCircle2Icon className="h-6 w-6 text-primary" />;
-  };
+export function ApplicationsLanding({
+  data,
+}: {
+  data: { templates: Record<string, any>; hierarchy: any };
+}) {
+  const { templates } = data;
+  const landing = templates?.__landing || {};
+  const [search, setSearch] = useState("");
+  const filtered = useMemo(() => {
+    const words = search.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    return APPLICATION_DIRECTORY.filter((app) => {
+      const text = [app.label, app.summary, ...app.uses].join(" ").toLowerCase();
+      return words.every((word) => text.includes(word));
+    });
+  }, [search]);
 
   return (
     <>
       <PageHero
         eyebrow="Applications"
-        title={heroTitle}
-        description={heroDescription}
-        image={heroImage}
+        title="Geosynthetic Applications Across Africa"
+        description="Find the right system for your project: containment, water storage, ground engineering, drainage, erosion protection and sediment management. Geosynthetics Africa connects technical selection, material supply, fabrication, cross-border delivery, installation and documented QA/QC."
+        image={landing.heroImage}
       />
-      <section className="relative isolate overflow-hidden bg-background border-b border-border">
-        <GeoGrid opacity={0.06} color="var(--primary)" gridSize={8} />
-        <div className="container-page py-16 md:py-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {applicationsItems.map((c: any) => {
-              const details = categoryDetails(c.slug || c.id, c.label);
-              return (
-                <Link
-                  key={c.slug || c.id}
-                  to="/applications/$category"
-                  params={{ category: c.slug || c.id }}
-                  className="group relative rounded-xl border border-border bg-card p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col justify-between overflow-hidden cursor-pointer"
-                >
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom rounded-l-xl" />
-                  <div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary/20">
-                      {resolveIcon(c.icon || "Layers")}
-                    </div>
-                    <h3 className="mt-5 font-display text-xl font-bold uppercase tracking-wide text-foreground">
-                      {details.title}
-                    </h3>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-4">
-                      {details.description}
-                    </p>
-                  </div>
-                  <div className="mt-6 text-primary text-xs uppercase tracking-wider font-bold inline-flex items-center gap-2 group-hover:text-primary-hover transition-colors">
-                    Explore System{" "}
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+      <section className="container-page py-12 md:py-16">
+        <div className="max-w-3xl mb-8">
+          <h2 className="font-display text-2xl md:text-3xl font-bold uppercase">
+            Find Your Application
+          </h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed">
+            Start with the work you need to deliver. Each application explains the system, relevant
+            materials, our African delivery scope, installation controls and QA/QC, with a direct
+            route to request a proposal.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2 mb-8">
+          {APPLICATION_GROUPS.map((group) => (
+            <a
+              key={group.id}
+              href={`#${group.id}`}
+              className="border border-border rounded-full px-4 py-2 text-xs font-bold hover:border-primary hover:text-primary transition"
+            >
+              {group.label}
+            </a>
+          ))}
+        </div>
+        <label htmlFor="application-search" className="block font-semibold text-sm mb-2">
+          Search by application or project need
+        </label>
+        <div className="relative max-w-2xl mb-12">
+          <Search
+            className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground"
+            aria-hidden="true"
+          />
+          <input
+            id="application-search"
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Try TSF, wastewater, geocell, silt fence or vertical drain"
+            className="w-full rounded-lg border border-border bg-card py-3 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+            {filtered.length} of {APPLICATION_DIRECTORY.length} applications
+          </p>
+        </div>
+        <div className="space-y-16">
+          {APPLICATION_GROUPS.map((group) => {
+            const apps = filtered.filter((app) => app.group === group.id);
+            if (!apps.length) return null;
+            return (
+              <section key={group.id} id={group.id} className="scroll-mt-28">
+                <h2 className="font-display text-2xl font-bold uppercase border-l-4 border-primary pl-4 mb-6">
+                  {group.label}
+                </h2>
+                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+                  {apps.map((app) => {
+                    const Icon = resolveIcon(app.icon, Layers) || Layers;
+                    return (
+                      <Link
+                        key={app.slug}
+                        to="/applications/$category"
+                        params={{ category: app.slug }}
+                        className="group border border-border rounded-xl bg-card p-6 hover:border-primary hover:shadow-lg transition flex flex-col"
+                      >
+                        <Icon className="h-7 w-7 text-primary mb-4" aria-hidden="true" />
+                        <h3 className="font-display text-lg font-bold uppercase leading-tight group-hover:text-primary">
+                          {app.label}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed mt-3">
+                          {app.summary}
+                        </p>
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-4 border-t border-border pt-3">
+                          {app.uses.join(" · ")}
+                        </p>
+                        <span className="mt-auto pt-5 text-xs font-bold uppercase text-primary inline-flex items-center gap-2">
+                          Explore Our Solution <ArrowRight className="h-4 w-4" />
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+          {!filtered.length && (
+            <p className="text-muted-foreground">
+              No exact match. Try a broader term, or{" "}
+              <Link to="/contacts" className="text-primary underline">
+                send your scope to our technical team
+              </Link>
+              .
+            </p>
+          )}
+        </div>
+        <div className="mt-14 rounded-xl border border-border bg-surface p-8">
+          <h2 className="font-display text-2xl font-bold uppercase">
+            Not Sure Which System You Need?
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-3xl">
+            Send your drawings, BOQ, site location, operating conditions and required date. We will
+            review the material and delivery requirements and prepare a proposal for your scope.
+          </p>
+          <Link
+            to="/contacts"
+            className="mt-5 inline-flex items-center gap-2 text-primary font-bold"
+          >
+            Discuss Your Project <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
       <PartnerStrip />

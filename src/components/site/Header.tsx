@@ -47,7 +47,7 @@ type AnyLinkProps = Omit<LinkComponentProps, "to"> & {
 };
 const RLink = Link as unknown as React.ComponentType<AnyLinkProps>;
 
-const MEGAMENU_CLOSE_DELAY = 150000; // milliseconds delay before closing the mega menu
+const MEGAMENU_CLOSE_DELAY = 250; // milliseconds delay before closing the mega menu
 
 function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: boolean }) {
   const { t } = useTranslation();
@@ -225,7 +225,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="hidden xl:flex self-stretch flex-1 justify-center items-stretch !max-w-none min-w-0"
+      className="hidden min-[1024px]:flex self-stretch flex-1 justify-center items-stretch !max-w-none min-w-0"
     >
       <NavigationMenu
         value={value}
@@ -260,7 +260,7 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                       navigate({ to: m.to });
                     }
                   }}
-                  className={`bg-transparent px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${
+                  className={`bg-transparent px-1.5 min-[1200px]:px-2 2xl:px-3 h-full flex items-center whitespace-nowrap text-[11px] min-[1200px]:text-xs 2xl:text-sm font-semibold uppercase tracking-normal transition border-b-2 rounded-none hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent ${
                     active
                       ? "text-primary border-primary"
                       : "text-foreground border-transparent hover:text-primary data-[state=open]:text-primary"
@@ -274,13 +274,14 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
               </NavigationMenuItem>
             );
           })}
-          {SIMPLE_NAV.map((item) => {
+          {SIMPLE_NAV.filter((item) => item.to !== "/blog").map((item) => {
             const active = isActiveRoute(item.to);
             const getSimpleNavKey = (label: string) => {
               if (label === "Projects") return "nav.projects";
-              if (label === "Quality Assurance") return "nav.qualityAssurance";
+              if (label === "Quality Assurance") return "nav.qualityShort";
               if (label === "Catalogue") return "nav.catalogue";
               if (label === "Resources") return "nav.resources";
+              if (label === "Technical Centre") return "nav.technicalCentre";
               if (label === "Blog") return "nav.blog";
               if (label === "Contacts") return "nav.contacts";
               return label;
@@ -291,11 +292,14 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
                   <RLink
                     to={item.to}
                     params={item.params}
-                    className={`inline-flex h-full items-center justify-center whitespace-nowrap px-2 2xl:px-3 text-sm font-semibold uppercase tracking-wide transition border-b-2 rounded-none hover:text-primary ${
+                    className={`inline-flex h-full items-center justify-center whitespace-nowrap px-1.5 min-[1200px]:px-2 2xl:px-3 text-[11px] min-[1200px]:text-xs 2xl:text-sm font-semibold uppercase tracking-normal transition border-b-2 rounded-none hover:text-primary ${
                       active ? "text-primary border-primary" : "text-foreground border-transparent"
                     }`}
                   >
-                    {t(getSimpleNavKey(item.label), item.label)}
+                    {t(
+                      getSimpleNavKey(item.label),
+                      item.label === "Quality Assurance" ? "QA/QC" : item.label,
+                    )}
                   </RLink>
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -345,7 +349,7 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="xl:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="min-[1024px]:hidden" aria-label="Open menu">
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
@@ -410,13 +414,14 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
             })}
           </Accordion>
           <ul className="mt-2 border-t border-border pt-2">
-            {SIMPLE_NAV.map((item) => {
+            {SIMPLE_NAV.filter((item) => item.to !== "/blog").map((item) => {
               const active = isActiveRoute(item.to);
               const getSimpleNavKey = (label: string) => {
                 if (label === "Projects") return "nav.projects";
-                if (label === "Quality Assurance") return "nav.qualityAssurance";
+                if (label === "Quality Assurance") return "nav.qualityShort";
                 if (label === "Catalogue") return "nav.catalogue";
                 if (label === "Resources") return "nav.resources";
+                if (label === "Technical Centre") return "nav.technicalCentre";
                 if (label === "Blog") return "nav.blog";
                 if (label === "Contacts") return "nav.contacts";
                 return label;
@@ -431,7 +436,10 @@ function MobileNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: b
                       active ? "text-primary" : "text-foreground"
                     }`}
                   >
-                    {t(getSimpleNavKey(item.label), item.label)}
+                    {t(
+                      getSimpleNavKey(item.label),
+                      item.label === "Quality Assurance" ? "QA/QC" : item.label,
+                    )}
                   </RLink>
                 </li>
               );
@@ -477,10 +485,10 @@ export function Header() {
   }, []);
 
   const headerContent = (
-    <div className="flex items-center gap-4 2xl:gap-6 px-5 h-[72px]">
+    <div className="flex items-center gap-2 min-[1200px]:gap-4 2xl:gap-6 px-4 h-[72px]">
       <Logo />
       <DesktopNav menus={menus} isLoading={isLoading} />
-      <div className="flex items-center gap-2 ml-auto xl:ml-0">
+      <div className="flex items-center gap-2 ml-auto min-[1024px]:ml-0">
         <MobileNav menus={menus} isLoading={isLoading} />
       </div>
     </div>
@@ -488,17 +496,9 @@ export function Header() {
 
   return (
     <>
-      <div className="w-full relative z-40">
-        <TopBar />
-        <header className="bg-background border-b border-border">{headerContent}</header>
-      </div>
-
+      <TopBar />
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm transform transition-all duration-300 ease-in-out ${
-          isScrolled
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-[100%] opacity-0 pointer-events-none"
-        }`}
+        className={`sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border ${isScrolled ? "shadow-sm" : ""}`}
       >
         {headerContent}
       </header>

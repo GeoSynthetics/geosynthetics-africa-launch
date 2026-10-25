@@ -1,6 +1,16 @@
+import { prepareResourceLinks, isPdfResource } from "@/lib/resource-links";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRightIcon, CheckCircle2Icon, ChevronRightIcon, DownloadIcon, FileTextIcon, HelpCircleIcon, MailIcon, PhoneIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CheckCircle2Icon,
+  ChevronRightIcon,
+  DownloadIcon,
+  FileTextIcon,
+  HelpCircleIcon,
+  MailIcon,
+  PhoneIcon,
+} from "lucide-react";
 import { resolveIcon } from "@/components/icons/resolve-icon";
 import { Button } from "@/components/ui/button";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
@@ -9,6 +19,7 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { DrainageMesh } from "@/components/site/shapes";
+import { APPLICATION_DIRECTORY, findApplication } from "@/data/application-directory";
 
 // Helper to render Lucide icons dynamically by string name
 function IconRenderer({ name, className }: { name: string; className?: string }) {
@@ -18,6 +29,139 @@ function IconRenderer({ name, className }: { name: string; className?: string })
   }
   return <IconComponent className={className} />;
 }
+
+const applicationDeliveryProfiles = [
+  {
+    match: /tailings|\btsf\b/i,
+    selection:
+      "We align HDPE geomembranes, protection geotextiles, GCLs and drainage layers with your TSF drawings, tailings chemistry and construction sequence.",
+    installation:
+      "Our lining crews coordinate accepted work fronts, panel deployment, daily trial welds, fusion and extrusion welding, anchorages and repairs.",
+    quality:
+      "Our installation QC links roll and panel numbers to welders, weld logs and test results. Air-channel testing to ASTM D5820, vacuum testing to ASTM D5641 and destructive peel/shear testing to ASTM D6392 are applied as specified for the seams. Repairs are mapped and retested before handover.",
+    why: "Bring liner supply, large-area installation and installation QA/QC into one coordinated package. Our 1.2 million m² lithium-mine TSF lining reference in Mali demonstrates delivery at project scale.",
+  },
+  {
+    match: /heap leach/i,
+    selection:
+      "We coordinate the geomembrane, protection and solution-collection material schedule around leach chemistry, ore loading and the pad construction phases.",
+    installation:
+      "Our lining teams plan panel runs, sumps, perimeter anchors and phase tie-ins, then deploy and weld the barrier before protection and collection layers are placed.",
+    quality:
+      "We document roll and panel identity, trial welds, applicable air-channel and vacuum tests, destructive peel/shear samples, repairs and covering releases. Collection interfaces and penetrations are inspected before burial.",
+    why: "Source the barrier, protection and collection interfaces through one delivery team, with cross-border logistics and installation records coordinated around your mine programme.",
+  },
+  {
+    match: /reservoir|dam lining/i,
+    selection:
+      "We review water use, reservoir geometry, substrate and penetration details to select the specified geomembrane and protection system, including product-specific drinking-water documentation where required.",
+    installation:
+      "We coordinate basin preparation interfaces, liner deployment, welded or manufacturer-specified joints, pipe boots, structural terminations and the agreed filling sequence.",
+    quality:
+      "Our checks cover product identity, formation release, protection placement, joint tests appropriate to the membrane, repair close-out and penetration inspection. Panel maps and installation records form the handover package.",
+    why: "Work with a supplier and installer that connects the membrane to the practical details of your reservoir, from protection and pipe interfaces to documented completion.",
+  },
+  {
+    match: /irrigation|canal/i,
+    selection:
+      "We match the specified geomembrane, concrete blanket or geocell-supported system to channel geometry, seepage-control objectives and the hydraulic design.",
+    installation:
+      "We plan material lengths and deployment around isolated work fronts, then install the selected lining with its own joint, anchorage, infill or hydration requirements.",
+    quality:
+      "Our inspection plan follows the actual system: membrane weld checks, concrete-blanket joints and hydration, or geocell expansion, anchorage and infill. We document transitions, outlets and completion before return to service.",
+    why: "Procure the right lining and its installation support together, with delivery and work-front planning suited to African irrigation and water-transfer projects.",
+  },
+  {
+    match: /landfill|ash|bund/i,
+    selection:
+      "We build the material schedule around your approved basal liner, capping or secondary-containment section, including geomembranes, GCLs, protection, filters and collection layers.",
+    installation:
+      "We sequence GCL placement, geomembrane deployment and welding, terminations and drainage interfaces so each barrier layer can be inspected before it is covered.",
+    quality:
+      "Our records cover material traceability, GCL overlaps and confinement, trial welds, applicable seam tests, repairs, drainage checks and covering hold points. We coordinate our installer QC records with the appointed CQA team.",
+    why: "Coordinate the barrier package and its installation through one partner, with clear material traceability and layer-by-layer evidence for project acceptance.",
+  },
+  {
+    match: /\bmse\b|reinforced slopes/i,
+    selection:
+      "We translate the approved reinforcement schedule into exact geogrid grades, lengths and quantities, with the facing connections, filters and drainage specified for the structure.",
+    installation:
+      "We coordinate reinforcement deliveries and site checks by lift, including grid direction, length, elevation, facing connection and backfill placement.",
+    quality:
+      "Our inspection records track reinforcement grade and layer placement before burial, with connection checks, facing surveys, drainage inspections and the specified fill and compaction results.",
+    why: "Get grade-specific reinforcement supply and practical construction coordination for demanding crusher walls, bridge approaches and reinforced-soil structures.",
+  },
+  {
+    match: /retaining/i,
+    selection:
+      "We coordinate reinforcement geogrids, facing interfaces, filtration and drainage against the approved wall system, geometry and backfill specification.",
+    installation:
+      "Our agreed site scope follows the wall sequence: foundation release, facing, reinforcement connections, controlled fill lifts and drainage completion.",
+    quality:
+      "We document material identity, grid orientation and length, layer elevations, connection checks, face alignment and drainage continuity, alongside specified backfill and compaction records.",
+    why: "Connect reinforcement procurement to the construction details that matter, with one team coordinating materials, delivery and the defined installation checks.",
+  },
+  {
+    match: /stabilisation|stabilization/i,
+    selection:
+      "We distinguish aggregate stabilisation, separation, confinement and tensile reinforcement, then match the geogrid, geotextile, geocell or paving grid to your approved build-up.",
+    installation:
+      "We coordinate roll layout, overlaps, grid direction, initial aggregate cover and construction access with the earthworks team and the selected product requirements.",
+    quality:
+      "Our checks cover exact product grade, formation acceptance, overlaps and orientation, damage before covering, fill placement and the specified layer and compaction records.",
+    why: "Choose from stabilisation, separation and confinement materials through one supplier, with practical support that keeps product selection connected to site conditions and placement.",
+  },
+  {
+    match: /erosion|slope/i,
+    selection:
+      "We match natural-fibre blankets, geocells and specified hard-armour linings to soil, slope geometry, runoff and the required vegetation or surface finish.",
+    installation:
+      "We coordinate preparation, crest and toe details, anchorage, overlaps, infill and any product-specific hydration with the drainage and rehabilitation programme.",
+    quality:
+      "Our inspections record product grade, surface preparation, soil contact, fixing patterns, geocell infill or concrete-blanket joint controls, and the agreed establishment and handover checks.",
+    why: "Combine erosion-control product choice with installation planning for the actual slope, including drainage interfaces and the work needed to support establishment.",
+  },
+  {
+    match: /drainage|filtration/i,
+    selection:
+      "We coordinate filter geotextiles, drainage cores and collector pipes using soil-retention criteria, design flow, gradients, loading and outlet requirements.",
+    installation:
+      "We support continuous filter and drainage paths, core joins, pipe bedding and gradients, with pre-cover inspection of connections, cleanouts and outlets.",
+    quality:
+      "Our checks record product and roll identity, filtration and drainage submittals, overlaps, core orientation, pipe levels, outlet locations and protection before backfilling.",
+    why: "Source the filter, drainage and collection materials as a coordinated package, with technical selection and delivery linked to the complete flow path.",
+  },
+  {
+    match: /coastal/i,
+    selection:
+      "We review the shoreline or river design, foundation, filter requirements and specified container or gabion arrangement, then coordinate fabric, seams, fill and handling details.",
+    installation:
+      "We coordinate fabrication, delivery and the agreed filling or placement scope, including foundation filters, container patterns, toe protection and specified gabion connections.",
+    quality:
+      "Our controls cover fabric and unit identity, dimensions, specified seam checks, filter continuity, filling and handling. Where gabions are included, we inspect basket and coating specifications, connections and rock fill against the approved details.",
+    why: "Access woven, nonwoven and multilayer sand-container fabrication, filters and specified gabion materials through one partner, with practical delivery and placement support across Africa.",
+  },
+  {
+    match: /roads|railways/i,
+    selection:
+      "We match foundation grids, separation and filtration fabrics, drainage and asphalt interlayers to their specific roles within your road or railway sections.",
+    installation:
+      "We coordinate staged delivery and placement around earthworks, aggregate or ballast operations and paving, with product-specific layout, cover and bonding requirements.",
+    quality:
+      "Our records cover product grades, prepared surfaces, laps and orientation, placement damage, initial cover and specified compaction or asphalt-interlayer bonding checks.",
+    why: "Procure foundation, drainage and rehabilitation geosynthetics through one partner, with support that connects product selection to the transport structure and construction sequence.",
+  },
+  {
+    match: /sludge|dewatering/i,
+    selection:
+      "We review representative feed data and trials to select slit-film, monofilament or composite dewatering bags and tubes, with dimensions, ports and seam requirements matched to the duty.",
+    installation:
+      "We coordinate fabrication and delivery with the pad, filtrate collection and filling plan, and provide the agreed support for controlled filling and drainage cycles.",
+    quality:
+      "Our controls cover fabric and unit identity, fabrication dimensions, specified seam checks, trial results and filling limits. Filtrate and cake checks follow the agreed project targets and sampling plan.",
+    why: "Combine fabric selection and in-house fabrication with delivery and installation support, rather than procuring a bag without the feed, filling and filtrate context.",
+  },
+];
 
 export function ApplicationCategoryPage({ data }: { data: any }) {
   const loaderData = data;
@@ -34,9 +178,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
   const description =
     templateData?.description ||
     "Complete engineered system — design, supply, install, test and certify.";
-  const heroImage =
-    templateData?.heroImage ||
-    "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
+  const heroImage = templateData?.heroImage || "";
 
   const downloadGuideLabel = templateData?.downloadGuideLabel || "Download System Guide";
   const downloadGuideUrl = templateData?.downloadGuideUrl || "";
@@ -67,8 +209,13 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           }),
         );
 
-  const assistancePhone = templateData?.assistancePhone || "+27 72 343 0868";
-  const assistanceEmail = templateData?.assistanceEmail || "sales@geosyntheticsafrica.com";
+  const assistancePhone = "+27 72 343 0868";
+  const assistanceEmail = "sales@geosyntheticsafrica.com";
+  const isTsf = /tailings|tsf/i.test(category.slug || title);
+  const applicationTopic = title.replace(/\s+Across Africa$/i, "").toLowerCase();
+  const assistanceMessage = isTsf
+    ? "Speak to a TSF lining engineer"
+    : `Discuss your ${applicationTopic} project with our technical team.`;
 
   const componentsTitle = templateData?.componentsTitle || "Typical System Components";
   const componentsImage = templateData?.componentsImage || "";
@@ -86,7 +233,25 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
 
   const productsTitle = templateData?.productsTitle || "Products Used in this Application";
   const downloadsTitle = templateData?.downloadsTitle || "Technical Downloads";
-  const downloads = templateData?.downloads || [];
+  const downloads = prepareResourceLinks(templateData?.downloads || []);
+  const deliveryProfile = templateData?.deliveryProfile ||
+    applicationDeliveryProfiles.find((profile) =>
+      profile.match.test(`${category.label || ""} ${title}`),
+    ) || {
+      selection:
+        "We review drawings, operating conditions and the material schedule before confirming products and delivery scope.",
+      installation:
+        "We agree installation responsibilities, work sequence and inspection stages with your project team before site work starts.",
+      quality:
+        "Our records connect material identity, installation inspections, applicable tests and repair close-out to the agreed handover scope.",
+      why: "Coordinate technical selection, supply, African project delivery and the defined installation package through one accountable partner.",
+    };
+  const directoryEntry = findApplication(category.slug);
+  const relatedApplications = directoryEntry
+    ? APPLICATION_DIRECTORY.filter(
+        (entry) => entry.group === directoryEntry.group && entry.slug !== category.slug,
+      ).slice(0, 4)
+    : [];
 
   // ─── Scroll Spy Navigation ──────────────────────────────────────────────────
   const [activeSection, setActiveSection] = useState<string>("overview");
@@ -94,6 +259,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
   useEffect(() => {
     const sectionIds = [
       "overview",
+      "delivery",
       "components",
       "design",
       "installation",
@@ -147,7 +313,9 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
       <section
         className="relative isolate overflow-hidden bg-surface-dark text-white"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(15,15,18,0.9), rgba(15,15,18,0.55)), url(${heroImage})`,
+          backgroundImage: heroImage
+            ? `linear-gradient(to right, rgba(15,15,18,0.9), rgba(15,15,18,0.55)), url(${heroImage})`
+            : "linear-gradient(to right, #0f0f12, #26343b)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -219,7 +387,12 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
             {[
               { id: "overview", label: "Overview" },
-              { id: "components", label: "System Components", show: !!componentsImage },
+              { id: "delivery", label: "Our Delivery & Why Choose Us" },
+              {
+                id: "components",
+                label: "System Components",
+                show: !!componentsImage || componentsCallouts.length > 0,
+              },
               { id: "design", label: "Design Considerations", show: designParagraphs.length > 0 },
               {
                 id: "installation",
@@ -270,37 +443,109 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             </div>
           </section>
 
+          <section id="delivery" className="border-t border-border pt-16 scroll-mt-32">
+            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+              How Geosynthetics Africa Delivers Across Africa
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-8">
+              Choose material supply or an integrated supply, delivery, installation and QA/QC
+              scope. We coordinate the package around your site, specification and construction
+              programme.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-5">
+              {[
+                { title: "Technical Selection & Scope", text: deliveryProfile.selection },
+                {
+                  title: "Supply & Cross-Border Delivery",
+                  text: "We coordinate material schedules, packing, freight, customs documentation and delivery routes to your African project site. Availability, shipment sequencing and mobilisation are confirmed in your proposal.",
+                },
+                { title: "Installation & Site Controls", text: deliveryProfile.installation },
+                { title: "Our QA/QC & Handover", text: deliveryProfile.quality },
+              ].map((stage) => (
+                <div key={stage.title} className="border border-border rounded-lg bg-card p-6">
+                  <h3 className="font-bold text-sm uppercase mb-3">{stage.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{stage.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 border-l-4 border-primary bg-surface p-6 rounded-r-lg">
+              <h3 className="font-display text-xl font-bold uppercase mb-4">
+                Why Choose Geosynthetics Africa
+              </h3>
+              <p className="text-muted-foreground leading-relaxed mb-5">{deliveryProfile.why}</p>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li>
+                  <strong className="text-foreground">African project experience.</strong> More than
+                  15 million m² installed and materials supplied to over 30 countries across the
+                  Group's delivery footprint.
+                </li>
+                <li>
+                  <strong className="text-foreground">One coordinated project scope.</strong>{" "}
+                  Technical selection, supply, fabrication where required, logistics and agreed
+                  installation responsibilities brought together from enquiry to handover.
+                </li>
+                <li>
+                  <strong className="text-foreground">Quality you can review.</strong> Defined
+                  inspection stages, material traceability and application-specific records, with
+                  our installer QC coordinated with independent CQA where appointed.
+                </li>
+                <li>
+                  <strong className="text-foreground">Specialist installation capability.</strong>{" "}
+                  The Group is an IAGI Installer Member. Geomembrane work is supported by trained
+                  welding technicians, trial welds and documented seam-control procedures.
+                </li>
+              </ul>
+              <a
+                href="#quote"
+                onClick={(e) => scrollToSection(e, "quote")}
+                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+              >
+                Discuss your project scope <ArrowRightIcon className="h-4 w-4" />
+              </a>
+            </div>
+          </section>
+
           {/* Section: System Components */}
-          {componentsImage && (
+          {(componentsImage || componentsCallouts.length > 0) && (
             <section id="components" className="border-t border-border pt-16 scroll-mt-32">
               <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
                 <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
                 {componentsTitle}
               </h2>
-              <div className="grid lg:grid-cols-12 gap-8 items-start">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="border border-border rounded-xl p-4 bg-surface/30">
-                    <img
-                      src={componentsImage}
-                      alt={componentsTitle}
-                      className="w-full h-auto rounded-lg object-contain bg-white mx-auto"
-                    />
+              <div
+                className={cn(
+                  "grid gap-8 items-start",
+                  componentsImage ? "lg:grid-cols-12" : "grid-cols-1",
+                )}
+              >
+                {(componentsImage || componentsDrawingLink) && (
+                  <div className="lg:col-span-7 space-y-4">
+                    {componentsImage && (
+                      <div className="border border-border rounded-xl p-4 bg-surface/30">
+                        <img
+                          src={componentsImage}
+                          alt={componentsTitle}
+                          className="w-full h-auto rounded-lg object-contain bg-white mx-auto"
+                        />
+                      </div>
+                    )}
+                    {componentsDrawingLink && (
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="uppercase font-bold tracking-wider text-xs cursor-pointer"
+                      >
+                        <a href={componentsDrawingLink} target="_blank" rel="noopener noreferrer">
+                          View Detailed Drawing <ChevronRightIcon className="h-4 w-4 ml-1" />
+                        </a>
+                      </Button>
+                    )}
                   </div>
-                  {componentsDrawingLink && (
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="uppercase font-bold tracking-wider text-xs cursor-pointer"
-                    >
-                      <a href={componentsDrawingLink} target="_blank" rel="noopener noreferrer">
-                        View Detailed Drawing <ChevronRightIcon className="h-4 w-4 ml-1" />
-                      </a>
-                    </Button>
-                  )}
-                </div>
-                <div className="lg:col-span-5 space-y-3">
+                )}
+                <div className={cn("space-y-3", componentsImage && "lg:col-span-5")}>
                   <h3 className="font-display text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
-                    Components Legend
+                    Key System Components
                   </h3>
                   <div className="space-y-4">
                     {componentsCallouts.map((item: any, idx: number) => (
@@ -391,10 +636,9 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                 {linkedProducts.map((prod: any, idx: number) => (
                   <Link
                     key={idx}
-                    to="/products/$category/$family"
+                    to="/catalogue/$slug"
                     params={{
-                      category: prod.product_categories?.slug || "geomembranes",
-                      family: prod.slug,
+                      slug: prod.slug,
                     }}
                     className="group border border-border bg-card rounded-lg overflow-hidden flex flex-col hover:border-primary transition"
                   >
@@ -413,7 +657,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                         <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">
                           {prod.name}
                         </h4>
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider leading-none">
+                        <span className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
                           {prod.thickness_mm
                             ? `${prod.thickness_mm}mm thickness`
                             : prod.short_description || ""}
@@ -481,6 +725,35 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             </section>
           )}
 
+          {relatedApplications.length > 0 && (
+            <section className="border-t border-border pt-16">
+              <h2 className="font-display text-2xl font-bold uppercase mb-6">
+                Related Applications
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {relatedApplications.map((app) => (
+                  <Link
+                    key={app.slug}
+                    to="/applications/$category"
+                    params={{ category: app.slug }}
+                    className="border border-border rounded-lg p-5 hover:border-primary transition"
+                  >
+                    <h3 className="text-sm font-bold text-primary">{app.label}</h3>
+                    <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                      {app.summary}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+              <Link
+                to="/applications"
+                className="mt-5 inline-flex text-sm font-bold text-primary hover:underline"
+              >
+                View all applications
+              </Link>
+            </section>
+          )}
+
           {/* Section: Downloads */}
           {downloads.length > 0 && (
             <section id="downloads" className="border-t border-border pt-16 scroll-mt-32">
@@ -506,7 +779,9 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                           {item.label}
                         </div>
                         <div className="text-[10px] text-muted-foreground mt-0.5 leading-none">
-                          Technical specification sheet (PDF)
+                          {/\.pdf(?:[?#]|$)/i.test(item.url)
+                            ? "Technical document (PDF)"
+                            : "Technical resources & product documentation"}
                         </div>
                       </div>
                     </div>
@@ -569,16 +844,13 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">
               <h3 className="font-display text-xs font-bold uppercase tracking-wider text-foreground flex items-center">
                 <span className="w-1 h-3 bg-primary rounded-full mr-2"></span>
-                Need Assistance?
+                Contact
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Our team can help you design and specify the right containment and engineering cover
-                solutions.
-              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{assistanceMessage}</p>
               <div className="space-y-3 pt-1 border-t border-border/60">
                 {assistancePhone && (
                   <a
-                    href={`tel:${assistancePhone}`}
+                    href={`tel:${assistancePhone.replace(/[^+\d]/g, "")}`}
                     className="flex items-center gap-2.5 text-xs font-semibold text-foreground hover:text-primary transition"
                   >
                     <PhoneIcon className="h-4 w-4 text-primary shrink-0" />
@@ -624,13 +896,14 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                     <span className="text-[9px] font-bold uppercase tracking-widest text-primary">
                       {featuredCaseStudy.project_year || "FEATURED CASE STUDY"}
                     </span>
-                    <h4 className="text-xs font-bold uppercase tracking-tight text-white line-clamp-1 mt-0.5">
+                    <h4 className="text-xs font-bold uppercase tracking-tight text-white mt-0.5">
                       {featuredCaseStudy.title}
+                      {featuredCaseStudy.project_year ? ` (${featuredCaseStudy.project_year})` : ""}
                     </h4>
                   </div>
                 </div>
                 <div className="p-4 flex flex-col flex-1 bg-card justify-between">
-                  <div className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed mb-3">
+                  <div className="text-[11px] text-muted-foreground leading-relaxed mb-3">
                     {featuredCaseStudy.summary}
                   </div>
                   <Link
@@ -645,11 +918,11 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             )}
 
             {/* Quote Form box */}
-            <div id="quote" className="scroll-mt-32">
+            <div className="scroll-mt-32">
               <QuoteCard
                 contextLabel={title}
-                heading="Request Support"
-                description="Describe your application requirements and our engineers will specify the right geosynthetics system."
+                heading="Request a Project Proposal"
+                description="Send your drawings, quantities, project location and required date. Our technical team will review your scope and prepare a proposal."
               />
             </div>
           </div>

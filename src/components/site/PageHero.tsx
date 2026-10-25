@@ -1,3 +1,4 @@
+import { productImage } from "@/lib/product-imagery";
 import { type ReactNode } from "react";
 import { DrainageMesh } from "@/components/site/shapes";
 
@@ -20,7 +21,7 @@ export function PageHero({
     <section
       className="relative isolate overflow-hidden bg-surface-dark text-surface-dark-foreground"
       style={{
-        backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.55)), url(${image})`,
+        backgroundImage: `linear-gradient(to right, rgba(10,10,12,0.85), rgba(10,10,12,0.55)), url(${productImage(image)})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

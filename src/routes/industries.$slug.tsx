@@ -1,3 +1,4 @@
+import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
@@ -151,25 +152,7 @@ export async function loadIndustryData(slug: string) {
   let keyProducts: any[] = [];
   if (templateData?.keyProducts && templateData.keyProducts.length > 0) {
     try {
-      const { data: prodsData } = await supabase
-        .from("products_public")
-        .select(
-          "id, name, slug, image_url, short_description, thickness_mm, roll_width_m, roll_length_m, product_categories(slug, name)",
-        )
-        .in("id", templateData.keyProducts);
-
-      if (prodsData) {
-        // Order products in the order they were nominated
-        const ordered = templateData.keyProducts
-          .map((id: string) => prodsData.find((p) => p.id === id))
-          .filter(Boolean);
-        keyProducts = ordered.map((d: any) => ({
-          ...d,
-          product_categories: Array.isArray(d.product_categories)
-            ? d.product_categories[0]
-            : d.product_categories,
-        }));
-      }
+      keyProducts = await fetchProductsByIdsOrSlugs(templateData.keyProducts);
     } catch (e) {
       console.error("Failed to load nominated key products:", e);
     }

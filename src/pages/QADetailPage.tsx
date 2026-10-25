@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { cn } from "@/lib/utils";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 
 const getIconComp = (name: string | undefined): React.ComponentType<any> => {
@@ -32,7 +33,8 @@ type ContentSection = {
 };
 
 export function QADetailPage() {
-  const { qaDocument: doc } = Route.useLoaderData();
+  const { qaDocument: rawDocument } = Route.useLoaderData();
+  const doc = useMemo(() => publicBusinessCopy(rawDocument), [rawDocument]);
   const [activeAnchor, setActiveAnchor] = useState("overview");
   const [headerH, setHeaderH] = useState(96);
 

@@ -10,8 +10,13 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
-import { mockProductFamilyData as mockData } from "@/mocks/productFamilyMocks";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
+import { canonicalPublicPath } from "@/lib/public-paths";
 import { SITE_URL } from "@/lib/site-url";
+import { MaterialSelectionPanel } from "@/components/site/MaterialSelectionPanel";
+import { applicationPath, materialGuideFor } from "@/data/material-selection";
+import { APPLICATION_DIRECTORY } from "@/data/application-directory";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 function mapFamilyData(
   familyData: any,
   category: string,
@@ -24,12 +29,6 @@ function mapFamilyData(
     title: familyData.label || familyData.title || "",
     heroImage: familyData.heroImage || familyData.heroImageUrl || "",
     subtitle: familyData.subtitle || "",
-    stats: familyData.stats || {
-      projects: "1 of 5",
-      countries: "30+",
-      experts: "One scope",
-      years: "100%",
-    },
     technicalSpecText: Array.isArray(familyData.description)
       ? familyData.description.join("\n\n")
       : familyData.technicalSpecText || "",
@@ -49,26 +48,14 @@ function mapFamilyData(
       (item: any) => ({
         name: item.name || "",
         spec: item.spec || item.desc || "",
-        image:
-          item.image || "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&q=80",
+        image: item.image || "",
         slug: item.slug || "",
       }),
     ),
     relatedProductGroups:
       familyData.relatedProductGroups && familyData.relatedProductGroups.length > 0
         ? familyData.relatedProductGroups
-        : [
-            { name: "HDPE Geomembranes", slug: "hdpe-geomembranes" },
-            { name: "LLDPE Geomembranes", slug: "lldpe-geomembranes" },
-            { name: "PVC Geomembranes", slug: "pvc-geomembranes" },
-            { name: "EPDM Geomembranes", slug: "epdm-geomembranes" },
-            { name: "PP Geomembranes", slug: "pp-geomembranes" },
-          ]
-            .filter((item) => item.slug !== family)
-            .map((item) => ({
-              name: item.name,
-              link: `/products/${category}/${item.slug}`,
-            })),
+        : [{ name: "Explore the complete material range", link: "/products" }],
     questions: (familyData.faqs || familyData.questions || []).map((item: any) => ({
       q: item.question || item.q || "",
       a: item.answer || item.a || "",
@@ -81,17 +68,13 @@ function mapFamilyData(
         ? dynamicCaseStudies.map((cs: any) => ({
             name: cs.title || "",
             location: `${cs.location}, ${cs.country}`,
-            image:
-              cs.hero_image_url ||
-              "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+            image: cs.hero_image_url || "",
             slug: cs.slug || "",
           }))
         : (familyData.projectReferences || familyData.projects || []).map((proj: any) => ({
             name: proj.name || "",
             location: proj.location || "",
-            image:
-              proj.image ||
-              "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+            image: proj.image || "",
             slug: proj.slug || proj.project_slug || "",
           })),
     applications: Array.isArray(familyData.applications)
@@ -107,15 +90,10 @@ function mapFamilyData(
           }
           return { label: app.label || "", slug: app.slug || "" };
         })
-      : [
-          { label: "Mining (Heap Leach Pads, Tailings Impoundments)", slug: "mining-systems" },
-          { label: "Environmental (Landfill Basal Lining, Capping)", slug: "waste-landfills" },
-          { label: "Water (Reservoirs, Dams, Canals, Ponds)", slug: "water-containment" },
-          {
-            label: "Roads & Infrastructure (Subgrade Stabilization)",
-            slug: "roads-infrastructure",
-          },
-        ],
+      : (materialGuideFor(category)?.applications || []).map((slug) => ({
+          label: APPLICATION_DIRECTORY.find((app) => app.slug === slug)?.label || slug,
+          slug,
+        })),
     industries:
       familyData.industries && familyData.industries.length > 0
         ? familyData.industries.map((ind: any) => ({
@@ -123,33 +101,38 @@ function mapFamilyData(
             slug: ind.slug || "",
           }))
         : [
-            { label: "Mining", slug: "mining" },
-            { label: "Water Management", slug: "water-management" },
-            { label: "Construction & Infrastructure", slug: "construction-infrastructure" },
+            { label: "Mining & Minerals Processing", slug: "mining-minerals-processing" },
+            { label: "Water Utilities & Irrigation", slug: "water-utilities-irrigation" },
+            { label: "Transport & Infrastructure", slug: "transport-infrastructure" },
           ],
   };
 }
 
 export function ProductFamilyPage() {
-  const { category, family, familyData, dynamicCaseStudies } = Route.useLoaderData();
+  const { category, family, familyData: rawFamilyData, dynamicCaseStudies } = Route.useLoaderData();
+  const familyData = publicBusinessCopy(rawFamilyData);
+  const { open } = useQuickQuote();
 
-  const data = (
-    familyData ? mapFamilyData(familyData, category, family, dynamicCaseStudies) : mockData
-  ) as typeof mockData & { heroImage?: string };
+  const data = mapFamilyData(
+    familyData || {
+      label: family
+        .split("-")
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" "),
+      subtitle:
+        "Material supply and technical selection support for African projects. Send your specification and quantities to define the supplied grade and delivery scope.",
+    },
+    category,
+    family,
+    dynamicCaseStudies,
+  )!;
   const heroImage = (data as any).heroImage || "";
   const [activeSection, setActiveSection] = useState<string>("description");
 
   useEffect(() => {
-    if (!familyData) {
-      console.warn(
-        "TODO: Replace `mockData` in ProductFamilyPage with dynamic content via the Site Builder / Database.",
-      );
-    }
-  }, [familyData]);
-
-  useEffect(() => {
     const sectionIds = [
       "description",
+      "selection-quality",
       "specifications",
       "faqs",
       "projects",
@@ -183,12 +166,12 @@ export function ProductFamilyPage() {
 
   const dynamicFamilyName = family
     .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ")
     .toUpperCase();
   const dynamicCategoryName = category
     .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ")
     .toUpperCase();
 
@@ -214,7 +197,10 @@ export function ProductFamilyPage() {
           { name: "Home", url: SITE_URL },
           { name: "Products", url: `${SITE_URL}/products` },
           { name: dynamicCategoryName, url: `${SITE_URL}/products/${category}` },
-          { name: data.title || dynamicFamilyName, url: `${SITE_URL}/products/${category}/${family}` },
+          {
+            name: data.title || dynamicFamilyName,
+            url: `${SITE_URL}/products/${category}/${family}`,
+          },
         ]}
       />
       {/* Hero Section */}
@@ -251,11 +237,7 @@ export function ProductFamilyPage() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
                 className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide text-white"
-                onClick={() => {
-                  document
-                    .getElementById("quote")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
+                onClick={() => open(data.title)}
               >
                 Get a Quote
               </Button>
@@ -264,7 +246,7 @@ export function ProductFamilyPage() {
                 variant="outline"
                 className="bg-transparent border-white/30 text-white hover:bg-white hover:text-surface-dark uppercase font-bold tracking-wide"
               >
-                <Link to="/resources">View Spec Sheet</Link>
+                <Link to="/resources">Technical Resources</Link>
               </Button>
             </div>
           </div>
@@ -315,14 +297,14 @@ export function ProductFamilyPage() {
             </Link>
             <Link
               to="/services/$slug"
-              params={{ slug: "geomembrane-liner-installation-africa" }}
+              params={{ slug: "manufacturing-fabrication" }}
               className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
             >
               <div className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105 leading-none md:leading-normal">
-                IAGI-Aligned
+                Project Scope
               </div>
               <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Installation
+                Fabrication & Installation
               </div>
             </Link>
             <Link
@@ -346,6 +328,7 @@ export function ProductFamilyPage() {
           <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
             {[
               { id: "description", label: "Description" },
+              { id: "selection-quality", label: "Selection & QA/QC" },
               { id: "specifications", label: "Specifications" },
               { id: "documents", label: "Documents" },
               { id: "applications", label: "Applications & Industries" },
@@ -378,7 +361,7 @@ export function ProductFamilyPage() {
           <section id="description">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
               <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-              Technical Specification of {data.title}
+              About {data.title}
             </h2>
             <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed">
               {splitIntoParagraphs(data.technicalSpecText).map((para, idx) => (
@@ -389,7 +372,7 @@ export function ProductFamilyPage() {
             </div>
 
             <h3 className="font-bold text-sm uppercase tracking-widest text-foreground mt-10 mb-6">
-              Typical Values for {dynamicCategoryName}
+              Published Technical Highlights
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {(data.typicalValues || []).map((val: any, idx: number) => (
@@ -406,6 +389,8 @@ export function ProductFamilyPage() {
             </div>
           </section>
 
+          <MaterialSelectionPanel category={category} productName={data.title} />
+
           {/* Section: Properties & Dimensions */}
           <section id="specifications">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
@@ -416,30 +401,26 @@ export function ProductFamilyPage() {
               <table className="w-full text-sm text-left">
                 <thead className="text-xs text-white uppercase bg-surface-dark font-bold">
                   <tr>
-                    {(data.properties?.headers || mockData.properties.headers).map(
-                      (h: string, i: number) => (
-                        <th key={i} className="px-4 py-4 whitespace-nowrap">
-                          {h}
-                        </th>
-                      ),
-                    )}
+                    {(data.properties?.headers || []).map((h: string, i: number) => (
+                      <th key={i} className="px-4 py-4 whitespace-nowrap">
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {(data.properties?.rows || mockData.properties.rows).map(
-                    (row: string[], i: number) => (
-                      <tr key={i} className="hover:bg-accent/50 transition-colors">
-                        {row.map((cell, j) => (
-                          <td
-                            key={j}
-                            className={`px-4 py-3 ${j === 0 ? "font-bold text-foreground" : "text-muted-foreground whitespace-nowrap"}`}
-                          >
-                            {cell}
-                          </td>
-                        ))}
-                      </tr>
-                    ),
-                  )}
+                  {(data.properties?.rows || []).map((row: string[], i: number) => (
+                    <tr key={i} className="hover:bg-accent/50 transition-colors">
+                      {row.map((cell, j) => (
+                        <td
+                          key={j}
+                          className={`px-4 py-3 ${j === 0 ? "font-bold text-foreground" : "text-muted-foreground whitespace-nowrap"}`}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -448,8 +429,7 @@ export function ProductFamilyPage() {
                 to="/resources"
                 className="text-primary hover:underline font-bold text-sm uppercase tracking-wider flex items-center gap-2"
               >
-                <Download className="h-4 w-4" /> Download Full Technical Datasheet for {data.title}{" "}
-                (PDF)
+                <FileText className="h-4 w-4" /> Browse Technical Resources for {data.title}
               </Link>
             </div>
           </section>
@@ -467,11 +447,13 @@ export function ProductFamilyPage() {
                   className="group border border-border bg-surface rounded overflow-hidden flex flex-col hover:border-primary transition-colors"
                 >
                   <div className="aspect-square bg-surface-dark overflow-hidden relative">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
-                    />
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100"
+                      />
+                    )}
                   </div>
                   <div className="p-4 flex flex-col flex-1">
                     <h4 className="font-bold text-sm uppercase tracking-wide text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
@@ -513,7 +495,7 @@ export function ProductFamilyPage() {
               {(data.relatedProductGroups || []).map((group: any, idx: number) => (
                 <Link
                   key={idx}
-                  to={group.link}
+                  to={canonicalPublicPath(group.link)}
                   className="border border-border bg-surface p-4 rounded hover:border-primary hover:bg-accent transition group/card flex items-center justify-between"
                 >
                   <span className="font-bold text-sm uppercase tracking-wide text-foreground group-hover/card:text-primary transition">
@@ -529,7 +511,7 @@ export function ProductFamilyPage() {
           <section id="faqs">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
               <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-              Three Questions To Ask Before You Order
+              Questions About {data.title}
             </h2>
             <FaqAccordion
               items={(data.questions || []).map((faq: any) => ({
@@ -583,11 +565,13 @@ export function ProductFamilyPage() {
             {(data.projects || []).map((project: any, idx: number) => {
               const cardContent = (
                 <>
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                  />
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt={project.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
                   <div className="absolute bottom-4 left-4 right-4">
                     <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">
@@ -605,7 +589,12 @@ export function ProductFamilyPage() {
                   <Link
                     key={idx}
                     to="/projects/$slug"
-                    params={{ slug: project.slug }}
+                    params={{
+                      slug: canonicalPublicPath("/projects/" + project.slug).replace(
+                        "/projects/",
+                        "",
+                      ),
+                    }}
                     className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border block"
                   >
                     {cardContent}
@@ -687,8 +676,7 @@ export function ProductFamilyPage() {
                   <li key={idx}>
                     {app.slug ? (
                       <Link
-                        to="/applications/$category"
-                        params={{ category: app.slug }}
+                        to={applicationPath(app.slug, app.label) as any}
                         className="group flex items-center gap-3 text-sm font-medium text-muted-foreground hover:text-primary transition"
                       >
                         <ArrowRight className="h-4 w-4 text-primary shrink-0" />
@@ -717,8 +705,8 @@ export function ProductFamilyPage() {
                 {(data.industries || []).map((ind: any, idx: number) => (
                   <Link
                     key={idx}
-                    to="/industries/$slug"
-                    params={{ slug: ind.slug }}
+                    to={ind.slug && ind.slug !== "#" ? "/industries/$slug" : "/industries"}
+                    params={ind.slug && ind.slug !== "#" ? { slug: ind.slug } : undefined}
                     className="group flex flex-col justify-between p-4 border border-border bg-surface rounded hover:border-primary hover:bg-accent transition"
                   >
                     <span className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition">
@@ -732,17 +720,6 @@ export function ProductFamilyPage() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Quote Request Section */}
-      <section className="bg-background">
-        <div className="container-page py-16 max-w-2xl">
-          <QuoteCard
-            contextLabel={data.title}
-            heading="Request a Quote for This Product Family"
-            description="Upload your BOQ, drawings, or specifications and our technical team will provide a detailed proposal."
-          />
         </div>
       </section>
 

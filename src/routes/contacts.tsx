@@ -49,10 +49,10 @@ export const Route = createFileRoute("/contacts")({
   },
   head: ({ loaderData }) => {
     const seo = loaderData?.seo;
-    const title = seo?.title || "Contact — Johannesburg Head Office | Geosynthetics Africa";
+    const title = seo?.title || "Contact Geosynthetics Africa | Project Quotes & Support";
     const desc =
       seo?.description ||
-      "Geosynthetics Africa Johannesburg Head Office — Southern Africa regional hub for supply, installation, QA/QC and logistics. Upload your BOQ or speak to the technical team.";
+      "Contact Geosynthetics Africa in Cape Town for material supply, fabrication, African delivery and installation enquiries. Send your BOQ, drawings and site location.";
     const meta = [
       { title },
       { name: "description", content: desc },

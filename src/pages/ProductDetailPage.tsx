@@ -1,5 +1,6 @@
 import { defaultQaForFamily } from "@/data/product-qa-defaults";
 import { Link } from "@tanstack/react-router";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ChevronRight,
@@ -33,6 +34,8 @@ import { findProductFamily } from "@/lib/product-families";
 import { Route } from "@/routes/catalogue.$slug";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { SITE_URL } from "@/lib/site-url";
+import { MaterialSelectionPanel } from "@/components/site/MaterialSelectionPanel";
+import { materialGuideFor } from "@/data/material-selection";
 
 interface KeyFeature {
   label: string;
@@ -59,15 +62,14 @@ const FEATURE_ICONS = {
 } as const;
 
 const DEFAULT_FEATURES: KeyFeature[] = [
-  { label: "High Filtration Efficiency", icon: "filter" },
-  { label: "Excellent Durability", icon: "durable" },
-  { label: "UV & Chemical Resistant", icon: "uv" },
-  { label: "Easy to Install", icon: "install" },
-  { label: "Cost Effective", icon: "cost" },
+  { label: "Technical Specification Review", icon: "install" },
+  { label: "Project Scope Support", icon: "durable" },
+  { label: "Supply & Delivery Planning", icon: "cost" },
 ];
 
 const TABS = [
   { id: "overview", label: "Overview" },
+  { id: "selection-quality", label: "Selection & Delivery" },
   { id: "specifications", label: "Specifications" },
   { id: "applications", label: "Applications" },
   { id: "systems", label: "Systems" },
@@ -78,8 +80,14 @@ const TABS = [
 ];
 
 export function ProductDetailPage() {
-  const { product, alternatives, systemComponents, familyData, caseStudies } =
-    Route.useLoaderData();
+  const {
+    product: rawProduct,
+    alternatives,
+    systemComponents,
+    familyData,
+    caseStudies,
+  } = Route.useLoaderData();
+  const product = useMemo(() => publicBusinessCopy(rawProduct), [rawProduct]);
 
   // QA/QC is specific to each product family: only show what Site Builder holds for it
   // (Site Builder first, then the built-in default for the family)
@@ -92,7 +100,13 @@ export function ProductDetailPage() {
     ...(product.standard ? [product.standard] : []),
   ].filter((v: string, idx: number, all: string[]) => v?.trim() && all.indexOf(v) === idx);
   const hasQa = qaChecklist.length > 0 || qaStandards.length > 0 || !!product.qa_checklist_url;
-  const tabs = TABS.filter((t) => t.id !== "qa" || hasQa);
+  const selectionGuide =
+    materialGuideFor(product.family_slug) ||
+    materialGuideFor(product.product_categories?.slug) ||
+    materialGuideFor(product.product_categories?.name);
+  const tabs = TABS.filter(
+    (t) => (t.id !== "qa" || hasQa) && (t.id !== "selection-quality" || !!selectionGuide),
+  );
   const { open } = useQuickQuote();
   const [activeTab, setActiveTab] = useState("overview");
   const [quoteMessage, setQuoteMessage] = useState("");
@@ -143,7 +157,16 @@ export function ProductDetailPage() {
         },
         { label: "QA/QC Checklist", url: product.qa_checklist_url, size: "PDF" },
         { label: "Chemical Resistance Guide", url: product.chemical_resistance_url, size: "PDF" },
-      ].filter((d) => d.url),
+      ]
+        .filter((d) => d.url)
+        .map((d) => ({
+          ...d,
+          size: d.url.startsWith("#")
+            ? "On-page guidance"
+            : /\.pdf(?:$|[?#])/i.test(d.url)
+              ? "PDF"
+              : "View resource",
+        })),
     [product, familyData],
   );
 
@@ -162,7 +185,7 @@ export function ProductDetailPage() {
       value:
         product.roll_width ||
         (familyData?.technicalHighlights?.[1]?.value &&
-          familyData.technicalHighlights[1].label.toLowerCase().includes("width")
+        familyData.technicalHighlights[1].label.toLowerCase().includes("width")
           ? familyData.technicalHighlights[1].value
           : null),
     },
@@ -172,7 +195,7 @@ export function ProductDetailPage() {
       value:
         product.roll_length ||
         (familyData?.technicalHighlights?.[2]?.value &&
-          familyData.technicalHighlights[2].label.toLowerCase().includes("length")
+        familyData.technicalHighlights[2].label.toLowerCase().includes("length")
           ? familyData.technicalHighlights[2].value
           : null),
     },
@@ -205,12 +228,12 @@ export function ProductDetailPage() {
     return [];
   }, [product.compatible_systems, familyData?.types]);
 
-function getValidSelectionGuideUrl(rawUrl?: string | null): string {
-  if (!rawUrl || rawUrl.includes("boq-uploads")) {
-    return "/resources/installation-guides";
+  function getValidSelectionGuideUrl(rawUrl?: string | null): string {
+    if (!rawUrl || rawUrl.includes("boq-uploads")) {
+      return "/resources/installation-guides";
+    }
+    return rawUrl;
   }
-  return rawUrl;
-}
 
   const documentGrid = useMemo(() => {
     return [
@@ -331,11 +354,11 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
           { name: "Catalogue", url: `${SITE_URL}/catalogue` },
           ...(productFamily?.label || product.product_categories?.name
             ? [
-              {
-                name: productFamily?.label || product.product_categories!.name,
-                url: `${SITE_URL}/products/${productFamily?.slug || product.product_categories?.slug || (productFamily?.label || product.product_categories!.name).toLowerCase().replace(/\s+/g, "-")}`,
-              },
-            ]
+                {
+                  name: productFamily?.label || product.product_categories!.name,
+                  url: `${SITE_URL}/products/${productFamily?.slug || product.product_categories?.slug || (productFamily?.label || product.product_categories!.name).toLowerCase().replace(/\s+/g, "-")}`,
+                },
+              ]
             : []),
           { name: product.name, url: `${SITE_URL}/catalogue/${product.slug}` },
         ]}
@@ -372,32 +395,36 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
               },
               ...(productFamily?.label || product.product_categories?.name
                 ? [
-                  (productFamily?.slug || product.product_categories?.slug)
-                    ? {
-                      label: productFamily?.label || product.product_categories!.name,
-                      to: "/products/$category",
-                      params: { category: (productFamily?.slug || product.product_categories?.slug)! },
-                    }
-                    : {
-                      label: productFamily?.label || product.product_categories!.name,
-                      to: "/catalogue",
-                      search: {
-                        q: "",
-                        cats: product.product_categories?.id ? [product.product_categories.id] : [],
-                        mans: [],
-                        sort: "newest",
-                      },
-                    },
-                ]
+                    productFamily?.slug || product.product_categories?.slug
+                      ? {
+                          label: productFamily?.label || product.product_categories!.name,
+                          to: "/products/$category",
+                          params: {
+                            category: (productFamily?.slug || product.product_categories?.slug)!,
+                          },
+                        }
+                      : {
+                          label: productFamily?.label || product.product_categories!.name,
+                          to: "/catalogue",
+                          search: {
+                            q: "",
+                            cats: product.product_categories?.id
+                              ? [product.product_categories.id]
+                              : [],
+                            mans: [],
+                            sort: "newest",
+                          },
+                        },
+                  ]
                 : []),
               ...(product.manufacturers?.name
                 ? [
-                  {
-                    label: product.manufacturers.name,
-                    to: "/catalogue",
-                    search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
-                  },
-                ]
+                    {
+                      label: product.manufacturers.name,
+                      to: "/catalogue",
+                      search: { q: "", cats: [], mans: [product.manufacturers.id], sort: "newest" },
+                    },
+                  ]
                 : []),
               { label: product.name },
             ]}
@@ -554,6 +581,7 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
             </div>
 
             {/* Specifications */}
+            <MaterialSelectionPanel category={selectionGuide?.slug} productName={product.name} />
             <div id="specifications">
               <h2 className="font-display text-2xl font-bold uppercase mb-5">Typical Properties</h2>
               {product.specifications && product.specifications.length > 0 ? (
@@ -751,8 +779,13 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                           asChild
                           className="w-full bg-primary hover:bg-primary-hover font-bold text-white uppercase mt-4 text-[11px] h-9"
                         >
-                          <a href={product.qa_checklist_url} target="_blank" rel="noopener noreferrer">
-                            <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist (PDF)
+                          <a
+                            href={product.qa_checklist_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Download className="mr-1.5 h-3.5 w-3.5" /> Download QA/QC Checklist
+                            (PDF)
                           </a>
                         </Button>
                       )}
@@ -1006,15 +1039,19 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                   <div className="flex items-center gap-2.5 mb-1.5 text-primary">
                     <ArrowLeftRight className="h-4.5 w-4.5 shrink-0" />
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Alternative {productFamily?.label || product.product_categories?.name || "Solutions"}
+                      Alternative{" "}
+                      {productFamily?.label || product.product_categories?.name || "Solutions"}
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
-                    Other {productFamily?.label?.toLowerCase() || product.product_categories?.name?.toLowerCase() || "products"} in this
-                    category. See our Product Selection Guide before specifying.
+                    Other{" "}
+                    {productFamily?.label?.toLowerCase() ||
+                      product.product_categories?.name?.toLowerCase() ||
+                      "products"}{" "}
+                    in this category. See our Product Selection Guide before specifying.
                   </p>
                   <ul className="space-y-2.5">
-                    {alternatives.map((alt) => {
+                    {alternatives.map((alt: any) => {
                       const altImg = alt.image_url || alt.images?.[0] || null;
                       return (
                         <li key={alt.id}>
@@ -1091,16 +1128,22 @@ function getValidSelectionGuideUrl(rawUrl?: string | null): string {
                   <div className="flex items-center gap-2.5 mb-1.5 text-emerald-800 dark:text-emerald-500">
                     <Puzzle className="h-4.5 w-4.5 shrink-0" />
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Complete the {productFamily?.label?.replace(/s$/, "") || product.product_categories?.name?.replace(/s$/, "") || "Lining"}{" "}
+                      Complete the{" "}
+                      {productFamily?.label?.replace(/s$/, "") ||
+                        product.product_categories?.name?.replace(/s$/, "") ||
+                        "Lining"}{" "}
                       System
                     </h3>
                   </div>
                   <p className="text-[11.5px] text-muted-foreground leading-normal mb-4">
                     Components and services typically specified to successfully install this{" "}
-                    {productFamily?.label?.toLowerCase().replace(/s$/, "") || product.product_categories?.name?.toLowerCase().replace(/s$/, "") || "liner"}.
+                    {productFamily?.label?.toLowerCase().replace(/s$/, "") ||
+                      product.product_categories?.name?.toLowerCase().replace(/s$/, "") ||
+                      "liner"}
+                    .
                   </p>
                   <ul className="space-y-2.5">
-                    {systemComponents.map((sys) => {
+                    {systemComponents.map((sys: any) => {
                       const sysImg = sys.image_url || sys.images?.[0] || null;
                       return (
                         <li key={sys.id}>

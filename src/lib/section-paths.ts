@@ -53,7 +53,11 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, string> = {
  * though its template is still stored under the old name.
  */
 export const RENAMED_SECTION_SLUGS: Record<string, string> = {
+  "drainage-filtration": "/applications/drainage-filtration-systems-africa",
   "hdpe-liners-geotextiles-gcl-geogrids-delivery-afric": "/services/delivery-logistics-africa",
+  "gcl-liner-installation-contractors-africa": "/services/gcl-installation-contractor-africa",
+  "channel-lining-installation-gccm-systems-across-africa":
+    "/services/gccm-channel-lining-contractor-africa",
 };
 
 type HierarchyItem = { id: string; slug?: string; label?: string };

@@ -7,6 +7,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { HexCell } from "@/components/site/shapes";
+import { INDUSTRY_DELIVERY_GUIDES } from "@/data/industry-delivery";
 
 export function IndustriesLanding({
   data,
@@ -50,10 +51,13 @@ export function IndustriesLanding({
   }, [hierarchy, templates]);
 
   const industryDetails = (id: string, fallbackLabel: string) => {
-    const t = templates?.[id] || {};
+    const item = hierarchy?.items?.find((entry: any) => entry.id === id || entry.slug === id);
+    const t = templates?.[id] || templates?.[item?.slug] || {};
+    const profile = INDUSTRY_DELIVERY_GUIDES[item?.slug || id];
     return {
       title: t.title || fallbackLabel,
       description:
+        profile?.summary ||
         t.description ||
         "Engineered geosynthetic containment, reinforcement, and drainage solutions for African projects.",
     };

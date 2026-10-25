@@ -8,6 +8,7 @@ import { useAboutContent } from "@/hooks/use-about-content";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 
 function DynamicCardIcon({ iconName, className }: { iconName: string; className?: string }) {
   const IconComponent = resolveIcon(iconName, ShieldCheckIcon);
@@ -15,7 +16,7 @@ function DynamicCardIcon({ iconName, className }: { iconName: string; className?
 }
 
 export function AboutPage() {
-  const content = useAboutContent();
+  const content = publicBusinessCopy(useAboutContent());
   const { hero, accountability, execution, partners, faqs, trademark, contact } = content;
 
   return (
@@ -46,13 +47,14 @@ export function AboutPage() {
                 key={card.id || idx}
                 className="rounded border border-border bg-card p-8 hover:border-primary transition group flex flex-col justify-start"
               >
-                <DynamicCardIcon iconName={card.icon} className="h-10 w-10 text-primary mb-6 shrink-0" />
+                <DynamicCardIcon
+                  iconName={card.icon}
+                  className="h-10 w-10 text-primary mb-6 shrink-0"
+                />
                 <h3 className="font-display text-xl font-bold uppercase mb-4 group-hover:text-primary transition-colors">
                   {card.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {card.description}
-                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
               </div>
             ))}
           </div>
@@ -102,9 +104,7 @@ export function AboutPage() {
             <h2 className="font-display text-3xl font-bold uppercase tracking-tight">
               {partners.title}
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              {partners.description}
-            </p>
+            <p className="mt-4 text-muted-foreground">{partners.description}</p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-12 items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
@@ -127,9 +127,7 @@ export function AboutPage() {
           <h2 className="font-display text-2xl font-bold uppercase text-center mb-10">
             {faqs.title}
           </h2>
-          <FAQPageSchema
-            items={faqs.items.map((faq) => ({ question: faq.q, answer: faq.a }))}
-          />
+          <FAQPageSchema items={faqs.items.map((faq) => ({ question: faq.q, answer: faq.a }))} />
           <div className="max-w-3xl mx-auto space-y-4">
             {faqs.items.map((faq, i) => (
               <div key={faq.id || i} className="bg-card border border-border p-6 rounded">
@@ -177,9 +175,7 @@ export function AboutPage() {
               <h2 className="font-display text-4xl font-bold uppercase tracking-tight text-white">
                 {contact.title}
               </h2>
-              <p className="mt-4 text-surface-dark-foreground/70">
-                {contact.subtitle}
-              </p>
+              <p className="mt-4 text-surface-dark-foreground/70">{contact.subtitle}</p>
             </div>
 
             <div className="space-y-8">
@@ -239,7 +235,9 @@ export function AboutPage() {
                     {contact.mapHeading || contact.formHeading || "Store & Office Location"}
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                    {contact.mapDescription || contact.formDescription || "Visit our primary head office and logistics hub in Johannesburg."}
+                    {contact.mapDescription ||
+                      contact.formDescription ||
+                      "Visit our primary head office and logistics hub in Johannesburg."}
                   </p>
                 </div>
               </div>

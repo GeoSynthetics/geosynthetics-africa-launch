@@ -137,7 +137,7 @@ function renderCredentialsStrip(): string {
           <tr>
             <td class="stack" width="33%" align="center" style="padding:6px 4px;">
               <div style="font-size:16px; font-weight:bold; color:#F2A900;">IAGI</div>
-              <div style="font-size:10px; letter-spacing:1px; color:#8FA3B8; text-transform:uppercase; padding-top:4px;">Installer Member &mdash; 1 of only 5 in Africa</div>
+              <div style="font-size:10px; letter-spacing:1px; color:#8FA3B8; text-transform:uppercase; padding-top:4px;">Group IAGI Installer Membership</div>
             </td>
             <td class="stack" width="33%" align="center" style="padding:6px 4px;">
               <div style="font-size:16px; font-weight:bold; color:#F2A900;">30+</div>
@@ -197,7 +197,7 @@ function renderEmailFooter(siteUrl: string = DEFAULT_SITE_URL): string {
           SUPPLY. LOGISTICS. INSTALLATION. &mdash; ONE CONTRACT. ONE CREW. ONE SIGNATURE.
         </div>
         <div style="font-family:Arial, Helvetica, sans-serif; font-size:11px; line-height:18px; color:#8A94A6; padding-top:10px;">
-          IAGI Installer Member &nbsp;|&nbsp; B-BBEE Level 2 &nbsp;|&nbsp; QA/QC Certified &nbsp;|&nbsp; Pan-African Logistics<br>
+          IAGI Installer Member &nbsp;|&nbsp; B-BBEE Level 2 &nbsp;|&nbsp; Documented QA/QC &nbsp;|&nbsp; Pan-African Logistics<br>
           <a href="${cleanSiteUrl}" style="color:#5A6B7E; text-decoration:underline;">${domainLabel}</a> &nbsp;&middot;&nbsp; <a href="${contactUrl}" style="color:#5A6B7E; text-decoration:underline;">Contact us</a>
         </div>
         <div style="font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#A6AFBC; padding-top:12px;">

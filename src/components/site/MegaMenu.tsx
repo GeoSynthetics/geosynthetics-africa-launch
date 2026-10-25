@@ -1,3 +1,4 @@
+import { productImage } from "@/lib/product-imagery";
 import { useState, useEffect } from "react";
 import { Link, useRouter, type LinkComponentProps } from "@tanstack/react-router";
 import { resolveIcon } from "@/components/icons/resolve-icon";
@@ -158,14 +159,15 @@ export function TopSellingProductsSlider({
               to="/catalogue/$slug"
               params={{ slug: product.slug }}
               onClick={closeMenus}
-              className={`absolute inset-0 group block overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl hover:border-primary bg-stone-950 transition-all duration-700 ease-in-out ${isActive
-                ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
-                : "opacity-0 translate-x-6 scale-98 pointer-events-none z-0"
-                }`}
+              className={`absolute inset-0 group block overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl hover:border-primary bg-stone-950 transition-all duration-700 ease-in-out ${
+                isActive
+                  ? "opacity-100 translate-x-0 scale-100 pointer-events-auto z-10"
+                  : "opacity-0 translate-x-6 scale-98 pointer-events-none z-0"
+              }`}
             >
               {product.image ? (
                 <ProgressiveImage
-                  src={product.image}
+                  src={productImage(product.image)}
                   alt={product.name}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
@@ -211,8 +213,9 @@ export function TopSellingProductsSlider({
                   e.stopPropagation();
                   setCurrentIndex(i);
                 }}
-                className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
-                  }`}
+                className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                  i === currentIndex ? "bg-primary w-3" : "bg-white/50 hover:bg-white"
+                }`}
               />
             ))}
           </div>
@@ -221,8 +224,9 @@ export function TopSellingProductsSlider({
         {products.length > 1 ? (
           <div
             key={`${currentIndex}-${isHovered}`}
-            className={`absolute bottom-0 left-0 right-0 h-1 bg-primary z-20 ${isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
-              }`}
+            className={`absolute bottom-0 left-0 right-0 h-1 bg-primary z-20 ${
+              isHovered ? "w-0 scale-x-0" : "animate-slide-progress"
+            }`}
             style={{
               animationDuration: "5000ms",
             }}
@@ -297,10 +301,11 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                       to={item.to}
                       params={item.params}
                       onClick={closeMenus}
-                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${isActive
-                        ? "bg-accent text-primary translate-x-1.5"
-                        : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
-                        }`}
+                      className={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-300 ${
+                        isActive
+                          ? "bg-accent text-primary translate-x-1.5"
+                          : "text-foreground hover:bg-accent hover:text-primary hover:translate-x-1.5"
+                      }`}
                     >
                       {Icon && (
                         <Icon
@@ -403,7 +408,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                   >
                     {p.image ? (
                       <img
-                        src={p.image}
+                        src={productImage(p.image)}
                         alt={p.label}
                         className="h-12 w-12 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105"
                       />
@@ -447,7 +452,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                     className="flex gap-3 group transition-all duration-300 hover:translate-x-1.5"
                   >
                     <img
-                      src={f.image}
+                      src={productImage(f.image)}
                       alt=""
                       className="h-16 w-20 flex-shrink-0 rounded object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"

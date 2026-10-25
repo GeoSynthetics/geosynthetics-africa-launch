@@ -86,7 +86,7 @@ export const mockProductFamilyData = {
     {
       name: "Gold Mine Heap Leach",
       location: "Tarkwa, Ghana",
-      image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=400&q=80",
+      image: "/images/geotextile-product-supply.webp",
     },
     {
       name: "Raw Water Reservoir",

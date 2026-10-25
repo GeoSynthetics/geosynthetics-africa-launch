@@ -23,7 +23,10 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { GeoGrid } from "@/components/site/shapes";
 import { getCatalogueFiltersForSlug } from "@/lib/product-families";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { SITE_URL } from "@/lib/site-url";
+import { applicationPath } from "@/data/material-selection";
+import { MaterialSelectionPanel } from "@/components/site/MaterialSelectionPanel";
 
 const LEGACY_SLUG_MAP: Record<string, string> = {
   mining: "mining-systems",
@@ -33,16 +36,15 @@ const LEGACY_SLUG_MAP: Record<string, string> = {
 };
 
 function resolveApplicationSlug(rawSlug?: string): { isDirectPath: boolean; pathOrSlug: string } {
-  if (!rawSlug) return { isDirectPath: false, pathOrSlug: "applications" };
-  if (rawSlug.startsWith("/")) {
-    return { isDirectPath: true, pathOrSlug: rawSlug };
-  }
-  const mapped = LEGACY_SLUG_MAP[rawSlug] || rawSlug;
-  return { isDirectPath: false, pathOrSlug: mapped };
+  return {
+    isDirectPath: true,
+    pathOrSlug: applicationPath(LEGACY_SLUG_MAP[rawSlug || ""] || rawSlug),
+  };
 }
 
 export function ProductCategoryPage() {
-  const { category, content } = Route.useLoaderData();
+  const { category, content: rawContent } = Route.useLoaderData();
+  const content = publicBusinessCopy(rawContent);
   const { open } = useQuickQuote();
 
   const heroImage = content.heroImage;
@@ -53,7 +55,7 @@ export function ProductCategoryPage() {
         items={[
           { name: "Home", url: SITE_URL },
           { name: "Products", url: `${SITE_URL}/products` },
-          { name: content.label, url: `${SITE_URL}/products/${category}` },
+          { name: content.label, url: `${SITE_URL}/products/${category.slug}` },
         ]}
       />
       <section
@@ -82,10 +84,10 @@ export function ProductCategoryPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
-                asChild
                 className="bg-primary hover:bg-primary-hover uppercase font-bold tracking-wide text-white"
+                onClick={() => open(content.label)}
               >
-                <Link to="/contacts">Get a Quote</Link>
+                Request a Project Proposal
               </Button>
               <Button
                 asChild
@@ -93,13 +95,13 @@ export function ProductCategoryPage() {
                 className="bg-transparent border-white/30 text-white hover:bg-white hover:text-surface-dark uppercase font-bold tracking-wide flex items-center gap-2"
               >
                 <Link to="/resources">
-                  <Download className="h-4 w-4" /> Download Data Sheet
+                  <FileText className="h-4 w-4" /> Technical Resources
                 </Link>
               </Button>
             </div>
             {content.technicalHighlights && (
               <div className="mt-12 flex flex-wrap items-center gap-6 border-t border-white/10 pt-6">
-                {content.technicalHighlights.map((highlight, idx) => (
+                {content.technicalHighlights.map((highlight: any, idx: number) => (
                   <div key={idx} className="flex flex-col">
                     <span className="text-primary text-xs font-bold uppercase tracking-wider">
                       {highlight.label}
@@ -147,6 +149,7 @@ export function ProductCategoryPage() {
               </div>
             </div>
 
+            <MaterialSelectionPanel category={category.slug} productName={content.label} />
             {/* Applications */}
             {content.applications && content.applications.length > 0 && (
               <div>
@@ -155,7 +158,7 @@ export function ProductCategoryPage() {
                   Cases
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {content.applications.map((app, i) => {
+                  {content.applications.map((app: any, i: number) => {
                     const { isDirectPath, pathOrSlug } = resolveApplicationSlug(app.slug);
                     return (
                       <div
@@ -167,7 +170,7 @@ export function ProductCategoryPage() {
                         </h3>
                         <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                           {app.description ||
-                            `Ideal for ${app.label.toLowerCase()} environments where long-term durability and resistance to harsh elements is critical.`}
+                            `Review the system, material interfaces, installation and QA/QC requirements for ${app.label.toLowerCase()}.`}
                         </p>
                         {isDirectPath ? (
                           <Link
@@ -202,7 +205,7 @@ export function ProductCategoryPage() {
                   <table className="w-full text-sm text-left border border-border">
                     <thead className="text-xs text-white uppercase bg-surface-dark font-bold">
                       <tr>
-                        {content.propertiesTable.headers.map((h, i) => (
+                        {content.propertiesTable.headers.map((h: any, i: number) => (
                           <th key={i} className="px-4 py-3">
                             {h}
                           </th>
@@ -210,12 +213,12 @@ export function ProductCategoryPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {content.propertiesTable.rows.map((row, i) => (
+                      {content.propertiesTable.rows.map((row: any, i: number) => (
                         <tr
                           key={i}
                           className="bg-background border-b border-border hover:bg-surface/50"
                         >
-                          {row.map((cell, j) => (
+                          {row.map((cell: any, j: number) => (
                             <td
                               key={j}
                               className={cn(
@@ -241,7 +244,7 @@ export function ProductCategoryPage() {
                   <span className="text-primary">|</span> Types of {content.label}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {content.types.map((type, i) => (
+                  {content.types.map((type: any, i: number) => (
                     <div
                       key={i}
                       className="p-5 border border-border rounded relative group overflow-hidden bg-surface"
@@ -266,7 +269,7 @@ export function ProductCategoryPage() {
                   <span className="text-primary">|</span> Benefits of using {content.label}
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {content.benefits.map((benefit, i) => (
+                  {content.benefits.map((benefit: any, i: number) => (
                     <div key={i} className="flex gap-4 p-5 bg-surface border border-border rounded">
                       <div className="w-1 h-10 bg-primary shrink-0 rounded-full"></div>
                       <div>
@@ -318,7 +321,7 @@ export function ProductCategoryPage() {
                 <span className="text-primary">|</span> Benefits of Choosing Our Products
               </h2>
               <ul className="grid sm:grid-cols-2 gap-3">
-                {content.features.map((feature, i) => (
+                {content.features.map((feature: any, i: number) => (
                   <li key={i} className="flex items-start gap-3 p-3 bg-surface rounded">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-sm font-medium">{feature}</span>
@@ -335,7 +338,7 @@ export function ProductCategoryPage() {
                   Africa
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {content.projectReferences.map((project, i) => {
+                  {content.projectReferences.map((project: any, i: number) => {
                     const slug = (project as any).slug || project.project_slug;
                     const cardContent = (
                       <>
@@ -405,7 +408,7 @@ export function ProductCategoryPage() {
                   specs, request a quote, or add to your BOQ — without leaving this page.
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {content.popularProducts.map((p, i) => (
+                  {content.popularProducts.map((p: any, i: number) => (
                     <Link
                       key={i}
                       to="/catalogue"
@@ -462,7 +465,7 @@ export function ProductCategoryPage() {
                   <span className="text-primary">|</span> Industries that use {content.label}
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {content.industries.map((ind, i) => (
+                  {content.industries.map((ind: any, i: number) => (
                     <Link
                       key={i}
                       to="/applications"
@@ -643,10 +646,10 @@ export function ProductCategoryPage() {
               <div className="rounded bg-surface-dark text-white p-6 grid grid-cols-2 gap-4 divide-x divide-white/10 text-center">
                 <div className="px-2">
                   <div className="text-xl md:text-2xl font-display font-bold text-primary mb-1">
-                    1 of 5
+                    IAGI
                   </div>
                   <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
-                    IAGI installer members
+                    Group Installer Member
                   </div>
                 </div>
                 <div className="px-2">
@@ -654,7 +657,7 @@ export function ProductCategoryPage() {
                     One scope
                   </div>
                   <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
-                    Supply, install, certify
+                    Supply & agreed installation
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
@@ -662,15 +665,15 @@ export function ProductCategoryPage() {
                     30<span className="text-lg">+</span>
                   </div>
                   <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
-                    Countries served
+                    Countries supplied
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">
                   <div className="text-2xl md:text-3xl font-display font-bold text-primary mb-1">
-                    100<span className="text-lg">%</span>
+                    QA/QC
                   </div>
                   <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
-                    QA Testing
+                    Defined inspection records
                   </div>
                 </div>
               </div>

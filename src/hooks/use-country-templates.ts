@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  DEFAULT_COUNTRY_TEMPLATES,
-  type CountryTemplate,
-} from "@/types/country-template";
+import { publicBusinessCopy } from "@/lib/public-business-copy";
+import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
 
 const SUPABASE_KEY = "template_countries";
 
@@ -47,7 +45,7 @@ export function mergeCountryTemplatesWithDefaults(
     if (country && savedCountries.has(country)) delete merged[key];
   }
 
-  return merged;
+  return publicBusinessCopy(merged);
 }
 
 export async function fetchCountryTemplates(): Promise<Record<string, CountryTemplate>> {
@@ -113,9 +111,7 @@ export function useCountryTemplate(
   initialTemplate?: CountryTemplate | null,
   slug?: string,
 ): CountryTemplate | null {
-  const [template, setTemplate] = useState<CountryTemplate | null>(
-    initialTemplate || null,
-  );
+  const [template, setTemplate] = useState<CountryTemplate | null>(initialTemplate || null);
 
   useEffect(() => {
     let isMounted = true;

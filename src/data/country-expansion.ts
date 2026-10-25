@@ -16,7 +16,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "HDPE geomembranes, GCLs, geotextiles, geogrids and erosion control supplied, installed and tested in Nigeria, serving Lagos, Abuja, Port Harcourt, Kano and project sites nationwide.",
     badge: "West Africa · Nigeria",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Delivery to Nigeria via Lagos",
     supplyDescription:
       "Materials are routed through Lagos (Apapa, Tin Can and Lekki Deep Sea Port) and Onne / Port Harcourt and delivered to site with full shipping and clearance documentation.",
@@ -499,7 +499,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "HDPE geomembranes, GCLs, geotextiles, geogrids and erosion control supplied, installed and tested in Senegal, serving Dakar, Thiès, Saint-Louis, Kédougou and project sites nationwide.",
     badge: "West Africa · Senegal",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Delivery to Senegal via Port of Dakar",
     supplyDescription:
       "Materials are routed through Port of Dakar and delivered to site with full shipping and clearance documentation.",
@@ -592,7 +592,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "HDPE geomembranes, GCLs, geotextiles, geogrids and erosion control supplied, installed and tested in Cameroon, serving Douala, Yaoundé, Kribi, Garoua and project sites nationwide.",
     badge: "Central Africa · Cameroon",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Delivery to Cameroon via Douala and Kribi deep-sea port",
     supplyDescription:
       "Materials are routed through Douala and Kribi deep-sea port and delivered to site with full shipping and clearance documentation.",
@@ -1627,7 +1627,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "HDPE geomembranes, GCLs, geotextiles, geogrids and erosion control supplied, installed and tested in Gabon, serving Libreville, Port-Gentil, Franceville, Moanda and project sites nationwide.",
     badge: "Central Africa · Gabon",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Delivery to Gabon via Owendo",
     supplyDescription:
       "Materials are routed through Owendo (Libreville) and Port-Gentil and delivered to site with full shipping and clearance documentation.",

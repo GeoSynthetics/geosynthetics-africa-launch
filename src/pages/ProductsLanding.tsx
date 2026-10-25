@@ -8,6 +8,7 @@ import { PartnerStrip } from "@/components/site/PartnerStrip";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { PRODUCT_CATEGORIES } from "@/components/site/mega-menu-data";
 import { HexCell, MembraneFold } from "@/components/site/shapes";
+import { materialGuideFor } from "@/data/material-selection";
 
 export function ProductsLanding() {
   const { templates, hierarchy } = useLoaderData({ from: "/products/" }) as {
@@ -37,14 +38,16 @@ export function ProductsLanding() {
   }, [hierarchy]);
 
   const categoryDetails = (slug: string, fallbackLabel: string) => {
-    const t = templates?.[slug] || {};
     const hItem = hierarchy?.items?.find((item: any) => item.id === slug || item.slug === slug);
+    const t = templates?.[slug] || templates?.[hItem?.id] || {};
+    const guide = materialGuideFor(slug);
     return {
       title: t.label || hItem?.label || fallbackLabel,
       description:
         hItem?.description ||
         t.subtitle ||
-        `High-performance geosynthetic ${fallbackLabel.toLowerCase()} solutions engineered for African operating conditions.`,
+        guide?.description ||
+        `Explore ${fallbackLabel.toLowerCase()}, review the supplied-grade requirements and request material supply, delivery and an agreed project scope from Geosynthetics Africa.`,
       icon: hItem?.icon || t.icon || "Layers",
     };
   };
