@@ -197,7 +197,6 @@ const existingApplications = [
     icon: "Filter",
   },
 ];
-
 const newApplications = [
   {
     slug: "process-water-pollution-control-dam-lining",
@@ -217,7 +216,7 @@ const newApplications = [
     selection:
       "We review process chemistry, operating head, temperature, foundation conditions and the approved liner section, then schedule the barrier, protection and collection materials.",
     installation:
-      "Our scope can connect material delivery to panel deployment, fusion and extrusion welding, pipe boots, sumps, anchors and phased connections to operating facilities.",
+      "We deliver the material, deploy panels, complete fusion and extrusion welding, pipe boots, sumps and anchors, and tie in to operating facilities in phases.",
     quality:
       "Our lining QC records roll and panel identity, trial welds, applicable air-channel testing (ASTM D5820), vacuum testing (ASTM D5641), destructive peel/shear tests (ASTM D6392), repair close-out and penetration checks to the project plan.",
     why: "Combine process-containment material supply with installation and documented seam control through one partner, with freight and site mobilisation planned around the plant construction or shutdown programme.",
@@ -228,35 +227,35 @@ const newApplications = [
       ],
       [
         "Protection and drainage interfaces",
-        "Use the specified cushioning, underdrainage and any leak-detection layers with defined collection points.",
+        "We use the specified cushioning, underdrainage and any leak-detection layers with defined collection points.",
       ],
       [
         "Penetrations and terminations",
-        "Detail pipe boots, sumps, anchors and concrete connections for liquid tightness and expected movement.",
+        "We detail pipe boots, sumps, anchors and concrete connections for liquid tightness and expected movement.",
       ],
     ],
     design: [
-      "Review representative liquid chemistry, temperature and exposure duration with the material specification.",
-      "Assess foundation settlement, groundwater uplift, hydraulic head and interface stability.",
-      "Detail sumps, pipe penetrations, monitoring points and tie-ins to existing containment.",
+      "We review representative liquid chemistry, temperature and exposure duration with the material specification.",
+      "We assess foundation settlement, groundwater uplift, hydraulic head and interface stability.",
+      "We detail sumps, pipe penetrations, monitoring points and tie-ins to existing containment.",
     ],
     install: [
-      "Accept the formation, drains and protection layers before deployment; isolate operating interfaces under the site work plan.",
-      "Deploy and join panels to the approved layout, recording welding settings, trial seams and detail welds.",
+      "We accept the formation, drains and protection layers before deployment; isolate operating interfaces under the site work plan.",
+      "We deploy and join panels to the approved layout, recording welding settings, trial seams and detail welds.",
       "Test, repair and retest, then release covering or filling and compile as-built panel and penetration records.",
     ],
     checks: [
       [
         "Liquid and material compatibility",
-        "Confirm the exact membrane and ancillary materials against approved chemical-exposure requirements.",
+        "We confirm the exact membrane and ancillary materials against approved chemical-exposure requirements.",
       ],
       [
         "Seams, sumps and connections",
-        "Record applicable weld tests and inspect pipe boots, anchors and structural terminations.",
+        "We record applicable weld tests and inspect pipe boots, anchors and structural terminations.",
       ],
       [
         "Filling or covering release",
-        "Close repairs and complete the specified leak survey or other acceptance checks before commissioning.",
+        "We close repairs and complete the specified leak survey or other acceptance checks before commissioning.",
       ],
     ],
   },
@@ -285,7 +284,7 @@ const newApplications = [
     components: [
       [
         "Effluent-compatible geomembrane",
-        "Select the exact liner for chemical and thermal exposure, jointing and operating conditions.",
+        "We select the exact liner for chemical and thermal exposure, jointing and operating conditions.",
       ],
       [
         "Formation and protection system",
@@ -298,22 +297,22 @@ const newApplications = [
     ],
     design: [
       "Characterise effluent, temperature, operating cycles and cleaning chemicals before choosing the lining.",
-      "Assess groundwater, gas uplift, settlement and the effects of mixers or aeration equipment.",
-      "Detail equipment supports, penetrations, access and the staged commissioning and maintenance plan.",
+      "We assess groundwater, gas uplift, settlement and the effects of mixers or aeration equipment.",
+      "We detail equipment supports, penetrations, access and the staged commissioning and maintenance plan.",
     ],
     install: [
-      "Prepare and accept the basin, penetrations and protection layers before deploying material.",
-      "Join the selected membrane using its approved procedure and inspect equipment and pipe interfaces.",
-      "Complete seam tests, repairs and specified acceptance checks before controlled filling and handover.",
+      "We prepare and accept the basin, penetrations and protection layers before deploying material.",
+      "We join the selected membrane using its approved procedure and inspect equipment and pipe interfaces.",
+      "We complete seam tests, repairs and specified acceptance checks before controlled filling and handover.",
     ],
     checks: [
       [
         "Effluent and product submittals",
-        "Check the specified material and exposure documentation before procurement.",
+        "We check the specified material and exposure documentation before procurement.",
       ],
       [
         "Joint and interface inspection",
-        "Document trial welds, applicable seam testing, repairs and equipment-area protection.",
+        "We document trial welds, applicable seam testing, repairs and equipment-area protection.",
       ],
       [
         "Commissioning records",
@@ -346,11 +345,11 @@ const newApplications = [
     components: [
       [
         "Selected pond liner",
-        "Specify the membrane for water use, exposure, cleaning and the required product suitability documentation.",
+        "We specify the membrane for water use, exposure, cleaning and the required product suitability documentation.",
       ],
       [
         "Cushioning and supporting formation",
-        "Prepare the basin and select protection against protrusions, settlement and maintenance damage.",
+        "We prepare the basin and select protection against protrusions, settlement and maintenance damage.",
       ],
       [
         "Anchors and water-control details",
@@ -358,27 +357,27 @@ const newApplications = [
       ],
     ],
     design: [
-      "Define water use, chemistry, exposure and any food-production or aquaculture product requirements.",
-      "Review basin soils, animal or equipment access, groundwater and empty/full cycles.",
-      "Detail pond drainage, cleaning access, overflow and all edge and pipe connections.",
+      "We define water use, chemistry, exposure and any food-production or aquaculture product requirements.",
+      "We review basin soils, animal or equipment access, groundwater and empty/full cycles.",
+      "We detail pond drainage, cleaning access, overflow and all edge and pipe connections.",
     ],
     install: [
-      "Prepare the pond and accept the formation, protection and pipe details.",
-      "Deploy and join the selected liner to its approved method, keeping work clean and protected.",
-      "Inspect and test applicable joints, complete repairs and release the pond for staged filling.",
+      "We prepare the pond and accept the formation, protection and pipe details.",
+      "We deploy and join the selected liner to its approved method, keeping work clean and protected.",
+      "We inspect and test applicable joints, complete repairs and release the pond for staged filling.",
     ],
     checks: [
       [
         "Product suitability and identity",
-        "Confirm the specified water-use documentation and record roll or panel references.",
+        "We confirm the specified water-use documentation and record roll or panel references.",
       ],
       [
         "Joint and penetration checks",
-        "Inspect the chosen jointing method, pipe connections, anchorages and repairs.",
+        "We inspect the chosen jointing method, pipe connections, anchorages and repairs.",
       ],
       [
         "Pond acceptance",
-        "Record specified integrity or retention checks and provide installation and care information.",
+        "We record specified integrity or retention checks and provide installation and care information.",
       ],
     ],
   },
@@ -407,7 +406,7 @@ const newApplications = [
     components: [
       [
         "Cover membrane and joined panels",
-        "Specify UV exposure, chemical compatibility, flexibility and joint performance for the intended duty.",
+        "We specify UV exposure, chemical compatibility, flexibility and joint performance for the intended duty.",
       ],
       [
         "Flotation, ballast and rainwater management",
@@ -415,27 +414,27 @@ const newApplications = [
       ],
       [
         "Anchorage and access details",
-        "Detail edge restraints, penetrations, safe access and inspection or maintenance provisions.",
+        "We detail edge restraints, penetrations, safe access and inspection or maintenance provisions.",
       ],
     ],
     design: [
-      "Set measurable cover objectives and assess wind, rainfall and the full operating water-level range.",
-      "Select membrane, joints, flotation and ballast from the approved cover design and stored-liquid chemistry.",
+      "We set measurable cover objectives and assess wind, rainfall and the full operating water-level range.",
+      "We select membrane, joints, flotation and ballast from the approved cover design and stored-liquid chemistry.",
       "We install stormwater removal and inspection access and hand over safe operating procedures.",
     ],
     install: [
-      "Survey and prepare the reservoir interfaces, anchorage and deployment areas.",
+      "We survey and prepare the reservoir interfaces, anchorage and deployment areas.",
       "Fabricate or join panels, install the specified attachments and deploy using the approved sequence.",
       "We inspect drainage, movement and connections at set water levels, close out repairs and hand over operating records.",
     ],
     checks: [
       [
         "Fabrication and joint quality",
-        "Record material identity, panel dimensions and the specified seam inspection and testing.",
+        "We record material identity, panel dimensions and the specified seam inspection and testing.",
       ],
       [
         "Anchors, attachments and drainage",
-        "Inspect connections, flotation or ballast and rainwater collection before operation.",
+        "We inspect connections, flotation or ballast and rainwater collection before operation.",
       ],
       [
         "Operational acceptance",
@@ -472,7 +471,7 @@ const newApplications = [
       ],
       [
         "Gas and drainage interfaces",
-        "Separate gas management and water drainage functions with defined connections and outlets.",
+        "We separate gas management and water drainage functions with defined connections and outlets.",
       ],
       [
         "Protection and final surface",
@@ -480,27 +479,27 @@ const newApplications = [
       ],
     ],
     design: [
-      "Review waste settlement, gas conditions, cap geometry and approved infiltration objectives.",
-      "Assess interface stability, barrier strain, gas pressure and drainage under the intended cover load.",
-      "Detail penetrations, gas wells, drainage outlets, erosion protection and post-closure inspection access.",
+      "We review waste settlement, gas conditions, cap geometry and approved infiltration objectives.",
+      "We assess interface stability, barrier strain, gas pressure and drainage under the intended cover load.",
+      "We detail penetrations, gas wells, drainage outlets, erosion protection and post-closure inspection access.",
     ],
     install: [
-      "Accept the prepared cap profile and complete the specified gas-management interfaces.",
-      "Place and join barrier layers, inspect transitions and release each stage before protection and drainage installation.",
-      "Place cover soils using controlled routes, inspect outlets and erosion protection and compile layer records.",
+      "We accept the prepared cap profile and complete the specified gas-management interfaces.",
+      "We place and join barrier layers, inspect transitions and release each stage before protection and drainage installation.",
+      "We place cover soils using controlled routes, inspect outlets and erosion protection and compile layer records.",
     ],
     checks: [
       [
         "Cap materials and traceability",
-        "Verify each barrier, drainage, filter and protection product against approved submittals.",
+        "We verify each barrier, drainage, filter and protection product against approved submittals.",
       ],
       [
         "Layer and joint acceptance",
-        "Record overlaps, applicable weld tests, penetrations and repaired areas before covering.",
+        "We record overlaps, applicable weld tests, penetrations and repaired areas before covering.",
       ],
       [
         "Drainage and closure records",
-        "Inspect outlets and final protection and provide layer maps, tests and as-built details.",
+        "We inspect outlets and final protection and provide layer maps, tests and as-built details.",
       ],
     ],
   },
@@ -529,7 +528,7 @@ const newApplications = [
     components: [
       [
         "Concrete protection liner",
-        "Select the specified anchored thermoplastic sheet for exposure, thickness and concrete-construction compatibility.",
+        "We select the specified anchored thermoplastic sheet for exposure, thickness and concrete-construction compatibility.",
       ],
       [
         "Welded panel and fabrication details",
@@ -541,27 +540,27 @@ const newApplications = [
       ],
     ],
     design: [
-      "Assess chemical exposure, temperature, pressure or vacuum and the intended cleaning regime.",
+      "We assess chemical exposure, temperature, pressure or vacuum and the intended cleaning regime.",
       "We plan liner anchorage, concrete placement, corners, joints and thermal movement.",
-      "Specify the applicable weld, spark or integrity-testing procedure for the actual liner and details.",
+      "We specify the applicable weld, spark or integrity-testing procedure for the actual liner and details.",
     ],
     install: [
       "Approve shop details and inspect supports, formwork or concrete surfaces before lining installation.",
       "We position panels and prefabricated pieces, fix or embed them and weld the specified joints.",
-      "Inspect and test applicable seams and details, repair defects and hand over traceable installation records.",
+      "We inspect and test applicable seams and details, repair defects and hand over traceable installation records.",
     ],
     checks: [
       [
         "Panel and anchor inspection",
-        "Confirm material grade, panel condition and the specified embedment or fixing arrangement.",
+        "We confirm material grade, panel condition and the specified embedment or fixing arrangement.",
       ],
       [
-        "Weld and integrity testing",
-        "Record weld checks and any specified spark or other integrity tests appropriate to the system.",
+        "We weld and integrity testing",
+        "We record weld checks and any specified spark or other integrity tests appropriate to the system.",
       ],
       [
         "Tank and penetration close-out",
-        "Inspect joints, pipe details and terminations and compile the required acceptance records.",
+        "We inspect joints, pipe details and terminations and compile the required acceptance records.",
       ],
     ],
   },
@@ -603,26 +602,26 @@ const newApplications = [
     ],
     design: [
       "Characterise compressible strata, consolidation behaviour and the required settlement or stability objectives.",
-      "Specify drain spacing, depth, filter properties and discharge performance under the relevant confinement and deformation.",
-      "Plan the loading sequence, drainage blanket, instrumentation and acceptance criteria for progression.",
+      "We specify drain spacing, depth, filter properties and discharge performance under the relevant confinement and deformation.",
+      "We plan the loading sequence, drainage blanket, instrumentation and acceptance criteria for progression.",
     ],
     install: [
-      "Set out the drain grid and verify product, mandrel and anchorage details before installation.",
-      "Install to the approved depth and method, recording location, penetration, splice and refusal information.",
-      "Complete drainage interfaces and hand over installation records for the project's loading and monitoring programme.",
+      "We set out the drain grid and verify product, mandrel and anchorage details before installation.",
+      "We install to the approved depth and method, recording location, penetration, splice and refusal information.",
+      "We complete drainage interfaces and hand over installation records for the project's loading and monitoring programme.",
     ],
     checks: [
       [
         "Drain product conformance",
-        "Check filter and core data, dimensions and batch identification against the specification.",
+        "We check filter and core data, dimensions and batch identification against the specification.",
       ],
       [
         "Installation logs",
-        "Record drain locations, depths, splices and deviations for review against the schedule.",
+        "We record drain locations, depths, splices and deviations for review against the schedule.",
       ],
       [
         "Drainage and monitoring interfaces",
-        "Inspect connections and supply installation records to the geotechnical monitoring team.",
+        "We inspect connections and supply installation records to the geotechnical monitoring team.",
       ],
     ],
   },
@@ -651,11 +650,11 @@ const newApplications = [
     components: [
       [
         "Protection above waterproofing",
-        "Use the specified cushioning or protection layer without compromising the accepted roof-waterproofing system.",
+        "We use the specified cushioning or protection layer without compromising the accepted roof-waterproofing system.",
       ],
       [
         "Drainage or retention core",
-        "Select flow capacity and any required water-storage function under the landscaped assembly's design loads.",
+        "We select flow capacity and any required water-storage function under the landscaped assembly's design loads.",
       ],
       [
         "Filter and growing-medium interface",
@@ -663,14 +662,14 @@ const newApplications = [
       ],
     ],
     design: [
-      "Confirm roof falls, waterproofing compatibility, growing medium and saturated permanent and imposed loads.",
-      "Select filter retention and drainage capacity at the actual gradient and confining load.",
-      "Detail root-management requirements, inspection chambers, outlets, perimeter edges and maintenance access.",
+      "We confirm roof falls, waterproofing compatibility, growing medium and saturated permanent and imposed loads.",
+      "We select filter retention and drainage capacity at the actual gradient and confining load.",
+      "We detail root-management requirements, inspection chambers, outlets, perimeter edges and maintenance access.",
     ],
     install: [
       "Obtain acceptance of waterproofing and install the specified protection before other geosynthetics.",
-      "Place cores and filters in their designed orientation with continuous drainage routes and protected outlets.",
-      "Inspect joins, edges and inspection points before adding growing medium, paving or other cover.",
+      "We place cores and filters in their designed orientation with continuous drainage routes and protected outlets.",
+      "We inspect joins, edges and inspection points before adding growing medium, paving or other cover.",
     ],
     checks: [
       [
@@ -679,11 +678,11 @@ const newApplications = [
       ],
       [
         "Drainage continuity",
-        "Inspect core joins, filters, outlet openings and inspection-chamber interfaces.",
+        "We inspect core joins, filters, outlet openings and inspection-chamber interfaces.",
       ],
       [
         "Pre-cover release",
-        "Record waterproofing interfaces and drainage checks before the assembly is concealed.",
+        "We record waterproofing interfaces and drainage checks before the assembly is concealed.",
       ],
     ],
   },
@@ -712,7 +711,7 @@ const newApplications = [
     components: [
       [
         "Silt-fence fabric and supports",
-        "Match fabric opening and flow properties, support spacing and toe embedment to the runoff and soil conditions.",
+        "We match fabric opening and flow properties, support spacing and toe embedment to the runoff and soil conditions.",
       ],
       [
         "Floating silt-curtain assembly",
@@ -720,31 +719,31 @@ const newApplications = [
       ],
       [
         "Maintenance and environmental interfaces",
-        "Provide access for sediment removal, inspection, repair and the required runoff or water-quality monitoring.",
+        "We provide access for sediment removal, inspection, repair and the required runoff or water-quality monitoring.",
       ],
     ],
     design: [
-      "Separate land-based runoff control from in-water sediment control and define the environmental objectives.",
+      "We separate land-based runoff control from in-water sediment control and define the environmental objectives.",
       "For fences, assess soil, catchment, flow concentration, support and embedment; for curtains, assess depth, current, waves, tides and moorings.",
-      "Define inspection, sediment removal, storm response, turbidity monitoring and the limits of operation.",
+      "We define inspection, sediment removal, storm response, turbidity monitoring and the limits of operation.",
     ],
     install: [
-      "Prepare supports and toe trenches or the curtain deployment and anchor positions under the approved plan.",
-      "Install continuous fence runs with the specified returns and embedment, or assemble and deploy the curtain and mooring system.",
-      "Inspect after installation and significant weather or flows, maintain the barrier and remove accumulated sediment or damaged components as required.",
+      "We prepare supports and toe trenches or the curtain deployment and anchor positions under the approved plan.",
+      "We install continuous fence runs with the specified returns and embedment, or assemble and deploy the curtain and mooring system.",
+      "We inspect after installation and significant weather or flows, maintain the barrier and remove accumulated sediment or damaged components as required.",
     ],
     checks: [
       [
         "Fabrication and material identity",
-        "Verify fabric grade, dimensions, seams and identified batches or sections.",
+        "We verify fabric grade, dimensions, seams and identified batches or sections.",
       ],
       [
         "Fence or curtain installation checks",
-        "Record support and embedment details or flotation, ballast, connections and anchor placement.",
+        "We record support and embedment details or flotation, ballast, connections and anchor placement.",
       ],
       [
         "Operational inspection",
-        "Document damage, sediment build-up, repairs and specified monitoring or maintenance actions.",
+        "We document damage, sediment build-up, repairs and specified monitoring or maintenance actions.",
       ],
     ],
   },
@@ -773,35 +772,35 @@ const newApplications = [
     components: [
       [
         "Specified storage geomembrane",
-        "Provide the designed impermeable barrier where attenuation or reuse requires water retention.",
+        "We provide the designed impermeable barrier where attenuation or reuse requires water retention.",
       ],
       [
         "Protection and support",
-        "Select cushioning for earthworks or structural storage components and the expected construction and service loads.",
+        "We select cushioning for earthworks or structural storage components and the expected construction and service loads.",
       ],
       [
         "Inlets, outlets and access interfaces",
-        "Detail pipe connections, overflow routes, cleanouts and access points within the complete stormwater design.",
+        "We detail pipe connections, overflow routes, cleanouts and access points within the complete stormwater design.",
       ],
     ],
     design: [
-      "Confirm attenuation, reuse or infiltration objectives and the required operating water levels and release strategy.",
-      "Assess foundation, groundwater uplift, structural contact pressures and protection needs.",
-      "Detail inlet, outlet, overflow, cleaning and access interfaces and specify the commissioning checks.",
+      "We confirm attenuation, reuse or infiltration objectives and the required operating water levels and release strategy.",
+      "We assess foundation, groundwater uplift, structural contact pressures and protection needs.",
+      "We detail inlet, outlet, overflow, cleaning and access interfaces and specify the commissioning checks.",
     ],
     install: [
-      "Accept the formation or supporting storage assembly and its specified protection.",
-      "Deploy and join the barrier, completing pipe boots and structural interfaces to the approved details.",
+      "We accept the formation or supporting storage assembly and its specified protection.",
+      "We deploy and join the barrier, completing pipe boots and structural interfaces to the approved details.",
       "Inspect, test and repair, then obtain covering or filling release and provide as-built records.",
     ],
     checks: [
       [
         "System and material verification",
-        "Confirm the design requires a sealed barrier and verify the exact liner and protection products.",
+        "We confirm the design requires a sealed barrier and verify the exact liner and protection products.",
       ],
       [
         "Seam and connection checks",
-        "Document applicable joint tests, penetrations, overflow interfaces and repaired areas.",
+        "We document applicable joint tests, penetrations, overflow interfaces and repaired areas.",
       ],
       [
         "Pre-cover and commissioning records",

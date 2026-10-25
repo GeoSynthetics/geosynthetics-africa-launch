@@ -19,6 +19,8 @@ import { QuoteCard } from "@/components/site/QuoteCard";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { DrainageMesh } from "@/components/site/shapes";
+import { APPLICATION_SYSTEMS } from "@/data/application-systems";
+import { SystemCrossSection } from "@/components/site/SystemCrossSection";
 import { APPLICATION_DIRECTORY, findApplication } from "@/data/application-directory";
 
 // Helper to render Lucide icons dynamically by string name
@@ -247,6 +249,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
       why: "We select, supply, deliver and install through one accountable team.",
     };
   const directoryEntry = findApplication(category.slug);
+  const appSystem = APPLICATION_SYSTEMS[directoryEntry?.slug || category.slug];
   const relatedApplications = directoryEntry
     ? APPLICATION_DIRECTORY.filter(
         (entry) => entry.group === directoryEntry.group && entry.slug !== category.slug,
@@ -259,6 +262,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
   useEffect(() => {
     const sectionIds = [
       "overview",
+      "system",
       "delivery",
       "components",
       "design",
@@ -387,6 +391,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
             {[
               { id: "overview", label: "Overview" },
+              { id: "system", label: "The System We Build", show: !!appSystem },
               { id: "delivery", label: "Our Delivery & Why Choose Us" },
               {
                 id: "components",
@@ -442,6 +447,8 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
               ))}
             </div>
           </section>
+
+          {appSystem && <SystemCrossSection system={appSystem} />}
 
           <section id="delivery" className="border-t border-border pt-16 scroll-mt-32">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
