@@ -1,40 +1,121 @@
+/**
+ * Service page content. Every service has its own tailored set of sections (tabs),
+ * written in Geosynthetics Africa's own voice: we supply, fabricate, install, test and hand over.
+ */
+export type ServiceSection =
+  | { id: string; label: string; title: string; kind: "text"; body: string; bullets?: string[] }
+  | {
+      id: string;
+      label: string;
+      title: string;
+      kind: "steps";
+      intro?: string;
+      steps: { title: string; text: string }[];
+    }
+  | { id: string; label: string; title: string; kind: "list"; intro?: string; items: string[] }
+  | {
+      id: string;
+      label: string;
+      title: string;
+      kind: "table";
+      intro?: string;
+      rows: { label: string; value: string }[];
+    }
+  | { id: string; label: string; title: string; kind: "manufactured-products"; intro?: string }
+  | { id: string; label: string; title: string; kind: "manufacturing-process"; intro?: string };
+
 export interface ServiceDeliveryProfile {
   title: string;
   summary: string;
-  scope: string;
-  inputs: string[];
-  controls: string[];
-  records: string[];
+  sections: ServiceSection[];
   why: string;
   applications: string[];
 }
+
+const WELD_TESTS = [
+  {
+    title: "Trial welds",
+    text: "Every welder and machine runs a trial weld at the start of each shift and at every change of operator or conditions, and we peel-test it before production welding starts.",
+  },
+  {
+    title: "Non-destructive testing",
+    text: "We air-pressure test every double-track fusion seam and vacuum-box test every extrusion weld along its full length.",
+  },
+  {
+    title: "Destructive testing",
+    text: "We cut seam samples at the frequency set in our QA/QC plan and test them in peel and shear, on site or through SANAS-accredited laboratories in South Africa.",
+  },
+  {
+    title: "Repairs and retests",
+    text: "We mark, repair and retest every defect, and record each repair against the panel layout.",
+  },
+];
 
 export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> = {
   "geomembrane-liner-installation-africa": {
     title: "Geomembrane Liner Installation Across Africa",
     summary:
-      "HDPE and other specified geomembrane installation for mining, water and waste containment. Geosynthetics Africa coordinates material supply, panel deployment, welding, installation QC and documented handover around your approved design.",
-    scope:
-      "Choose installation services or an integrated material supply and installation package. We review the liner configuration, construction sequence, access and inspection requirements before agreeing the site scope. The appointed designer's barrier design and the project's CQA responsibilities remain clearly identified.",
-    inputs: [
-      "Site location, liner area, drawings and construction programme",
-      "Polymer, grade, thickness, surface finish and protection requirements",
-      "Foundation acceptance criteria, anchorage, sumps and penetration details",
-      "Inspection plan, seam-test requirements and handover deliverables",
+      "We supply and install HDPE and other geomembrane liners for tailings, heap leach, water and waste containment, with our own IAGI-member welding crews and a documented QA/QC dossier on every project.",
+    sections: [
+      {
+        id: "scope",
+        label: "Scope",
+        title: "What We Install",
+        kind: "text",
+        body: "We supply, deploy, weld and test geomembrane liners and their protection and drainage layers to the approved design. Appoint us for installation only or for an integrated supply-and-installation package; either way our own crews do the work and sign the records.",
+        bullets: [
+          "Tailings storage facilities and heap leach pads",
+          "Process-water, stormwater and pollution-control dams",
+          "Reservoirs, canals and irrigation storage",
+          "Landfill cells, caps and secondary containment",
+        ],
+      },
+      {
+        id: "method",
+        label: "Installation Method",
+        title: "How We Install",
+        kind: "steps",
+        steps: [
+          {
+            title: "Subgrade acceptance",
+            text: "We inspect and sign off the subgrade surface, compaction, anchor trenches and drainage interfaces before any panel is deployed.",
+          },
+          {
+            title: "Panel layout and deployment",
+            text: "We deploy panels to our approved layout drawing, recording roll number, panel number, position and weather for every panel.",
+          },
+          {
+            title: "Welding",
+            text: "We join panels with double-track fusion welds and complete details, penetrations and repairs with extrusion welds, using qualified welders and calibrated machines.",
+          },
+          {
+            title: "Covering release",
+            text: "We release each tested area for protection or cover placement only once every seam, repair and detail in it has passed.",
+          },
+        ],
+      },
+      {
+        id: "testing",
+        label: "Seam Testing",
+        title: "Our Seam Testing",
+        kind: "steps",
+        steps: WELD_TESTS,
+      },
+      {
+        id: "records",
+        label: "Handover Dossier",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Material certificates and roll references for every roll installed",
+          "Subgrade acceptance and covering-release records",
+          "Panel, weld, welder and machine traceability",
+          "Non-destructive and destructive seam-test results",
+          "Repair log, leak-survey results where specified, and as-built panel layout",
+        ],
+      },
     ],
-    controls: [
-      "Accept foundations and drainage interfaces before deploying panels.",
-      "Record roll and panel identities, layout and weather conditions.",
-      "Qualify welding with trial seams and control fusion and extrusion work to the approved method.",
-      "Complete the specified seam tests, repairs, retests and covering releases.",
-    ],
-    records: [
-      "Material submittals, roll references and foundation hold-point records",
-      "Panel, weld, welder and equipment traceability",
-      "Applicable non-destructive and destructive seam-test results",
-      "Repair close-out, specified leak surveys and as-built handover dossier",
-    ],
-    why: "Connect the supplied membrane, installation crews and seam-control records in one coordinated scope, with Group IAGI Installer Membership and trained welding technicians supporting the installation capability.",
+    why: "One team supplies the membrane, installs it with our own trained welding technicians and signs the QA/QC records. Geosynthetics Africa is an IAGI Installer Member.",
     applications: [
       "tailings-storage-facility-lining",
       "heap-leach-pad-lining",
@@ -45,28 +126,70 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "gcl-installation-contractor-africa": {
     title: "GCL Liner Installation & QA/QC Across Africa",
     summary:
-      "Eurobent geosynthetic clay liner supply, deployment and installation controls for engineered containment and waterproofing. We coordinate foundations, overlaps, terminations, protection and covering records for the agreed project scope.",
-    scope:
-      "A GCL installation is coordinated with the complete barrier design. We review the grade, liquid compatibility, slope and confinement requirements, roll layout and cover sequence before mobilisation. The applicable manufacturer guidance and approved drawings govern overlap and detail work.",
-    inputs: [
-      "Approved GCL grade, coating and compatibility requirements",
-      "Foundation, slope, anchorage, overlap and penetration details",
-      "Hydration protection, cover layers and construction sequence",
-      "Roll quantities, handling access and inspection hold points",
+      "We supply, deploy and cover Eurobent® geosynthetic clay liners for mining, landfill and water containment, controlling overlaps, hydration and cover placement to protect the bentonite barrier.",
+    sections: [
+      {
+        id: "scope",
+        label: "Scope",
+        title: "What We Install",
+        kind: "text",
+        body: "We supply and install Eurobent® reinforced and HDPE-backed GCLs as stand-alone barriers or beneath HDPE in composite liners, working to the approved design and the manufacturer's installation guidance.",
+        bullets: [
+          "Composite liners beneath HDPE on TSFs, heap leach pads and landfill cells",
+          "Landfill capping and closure",
+          "Reservoirs, canals and secondary containment",
+        ],
+      },
+      {
+        id: "method",
+        label: "Deployment",
+        title: "How We Deploy GCL",
+        kind: "steps",
+        steps: [
+          {
+            title: "Subgrade preparation",
+            text: "We remove rocks, debris and standing water, test compaction and deliver a smooth, firm surface. We never deploy GCL over mud.",
+          },
+          {
+            title: "Controlled deployment",
+            text: "We align rolls for consistent overlaps, sequence panels to minimise wrinkles and deploy only as much GCL as we can cover the same day.",
+          },
+          {
+            title: "Overlaps and seaming",
+            text: "We hold the minimum overlap on every edge, apply bentonite paste or powder in the overlap zone and seal joints against bentonite loss.",
+          },
+          {
+            title: "Cover placement",
+            text: "We place a minimum 300 mm cover layer with low-ground-pressure equipment and complete all repairs before cover goes down.",
+          },
+        ],
+      },
+      {
+        id: "hydration",
+        label: "Hydration Control",
+        title: "How We Protect the Bentonite",
+        kind: "list",
+        items: [
+          "We store rolls off the ground, covered and dry",
+          "We monitor subgrade moisture for early hydration",
+          "We stop deployment in rain and protect exposed panels",
+          "We keep hydration logs for every deployed area",
+        ],
+      },
+      {
+        id: "records",
+        label: "QA/QC Records",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Product certificates and roll references",
+          "Subgrade acceptance and daily deployment records",
+          "Overlap, detail and repair logs (patches with a minimum 300 mm overlap)",
+          "Hydration and weather logs, cover releases and as-built layout",
+        ],
+      },
     ],
-    controls: [
-      "Store and handle rolls to protect the material from damage and premature hydration.",
-      "Accept the receiving foundation and deploy panels to the agreed layout.",
-      "Inspect the specified overlaps, bentonite additions, penetrations and repairs.",
-      "Protect the deployed GCL and complete the approved cover and confinement sequence.",
-    ],
-    records: [
-      "Product submittals and roll or batch references",
-      "Foundation and panel-deployment inspections",
-      "Overlap, detail and repair records",
-      "Exposure conditions, covering releases and as-built information",
-    ],
-    why: "Coordinate the GCL supply with the practical overlap, hydration-protection and covering controls that determine installation quality, rather than treating bentonite liner deployment as ordinary roll placement.",
+    why: "We treat GCL as an engineered barrier, not ordinary roll placement: overlaps, hydration and cover are controlled and recorded by our own crews.",
     applications: [
       "tailings-storage-facility-lining",
       "landfill-ash-bund-lining",
@@ -77,28 +200,72 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "floating-cover-installation-africa": {
     title: "Floating Cover Fabrication & Installation Across Africa",
     summary:
-      "Project-specific membrane covers for water and process storage. Geosynthetics Africa coordinates material selection, fabrication, floats, ballast, rainwater management, anchorage and installation around the specified operating duty.",
-    scope:
-      "The cover configuration depends on liquid chemistry, water-level movement, geometry, wind, access and the required cover function. Potable-water approvals, any gas-management duty, design life and warranty terms are confirmed for the selected material and complete system; they are not universal cover properties.",
-    inputs: [
-      "Storage geometry, operating levels and liquid chemistry",
-      "Cover function, exposure, applicable approvals and design requirements",
-      "Floats, ballast, sumps, rainwater removal and access details",
-      "Perimeter anchorage, penetrations, installation and operating procedures",
+      "We fabricate and install floating covers for evaporation control, odour management and water protection, with panels, floats, ballast, sumps and anchorage built for each reservoir.",
+    sections: [
+      {
+        id: "functions",
+        label: "Cover Functions",
+        title: "What Our Covers Do",
+        kind: "table",
+        rows: [
+          { label: "Evaporation control", value: "Cuts water loss from open reservoirs" },
+          {
+            label: "Water quality",
+            value: "Blocks sunlight to stop algae and protects stored water",
+          },
+          {
+            label: "Odour and gas",
+            value: "Gas-tight covers that capture emissions where specified",
+          },
+          {
+            label: "Potable storage",
+            value: "Covers for drinking-water reservoirs with approved materials",
+          },
+        ],
+      },
+      {
+        id: "fabrication",
+        label: "Fabrication",
+        title: "What We Fabricate",
+        kind: "list",
+        intro: "We shop-weld cover panels in our own facility before mobilisation:",
+        items: [
+          "Cover panels in rLLDPE, HDPE or the specified membrane, rolled and numbered to the as-built layout",
+          "Ballast pockets and weighted troughs that guide rainwater to the sumps",
+          "Flotation logs, sumps, hatches and inspection ports",
+          "Pipe boots and penetration seals made to each pipe",
+        ],
+      },
+      {
+        id: "installation",
+        label: "Installation",
+        title: "How We Install",
+        kind: "steps",
+        steps: [
+          {
+            title: "Site survey",
+            text: "We survey the reservoir geometry, operating levels, anchorage and access.",
+          },
+          { title: "Deployment", text: "We deploy panels to the layout and complete field welds." },
+          {
+            title: "Anchorage",
+            text: "We install perimeter anchorage that holds the cover through the full water-level range.",
+          },
+          {
+            title: "Rainwater system",
+            text: "We install and commission the sumps and drainage pumps.",
+          },
+        ],
+      },
+      {
+        id: "testing",
+        label: "Seam Testing",
+        title: "Our Seam Testing",
+        kind: "steps",
+        steps: WELD_TESTS,
+      },
     ],
-    controls: [
-      "Review material and fabrication details against the approved cover configuration.",
-      "Inspect fabricated panels, welded details, floats and ballast components.",
-      "Coordinate deployment, anchorage and penetrations with safe access and the operating facility.",
-      "Inspect the completed arrangement and the specified rainwater, access and operating functions.",
-    ],
-    records: [
-      "Approved cover material and component references",
-      "Fabrication, weld qualification and applicable seam-test records",
-      "Anchorage, sump, float, ballast and penetration inspections",
-      "Repairs, as-built layout, operating guidance and agreed warranty documentation",
-    ],
-    why: "Bring fabricated cover components and site installation into the same delivery plan, with inspection records connected to the actual cover geometry and operating conditions.",
+    why: "We fabricate the cover and install it, so the panels, floats, ballast and welds are designed, built and tested by one team.",
     applications: [
       "floating-covers-evaporation-control",
       "reservoir-dam-lining",
@@ -109,28 +276,65 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "gabion-installation-contractor-africa": {
     title: "Gabion Basket & Mattress Installation Across Africa",
     summary:
-      "Assembly and installation of specified gabion baskets and mattresses for retaining, channel and scour-protection works. Our scope coordinates units, foundations, filter layers, connections, rock fill and final geometry.",
-    scope:
-      "We review the approved structure, mesh and coating, rock source, filter arrangement and site access before agreeing the supply and installation package. Welded and woven systems have different assembly details; the supplied system and its approved installation method govern the work.",
-    inputs: [
-      "Retaining or hydraulic design, structure geometry and foundation details",
-      "Mesh type, wire and coating specification, unit sizes and connections",
-      "Rock grading, durability and appearance requirements",
-      "Filter layers, drainage, access and construction sequence",
+      "We supply and install gabion baskets and Reno mattresses for retaining walls, channels and scour protection, including foundations, filter layers, rock fill and final geometry.",
+    sections: [
+      {
+        id: "systems",
+        label: "Systems",
+        title: "What We Install",
+        kind: "table",
+        rows: [
+          {
+            label: "Welded mesh gabions",
+            value:
+              "50 × 50 mm square welded mesh, Class A galvanised or PVC-coated (SANS 675), made in our own facility",
+          },
+          { label: "Woven gabions", value: "80 × 100 mm double-twist mesh, Class A galvanised" },
+          { label: "Reno mattresses", value: "Channel and scour lining, Class A galvanised" },
+        ],
+      },
+      {
+        id: "method",
+        label: "Installation Sequence",
+        title: "Our Installation Sequence",
+        kind: "steps",
+        steps: [
+          {
+            title: "Material check",
+            text: "We check mesh, wire and unit sizes against the specification.",
+          },
+          {
+            title: "Foundation",
+            text: "We clear, level and compact the foundation and place the specified filter geotextile.",
+          },
+          {
+            title: "Assembly and placement",
+            text: "We assemble, lace, brace and align units to the approved arrangement.",
+          },
+          {
+            title: "Rock fill",
+            text: "We fill and pack rock in layers, keeping unit shape and face quality.",
+          },
+          {
+            title: "Sign-off",
+            text: "We close and lace lids and sign off dimensions and alignment.",
+          },
+        ],
+      },
+      {
+        id: "records",
+        label: "QA/QC Records",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Mesh, wire and coating certificates",
+          "Foundation and filter acceptance",
+          "Lacing, bracing and rock-fill inspections",
+          "Completed geometry and alignment survey",
+        ],
+      },
     ],
-    controls: [
-      "Accept foundations and complete the specified filter and drainage interfaces.",
-      "Assemble, position, connect and brace units to the approved arrangement.",
-      "Place and pack suitable rock while maintaining unit shape and facing quality.",
-      "Close lids, inspect connections and verify completed dimensions and alignment.",
-    ],
-    records: [
-      "Supplied mesh, coating and unit references",
-      "Foundation, filter and drainage acceptance",
-      "Connections, bracing, rock-fill and packing inspections",
-      "Completed geometry, repairs and handover information",
-    ],
-    why: "Coordinate the basket system with the filter, rock and construction details that make it a functioning engineered structure, with fabrication and installation responsibilities defined at quotation.",
+    why: "We manufacture welded mesh gabions and install them, so the basket, filter and rock fill are delivered as one working structure.",
     applications: [
       "retaining-wall-systems",
       "coastal-protection",
@@ -141,28 +345,77 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "geocell-installation-contractor-africa": {
     title: "Geocell Installation Across Africa",
     summary:
-      "HDPE and woven geocell supply and installation for designed confinement, load-support and erosion-protection systems. We coordinate the selected cell, foundation, expansion, anchorage and infill with the project requirements.",
-    scope:
-      "Geocell selection and any pavement or aggregate optimisation depend on the ground, loading, geometry, infill and accepted design method. We agree the installation scope against the approved cell layout and construction details; material savings are assessed for the project rather than promised as a standard percentage.",
-    inputs: [
-      "Application, ground conditions, geometry and loading or hydraulic design",
-      "Specified cell type, depth, connections and deployment dimensions",
-      "Separation or filter layers, anchorage and edge details",
-      "Infill grading, placement, compaction and construction access",
+      "We supply and install HDPE and woven PP geocells for load support, slope protection and channel lining, controlling expansion, anchorage and infill on every panel.",
+    sections: [
+      {
+        id: "uses",
+        label: "Applications",
+        title: "Where We Install Geocells",
+        kind: "table",
+        rows: [
+          {
+            label: "Load support",
+            value: "Haul roads, access platforms and unpaved roads over soft ground",
+          },
+          {
+            label: "Slope protection",
+            value: "Vegetated or rock-filled cells on steep embankments",
+          },
+          { label: "Channels", value: "Concrete or rock-filled channel and spillway lining" },
+          { label: "Retaining", value: "Gravity and reinforced geocell walls" },
+        ],
+      },
+      {
+        id: "products",
+        label: "Cell Types",
+        title: "Cells We Supply",
+        kind: "table",
+        rows: [
+          {
+            label: "HDPE geocell (GeoStrata™)",
+            value: "Textured and perforated, 50 to 200 mm cell depth",
+          },
+          { label: "Woven PP geocell (PolyCell)", value: "75 to 150 mm cell depth" },
+        ],
+      },
+      {
+        id: "method",
+        label: "Installation",
+        title: "How We Install",
+        kind: "steps",
+        steps: [
+          {
+            title: "Foundation",
+            text: "We prepare and accept the foundation and lay the separation or filter geotextile.",
+          },
+          {
+            title: "Expansion",
+            text: "We expand each panel to its full cell dimensions and connect adjacent panels.",
+          },
+          {
+            title: "Anchorage",
+            text: "We install the specified pins, tendons and edge details before infill.",
+          },
+          {
+            title: "Infill",
+            text: "We place and compact infill without distorting or damaging the cells.",
+          },
+        ],
+      },
+      {
+        id: "records",
+        label: "QA/QC Records",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Cell product and batch identification",
+          "Foundation, expansion and connection inspections",
+          "Anchorage, infill and compaction records",
+          "Completed coverage and as-built details",
+        ],
+      },
     ],
-    controls: [
-      "Prepare and accept the foundation and underlying filter or separator.",
-      "Expand cells to the specified dimensions and complete connections and restraints.",
-      "Install the approved anchorage and transitions before placing infill.",
-      "Control infill placement and compaction without damaging or distorting the cells.",
-    ],
-    records: [
-      "Cell product and batch identification",
-      "Foundation, expansion and connection inspections",
-      "Anchorage, infill and compaction records",
-      "Completed coverage, repairs and as-built details",
-    ],
-    why: "Connect geocell supply with controlled expansion, anchorage and infill placement, keeping the construction method aligned with the intended ground or erosion-control function.",
+    why: "We supply the cells and install them, with expansion, anchorage and infill controlled by our own crews.",
     applications: [
       "stabilisation-reinforcement",
       "slope-erosion-protection",
@@ -173,28 +426,58 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "gccm-channel-lining-contractor-africa": {
     title: "GCCM Channel Lining Installation Across Africa",
     summary:
-      "Tiltex cementitious composite mat installation for specified channel and erosion-protection works. Geosynthetics Africa coordinates substrate preparation, deployment, joints, anchorage, hydration and inspection to the approved lining method.",
-    scope:
-      "Channel geometry, flow, foundation conditions and the specified GCCM grade establish the installation requirements. The lining is coordinated with inlet, outlet, edge and transition details. Hydration, curing and release to service follow the current manufacturer guidance and approved project method.",
-    inputs: [
-      "Channel geometry, hydraulic duty, foundation and drainage details",
-      "Specified GCCM grade and exposure or durability requirements",
-      "Joint, anchorage, termination and transition details",
-      "Water supply, weather, access and construction sequence",
+      "We supply and install TILTEX™ geosynthetic cementitious composite mats for channels, spillways and slopes, hydrating and curing them to the manufacturer's method.",
+    sections: [
+      {
+        id: "uses",
+        label: "Applications",
+        title: "Where We Install GCCM",
+        kind: "list",
+        items: [
+          "TSF emergency spillways and mine water diversion channels",
+          "Stormwater drains, roadside ditches and culvert outlets",
+          "Irrigation canals and reservoir spillways",
+          "Bund lining and slope protection over geomembranes",
+        ],
+      },
+      {
+        id: "method",
+        label: "Installation & Hydration",
+        title: "How We Install",
+        kind: "steps",
+        steps: [
+          {
+            title: "Subgrade",
+            text: "We audit compaction and grading, inspect every roll and check anchor trench layout.",
+          },
+          {
+            title: "Deployment",
+            text: "We deploy along the flow direction and verify overlaps and fastening spacing.",
+          },
+          {
+            title: "Pre-hydration check",
+            text: "We check joint integrity and anchor trench backfill, then release the area for hydration.",
+          },
+          {
+            title: "Hydration and curing",
+            text: "We apply the specified water volume, monitor curing and complete the final inspection.",
+          },
+        ],
+      },
+      {
+        id: "records",
+        label: "QA/QC Records",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Material grade and batch references",
+          "Subgrade, overlap and fastening inspections",
+          "Hydration volumes, curing times and weather records",
+          "Repairs, as-built layout and service release",
+        ],
+      },
     ],
-    controls: [
-      "Prepare the channel and remove defects that could prevent proper lining support.",
-      "Deploy to the approved orientation and form the specified joints and anchorage.",
-      "Hydrate and protect the installed material in accordance with the approved method.",
-      "Inspect transitions and completed lining before the required curing and service-release stages.",
-    ],
-    records: [
-      "Material grade and batch references",
-      "Foundation and joint inspections",
-      "Hydration, curing and exposure records",
-      "Repairs, completed layout and service-release documentation",
-    ],
-    why: "Coordinate material supply with the substrate, joint and hydration controls needed for GCCM work, keeping these inspections distinct from thermoplastic geomembrane welding tests.",
+    why: "We supply TILTEX™ and install it ourselves, keeping hydration and curing under one team's control.",
     applications: [
       "irrigation-canal-lining",
       "slope-erosion-protection",
@@ -204,28 +487,45 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "manufacturing-fabrication": {
     title: "Geosynthetics Manufacturing & Custom Fabrication",
     summary:
-      "In-house manufacture and fabrication of sewn geotextile, welded geomembrane and welded mesh systems for African projects. Specify dewatering bags and tubes, sand containers, sediment barriers, liner panels, floating covers and custom details.",
-    scope:
-      "Production starts with the duty, dimensions, material requirements and approved fabrication details. We coordinate fabric or membrane selection, cutting, joining, closures, ports, handling features and inspection records for the ordered article. Raw-material manufacture and article fabrication are identified separately in the technical submission.",
-    inputs: [
-      "Application, operating duty, drawings, quantities and dimensions",
-      "Required fabric, membrane or mesh properties and exposure conditions",
-      "Seams, welds, closures, ports and any lifting or handling provisions",
-      "Inspection requirements, packaging, delivery and acceptance criteria",
+      "We manufacture and fabricate geosynthetic products in our own Johannesburg facility, from ISO 9001-mill roll goods, with factory QA/QC and test records on every article.",
+    sections: [
+      {
+        id: "products",
+        label: "Products We Make",
+        title: "Products We Manufacture",
+        kind: "manufactured-products",
+        intro:
+          "Every product below is made in our own facility. Open a product for its raw-material inputs, factory QA/QC and key specifications.",
+      },
+      {
+        id: "inputs",
+        label: "Raw Materials",
+        title: "ISO-Quality Raw Materials",
+        kind: "text",
+        body: "We fabricate only from roll goods and wire made in ISO 9001-certified mills: the same globally recognised geomembranes, geotextiles and wire specified on major projects worldwide. Each grade is manufactured and tested to GRI, ASTM or EN ISO requirements, with ASQUAL-certified geotextile grades where the specification calls for them.",
+        bullets: [
+          "Geomembranes to GRI-GM13 (HDPE) and GRI-GM17 (LLDPE)",
+          "Geotextiles tested to EN ISO and ASTM methods for tensile strength, puncture and opening size",
+          "Gabion wire to SANS 675, Class A galvanised or PVC-coated",
+          "A mill certificate for every roll and coil, held against its batch",
+        ],
+      },
+      {
+        id: "qaqc",
+        label: "Factory QA/QC",
+        title: "Our Factory QA/QC",
+        kind: "manufacturing-process",
+        intro: "Every article passes the same six controls before it leaves our facility:",
+      },
+      {
+        id: "custom",
+        label: "Custom Orders",
+        title: "Made to Your Specification",
+        kind: "text",
+        body: "A non-standard size, heavier fabric, different seam or wire gauge is a production run on our own machines, typically days rather than the eight to twelve weeks an import takes. Send the duty, dimensions and drawings and we return a fabrication specification. Where a tender names filled mass without opening size or seam strength, we flag the gap and propose values.",
+      },
     ],
-    controls: [
-      "Approve materials and fabrication details before releasing production.",
-      "Maintain material identification through cutting, stitching, welding and assembly.",
-      "Inspect dimensions, seams, welds, closures and project-specific fittings.",
-      "Complete the specified tests, repairs, packing and dispatch identification.",
-    ],
-    records: [
-      "Material and production-batch traceability",
-      "Dimensional, sewing, welding and assembly inspections",
-      "Specified seam tests and separately verified lifting-system evidence",
-      "Inspection release, repairs, packing list and product identification",
-    ],
-    why: "Work directly with the team defining and producing the fabricated article, with material selection, joining details and delivery requirements coordinated before production rather than left to site improvisation.",
+    why: "We make it, we test it and we install it. When a seam is queried on site, the team that made it is the team that answers.",
     applications: [
       "sludge-dewatering",
       "coastal-protection",
@@ -236,55 +536,131 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "sand-container-installation": {
     title: "Geosynthetic Sand Container Installation Across Africa",
     summary:
-      "Supply, fabrication and placement support for woven, nonwoven and composite geotextile sand containers. We coordinate filling, handling and placement with the engineered coastal, riverbank or scour-protection layout.",
-    scope:
-      "The design establishes container geometry, fabric and seam requirements, fill, foundation, filters and stability under the intended exposure. We agree the fabricated article and site scope against those requirements, including any separately specified handling or lifting arrangement.",
-    inputs: [
-      "Coastal or hydraulic design, geometry, exposure and site access",
-      "Fabric, seam, closure and container-dimension requirements",
-      "Sand properties, fill procedure and filling equipment",
-      "Foundation, filter, handling and placement details",
+      "We manufacture FlowTex™ sand containers and place them for coastal revetments, groynes, scour aprons and riverbanks, with photographic sign-off on every course.",
+    sections: [
+      {
+        id: "grades",
+        label: "Container Grades",
+        title: "Container Grades We Make",
+        kind: "table",
+        rows: [
+          {
+            label: "NW40 to NW70",
+            value: "Nonwoven, 40 to 70 kg, hand-filled for rapid deployment",
+          },
+          {
+            label: "NW70HD or W30",
+            value: "70 to 400 kg, bank stabilisation and low-energy flows",
+          },
+          { label: "NW400", value: "400 kg, sheltered revetments and dune toe" },
+          { label: "NW1350 or W45", value: "1,000 to 1,350 kg, revetments and groynes" },
+          { label: "NW1800 or W60", value: "1,800 kg, exposed revetments and scour aprons" },
+          { label: "NW4000 or W105", value: "4,000 kg, breakwater cores and high-energy armour" },
+        ],
+      },
+      {
+        id: "method",
+        label: "Placement",
+        title: "How We Place Them",
+        kind: "steps",
+        steps: [
+          {
+            title: "Base and underliner",
+            text: "We excavate to a firm base and lay a shingle-lapped nonwoven underliner with 500 mm overlaps, or 1,000 mm on soft ground.",
+          },
+          {
+            title: "Filling",
+            text: "We fill containers to about 80% of capacity and double-seam every closure.",
+          },
+          {
+            title: "Stretcher bond",
+            text: "We place courses in stretcher bond, offset half a bag from the course below, compacting after every three containers.",
+          },
+          {
+            title: "Course sign-off",
+            text: "We check face alignment against setting-out pegs and photograph every course before placing the next.",
+          },
+        ],
+      },
+      {
+        id: "records",
+        label: "QA/QC Records",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Mill certificates and batch traceability for every container",
+          "Seam strength results to EN ISO 10319",
+          "Course-by-course photographic sign-off",
+          "Final layout survey",
+        ],
+      },
     ],
-    controls: [
-      "Accept the foundation and specified filter layers before placement.",
-      "Inspect the container, filling ports, seams and approved handling provisions.",
-      "Fill and close the article to the approved procedure while monitoring its shape and condition.",
-      "Place to the engineered layout and inspect damage, interfaces and completed geometry.",
-    ],
-    records: [
-      "Fabric and fabrication references",
-      "Seam, dimensional and closure inspections",
-      "Fill and separately specified lifting or handling records",
-      "Placement, repairs and final layout documentation",
-    ],
-    why: "Connect container fabrication to the practical filling and placement method, with seam inspections and handling provisions reviewed for the actual article and site conditions.",
+    why: "We make the containers and place them, so fabric, seams and placement are controlled by one team, with filling from local sand and no rock haulage.",
     applications: ["coastal-protection", "slope-erosion-protection"],
   },
   "silt-curtain-deployment": {
     title: "Silt Curtain & Turbidity Barrier Deployment Across Africa",
     summary:
-      "Fabricated silt curtains and deployment support for suitable dredging, bridge, port and construction works. We review current, depth, water-level movement, anchorage and operating access before defining the barrier and site scope.",
-    scope:
-      "A curtain is one part of the project's sediment-management plan. Configuration, flotation, skirt, ballast, joints, anchors and maintenance access are selected for the actual water conditions. A curtain does not guarantee a fixed turbidity reduction or suit every current, wave or debris environment.",
-    inputs: [
-      "Water depth, current, tide or water-level range and wave exposure",
-      "Sediment characteristics, work method, debris and navigation constraints",
-      "Curtain alignment, skirt, flotation, ballast, anchorage and joint details",
-      "Deployment access, monitoring, maintenance and removal requirements",
+      "We fabricate GeoCurtain™ silt curtains and deploy, maintain and recover them for dredging, piling, port and river works, sized to the survey and tidal range.",
+    sections: [
+      {
+        id: "classes",
+        label: "Curtain Classes",
+        title: "Curtain Classes We Make",
+        kind: "table",
+        rows: [
+          {
+            label: "Class 1",
+            value: "Calm water: ponds, canals, marinas and sheltered work zones",
+          },
+          {
+            label: "Class 2",
+            value: "Mild current and wind: high-strength fabric and heavy-duty tension members",
+          },
+          {
+            label: "Class 3",
+            value: "Dredging and marine construction in moderate current, wind and wave",
+          },
+        ],
+      },
+      {
+        id: "survey",
+        label: "Site Survey",
+        title: "What We Survey Before We Quote",
+        kind: "list",
+        items: [
+          "Water depth along the full alignment, from a bathymetric survey",
+          "Tidal range, so the skirt neither falls short nor grounds",
+          "Current velocity and wind fetch, which set the class and anchor capacity",
+          "Work-zone geometry and vessel access points",
+        ],
+      },
+      {
+        id: "deployment",
+        label: "Deployment",
+        title: "How We Deploy",
+        kind: "steps",
+        steps: [
+          {
+            title: "Anchors first",
+            text: "We install anchors sized for current, depth, bed material and wind fetch.",
+          },
+          {
+            title: "Float and connect",
+            text: "We float the curtain into position, join it at the connectors and tension it with allowance for tide and wake.",
+          },
+          {
+            title: "Maintain",
+            text: "We inspect routinely, reposition around the works and repair fabric, ballast or anchoring in place.",
+          },
+          {
+            title: "Recover",
+            text: "We recover the curtain cleanly at completion, with inspection logs and photographs for your compliance file.",
+          },
+        ],
+      },
     ],
-    controls: [
-      "Review the barrier layout and conditions before deployment.",
-      "Inspect fabricated sections, floats, ballast, connections and anchorage components.",
-      "Deploy and connect sections using the agreed access and anchoring method.",
-      "Inspect condition, maintain the barrier and coordinate monitoring and removal with the project team.",
-    ],
-    records: [
-      "Fabrication and component identification",
-      "Joint, skirt, flotation and ballast inspections",
-      "Anchor and deployment layout records",
-      "Inspection, maintenance, repairs and removal handover information",
-    ],
-    why: "Bring fabrication and deployment into one practical plan, with the barrier geometry and anchorage reviewed against the site rather than selected by class designation alone.",
+    why: "Our own crew sizes, fabricates, deploys, maintains and recovers the curtain.",
     applications: [
       "sediment-control-silt-curtains-fences",
       "coastal-protection",
@@ -294,28 +670,59 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "concrete-lining-protection": {
     title: "Concrete Protection Liner & GCCM Installation Across Africa",
     summary:
-      "Installation of specified thermoplastic concrete protective liners and cementitious composite linings. We distinguish chemical and corrosion protection from channel erosion control, with the appropriate preparation, joining and inspection procedure for each system.",
-    scope:
-      "GSE Studliner concrete protective liner work is coordinated with anchorage, concrete placement, welds and penetrations. Tiltex GCCM work follows its own foundation, joint, hydration and curing controls. The project duty determines the material and inspection method; the two systems are not interchangeable.",
-    inputs: [
-      "Structure or channel geometry, substrate and operating duty",
-      "Chemical and temperature exposure or hydraulic erosion design",
-      "Liner grade, anchorage, joints, penetrations and termination details",
-      "Specified welding or hydration procedure, tests and acceptance records",
+      "We install GSE® Studliner® concrete protection liners and TILTEX™ GCCM linings, each with its own preparation, joining and inspection method.",
+    sections: [
+      {
+        id: "systems",
+        label: "Systems",
+        title: "Two Systems, Two Duties",
+        kind: "table",
+        rows: [
+          {
+            label: "GSE® Studliner®",
+            value:
+              "Studded HDPE cast into concrete for permanent chemical and corrosion protection",
+          },
+          {
+            label: "TILTEX™ GCCM",
+            value: "Concrete-impregnated mats for channel lining and erosion control, no formwork",
+          },
+        ],
+      },
+      {
+        id: "studliner",
+        label: "Studliner Installation",
+        title: "How We Install Studliner",
+        kind: "steps",
+        steps: [
+          {
+            title: "Prefabrication",
+            text: "We prefabricate Studliner to size to reduce site cutting and welding.",
+          },
+          {
+            title: "Placement",
+            text: "We fix panels to the formwork and work with the concrete team through the pour.",
+          },
+          { title: "Welding", text: "We extrusion-weld joints, penetrations and terminations." },
+          {
+            title: "Testing",
+            text: "We spark or vacuum test every seam and record it in the QA report.",
+          },
+        ],
+      },
+      {
+        id: "gccm",
+        label: "GCCM Installation",
+        title: "How We Install GCCM",
+        kind: "steps",
+        steps: [
+          { title: "Subgrade", text: "We trim and compact the subgrade and cut anchor trenches." },
+          { title: "Deployment", text: "We deploy along the flow direction and fasten overlaps." },
+          { title: "Hydration", text: "We hydrate and cure to the manufacturer's method." },
+        ],
+      },
     ],
-    controls: [
-      "Approve the substrate, anchor and transition details for the selected lining system.",
-      "Install thermoplastic liner and complete qualified welds and accessible detail work where applicable.",
-      "Deploy and hydrate GCCM using the approved joint, anchorage and curing method where applicable.",
-      "Inspect the relevant lining, close out repairs and release it to the specified service sequence.",
-    ],
-    records: [
-      "Material, batch and component references",
-      "Substrate, anchor, joint and penetration inspections",
-      "Applicable weld and continuity tests or GCCM hydration and curing records",
-      "Repair close-out and system-specific as-built handover information",
-    ],
-    why: "Coordinate material and installation requirements with the actual protection duty, maintaining a clear distinction between thermoplastic corrosion barriers and cementitious erosion-control linings.",
+    why: "We match the lining system to the duty and install both with our own crews and records.",
     applications: [
       "concrete-protection-lining",
       "wastewater-treatment-pond-lining",
@@ -326,55 +733,115 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "bioengineering-revegetation": {
     title: "Erosion Blankets, Bioengineering & Revegetation Across Africa",
     summary:
-      "Supply and installation of specified natural-fibre erosion blankets and revegetation interfaces for mine rehabilitation, slopes, embankments and channel banks. SoilLock jute, coir, straw and wood-wool systems are matched to the intended establishment duty.",
-    scope:
-      "Blanket selection depends on slope and runoff conditions, required service duration, soil preparation and the vegetation programme. We coordinate the geosynthetic installation scope with the appointed environmental or rehabilitation team's seed, soil, watering and maintenance requirements.",
-    inputs: [
-      "Slope geometry, soil condition, runoff and any hydraulic design",
-      "Specified blanket type, durability and vegetation objectives",
-      "Soil preparation, seed or planting, anchorage and termination details",
-      "Watering, inspection, maintenance and establishment responsibilities",
+      "We supply and install SoilLock™ jute, coir and straw and EnviroWool erosion blankets for mine rehabilitation, TSF walls, embankments and riverbanks.",
+    sections: [
+      {
+        id: "blankets",
+        label: "Blanket Selection",
+        title: "Blankets We Supply",
+        kind: "table",
+        rows: [
+          {
+            label: "Jute SoilLock™ 292",
+            value: "292 g/m² open weave, 10 × 10 mm aperture, 12 to 24 months",
+          },
+          {
+            label: "Coir SoilLock™ 350 / 450",
+            value: "Civil and mining grades for steep, high-runoff slopes and TSFs, 2 to 3 years",
+          },
+          { label: "Straw SoilLock™ 300", value: "Short-term cover on gentle slopes" },
+          { label: "EnviroWool", value: "Wood-wool erosion blanket, 2.45 m × 51.4 m rolls" },
+        ],
+      },
+      {
+        id: "method",
+        label: "Installation",
+        title: "How We Install",
+        kind: "steps",
+        steps: [
+          {
+            title: "Surface preparation",
+            text: "We trim the slope and place seed and topsoil to specification before the blanket goes down.",
+          },
+          { title: "Crest anchorage", text: "We cut and backfill crest anchor trenches." },
+          {
+            title: "Deployment",
+            text: "We roll blankets down-slope in full soil contact, with shingle-lapped overlaps.",
+          },
+          {
+            title: "Pinning",
+            text: "We pin to the specified pattern so the blanket stays in contact through the rains.",
+          },
+        ],
+      },
+      {
+        id: "records",
+        label: "Handover",
+        title: "What We Hand Over",
+        kind: "list",
+        items: [
+          "Blanket type and batch references",
+          "Surface preparation, seeding and anchorage inspections",
+          "Coverage, overlap and repair records",
+          "An inspection and maintenance plan for the establishment period",
+        ],
+      },
     ],
-    controls: [
-      "Prepare the soil surface and complete the specified seed or planting stage.",
-      "Deploy blankets in contact with the ground to the approved orientation and overlaps.",
-      "Complete crest trenches, pins, joints and edge details using the specified arrangement.",
-      "Inspect after installation and coordinate the agreed vegetation-establishment and maintenance programme.",
-    ],
-    records: [
-      "Blanket type, material and batch references",
-      "Surface preparation, seed or planting and anchorage inspections",
-      "Coverage, overlap, damage and repair records",
-      "Handover of inspection and maintenance responsibilities",
-    ],
-    why: "Coordinate blanket supply and deployment with the soil, vegetation and anchorage interfaces that support rehabilitation, with establishment responsibilities clearly identified before site work.",
+    why: "We supplied 210,000 m² of Jute SoilLock™ 292 to a single river-rehabilitation programme in Zimbabwe, and we install with our own crews.",
     applications: ["slope-erosion-protection", "coastal-protection", "roads-railways"],
   },
   "delivery-logistics-africa": {
     title: "Geosynthetics Delivery & Cross-Border Logistics Across Africa",
     summary:
-      "Material scheduling, packing and freight coordination for African geosynthetics projects. We plan road, ocean or agreed multimodal delivery around the product, destination, site access and construction programme.",
-    scope:
-      "We define the dispatch origin, delivery term, transport route, unloading responsibilities and required documents in the proposal. Stock, lead time, port entry, customs arrangements and crew mobilisation are confirmed for the actual consignment. Country coverage does not mean every grade is stocked in every destination.",
-    inputs: [
-      "Product grades, dimensions, roll or article quantities and required date",
-      "Site destination, nearest port or town and access or unloading constraints",
-      "Agreed delivery term and division of freight and import responsibilities",
-      "Packing, identification, documentation and any special handling requirements",
+      "We deliver geosynthetics to project sites across Africa by road, sea and air, with certificates of origin and customs documents prepared before the consignment leaves.",
+    sections: [
+      {
+        id: "routes",
+        label: "Routes",
+        title: "How We Reach Your Site",
+        kind: "table",
+        rows: [
+          {
+            label: "Southern Africa",
+            value: "Road dispatch into Zambia, Botswana, Namibia, Zimbabwe and Mozambique",
+          },
+          {
+            label: "West Africa",
+            value: "Sea freight via Tema or Abidjan with bonded inland transfer",
+          },
+          {
+            label: "East & Central Africa",
+            value:
+              "Sea, inland container depot and road or rail corridors into Tanzania, Zambia and the DRC",
+          },
+        ],
+      },
+      {
+        id: "documents",
+        label: "Documentation",
+        title: "Documents We Prepare",
+        kind: "list",
+        items: [
+          "SADC and AfCFTA certificates of origin for qualifying consignments",
+          "Commercial invoice, packing list and tariff classification",
+          "Mill certificates and product datasheets",
+          "French-language documents for West African destinations",
+        ],
+      },
+      {
+        id: "packing",
+        label: "Packing & Loading",
+        title: "How We Pack and Load",
+        kind: "list",
+        items: [
+          "Container fill plans for 20 ft, 40 ft and high-cube loads",
+          "Fabricated articles shipped flat and unfilled to save freight volume",
+          "Rolls labelled and listed against the packing list",
+          "Loads restrained and protected for long road legs",
+        ],
+      },
     ],
-    controls: [
-      "Coordinate the material schedule and confirmed availability with the construction programme.",
-      "Plan packing, loading and restraints to protect the supplied goods.",
-      "Prepare consignment references and coordinate documents with the appointed freight and clearing parties.",
-      "Track the agreed shipment milestones and confirm delivery and receipt information.",
-    ],
-    records: [
-      "Product and roll or article identification linked to the packing list",
-      "Dispatch, loading and consignment records",
-      "Agreed freight and customs-support documentation",
-      "Delivery receipt, discrepancy records and project handover references",
-    ],
-    why: "Keep procurement, roll schedules and freight planning connected, with one team coordinating material and delivery information for a clearly defined African project destination.",
+    why: "One contact from enquiry to delivery, with no broker chain between you and your material.",
     applications: [
       "tailings-storage-facility-lining",
       "reservoir-dam-lining",
@@ -388,28 +855,17 @@ export function serviceDeliveryFor(slug: string, label: string): ServiceDelivery
   return (
     SERVICE_DELIVERY_PROFILES[slug] || {
       title: label,
-      summary: `Geosynthetics Africa coordinates ${label.toLowerCase()} for African projects, with material, delivery, installation and inspection responsibilities defined for the agreed scope.`,
-      scope:
-        "Send your drawings, specification, quantities, destination and required date. Our team will review the duty, clarify responsibilities and prepare a project-specific proposal.",
-      inputs: [
-        "Application, project location and programme",
-        "Drawings, quantities and material specification",
-        "Site access and agreed delivery or installation scope",
-        "Inspection requirements and handover records",
+      summary: `Geosynthetics Africa delivers ${label.toLowerCase()} for projects across Africa, with our own supply, crews and QA/QC records.`,
+      sections: [
+        {
+          id: "scope",
+          label: "Scope",
+          title: "What We Deliver",
+          kind: "text",
+          body: "Send us your drawings, specification, quantities, destination and required date, and we will prepare a project-specific proposal.",
+        },
       ],
-      controls: [
-        "Review the agreed drawings and scope before procurement or mobilisation.",
-        "Identify materials and coordinate the approved installation or delivery sequence.",
-        "Complete the relevant inspections and close out deviations and repairs.",
-        "Compile the agreed records for project handover.",
-      ],
-      records: [
-        "Approved material and scope references",
-        "Relevant delivery and installation inspections",
-        "Applicable test and repair records",
-        "Agreed handover documentation",
-      ],
-      why: "Coordinate technical selection, supply, fabrication where applicable, delivery and agreed site work with defined inspection and handover responsibilities.",
+      why: "We supply, fabricate where required, deliver and install, with one team accountable for the records.",
       applications: [],
     }
   );

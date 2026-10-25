@@ -175,7 +175,7 @@ export function TechnicalCentrePage() {
           </h2>
           <p className="mt-4 max-w-3xl text-muted-foreground">
             A useful proposal starts with the application and site conditions. Send what you have;
-            identify items still awaiting the appointed designer's confirmation.
+            tell us which items are still awaiting design confirmation.
           </p>
           <ol className="grid md:grid-cols-2 gap-5 mt-6 list-decimal pl-5 text-sm leading-relaxed">
             <li>

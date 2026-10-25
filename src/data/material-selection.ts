@@ -18,7 +18,7 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
     slug: "geomembrane-liners",
     title: "Geomembrane Liners",
     description:
-      "HDPE, LLDPE and other specified polymeric barriers for water, tailings, leach solutions and waste containment, with protection layers, anchorage and welded details coordinated as a system.",
+      "HDPE, LLDPE and other specified polymeric barriers for water, tailings, leach solutions and waste containment, with protection layers, anchorage and welded details supplied and installed as one system.",
     functions: ["Containment", "Seepage control", "Liner rehabilitation"],
     inputs: [
       "Liquid chemistry, temperature, exposure and required material approvals",
@@ -26,9 +26,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Approved polymer, grade, thickness, surface finish and protection arrangement",
     ],
     installation:
-      "Agree foundation acceptance, panel deployment, anchorage and penetration details before installation. Welding procedures, trial seams, weather controls and covering releases follow the approved method and inspection plan.",
+      "We set foundation acceptance, panel deployment, anchorage and penetration details before installation. Welding procedures, trial seams, weather controls and covering releases follow the approved method and inspection plan.",
     quality:
-      "Review roll identification and material certificates, panel and seam records, applicable non-destructive tests, destructive seam tests, repair close-out and as-built information. Electrical leak location is included where specified and suitable for the liner configuration.",
+      "We review roll identification and material certificates, panel and seam records, applicable non-destructive tests, destructive seam tests, repair close-out and as-built information. Electrical leak location is included where specified and suitable for the liner configuration.",
     applications: [
       "tailings-storage-facility-lining",
       "heap-leach-pad-lining",
@@ -48,9 +48,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "GCL grade, coating, overlap, penetration and cover details",
     ],
     installation:
-      "Protect rolls from premature hydration. Deploy against accepted foundations, maintain the specified overlaps, complete bentonite and termination details, and place the required cover within the approved construction sequence.",
+      "We protect rolls from premature hydration. We deploy against accepted foundations, maintain the specified overlaps, complete bentonite and termination details, and place the required cover within the approved construction sequence.",
     quality:
-      "Retain batch references and product submittals, foundation acceptance, panel and overlap inspections, damage and repair records, exposure conditions and covering releases.",
+      "We keep batch references and product submittals, foundation acceptance, panel and overlap inspections, damage and repair records, exposure conditions and covering releases.",
     applications: [
       "landfill-ash-bund-lining",
       "landfill-capping-closure",
@@ -70,9 +70,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Installation survivability, puncture or tensile demands, exposure and overlaps",
     ],
     installation:
-      "Prepare the receiving surface, deploy without damaging or contaminating the fabric, maintain the specified overlaps or sewn seams, and control aggregate placement, cover thickness and construction traffic.",
+      "We prepare the receiving surface, deploy without damaging or contaminating the fabric, maintain the specified overlaps or sewn seams, and control aggregate placement, cover thickness and construction traffic.",
     quality:
-      "Check the supplied grade and roll references against the specified mechanical and hydraulic properties. Record placement, overlaps, seams, damage repairs and cover acceptance.",
+      "We check the supplied grade and roll references against the specified mechanical and hydraulic properties. We record placement, overlaps, seams, damage repairs and cover acceptance.",
     applications: [
       "drainage-filtration-systems-africa",
       "roads-railways",
@@ -92,9 +92,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Relevant interaction, stiffness, long-term design strength or asphalt interlayer requirements",
     ],
     installation:
-      "Confirm grid orientation, overlaps and facing connections where applicable. Control fill grading, placement and compaction; asphalt interlayers need a compatible prepared surface, bond treatment and paving sequence.",
+      "We confirm grid orientation, overlaps and facing connections where applicable. We control fill grading, placement and compaction; asphalt interlayers need a compatible prepared surface, bond treatment and paving sequence.",
     quality:
-      "Verify the grid grade and specified performance data. Keep records of layer locations, overlaps or connections, fill acceptance, compaction and departures from the approved layout.",
+      "We verify the grid grade and specified performance data. We keep records of layer locations, overlaps or connections, fill acceptance, compaction and departures from the approved layout.",
     applications: [
       "stabilisation-reinforcement",
       "retaining-wall-systems",
@@ -114,9 +114,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Cell or blanket grade, infill, anchorage and termination details",
     ],
     installation:
-      "Prepare the slope or channel, complete anchor and crest details, deploy to the approved layout and secure contact with the underlying ground. Place infill, seed and vegetation treatment in the specified sequence.",
+      "We prepare the slope or channel, complete anchor and crest details, deploy to the approved layout and secure contact with the underlying ground. We place infill, seed and vegetation treatment in the specified sequence.",
     quality:
-      "Document product and batch references, prepared surfaces, anchorage, coverage and overlaps, infill and vegetation measures. Confirm any maintenance and establishment requirements at handover.",
+      "We document product and batch references, prepared surfaces, anchorage, coverage and overlaps, infill and vegetation measures. We confirm any maintenance and establishment requirements at handover.",
     applications: [
       "slope-erosion-protection",
       "stabilisation-reinforcement",
@@ -136,9 +136,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Diameter, stiffness, slot or perforation arrangement, joint and core performance",
     ],
     installation:
-      "Set out line and level, prepare bedding or supporting surfaces, protect filter continuity and complete joints and outlets. Control backfill and compaction; inspect duct routes and access points before closing trenches.",
+      "We set out line and level, prepare bedding or supporting surfaces, protect filter continuity and complete joints and outlets. We control backfill and compaction; we inspect duct routes and access points before closing trenches.",
     quality:
-      "Verify product identification and geometry, slot or core configuration, filter details, joint inspections and the specified flow or continuity checks. Record buried routes, levels and outlets for handover.",
+      "We verify product identification and geometry, slot or core configuration, filter details, joint inspections and the specified flow or continuity checks. We record buried routes, levels and outlets for handover.",
     applications: [
       "drainage-filtration-systems-africa",
       "green-roof-podium-drainage",
@@ -150,7 +150,7 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
     slug: "gabion-baskets",
     title: "Gabion Baskets & Mattresses",
     description:
-      "Wire-mesh baskets and mattresses for designed retaining, channel and scour-protection structures, coordinated with foundations, rock fill, connections and filter layers.",
+      "Wire-mesh baskets and mattresses for designed retaining, channel and scour-protection structures, supplied and installed with foundations, rock fill, connections and filter layers.",
     functions: ["Retaining structures", "Channel protection", "Scour protection"],
     inputs: [
       "Structure geometry, foundation conditions and hydraulic or retaining design",
@@ -158,9 +158,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Rock grading, filter arrangement, connections and construction access",
     ],
     installation:
-      "Prepare foundations and filters, assemble and brace the specified units, connect adjacent baskets and place suitable rock with controlled facing and internal packing. Complete lids and connections before the next construction stage.",
+      "We prepare foundations and filters, assemble and brace the specified units, connect adjacent baskets and place suitable rock with controlled facing and internal packing. We complete lids and connections before the next construction stage.",
     quality:
-      "Inspect unit dimensions and supplied mesh and coating data. Record foundation acceptance, filters, connections, bracing, rock quality, packing and final geometry.",
+      "We inspect unit dimensions and supplied mesh and coating data. We record foundation acceptance, filters, connections, bracing, rock quality, packing and final geometry.",
     applications: [
       "retaining-wall-systems",
       "coastal-protection",
@@ -180,9 +180,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Cell or paving grade, edge restraint, infill and maintenance arrangement",
     ],
     installation:
-      "Prepare the designed pavement layers and drainage interfaces, install edge restraints and cellular units, and complete the specified infill or vegetation. Release traffic only after the required construction and establishment stages.",
+      "We prepare the designed pavement layers and drainage interfaces, install edge restraints and cellular units, and complete the specified infill or vegetation. Release traffic only after the required construction and establishment stages.",
     quality:
-      "Confirm the supplied grade, subgrade and layer acceptance, joint and edge details, infill and drainage continuity. Handover includes the specified maintenance and traffic-use conditions.",
+      "We confirm the supplied grade, subgrade and layer acceptance, joint and edge details, infill and drainage continuity. Handover includes the specified maintenance and traffic-use conditions.",
     applications: [
       "stabilisation-reinforcement",
       "roads-railways",
@@ -201,9 +201,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Available footprint, contained drainage platform, article geometry and removal plan",
     ],
     installation:
-      "Prepare the contained platform and filtrate collection, inspect fabricated units and connections, and agree the filling procedure. Monitor filling, drainage and deformation; handling or lifting requires the specified arrangement and approval.",
+      "We prepare the contained platform and filtrate collection, inspect fabricated units and connections, and set the filling procedure. We monitor filling, drainage and deformation; handling or lifting requires the specified arrangement and approval.",
     quality:
-      "Define feed sampling and dewatering trials, fabric and fabrication records, seam inspections and filling records. Lifting components require the specified ratings and supporting evidence; a dewatering article is not automatically a lifting bag.",
+      "We define feed sampling and dewatering trials, fabric and fabrication records, seam inspections and filling records. Lifting components require the specified ratings and supporting evidence; a dewatering article is not automatically a lifting bag.",
     applications: [
       "sludge-dewatering",
       "wastewater-treatment-pond-lining",
@@ -222,9 +222,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Fabric mechanical and hydraulic properties, seam performance and handling provisions",
     ],
     installation:
-      "Prepare the designed foundation and filter, fill to the approved procedure and inspect closures and handling details. Position containers to the engineered layout, controlling abrasion, damage and interfaces with adjacent units.",
+      "We prepare the designed foundation and filter, fill to the approved procedure and inspect closures and handling details. We position containers to the engineered layout, controlling abrasion, damage and interfaces with adjacent units.",
     quality:
-      "Retain fabric identification, fabrication and seam inspection records, dimensions and filling checks. Verify any specified lifting system separately and record placement, damage repairs and the completed layout.",
+      "We keep fabric identification, fabrication and seam inspection records, dimensions and filling checks. We verify any specified lifting system separately and record placement, damage repairs and the completed layout.",
     applications: [
       "coastal-protection",
       "slope-erosion-protection",
@@ -243,9 +243,9 @@ export const MATERIAL_SELECTION_GUIDES: MaterialSelectionGuide[] = [
       "Specified liner grade, welding or joining method and continuity test requirements",
     ],
     installation:
-      "Coordinate liner anchorage and concrete placement or substrate preparation with the structural works. Complete welds, terminations and penetrations using the approved procedure, with access for the required inspections.",
+      "We plan liner anchorage and concrete placement or substrate preparation with the structural works. We complete welds, terminations and penetrations using the approved procedure, with access for the required inspections.",
     quality:
-      "Review product and batch records, anchor and joint details, weld qualification and inspection records, applicable continuity tests and repairs. Keep concrete protective liner tests distinct from GCCM hydration and curing inspections.",
+      "We review product and batch records, anchor and joint details, weld qualification and inspection records, applicable continuity tests and repairs. We keep concrete protective liner tests distinct from GCCM hydration and curing inspections.",
     applications: [
       "concrete-protection-lining",
       "wastewater-treatment-pond-lining",

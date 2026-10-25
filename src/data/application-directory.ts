@@ -215,7 +215,7 @@ const newApplications = [
     ],
     what: "Process-water and pollution-control facilities store liquids whose chemistry, temperature and operating level can differ substantially from clean water. Geosynthetics Africa supplies and installs geomembranes, protection geotextiles and specified drainage or leak-detection layers for these containment duties across Africa.",
     selection:
-      "We review process chemistry, operating head, temperature, foundation conditions and the approved liner section, then coordinate the barrier, protection and collection material schedule.",
+      "We review process chemistry, operating head, temperature, foundation conditions and the approved liner section, then schedule the barrier, protection and collection materials.",
     installation:
       "Our scope can connect material delivery to panel deployment, fusion and extrusion welding, pipe boots, sumps, anchors and phased connections to operating facilities.",
     quality:
@@ -274,14 +274,14 @@ const newApplications = [
       "Treatment and polishing ponds",
       "Sludge-storage containment",
     ],
-    what: "Wastewater ponds need a containment barrier that suits the effluent, treatment process and maintenance regime. Geosynthetics Africa supplies and installs lining systems for municipal, industrial and agricultural wastewater facilities across Africa, with protection and connection details coordinated around the approved process design.",
+    what: "Wastewater ponds need a containment barrier that suits the effluent, treatment process and maintenance regime. Geosynthetics Africa supplies and installs lining systems for municipal, industrial and agricultural wastewater facilities across Africa, with protection and connection details built around the approved process design.",
     selection:
       "We review effluent chemistry, operating temperature, aeration or mixing equipment, water levels, foundation and access to select the specified liner and protection package.",
     installation:
-      "We coordinate earthwork interfaces, panel placement, welding, inlet and outlet details and protection around equipment supports and maintenance areas.",
+      "We accept the earthworks, place and weld panels, and complete inlet and outlet details and protection around equipment supports and maintenance areas.",
     quality:
-      "Our records cover material identity, formation acceptance, trial welding, applicable seam tests, repairs, equipment-interface inspections and the agreed release for filling. HDPE seam checks follow the specified ASTM methods and CQA plan.",
-    why: "Procure the membrane, protection and installation as a coordinated package, with clear responsibilities at treatment-process interfaces and an installation dossier for handover.",
+      "Our records cover material identity, formation acceptance, trial welding, applicable seam tests, repairs, equipment-interface inspections and our release for filling. We test HDPE seams to the specified ASTM methods and CQA plan.",
+    why: "We supply the membrane and protection and install them as one package, with every treatment-process interface detailed and an installation dossier at handover.",
     components: [
       [
         "Effluent-compatible geomembrane",
@@ -293,7 +293,7 @@ const newApplications = [
       ],
       [
         "Treatment-process interfaces",
-        "Inlets, outlets, equipment bases and access details require coordinated terminations and protection.",
+        "We terminate and protect the liner at every inlet, outlet, equipment base and access point.",
       ],
     ],
     design: [
@@ -317,7 +317,7 @@ const newApplications = [
       ],
       [
         "Commissioning records",
-        "Record filling releases and agreed retention or integrity tests, with as-built details.",
+        "We record filling releases and the specified retention or integrity tests, with as-built details.",
       ],
     ],
   },
@@ -337,9 +337,9 @@ const newApplications = [
     ],
     what: "Lined ponds help manage water retention and the separation of stored water from the supporting soil. Geosynthetics Africa supplies geomembranes and installation packages for farm-water storage and aquaculture projects across Africa. Material choice accounts for the water use, stock or crop sensitivity, maintenance and site conditions.",
     selection:
-      "We review pond geometry, foundation, water chemistry, intended aquaculture or agricultural use and required product approvals before coordinating the liner and protection materials.",
+      "We review pond geometry, foundation, water chemistry, intended aquaculture or agricultural use and required product approvals before we select the liner and protection materials.",
     installation:
-      "We plan panel sizes, anchors, inlet and outlet connections and the agreed welding or manufacturer-specific joining scope for the selected membrane.",
+      "We plan panel sizes, anchors, inlet and outlet connections and the welding or manufacturer-specific joining method for the selected membrane.",
     quality:
       "Our checks cover material identity, prepared formation, protection, joint integrity, repairs and terminations. Water-contact or aquaculture suitability is checked for the exact product rather than inferred from the polymer alone.",
     why: "Access a defined material and installation package for your pond layout, with delivery planning for rural sites and documented completion before the pond is placed in service.",
@@ -354,7 +354,7 @@ const newApplications = [
       ],
       [
         "Anchors and water-control details",
-        "Coordinate inlets, outlets, harvest or drain points and edge restraint with the pond design.",
+        "We detail inlets, outlets, harvest or drain points and edge restraint to the pond design.",
       ],
     ],
     design: [
@@ -396,14 +396,14 @@ const newApplications = [
       "Agricultural storage covers",
       "Cover repair and replacement",
     ],
-    what: "A floating membrane cover is a separate engineered system above stored liquid. It can support evaporation or contamination-control objectives when its material, flotation, ballast, drainage and anchorage suit the reservoir and operating conditions. Geosynthetics Africa coordinates material supply, fabrication and the agreed installation scope for African water-storage projects.",
+    what: "A floating membrane cover is a separate engineered system above stored liquid. It can support evaporation or contamination-control objectives when its material, flotation, ballast, drainage and anchorage suit the reservoir and operating conditions. Geosynthetics Africa supplies, fabricates and installs floating covers for African water-storage projects.",
     selection:
       "We review stored liquid, basin geometry, operating levels, wind, rainfall, access and cover objectives before selecting the specified membrane and fabrication details.",
     installation:
-      "We coordinate panel fabrication and joining, flotation or ballast interfaces, anchors, access details and the agreed deployment and filling sequence.",
+      "We fabricate and join panels, fit flotation and ballast, install anchors and access details, and deploy to a planned filling sequence.",
     quality:
-      "Our controls record membrane and panel identity, fabrication and field-joint checks, repairs, attachment and drainage inspections, and operational checks through the agreed water-level range.",
-    why: "Connect cover material and fabrication to the reservoir's practical operating details, with one team coordinating delivery, installation interfaces and documented completion.",
+      "Our controls record membrane and panel identity, fabrication and field-joint checks, repairs, attachment and drainage inspections, and operational checks through the full water-level range.",
+    why: "We fabricate the cover for your reservoir's operating details, then deliver, install and document it with one team.",
     components: [
       [
         "Cover membrane and joined panels",
@@ -421,12 +421,12 @@ const newApplications = [
     design: [
       "Set measurable cover objectives and assess wind, rainfall and the full operating water-level range.",
       "Select membrane, joints, flotation and ballast from the approved cover design and stored-liquid chemistry.",
-      "Coordinate stormwater removal, inspection access and the safe construction and operating procedures.",
+      "We install stormwater removal and inspection access and hand over safe operating procedures.",
     ],
     install: [
       "Survey and prepare the reservoir interfaces, anchorage and deployment areas.",
       "Fabricate or join panels, install the specified attachments and deploy using the approved sequence.",
-      "Inspect drainage, movement and connections at agreed levels, close repairs and hand over operating records.",
+      "We inspect drainage, movement and connections at set water levels, close out repairs and hand over operating records.",
     ],
     checks: [
       [
@@ -439,7 +439,7 @@ const newApplications = [
       ],
       [
         "Operational acceptance",
-        "Complete agreed movement, drainage and water-level checks and provide the maintenance information.",
+        "We complete movement, drainage and water-level checks and provide the maintenance information.",
       ],
     ],
   },
@@ -459,12 +459,12 @@ const newApplications = [
     ],
     what: "Landfill capping manages infiltration and the interfaces between waste, gas, drainage and the final cover surface. Geosynthetics Africa supplies and installs specified geomembranes, GCLs, geotextiles and drainage products for closure and rehabilitation works across Africa. The cap arrangement follows the approved facility design and anticipated settlement.",
     selection:
-      "We coordinate the cap material schedule around infiltration objectives, gas-management details, differential settlement, slope stability and cover-soil requirements.",
+      "We schedule the cap materials around infiltration objectives, gas management, differential settlement, slope stability and cover soil.",
     installation:
       "We sequence barrier deployment, joints, gas and drainage interfaces, protection and cover placement so each layer remains accessible for inspection.",
     quality:
       "Our records cover material identity, layer acceptance, GCL overlaps where used, applicable geomembrane seam testing, repairs, drainage continuity and covering releases.",
-    why: "Source the closure layers as a coordinated package, with installation and traceability organised around the actual cap sequence and handover requirements.",
+    why: "We supply and install the closure layers as one package, with installation and traceability organised around the cap sequence and handover.",
     components: [
       [
         "Specified cap barrier",
@@ -518,14 +518,14 @@ const newApplications = [
       "Chemical-exposure channels",
       "Tank penetrations and lining details",
     ],
-    what: "Concrete protection liners isolate the concrete surface from specified aggressive liquids or gases. Geosynthetics Africa supplies anchored thermoplastic lining materials and coordinates fabrication, welding and installation interfaces for tanks, channels and process structures across Africa. The selected system must suit both chemical exposure and the concrete construction method.",
+    what: "Concrete protection liners isolate the concrete surface from specified aggressive liquids or gases. Geosynthetics Africa supplies, prefabricates, welds and installs anchored thermoplastic linings for tanks, channels and process structures across Africa. The selected system must suit both chemical exposure and the concrete construction method.",
     selection:
       "We review liquid or gas exposure, temperature, structural details, liner anchorage and concrete placement or rehabilitation requirements before confirming materials.",
     installation:
-      "We coordinate panels, embedment or approved fixing details, welded joints, pipe penetrations and terminations with the concrete and process-work programme.",
+      "We install panels, embedment or approved fixings, welded joints, pipe penetrations and terminations in step with the concrete programme.",
     quality:
       "Our inspection records address panel identity, fixing or anchor details, weld preparation, applicable seam or spark testing, repairs and the close-out of penetrations and terminations.",
-    why: "Bring thermoplastic lining supply and specialist fabrication or welding interfaces together, with the concrete contractor's responsibilities and inspection releases defined before construction.",
+    why: "We supply, prefabricate and weld the thermoplastic lining, with inspection releases set with the concrete team before construction.",
     components: [
       [
         "Concrete protection liner",
@@ -533,7 +533,7 @@ const newApplications = [
       ],
       [
         "Welded panel and fabrication details",
-        "Coordinate corner pieces, joints, transitions and pipe boots to maintain the designed lining continuity.",
+        "We prefabricate corner pieces, joints, transitions and pipe boots to keep the lining continuous.",
       ],
       [
         "Anchorage and terminations",
@@ -542,12 +542,12 @@ const newApplications = [
     ],
     design: [
       "Assess chemical exposure, temperature, pressure or vacuum and the intended cleaning regime.",
-      "Coordinate liner anchorage, concrete placement, corners, joints and thermal movement.",
+      "We plan liner anchorage, concrete placement, corners, joints and thermal movement.",
       "Specify the applicable weld, spark or integrity-testing procedure for the actual liner and details.",
     ],
     install: [
       "Approve shop details and inspect supports, formwork or concrete surfaces before lining installation.",
-      "Position panels and prefabricated pieces, coordinate embedment or fixings and weld the specified joints.",
+      "We position panels and prefabricated pieces, fix or embed them and weld the specified joints.",
       "Inspect and test applicable seams and details, repair defects and hand over traceable installation records.",
     ],
     checks: [
@@ -583,10 +583,10 @@ const newApplications = [
     selection:
       "We review the ground investigation, drain schedule, installation depth, soil and flow conditions and the specified filter and core performance before procurement.",
     installation:
-      "We coordinate drain supply and the agreed installation interfaces, including grid set-out, mandrel compatibility, anchorage, achieved depths and connection to the drainage blanket.",
+      "We supply the drains and plan installation: grid set-out, mandrel compatibility, anchorage, achieved depths and connection to the drainage blanket.",
     quality:
-      "Our records identify drain batches and installed locations, depths, splices, refusals and departures from the schedule. Instrumentation and settlement acceptance are managed by the appointed geotechnical parties.",
-    why: "Coordinate PVD procurement with the practical drain-installation and surface-drainage interfaces, keeping traceability connected to the approved ground-improvement schedule.",
+      "Our records identify drain batches and installed locations, depths, splices, refusals and departures from the schedule. We work with the project's geotechnical engineer on instrumentation and settlement acceptance.",
+    why: "We supply PVDs with traceability tied to the approved ground-improvement schedule and support installation and surface-drainage interfaces.",
     components: [
       [
         "Prefabricated vertical drain",
@@ -604,7 +604,7 @@ const newApplications = [
     design: [
       "Characterise compressible strata, consolidation behaviour and the required settlement or stability objectives.",
       "Specify drain spacing, depth, filter properties and discharge performance under the relevant confinement and deformation.",
-      "Coordinate loading sequence, drainage blanket, instrumentation and the acceptance criteria for progression.",
+      "Plan the loading sequence, drainage blanket, instrumentation and acceptance criteria for progression.",
     ],
     install: [
       "Set out the drain grid and verify product, mandrel and anchorage details before installation.",
@@ -640,14 +640,14 @@ const newApplications = [
       "Planter drainage",
       "Protection and drainage above waterproofing",
     ],
-    what: "Green roofs and landscaped podiums need drainage and filter layers that manage water without losing the growing medium or damaging the underlying waterproofing. Geosynthetics Africa supplies geotextiles, drainage cores and specified protection and root-management materials for these assemblies. The roof or structural designer coordinates waterproofing, loading and outlet capacity.",
+    what: "Green roofs and landscaped podiums need drainage and filter layers that manage water without losing the growing medium or damaging the underlying waterproofing. Geosynthetics Africa supplies geotextiles, drainage cores and specified protection and root-management materials for these assemblies. We work to the roof designer's waterproofing, loading and outlet details.",
     selection:
       "We match filter, drainage and protection layers to growing medium, imposed loads, gradients and outlet details, checking the exact product's water-flow and structural data.",
     installation:
-      "We coordinate material placement and continuity with the waterproofing team, including protection, core joins, filter laps, planters and drain inspection points.",
+      "We place the layers in step with the waterproofing team, including protection, core joins, filter laps, planters and drain inspection points.",
     quality:
       "Our checks cover product identity, protection of accepted waterproofing, core orientation, filter continuity, outlet connections and inspection before growing medium or paving covers the system.",
-    why: "Procure the filter, protection and drainage layers together, with selection and delivery coordinated around the waterproofing and landscaping sequence.",
+    why: "We supply the filter, protection and drainage layers together, selected and delivered around the waterproofing and landscaping sequence.",
     components: [
       [
         "Protection above waterproofing",
@@ -675,7 +675,7 @@ const newApplications = [
     checks: [
       [
         "Assembly and product approval",
-        "Verify protection, filter and drainage products against the coordinated roof or podium design.",
+        "We verify protection, filter and drainage products against the roof or podium design.",
       ],
       [
         "Drainage continuity",
@@ -701,11 +701,11 @@ const newApplications = [
       "Dredging sediment management",
       "Construction-site runoff interception",
     ],
-    what: "Silt fences and silt curtains address different sediment pathways. Fences intercept sediment-laden surface runoff on land, while floating curtains manage suspended sediment during suitable in-water construction or dredging. Geosynthetics Africa coordinates fabric selection, fabrication, supply and the agreed installation scope for both across Africa.",
+    what: "Silt fences and silt curtains address different sediment pathways. Fences intercept sediment-laden surface runoff on land, while floating curtains manage suspended sediment during suitable in-water construction or dredging. Geosynthetics Africa selects, fabricates, supplies and installs both across Africa.",
     selection:
       "We review the catchment, soil or sediment, expected runoff or water conditions and installation constraints before selecting the fence fabric or complete curtain arrangement.",
     installation:
-      "We coordinate selvedged fence fabric, supports and toe embedment, or curtain sections, flotation, ballast, connectors and designed moorings, with delivery and deployment planned for the site.",
+      "We supply selvedged fence fabric, supports and toe embedment, or fabricate curtain sections with flotation, ballast, connectors and moorings, and deliver and deploy them on site.",
     quality:
       "Our checks cover fabric and batch identity, fabrication dimensions and seams, fence support and toe details, or curtain connections and moorings. Maintenance and turbidity checks follow the environmental plan.",
     why: "Access standard and heavy-duty fence fabrics and project-specific curtain fabrication through one partner, with practical selection and installation interfaces rather than a barrier class alone.",
@@ -764,12 +764,12 @@ const newApplications = [
     ],
     what: "Stormwater attenuation systems store runoff and release or reuse it through a designed water-management arrangement. Where the design requires a sealed system, Geosynthetics Africa supplies and installs geomembranes, protection and drainage interfaces for ponds and storage structures across Africa. Infiltration systems have a different function and should not receive an impermeable barrier unless the design calls for it.",
     selection:
-      "We review storage geometry, water quality, loading, foundation, groundwater and inlet or outlet details before coordinating the specified liner and protection materials.",
+      "We review storage geometry, water quality, loading, foundation, groundwater and inlet or outlet details before we select the liner and protection materials.",
     installation:
-      "We coordinate basin or storage-structure interfaces, protection, panel deployment, joints, pipe boots and connections with the attenuation and outlet works.",
+      "We install protection, panels, joints, pipe boots and connections at every basin and storage-structure interface, in step with the attenuation and outlet works.",
     quality:
       "Our records cover formation acceptance, material identity, applicable seam tests, repairs, pipe connections and pre-cover checks, with the specified retention or integrity testing at commissioning.",
-    why: "Combine lining materials and installation with the practical storage interfaces, keeping delivery, protection and inspection coordinated before attenuation structures are covered.",
+    why: "We supply and install the lining and inspect every interface before the attenuation structures are covered.",
     components: [
       [
         "Specified storage geomembrane",
@@ -805,7 +805,7 @@ const newApplications = [
       ],
       [
         "Pre-cover and commissioning records",
-        "Complete required integrity or retention checks and retain the agreed handover evidence.",
+        "We complete the integrity or retention checks and hand over the evidence.",
       ],
     ],
   },
@@ -887,18 +887,18 @@ export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEnt
       title: app.label,
       description:
         app.summary +
-        " Geosynthetics Africa coordinates technical selection, supply, delivery, installation and documented QA/QC across Africa. Send your drawings and quantities for a proposal.",
+        " Geosynthetics Africa selects, supplies, delivers and installs, with documented QA/QC, across Africa. Send your drawings and quantities for a proposal.",
       heroImage: app.hero,
       overviewParagraphs: [
         app.what,
         app.selection,
-        "Choose material supply or an integrated project scope. We coordinate fabrication where required, cross-border delivery and the agreed site work, with inspection stages and handover records defined before mobilisation.",
-        "Send your project location, drawings, quantities, operating conditions and required date. Our technical team will review the specification and prepare a proposal with clear material, installation and QA/QC responsibilities.",
+        "Appoint us for material supply or an integrated package. We fabricate where required, deliver across borders and install with our own crews, with inspection stages and handover records set before mobilisation.",
+        "Send your project location, drawings, quantities, operating conditions and required date. Our technical team will review the specification and prepare a proposal covering material, installation and QA/QC.",
       ],
       keyBenefits: [
         "Application-specific material selection",
-        "Coordinated supply and African project delivery",
-        "Defined installation and inspection responsibilities",
+        "Supply and delivery across Africa",
+        "Installation and inspection by our own crews",
         "Material traceability and documented handover",
       ],
       suitableFor: app.uses.map((label) => ({ icon: app.icon, label })),
@@ -926,7 +926,7 @@ export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEnt
           icon: "FileCheck",
           title: "Approved Scope & Inspection Plan",
           description:
-            "We agree drawings, product submittals, responsibilities, acceptance criteria and hold points before the relevant installation work starts.",
+            "We confirm drawings, product submittals, acceptance criteria and hold points before our installation work starts.",
         },
         ...app.checks.map(([title, description]) => ({
           icon: "ClipboardCheck",
@@ -937,7 +937,7 @@ export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEnt
           icon: "FileText",
           title: "Documented Handover",
           description:
-            "We compile the agreed material references, installation inspections, applicable tests, repairs and as-built information for your project team.",
+            "We compile material certificates, installation inspections, test results, repairs and as-built information for your project team.",
         },
       ],
       deliveryProfile: {

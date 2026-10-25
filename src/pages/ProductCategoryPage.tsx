@@ -657,7 +657,7 @@ export function ProductCategoryPage() {
                     One scope
                   </div>
                   <div className="text-xs uppercase tracking-wider text-white/70 font-medium">
-                    Supply & agreed installation
+                    Supply & installation
                   </div>
                 </div>
                 <div className="px-2 pt-4 border-t border-white/10 mt-2">

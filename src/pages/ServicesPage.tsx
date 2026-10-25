@@ -77,9 +77,9 @@ const DEFAULT_CAPABILITIES: CapabilityItem[] = [
   },
   {
     icon: "HardHat",
-    title: "On-Site Installation Supervision",
+    title: "Installation by Our Own Crews",
     description:
-      "Installation supervision and agreed inspection responsibilities coordinated with the project team.",
+      "Our IAGI-member crews install, inspect and test on site, with daily QA/QC records.",
   },
   {
     icon: "FileText",
@@ -92,22 +92,22 @@ const DEFAULT_FAQS: FaqItem[] = [
   {
     question: "Do you supply and install, or can we purchase materials only?",
     answer:
-      "Choose material supply, fabrication, installation or a coordinated package. The quotation defines delivery responsibilities, inspection requirements and handover documents.",
+      "Both. Appoint us for material supply only, for manufacturing, or for a full supply-and-installation package. Our quotation sets out delivery, inspections and the handover documents we provide.",
   },
   {
     question: "What international standards do your installation crews follow?",
     answer:
-      "Material specifications and installation tests are confirmed against the approved design and inspection plan. Geomembrane seam testing uses the applicable ASTM methods; other materials require their own installation controls.",
+      "We install to the approved design and our QA/QC plan. Our geomembrane seam testing follows ASTM D5820 (air channel), ASTM D5641 (vacuum box) and ASTM D6392 (peel and shear); every other material we install has its own installation controls.",
   },
   {
     question: "Can you issue SADC Certificates of Origin for cross-border shipments?",
     answer:
-      "We coordinate shipping and origin documentation for the destination and supplied material. Eligibility for preferential duties depends on origin rules, product classification and the importing country; confirm these during quotation.",
+      "Yes. We prepare SADC and AfCFTA certificates of origin for qualifying consignments, together with the shipping documents for the destination. Preferential duty depends on origin rules and product classification, which we confirm in our quotation.",
   },
   {
     question: "What quality documentation do we receive at project completion?",
     answer:
-      "Documents follow the agreed scope: material references and submittals, fabrication or installation inspections, applicable test results, repair records and as-built information where required. Warranty terms and independent CQA responsibilities are agreed separately.",
+      "Our handover dossier includes material certificates and submittals, fabrication and installation inspections, test results, repair records and as-built information. For supply-only orders we provide the full supply documentation.",
   },
 ];
 
@@ -115,17 +115,17 @@ const WHY_WORK_WITH_US = [
   {
     title: "Single-Point Accountability",
     description:
-      "We eliminate fingers-pointing between manufacturer, logistics provider, and installer. We own the entire chain.",
+      "No finger-pointing between manufacturer, logistics provider and installer: we own the entire chain.",
   },
   {
     title: "Documented Quality Control",
     description:
-      "Material references, relevant inspections, applicable tests and handover records are defined for the agreed scope.",
+      "Mill certificates, our inspections, test results and handover records in one dossier.",
   },
   {
     title: "Pan-African Compliance",
     description:
-      "Destination requirements, origin documentation, delivery routes and site responsibilities are reviewed before dispatch.",
+      "We confirm destination requirements, origin documents and delivery routes before dispatch.",
   },
   {
     title: "Proven Under Pressure",
@@ -315,9 +315,9 @@ export function ServicesPage() {
                 Why work with us?
               </h2>
               <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-                Geosynthetics Africa manages the entire containment system workflow. We take full
-                responsibility for materials specification, import clearance, site delivery, and
-                precision installation.
+                Geosynthetics Africa manufactures, supplies, delivers and installs. We take full
+                responsibility for materials specification, manufacturing, import clearance, site
+                delivery and precision installation.
               </p>
               <div className="mt-8">
                 <Button
