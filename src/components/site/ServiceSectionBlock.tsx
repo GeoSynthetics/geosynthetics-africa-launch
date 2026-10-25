@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { CheckCircle2, ChevronDown } from "lucide-react";
 import type { ServiceSection } from "@/data/service-delivery";
@@ -72,6 +73,15 @@ function SpecTable({ rows }: { rows: { label: string; value: string }[] }) {
 }
 
 function ManufacturedProducts() {
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id.startsWith("made-")) return;
+    const el = document.getElementById(id);
+    if (el instanceof HTMLDetailsElement) {
+      el.open = true;
+      el.scrollIntoView({ block: "start" });
+    }
+  }, []);
   return (
     <div className="mt-6 space-y-3">
       {MANUFACTURED_PRODUCTS.map((product) => (
