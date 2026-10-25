@@ -1,3 +1,5 @@
+import { productImage } from "@/lib/product-imagery";
+import { prepareResourceLinks } from "@/lib/resource-links";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, FileText, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,15 +19,16 @@ export function ServicePage({ data }: { data: any }) {
   const { service, templateData, linkedProducts = [] } = data;
   const profile = serviceDeliveryFor(service.slug, templateData?.title || service.label);
   const { open } = useQuickQuote();
+  const candidateImage = productImage(templateData?.heroImage);
   const image =
-    templateData?.heroImage && !templateData.heroImage.includes("images.unsplash.com")
-      ? templateData.heroImage
-      : "";
-  const downloads = (templateData?.downloads || []).filter(
-    (item: any) =>
-      item.url &&
-      /^(https?:\/\/|\/resources(?:\/|$)|\/api\/storage\/)/.test(item.url) &&
-      !item.url.includes("/object/sign/"),
+    candidateImage && !candidateImage.includes("images.unsplash.com") ? candidateImage : "";
+  const downloads = prepareResourceLinks(
+    (templateData?.downloads || []).filter(
+      (item: any) =>
+        item.url &&
+        /^(https?:\/\/|\/resources(?:\/|$)|\/api\/storage\/)/.test(item.url) &&
+        !item.url.includes("/object/sign/"),
+    ),
   );
   const related = profile.applications
     .map((slug) => APPLICATION_DIRECTORY.find((app) => app.slug === slug))
@@ -228,6 +231,29 @@ export function ServicePage({ data }: { data: any }) {
                     ),
                 )}
               </div>
+            </section>
+          )}
+          {/manufactur|fabrication/i.test(service.slug) && (
+            <section className="border-t border-border pt-10 space-y-4">
+              <h2 className="font-display text-2xl font-bold uppercase">
+                Fabrication inspection checklist
+              </h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Agree material traceability, dimensions, seam and weld acceptance criteria, handling
+                provisions and release records before production. Project test results and
+                certificates are provided against the ordered article and inspection plan.
+              </p>
+              <a
+                className="inline-block font-semibold text-primary"
+                href="/technical/fabrication-inspection-checklist.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View and print the fabrication inspection checklist →
+              </a>
+              <p className="text-xs text-muted-foreground">
+                Planning reference; not a completed inspection record or test certificate.
+              </p>
             </section>
           )}
           <section id="service-resources" className="scroll-mt-36 border-t border-border pt-10">

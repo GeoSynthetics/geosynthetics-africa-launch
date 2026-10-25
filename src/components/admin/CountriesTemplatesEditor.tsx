@@ -178,7 +178,7 @@ export function CountriesTemplatesEditor() {
       heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
       supplyTitle: `Material Supply & Freight Logistics to ${newCountryName}`,
       supplyDescription: `Direct containerized and road freight logistics serving mining and infrastructure in ${newCountryName}.`,
-      supplyImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+      supplyImage: "/images/geotextile-product-supply.webp",
       supplyCardTitle: "Container Direct & Local Warehouse Inventory",
       supplyCardDescription: "Material rolls shipped in heavy-duty protective wrapping, verified with full resin-to-roll laboratory reports.",
       supplyHighlights: [

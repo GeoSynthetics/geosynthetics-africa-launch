@@ -4,7 +4,11 @@ import africaLogo from "@/assets/africa.svg";
 export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
   const textColor = variant === "dark" ? "text-foreground" : "text-surface-dark-foreground";
   return (
-    <Link to="/" className="flex items-center gap-3" aria-label="Geosynthetics Africa home">
+    <Link
+      to="/"
+      className="flex shrink-0 items-center gap-2"
+      aria-label="Geosynthetics Africa home"
+    >
       <img
         src={africaLogo}
         alt=""

@@ -1,3 +1,4 @@
+import { productImage } from "@/lib/product-imagery";
 import { useState, useEffect, useMemo } from "react";
 import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { Link } from "@tanstack/react-router";
@@ -90,7 +91,7 @@ export function CountryPage({ data }: { data: any }) {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src={template.heroImage}
+            src={productImage(template.heroImage)}
             alt={`${template.country} Geosynthetics Supply`}
             className="w-full h-full object-cover object-center opacity-25"
           />
@@ -274,11 +275,8 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src={
-                  template.supplyImage ||
-                  "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
-                }
-                alt={template.supplyCardTitle || "Logistics and Freight Delivery"}
+                src={productImage(template.supplyImage) || "/images/geotextile-product-supply.webp"}
+                alt={template.supplyCardTitle || "Geotextile material supply"}
                 className="w-full h-72 object-cover"
               />
               <div className="p-6 bg-card space-y-3">

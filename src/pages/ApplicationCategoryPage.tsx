@@ -1,3 +1,4 @@
+import { prepareResourceLinks, isPdfResource } from "@/lib/resource-links";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -232,7 +233,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
 
   const productsTitle = templateData?.productsTitle || "Products Used in this Application";
   const downloadsTitle = templateData?.downloadsTitle || "Technical Downloads";
-  const downloads = templateData?.downloads || [];
+  const downloads = prepareResourceLinks(templateData?.downloads || []);
   const deliveryProfile = templateData?.deliveryProfile ||
     applicationDeliveryProfiles.find((profile) =>
       profile.match.test(`${category.label || ""} ${title}`),
@@ -656,7 +657,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                         <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">
                           {prod.name}
                         </h4>
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider leading-none">
+                        <span className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
                           {prod.thickness_mm
                             ? `${prod.thickness_mm}mm thickness`
                             : prod.short_description || ""}

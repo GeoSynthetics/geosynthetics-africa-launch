@@ -12,11 +12,11 @@ import { DEFAULT_SERVICES_TEMPLATES, type ServiceTemplate } from "@/types/servic
 export async function loadServiceData(slug: string) {
   // Per-slug fallback hero images — kept in sync with the static SERVICE_CONTENT map in ServicePage.tsx
   const FALLBACK_HEROES: Record<string, string> = {
-    supply: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    supply: "/images/geotextile-product-supply.webp",
     installation: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
     "qa-qc": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&q=80",
     "design-support": "https://images.unsplash.com/photo-1503694978374-8a2fa68f5981?w=1920&q=80",
-    logistics: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
+    logistics: "/images/geotextile-product-supply.webp",
     "after-sales": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80",
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";

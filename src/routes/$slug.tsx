@@ -130,7 +130,7 @@ export async function loadCountryData(customSlug: string) {
         slug: "bidim-non-woven-continuous-filament-geotextile",
         short_description:
           "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
-        image_url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80",
+        image_url: "/images/geotextile-product-supply.webp",
       },
     ];
   }

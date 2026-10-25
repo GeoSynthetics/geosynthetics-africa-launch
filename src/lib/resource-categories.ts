@@ -22,7 +22,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   {
     slug: "datasheets",
     title: "Datasheets",
-    desc: "Technical specifications (TDS / SDS) for every product.",
+    desc: "Published product datasheets and safety information. Request the current grade-specific document for your project.",
     icon: FileText,
     types: ["tds", "sds"],
   },

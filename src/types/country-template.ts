@@ -180,7 +180,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "Leading supplier of HDPE geomembranes, Bidim geotextiles, and geogrids for mining, water conservation, and infrastructure projects across Botswana.",
     badge: "Botswana Logistics & Mining Supply Corridor",
-    heroImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Dedicated Freight & Customs Clearance to Gaborone, Jwaneng & Orapa",
     supplyDescription:
       "We streamline cross-border logistics from Johannesburg to Gaborone, Francistown, and remote mine sites, handling SAD500 customs documentation and border tax clearances.",
@@ -586,7 +586,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, gold mine lining, and port infrastructure projects in Côte d'Ivoire.",
     badge: "West Africa Hub — Abidjan",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Port of Abidjan Shipping & West African Distribution",
     supplyDescription:
       "Direct shipments via Autonomous Port of Abidjan serving mining projects in Yamoussoukro, Korhogo, and coastal civil works.",
@@ -653,7 +653,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     description:
       "Contact our Maputo regional hub for coastal works supply, geosynthetic clay liners (GCL), heavy HDPE geomembranes, and installation QA/QC across Mozambique.",
     badge: "Mozambique Regional Hub — Maputo",
-    heroImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Ressano Garcia Corridor Freight & Port Logistics",
     supplyDescription:
       "Direct road freight from Johannesburg via Ressano Garcia border or shipping into Maputo / Beira ports serving Tete mining and Nacala projects.",

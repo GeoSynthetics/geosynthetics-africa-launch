@@ -41,7 +41,7 @@ export function CountriesPage({ countries }: { countries: CountryLink[] }) {
         eyebrow="Countries We Serve"
         title="Geosynthetics Across Africa"
         description={`Supply, installation and QA/QC of geomembranes, GCLs, geotextiles, geogrids and erosion control in ${countries.length} African countries, delivered from our South African base.`}
-        image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80"
+        image="/images/geotextile-product-supply.webp"
       />
       <section className="bg-background">
         <div className="container-page py-14 md:py-20 space-y-14">

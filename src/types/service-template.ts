@@ -97,7 +97,7 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
     description:
       "Direct-from-manufacturer supply of premium GSE HDPE/LLDPE liners, Bidim non-woven geotextiles, GCLs, geogrids, and drainage composites with resin-to-roll traceability across Africa.",
     badge: "Direct Supply & Sourcing",
-    heroImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     topSellingProductId: "gse-hdpe-smooth",
     topSellingProductIds: ["gse-hdpe-smooth", "bidim-geotextile", "bentofix-gcl"],
 
@@ -162,11 +162,11 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
       "Continuous filament and staple-fibre non-woven geotextiles in all standard grades",
       "SADC Certificates of Origin issued to eliminate or reduce regional cross-border customs tariffs",
     ],
-    coverageImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+    coverageImage: "/images/geotextile-product-supply.webp",
     coverageCaption:
       "High-density container loading and staging at our regional distribution yard.",
 
-    sidebarImage: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?w=800&q=80",
+    sidebarImage: "/images/geotextile-product-supply.webp",
     sidebarCaption: "Container-direct procurement with full batch mill test certification.",
     directModelTitle: "Direct Factory Pricing. No Distributor Markups.",
     directModelText:
@@ -253,7 +253,7 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
     description:
       "Comprehensive pan-African freight forwarding, road flatbeds, ocean transit, and bonded customs clearance delivering heavy geosynthetic rolls directly to remote African mine sites and infrastructure projects.",
     badge: "Pan-African Cross-Border Logistics",
-    heroImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80",
+    heroImage: "/images/geotextile-product-supply.webp",
     topSellingProductId: "gse-hdpe-smooth",
     topSellingProductIds: ["gse-hdpe-smooth", "bidim-geotextile"],
 
@@ -321,7 +321,7 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
     coverageImage: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80",
     coverageCaption: "Flatbed freight convoy traversing cross-border mining corridors.",
 
-    sidebarImage: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+    sidebarImage: "/images/geotextile-product-supply.webp",
     sidebarCaption: "30+ African country reach with dedicated border clearing agents.",
     directModelTitle: "Direct Freight Desk. Direct Accountability.",
     directModelText:
