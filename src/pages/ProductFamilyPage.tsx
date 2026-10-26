@@ -268,58 +268,6 @@ export function ProductFamilyPage() {
             </div>
           </div>
         </div>
-
-        {/* Stats Row */}
-        <div className="border-t border-white/10 relative z-10 bg-black/20">
-          <div className="container-page grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
-            <Link
-              to="/services"
-              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
-            >
-              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
-                Supply
-              </div>
-              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Direct Sourcing
-              </div>
-            </Link>
-            <Link
-              to="/services/$slug"
-              params={{ slug: "delivery-logistics-africa" }}
-              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
-            >
-              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
-                30+
-              </div>
-              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Country Delivery
-              </div>
-            </Link>
-            <Link
-              to="/services/$slug"
-              params={{ slug: "manufacturing-fabrication" }}
-              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
-            >
-              <div className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105 leading-none md:leading-normal">
-                Project Scope
-              </div>
-              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Fabrication & Installation
-              </div>
-            </Link>
-            <Link
-              to="/quality-assurance"
-              className="py-6 px-4 text-center hover:bg-white/5 transition-all duration-200 cursor-pointer block group"
-            >
-              <div className="font-display text-2xl md:text-3xl font-bold text-primary uppercase transition-transform duration-200 group-hover:scale-105">
-                Quality
-              </div>
-              <div className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium mt-1">
-                Assurance
-              </div>
-            </Link>
-          </div>
-        </div>
       </section>
 
       {/* Sticky Navigation */}
@@ -370,26 +318,9 @@ export function ProductFamilyPage() {
                 </p>
               ))}
             </div>
-
-            <h3 className="font-bold text-sm uppercase tracking-widest text-foreground mt-10 mb-6">
-              Published Technical Highlights
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {(data.typicalValues || []).map((val: any, idx: number) => (
-                <div key={idx} className="bg-surface border border-border p-5 rounded text-center">
-                  <div className="text-xs font-bold uppercase text-muted-foreground mb-2">
-                    {val.label}
-                  </div>
-                  <div className="font-display text-2xl font-bold text-foreground">
-                    {val.value}
-                    {val.unit && <span className="text-sm text-primary ml-1">{val.unit}</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
           </section>
 
-          <MaterialSelectionPanel category={category} productName={data.title} />
+          <MaterialSelectionPanel category={category} family={family} productName={data.title} />
 
           {/* Section: Properties & Dimensions */}
           <section id="specifications">
@@ -485,28 +416,6 @@ export function ProductFamilyPage() {
             </div>
           </section>
 
-          {/* Section: Related Product Groups */}
-          <section>
-            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
-              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-              Related Product Groups
-            </h2>
-            <div className="grid sm:grid-cols-3 gap-4">
-              {(data.relatedProductGroups || []).map((group: any, idx: number) => (
-                <Link
-                  key={idx}
-                  to={canonicalPublicPath(group.link)}
-                  className="border border-border bg-surface p-4 rounded hover:border-primary hover:bg-accent transition group/card flex items-center justify-between"
-                >
-                  <span className="font-bold text-sm uppercase tracking-wide text-foreground group-hover/card:text-primary transition">
-                    {group.name}
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover/card:text-primary transition" />
-                </Link>
-              ))}
-            </div>
-          </section>
-
           {/* Section: FAQs */}
           <section id="faqs">
             <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
@@ -527,30 +436,65 @@ export function ProductFamilyPage() {
           </section>
 
           {/* Section: Specification for Design */}
-          <section>
-            <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
-              <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-              Specification For The Design, Installation Of {data.title}
-            </h2>
-            <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed bg-surface border border-border p-6 rounded">
+          <details className="group rounded border border-border bg-surface">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-display text-lg font-bold uppercase">
+              Design & Installation Specification
+              <ChevronRight className="h-5 w-5 text-primary transition-transform group-open:rotate-90" />
+            </summary>
+            <div className="prose prose-sm sm:prose-base max-w-none text-muted-foreground leading-relaxed px-6 pb-6">
               {splitIntoParagraphs(data.installationSpecs).map((para, idx) => (
                 <p key={idx} className={idx > 0 ? "mt-4" : ""}>
                   {para}
                 </p>
               ))}
             </div>
-          </section>
+          </details>
         </div>
 
         {/* Sidebar Area */}
-        <aside className="lg:col-span-4 space-y-12">
-          {/* Request For Quote Form */}
-          <QuoteCard
-            contextId={family}
-            contextLabel={data.title}
-            heading="Request For Quote"
-            description={`Need pricing for ${data.title}? Our sales engineers are ready to assist you.`}
-          />
+        <aside className="lg:col-span-4 space-y-8">
+          {(data.typicalValues || []).length > 0 && (
+            <div className="rounded-lg border border-border bg-surface p-5">
+              <h2 className="font-display text-lg font-bold uppercase">At a Glance</h2>
+              <dl className="mt-4 divide-y divide-border">
+                {(data.typicalValues || []).map((val: any, idx: number) => (
+                  <div key={idx} className="flex items-baseline justify-between gap-4 py-3">
+                    <dt className="text-sm text-muted-foreground">{val.value}</dt>
+                    <dd className="text-right text-sm font-bold text-foreground">
+                      {val.label}
+                      {val.unit && <span className="ml-1 text-primary">{val.unit}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+          {(data.relatedProductGroups || []).length > 0 && (
+            <div className="rounded-lg border border-border bg-surface p-5">
+              <h2 className="font-display text-lg font-bold uppercase">Related Products</h2>
+              <ul className="mt-3 divide-y divide-border">
+                {(data.relatedProductGroups || []).map((group: any, idx: number) => (
+                  <li key={idx}>
+                    <Link
+                      to={canonicalPublicPath(group.link)}
+                      className="flex min-h-[44px] items-center justify-between gap-3 py-2 text-sm font-semibold hover:text-primary"
+                    >
+                      {group.name}
+                      <ChevronRight className="h-4 w-4 shrink-0 text-primary" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="lg:sticky lg:top-36">
+            <QuoteCard
+              contextId={family}
+              contextLabel={data.title}
+              heading="Request For Quote"
+              description={`Send your quantities and site for ${data.title} and we will quote supply and installation.`}
+            />
+          </div>
         </aside>
       </div>
 

@@ -115,27 +115,6 @@ export function ServicePage({ data }: { data: any }) {
               Why Choose Geosynthetics Africa
             </h2>
             <p className="mt-5 text-muted-foreground leading-relaxed">{profile.why}</p>
-            <div className="grid sm:grid-cols-3 gap-4 mt-6">
-              {[
-                {
-                  title: "African experience",
-                  text: "More than 15 million m² installed across the Group and materials supplied to over 30 countries.",
-                },
-                {
-                  title: "One accountable team",
-                  text: "We select, manufacture or supply, deliver and install, from enquiry to handover.",
-                },
-                {
-                  title: "Documented quality",
-                  text: "Mill certificates, our inspections, test results and repair close-out in one handover dossier.",
-                },
-              ].map((item) => (
-                <div key={item.title} className="border border-border rounded-lg p-5">
-                  <h3 className="font-bold text-sm">{item.title}</h3>
-                  <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{item.text}</p>
-                </div>
-              ))}
-            </div>
           </section>
           {linkedProducts.length > 0 && (
             <section className="border-t border-border pt-10">
