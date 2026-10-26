@@ -295,6 +295,39 @@ export const FAMILY_SYSTEMS: Record<string, ProductSystem> = {
       "We weld and test every seam",
     ],
   }),
+  "cspe-geomembranes-for-potable-water-floating-covers": family({
+    intro:
+      "We supply polyester-reinforced CSPE geomembranes in CS60 and CS90 grades, NSF/ANSI 61 certified, and fabricate them into potable-water floating covers, reservoir liners and drop-in tank liners.",
+    industries: [IND.water, IND.mining, IND.agri],
+    install: INSTALL.cover,
+    manufactured: [
+      { label: "Floating covers", anchor: "made-floating-covers" },
+      { label: "Drop-in liners", anchor: "made-drop-in-liners" },
+    ],
+    builds: [
+      { label: "Potable water floating covers", value: "Covers for drinking-water reservoirs" },
+      { label: "Reservoir & pond liners", value: "Exposed liners with long weathering life" },
+      {
+        label: "Drop-in tank liners & baffle curtains",
+        value: "Prefabricated to tank and basin size",
+      },
+      { label: "Desalination cell liners", value: "Chemically resistant containment" },
+    ],
+    specsTitle: "CSPE Key Specifications (typical)",
+    specs: [
+      { label: "Grades", value: "CS60: 60 mil (1.52 mm), 3-ply · CS90: 90 mil (2.28 mm), 5-ply" },
+      { label: "Reinforcement", value: "Polyester scrim, 10 × 10, 1000 denier" },
+      { label: "Grab breaking strength", value: "CS60 1,556 N · CS90 2,668 N (ASTM D751)" },
+      { label: "Tongue tear", value: "CS60 444 N · CS90 689 N (ASTM D751)" },
+      { label: "Puncture resistance", value: "CS60 1,334 N · CS90 2,224 N (FTMS 101B 2031)" },
+      { label: "Potable water", value: "NSF/ANSI 61 certified" },
+    ],
+    doList: [
+      "We supply CS60 and CS90 with batch certificates",
+      "We fabricate covers, liners and baffle curtains to size in our own facility",
+      "We install and test on site",
+    ],
+  }),
   "bituminous-liners": family({
     intro:
       "We supply and install DamSeal, a bitumen-impregnated geotextile that forms a continuous waterproof membrane moulded to your dam on site.",
