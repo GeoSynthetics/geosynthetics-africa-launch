@@ -106,7 +106,7 @@ export const PRODUCT_SYSTEMS: Record<string, ProductSystem> = {
           { label: "EVA", value: "1.5 mm flexible liner for concrete reservoirs and tanks" },
           {
             label: "Bituminous (BGM)",
-            value: "Robust, puncture-resistant barrier for dams and canals",
+            value: "DamSeal bitumen-impregnated geotextile, formed on site for leaking earth dams and canals",
           },
         ],
       },
@@ -369,7 +369,7 @@ export const PRODUCT_SYSTEMS: Record<string, ProductSystem> = {
             value: "Civil and mining grades for steep, high-runoff slopes and TSFs, 2 to 3 years",
           },
           { label: "Straw SoilLock™ 300", value: "300 g/m² short-term cover on gentle slopes" },
-          { label: "EnviroWool", value: "Wood-wool blanket, 2.45 m × 51.4 m rolls" },
+          { label: "EnviroWool", value: "440 g/m² wood-wool blanket, 2.45 m × 51.4 m rolls" },
           {
             label: "Geocells",
             value: "GeoStrata™ HDPE (50 to 200 mm) or PolyCell woven PP (75 to 150 mm)",
@@ -489,7 +489,7 @@ export const PRODUCT_SYSTEMS: Record<string, ProductSystem> = {
           },
           {
             label: "Reno mattresses",
-            value: "60 × 80 mm mesh, 2.7 mm wire, for channel and scour lining",
+            value: "60 × 80 mm mesh with 2.2 mm wire (80 × 100 mm, 2.7 mm heavy duty), for channel and scour lining",
           },
         ],
       },
@@ -676,7 +676,7 @@ export const PRODUCT_SYSTEMS: Record<string, ProductSystem> = {
         kind: "table",
         rows: [
           { label: "GSE® Studliner®", value: "Studded HDPE, 1,200+ anchor studs per m²" },
-          { label: "TILTEX™ GCCM", value: "7 to 12 mm concrete cloth, hydrated in place" },
+          { label: "TILTEX™ GCCM", value: "TILTEX 7P and 9P (7 and 9 mm) concrete cloth, hydrated in place" },
           { label: "DPM sheeting", value: "250, 375 and 500 micron" },
           { label: "CureLock™ hessian", value: "Jute curing hessian" },
         ],

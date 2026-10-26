@@ -392,7 +392,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             {[
               { id: "overview", label: "Overview" },
               { id: "system", label: "The System We Build", show: !!appSystem },
-              { id: "delivery", label: "Our Delivery & Why Choose Us" },
+              { id: "delivery", label: "How We Deliver" },
               {
                 id: "components",
                 label: "System Components",
@@ -480,27 +480,6 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                 Why Choose Geosynthetics Africa
               </h3>
               <p className="text-muted-foreground leading-relaxed mb-5">{deliveryProfile.why}</p>
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                <li>
-                  <strong className="text-foreground">African project experience.</strong> More than
-                  15 million m² installed across the Group and materials supplied to over 30
-                  countries.
-                </li>
-                <li>
-                  <strong className="text-foreground">One accountable team.</strong> We select,
-                  supply, manufacture where required, deliver and install, from enquiry to handover.
-                </li>
-                <li>
-                  <strong className="text-foreground">Quality you can review.</strong> Defined
-                  inspection stages, material traceability and application-specific records, and we
-                  work alongside any independent CQA the owner appoints.
-                </li>
-                <li>
-                  <strong className="text-foreground">Specialist installation capability.</strong>{" "}
-                  The Group is an IAGI Installer Member. Geomembrane work is supported by trained
-                  welding technicians, trial welds and documented seam-control procedures.
-                </li>
-              </ul>
               <a
                 href="#quote"
                 onClick={(e) => scrollToSection(e, "quote")}

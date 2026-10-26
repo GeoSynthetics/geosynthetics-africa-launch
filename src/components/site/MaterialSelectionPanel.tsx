@@ -4,18 +4,22 @@ import { ArrowRight, ClipboardCheck, Factory, HardHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { materialGuideFor } from "@/data/material-selection";
 import { PRODUCT_SYSTEMS } from "@/data/product-systems";
+import { FAMILY_SYSTEMS } from "@/data/family-systems";
 import { ServiceSectionBlock } from "@/components/site/ServiceSectionBlock";
 import { useQuickQuote } from "@/hooks/use-quick-quote";
 
 export function MaterialSelectionPanel({
   category,
+  family,
   productName,
 }: {
   category?: string;
+  family?: string;
   productName: string;
 }) {
   const guide = materialGuideFor(category);
-  const system = guide ? PRODUCT_SYSTEMS[guide.slug] : undefined;
+  const familySystem = family ? FAMILY_SYSTEMS[family] : undefined;
+  const system = familySystem || (guide ? PRODUCT_SYSTEMS[guide.slug] : undefined);
   const { open } = useQuickQuote();
   const [active, setActive] = useState(0);
   if (!guide) return null;
