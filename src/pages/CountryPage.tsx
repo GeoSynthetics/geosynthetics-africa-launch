@@ -27,6 +27,29 @@ import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 import type { CountryTemplate } from "@/types/country-template";
 import { useCountryTemplate } from "@/hooks/use-country-templates";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
+import { countryProfileFor } from "@/data/country-profiles";
+import { PRODUCT_FAMILIES } from "@/lib/product-families";
+import { applicationPath } from "@/data/material-selection";
+import { APPLICATION_DIRECTORY } from "@/data/application-directory";
+
+/** Our own site photos, used wherever a country page would show a stock image. */
+const OWN_PHOTOS = {
+  hero: "/api/storage/media-center/Geosynthetics_Africa_Installtion_-_TSF_HDPE_Lining_Project_West_Africa_04928623-815e-43cc-8bdc-949985b70f28.webp",
+  installation:
+    "/api/storage/media-center/Geosynthetics_Africa_-_TSF_HDPE_Liner_Installtion_Gold_Mine_West_Africa_c304ffa8-7262-4403-9e3d-4772e986fa80.webp",
+  project:
+    "/api/storage/media-center/GSE-HDPE-LINER-SUPPLY-TO-TANZANIA-GEOSYNTHETICS-AFRICA-GEOMEMBRANES_7d14427f-3dab-4433-b992-090e9594f3c6.webp",
+};
+
+/** Replaces stock-library images (stored in older CMS entries) with our own photos. */
+function ownPhoto(url: string | null | undefined, fallback: string): string {
+  if (!url || /images\.unsplash\.com|unsplash\.com\/photo/i.test(url)) return fallback;
+  return url;
+}
+
+function applicationLabel(slug: string): string {
+  return APPLICATION_DIRECTORY.find((app) => app.slug === slug)?.label || slug;
+}
 
 export function CountryPage({ data }: { data: any }) {
   const {
@@ -42,11 +65,11 @@ export function CountryPage({ data }: { data: any }) {
   const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
   const hasLocalProject = Boolean(
     template?.country &&
-      caseStudies.some((cs: any) =>
-        String(cs?.country || "")
-          .toLowerCase()
-          .includes(template.country.toLowerCase()),
-      ),
+    caseStudies.some((cs: any) =>
+      String(cs?.country || "")
+        .toLowerCase()
+        .includes(template.country.toLowerCase()),
+    ),
   );
 
   useEffect(() => {
@@ -98,7 +121,7 @@ export function CountryPage({ data }: { data: any }) {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src={productImage(template.heroImage)}
+            src={ownPhoto(productImage(template.heroImage), OWN_PHOTOS.hero)}
             alt={`${template.country} Geosynthetics Supply`}
             className="w-full h-full object-cover object-center opacity-25"
           />
@@ -281,7 +304,10 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src={productImage(template.supplyImage) || "/images/geotextile-product-supply.webp"}
+                src={ownPhoto(
+                  productImage(template.supplyImage),
+                  "/images/geotextile-product-supply.webp",
+                )}
                 alt={template.supplyCardTitle || "Geotextile material supply"}
                 className="w-full h-72 object-cover"
               />
@@ -303,10 +329,7 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src={
-                  template.installationImage ||
-                  "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80"
-                }
+                src={ownPhoto(template.installationImage, OWN_PHOTOS.installation)}
                 alt={template.installationCardTitle || "Geomembrane Field Welding"}
                 className="w-full h-72 object-cover"
               />
@@ -457,12 +480,10 @@ export function CountryPage({ data }: { data: any }) {
                 >
                   <div className="h-44 overflow-hidden bg-muted relative">
                     <img
-                      src={
-                        prod.image_url ||
-                        prod.image ||
-                        prod.hero_image_url ||
-                        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80"
-                      }
+                      src={ownPhoto(
+                        prod.image_url || prod.image || prod.hero_image_url,
+                        OWN_PHOTOS.project,
+                      )}
                       alt={prod.name || prod.label}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -527,10 +548,7 @@ export function CountryPage({ data }: { data: any }) {
                 >
                   <div className="h-48 overflow-hidden bg-muted relative">
                     <img
-                      src={
-                        study.hero_image_url ||
-                        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80"
-                      }
+                      src={ownPhoto(study.hero_image_url, OWN_PHOTOS.project)}
                       alt={study.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
