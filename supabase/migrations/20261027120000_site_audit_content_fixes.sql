@@ -180,7 +180,9 @@ BEGIN
     ('techgrid-tgu-uniaxial-geogrid-40-600-kn-m-africa-supply', '(51 m² per roll)', '(510 m² per roll)'),
     ('techgrid-tgu-uniaxial-geogrid-40-600-kn-m-africa-supply', '30 × 25 mm apertures', '30 × 15 to 30 × 25 mm apertures by grade'),
     -- TriAx card: the 500M+ m2 figure belongs to Tensar biaxial grids
-    ('triaxial-geogrid-tensar-triax-tx', ', with over 500 million m² installed globally', '')
+    ('triaxial-geogrid-tensar-triax-tx', ', with over 500 million m² installed globally', ''),
+    -- FC60 catalogue item: the mill rates FC60 for up to 20 years exposed service
+    ('rlldpe-floating-cover-exposed-membrane', '30-year outdoor service life', 'up to 20 years exposed service')
   ) AS fixes(slug, old_text, new_text)
   LOOP
     FOR col IN
