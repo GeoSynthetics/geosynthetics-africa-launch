@@ -21,6 +21,7 @@
 --     https://tensar.co.uk/getattachment/bec910a1-8fef-42d0-a716-733e1884f613/IG_TriAx.pdf
 --   InterAx installation guide (min overlap 300 mm, normally max 600 mm):
 --     https://www.tensar.co.uk/getattachment/9197ab55-aec1-4fb1-9162-2ff9cb04fb8d/Installation-Guide-Tensar-InterAx-geogrid.pdf
+--   FC45 / FC60: mill datasheets on file (up to 20 years exposed service, both grades)
 --   Burkina Faso left ECOWAS on 29 January 2025:
 --     https://african.business/2025/04/apo-newsfeed/extraordinary-session-of-the-economic-community-of-west-african-states-ecowas-council-of-ministers-on-the-contingency-plan-and-modalities-on-the-withdrawal-of-burkina-faso-republics-of-mali-and-nig
 --
@@ -38,6 +39,7 @@
 --   ('500 million'),
 --   ('depending on the All field seams'),
 --   ('51 m² per roll'),
+--   ('30-year'),
 --   ('is a ECOWAS member')
 -- ) AS t(pattern);
 
@@ -143,6 +145,27 @@ BEGIN
     t := replace(t,
       'Cover deployment is carried out with the pond at or near operating liquid level',
       'In a wet installation, cover deployment is carried out with the pond at or near operating liquid level');
+    -- Mill datasheets for both grades state up to 20 years of exposed
+    -- service depending on location; there is no 30-year grade.
+    t := regexp_replace(t,
+      'FC45 \(1\.14 ?mm, 20-year outdoor service life\) and FC60 \(1\.52 ?mm, 30-year outdoor service life\)',
+      'FC45 (1.14 mm) and FC60 (1.52 mm), both rated for up to 20 years of exposed service depending on location',
+      'g');
+    t := regexp_replace(t,
+      'FC45 \(1\.14 ?mm, 20-year\) and FC60 \(1\.52 ?mm, 30-year\) grades',
+      'FC45 (1.14 mm) and FC60 (1.52 mm) grades, rated for up to 20 years of exposed service',
+      'g');
+    t := regexp_replace(t,
+      '1\.14 ?mm \(20yr\) and 1\.52 ?mm \(30yr\) [-–—]+ two grades, matched to project design life',
+      '1.14 mm and 1.52 mm - two grades, up to 20 years exposed service depending on location',
+      'g');
+    t := regexp_replace(t,
+      'FC45 \(1\.14 ?mm, 20-year\) is the standard specification.*?Contact our technical team if you are unsure\.',
+      'Both grades carry the same rating of up to 20 years of exposed service, depending on location, so choose on thickness and robustness. FC45 (1.14 mm) suits process water dams, effluent ponds, TSF water recovery covers and agricultural storage. FC60 (1.52 mm, GRI GM25 Category 1) adds tear, tensile and puncture margin (600 N tear, 1,602 N grab tensile, 600 N puncture, typical) for large covers, potable reservoirs and digesters where wind, rainwater and maintenance traffic load the cover harder. Ask us for the warranty terms for your site.',
+      'g');
+    -- Specification table cells for outdoor service life
+    t := replace(t, '"20 years"', '"Up to 20 years"');
+    t := replace(t, '"30 years"', '"Up to 20 years"');
     UPDATE public.site_config
     SET value = jsonb_set(value, ARRAY[k], t::jsonb), updated_at = now()
     WHERE key = 'template_product_categories';
@@ -257,7 +280,7 @@ COMMIT;
 -- FROM public.site_config,
 --   (VALUES ('Near-Uniform Radial Performance'), ('butt-jointed'),
 --     ('250.540 kN/m \(Radial Secant'), ('depending on the All field seams'),
---     ('Burkina Faso is a ECOWAS member'), ('is a ECOWAS member')) AS t(pattern)
+--     ('Burkina Faso is a ECOWAS member'), ('is a ECOWAS member'), ('30-year')) AS t(pattern)
 -- WHERE key IN ('template_product_categories', 'template_countries')
 --   AND value::text ~ pattern
 -- UNION ALL

@@ -696,16 +696,10 @@ function MapAndCoverage({
                     {activeLoc.services}
                   </div>
                   <a
-                    href={`tel:${(activeLoc.phone || "").replace(/\s+/g, "")}`}
+                    href="#boq-form"
                     className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1"
                   >
-                    <Phone className="h-3 w-3 shrink-0" /> {activeLoc.phone}
-                  </a>
-                  <a
-                    href={`mailto:${activeLoc.email}`}
-                    className="flex items-center gap-1.5 text-primary hover:underline font-medium break-all"
-                  >
-                    <Mail className="h-3 w-3 shrink-0" /> {activeLoc.email}
+                    <Mail className="h-3 w-3 shrink-0" /> Contact the {activeLoc.country} hub
                   </a>
                 </div>
               </div>

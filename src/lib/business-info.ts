@@ -5,6 +5,9 @@
  * (name, address, phone), so Google treats the website and the profile as the
  * same business. Do not mix in the geosynthetics.com head-office details.
  */
+/** Mailbox that receives every website form enquiry (hero, contacts, quick quote, hubs). */
+export const ENQUIRY_EMAIL = "info@geosyntheticsafrica.com";
+
 export const BUSINESS = {
   name: "Geosynthetics Africa",
   legalName: "Geosynthetics Africa (Pty) Ltd",

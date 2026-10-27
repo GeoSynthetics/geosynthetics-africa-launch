@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from "react";
 import { PROJECT_ZONES } from "@/lib/project-zones";
+import { ENQUIRY_EMAIL } from "@/lib/business-info";
 import { Upload, ArrowRight, Lock, CheckCircle2, Loader2, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -155,7 +156,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
             <div className="text-sm font-semibold text-white">{routedTo.targetName}</div>
             <div className="text-xs text-zinc-300">
               {routedTo.targetRole} ·{" "}
-              <span className="text-primary">sales@geosyntheticsafrica.com</span>
+              <span className="text-primary">{ENQUIRY_EMAIL}</span>
             </div>
             <div className="text-[11px] text-zinc-400 pt-1 border-t border-white/10">
               Your enquiry has been routed to the team responsible for your project region. We will

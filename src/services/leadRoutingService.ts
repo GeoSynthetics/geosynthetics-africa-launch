@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
+import { ENQUIRY_EMAIL } from "@/lib/business-info";
 import { sendHeroProjectEmailFn } from "@/lib/email";
-import { resolveRegionalRouting, SOUTH_AFRICA_CONTACT } from "@/types/regionalCoverage";
+import { resolveRegionalRouting } from "@/types/regionalCoverage";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PLACEHOLDER_DOMAIN = "@phone-inquiry.invalid";
@@ -107,8 +108,8 @@ export async function submitHeroProjectRequest(
   }
 
   // 3. Save into Supabase `quote_requests` table
-  // All requests go to the sales mailbox for now; the region is kept for reference.
-  const routingDescriptionTag = `[ROUTED TO: Sales (${SOUTH_AFRICA_CONTACT.email})]`;
+  // All requests go to the enquiries mailbox; the region is kept for reference.
+  const routingDescriptionTag = `[ROUTED TO: Enquiries (${ENQUIRY_EMAIL})]`;
 
   const fullDescription = `${need.trim()}\n\n${routingDescriptionTag}\n[region: ${region}]\n[contact: ${contact.trim()}]${
     uploadedFilePath ? `\n\n[attachments]\n${uploadedFilePath}` : ""
@@ -201,7 +202,7 @@ export async function submitHeroProjectRequest(
 
   if (lastError && !notified) {
     throw new Error(
-      "We couldn't send your request. Please try again or email sales@geosyntheticsafrica.com.",
+      "We couldn't send your request. Please try again or email info@geosyntheticsafrica.com.",
     );
   }
 

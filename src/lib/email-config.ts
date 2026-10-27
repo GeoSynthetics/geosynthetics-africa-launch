@@ -1,4 +1,4 @@
-import { BUSINESS } from "@/lib/business-info";
+import { BUSINESS, ENQUIRY_EMAIL } from "@/lib/business-info";
 
 /**
  * Email settings for form notifications. Server-side only: these read the
@@ -9,11 +9,12 @@ import { BUSINESS } from "@/lib/business-info";
  *                          (default website@notify.geosyntheticsafrica.com)
  *   NOTIFICATION_TO_EMAIL  Mailbox that receives every enquiry
  *
- * Enquiries go to sales@geosyntheticsafrica.com by default. The sender uses the
+ * Every form enquiry goes to info@geosyntheticsafrica.com by default. The sender uses the
  * notify. subdomain so Resend's DNS records stay separate from Microsoft 365 on
  * the main domain; replies go to the customer through reply-to.
  */
 export const SALES_EMAIL = BUSINESS.email;
+export { ENQUIRY_EMAIL };
 export const DEFAULT_FROM_EMAIL = "website@notify.geosyntheticsafrica.com";
 
 function env(name: string): string {
@@ -26,6 +27,6 @@ export function getEmailConfig() {
     apiKey: env("RESEND_API_KEY"),
     fromEmail: env("EMAIL_FROM") || DEFAULT_FROM_EMAIL,
     fromName: "Geosynthetics Africa",
-    notifyEmail: env("NOTIFICATION_TO_EMAIL") || SALES_EMAIL,
+    notifyEmail: env("NOTIFICATION_TO_EMAIL") || ENQUIRY_EMAIL,
   };
 }

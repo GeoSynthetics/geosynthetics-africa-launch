@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { getEmailConfig, SALES_EMAIL, DEFAULT_FROM_EMAIL } from "@/lib/email-config";
+import { getEmailConfig, ENQUIRY_EMAIL, DEFAULT_FROM_EMAIL } from "@/lib/email-config";
 
 const KEYS = ["NOTIFICATION_TO_EMAIL", "VITE_NOTIFICATION_TO_EMAIL", "EMAIL_FROM"];
 const saved = Object.fromEntries(KEYS.map((k) => [k, process.env[k]]));
@@ -12,11 +12,11 @@ afterEach(() => {
 });
 
 describe("getEmailConfig", () => {
-  it("sends enquiries to sales@geosyntheticsafrica.com when nothing is configured", () => {
+  it("sends enquiries to info@geosyntheticsafrica.com when nothing is configured", () => {
     for (const k of KEYS) delete process.env[k];
     const cfg = getEmailConfig();
-    expect(SALES_EMAIL).toBe("sales@geosyntheticsafrica.com");
-    expect(cfg.notifyEmail).toBe(SALES_EMAIL);
+    expect(ENQUIRY_EMAIL).toBe("info@geosyntheticsafrica.com");
+    expect(cfg.notifyEmail).toBe(ENQUIRY_EMAIL);
     expect(cfg.fromEmail).toBe(DEFAULT_FROM_EMAIL);
     expect(DEFAULT_FROM_EMAIL).toBe("website@notify.geosyntheticsafrica.com");
   });

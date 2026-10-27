@@ -229,7 +229,7 @@ export interface SendHeroProjectEmailParams {
 }
 
 /**
- * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default sales@geosyntheticsafrica.com)
+ * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default info@geosyntheticsafrica.com)
  * and, when the enquirer left an email address, sends them a confirmation.
  * Recipients are set here on the server so the client cannot choose them.
  */
