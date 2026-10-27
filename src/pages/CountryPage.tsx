@@ -321,43 +321,27 @@ export function CountryPage({ data }: { data: any }) {
           </div>
         </section>
 
-        {/* ── SITE CONDITIONS & SERVING HUB ── */}
+        {/* ── SITE CONDITIONS ── */}
         {profile && (
-          <section className="grid lg:grid-cols-12 gap-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
-                <Wrench className="h-4 w-4" />
-                Site Conditions We Plan For
-              </div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
-                Engineering for {template.country}
-              </h2>
-              <ul className="space-y-2.5">
-                {profile.conditions.map((condition) => (
-                  <li
-                    key={condition}
-                    className="flex items-start gap-2.5 text-sm text-muted-foreground"
-                  >
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    <span>{condition}</span>
-                  </li>
-                ))}
-              </ul>
+          <section className="rounded-xl border border-border bg-surface p-6 sm:p-8 space-y-4">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+              <Wrench className="h-4 w-4" />
+              Site Conditions We Plan For
             </div>
-            <div className="lg:col-span-5 flex flex-col justify-center gap-4 rounded-lg border border-border bg-card p-5">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
-                <Truck className="h-4 w-4" />
-                Supply & Installation Hub
-              </div>
-              <p className="text-sm text-foreground leading-relaxed">{profile.hub}</p>
-              <Button
-                onClick={() => openQuickQuote()}
-                className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 cursor-pointer"
-              >
-                Request Project Quote
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
+              Engineering for {template.country}
+            </h2>
+            <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2.5">
+              {profile.conditions.map((condition) => (
+                <li
+                  key={condition}
+                  className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                >
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span>{condition}</span>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
@@ -697,50 +681,71 @@ export function CountryPage({ data }: { data: any }) {
           </section>
         )}
 
-        {/* ── 6. REGIONAL OFFICE & LOGISTICS HUB ── */}
+        {/* ── 6. ONE CONTRACT: MANUFACTURING, SUPPLY, QA/QC-CONTROLLED INSTALLATION ── */}
         <section className="bg-surface-dark text-surface-dark-foreground rounded-2xl p-8 lg:p-12 relative overflow-hidden">
-          <div className="grid lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
-                <MapPin className="h-4 w-4" />
-                {template.hubName || `${template.country} Regional Hub`}
+          <div className="relative z-10 space-y-8">
+            <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-end">
+              <div className="lg:col-span-8 space-y-4">
+                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                  <ShieldCheck className="h-4 w-4" />
+                  One Contract · {template.country}
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                  Manufacturing. Supply. QA/QC-Controlled Installation.
+                </h2>
+                <p className="text-sm sm:text-base text-surface-dark-foreground/80 leading-relaxed max-w-2xl">
+                  One contract and one accountable team for your {template.country} project, from
+                  the factory floor to the signed handover dossier. No gaps between supplier,
+                  fabricator and installer.
+                </p>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-                {template.officeTitle || `${template.country} Operations & Logistics Hub`}
-              </h2>
-
-              <div className="space-y-2.5 text-sm text-surface-dark-foreground/80 pt-2">
-                {template.address && (
-                  <div className="flex items-start gap-3">
-                    <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        template.address,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-primary transition-colors cursor-pointer"
-                      title="Open location in Google Maps"
-                    >
-                      {template.address}
-                    </a>
-                  </div>
-                )}
+              <div className="lg:col-span-4 flex flex-col items-stretch lg:items-end gap-3">
+                <Button
+                  size="lg"
+                  onClick={() => openQuickQuote()}
+                  className="w-full lg:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-lg cursor-pointer"
+                >
+                  Request Project Quote
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <p className="text-xs text-surface-dark-foreground/60 text-left lg:text-right">
+                  Reply within 24 hours · English, French or Portuguese
+                </p>
               </div>
             </div>
 
-            <div className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center gap-4">
-              <Button
-                size="lg"
-                onClick={() => openQuickQuote()}
-                className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-lg cursor-pointer"
-              >
-                Request Project Quote
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <p className="text-xs text-surface-dark-foreground/60 text-left lg:text-right">
-                Immediate response for BOQ pricing, roll availability & freight lead times.
-              </p>
+            <div className="grid sm:grid-cols-3 gap-px rounded-xl overflow-hidden bg-surface-dark-foreground/10">
+              {[
+                {
+                  icon: Package,
+                  step: "01",
+                  title: "Manufacturing",
+                  text: "Liners, floating covers and panels fabricated in our own facility, so most seams are made and tested before they reach site.",
+                },
+                {
+                  icon: Truck,
+                  step: "02",
+                  title: "Supply",
+                  text: `Certified materials from Solmax GSE, Tensar and our own ranges, with freight, clearance and duties planned to your ${template.country} site.`,
+                },
+                {
+                  icon: Wrench,
+                  step: "03",
+                  title: "QA/QC-Controlled Installation",
+                  text: "Our own crews, trial welds every shift, 100% non-destructive seam testing and a full as-built and test dossier at handover.",
+                },
+              ].map(({ icon: Icon, step, title, text }) => (
+                <div key={title} className="bg-surface-dark p-6 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Icon className="h-6 w-6 text-primary" />
+                    <span className="text-xs font-bold tracking-widest text-surface-dark-foreground/40">
+                      {step}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-white">{title}</h3>
+                  <p className="text-sm text-surface-dark-foreground/75 leading-relaxed">{text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
