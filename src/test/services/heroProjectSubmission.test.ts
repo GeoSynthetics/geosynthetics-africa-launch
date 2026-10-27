@@ -72,6 +72,33 @@ describe("submitHeroProjectRequest", () => {
     expect(data.contactPhone).toBe("+27 11 555 0100");
   });
 
+  it("accepts separate email and phone fields", async () => {
+    await submitHeroProjectRequest({
+      need: "Floating cover",
+      region: "East Africa",
+      email: "buyer@utility.co",
+      phone: "+255 22 000 000",
+    });
+
+    const { data } = sendHeroProjectEmailFn.mock.calls[0][0];
+    expect(data.contactEmail).toBe("buyer@utility.co");
+    expect(data.contactPhone).toBe("+255 22 000 000");
+    expect(data.contact).toBe("buyer@utility.co · +255 22 000 000");
+  });
+
+  it("accepts a phone in the phone field only", async () => {
+    await submitHeroProjectRequest({
+      need: "GCL",
+      region: "Not specified",
+      email: "",
+      phone: "+260 97 000 0000",
+    });
+
+    const { data } = sendHeroProjectEmailFn.mock.calls[0][0];
+    expect(data.contactEmail).toBeUndefined();
+    expect(data.contactPhone).toBe("+260 97 000 0000");
+  });
+
   it("fails when neither the database save nor the email went through", async () => {
     insertResult.current = { data: null as never, error: { message: "permission denied" } };
     sendHeroProjectEmailFn.mockRejectedValue(new Error("network"));

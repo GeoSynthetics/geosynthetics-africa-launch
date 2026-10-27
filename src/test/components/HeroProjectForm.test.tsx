@@ -34,10 +34,12 @@ describe("HeroProjectForm Component", () => {
     expect(regionSelect.className).toContain("backdrop-blur-md");
     expect(regionSelect.className).toContain("hover:border-white/40");
 
-    const contactInput = screen.getByLabelText(/email or phone/i);
-    expect(contactInput).toBeInTheDocument();
-    expect(contactInput.className).toContain("backdrop-blur-md");
-    expect(contactInput.className).toContain("hover:border-white/40");
+    const emailInput = screen.getByLabelText(/^email$/i);
+    const phoneInput = screen.getByLabelText(/^phone$/i);
+    expect(emailInput).toHaveAttribute("type", "email");
+    expect(phoneInput).toHaveAttribute("type", "tel");
+    expect(emailInput.className).toContain("backdrop-blur-md");
+    expect(phoneInput.className).toContain("hover:border-white/40");
 
     expect(screen.getByText(/attach boq or drawings/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /send request/i })).toBeInTheDocument();
@@ -55,9 +57,13 @@ describe("HeroProjectForm Component", () => {
     fireEvent.change(needInput, { target: { value: "50,000 sqm HDPE Geomembrane 2mm" } });
     expect(needInput.value).toBe("50,000 sqm HDPE Geomembrane 2mm");
 
-    const contactInput = screen.getByLabelText(/email or phone/i) as HTMLInputElement;
-    fireEvent.change(contactInput, { target: { value: "lead@miningcompany.africa" } });
-    expect(contactInput.value).toBe("lead@miningcompany.africa");
+    const emailInput = screen.getByLabelText(/^email$/i) as HTMLInputElement;
+    fireEvent.change(emailInput, { target: { value: "lead@miningcompany.africa" } });
+    expect(emailInput.value).toBe("lead@miningcompany.africa");
+
+    const phoneInput = screen.getByLabelText(/^phone$/i) as HTMLInputElement;
+    fireEvent.change(phoneInput, { target: { value: "+243 970 000 000" } });
+    expect(phoneInput.value).toBe("+243 970 000 000");
 
     const regionSelect = screen.getByLabelText(/region/i) as HTMLSelectElement;
     expect(screen.getByRole("option", { name: "Southern Africa" })).toBeInTheDocument();
