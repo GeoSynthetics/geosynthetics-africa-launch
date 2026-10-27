@@ -206,7 +206,7 @@ export const DEFAULT_REGIONAL_COVERAGE = [
     coords: [5.36, -4.0083],
     title: "Abidjan Hub",
     subtitle: "West Africa Office",
-    address: "Zone 4C, Rue des Carrossiers, Abidjan",
+    address: "Abidjan, Côte d'Ivoire",
     phone: "+27 78 1355 926",
     email: "sales@geosyntheticsafrica.com",
     services: "Port Infrastructure & Shoreline Erosion Supply",

@@ -119,7 +119,7 @@ const HUB = {
   westPort:
     "Served from our Bamako hub and permanent Mali crews, with container shipments through the nearest West African port.",
   abidjan:
-    "Served from our Abidjan hub in Côte d'Ivoire, with materials cleared at the Port of Abidjan and trucked up the corridor to Ouagadougou and site.",
+    "Materials are cleared at the Port of Abidjan and trucked up the corridor to Ouagadougou and site, with installation crews mobilised from our West Africa team.",
   north:
     "Served by our pan-African project desk, with materials shipped container-direct to the nearest port and crews mobilised for each project.",
   central:

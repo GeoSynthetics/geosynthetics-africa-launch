@@ -1161,7 +1161,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
     supplyTitle: "Delivery to Burkina Faso via Abidjan",
     supplyDescription:
-      "Materials are cleared through our Abidjan hub at the Port of Abidjan, then trucked inland on the Abidjan–Ouagadougou corridor and delivered to site with full shipping and clearance documentation.",
+      "Materials are cleared at the Port of Abidjan, then trucked inland on the Abidjan–Ouagadougou corridor and delivered to site with full shipping and clearance documentation.",
     supplyHighlights: [
       {
         title: "Door-to-site logistics",
@@ -1174,7 +1174,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
           "Mill certificates, packing lists and certificates of origin supplied with every shipment.",
       },
     ],
-    transitTime: "By road from our Abidjan hub · lead time confirmed at quote",
+    transitTime: "Cleared at Abidjan, then by road · lead time confirmed at quote",
     logisticsRoutes: "Port of Abidjan → Ferkessédougou → Bobo-Dioulasso → Ouagadougou and site",
     customsInfo:
       "Burkina Faso left ECOWAS on 29 January 2025 and is a member of the Alliance of Sahel States (AES) and UEMOA. Imports move under transit documents through Côte d'Ivoire, and we prepare the commercial invoice, packing list, certificate of origin and mill certificates each border needs.",
@@ -1218,16 +1218,15 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       "eb4000-bentonite-geosynthetic-clay-liner-gcl-5-10m-x-40m",
     ],
     featuredProjectSlugs: [],
-    officeTitle: "Served from our Abidjan Hub",
-    hubName: "Abidjan Hub",
-    address: "Zone Industrielle de Yopougon, Abidjan, Côte d'Ivoire",
+    officeTitle: "Cleared through the Port of Abidjan",
+    hubName: "West Africa Projects",
+    address: "Clearing: Port of Abidjan, Côte d'Ivoire",
     phone: "+27 72 343 0868",
     email: "sales@geosyntheticsafrica.com",
     faqs: [
       {
         question: "How are materials delivered to Burkina Faso?",
-        answer:
-          "Through our Abidjan hub: cleared at the Port of Abidjan, then by road under transit documents to site.",
+        answer: "Cleared at the Port of Abidjan, then by road under transit documents to site.",
       },
       {
         question: "Is documentation available in French?",

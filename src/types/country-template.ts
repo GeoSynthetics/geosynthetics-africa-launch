@@ -627,7 +627,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     featuredProjectSlugs: [],
     officeTitle: "Abidjan Regional Hub",
     hubName: "Abidjan Hub",
-    address: "Zone Industrielle de Yopougon, Abidjan, Côte d'Ivoire",
+    address: "Abidjan, Côte d'Ivoire",
     phone: "+27 72 343 0868",
     email: "sales@geosyntheticsafrica.com",
     coords: [5.36, -4.0083],
