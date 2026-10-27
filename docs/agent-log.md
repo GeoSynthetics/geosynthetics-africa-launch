@@ -123,3 +123,8 @@
 ## 2026-10-27 — Floating Covers application page
 - Dedicated content for /applications/floating-covers-evaporation-control (src/data/floating-covers-application.ts): own hero photo, overview, six components, materials comparison (FC45, FC60, CSPE, rFPP; NSF/ANSI 61; FC60 30-year warranty 20 + 10 pro-rata), design, fabrication/installation, QA/QC, FAQs with FAQPage schema.
 - ApplicationCategoryPage gains optional `materialOptions` table and `faqs` sections (render only when a template provides them).
+
+## 2026-10-27 — Floating cover design content and menu
+- Floating Cover Installation service page: "Defined Sump Cover Design" section with our own SVG diagrams (empty/full sections, force detail, profile-trace / double-Y / X sump layouts), float and ballast sizing, and a rainwater-removal sequence (collect, pump, discharge, vent).
+- Application page design text covers defined sumps and layouts.
+- Migration 20261027180000 adds Floating Covers & Evaporation Control to the Applications menu after Reservoir & Dam Lining (applied to live).
