@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from "react";
 import { PROJECT_ZONES } from "@/lib/project-zones";
+import { hasEmailOrPhone } from "@/lib/contact-input";
 import { ENQUIRY_EMAIL } from "@/lib/business-info";
 import { Upload, ArrowRight, Lock, CheckCircle2, Loader2, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,8 @@ export const SIMPLIFIED_AFRICAN_REGIONS = PROJECT_ZONES;
 export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProps) {
   const [need, setNeed] = useState("");
   const [region, setRegion] = useState("");
-  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submissionResult, setSubmissionResult] = useState<HeroSubmissionResult | null>(null);
@@ -84,8 +86,12 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
       toast.error("Please describe your project requirements.");
       return;
     }
-    if (!contact.trim()) {
-      toast.error("Please provide an email or phone number.");
+    if (!hasEmailOrPhone(email, phone)) {
+      toast.error(
+        email.trim()
+          ? "Please check your email address."
+          : "Please add an email or a phone number.",
+      );
       return;
     }
 
@@ -94,7 +100,8 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
       const result = await submitHeroProjectRequest({
         need: need.trim(),
         region: region.trim() || "Not specified",
-        contact: contact.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
         file,
       });
 
@@ -115,7 +122,8 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
   const resetForm = () => {
     setNeed("");
     setRegion("");
-    setContact("");
+    setEmail("");
+    setPhone("");
     setFile(null);
     setSubmissionResult(null);
   };
@@ -232,62 +240,81 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
           />
         </div>
 
-        {/* 2-Column Row: REGION & EMAIL OR PHONE */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* REGION (dynamically loaded from our regions/countries list) */}
-          <div className="group/field">
-            <label
-              htmlFor="hero-region"
-              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
-            >
-              REGION
-            </label>
-            <div className="relative">
-              <select
-                id="hero-region"
-                value={region}
-                onChange={(e) => setRegion(e.target.value)}
-                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal appearance-none cursor-pointer pr-9 [&>option]:bg-zinc-900 [&>option]:text-white"
+        {/* EMAIL & PHONE: separate fields, one is enough */}
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="group/field">
+              <label
+                htmlFor="hero-email"
+                className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
               >
-                <option value="" className="text-zinc-400">
-                  Zone (optional)
-                </option>
-                {SIMPLIFIED_AFRICAN_REGIONS.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 group-hover/field:text-white transition-colors duration-200">
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
+                EMAIL
+              </label>
+              <input
+                id="hero-email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@company.co"
+                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white placeholder:text-zinc-400 rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal cursor-text"
+              />
+            </div>
+            <div className="group/field">
+              <label
+                htmlFor="hero-phone"
+                className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
+              >
+                PHONE
+              </label>
+              <input
+                id="hero-phone"
+                type="tel"
+                autoComplete="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+27 72 000 0000"
+                className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white placeholder:text-zinc-400 rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal cursor-text"
+              />
             </div>
           </div>
+          <p className="mt-1.5 text-[11px] text-zinc-400">Email or phone: one is enough.</p>
+        </div>
 
-          {/* EMAIL OR PHONE */}
-          <div className="group/field">
-            <label
-              htmlFor="hero-contact"
-              className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
+        {/* ZONE (optional) */}
+        <div className="group/field">
+          <label
+            htmlFor="hero-region"
+            className="block text-[11px] font-bold uppercase tracking-wider text-zinc-300 group-hover/field:text-white transition-colors duration-200 mb-1.5"
+          >
+            REGION
+          </label>
+          <div className="relative">
+            <select
+              id="hero-region"
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal appearance-none cursor-pointer pr-9 [&>option]:bg-zinc-900 [&>option]:text-white"
             >
-              EMAIL OR PHONE
-            </label>
-            <input
-              id="hero-contact"
-              type="text"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              placeholder="name@company.co"
-              className="w-full bg-white/[0.06] hover:bg-white/[0.1] focus:bg-zinc-950/90 text-white placeholder:text-zinc-400 rounded-xl h-11 px-3.5 text-sm border border-white/15 hover:border-white/40 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.07)] focus:shadow-[0_0_20px_rgba(239,68,68,0.2)] backdrop-blur-md transition-all duration-200 font-normal cursor-text"
-              required
-            />
+              <option value="" className="text-zinc-400">
+                Zone (optional)
+              </option>
+              {SIMPLIFIED_AFRICAN_REGIONS.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 group-hover/field:text-white transition-colors duration-200">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 

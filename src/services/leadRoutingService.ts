@@ -4,6 +4,7 @@ import {
   EMAIL_REGEX,
   PHONE_PLACEHOLDER_DOMAIN,
   parseContactInput as parseContact,
+  resolveContact,
 } from "@/lib/contact-input";
 import { sendHeroProjectEmailFn } from "@/lib/email";
 import { resolveRegionalRouting } from "@/types/regionalCoverage";
@@ -11,7 +12,10 @@ import { resolveRegionalRouting } from "@/types/regionalCoverage";
 export interface HeroProjectSubmission {
   need: string;
   region: string;
-  contact: string; // Email or phone
+  /** Legacy single "email or phone" value; used when email and phone are not given. */
+  contact?: string;
+  email?: string;
+  phone?: string;
   file?: File | null;
 }
 
@@ -39,7 +43,13 @@ export interface HeroSubmissionResult {
 export async function submitHeroProjectRequest(
   submission: HeroProjectSubmission,
 ): Promise<HeroSubmissionResult> {
-  const { need, region, contact, file } = submission;
+  const { need, region, file } = submission;
+  const emailInput = submission.email?.trim() ?? "";
+  const phoneInput = submission.phone?.trim() ?? "";
+  const separateFields = Boolean(emailInput || phoneInput);
+  const contact = separateFields
+    ? [emailInput, phoneInput].filter(Boolean).join(" · ")
+    : (submission.contact ?? "").trim();
 
   if (!need.trim()) {
     throw new Error("Please describe what you need for your project.");
@@ -50,7 +60,9 @@ export async function submitHeroProjectRequest(
 
   // 1. Resolve regional routing
   const routing = resolveRegionalRouting(region);
-  const { email, phone } = parseContact(contact);
+  const { email, phone } = separateFields
+    ? resolveContact(emailInput, phoneInput)
+    : parseContact(contact);
 
   // 2. Upload attachment if present
   let uploadedFilePath: string | null = null;
@@ -90,7 +102,7 @@ export async function submitHeroProjectRequest(
   const userId = sessionData.session?.user.id ?? null;
 
   const basePayload: Record<string, unknown> = {
-    contact_name: contact.trim().split("@")[0].slice(0, 50),
+    contact_name: (emailInput || contact).trim().split("@")[0].slice(0, 50),
     contact_email: email,
     contact_phone: phone,
     company: null,
