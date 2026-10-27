@@ -1,3 +1,4 @@
+import { FLOATING_COVERS_HERO, FLOATING_COVERS_TEMPLATE } from "@/data/floating-covers-application";
 /** Canonical application directory. Existing addresses remain unchanged. */
 // CMS template IDs predate the public application URLs. Keep them as lookup aliases.
 export const LEGACY_APPLICATION_TEMPLATE_IDS: Record<string, string> = {
@@ -386,9 +387,9 @@ const newApplications = [
     label: "Floating Covers & Evaporation Control",
     group: "water-storage",
     icon: "Waves",
-    hero: "",
+    hero: FLOATING_COVERS_HERO,
     summary:
-      "Fabricated membrane-cover systems for water storage, quality protection and project-specific evaporation control.",
+      "Floating covers fabricated in our own facility and installed by our own crews, in FC45/FC60 rLLDPE, CSPE and rFPP, all NSF/ANSI 61 certified.",
     uses: [
       "Reservoir floating covers",
       "Industrial water covers",
@@ -879,7 +880,7 @@ const APPLICATION_SEO: Record<string, { title: string; description: string }> = 
   },
 };
 
-export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEntries(
+const GENERATED_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEntries(
   newApplications.map((app) => [
     app.slug,
     {
@@ -960,3 +961,12 @@ export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = Object.fromEnt
     },
   ]),
 );
+
+/** Applications with dedicated content replace their generated template fields. */
+export const DEFAULT_APPLICATION_TEMPLATES: Record<string, any> = {
+  ...GENERATED_APPLICATION_TEMPLATES,
+  "floating-covers-evaporation-control": {
+    ...GENERATED_APPLICATION_TEMPLATES["floating-covers-evaporation-control"],
+    ...FLOATING_COVERS_TEMPLATE,
+  },
+};

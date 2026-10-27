@@ -119,3 +119,7 @@
 ## 2026-10-27 — Country pages: one-contract block
 - Removed the "Served from / hub" card and the office/address block from every country page.
 - The dark block is now the one-contract offer: Manufacturing, Supply, QA/QC-Controlled Installation, with Request Project Quote.
+
+## 2026-10-27 — Floating Covers application page
+- Dedicated content for /applications/floating-covers-evaporation-control (src/data/floating-covers-application.ts): own hero photo, overview, six components, materials comparison (FC45, FC60, CSPE, rFPP; NSF/ANSI 61; FC60 30-year warranty 20 + 10 pro-rata), design, fabrication/installation, QA/QC, FAQs with FAQPage schema.
+- ApplicationCategoryPage gains optional `materialOptions` table and `faqs` sections (render only when a template provides them).

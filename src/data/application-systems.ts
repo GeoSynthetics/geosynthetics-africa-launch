@@ -515,7 +515,7 @@ export const APPLICATION_SYSTEMS: Record<string, ApplicationSystem> = {
     layers: [
       {
         name: "Cover membrane",
-        role: "rLLDPE panels fabricated in our facility",
+        role: "FC45/FC60 rLLDPE, CSPE or rFPP panels fabricated in our facility",
         product: L.rlldpe,
         kind: "cover",
       },

@@ -18,6 +18,7 @@ import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import { QuoteCard } from "@/components/site/QuoteCard";
 import { cn } from "@/lib/utils";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 import { DrainageMesh } from "@/components/site/shapes";
 import { APPLICATION_SYSTEMS } from "@/data/application-systems";
 import { SystemCrossSection } from "@/components/site/SystemCrossSection";
@@ -230,6 +231,15 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
   const installationTitle = templateData?.installationTitle || "Installation Guidelines";
   const installationParagraphs = templateData?.installationParagraphs || [];
 
+  const materialOptions: {
+    title?: string;
+    intro?: string;
+    headers: string[];
+    rows: string[][];
+    links?: { label: string; href: string }[];
+  } | null = templateData?.materialOptions?.rows?.length ? templateData.materialOptions : null;
+  const faqs: { question: string; answer: string }[] = templateData?.faqs || [];
+
   const qaTitle = templateData?.qaTitle || "QA & Testing";
   const qaItems = templateData?.qaItems || [];
 
@@ -265,9 +275,11 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
       "system",
       "delivery",
       "components",
+      "materials",
       "design",
       "installation",
       "qa",
+      "faqs",
       "products",
       "projects",
       "downloads",
@@ -398,6 +410,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                 label: "System Components",
                 show: !!componentsImage || componentsCallouts.length > 0,
               },
+              { id: "materials", label: "Materials", show: !!materialOptions },
               { id: "design", label: "Design Considerations", show: designParagraphs.length > 0 },
               {
                 id: "installation",
@@ -405,6 +418,7 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                 show: installationParagraphs.length > 0,
               },
               { id: "qa", label: "QA & Testing", show: qaItems.length > 0 },
+              { id: "faqs", label: "FAQs", show: faqs.length > 0 },
               { id: "products", label: "Products Used", show: linkedProducts.length > 0 },
               { id: "projects", label: "Case Studies", show: caseStudies.length > 0 },
               { id: "downloads", label: "Downloads", show: downloads.length > 0 },
@@ -553,6 +567,72 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             </section>
           )}
 
+          {/* Section: Material Options */}
+          {materialOptions && (
+            <section id="materials" className="border-t border-border pt-16 scroll-mt-32">
+              <h2 className="font-display text-2xl font-bold uppercase mb-4 flex items-center">
+                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                {materialOptions.title || "Material Options"}
+              </h2>
+              {materialOptions.intro && (
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-3xl">
+                  {materialOptions.intro}
+                </p>
+              )}
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[640px] text-sm">
+                  <thead className="bg-surface">
+                    <tr>
+                      {materialOptions.headers.map((h, i) => (
+                        <th
+                          key={i}
+                          scope="col"
+                          className="text-left px-4 py-3 font-display text-xs font-bold uppercase tracking-wider text-foreground"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {materialOptions.rows.map((row, r) => (
+                      <tr key={r} className="border-t border-border align-top">
+                        {row.map((cell, c) =>
+                          c === 0 ? (
+                            <th
+                              key={c}
+                              scope="row"
+                              className="text-left px-4 py-3 text-xs font-bold uppercase tracking-wide text-muted-foreground whitespace-nowrap"
+                            >
+                              {cell}
+                            </th>
+                          ) : (
+                            <td key={c} className="px-4 py-3 text-foreground leading-snug">
+                              {cell}
+                            </td>
+                          ),
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {materialOptions.links && materialOptions.links.length > 0 && (
+                <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4">
+                  {materialOptions.links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="inline-flex items-center text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                    >
+                      {link.label} <ChevronRightIcon className="h-3.5 w-3.5 ml-1" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
           {/* Section: Design Considerations */}
           {designParagraphs.length > 0 && (
             <section id="design" className="border-t border-border pt-16 scroll-mt-32">
@@ -604,6 +684,30 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
                       {item.description}
                     </p>
                   </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Section: FAQs */}
+          {faqs.length > 0 && (
+            <section id="faqs" className="border-t border-border pt-16 scroll-mt-32">
+              <FAQPageSchema items={faqs} />
+              <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                Frequently Asked Questions
+              </h2>
+              <div className="divide-y divide-border border-y border-border">
+                {faqs.map((faq) => (
+                  <details key={faq.question} className="group py-4">
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-sm font-bold text-foreground">
+                      {faq.question}
+                      <ChevronRightIcon className="h-4 w-4 shrink-0 text-primary transition-transform group-open:rotate-90" />
+                    </summary>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </details>
                 ))}
               </div>
             </section>
