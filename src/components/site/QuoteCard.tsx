@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
 import { sendQuoteEmailFn } from "@/lib/email";
-import { isValidContactInput, parseContactInput } from "@/lib/contact-input";
+import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
 
 const ALLOWED_TYPES = [
   ".pdf",
@@ -50,7 +50,8 @@ export function QuoteCard({
   showFileUpload = true,
 }: QuoteCardProps) {
   const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
@@ -100,11 +101,11 @@ export function QuoteCard({
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !isValidContactInput(contact)) {
-      toast.error("Please add your name and an email address or phone number.");
+    if (!name.trim() || !hasEmailOrPhone(email, phone)) {
+      toast.error("Please add your name and a valid email or phone number.");
       return;
     }
-    const { email, phone } = parseContactInput(contact);
+    const resolved = resolveContact(email, phone);
     setSubmitting(true);
     try {
       const attachment_paths: string[] = [];
@@ -135,8 +136,8 @@ export function QuoteCard({
 
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
-        contact_email: email,
-        contact_phone: phone,
+        contact_email: resolved.email,
+        contact_phone: resolved.phone,
         company: null,
         project_description: descriptionWithPaths,
         product_name: contextLabel ?? null,
@@ -179,8 +180,8 @@ export function QuoteCard({
       void sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
-          contactEmail: email,
-          contactPhone: phone ?? undefined,
+          contactEmail: resolved.email,
+          contactPhone: resolved.phone ?? undefined,
           productName: contextLabel || undefined,
           projectDescription: baseDescription,
         },
@@ -188,7 +189,8 @@ export function QuoteCard({
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
       setName("");
-      setContact("");
+      setEmail("");
+      setPhone("");
       setMessage("");
       setFiles([]);
     } catch (err) {
@@ -211,12 +213,23 @@ export function QuoteCard({
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <Input
-          placeholder="Email or phone *"
-          autoComplete="email"
-          value={contact}
-          onChange={(e) => setContact(e.target.value)}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            type="email"
+            placeholder="Email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="tel"
+            placeholder="Phone"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <p className="text-[11px] text-muted-foreground -mt-1">Email or phone — one is enough.</p>
         <Textarea
           placeholder={
             contextLabel

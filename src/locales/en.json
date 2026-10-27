@@ -58,7 +58,6 @@
     "error": "Error submitting request. Please try again.",
     "projectZone": "Project Zone",
     "selectZone": "Select zone (optional)",
-    "contact": "Email or Phone",
     "needLabel": "What do you need?",
     "needPlaceholder": "e.g. 20,000 m² 1.5 mm HDPE, supply and install, Kolwezi"
   },

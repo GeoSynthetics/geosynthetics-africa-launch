@@ -1,6 +1,6 @@
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
-import { isValidContactInput, parseContactInput } from "@/lib/contact-input";
+import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -96,24 +96,33 @@ const RESOURCE_STRIP = [
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_EXT = [".pdf", ".xls", ".xlsx", ".csv", ".dwg", ".dxf", ".doc", ".docx", ".zip"];
 
-const contactField = z
+const emailField = z
   .string()
   .trim()
-  .max(160)
-  .refine(isValidContactInput, "Enter an email address or phone number");
+  .max(255)
+  .refine((v) => !v || z.string().email().safeParse(v).success, "Enter a valid email");
+const phoneField = z.string().trim().max(40);
+const emailOrPhone = (v: { email: string; phone: string }) => hasEmailOrPhone(v.email, v.phone);
+const emailOrPhoneError = { message: "Add an email or a phone number", path: ["email"] };
 
-const boqSchema = z.object({
-  name: z.string().trim().min(2, "Your name").max(120),
-  contact: contactField,
-  zone: z.string().trim().max(40).optional(),
-  message: z.string().trim().min(2, "Tell us what you need").max(2000),
-});
+const boqSchema = z
+  .object({
+    name: z.string().trim().min(2, "Your name").max(120),
+    email: emailField,
+    phone: phoneField,
+    zone: z.string().trim().max(40).optional(),
+    message: z.string().trim().min(2, "Tell us what you need").max(2000),
+  })
+  .refine(emailOrPhone, emailOrPhoneError);
 
-const quickSchema = z.object({
-  name: z.string().trim().min(2, "Your name").max(120),
-  contact: contactField,
-  message: z.string().trim().min(2, "How can we help?").max(2000),
-});
+const quickSchema = z
+  .object({
+    name: z.string().trim().min(2, "Your name").max(120),
+    email: emailField,
+    phone: phoneField,
+    message: z.string().trim().min(2, "How can we help?").max(2000),
+  })
+  .refine(emailOrPhone, emailOrPhoneError);
 
 // Static constants REGIONAL_LOCATIONS and REGIONAL_DETAILS are replaced by database configuration.
 
@@ -850,7 +859,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     resolver: zodResolver(boqSchema),
     defaultValues: {
       name: "",
-      contact: user?.email ?? "",
+      email: user?.email ?? "",
+      phone: "",
       zone: "",
       message: "",
     },
@@ -860,18 +870,19 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     resolver: zodResolver(quickSchema),
     defaultValues: {
       name: "",
-      contact: user?.email ?? "",
+      email: user?.email ?? "",
+      phone: "",
       message: "",
     },
   });
 
   useEffect(() => {
     if (user?.email) {
-      if (!boqForm.getValues("contact")) {
-        boqForm.setValue("contact", user.email);
+      if (!boqForm.getValues("email")) {
+        boqForm.setValue("email", user.email);
       }
-      if (!quickForm.getValues("contact")) {
-        quickForm.setValue("contact", user.email);
+      if (!quickForm.getValues("email")) {
+        quickForm.setValue("email", user.email);
       }
     }
   }, [user?.email, boqForm, quickForm]);
@@ -900,7 +911,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const onBoqSubmit = async (values: BoqValues) => {
     setBoqSubmitting(true);
-    const boqContact = parseContactInput(values.contact);
+    const boqContact = resolveContact(values.email, values.phone);
     try {
       const ownerKey = user?.id ?? "anonymous";
       const uploadedPaths: string[] = [];
@@ -949,7 +960,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
       boqForm.reset({
         name: "",
-        contact: user?.email ?? "",
+        email: user?.email ?? "",
+        phone: "",
         zone: "",
         message: "",
       });
@@ -963,7 +975,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const onQuickSubmit = async (values: QuickValues) => {
     setQuickSubmitting(true);
-    const quickContact = parseContactInput(values.contact);
+    const quickContact = resolveContact(values.email, values.phone);
     try {
       const { error } = await supabase.from("quote_requests").insert({
         contact_name: values.name,
@@ -990,7 +1002,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       toast.success("Inquiry sent — thank you!");
       quickForm.reset({
         name: "",
-        contact: user?.email ?? "",
+        email: user?.email ?? "",
+        phone: "",
         message: "",
       });
     } catch (err) {
@@ -1085,17 +1098,17 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                         />
                         <FormField
                           control={boqForm.control}
-                          name="contact"
+                          name="email"
                           render={({ field }) => (
                             <FormItem className="space-y-1">
                               <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                                Email or Phone <span className="text-primary">*</span>
+                                Email
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  maxLength={160}
+                                  type="email"
+                                  maxLength={255}
                                   autoComplete="email"
-                                  placeholder="you@company.com or +27 …"
                                   {...field}
                                 />
                               </FormControl>
@@ -1104,31 +1117,48 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                           )}
                         />
                       </div>
-                      <FormField
-                        control={boqForm.control}
-                        name="zone"
-                        render={({ field }) => (
-                          <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                              Project Zone
-                            </FormLabel>
-                            <FormControl>
-                              <select
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                {...field}
-                              >
-                                <option value="">Select zone (optional)</option>
-                                {PROJECT_ZONES.map((opt) => (
-                                  <option key={opt} value={opt}>
-                                    {opt}
-                                  </option>
-                                ))}
-                              </select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Phone
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="tel" maxLength={40} autoComplete="tel" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={boqForm.control}
+                          name="zone"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Project Zone
+                              </FormLabel>
+                              <FormControl>
+                                <select
+                                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                  {...field}
+                                >
+                                  <option value="">Select zone (optional)</option>
+                                  {PROJECT_ZONES.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       <FormField
                         control={boqForm.control}
                         name="message"
@@ -1235,19 +1265,29 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                       />
                       <FormField
                         control={quickForm.control}
-                        name="contact"
+                        name="email"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
                             <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                              Email or Phone <span className="text-primary">*</span>
+                              Email
                             </FormLabel>
                             <FormControl>
-                              <Input
-                                maxLength={160}
-                                autoComplete="email"
-                                placeholder="you@company.com or +27 …"
-                                {...field}
-                              />
+                              <Input type="email" maxLength={255} autoComplete="email" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Phone
+                            </FormLabel>
+                            <FormControl>
+                              <Input type="tel" maxLength={40} autoComplete="tel" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

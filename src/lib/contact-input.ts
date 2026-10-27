@@ -14,16 +14,6 @@ export function isPlaceholderEmail(email: string | null | undefined): boolean {
   return !email || email.endsWith(PHONE_PLACEHOLDER_DOMAIN) || !EMAIL_REGEX.test(email);
 }
 
-/** True when the input contains a usable email address or phone number. */
-export function isValidContactInput(contactInput: string): boolean {
-  const trimmed = contactInput.trim();
-  return (
-    EMAIL_REGEX.test(trimmed) ||
-    /^[\d\s+\-()]{6,}$/.test(trimmed) ||
-    /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(trimmed)
-  );
-}
-
 /** Splits "email or phone" input into an email (or placeholder) and a phone. */
 export function parseContactInput(contactInput: string): { email: string; phone: string | null } {
   const trimmed = contactInput.trim();
@@ -48,4 +38,26 @@ export function parseContactInput(contactInput: string): { email: string; phone:
   }
 
   return { email: trimmed, phone: null };
+}
+
+/** True when the visitor gave a valid email, a phone number, or both. */
+export function hasEmailOrPhone(email: string, phone: string): boolean {
+  const e = email.trim();
+  const p = phone.trim();
+  if (e && !EMAIL_REGEX.test(e)) return false;
+  return Boolean(e) || /^[\d\s+\-()]{6,}$/.test(p);
+}
+
+/**
+ * Builds the stored contact from separate email and phone fields. When only a
+ * phone is given, the email becomes a placeholder on the reserved domain.
+ */
+export function resolveContact(
+  email: string,
+  phone: string,
+): { email: string; phone: string | null } {
+  const e = email.trim();
+  const p = phone.trim() || null;
+  if (e) return { email: e, phone: p };
+  return { email: `${(p ?? "").replace(/[^\d+]/g, "")}${PHONE_PLACEHOLDER_DOMAIN}`, phone: p };
 }

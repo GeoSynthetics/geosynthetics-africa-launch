@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
-import { isValidContactInput, parseContactInput } from "@/lib/contact-input";
+import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +42,8 @@ export function QuickQuoteModal() {
   const { t } = useTranslation();
   const { isOpen, close, productName, productId } = useQuickQuote();
   const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -52,7 +53,8 @@ export function QuickQuoteModal() {
 
   const resetForm = () => {
     setName("");
-    setContact("");
+    setEmail("");
+    setPhone("");
     setCountry("");
     setMessage("");
     setFiles([]);
@@ -100,11 +102,11 @@ export function QuickQuoteModal() {
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !isValidContactInput(contact)) {
-      toast.error("Please add your name and an email address or phone number.");
+    if (!name.trim() || !hasEmailOrPhone(email, phone)) {
+      toast.error("Please add your name and a valid email or phone number.");
       return;
     }
-    const { email, phone } = parseContactInput(contact);
+    const resolved = resolveContact(email, phone);
     setSubmitting(true);
     try {
       const attachment_paths: string[] = [];
@@ -139,8 +141,8 @@ export function QuickQuoteModal() {
 
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
-        contact_email: email,
-        contact_phone: phone,
+        contact_email: resolved.email,
+        contact_phone: resolved.phone,
         company: null,
         country: country || null,
         project_description: descriptionWithPaths,
@@ -187,8 +189,8 @@ export function QuickQuoteModal() {
       void sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
-          contactEmail: email,
-          contactPhone: phone ?? undefined,
+          contactEmail: resolved.email,
+          contactPhone: resolved.phone ?? undefined,
           country: country || undefined,
           productName: productName || undefined,
           projectDescription: baseDescription,
@@ -249,16 +251,31 @@ export function QuickQuoteModal() {
             </div>
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                {t("quote.contact", "Email or Phone")} <span className="text-primary">*</span>
+                {t("quote.email", "Email")}
               </label>
               <Input
-                placeholder="you@company.com or +27 …"
+                type="email"
+                placeholder="name@company.com"
                 autoComplete="email"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
               />
             </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
+              {t("quote.phone", "Phone")}
+            </label>
+            <Input
+              type="tel"
+              placeholder="Contact number"
+              autoComplete="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
+            />
           </div>
 
           <div className="space-y-1">
