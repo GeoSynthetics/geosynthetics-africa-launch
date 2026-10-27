@@ -1,5 +1,6 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
+import { isValidContactInput, parseContactInput } from "@/lib/contact-input";
 import {
   Dialog,
   DialogContent,
@@ -41,9 +42,7 @@ export function QuickQuoteModal() {
   const { t } = useTranslation();
   const { isOpen, close, productName, productId } = useQuickQuote();
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [contact, setContact] = useState("");
   const [country, setCountry] = useState("");
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -53,9 +52,7 @@ export function QuickQuoteModal() {
 
   const resetForm = () => {
     setName("");
-    setCompany("");
-    setEmail("");
-    setPhone("");
+    setContact("");
     setCountry("");
     setMessage("");
     setFiles([]);
@@ -103,10 +100,11 @@ export function QuickQuoteModal() {
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !email.trim() || !phone.trim()) {
-      toast.error("Name, email, and phone number are required.");
+    if (!name.trim() || !isValidContactInput(contact)) {
+      toast.error("Please add your name and an email address or phone number.");
       return;
     }
+    const { email, phone } = parseContactInput(contact);
     setSubmitting(true);
     try {
       const attachment_paths: string[] = [];
@@ -141,9 +139,9 @@ export function QuickQuoteModal() {
 
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
-        contact_email: email.trim(),
-        contact_phone: phone.trim(),
-        company: company.trim() || null,
+        contact_email: email,
+        contact_phone: phone,
+        company: null,
         country: country || null,
         project_description: descriptionWithPaths,
         product_id: productId || null,
@@ -189,9 +187,8 @@ export function QuickQuoteModal() {
       void sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
-          contactEmail: email.trim(),
-          contactPhone: phone.trim(),
-          company: company.trim() || undefined,
+          contactEmail: email,
+          contactPhone: phone ?? undefined,
           country: country || undefined,
           productName: productName || undefined,
           projectDescription: baseDescription,
@@ -252,39 +249,13 @@ export function QuickQuoteModal() {
             </div>
             <div className="space-y-1">
               <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                {t("quote.company", "Company")}
+                {t("quote.contact", "Email or Phone")} <span className="text-primary">*</span>
               </label>
               <Input
-                placeholder={t("quote.companyPlaceholder", "Company Name")}
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                {t("quote.email", "Email")} <span className="text-primary">*</span>
-              </label>
-              <Input
-                type="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                {t("quote.phone", "Phone")} <span className="text-primary">*</span>
-              </label>
-              <Input
-                type="tel"
-                placeholder={t("quote.phonePlaceholder", "Contact number")}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                placeholder="you@company.com or +27 …"
+                autoComplete="email"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
                 className="h-11 rounded-xl border border-input focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary shadow-sm"
               />
             </div>
@@ -299,9 +270,7 @@ export function QuickQuoteModal() {
               onChange={(e) => setCountry(e.target.value)}
               className="w-full bg-background border border-input rounded-xl px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-11 transition shadow-sm"
             >
-              <option value="" disabled>
-                {t("quote.selectZone", "Select zone")}
-              </option>
+              <option value="">{t("quote.selectZone", "Select zone")}</option>
               {ZONES.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -312,10 +281,13 @@ export function QuickQuoteModal() {
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-              {t("quote.notes", "Message / Project Description")}
+              {t("quote.needLabel", "What do you need?")}
             </label>
             <Textarea
-              placeholder={t("quote.notesPlaceholder", "Tell us about your project...")}
+              placeholder={t(
+                "quote.needPlaceholder",
+                "e.g. 20,000 m² 1.5 mm HDPE, supply and install, Kolwezi",
+              )}
               rows={3}
               value={message}
               onChange={(e) => setMessage(e.target.value)}

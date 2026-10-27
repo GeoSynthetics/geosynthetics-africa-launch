@@ -4,6 +4,7 @@
  */
 
 import { createServerFn } from "@tanstack/react-start";
+import { isPlaceholderEmail } from "@/lib/contact-input";
 import { z } from "zod";
 import {
   generateQuoteCustomerEmail,
@@ -103,6 +104,7 @@ export async function dispatchQuoteEmails(
   params: SendQuoteEmailParams,
 ): Promise<{ adminSent: boolean; customerSent: boolean }> {
   const adminEmail = getEmailConfig().notifyEmail;
+  const hasRealEmail = !isPlaceholderEmail(params.contactEmail);
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
@@ -113,12 +115,13 @@ export async function dispatchQuoteEmails(
   // Notify the sales team first: this is the email that must arrive
   const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
-    replyTo: { email: params.contactEmail, name: params.contactName },
+    ...(hasRealEmail ? { replyTo: { email: params.contactEmail, name: params.contactName } } : {}),
     subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"}) — REF ${reference}`,
     htmlContent: adminHtml,
   });
 
-  // Confirmation to the customer
+  // Confirmation to the customer (skipped when they left only a phone number)
+  if (!hasRealEmail) return { adminSent: admin.success, customerSent: false };
   const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
@@ -170,6 +173,7 @@ export async function dispatchContactEmails(
   params: SendContactEmailParams,
 ): Promise<{ adminSent: boolean; customerSent: boolean }> {
   const adminEmail = getEmailConfig().notifyEmail;
+  const hasRealEmail = !isPlaceholderEmail(params.contactEmail);
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
@@ -180,12 +184,13 @@ export async function dispatchContactEmails(
   // Notify the sales team first: this is the email that must arrive
   const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
-    replyTo: { email: params.contactEmail, name: params.contactName },
+    ...(hasRealEmail ? { replyTo: { email: params.contactEmail, name: params.contactName } } : {}),
     subject: `[Quick Contact] ${params.contactName} — REF ${reference}`,
     htmlContent: adminHtml,
   });
 
-  // Confirmation to the customer
+  // Confirmation to the customer (skipped when they left only a phone number)
+  if (!hasRealEmail) return { adminSent: admin.success, customerSent: false };
   const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },

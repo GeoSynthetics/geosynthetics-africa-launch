@@ -57,7 +57,10 @@
     "success": "Demande de devis soumise avec succès !",
     "error": "Erreur lors de la soumission de la demande. Veuillez réessayer.",
     "projectZone": "Zone du projet",
-    "selectZone": "Choisir une zone"
+    "selectZone": "Choisir une zone (facultatif)",
+    "contact": "E-mail ou téléphone",
+    "needLabel": "De quoi avez-vous besoin ?",
+    "needPlaceholder": "ex. 20 000 m² de PEHD 1,5 mm, fourniture et pose, Kolwezi"
   },
   "common": {
     "home": "Accueil",

@@ -1,5 +1,11 @@
 # Agent Log
 
+## 2026-10-27 17:10 (UTC+2)
+
+- **Feature**: Minimal enquiry forms, CSPE page content, SANS wording
+- **Problem**: Forms asked for company, separate email and phone, country, scope and language before a buyer could start a conversation; the CSPE URL showed rFPP content; GSE liners were described as "SANS 1526 certified" when they meet SANS 1526.
+- **Solution**: Contacts BOQ form, quick contact and the quick-quote modal now ask only for name, one "email or phone" field (`src/lib/contact-input.ts`), an optional zone and what the buyer needs; the hero zone is optional. Phone-only enquiries skip the customer confirmation email instead of mailing a placeholder address. The content migration replaces the CSPE page with CS60/CS90 content from the mill's published data and rewrites "SANS 1526 certified/approved" as "SANS 1526 compliant" in CMS text and products; code defaults updated to match. Migration verified twice against a local Postgres 16 with fixture rows.
+
 ## 2026-10-27 16:10 (UTC+2)
 
 - **Feature**: Site audit week-one fixes: enquiry zones, relevant country projects, Tensar accuracy, Burkina Faso customs
