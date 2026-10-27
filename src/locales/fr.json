@@ -55,7 +55,9 @@
     "submit": "Soumettre la demande de devis",
     "submitting": "Envoi en cours...",
     "success": "Demande de devis soumise avec succès !",
-    "error": "Erreur lors de la soumission de la demande. Veuillez réessayer."
+    "error": "Erreur lors de la soumission de la demande. Veuillez réessayer.",
+    "projectZone": "Zone du projet",
+    "selectZone": "Choisir une zone"
   },
   "common": {
     "home": "Accueil",

@@ -1,4 +1,10 @@
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
+import {
+  PROJECT_LANGUAGES,
+  PROJECT_SCOPES,
+  PROJECT_ZONES,
+  formatEnquiryMeta,
+} from "@/lib/project-zones";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -99,7 +105,10 @@ const boqSchema = z.object({
   company: z.string().trim().max(160).optional(),
   email: z.string().trim().email("Enter a valid email").max(255),
   phone: z.string().trim().max(40).optional(),
+  zone: z.string().trim().min(1, "Select your project zone"),
   country: z.string().trim().max(120).optional(),
+  scope: z.string().trim().max(60).optional(),
+  language: z.string().trim().max(30).optional(),
   message: z.string().trim().min(10, "Tell us a bit more about your project").max(2000),
 });
 
@@ -107,6 +116,7 @@ const quickSchema = z.object({
   name: z.string().trim().min(2, "Full name required").max(120),
   email: z.string().trim().email("Enter a valid email").max(255),
   phone: z.string().trim().max(40).optional(),
+  zone: z.string().trim().min(1, "Select your project zone"),
   message: z.string().trim().min(5, "How can we help?").max(2000),
 });
 
@@ -854,7 +864,10 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       company: "",
       email: user?.email ?? "",
       phone: "",
+      zone: "",
       country: "",
+      scope: "",
+      language: "",
       message: "",
     },
   });
@@ -865,6 +878,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       name: "",
       email: user?.email ?? "",
       phone: "",
+      zone: "",
       message: "",
     },
   });
@@ -918,10 +932,18 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         uploadedPaths.push(path);
       }
 
-      const messageWithMeta =
-        `${values.message}` +
-        (values.country ? `${values.country}` : "") +
-        (uploadedPaths.length ? `${uploadedPaths.join("\n")}` : "");
+      const messageWithMeta = [
+        values.message,
+        formatEnquiryMeta({
+          zone: values.zone,
+          country: values.country,
+          scope: values.scope,
+          language: values.language,
+        }),
+        uploadedPaths.length ? `[attachments]\n${uploadedPaths.join("\n")}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
 
       const { error: insertErr } = await supabase.from("quote_requests").insert({
         contact_name: values.name,
@@ -942,7 +964,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           contactEmail: values.email,
           contactPhone: values.phone ?? undefined,
           company: values.company ?? undefined,
-          country: values.country ?? undefined,
+          country: [values.zone, values.country].filter(Boolean).join(" — ") || undefined,
           projectDescription: messageWithMeta,
         },
       }).catch((err) => console.warn("[Email Trigger Error]:", err));
@@ -953,7 +975,10 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         company: "",
         email: user?.email ?? "",
         phone: "",
+        zone: "",
         country: "",
+        scope: "",
+        language: "",
         message: "",
       });
       setFiles([]);
@@ -972,7 +997,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         contact_email: values.email,
         contact_phone: values.phone ?? null,
         company: null,
-        project_description: `${values.message}`,
+        project_description: `${values.message}\n\n${formatEnquiryMeta({ zone: values.zone })}`,
         boq_file_path: null,
         user_id: user?.id ?? null,
         status: "new",
@@ -985,7 +1010,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           contactName: values.name,
           contactEmail: values.email,
           contactPhone: values.phone ?? undefined,
-          message: `${values.message}`,
+          message: `${values.message}\n\n${formatEnquiryMeta({ zone: values.zone })}`,
         },
       }).catch((err) => console.warn("[Email Trigger Error]:", err));
 
@@ -994,6 +1019,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         name: "",
         email: user?.email ?? "",
         phone: "",
+        zone: "",
         message: "",
       });
     } catch (err) {
@@ -1134,21 +1160,91 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                           )}
                         />
                       </div>
-                      <FormField
-                        control={boqForm.control}
-                        name="country"
-                        render={({ field }) => (
-                          <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                              Project Location / Country
-                            </FormLabel>
-                            <FormControl>
-                              <Input maxLength={120} placeholder="Select country" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="zone"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Project Zone <span className="text-primary">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" {...field}>
+                                  <option value="">Select zone</option>
+                                  {PROJECT_ZONES.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={boqForm.control}
+                          name="country"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                Country (optional)
+                              </FormLabel>
+                              <FormControl>
+                                <Input maxLength={120} placeholder="e.g. DRC, Mali, Kenya" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <FormField
+                          control={boqForm.control}
+                          name="scope"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Scope
+                              </FormLabel>
+                              <FormControl>
+                                <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" {...field}>
+                                  <option value="">Select scope</option>
+                                  {PROJECT_SCOPES.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={boqForm.control}
+                          name="language"
+                          render={({ field }) => (
+                            <FormItem className="space-y-1">
+                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                                Preferred Language
+                              </FormLabel>
+                              <FormControl>
+                                <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" {...field}>
+                                  <option value="">Select language</option>
+                                  {PROJECT_LANGUAGES.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       <FormField
                         control={boqForm.control}
                         name="message"
@@ -1278,6 +1374,31 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                             </FormLabel>
                             <FormControl>
                               <Input type="tel" maxLength={40} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={quickForm.control}
+                        name="zone"
+                        render={({ field }) => (
+                          <FormItem className="space-y-1">
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                              Project Zone <span className="text-primary">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <select
+                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                {...field}
+                              >
+                                <option value="">Select zone</option>
+                                {PROJECT_ZONES.map((opt) => (
+                                  <option key={opt} value={opt}>
+                                    {opt}
+                                  </option>
+                                ))}
+                              </select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>

@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 import { publicBusinessCopy } from "@/lib/public-business-copy";
-import { canonicalPublicPath } from "@/lib/public-paths";
+import { canonicalPublicPath, canonicalIndustrySlug } from "@/lib/public-paths";
 import { SITE_URL } from "@/lib/site-url";
 import { MaterialSelectionPanel } from "@/components/site/MaterialSelectionPanel";
 import { applicationPath, materialGuideFor } from "@/data/material-selection";
@@ -97,8 +97,8 @@ function mapFamilyData(
     industries:
       familyData.industries && familyData.industries.length > 0
         ? familyData.industries.map((ind: any) => ({
-            label: ind.label || "",
-            slug: ind.slug || "",
+            label: LEGACY_INDUSTRY_LABELS[ind.slug] || ind.label || "",
+            slug: canonicalIndustrySlug(ind.slug || ""),
           }))
         : [
             { label: "Mining & Minerals Processing", slug: "mining-minerals-processing" },
@@ -107,6 +107,14 @@ function mapFamilyData(
           ],
   };
 }
+
+/** Labels for industry slugs that older templates stored under retired names. */
+const LEGACY_INDUSTRY_LABELS: Record<string, string> = {
+  "construction-infrastructure": "Transport & Infrastructure",
+  mining: "Mining & Minerals Processing",
+  "environmental-waste": "Waste Management & Landfills",
+  "water-management": "Water Utilities & Irrigation",
+};
 
 export function ProductFamilyPage() {
   const { category, family, familyData: rawFamilyData, dynamicCaseStudies } = Route.useLoaderData();

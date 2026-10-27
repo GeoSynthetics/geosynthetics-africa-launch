@@ -55,7 +55,9 @@
     "submit": "Submit Quote Request",
     "submitting": "Submitting...",
     "success": "Quote request submitted successfully!",
-    "error": "Error submitting request. Please try again."
+    "error": "Error submitting request. Please try again.",
+    "projectZone": "Project Zone",
+    "selectZone": "Select zone"
   },
   "common": {
     "home": "Home",

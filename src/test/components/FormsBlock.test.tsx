@@ -62,6 +62,8 @@ describe("FormsBlock Component (React Hook Form)", () => {
     fireEvent.change(nameInput, { target: { value: "John Doe" } });
     fireEvent.change(emailInput, { target: { value: "john@example.com" } });
     fireEvent.change(messageInput, { target: { value: "Hello world" } });
+    const zoneSelect = within(quickContactAside).getByLabelText(/Project Zone/i);
+    fireEvent.change(zoneSelect, { target: { value: "West Africa" } });
 
     const submitBtn = within(quickContactAside).getByRole("button", { name: /send inquiry/i });
     fireEvent.click(submitBtn);

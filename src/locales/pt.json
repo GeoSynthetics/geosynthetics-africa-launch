@@ -55,7 +55,9 @@
     "submit": "Enviar Solicitação de Orçamento",
     "submitting": "Enviando...",
     "success": "Solicitação de orçamento enviada com sucesso!",
-    "error": "Erro ao enviar a solicitação. Por favor, tente novamente."
+    "error": "Erro ao enviar a solicitação. Por favor, tente novamente.",
+    "projectZone": "Zona do projeto",
+    "selectZone": "Selecione a zona"
   },
   "common": {
     "home": "Início",

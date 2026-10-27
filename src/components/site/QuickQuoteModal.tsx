@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
 import {
   Dialog,
   DialogContent,
@@ -34,27 +35,7 @@ const ALLOWED_TYPES = [
 const MAX_BYTES = 20 * 1024 * 1024;
 const MAX_FILES = 8;
 
-const COUNTRIES = [
-  "South Africa",
-  "Nigeria",
-  "Kenya",
-  "Ghana",
-  "Zimbabwe",
-  "Namibia",
-  "Botswana",
-  "Mozambique",
-  "Zambia",
-  "Tanzania",
-  "Uganda",
-  "Angola",
-  "DR Congo",
-  "Rwanda",
-  "Ethiopia",
-  "Egypt",
-  "United Kingdom",
-  "United States",
-  "Other",
-];
+const ZONES = PROJECT_ZONES;
 
 export function QuickQuoteModal() {
   const { t } = useTranslation();
@@ -146,7 +127,13 @@ export function QuickQuoteModal() {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id ?? null;
 
-      const baseDescription = message.trim() || `Quote request via global BOQ uploader`;
+      const enquiryMeta = formatEnquiryMeta({ zone: country });
+      const baseDescription = [
+        message.trim() || `Quote request via global BOQ uploader`,
+        enquiryMeta,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
       const descriptionWithPaths =
         attachment_paths.length > 1
           ? `${baseDescription}\n\n[attachments]\n${attachment_paths.join("\n")}`
@@ -305,7 +292,7 @@ export function QuickQuoteModal() {
 
           <div className="space-y-1">
             <label className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-              {t("quote.projectLocation", "Project Location / Country")}
+              {t("quote.projectZone", "Project Zone")}
             </label>
             <select
               value={country}
@@ -313,9 +300,9 @@ export function QuickQuoteModal() {
               className="w-full bg-background border border-input rounded-xl px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-11 transition shadow-sm"
             >
               <option value="" disabled>
-                {t("quote.selectCountry", "Select country")}
+                {t("quote.selectZone", "Select zone")}
               </option>
-              {COUNTRIES.map((c) => (
+              {ZONES.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { PROJECT_ZONES } from "@/lib/project-zones";
 import { Upload, ArrowRight, Lock, CheckCircle2, Loader2, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -32,13 +33,8 @@ interface HeroProjectFormProps {
   className?: string;
 }
 
-export const SIMPLIFIED_AFRICAN_REGIONS = [
-  "Southern Africa",
-  "West Africa",
-  "East Africa",
-  "Central Africa",
-  "North Africa",
-] as const;
+/** Enquiry zones shown in the hero form (shared with every other enquiry form). */
+export const SIMPLIFIED_AFRICAN_REGIONS = PROJECT_ZONES;
 
 export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProps) {
   const [need, setNeed] = useState("");

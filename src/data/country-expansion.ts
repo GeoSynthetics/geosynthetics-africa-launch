@@ -35,7 +35,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     transitTime: "Typically 3–5 weeks by sea, plus clearance",
     logisticsRoutes: "Durban or overseas mill → Lagos / Onne by sea → road to site",
     customsInfo:
-      "Nigeria is a ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
+      "Nigeria is an ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
     installationTitle: "Lining Installation & Field Services in Nigeria",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Nigeria.",
@@ -519,7 +519,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     logisticsRoutes:
       "Overseas mill → Dakar by sea → road to site (including the gold belt around Kédougou)",
     customsInfo:
-      "Senegal is a ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
+      "Senegal is an ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
     installationTitle: "Lining Installation & Field Services in Senegal",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Senegal.",
@@ -1081,7 +1081,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     transitTime: "Typically 3–5 weeks by sea, plus clearance",
     logisticsRoutes: "Overseas mill → Conakry / Kamsar by sea → road to site",
     customsInfo:
-      "Guinea is a ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
+      "Guinea is an ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
     installationTitle: "Lining Installation & Field Services in Guinea",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Guinea.",
@@ -1174,11 +1174,11 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
           "Mill certificates, packing lists and certificates of origin supplied with every shipment.",
       },
     ],
-    transitTime: "Typically 4–6 weeks including inland transit",
+    transitTime: "Common grades by road from our Bamako stock · container imports via Abidjan, Tema or Lomé: lead time confirmed at quote",
     logisticsRoutes:
-      "Overseas mill → Abidjan / Tema / Lomé by sea → road corridor to Ouagadougou and site",
+      "Bamako → Sikasso → Bobo-Dioulasso → Ouagadougou and site · Abidjan / Tema / Lomé by sea → road corridor to Ouagadougou and site",
     customsInfo:
-      "Burkina Faso is a ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
+      "Burkina Faso left ECOWAS on 29 January 2025 and is a member of the Alliance of Sahel States (AES) and UEMOA. Imports move under transit documents through Côte d'Ivoire, Ghana or Togo, and we prepare the commercial invoice, packing list, certificate of origin and mill certificates each border needs.",
     installationTitle: "Lining Installation & Field Services in Burkina Faso",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Burkina Faso.",
@@ -1459,7 +1459,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     transitTime: "Typically 3–5 weeks by sea, plus clearance",
     logisticsRoutes: "Overseas mill → Freetown by sea → road to site",
     customsInfo:
-      "Sierra Leone is a ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
+      "Sierra Leone is an ECOWAS member. Customs documentation, certificates of origin and duty treatment are prepared for each shipment.",
     installationTitle: "Lining Installation & Field Services in Sierra Leone",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Sierra Leone.",
