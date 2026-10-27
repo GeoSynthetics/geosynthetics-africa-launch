@@ -7,6 +7,8 @@ export interface CompanyPageSection {
   subtitle?: string;
   body: string;
   bullets?: string[];
+  /** Optional reference links shown under the section (e.g. EPD registrations) */
+  links?: { label: string; href: string }[];
 }
 
 export interface CompanyPageCta {
@@ -88,7 +90,8 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
       title: "Careers — Geosynthetics Africa",
       description:
         "Explore career opportunities in geotechnical engineering, HDPE geomembrane lining, and technical project management across Africa.",
-      keywords: "geosynthetics careers, civil engineering jobs Africa, geomembrane installer jobs, geotechnical careers",
+      keywords:
+        "geosynthetics careers, civil engineering jobs Africa, geomembrane installer jobs, geotechnical careers",
     },
   },
   sustainability: {
@@ -130,6 +133,28 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
           "Engineered solutions that restore native vegetation and stabilize riverbanks",
         ],
       },
+      {
+        id: "epds",
+        heading: "Environmental Product Declarations (EPDs)",
+        subtitle: "BERA® is EPD certified",
+        body: "An Environmental Product Declaration is an independently verified, ISO 14025 report of a product's environmental impact over its life cycle. Our BERA® ground-stabilisation range carries verified EPDs registered with the International EPD System, so you can use real life-cycle data in green building ratings and ESG reporting.\n\nWe add EPDs for further products as their manufacturers publish them. Ask us for the EPD of any product on your project.",
+        bullets: [
+          "BERA Gravel Fix® white (Pro, Pro XL, Pro XXL, Lite, Smart): EPD-IES-0017007, valid to 18 Sep 2029",
+          "BERA Gravel Fix® grey (Pro, Pro XL, Pro XXL, Lite, Smart): EPD-IES-0016488, valid to 18 Sep 2029",
+          "BERA® Water Fix (Pro, Pro XL, Pro XXL): EPD-IES-0016491, valid to 18 Sep 2029",
+        ],
+        links: [
+          {
+            label: "BERA Gravel Fix® white EPD",
+            href: "https://www.environdec.com/library/epd17007",
+          },
+          {
+            label: "BERA Gravel Fix® grey EPD",
+            href: "https://www.environdec.com/library/epd16488",
+          },
+          { label: "BERA® Water Fix EPD", href: "https://environdec.com/library/epd16491" },
+        ],
+      },
     ],
     cta: {
       heading: "Design for Environmental Compliance",
@@ -141,7 +166,8 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
       title: "Sustainability & Environmental Protection — Geosynthetics Africa",
       description:
         "Our commitment to environmental containment, groundwater protection, and sustainable civil engineering across Africa.",
-      keywords: "environmental containment, groundwater protection Africa, sustainable geosynthetics, tailings lining sustainability",
+      keywords:
+        "environmental containment, groundwater protection Africa, sustainable geosynthetics, tailings lining sustainability",
     },
   },
   "privacy-policy": {
@@ -225,7 +251,8 @@ export const DEFAULT_COMPANY_PAGE_TEMPLATES: Record<string, CompanyPageTemplate>
     ],
     seo: {
       title: "Terms & Conditions — Geosynthetics Africa",
-      description: "Terms and conditions for Geosynthetics Africa supply, quotation, and installation services.",
+      description:
+        "Terms and conditions for Geosynthetics Africa supply, quotation, and installation services.",
       keywords: "terms and conditions, geosynthetics terms of service, legal terms",
     },
   },

@@ -1,0 +1,182 @@
+-- 1. Blog post: floating covers, defined sump layout (published)
+-- 2. Footer: "EPDs" link under Company; "BERA® EPD Certified" badge
+-- 3. Sustainability page: EPD section (BERA® EPDs registered with the International EPD System)
+-- Idempotent.
+
+INSERT INTO public.blog_posts
+  (slug, title, content, excerpt, cover_image, category, tags, read_time, status, featured,
+   author_id, meta_title, meta_description, published_at, updated_at)
+SELECT
+  'floating-covers-defined-sump-layout',
+  'Floating Covers That Stay Tight: Defined Sump Design for Evaporation, Algae and Odour Control',
+  $blog$<p>Open reservoirs and ponds lose water to the sun, grow algae, collect dust and bird droppings and, on effluent dams, release odour. A floating cover fixes all of it, and a well-made one lasts: our FC60 covers carry a 30-year warranty (20 years full plus 10 years pro-rata). But a cover only performs if it stays tight. A loose cover ponds rainwater, flaps and tears in wind and is unsafe to walk on. The defined sump layout solves that with two simple parts: floats and ballast.</p>
+
+<p>This guide covers what floating covers do for each type of reservoir, how a defined sump cover works, how we lay it out, and what to put in your specification.</p>
+
+<blockquote><strong>Planning a cover?</strong> Send the reservoir dimensions, operating water levels and what is stored. We reply within 24 hours with a cover layout, material recommendation and one price for fabrication, supply and QA/QC-controlled installation. <a href="/contacts">Request a project quote</a>.</blockquote>
+
+<h2>What a floating cover does, by application</h2>
+<table>
+<thead><tr><th>Reservoir</th><th>Main problem</th><th>What the cover does</th></tr></thead>
+<tbody>
+<tr><td>Potable water reservoirs</td><td>Algae, contamination, chlorine loss</td><td>Blocks sunlight so algae cannot grow, keeps out dust, birds and debris; NSF/ANSI 61 materials</td></tr>
+<tr><td>Mine return-water and process ponds</td><td>Evaporation losses</td><td>Stops evaporation from the water surface, so more water stays in the circuit</td></tr>
+<tr><td>Irrigation and farm storage dams</td><td>Evaporation in hot, dry seasons</td><td>Keeps the water you pumped and paid for in the dam</td></tr>
+<tr><td>Effluent ponds and digesters</td><td>Odour and gas</td><td>A sealed cover contains odour and lets gas be vented or collected</td></tr>
+<tr><td>Raw-water and fire-water reservoirs</td><td>Debris, algae, water loss</td><td>Keeps stored water clean and available when it is needed</td></tr>
+</tbody>
+</table>
+<p>In hot, dry climates the water saved is often what pays for the cover.</p>
+
+<h2>What a defined sump cover is</h2>
+<p>A defined sump cover combines rows of floats with rows of sand-filled ballast tubes. Both are sealed inside geomembrane sleeves welded to the cover, so nothing is exposed to sun or water. The ballast pulls the cover down between the float rows and forms drainage channels, the sumps, across the surface. The same pull tensions the membrane, so the cover stays taut whatever the water level.</p>
+
+<figure>
+<svg viewBox="0 0 600 190" role="img" aria-label="Floating cover in an empty reservoir" style="width:100%;height:auto;max-width:640px">
+<path d="M0 30 H40 L110 150 H490 L560 30 H600 V180 H0 Z" fill="#b45309" fill-opacity="0.15"/>
+<path d="M0 30 H40 L110 150 H490 L560 30 H600" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+<path d="M36 30 L110 148 H490 L564 30" fill="none" stroke="#d2302f" stroke-width="3"/>
+<rect x="177" y="140" width="18" height="6" rx="2" fill="#d2302f"/><circle cx="220" cy="142" r="5" fill="currentColor"/><rect x="245" y="140" width="18" height="6" rx="2" fill="#d2302f"/>
+<rect x="337" y="140" width="18" height="6" rx="2" fill="#d2302f"/><circle cx="380" cy="142" r="5" fill="currentColor"/><rect x="405" y="140" width="18" height="6" rx="2" fill="#d2302f"/>
+</svg>
+<figcaption><strong>Empty reservoir.</strong> The cover lies on the floor like a fitted liner. The sumps are flat and the float rows are at their widest spacing, because there is no slack to take up.</figcaption>
+</figure>
+
+<figure>
+<svg viewBox="0 0 600 190" role="img" aria-label="Floating cover in a full reservoir" style="width:100%;height:auto;max-width:640px">
+<path d="M55 62 L110 150 H490 L545 62 Z" fill="#38bdf8" fill-opacity="0.3"/>
+<path d="M0 30 H40 L110 150 H490 L560 30 H600 V180 H0 Z" fill="#b45309" fill-opacity="0.15"/>
+<path d="M0 30 H40 L110 150 H490 L560 30 H600" fill="none" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.5"/>
+<path d="M36 30 L55 62 H206 L217 96 H223 L234 62 H366 L377 96 H383 L394 62 H545 L564 30" fill="none" stroke="#d2302f" stroke-width="3" stroke-linejoin="round"/>
+<rect x="189" y="56" width="18" height="6" rx="2" fill="#d2302f"/><circle cx="220" cy="96" r="5" fill="currentColor"/><rect x="233" y="56" width="18" height="6" rx="2" fill="#d2302f"/>
+<rect x="349" y="56" width="18" height="6" rx="2" fill="#d2302f"/><circle cx="380" cy="96" r="5" fill="currentColor"/><rect x="393" y="56" width="18" height="6" rx="2" fill="#d2302f"/>
+</svg>
+<figcaption><strong>Full reservoir.</strong> The ballast tubes pull the spare material down into the sumps. The sumps hang vertically, the float rows close up and the cover stays taut.</figcaption>
+</figure>
+
+<h2>How the cover stays tight</h2>
+<p>Floats lift the cover on either side of each sump, and the ballast tube pulls the middle down. The two forces tension the membrane across the reservoir. As the water rises, the spare material that would otherwise wrinkle on the surface is drawn into the sumps, which simply get deeper. A tensioned cover is safer to walk on, easier to keep clean and far more secure in high wind.</p>
+
+<figure>
+<svg viewBox="0 0 300 190" role="img" aria-label="Forces on a defined sump" style="width:100%;height:auto;max-width:420px">
+<rect x="0" y="70" width="300" height="120" fill="#38bdf8" fill-opacity="0.3"/>
+<path d="M0 70 H120 L144 140 H156 L180 70 H300" fill="none" stroke="#d2302f" stroke-width="3" stroke-linejoin="round"/>
+<rect x="91" y="64" width="18" height="6" rx="2" fill="#d2302f"/><rect x="191" y="64" width="18" height="6" rx="2" fill="#d2302f"/><circle cx="150" cy="140" r="5" fill="currentColor"/>
+<g stroke="#d2302f" stroke-width="2"><line x1="100" y1="58" x2="100" y2="24"/><line x1="200" y1="58" x2="200" y2="24"/><line x1="150" y1="150" x2="150" y2="180"/><line x1="60" y1="70" x2="12" y2="70"/><line x1="240" y1="70" x2="288" y2="70"/></g>
+<g fill="#d2302f"><path d="M100 18 l-5 8 h10z"/><path d="M200 18 l-5 8 h10z"/><path d="M150 186 l-5 -8 h10z"/><path d="M6 70 l8 -5 v10z"/><path d="M294 70 l-8 -5 v10z"/></g>
+<g fill="currentColor" style="font:700 11px sans-serif;text-transform:uppercase"><text x="108" y="30">Float lift</text><text x="158" y="178">Ballast pull</text><text x="6" y="62">Tension</text><text x="246" y="62">Tension</text></g>
+</svg>
+<figcaption>Float lift on each side, ballast pull in the middle: the membrane is held in tension across the reservoir.</figcaption>
+</figure>
+
+<h2>Getting rainwater off the cover</h2>
+<ol>
+<li><strong>Collect.</strong> Rain runs off the taut cover, drains through the gaps between the segmented floats and collects in the sumps, away from the stored water.</li>
+<li><strong>Pump.</strong> Scavenging pumps sit in the sumps at the sump intersections, held in a buoyant, membrane-encapsulated foam collar so they follow the water level.</li>
+<li><strong>Discharge.</strong> When a pump switches on it empties the sump through a discharge hose that runs, with its power cable, along the sump and off the cover.</li>
+<li><strong>Vent.</strong> Floating vents, a floating base under the membrane with a boot and vent riser fitted from above, let air and gas escape from under the cover.</li>
+</ol>
+
+<h2>Choosing a sump layout</h2>
+<p>There are several ways to lay out the sumps. Three patterns cover most reservoirs. We choose between them from the reservoir's shape and size, the side slopes, and where the pumps and discharge lines can sit.</p>
+
+<figure>
+<svg viewBox="0 0 600 240" role="img" aria-label="Profile trace, double Y and X pattern sump layouts" style="width:100%;height:auto;max-width:640px">
+<g fill="#b45309" fill-opacity="0.1" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"><rect x="12" y="2" width="176" height="216" rx="8"/><rect x="212" y="2" width="176" height="216" rx="8"/><rect x="412" y="2" width="176" height="216" rx="8"/></g>
+<g fill="none" stroke="#d2302f" stroke-width="3" stroke-dasharray="10 5">
+<path d="M40 30 H160 V190 H40 Z"/><path d="M20 10 L40 30"/><path d="M180 10 L160 30"/><path d="M20 210 L40 190"/><path d="M180 210 L160 190"/>
+<path d="M220 10 L300 70 L380 10"/><path d="M300 70 V150"/><path d="M220 210 L300 150 L380 210"/>
+<path d="M420 10 L580 210"/><path d="M580 10 L420 210"/>
+</g>
+<g fill="currentColor" style="font:700 12px sans-serif;text-transform:uppercase" text-anchor="middle"><text x="100" y="236">Profile trace</text><text x="300" y="236">Double Y</text><text x="500" y="236">X pattern</text></g>
+</svg>
+<figcaption>Sump layouts in plan view, reservoir empty. Dashed lines are the sumps.</figcaption>
+</figure>
+
+<h2>Floats and ballast: short on the slopes, long on the floor</h2>
+<p>Over the flat floor the cover only has to follow a level surface, so floats are long (typically about 2.75 m) and ballast tubes about 1.83 m. On the side slopes we use short floats and ballast tubes, about 0.91 m each. Short segments let the cover articulate and follow the slope as the water level rises and falls, instead of bridging and straining at the change of grade.</p>
+
+<h2>Cover materials and a 30-year exposed life</h2>
+<p>A floating cover lives in full sun on moving water, so the membrane matters as much as the layout. Defined sump covers are fabricated from scrim-reinforced geomembranes, and we build them in four grades, all certified to NSF/ANSI 61 for drinking water.</p>
+<table>
+<thead><tr><th>Grade</th><th>Thickness</th><th>Exposed life / warranty</th><th>Best for</th></tr></thead>
+<tbody>
+<tr><td>FC60 rLLDPE</td><td>1.52 mm</td><td>30-year warranty (20 years full + 10 years pro-rata)</td><td>Long-life potable and process covers</td></tr>
+<tr><td>FC45 rLLDPE</td><td>1.14 mm</td><td>20-year outdoor service life</td><td>Process, return-water, farm and effluent covers</td></tr>
+<tr><td>CSPE CS60 / CS90</td><td>1.52 / 2.28 mm</td><td>30-year weathering warranty for approved applications</td><td>Municipal potable reservoirs and large covers</td></tr>
+<tr><td>rFPP</td><td>0.91 / 1.14 mm</td><td>Confirmed per project</td><td>Exposed covers and liners under wind uplift</td></tr>
+</tbody>
+</table>
+<p>We confirm in writing, before you order, which warranty applies to your application. See the full specifications on our <a href="/products/geomembrane-liners/floating-cover-geomembranes">FC45 and FC60</a> and <a href="/products/geomembrane-liners/cspe-geomembranes-for-potable-water-floating-covers">CSPE</a> product pages.</p>
+
+<h2>What to put in the specification</h2>
+<ul>
+<li>Cover material, thickness and NSF/ANSI 61 certification where the water is potable.</li>
+<li>Sump layout drawing, with float and ballast lengths on the floor and on the slopes.</li>
+<li>Rainwater removal: number and position of sumps and pumps, and the discharge route off the cover.</li>
+<li>Venting, hatches, walkways and penetrations, fabricated into the panels.</li>
+<li>Perimeter anchorage detail and the full range of operating water levels.</li>
+<li>Seam testing to the project CQA plan, and a handover dossier with as-built layout and test records.</li>
+</ul>
+
+<h2>One contract, factory to handover</h2>
+<p>We lay out the cover from your reservoir drawings, fabricate it in large panels in our own facility, and install it with our own crews: anchorage, deployment, panel joins, floats, ballast, pumps and vents, tested and documented. Read more about our <a href="/floating-cover-installation-africa">floating cover fabrication and installation</a> and <a href="/applications/floating-covers-evaporation-control">floating covers and evaporation control</a>, or send us your reservoir drawings for a <a href="/contacts">project quote</a>.</p>
+
+<blockquote><strong>Get a cover layout and price.</strong> Reservoir dimensions, water levels and what is stored are enough to start. We reply within 24 hours, in English, French or Portuguese. <a href="/contacts">Request a project quote</a>.</blockquote>
+$blog$,
+  'How defined sump floating covers use floats and ballast to stay taut, drain rainwater and survive wind, what they do for potable, mining, farm and effluent reservoirs, and how to specify a cover with a 30-year exposed life.',
+  'https://www.geosyntheticsafrica.com/api/storage/media-center/Floating-Covers-South-Africa-Geosynthetics-Africa_5536bff0-c2ff-45e1-b671-e9a6bc317abd.webp',
+  'Water Storage & Floating Covers',
+  ARRAY['floating covers','defined sump','evaporation control','algae control','odour control','potable water','NSF/ANSI 61','FC60','CSPE'],
+  5,
+  'published',
+  true,
+  (SELECT author_id FROM public.blog_posts WHERE author_id IS NOT NULL GROUP BY author_id ORDER BY count(*) DESC LIMIT 1),
+  'Floating Covers Africa | Defined Sump Design, 30-Year Exposed Life',
+  'Defined sump floating covers for reservoirs, mine ponds and effluent dams: evaporation, algae and odour control, sump layouts, NSF/ANSI 61 materials and a 30-year warranty.',
+  now(),
+  now()
+WHERE NOT EXISTS (SELECT 1 FROM public.blog_posts WHERE slug = 'floating-covers-defined-sump-layout');
+
+DO $$
+DECLARE
+  cidx int;
+  sidx int;
+BEGIN
+  -- Footer: EPDs link after Sustainability in the Company column
+  SELECT (t.ord - 1)::int INTO cidx
+  FROM public.site_config s, jsonb_array_elements(s.value->'columns') WITH ORDINALITY t(c, ord)
+  WHERE s.key = 'footer_content' AND lower(t.c->>'title') = 'company';
+
+  IF cidx IS NOT NULL AND NOT EXISTS (
+    SELECT 1 FROM public.site_config s, jsonb_array_elements(s.value->'columns'->cidx->'links') l
+    WHERE s.key = 'footer_content' AND l->>'label' = 'EPDs'
+  ) THEN
+    SELECT (t.ord)::int INTO sidx
+    FROM public.site_config s, jsonb_array_elements(s.value->'columns'->cidx->'links') WITH ORDINALITY t(l, ord)
+    WHERE s.key = 'footer_content' AND t.l->>'label' = 'Sustainability';
+
+    UPDATE public.site_config
+    SET value = jsonb_insert(
+      value,
+      ARRAY['columns', cidx::text, 'links', coalesce(sidx, jsonb_array_length(value->'columns'->cidx->'links'))::text],
+      '{"label": "EPDs", "to": "/sustainability#epds"}'::jsonb)
+    WHERE key = 'footer_content';
+  END IF;
+
+  -- Footer: certification badge
+  UPDATE public.site_config
+  SET value = jsonb_set(value, '{certifications}', coalesce(value->'certifications', '[]'::jsonb) || '["BERA® EPD Certified"]'::jsonb)
+  WHERE key = 'footer_content'
+    AND NOT coalesce(value->'certifications', '[]'::jsonb) ? 'BERA® EPD Certified';
+
+  -- Sustainability page: EPD section
+  UPDATE public.site_config
+  SET value = jsonb_set(value, '{sustainability,sections}',
+        coalesce(value->'sustainability'->'sections', '[]'::jsonb) || jsonb_build_array($epd${"id": "epds", "heading": "Environmental Product Declarations (EPDs)", "subtitle": "BERA® is EPD certified", "body": "An Environmental Product Declaration is an independently verified, ISO 14025 report of a product's environmental impact over its life cycle. Our BERA® ground-stabilisation range carries verified EPDs registered with the International EPD System, so you can use real life-cycle data in green building ratings and ESG reporting.\n\nWe add EPDs for further products as their manufacturers publish them. Ask us for the EPD of any product on your project.", "bullets": ["BERA Gravel Fix® white (Pro, Pro XL, Pro XXL, Lite, Smart): EPD-IES-0017007, valid to 18 Sep 2029", "BERA Gravel Fix® grey (Pro, Pro XL, Pro XXL, Lite, Smart): EPD-IES-0016488, valid to 18 Sep 2029", "BERA® Water Fix (Pro, Pro XL, Pro XXL): EPD-IES-0016491, valid to 18 Sep 2029"], "links": [{"label": "BERA Gravel Fix® white EPD", "href": "https://www.environdec.com/library/epd17007"}, {"label": "BERA Gravel Fix® grey EPD", "href": "https://www.environdec.com/library/epd16488"}, {"label": "BERA® Water Fix EPD", "href": "https://environdec.com/library/epd16491"}]}$epd$::jsonb))
+  WHERE key = 'template_company_pages'
+    AND value ? 'sustainability'
+    AND NOT EXISTS (
+      SELECT 1 FROM jsonb_array_elements(value->'sustainability'->'sections') x WHERE x->>'id' = 'epds'
+    );
+END $$;
