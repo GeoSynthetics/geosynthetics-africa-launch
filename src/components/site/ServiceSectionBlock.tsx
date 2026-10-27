@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { CheckCircle2, ChevronDown } from "lucide-react";
 import type { ServiceSection } from "@/data/service-delivery";
 import { MANUFACTURED_PRODUCTS, MANUFACTURING_PROCESS } from "@/data/manufactured-products";
+import { SumpCoverDiagrams } from "./SumpCoverDiagrams";
 
 function SectionShell({
   section,
@@ -181,6 +182,14 @@ export function ServiceSectionBlock({
         <SectionShell section={section} first={first}>
           <Intro text={section.intro} />
           <ManufacturedProducts />
+        </SectionShell>
+      );
+    case "sump-cover-design":
+      return (
+        <SectionShell section={section} first={first}>
+          <Intro text={section.intro} />
+          <SumpCoverDiagrams />
+          {section.bullets && <CheckList items={section.bullets} />}
         </SectionShell>
       );
     case "manufacturing-process":

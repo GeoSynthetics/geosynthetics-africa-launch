@@ -22,7 +22,15 @@ export type ServiceSection =
       rows: { label: string; value: string }[];
     }
   | { id: string; label: string; title: string; kind: "manufactured-products"; intro?: string }
-  | { id: string; label: string; title: string; kind: "manufacturing-process"; intro?: string };
+  | { id: string; label: string; title: string; kind: "manufacturing-process"; intro?: string }
+  | {
+      id: string;
+      label: string;
+      title: string;
+      kind: "sump-cover-design";
+      intro?: string;
+      bullets?: string[];
+    };
 
 export interface ServiceDeliveryProfile {
   title: string;
@@ -224,15 +232,53 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
         ],
       },
       {
+        id: "design",
+        label: "Cover Design",
+        title: "Defined Sump Cover Design",
+        kind: "sump-cover-design",
+        intro:
+          "Most of our floating covers are defined sump covers. Rows of floats and sand-filled ballast tubes, sealed inside the cover membrane, pull the cover taut and form drainage channels (sumps) across its surface. Tension takes up the spare material as the water level rises and falls, so the cover stays tight, is safe to walk on, is easier to keep clean and is far more secure in high wind.",
+        bullets: [
+          "Scrim-reinforced cover membrane, with floats and ballast tubes encapsulated in geomembrane for long exposed life",
+          "Sumps laid out to suit the reservoir: profile trace, double Y or X pattern",
+          "Short floats and ballast tubes (about 0.91 m) on the side slopes so the cover articulates and follows the slope as the level changes",
+          "Long floats (about 2.75 m) and ballast tubes (about 1.83 m) over the flat floor, where the cover only needs to follow a level surface",
+        ],
+      },
+      {
+        id: "rainwater",
+        label: "Rainwater Removal",
+        title: "How Rainwater Leaves the Cover",
+        kind: "steps",
+        steps: [
+          {
+            title: "Collect",
+            text: "Rain runs off the taut cover, drains through the gaps between the segmented floats and collects in the sumps, away from the stored water.",
+          },
+          {
+            title: "Pump",
+            text: "Scavenging pumps sit in the sumps at the sump intersections, held in a buoyant membrane-encapsulated foam collar so they follow the water level.",
+          },
+          {
+            title: "Discharge",
+            text: "When the pump switches on it empties the sump through a discharge hose that runs, with the power cable, along the sump and off the cover.",
+          },
+          {
+            title: "Vent",
+            text: "Floating vents, a floating base under the membrane with a boot and vent riser fitted from above, release air and gas from under the cover.",
+          },
+        ],
+      },
+      {
         id: "fabrication",
         label: "Fabrication",
         title: "What We Fabricate",
         kind: "list",
         intro: "We shop-weld cover panels in our own facility before mobilisation:",
         items: [
-          "Cover panels in rLLDPE, HDPE or the specified membrane, rolled and numbered to the as-built layout",
-          "Ballast pockets and weighted troughs that guide rainwater to the sumps",
-          "Flotation logs, sumps, hatches and inspection ports",
+          "Cover panels in FC45 or FC60 rLLDPE, CSPE, rFPP or the specified membrane, rolled and numbered to the as-built layout",
+          "Float and ballast sleeves that form the defined sumps and guide rainwater to the pumps",
+          "Encapsulated floats and sand-filled ballast tubes, pump and vent bases, hatches and inspection ports",
           "Pipe boots and penetration seals made to each pipe",
         ],
       },

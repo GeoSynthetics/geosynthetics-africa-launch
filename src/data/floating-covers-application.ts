@@ -160,6 +160,7 @@ export const FLOATING_COVERS_TEMPLATE = {
   ],
   designTitle: "Designing Your Floating Cover",
   designParagraphs: [
+    "Most of our covers are defined sump covers: rows of floats and sand-filled ballast tubes, sealed inside the membrane, tension the cover and form sumps that carry rainwater to scavenging pumps. Tensioned covers are safer to walk on, easier to keep clean and far more secure in high wind. We lay the sumps out in a profile trace, double Y or X pattern to suit the reservoir, and use short floats and ballast tubes on the side slopes so the cover follows the slope as the level changes.",
     "We start from the reservoir geometry and the full range of operating water levels. The cover has to fit the reservoir when it is full and when it is drawn down, so we size the slack, the float and ballast pattern and the sump positions for both.",
     "Wind and rainfall set the float and ballast layout and the sump and pump capacity. We use the site's design wind and rainfall to keep the cover stable and to remove rain before it loads the membrane.",
     "The stored liquid sets the material. Drinking water needs NSF/ANSI 61 materials. Process water, effluent and gas-producing ponds need chemical resistance and a sealed perimeter. We recommend FC45, FC60, CSPE or rFPP against your water, exposure and design life, and state the warranty that applies in writing.",
