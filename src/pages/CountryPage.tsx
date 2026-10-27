@@ -110,6 +110,8 @@ export function CountryPage({ data }: { data: any }) {
     );
   }
 
+  const profile = countryProfileFor(template.slug, template.country);
+
   const toggleFaq = (idx: number) => {
     setActiveFaq(activeFaq === idx ? null : idx);
   };
@@ -248,6 +250,126 @@ export function CountryPage({ data }: { data: any }) {
 
       {/* ── 3. DETAILED SHOWCASE SECTIONS ── */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+        {/* ── PRIORITY INDUSTRIES & APPLICATIONS IN THIS COUNTRY ── */}
+        {profile && profile.industries.length > 0 && (
+          <section className="space-y-8">
+            <div className="max-w-3xl space-y-3">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Globe className="h-4 w-4" />
+                What We Do in {template.country}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                Geosynthetics for {template.country}&apos;s Key Industries
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                Supply, installation and QA/QC for the projects that matter most in{" "}
+                {template.country}. Pick your industry to see the systems we build.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {profile.industries.map((industry) => (
+                <div
+                  key={industry.label}
+                  className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-xs"
+                >
+                  <h3 className="font-bold text-foreground">{industry.label}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {industry.summary}
+                  </p>
+                  <ul className="mt-4 space-y-1.5 flex-1">
+                    {industry.applications.map((slug) => (
+                      <li key={slug}>
+                        <Link
+                          to={applicationPath(slug) as any}
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition"
+                        >
+                          <ArrowRight className="h-3.5 w-3.5 text-primary shrink-0" />
+                          {applicationLabel(slug)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  {industry.industrySlug && (
+                    <Link
+                      to="/industries/$slug"
+                      params={{ slug: industry.industrySlug }}
+                      className="mt-4 pt-3 border-t border-border text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                    >
+                      Explore {industry.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── EVERY PRODUCT FAMILY ── */}
+        <section className="space-y-6">
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+              <Package className="h-4 w-4" />
+              Full Product Range
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              Every Product Family, Supplied and Installed in {template.country}
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {PRODUCT_FAMILIES.map((family) => (
+              <Link
+                key={family.slug}
+                to="/products/$category"
+                params={{ category: family.slug }}
+                className="group flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-4 py-3 text-sm font-semibold hover:border-primary hover:text-primary transition"
+              >
+                {family.label}
+                <ArrowRight className="h-4 w-4 text-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ── SITE CONDITIONS & SERVING HUB ── */}
+        {profile && (
+          <section className="grid lg:grid-cols-12 gap-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Wrench className="h-4 w-4" />
+                Site Conditions We Plan For
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
+                Engineering for {template.country}
+              </h2>
+              <ul className="space-y-2.5">
+                {profile.conditions.map((condition) => (
+                  <li
+                    key={condition}
+                    className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{condition}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="lg:col-span-5 flex flex-col justify-center gap-4 rounded-lg border border-border bg-card p-5">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Truck className="h-4 w-4" />
+                Supply & Installation Hub
+              </div>
+              <p className="text-sm text-foreground leading-relaxed">{profile.hub}</p>
+              <Button
+                onClick={() => openQuickQuote()}
+                className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 cursor-pointer"
+              >
+                Contact the Hub
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </section>
+        )}
+
         {/* SECTION A: MATERIAL SUPPLY & LOGISTICS */}
         <section className="grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 space-y-6">

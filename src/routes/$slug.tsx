@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
-import { rankCountryCaseStudies } from "@/lib/country-case-studies";
+import { industryPattern, rankCountryCaseStudies } from "@/lib/country-case-studies";
+import { countryProfileFor } from "@/data/country-profiles";
 import { sectionPathForTopLevelSlug } from "@/lib/section-paths";
 import { resolveSlugToPath, fetchSeoPages } from "@/hooks/use-page-slugs";
 import { lazy, Suspense } from "react";
@@ -146,7 +147,13 @@ export async function loadCountryData(customSlug: string) {
       .eq("status", "published")
       .order("project_year", { ascending: false })
       .limit(200);
-    caseStudies = rankCountryCaseStudies(countryTemplate?.country || "", cData || []);
+    const profile = countryProfileFor(countryTemplate?.slug, countryTemplate?.country);
+    caseStudies = rankCountryCaseStudies(
+      countryTemplate?.country || "",
+      cData || [],
+      3,
+      industryPattern(profile?.industries[0]?.industrySlug),
+    );
   } catch (err) {
     console.error("Error loading case studies for country:", err);
   }
