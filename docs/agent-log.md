@@ -128,3 +128,8 @@
 - Floating Cover Installation service page: "Defined Sump Cover Design" section with our own SVG diagrams (empty/full sections, force detail, profile-trace / double-Y / X sump layouts), float and ballast sizing, and a rainwater-removal sequence (collect, pump, discharge, vent).
 - Application page design text covers defined sumps and layouts.
 - Migration 20261027180000 adds Floating Covers & Evaporation Control to the Applications menu after Reservoir & Dam Lining (applied to live).
+
+## 2026-10-27 — Floating cover blog post, EPDs
+- Blog post `floating-covers-defined-sump-layout` (published via migration 20261027193000): applications table, defined sump explainer with inline SVG diagrams, sump layouts, float/ballast sizing, materials and 30-year warranty table, spec checklist, two quote CTAs. Source HTML in supabase/content/.
+- Blog post page styles tables and figures.
+- Footer: "EPDs" link (Company) and "BERA® EPD Certified" badge. Sustainability page: EPD section with the three BERA EPD registrations (International EPD System), anchor #epds; content pages now render section ids and optional links.

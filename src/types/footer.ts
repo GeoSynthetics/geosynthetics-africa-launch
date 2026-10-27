@@ -66,6 +66,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
     "B-BBEE Level 2",
     "Pan-African Logistics",
     "Documented QA/QC",
+    "BERA® EPD Certified",
   ],
   copyrightText: "© {{year}} Geosynthetics Africa (Pty) Ltd. All Rights Reserved.",
   columns: [
@@ -138,6 +139,7 @@ export const DEFAULT_FOOTER_CONTENT: FooterContent = {
         { label: "Careers", to: "/careers" },
         { label: "Blog", to: "/blog" },
         { label: "Sustainability", to: "/sustainability" },
+        { label: "EPDs", to: "/sustainability#epds" },
         { label: "Privacy Policy", to: "/privacy-policy" },
         { label: "Terms & Conditions", to: "/terms-and-conditions" },
       ],

@@ -83,7 +83,7 @@ export function BlogPostPage() {
         {/* Abstract shapes */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <HexCell opacity={0.30} color="var(--primary)" count={60} />
+        <HexCell opacity={0.3} color="var(--primary)" count={60} />
 
         <div className="container-page max-w-5xl mx-auto px-4 md:px-6 relative z-10">
           <Link
@@ -157,7 +157,11 @@ export function BlogPostPage() {
               [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ul]:text-muted-foreground/90
               [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:text-muted-foreground/90
               [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-5 [&_blockquote]:text-muted-foreground [&_blockquote]:bg-muted/10 [&_blockquote]:py-1 [&_blockquote]:rounded-r
-              [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary-hover [&_a]:font-semibold"
+              [&_a]:text-primary [&_a]:underline [&_a]:hover:text-primary-hover [&_a]:font-semibold
+              [&_table]:w-full [&_table]:my-6 [&_table]:text-sm [&_table]:border-collapse [&_table]:block [&_table]:overflow-x-auto sm:[&_table]:table
+              [&_th]:text-left [&_th]:font-bold [&_th]:text-foreground [&_th]:bg-muted/40 [&_th]:px-3 [&_th]:py-2 [&_th]:border [&_th]:border-border
+              [&_td]:align-top [&_td]:px-3 [&_td]:py-2 [&_td]:border [&_td]:border-border [&_td]:text-muted-foreground
+              [&_figure]:my-8 [&_figcaption]:mt-2 [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground"
           />
 
           {/* Tags */}

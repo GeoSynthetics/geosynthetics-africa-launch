@@ -25,7 +25,10 @@ export function GenericContentPage({ slug, initialTemplate }: GenericContentPage
         <p className="mt-2 text-sm text-muted-foreground">
           The requested page content has not been published yet.
         </p>
-        <Link to="/" className="mt-6 inline-block text-primary text-sm font-semibold hover:underline">
+        <Link
+          to="/"
+          className="mt-6 inline-block text-primary text-sm font-semibold hover:underline"
+        >
           Return to Home
         </Link>
       </div>
@@ -68,6 +71,7 @@ export function GenericContentPage({ slug, initialTemplate }: GenericContentPage
             template.sections.map((section, idx) => (
               <section
                 key={section.id || idx}
+                id={section.id || undefined}
                 className="scroll-mt-24 space-y-6 pb-12 border-b border-border/60 last:border-0 last:pb-0"
               >
                 {section.heading && (
@@ -105,6 +109,22 @@ export function GenericContentPage({ slug, initialTemplate }: GenericContentPage
                           {bullet}
                         </span>
                       </div>
+                    ))}
+                  </div>
+                )}
+
+                {section.links && section.links.length > 0 && (
+                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                    {section.links.map((link) => (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target={/^https?:/.test(link.href) ? "_blank" : undefined}
+                        rel={/^https?:/.test(link.href) ? "noopener noreferrer" : undefined}
+                        className="text-sm font-bold text-primary hover:underline"
+                      >
+                        {link.label} →
+                      </a>
                     ))}
                   </div>
                 )}
