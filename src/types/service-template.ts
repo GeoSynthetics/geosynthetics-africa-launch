@@ -114,7 +114,7 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
           "Zero middleman or broker markups. Direct plant-to-project procurement at guaranteed factory pricing.",
       },
       {
-        title: "SANS 1526 & GRI-GM13 Certified",
+        title: "GRI-GM13 Certified, Meets SANS 1526",
         description:
           "Full resin-to-roll testing certificates (MTRs) provided before container dispatch and vessel departure.",
       },
@@ -242,7 +242,7 @@ export const DEFAULT_SERVICES_TEMPLATES: Record<string, ServiceTemplate> = {
     seo: {
       title: "Pan-African Geosynthetic Material Supply | Geosynthetics Africa",
       description:
-        "Direct-from-manufacturer supply of premium GSE HDPE liners, Bidim geotextiles, and GCL systems across Africa. SANS 1526 & GRI-GM13 certified.",
+        "Direct-from-manufacturer supply of premium GSE HDPE liners, Bidim geotextiles, and GCL systems across Africa. GRI-GM13 certified and meeting SANS 1526.",
       keywords:
         "geosynthetics supply Africa, HDPE liner supplier, geotextile distributor, GCL supplier, mining containment supply",
     },

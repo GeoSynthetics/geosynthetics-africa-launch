@@ -203,6 +203,196 @@
       "source": "/products-we-supply",
       "destination": "/catalogue",
       "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes",
+      "destination": "/products/geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/",
+      "destination": "/products/geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/hdpe-geomembranes",
+      "destination": "/products/geomembrane-liners/hdpe-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/hdpe-geomembranes/",
+      "destination": "/products/geomembrane-liners/hdpe-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/lldpe-geomembranes",
+      "destination": "/products/geomembrane-liners/lldpe-geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/lldpe-geomembranes/",
+      "destination": "/products/geomembrane-liners/lldpe-geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/pvc-geomembranes",
+      "destination": "/products/geomembrane-liners/pvc-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/pvc-geomembranes/",
+      "destination": "/products/geomembrane-liners/pvc-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/epdm-geomembranes",
+      "destination": "/products/geomembrane-liners/epdm-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/epdm-geomembranes/",
+      "destination": "/products/geomembrane-liners/epdm-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/pp-geomembranes",
+      "destination": "/products/geomembrane-liners/fpp-geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/pp-geomembranes/",
+      "destination": "/products/geomembrane-liners/fpp-geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/textured-geomembranes",
+      "destination": "/products/geomembrane-liners/hdpe-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/textured-geomembranes/",
+      "destination": "/products/geomembrane-liners/hdpe-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/speciality-geomembranes",
+      "destination": "/products/geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembranes/speciality-geomembranes/",
+      "destination": "/products/geomembrane-liners",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles",
+      "destination": "/products/geotextile-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/",
+      "destination": "/products/geotextile-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/non-woven-geotextiles",
+      "destination": "/products/geotextile-fabrics/polypropylene-non-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/non-woven-geotextiles/",
+      "destination": "/products/geotextile-fabrics/polypropylene-non-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/woven-geotextiles",
+      "destination": "/products/geotextile-fabrics/polypropylene-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/woven-geotextiles/",
+      "destination": "/products/geotextile-fabrics/polypropylene-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/high-strength-geotextiles",
+      "destination": "/products/geotextile-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/high-strength-geotextiles/",
+      "destination": "/products/geotextile-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/geotextile-tubes",
+      "destination": "/products/dewatering-systems/geotube-dewatering-systems",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/geotextile-tubes/",
+      "destination": "/products/dewatering-systems/geotube-dewatering-systems",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/paving-fabrics",
+      "destination": "/products/geogrids-interlayers/paving-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/paving-fabrics/",
+      "destination": "/products/geogrids-interlayers/paving-fabrics",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/filtration-geotextiles",
+      "destination": "/products/geotextile-fabrics/polypropylene-non-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geotextiles/filtration-geotextiles/",
+      "destination": "/products/geotextile-fabrics/polypropylene-non-woven-geotextiles",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/construction-infrastructure",
+      "destination": "/industries/transport-infrastructure",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/construction-infrastructure/",
+      "destination": "/industries/transport-infrastructure",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/mining",
+      "destination": "/industries/mining-minerals-processing",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/mining/",
+      "destination": "/industries/mining-minerals-processing",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/environmental-waste",
+      "destination": "/industries/waste-management-landfills",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/environmental-waste/",
+      "destination": "/industries/waste-management-landfills",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/water-management",
+      "destination": "/industries/water-utilities-irrigation",
+      "statusCode": 301
+    },
+    {
+      "source": "/industries/water-management/",
+      "destination": "/industries/water-utilities-irrigation",
+      "statusCode": 301
     }
   ],
   "headers": [

@@ -1,9 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
+import { ENQUIRY_EMAIL } from "@/lib/business-info";
+import {
+  EMAIL_REGEX,
+  PHONE_PLACEHOLDER_DOMAIN,
+  parseContactInput as parseContact,
+} from "@/lib/contact-input";
 import { sendHeroProjectEmailFn } from "@/lib/email";
-import { resolveRegionalRouting, SOUTH_AFRICA_CONTACT } from "@/types/regionalCoverage";
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_PLACEHOLDER_DOMAIN = "@phone-inquiry.invalid";
+import { resolveRegionalRouting } from "@/types/regionalCoverage";
 
 export interface HeroProjectSubmission {
   need: string;
@@ -27,36 +30,6 @@ export interface HeroSubmissionResult {
 }
 
 /**
- * Parses user contact input to identify whether it is an email, phone, or both.
- */
-function parseContact(contactInput: string): { email: string; phone: string | null } {
-  const trimmed = contactInput.trim();
-
-  if (EMAIL_REGEX.test(trimmed)) {
-    return { email: trimmed, phone: null };
-  }
-
-  // If contains digits and phone format
-  const isLikelyPhone = /^[\d\s+\-()]{6,}$/.test(trimmed);
-  if (isLikelyPhone) {
-    return {
-      email: `${trimmed.replace(/[^\d+]/g, "")}${PHONE_PLACEHOLDER_DOMAIN}`,
-      phone: trimmed,
-    };
-  }
-
-  // If user typed both email and phone or name
-  const matchEmail = trimmed.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-  if (matchEmail) {
-    const email = matchEmail[0];
-    const phone = trimmed.replace(email, "").trim() || null;
-    return { email, phone };
-  }
-
-  return { email: trimmed, phone: null };
-}
-
-/**
  * Handles the complete lifecycle of a Hero Project Request submission:
  * 1. Resolves dynamic regional routing (West Africa -> Mamadou Coulibaly; SA -> South Africa Desk).
  * 2. Uploads any attached BOQ/drawings to Supabase Storage.
@@ -70,9 +43,6 @@ export async function submitHeroProjectRequest(
 
   if (!need.trim()) {
     throw new Error("Please describe what you need for your project.");
-  }
-  if (!region.trim()) {
-    throw new Error("Please select your project region or country.");
   }
   if (!contact.trim()) {
     throw new Error("Please provide your email or phone number.");
@@ -107,8 +77,8 @@ export async function submitHeroProjectRequest(
   }
 
   // 3. Save into Supabase `quote_requests` table
-  // All requests go to the sales mailbox for now; the region is kept for reference.
-  const routingDescriptionTag = `[ROUTED TO: Sales (${SOUTH_AFRICA_CONTACT.email})]`;
+  // All requests go to the enquiries mailbox; the region is kept for reference.
+  const routingDescriptionTag = `[ROUTED TO: Enquiries (${ENQUIRY_EMAIL})]`;
 
   const fullDescription = `${need.trim()}\n\n${routingDescriptionTag}\n[region: ${region}]\n[contact: ${contact.trim()}]${
     uploadedFilePath ? `\n\n[attachments]\n${uploadedFilePath}` : ""
@@ -201,7 +171,7 @@ export async function submitHeroProjectRequest(
 
   if (lastError && !notified) {
     throw new Error(
-      "We couldn't send your request. Please try again or email sales@geosyntheticsafrica.com.",
+      "We couldn't send your request. Please try again or email info@geosyntheticsafrica.com.",
     );
   }
 

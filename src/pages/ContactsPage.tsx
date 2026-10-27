@@ -1,4 +1,6 @@
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
+import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
+import { isValidContactInput, parseContactInput } from "@/lib/contact-input";
 import { useRef, useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -94,20 +96,23 @@ const RESOURCE_STRIP = [
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_EXT = [".pdf", ".xls", ".xlsx", ".csv", ".dwg", ".dxf", ".doc", ".docx", ".zip"];
 
+const contactField = z
+  .string()
+  .trim()
+  .max(160)
+  .refine(isValidContactInput, "Enter an email address or phone number");
+
 const boqSchema = z.object({
-  name: z.string().trim().min(2, "Full name required").max(120),
-  company: z.string().trim().max(160).optional(),
-  email: z.string().trim().email("Enter a valid email").max(255),
-  phone: z.string().trim().max(40).optional(),
-  country: z.string().trim().max(120).optional(),
-  message: z.string().trim().min(10, "Tell us a bit more about your project").max(2000),
+  name: z.string().trim().min(2, "Your name").max(120),
+  contact: contactField,
+  zone: z.string().trim().max(40).optional(),
+  message: z.string().trim().min(2, "Tell us what you need").max(2000),
 });
 
 const quickSchema = z.object({
-  name: z.string().trim().min(2, "Full name required").max(120),
-  email: z.string().trim().email("Enter a valid email").max(255),
-  phone: z.string().trim().max(40).optional(),
-  message: z.string().trim().min(5, "How can we help?").max(2000),
+  name: z.string().trim().min(2, "Your name").max(120),
+  contact: contactField,
+  message: z.string().trim().min(2, "How can we help?").max(2000),
 });
 
 // Static constants REGIONAL_LOCATIONS and REGIONAL_DETAILS are replaced by database configuration.
@@ -686,16 +691,10 @@ function MapAndCoverage({
                     {activeLoc.services}
                   </div>
                   <a
-                    href={`tel:${(activeLoc.phone || "").replace(/\s+/g, "")}`}
+                    href="#boq-form"
                     className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1"
                   >
-                    <Phone className="h-3 w-3 shrink-0" /> {activeLoc.phone}
-                  </a>
-                  <a
-                    href={`mailto:${activeLoc.email}`}
-                    className="flex items-center gap-1.5 text-primary hover:underline font-medium break-all"
-                  >
-                    <Mail className="h-3 w-3 shrink-0" /> {activeLoc.email}
+                    <Mail className="h-3 w-3 shrink-0" /> Contact the {activeLoc.country} hub
                   </a>
                 </div>
               </div>
@@ -851,10 +850,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     resolver: zodResolver(boqSchema),
     defaultValues: {
       name: "",
-      company: "",
-      email: user?.email ?? "",
-      phone: "",
-      country: "",
+      contact: user?.email ?? "",
+      zone: "",
       message: "",
     },
   });
@@ -863,19 +860,18 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
     resolver: zodResolver(quickSchema),
     defaultValues: {
       name: "",
-      email: user?.email ?? "",
-      phone: "",
+      contact: user?.email ?? "",
       message: "",
     },
   });
 
   useEffect(() => {
     if (user?.email) {
-      if (!boqForm.getValues("email")) {
-        boqForm.setValue("email", user.email);
+      if (!boqForm.getValues("contact")) {
+        boqForm.setValue("contact", user.email);
       }
-      if (!quickForm.getValues("email")) {
-        quickForm.setValue("email", user.email);
+      if (!quickForm.getValues("contact")) {
+        quickForm.setValue("contact", user.email);
       }
     }
   }, [user?.email, boqForm, quickForm]);
@@ -904,6 +900,7 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const onBoqSubmit = async (values: BoqValues) => {
     setBoqSubmitting(true);
+    const boqContact = parseContactInput(values.contact);
     try {
       const ownerKey = user?.id ?? "anonymous";
       const uploadedPaths: string[] = [];
@@ -918,16 +915,19 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
         uploadedPaths.push(path);
       }
 
-      const messageWithMeta =
-        `${values.message}` +
-        (values.country ? `${values.country}` : "") +
-        (uploadedPaths.length ? `${uploadedPaths.join("\n")}` : "");
+      const messageWithMeta = [
+        values.message,
+        formatEnquiryMeta({ zone: values.zone }),
+        uploadedPaths.length ? `[attachments]\n${uploadedPaths.join("\n")}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
 
       const { error: insertErr } = await supabase.from("quote_requests").insert({
         contact_name: values.name,
-        contact_email: values.email,
-        contact_phone: values.phone ?? null,
-        company: values.company ?? null,
+        contact_email: boqContact.email,
+        contact_phone: boqContact.phone,
+        company: null,
         project_description: messageWithMeta,
         boq_file_path: uploadedPaths[0] ?? null,
         user_id: user?.id ?? null,
@@ -939,10 +939,9 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       void sendQuoteEmailFn({
         data: {
           contactName: values.name,
-          contactEmail: values.email,
-          contactPhone: values.phone ?? undefined,
-          company: values.company ?? undefined,
-          country: values.country ?? undefined,
+          contactEmail: boqContact.email,
+          contactPhone: boqContact.phone ?? undefined,
+          country: values.zone || undefined,
           projectDescription: messageWithMeta,
         },
       }).catch((err) => console.warn("[Email Trigger Error]:", err));
@@ -950,10 +949,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
       boqForm.reset({
         name: "",
-        company: "",
-        email: user?.email ?? "",
-        phone: "",
-        country: "",
+        contact: user?.email ?? "",
+        zone: "",
         message: "",
       });
       setFiles([]);
@@ -966,13 +963,14 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
 
   const onQuickSubmit = async (values: QuickValues) => {
     setQuickSubmitting(true);
+    const quickContact = parseContactInput(values.contact);
     try {
       const { error } = await supabase.from("quote_requests").insert({
         contact_name: values.name,
-        contact_email: values.email,
-        contact_phone: values.phone ?? null,
+        contact_email: quickContact.email,
+        contact_phone: quickContact.phone,
         company: null,
-        project_description: `${values.message}`,
+        project_description: values.message,
         boq_file_path: null,
         user_id: user?.id ?? null,
         status: "new",
@@ -983,17 +981,16 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       void sendContactEmailFn({
         data: {
           contactName: values.name,
-          contactEmail: values.email,
-          contactPhone: values.phone ?? undefined,
-          message: `${values.message}`,
+          contactEmail: quickContact.email,
+          contactPhone: quickContact.phone ?? undefined,
+          message: values.message,
         },
       }).catch((err) => console.warn("[Email Trigger Error]:", err));
 
       toast.success("Inquiry sent — thank you!");
       quickForm.reset({
         name: "",
-        email: user?.email ?? "",
-        phone: "",
+        contact: user?.email ?? "",
         message: "",
       });
     } catch (err) {
@@ -1077,10 +1074,10 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                           render={({ field }) => (
                             <FormItem className="space-y-1">
                               <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                                Full Name <span className="text-primary">*</span>
+                                Name <span className="text-primary">*</span>
                               </FormLabel>
                               <FormControl>
-                                <Input maxLength={120} {...field} />
+                                <Input maxLength={120} autoComplete="name" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1088,46 +1085,19 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                         />
                         <FormField
                           control={boqForm.control}
-                          name="company"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1">
-                              <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                                Company
-                              </FormLabel>
-                              <FormControl>
-                                <Input maxLength={160} {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <FormField
-                          control={boqForm.control}
-                          name="email"
+                          name="contact"
                           render={({ field }) => (
                             <FormItem className="space-y-1">
                               <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                                Email <span className="text-primary">*</span>
+                                Email or Phone <span className="text-primary">*</span>
                               </FormLabel>
                               <FormControl>
-                                <Input type="email" maxLength={255} {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={boqForm.control}
-                          name="phone"
-                          render={({ field }) => (
-                            <FormItem className="space-y-1">
-                              <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                                Phone <span className="text-primary">*</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Input type="tel" maxLength={40} {...field} />
+                                <Input
+                                  maxLength={160}
+                                  autoComplete="email"
+                                  placeholder="you@company.com or +27 …"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -1136,14 +1106,24 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                       </div>
                       <FormField
                         control={boqForm.control}
-                        name="country"
+                        name="zone"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                              Project Location / Country
+                            <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
+                              Project Zone
                             </FormLabel>
                             <FormControl>
-                              <Input maxLength={120} placeholder="Select country" {...field} />
+                              <select
+                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                {...field}
+                              >
+                                <option value="">Select zone (optional)</option>
+                                {PROJECT_ZONES.map((opt) => (
+                                  <option key={opt} value={opt}>
+                                    {opt}
+                                  </option>
+                                ))}
+                              </select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1155,13 +1135,13 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                         render={({ field }) => (
                           <FormItem className="space-y-1">
                             <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                              Message / Project Description
+                              What do you need? <span className="text-primary">*</span>
                             </FormLabel>
                             <FormControl>
                               <Textarea
                                 rows={3}
                                 maxLength={2000}
-                                placeholder="Tell us about your project..."
+                                placeholder="e.g. 20,000 m² 1.5 mm HDPE, supply and install, Kolwezi"
                                 {...field}
                               />
                             </FormControl>
@@ -1244,10 +1224,10 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                         render={({ field }) => (
                           <FormItem className="space-y-1">
                             <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                              Full Name <span className="text-primary">*</span>
+                              Name <span className="text-primary">*</span>
                             </FormLabel>
                             <FormControl>
-                              <Input maxLength={120} {...field} />
+                              <Input maxLength={120} autoComplete="name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1255,29 +1235,19 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
                       />
                       <FormField
                         control={quickForm.control}
-                        name="email"
+                        name="contact"
                         render={({ field }) => (
                           <FormItem className="space-y-1">
                             <FormLabel className="text-xs font-semibold uppercase tracking-wide flex items-center gap-0.5 text-muted-foreground">
-                              Email <span className="text-primary">*</span>
+                              Email or Phone <span className="text-primary">*</span>
                             </FormLabel>
                             <FormControl>
-                              <Input type="email" maxLength={255} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={quickForm.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem className="space-y-1">
-                            <FormLabel className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                              Phone
-                            </FormLabel>
-                            <FormControl>
-                              <Input type="tel" maxLength={40} {...field} />
+                              <Input
+                                maxLength={160}
+                                autoComplete="email"
+                                placeholder="you@company.com or +27 …"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

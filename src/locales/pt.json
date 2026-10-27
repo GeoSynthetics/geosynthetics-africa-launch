@@ -55,7 +55,12 @@
     "submit": "Enviar Solicitação de Orçamento",
     "submitting": "Enviando...",
     "success": "Solicitação de orçamento enviada com sucesso!",
-    "error": "Erro ao enviar a solicitação. Por favor, tente novamente."
+    "error": "Erro ao enviar a solicitação. Por favor, tente novamente.",
+    "projectZone": "Zona do projeto",
+    "selectZone": "Selecione a zona (opcional)",
+    "contact": "E-mail ou telefone",
+    "needLabel": "Do que precisa?",
+    "needPlaceholder": "ex. 20 000 m² de PEAD 1,5 mm, fornecimento e instalação, Tete"
   },
   "common": {
     "home": "Início",

@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import { rankCountryCaseStudies } from "@/lib/country-case-studies";
 import { sectionPathForTopLevelSlug } from "@/lib/section-paths";
 import { resolveSlugToPath, fetchSeoPages } from "@/hooks/use-page-slugs";
 import { lazy, Suspense } from "react";
@@ -135,29 +136,17 @@ export async function loadCountryData(customSlug: string) {
     ];
   }
 
-  // Fetch featured case studies
+  // Featured case studies: this country first, then the same zone, then other
+  // infrastructure projects (never unrelated residential jobs).
   let caseStudies: any[] = [];
   try {
-    const countryName = countryTemplate?.country || "";
-    if (countryName) {
-      const { data: cData } = await supabase
-        .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url")
-        .eq("status", "published")
-        .ilike("country", `%${countryName}%`)
-        .limit(3);
-      caseStudies = cData || [];
-    }
-
-    if (caseStudies.length === 0) {
-      const { data: fallbackData } = await supabase
-        .from("case_studies")
-        .select("id, title, slug, summary, location, country, hero_image_url")
-        .eq("status", "published")
-        .order("project_year", { ascending: false })
-        .limit(3);
-      caseStudies = fallbackData || [];
-    }
+    const { data: cData } = await supabase
+      .from("case_studies")
+      .select("id, title, slug, summary, location, country, hero_image_url, sector, project_year")
+      .eq("status", "published")
+      .order("project_year", { ascending: false })
+      .limit(200);
+    caseStudies = rankCountryCaseStudies(countryTemplate?.country || "", cData || []);
   } catch (err) {
     console.error("Error loading case studies for country:", err);
   }

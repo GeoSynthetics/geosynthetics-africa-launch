@@ -1607,10 +1607,10 @@ function generateParentCategoryFallback(slug: string): ProductPageContent {
       },
     ],
     industries: [
-      { label: "Construction & Infrastructure", slug: "construction-infrastructure" },
-      { label: "Mining", slug: "mining" },
-      { label: "Environmental & Waste", slug: "environmental-waste" },
-      { label: "Water Management", slug: "water-management" },
+      { label: "Transport & Infrastructure", slug: "transport-infrastructure" },
+      { label: "Mining & Minerals Processing", slug: "mining-minerals-processing" },
+      { label: "Waste Management & Landfills", slug: "waste-management-landfills" },
+      { label: "Water Utilities & Irrigation", slug: "water-utilities-irrigation" },
       { label: "Agriculture & Aquaculture", slug: "agriculture-aquaculture" },
     ],
   };

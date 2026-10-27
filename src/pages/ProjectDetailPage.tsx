@@ -1255,8 +1255,8 @@ export function ProjectDetailPage() {
                       supply &amp; install
                     </div>
                     <div className="flex items-center gap-2 py-1.5 text-xs text-white/80 border-b border-white/5 last:border-0">
-                      <span className="w-1.5 h-1.5 bg-primary rounded-full" /> SANS 1526 approved
-                      wedge welding
+                      <span className="w-1.5 h-1.5 bg-primary rounded-full" /> Meets SANS 1526 wedge
+                      welding
                     </div>
                     <div className="flex items-center gap-2 py-1.5 text-xs text-white/80 border-b border-white/5 last:border-0">
                       <span className="w-1.5 h-1.5 bg-primary rounded-full" /> Certified IAGI

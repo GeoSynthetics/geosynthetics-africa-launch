@@ -1,5 +1,17 @@
 # Agent Log
 
+## 2026-10-27 17:10 (UTC+2)
+
+- **Feature**: Minimal enquiry forms, CSPE page content, SANS wording
+- **Problem**: Forms asked for company, separate email and phone, country, scope and language before a buyer could start a conversation; the CSPE URL showed rFPP content; GSE liners were described as "SANS 1526 certified" when they meet SANS 1526.
+- **Solution**: Contacts BOQ form, quick contact and the quick-quote modal now ask only for name, one "email or phone" field (`src/lib/contact-input.ts`), an optional zone and what the buyer needs; the hero zone is optional. Phone-only enquiries skip the customer confirmation email instead of mailing a placeholder address. The content migration replaces the CSPE page with CS60/CS90 content from the mill's published data and rewrites "SANS 1526 certified/approved" as "SANS 1526 compliant" in CMS text and products; code defaults updated to match. Migration verified twice against a local Postgres 16 with fixture rows.
+
+## 2026-10-27 16:10 (UTC+2)
+
+- **Feature**: Site audit week-one fixes: enquiry zones, relevant country projects, Tensar accuracy, Burkina Faso customs
+- **Problem**: Forms used a short country list and a Central Africa region instead of the five zones the business uses; country pages fell back to the three latest projects (a Cape Town driveway appeared on mining-country pages); the country CTA said "SADC" on non-SADC pages and every hub address opened the Cape Town map; older CMS templates linked to retired product and industry URLs; CMS text on the Tensar TriAx/InterAx pages contradicted Tensar documents (stiffness-ratio meaning, 0.5% stiffness range, "butt-jointed, no overlap" where Tensar requires 300 mm minimum overlap); Burkina Faso was described as an ECOWAS member after its 29 January 2025 exit.
+- **Solution**: Added `src/lib/project-zones.ts` (Southern, East, West, North Africa, Other; scope and language options; country → zone map) and used it in the hero form, quick-quote modal and both contacts forms (enquiry meta now stored as labelled lines). Added `rankCountryCaseStudies` (country, then same zone, then other infrastructure; residential only on its own country page) in the country loader, with an honest section heading. CTA reads "Request Supply & Freight Quote"; hub map links search the hub's own address. Legacy `/products/geomembranes/*`, `/products/geotextiles/*` and retired industry slugs now 301 and are canonicalised in links. CMS text fixes ship as `supabase/migrations/20261027120000_site_audit_content_fixes.sql` (backup + exact replacements; apply in the Supabase SQL editor). Manufacturer product names and codes are unchanged.
+
 ## 2026-10-18 12:00 (UTC+1)
 
 - **Feature**: AI / search visibility: crawlable FAQs, richer schema, llms.txt, IndexNow

@@ -63,8 +63,9 @@ describe("HeroProjectForm Component", () => {
     expect(screen.getByRole("option", { name: "Southern Africa" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "West Africa" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "East Africa" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Central Africa" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "North Africa" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Other" })).toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: "Central Africa" })).not.toBeInTheDocument();
 
     fireEvent.change(regionSelect, { target: { value: "Southern Africa" } });
     expect(regionSelect.value).toBe("Southern Africa");

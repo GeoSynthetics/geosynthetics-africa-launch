@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Wrench,
   MapPin,
-  Phone,
   Mail,
   CheckCircle2,
   ChevronDown,
@@ -41,6 +40,14 @@ export function CountryPage({ data }: { data: any }) {
     [rawTemplate],
   );
   const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
+  const hasLocalProject = Boolean(
+    template?.country &&
+      caseStudies.some((cs: any) =>
+        String(cs?.country || "")
+          .toLowerCase()
+          .includes(template.country.toLowerCase()),
+      ),
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -138,18 +145,17 @@ export function CountryPage({ data }: { data: any }) {
                 onClick={() => openQuickQuote()}
                 className="bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-lg cursor-pointer"
               >
-                Request SADC / Freight Quote
+                Request Supply & Freight Quote
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              {template.phone && (
-                <a
-                  href={`tel:${template.phone.replace(/\s+/g, "")}`}
-                  className="inline-flex items-center justify-center rounded-md border border-surface-dark-foreground/30 px-5 py-3 text-sm font-semibold text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition"
-                >
-                  <Phone className="mr-2 h-4 w-4 text-primary" />
-                  Call {template.hubName || template.country} Hub
-                </a>
-              )}
+              <button
+                type="button"
+                onClick={() => openQuickQuote()}
+                className="inline-flex items-center justify-center rounded-md border border-surface-dark-foreground/30 px-5 py-3 text-sm font-semibold text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition cursor-pointer"
+              >
+                <Mail className="mr-2 h-4 w-4 text-primary" />
+                Contact {template.hubName || `${template.country} Hub`}
+              </button>
             </div>
           </div>
         </div>
@@ -493,11 +499,14 @@ export function CountryPage({ data }: { data: any }) {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                  Featured Projects & Case Studies in {template.country}
+                  {hasLocalProject
+                    ? `Projects & Case Studies in ${template.country}`
+                    : `Related Projects Near ${template.country}`}
                 </h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Proven containment, tailings dam, and infrastructure installations across Southern
-                  and Pan-Africa.
+                  {hasLocalProject
+                    ? `Supply, installation and QA/QC work delivered in ${template.country} and the wider region.`
+                    : `Comparable supply, installation and QA/QC work from the same region and industries.`}
                 </p>
               </div>
               <Link
@@ -574,32 +583,15 @@ export function CountryPage({ data }: { data: any }) {
                   <div className="flex items-start gap-3">
                     <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     <a
-                      href="https://maps.app.goo.gl/dWqBYitmU8ziMmDd8"
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        template.address,
+                      )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="hover:text-primary transition-colors cursor-pointer"
                       title="Open location in Google Maps"
                     >
                       {template.address}
-                    </a>
-                  </div>
-                )}
-                {template.phone && (
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-primary shrink-0" />
-                    <a
-                      href={`tel:${template.phone.replace(/\s+/g, "")}`}
-                      className="hover:text-primary transition"
-                    >
-                      {template.phone}
-                    </a>
-                  </div>
-                )}
-                {template.email && (
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-primary shrink-0" />
-                    <a href={`mailto:${template.email}`} className="hover:text-primary transition">
-                      {template.email}
                     </a>
                   </div>
                 )}

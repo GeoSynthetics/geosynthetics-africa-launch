@@ -55,8 +55,8 @@ describe("FormsBlock Component (React Hook Form)", () => {
     const quickContactAside = screen.getByText("Quick Contact").closest("aside")!;
     expect(quickContactAside).toBeInTheDocument();
 
-    const nameInput = within(quickContactAside).getByLabelText(/Full Name/i);
-    const emailInput = within(quickContactAside).getByLabelText(/Email/i);
+    const nameInput = within(quickContactAside).getByLabelText(/^Name/i);
+    const emailInput = within(quickContactAside).getByLabelText(/Email or Phone/i);
     const messageInput = within(quickContactAside).getByLabelText(/Message/i);
 
     fireEvent.change(nameInput, { target: { value: "John Doe" } });

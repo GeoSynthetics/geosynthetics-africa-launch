@@ -103,7 +103,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       },
       {
         title: "Resin-to-Roll Quality Assurance",
-        description: "Full Manufacturer Quality Control (MQC) documentation certified to SANS 1526 and ASTM standards.",
+        description: "Full Manufacturer Quality Control (MQC) documentation against SANS 1526 and ASTM standards.",
       },
       {
         title: "Custom Roll Cutting & Fabrication",
