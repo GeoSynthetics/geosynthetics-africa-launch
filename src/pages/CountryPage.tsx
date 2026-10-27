@@ -27,6 +27,29 @@ import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 import type { CountryTemplate } from "@/types/country-template";
 import { useCountryTemplate } from "@/hooks/use-country-templates";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
+import { countryProfileFor } from "@/data/country-profiles";
+import { PRODUCT_FAMILIES } from "@/lib/product-families";
+import { applicationPath } from "@/data/material-selection";
+import { APPLICATION_DIRECTORY } from "@/data/application-directory";
+
+/** Our own site photos, used wherever a country page would show a stock image. */
+const OWN_PHOTOS = {
+  hero: "/api/storage/media-center/Geosynthetics_Africa_Installtion_-_TSF_HDPE_Lining_Project_West_Africa_04928623-815e-43cc-8bdc-949985b70f28.webp",
+  installation:
+    "/api/storage/media-center/Geosynthetics_Africa_-_TSF_HDPE_Liner_Installtion_Gold_Mine_West_Africa_c304ffa8-7262-4403-9e3d-4772e986fa80.webp",
+  project:
+    "/api/storage/media-center/GSE-HDPE-LINER-SUPPLY-TO-TANZANIA-GEOSYNTHETICS-AFRICA-GEOMEMBRANES_7d14427f-3dab-4433-b992-090e9594f3c6.webp",
+};
+
+/** Replaces stock-library images (stored in older CMS entries) with our own photos. */
+function ownPhoto(url: string | null | undefined, fallback: string): string {
+  if (!url || /images\.unsplash\.com|unsplash\.com\/photo/i.test(url)) return fallback;
+  return url;
+}
+
+function applicationLabel(slug: string): string {
+  return APPLICATION_DIRECTORY.find((app) => app.slug === slug)?.label || slug;
+}
 
 export function CountryPage({ data }: { data: any }) {
   const {
@@ -42,11 +65,11 @@ export function CountryPage({ data }: { data: any }) {
   const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
   const hasLocalProject = Boolean(
     template?.country &&
-      caseStudies.some((cs: any) =>
-        String(cs?.country || "")
-          .toLowerCase()
-          .includes(template.country.toLowerCase()),
-      ),
+    caseStudies.some((cs: any) =>
+      String(cs?.country || "")
+        .toLowerCase()
+        .includes(template.country.toLowerCase()),
+    ),
   );
 
   useEffect(() => {
@@ -87,6 +110,8 @@ export function CountryPage({ data }: { data: any }) {
     );
   }
 
+  const profile = countryProfileFor(template.slug, template.country);
+
   const toggleFaq = (idx: number) => {
     setActiveFaq(activeFaq === idx ? null : idx);
   };
@@ -98,7 +123,7 @@ export function CountryPage({ data }: { data: any }) {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src={productImage(template.heroImage)}
+            src={ownPhoto(productImage(template.heroImage), OWN_PHOTOS.hero)}
             alt={`${template.country} Geosynthetics Supply`}
             className="w-full h-full object-cover object-center opacity-25"
           />
@@ -225,6 +250,126 @@ export function CountryPage({ data }: { data: any }) {
 
       {/* ── 3. DETAILED SHOWCASE SECTIONS ── */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+        {/* ── PRIORITY INDUSTRIES & APPLICATIONS IN THIS COUNTRY ── */}
+        {profile && profile.industries.length > 0 && (
+          <section className="space-y-8">
+            <div className="max-w-3xl space-y-3">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Globe className="h-4 w-4" />
+                What We Do in {template.country}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                Geosynthetics for {template.country}&apos;s Key Industries
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                Supply, installation and QA/QC for the projects that matter most in{" "}
+                {template.country}. Pick your industry to see the systems we build.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {profile.industries.map((industry) => (
+                <div
+                  key={industry.label}
+                  className="flex flex-col rounded-xl border border-border bg-card p-5 shadow-xs"
+                >
+                  <h3 className="font-bold text-foreground">{industry.label}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {industry.summary}
+                  </p>
+                  <ul className="mt-4 space-y-1.5 flex-1">
+                    {industry.applications.map((slug) => (
+                      <li key={slug}>
+                        <Link
+                          to={applicationPath(slug) as any}
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary transition"
+                        >
+                          <ArrowRight className="h-3.5 w-3.5 text-primary shrink-0" />
+                          {applicationLabel(slug)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  {industry.industrySlug && (
+                    <Link
+                      to="/industries/$slug"
+                      params={{ slug: industry.industrySlug }}
+                      className="mt-4 pt-3 border-t border-border text-xs font-bold uppercase tracking-wider text-primary hover:underline"
+                    >
+                      Explore {industry.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── EVERY PRODUCT FAMILY ── */}
+        <section className="space-y-6">
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+              <Package className="h-4 w-4" />
+              Full Product Range
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              Every Product Family, Supplied and Installed in {template.country}
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {PRODUCT_FAMILIES.map((family) => (
+              <Link
+                key={family.slug}
+                to="/products/$category"
+                params={{ category: family.slug }}
+                className="group flex items-center justify-between gap-2 rounded-lg border border-border bg-surface px-4 py-3 text-sm font-semibold hover:border-primary hover:text-primary transition"
+              >
+                {family.label}
+                <ArrowRight className="h-4 w-4 text-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ── SITE CONDITIONS & SERVING HUB ── */}
+        {profile && (
+          <section className="grid lg:grid-cols-12 gap-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Wrench className="h-4 w-4" />
+                Site Conditions We Plan For
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
+                Engineering for {template.country}
+              </h2>
+              <ul className="space-y-2.5">
+                {profile.conditions.map((condition) => (
+                  <li
+                    key={condition}
+                    className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{condition}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="lg:col-span-5 flex flex-col justify-center gap-4 rounded-lg border border-border bg-card p-5">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Truck className="h-4 w-4" />
+                Supply & Installation Hub
+              </div>
+              <p className="text-sm text-foreground leading-relaxed">{profile.hub}</p>
+              <Button
+                onClick={() => openQuickQuote()}
+                className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 cursor-pointer"
+              >
+                Contact the Hub
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </section>
+        )}
+
         {/* SECTION A: MATERIAL SUPPLY & LOGISTICS */}
         <section className="grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 space-y-6">
@@ -281,7 +426,10 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src={productImage(template.supplyImage) || "/images/geotextile-product-supply.webp"}
+                src={ownPhoto(
+                  productImage(template.supplyImage),
+                  "/images/geotextile-product-supply.webp",
+                )}
                 alt={template.supplyCardTitle || "Geotextile material supply"}
                 className="w-full h-72 object-cover"
               />
@@ -303,10 +451,7 @@ export function CountryPage({ data }: { data: any }) {
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card">
               <img
-                src={
-                  template.installationImage ||
-                  "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80"
-                }
+                src={ownPhoto(template.installationImage, OWN_PHOTOS.installation)}
                 alt={template.installationCardTitle || "Geomembrane Field Welding"}
                 className="w-full h-72 object-cover"
               />
@@ -457,12 +602,10 @@ export function CountryPage({ data }: { data: any }) {
                 >
                   <div className="h-44 overflow-hidden bg-muted relative">
                     <img
-                      src={
-                        prod.image_url ||
-                        prod.image ||
-                        prod.hero_image_url ||
-                        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80"
-                      }
+                      src={ownPhoto(
+                        prod.image_url || prod.image || prod.hero_image_url,
+                        OWN_PHOTOS.project,
+                      )}
                       alt={prod.name || prod.label}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -527,10 +670,7 @@ export function CountryPage({ data }: { data: any }) {
                 >
                   <div className="h-48 overflow-hidden bg-muted relative">
                     <img
-                      src={
-                        study.hero_image_url ||
-                        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80"
-                      }
+                      src={ownPhoto(study.hero_image_url, OWN_PHOTOS.project)}
                       alt={study.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />

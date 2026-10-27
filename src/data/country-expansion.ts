@@ -1161,7 +1161,7 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
     supplyTitle: "Delivery to Burkina Faso via Abidjan",
     supplyDescription:
-      "Materials are routed through Abidjan, Tema or Lomé ports, then road inland and delivered to site with full shipping and clearance documentation.",
+      "Materials are cleared through our Abidjan hub at the Port of Abidjan, then trucked inland on the Abidjan–Ouagadougou corridor and delivered to site with full shipping and clearance documentation.",
     supplyHighlights: [
       {
         title: "Door-to-site logistics",
@@ -1174,11 +1174,10 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
           "Mill certificates, packing lists and certificates of origin supplied with every shipment.",
       },
     ],
-    transitTime: "Common grades by road from our Bamako stock · container imports via Abidjan, Tema or Lomé: lead time confirmed at quote",
-    logisticsRoutes:
-      "Bamako → Sikasso → Bobo-Dioulasso → Ouagadougou and site · Abidjan / Tema / Lomé by sea → road corridor to Ouagadougou and site",
+    transitTime: "By road from our Abidjan hub · lead time confirmed at quote",
+    logisticsRoutes: "Port of Abidjan → Ferkessédougou → Bobo-Dioulasso → Ouagadougou and site",
     customsInfo:
-      "Burkina Faso left ECOWAS on 29 January 2025 and is a member of the Alliance of Sahel States (AES) and UEMOA. Imports move under transit documents through Côte d'Ivoire, Ghana or Togo, and we prepare the commercial invoice, packing list, certificate of origin and mill certificates each border needs.",
+      "Burkina Faso left ECOWAS on 29 January 2025 and is a member of the Alliance of Sahel States (AES) and UEMOA. Imports move under transit documents through Côte d'Ivoire, and we prepare the commercial invoice, packing list, certificate of origin and mill certificates each border needs.",
     installationTitle: "Lining Installation & Field Services in Burkina Faso",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and geosynthetic installation, mobilised to sites across Burkina Faso.",
@@ -1219,16 +1218,16 @@ export const EXPANSION_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       "eb4000-bentonite-geosynthetic-clay-liner-gcl-5-10m-x-40m",
     ],
     featuredProjectSlugs: [],
-    officeTitle: "Served from our Cape Town Head Office",
-    hubName: "Geosynthetics Africa Head Office",
-    address:
-      "11 Arum Lily Street, Fisantekraal Industrial, Durbanville, Cape Town, 7550, South Africa",
+    officeTitle: "Served from our Abidjan Hub",
+    hubName: "Abidjan Hub",
+    address: "Zone Industrielle de Yopougon, Abidjan, Côte d'Ivoire",
     phone: "+27 72 343 0868",
     email: "sales@geosyntheticsafrica.com",
     faqs: [
       {
         question: "How are materials delivered to Burkina Faso?",
-        answer: "By sea to Abidjan, Tema or Lomé, then by road under transit documents to site.",
+        answer:
+          "Through our Abidjan hub: cleared at the Port of Abidjan, then by road under transit documents to site.",
       },
       {
         question: "Is documentation available in French?",

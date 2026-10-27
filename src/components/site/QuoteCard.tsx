@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CloudUpload, FileText, X, Loader2 } from "lucide-react";
 import { sendQuoteEmailFn } from "@/lib/email";
+import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
 
 const ALLOWED_TYPES = [
   ".pdf",
@@ -49,7 +50,6 @@ export function QuoteCard({
   showFileUpload = true,
 }: QuoteCardProps) {
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -101,10 +101,11 @@ export function QuoteCard({
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !email.trim()) {
-      toast.error("Name and email are required.");
+    if (!name.trim() || !hasEmailOrPhone(email, phone)) {
+      toast.error("Please add your name and a valid email or phone number.");
       return;
     }
+    const resolved = resolveContact(email, phone);
     setSubmitting(true);
     try {
       const attachment_paths: string[] = [];
@@ -135,9 +136,9 @@ export function QuoteCard({
 
       const basePayload: Record<string, unknown> = {
         contact_name: name.trim(),
-        contact_email: email.trim(),
-        contact_phone: phone.trim() || null,
-        company: company.trim() || null,
+        contact_email: resolved.email,
+        contact_phone: resolved.phone,
+        company: null,
         project_description: descriptionWithPaths,
         product_name: contextLabel ?? null,
         attachment_paths,
@@ -179,9 +180,8 @@ export function QuoteCard({
       void sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
-          contactEmail: email.trim(),
-          contactPhone: phone.trim() || undefined,
-          company: company.trim() || undefined,
+          contactEmail: resolved.email,
+          contactPhone: resolved.phone ?? undefined,
           productName: contextLabel || undefined,
           projectDescription: baseDescription,
         },
@@ -189,7 +189,6 @@ export function QuoteCard({
 
       toast.success("Quote request submitted. We'll be in touch shortly.");
       setName("");
-      setCompany("");
       setEmail("");
       setPhone("");
       setMessage("");
@@ -208,29 +207,34 @@ export function QuoteCard({
       <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{description}</p>
 
       <div className="mt-4 space-y-3">
+        <Input
+          placeholder="Your name *"
+          autoComplete="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <div className="grid grid-cols-2 gap-3">
-          <Input placeholder="Your name *" value={name} onChange={(e) => setName(e.target.value)} />
           <Input
-            placeholder="Company name"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
+            type="email"
+            placeholder="Email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="tel"
+            placeholder="Phone"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </div>
-        <Input
-          type="email"
-          placeholder="Email address *"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="tel"
-          placeholder="Phone number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
+        <p className="text-[11px] text-muted-foreground -mt-1">Email or phone — one is enough.</p>
         <Textarea
           placeholder={
-            contextLabel ? `Message about ${contextLabel}…` : "Tell us about your project…"
+            contextLabel
+              ? `What do you need? e.g. quantity and site for ${contextLabel}`
+              : "What do you need? e.g. quantity, product and site"
           }
           rows={3}
           value={message}
