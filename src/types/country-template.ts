@@ -582,34 +582,34 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     slug: "cote-divoire-geosynthetics-supplier-contact",
     flag: "🇨🇮",
     code: "CIV",
-    title: "Côte d'Ivoire Geosynthetics Supplier — West Africa Hub",
+    title: "Geosynthetics Supplier & Installer in Côte d'Ivoire — Liners, Geotextiles & Geogrids",
     description:
-      "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, gold mine lining, and port infrastructure projects in Côte d'Ivoire.",
-    badge: "West Africa Hub — Abidjan",
+      "Geosynthetics supply, installation and QA/QC in Côte d'Ivoire: HDPE liners, GCLs, geotextiles and geogrids for gold mines, roads, ports and coastal protection, delivered through the Ports of Abidjan and San-Pédro.",
+    badge: "West Africa · Côte d'Ivoire",
     heroImage: "/images/geotextile-product-supply.webp",
-    supplyTitle: "Port of Abidjan Shipping & West African Distribution",
+    supplyTitle: "Delivery to Côte d'Ivoire via Abidjan and San-Pédro",
     supplyDescription:
-      "Direct shipments via Autonomous Port of Abidjan serving mining projects in Yamoussoukro, Korhogo, and coastal civil works.",
+      "Materials are cleared at the Port of Abidjan or San-Pédro, then trucked to mines, road works and coastal sites with full shipping and clearance documentation.",
     supplyHighlights: [
       {
         title: "Coastal Erosion & Port Infrastructure Supply",
         description: "Heavy geotextile containers and geogrids engineered for marine and port applications.",
       },
     ],
-    transitTime: "7 - 10 Days (Sea Freight / Local Logistics)",
-    logisticsRoutes: "Port of Abidjan → Highway Corridor → Yamoussoukro / Korhogo / San-Pédro",
+    transitTime: "Lead time confirmed at quote",
+    logisticsRoutes: "Port of Abidjan or San-Pédro → road → Yamoussoukro / Korhogo / site",
     customsInfo: "Douanes Ivoiriennes clearing, CODINORM certification, and ECOWAS trade documentation.",
     installationTitle: "Gold Mining TSF & Coastal Protection Installation",
     installationDescription:
-      "Bilingual installation engineers providing specialized geomembrane welding and coastal geotextile placement.",
+      "Mobile installation crews for geomembrane welding, GCL placement and coastal geotextile works, mobilised to sites across Côte d'Ivoire.",
     installationHighlights: [
       {
         title: "Bilingual Technical Field Teams",
         description: "Fluent in French and English for seamless coordination on international engineering projects.",
       },
     ],
-    masterSeamersCount: "4 Installation Crews",
-    equipmentMobilization: "72 Hours in Ivory Coast",
+    masterSeamersCount: "Mobile installation crews",
+    equipmentMobilization: "Planned per project",
     qaqcTitle: "CODINORM & International Quality Assurance",
     qaqcDescription:
       "Comprehensive field QA testing verifying seam shear and peel strength under West African climate conditions.",
@@ -625,9 +625,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       "mirafi-s51-virgin-pp-nonwoven-geotextile-200gsm-3m-x-180m-roll",
     ],
     featuredProjectSlugs: [],
-    officeTitle: "Abidjan Regional Hub",
-    hubName: "Abidjan Hub",
-    address: "Zone Industrielle de Yopougon, Abidjan, Côte d'Ivoire",
+    officeTitle: "Served by our West Africa project team",
+    hubName: "West Africa Projects",
     phone: "+27 72 343 0868",
     email: "sales@geosyntheticsafrica.com",
     coords: [5.36, -4.0083],
@@ -638,10 +637,10 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       },
     ],
     seo: {
-      title: "Côte d'Ivoire Geosynthetics Supplier — Contact & Supply | Geosynthetics Africa",
+      title: "Geosynthetics Côte d'Ivoire | HDPE Liners, Geotextiles & Geogrids — Geosynthetics Africa",
       description:
-        "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, and port infrastructure projects in Côte d'Ivoire.",
-      keywords: "Côte d'Ivoire geosynthetics, Abidjan geomembrane supplier, coastal erosion Côte d'Ivoire",
+        "Geosynthetics supply, installation and QA/QC in Côte d'Ivoire: HDPE liners, GCLs, geotextiles and geogrids for gold mines, roads, ports and coastal protection, delivered through the Ports of Abidjan and San-Pédro.",
+      keywords: "Côte d'Ivoire geosynthetics, geomembrane supplier Côte d'Ivoire, HDPE liner Abidjan, coastal erosion Côte d'Ivoire",
     },
   },
   "mozambique-geosynthetics-supplier-contact": {

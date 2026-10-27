@@ -22,11 +22,10 @@ export const MAMADOU_COULIBALY_CONTACT = {
   name: "Mamadou Coulibaly",
   title: "Regional Director — West Africa",
   country: "Côte d'Ivoire",
-  hub: "West Africa Hub (Abidjan)",
+  hub: "West Africa",
   email: "sales@geosyntheticsafrica.com",
   fallbackEmail: "sales@geosyntheticsafrica.com",
   phone: "+27 78 1355 926",
-  address: "Zone 4C, Rue des Carrossiers, Abidjan, Côte d'Ivoire",
 };
 
 export const SOUTH_AFRICA_CONTACT = {
@@ -62,26 +61,6 @@ export const DEFAULT_REGIONAL_COVERAGE: RegionItem[] = [
       "QA/QC Testing",
       "Technical Support",
     ],
-  },
-  {
-    country: "Côte d'Ivoire",
-    flag: "🇨🇮",
-    code: "CIV",
-    hub: "West Africa Hub",
-    coords: [5.36, -4.0083],
-    title: "Abidjan Hub",
-    subtitle: "West Africa Office",
-    address: "Zone 4C, Rue des Carrossiers, Abidjan",
-    phone: "+27 78 1355 926",
-    email: "sales@geosyntheticsafrica.com",
-    contactPerson: "Mamadou Coulibaly",
-    isWestAfrica: true,
-    services: "Port Infrastructure & Shoreline Erosion Supply",
-    transit: "16 - 20 Days (Sea Freight)",
-    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
-    description:
-      "Headed by Mamadou Coulibaly. Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
-    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
   },
   {
     country: "Ghana",
@@ -318,7 +297,7 @@ export function resolveRegionalRouting(regionOrCountry: string): {
     return {
       targetEmail: MAMADOU_COULIBALY_CONTACT.email,
       targetName: MAMADOU_COULIBALY_CONTACT.name,
-      targetRole: "Regional Director — West Africa (Ivory Coast)",
+      targetRole: "Regional Director — West Africa",
       isWestAfrica: true,
       isSouthAfrica: false,
     };

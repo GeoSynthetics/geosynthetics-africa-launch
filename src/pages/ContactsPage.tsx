@@ -703,7 +703,7 @@ function MapAndCoverage({
                     href="#boq-form"
                     className="flex items-center gap-1.5 text-primary hover:underline font-medium mt-1"
                   >
-                    <Mail className="h-3 w-3 shrink-0" /> Contact the {activeLoc.country} hub
+                    <Mail className="h-3 w-3 shrink-0" /> Request Project Quote
                   </a>
                 </div>
               </div>

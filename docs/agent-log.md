@@ -110,3 +110,8 @@
 ## 2026-10-27 — Burkina Faso routing via Abidjan
 - Owner confirmed Burkina Faso is served through Abidjan (not Bamako). Country profile hub text, supply, transit, route, customs, hub card and FAQ updated to the Abidjan hub.
 - Owner confirmed NSF/ANSI 61 for all floating-cover, rFPP and CSPE grades; existing claims kept.
+
+## 2026-10-27 — Abidjan is a clearing point; country CTAs
+- Abidjan has no street address on the site (city only); Burkina Faso copy says materials are cleared at the Port of Abidjan rather than served from an Abidjan hub.
+- Country page and contacts page hub buttons now read "Request Project Quote"; the duplicate hero button is removed.
+- Côte d'Ivoire treated like any other country: no Abidjan hub, office or address; removed from the regional office lists; supply via the Ports of Abidjan and San-Pédro; unverified crew counts and 72-hour mobilisation removed. Burkina French page routes via Abidjan only.

@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Wrench,
   MapPin,
-  Mail,
   CheckCircle2,
   ChevronDown,
   ArrowRight,
@@ -170,17 +169,9 @@ export function CountryPage({ data }: { data: any }) {
                 onClick={() => openQuickQuote()}
                 className="bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-lg cursor-pointer"
               >
-                Request Supply & Freight Quote
+                Request Project Quote
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <button
-                type="button"
-                onClick={() => openQuickQuote()}
-                className="inline-flex items-center justify-center rounded-md border border-surface-dark-foreground/30 px-5 py-3 text-sm font-semibold text-surface-dark-foreground hover:bg-surface-dark-foreground/10 transition cursor-pointer"
-              >
-                <Mail className="mr-2 h-4 w-4 text-primary" />
-                Contact {template.hubName || `${template.country} Hub`}
-              </button>
             </div>
           </div>
         </div>
@@ -363,7 +354,7 @@ export function CountryPage({ data }: { data: any }) {
                 onClick={() => openQuickQuote()}
                 className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 cursor-pointer"
               >
-                Contact the Hub
+                Request Project Quote
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
@@ -744,7 +735,7 @@ export function CountryPage({ data }: { data: any }) {
                 onClick={() => openQuickQuote()}
                 className="w-full sm:w-auto bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-lg cursor-pointer"
               >
-                Contact {template.country} Hub
+                Request Project Quote
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <p className="text-xs text-surface-dark-foreground/60 text-left lg:text-right">
