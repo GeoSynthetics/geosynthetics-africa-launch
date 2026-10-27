@@ -118,6 +118,8 @@ const HUB = {
   west: "Served from our Bamako stock and permanent Mali installation crews, who also work across West Africa.",
   westPort:
     "Served from our Bamako hub and permanent Mali crews, with container shipments through the nearest West African port.",
+  abidjan:
+    "Served from our Abidjan hub in Côte d'Ivoire, with materials cleared at the Port of Abidjan and trucked up the corridor to Ouagadougou and site.",
   north:
     "Served by our pan-African project desk, with materials shipped container-direct to the nearest port and crews mobilised for each project.",
   central:
@@ -433,7 +435,7 @@ export const COUNTRY_PROFILES: Record<string, CountryProfile> = {
       IND.water("Reservoirs and irrigation basins in a water-scarce climate."),
       IND.roads("Roads and platforms."),
     ],
-    hub: HUB.west,
+    hub: HUB.abidjan,
     conditions: [
       "A rainy season from about June to September, and Harmattan dust in the dry season",
       "High evaporation that makes lined storage and covers pay back",

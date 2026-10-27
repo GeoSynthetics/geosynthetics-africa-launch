@@ -106,3 +106,7 @@
 - **Problem**: The hero statistics ribbon on the home page (displaying 80l/s flow rates, 105kNm strength, 10,000Hrs UV resistance, and 25+ African countries served) displayed static values without visual engagement or feedback when users scrolled into the section.
 - **Solution**: Created a reusable `useCountUp` animation hook and `useInView` viewport observer, built the `StatsBanner` component with cubic ease-out interpolation and tabular number alignment, and replaced static markup with fluid counter animations that trigger upon entering the viewport while respecting reduced motion preferences.
 
+
+## 2026-10-27 — Burkina Faso routing via Abidjan
+- Owner confirmed Burkina Faso is served through Abidjan (not Bamako). Country profile hub text, supply, transit, route, customs, hub card and FAQ updated to the Abidjan hub.
+- Owner confirmed NSF/ANSI 61 for all floating-cover, rFPP and CSPE grades; existing claims kept.
