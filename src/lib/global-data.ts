@@ -198,22 +198,4 @@ export const DEFAULT_REGIONAL_COVERAGE = [
       "Logistics & Export",
     ],
   },
-  {
-    country: "Côte d'Ivoire",
-    flag: "🇨🇮",
-    code: "CIV",
-    hub: "West Africa Hub",
-    coords: [5.36, -4.0083],
-    title: "Abidjan Hub",
-    subtitle: "West Africa Office",
-    address: "Abidjan, Côte d'Ivoire",
-    phone: "+27 78 1355 926",
-    email: "sales@geosyntheticsafrica.com",
-    services: "Port Infrastructure & Shoreline Erosion Supply",
-    transit: "16 - 20 Days (Sea Freight)",
-    routes: "Port of Durban → Port of Abidjan → Yamoussoukro",
-    description:
-      "Supporting West African gold mining, agricultural water storage, and coastal protection projects. Custom logistics clearing via Port of Abidjan.",
-    capabilities: ["Material Supply", "Logistics & Export", "QA/QC Support"],
-  },
 ];

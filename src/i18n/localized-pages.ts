@@ -648,7 +648,7 @@ export const LOCALIZED_PAGES: LocalizedPage[] = [
     group: "pays",
     title: "Géosynthétiques au Burkina Faso | Géomembranes, géotextiles et géogrilles",
     description:
-      "Fourniture, pose et contrôle qualité de géomembranes PEHD, GCL, géotextiles et géogrilles au Burkina Faso. Livraison via les ports d'Abidjan, Tema ou Lomé puis la route.",
+      "Fourniture, pose et contrôle qualité de géomembranes PEHD, GCL, géotextiles et géogrilles au Burkina Faso. Livraison via le port d'Abidjan puis la route.",
     eyebrow: "Burkina Faso",
     heading: "Géosynthétiques au Burkina Faso",
     intro:
@@ -656,7 +656,7 @@ export const LOCALIZED_PAGES: LocalizedPage[] = [
     sections: [
       {
         heading: "Logistique",
-        body: "Les matériaux sont acheminés via les ports d'Abidjan, Tema ou Lomé puis la route, puis livrés sur chantier avec les documents d'expédition, certificats d'usine et certificats d'origine.",
+        body: "Les matériaux sont acheminés via le port d'Abidjan puis la route, puis livrés sur chantier avec les documents d'expédition, certificats d'usine et certificats d'origine.",
       },
       {
         heading: "Secteurs principaux",
@@ -678,7 +678,7 @@ export const LOCALIZED_PAGES: LocalizedPage[] = [
     faqs: [
       {
         q: "Livrez-vous au Burkina Faso ?",
-        a: "Oui, via les ports d'Abidjan, Tema ou Lomé puis la route, avec dédouanement et livraison sur site.",
+        a: "Oui, via le port d'Abidjan puis la route, avec dédouanement et livraison sur site.",
       },
       {
         q: "Les documents sont-ils disponibles en français ?",

@@ -729,7 +729,7 @@ export function QuotesAdminPage() {
                             West Africa Regional Routing
                           </span>
                           <p className="text-muted-foreground mt-0.5">
-                            Assigned to Mamadou Coulibaly (Abidjan Hub, Côte d'Ivoire)
+                            Assigned to Mamadou Coulibaly (West Africa)
                           </p>
                         </div>
                         <Button
@@ -750,7 +750,9 @@ export function QuotesAdminPage() {
                       </div>
                     )}
 
-                    {selected.project_description?.includes("ROUTED TO: South Africa Sales Desk") && (
+                    {selected.project_description?.includes(
+                      "ROUTED TO: South Africa Sales Desk",
+                    ) && (
                       <div className="p-3 rounded-lg border border-red-500/30 bg-red-500/10 flex items-center justify-between gap-3">
                         <div className="text-xs">
                           <span className="font-bold text-red-600 dark:text-red-400 uppercase tracking-wider text-[11px]">

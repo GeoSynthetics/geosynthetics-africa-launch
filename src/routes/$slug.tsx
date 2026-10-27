@@ -226,11 +226,12 @@ const COUNTRY_SEO_MAP: Record<
   },
   "cote-divoire-geosynthetics-supplier-contact": {
     country: "Côte d'Ivoire",
-    title: "Côte d'Ivoire Geosynthetics Supplier — Contact & Supply | Geosynthetics Africa",
+    title:
+      "Geosynthetics Côte d'Ivoire | HDPE Liners, Geotextiles & Geogrids — Geosynthetics Africa",
     description:
-      "Contact our West Africa hub in Abidjan for geosynthetics supply, coastal erosion control, and port infrastructure projects in Côte d'Ivoire.",
+      "Geosynthetics supply, installation and QA/QC in Côte d'Ivoire: HDPE liners, GCLs, geotextiles and geogrids for gold mines, roads, ports and coastal protection, delivered through the Ports of Abidjan and San-Pédro.",
     keywords:
-      "Côte d'Ivoire geosynthetics, Abidjan geomembrane supplier, coastal erosion Côte d'Ivoire",
+      "Côte d'Ivoire geosynthetics, geomembrane supplier Côte d'Ivoire, HDPE liner Abidjan, coastal erosion Côte d'Ivoire",
   },
   "mozambique-geosynthetics-supplier-contact": {
     country: "Mozambique",

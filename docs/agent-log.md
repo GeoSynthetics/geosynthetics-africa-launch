@@ -114,3 +114,4 @@
 ## 2026-10-27 — Abidjan is a clearing point; country CTAs
 - Abidjan has no street address on the site (city only); Burkina Faso copy says materials are cleared at the Port of Abidjan rather than served from an Abidjan hub.
 - Country page and contacts page hub buttons now read "Request Project Quote"; the duplicate hero button is removed.
+- Côte d'Ivoire treated like any other country: no Abidjan hub, office or address; removed from the regional office lists; supply via the Ports of Abidjan and San-Pédro; unverified crew counts and 72-hour mobilisation removed. Burkina French page routes via Abidjan only.
