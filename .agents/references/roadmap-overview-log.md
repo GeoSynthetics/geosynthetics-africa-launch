@@ -7,3 +7,7 @@ Restore server-side Brevo support when the existing BREVO_API_KEY is configured 
 ## 2026-10-29 — Anonymous homepage enquiry storage
 
 Remove SELECT read-back from homepage enquiry inserts, matching the working quote modal. Generate a UUID before insertion so email references still match the saved enquiry without requiring anonymous read access. Preserve database access policies. Verify anonymous insertion flow and reference correlation with the existing focused submission tests.
+
+## 2026-10-29 — Clear enquiry email subjects
+
+All form sales notifications and customer acknowledgements now share `Your [product or geosynthetics] enquiry | GSA-[short reference]`. Explicit product context is used for product quotes; internal labels, client addresses, long UUIDs and response-time promises are removed from subjects. New fallback references use ten UUID hex characters; existing full lead IDs remain in message bodies. Reply-to routing and the sales recipient are preserved. Validation: ten focused subject/provider/reference checks passed; Vercel production build passed. The broader template suite has an existing unrelated credential-strip wording mismatch.
