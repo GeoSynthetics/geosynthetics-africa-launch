@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { insertResult, sendHeroProjectEmailFn } = vi.hoisted(() => ({
+const { insertResult, insertRequest, sendHeroProjectEmailFn } = vi.hoisted(() => ({
   insertResult: {
     current: { data: { id: "quote-123" }, error: null as { message: string } | null },
   },
+  insertRequest: vi.fn(),
   sendHeroProjectEmailFn: vi.fn(),
 }));
 
@@ -11,7 +12,7 @@ vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
     from: () => ({
-      insert: () => ({ select: () => ({ maybeSingle: async () => insertResult.current }) }),
+      insert: insertRequest,
     }),
     storage: { from: () => ({ upload: vi.fn().mockResolvedValue({ error: null }) }) },
   },
@@ -29,6 +30,7 @@ const fetchMock = vi.fn();
 
 beforeEach(() => {
   insertResult.current = { data: { id: "quote-123" }, error: null };
+  insertRequest.mockReset().mockImplementation(async () => insertResult.current);
   sendHeroProjectEmailFn.mockReset().mockResolvedValue({ notified: true });
   fetchMock.mockReset().mockResolvedValue(new Response(JSON.stringify({ id: "m1" })));
   vi.stubGlobal("fetch", fetchMock);
@@ -54,10 +56,13 @@ describe("submitHeroProjectRequest", () => {
         region: "Central Africa",
         contact: "buyer@mine.co",
         contactEmail: "buyer@mine.co",
-        reference: "quote-123",
+        reference: expect.any(String),
       }),
     });
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(result.quoteId).toMatch(/^[0-9a-f-]{36}$/);
+    expect(insertRequest).toHaveBeenCalledWith(expect.objectContaining({ id: result.quoteId }));
+    expect(sendHeroProjectEmailFn.mock.calls[0][0].data.reference).toBe(result.quoteId);
   });
 
   it("passes a phone-only contact without a placeholder email", async () => {
