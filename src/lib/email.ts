@@ -1,5 +1,5 @@
 /**
- * Transactional email for the website forms, sent through Resend (resend.com).
+ * Transactional email for the website forms, sent through the configured Resend or Brevo provider.
  * Sends the sales notification and the customer confirmation.
  */
 
@@ -49,50 +49,67 @@ function formatAddress({ email, name }: EmailRecipient): string {
 }
 
 /**
- * Sends a transactional email through the Resend API.
+ * Sends a transactional email through the configured provider API.
  * Server-side only: the API key is read from the Vercel environment.
  */
 export async function sendEmail(
   payload: SendEmailPayload,
 ): Promise<{ success: boolean; messageId?: string }> {
-  const { apiKey, fromEmail, fromName } = getEmailConfig();
+  const { provider, apiKey, fromEmail, fromName } = getEmailConfig();
 
   if (!apiKey) {
-    console.error("[Email] RESEND_API_KEY is not set. Email not sent.");
+    console.error("[Email] No server-side email API key is configured. Email not sent.");
     return { success: false };
   }
 
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const isBrevo = provider === "brevo";
+    const response = await fetch(
+      isBrevo ? "https://api.brevo.com/v3/smtp/email" : "https://api.resend.com/emails",
+      {
+        method: "POST",
+        headers: {
+          ...(isBrevo ? { "api-key": apiKey } : { Authorization: `Bearer ${apiKey}` }),
+          "Content-Type": "application/json",
+        },
+        signal: AbortSignal.timeout(15000),
+        body: JSON.stringify(
+          isBrevo
+            ? {
+                sender: { email: fromEmail, name: fromName },
+                to: payload.to,
+                ...(payload.cc?.length ? { cc: payload.cc } : {}),
+                ...(payload.replyTo ? { replyTo: payload.replyTo } : {}),
+                subject: payload.subject,
+                htmlContent: payload.htmlContent,
+                ...(payload.textContent ? { textContent: payload.textContent } : {}),
+              }
+            : {
+                from: formatAddress({ email: fromEmail, name: fromName }),
+                to: payload.to.map(formatAddress),
+                ...(payload.cc?.length ? { cc: payload.cc.map(formatAddress) } : {}),
+                ...(payload.replyTo ? { reply_to: formatAddress(payload.replyTo) } : {}),
+                subject: payload.subject,
+                html: payload.htmlContent,
+                ...(payload.textContent ? { text: payload.textContent } : {}),
+              },
+        ),
       },
-      body: JSON.stringify({
-        from: formatAddress({ email: fromEmail, name: fromName }),
-        to: payload.to.map(formatAddress),
-        ...(payload.cc?.length ? { cc: payload.cc.map(formatAddress) } : {}),
-        ...(payload.replyTo ? { reply_to: formatAddress(payload.replyTo) } : {}),
-        subject: payload.subject,
-        html: payload.htmlContent,
-        ...(payload.textContent ? { text: payload.textContent } : {}),
-      }),
-    });
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`[Email] Resend API error ${response.status}:`, errorText);
+      console.error(`[Email] ${provider} API error ${response.status}:`, errorText);
       return { success: false };
     }
 
-    const result = (await response.json()) as { id?: string };
+    const result = (await response.json()) as { id?: string; messageId?: string };
     console.log(
-      `[Email] Sent via Resend. ID: ${result.id} to ${payload.to.map((t) => t.email).join(", ")}`,
+      `[Email] Accepted by ${provider}. ID: ${result.id || result.messageId} to ${payload.to.map((t) => t.email).join(", ")}`,
     );
-    return { success: true, messageId: result.id };
+    return { success: true, messageId: result.id || result.messageId };
   } catch (err) {
-    console.error("[Email] Could not reach Resend:", err);
+    console.error("[Email] Could not reach the email provider:", err);
     return { success: false };
   }
 }

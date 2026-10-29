@@ -1,3 +1,4 @@
+import { checkEmailNotification, SAVED_ENQUIRY_MESSAGE } from "@/lib/email-notification";
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
 import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
@@ -946,8 +947,8 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (insertErr) throw insertErr;
 
-      // Trigger transactional email notifications (non-blocking)
-      void sendQuoteEmailFn({
+      // Keep the form pending until the notification result is known.
+      const notified = await checkEmailNotification(sendQuoteEmailFn({
         data: {
           contactName: values.name,
           contactEmail: boqContact.email,
@@ -955,9 +956,10 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
           country: values.zone || undefined,
           projectDescription: messageWithMeta,
         },
-      }).catch((err) => console.warn("[Email Trigger Error]:", err));
+      }));
 
-      toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
+      if (notified) toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
+      else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
       boqForm.reset({
         name: "",
         email: user?.email ?? "",
@@ -989,17 +991,18 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       });
       if (error) throw error;
 
-      // Trigger transactional email notifications (non-blocking)
-      void sendContactEmailFn({
+      // Keep the form pending until the notification result is known.
+      const notified = await checkEmailNotification(sendContactEmailFn({
         data: {
           contactName: values.name,
           contactEmail: quickContact.email,
           contactPhone: quickContact.phone ?? undefined,
           message: values.message,
         },
-      }).catch((err) => console.warn("[Email Trigger Error]:", err));
+      }));
 
-      toast.success("Inquiry sent — thank you!");
+      if (notified) toast.success("Inquiry sent — thank you!");
+      else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
       quickForm.reset({
         name: "",
         email: user?.email ?? "",

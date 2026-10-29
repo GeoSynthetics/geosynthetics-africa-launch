@@ -110,7 +110,8 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
         return;
       }
       setSubmissionResult(result);
-      toast.success(result.message);
+      if (result.notified) toast.success(result.message);
+      else toast.warning(result.message, { duration: 10000 });
     } catch (err: any) {
       console.error("Hero form submission error:", err);
       toast.error(err.message || "Failed to submit project request. Please try again.");
@@ -146,7 +147,7 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
           </div>
 
           <span className="px-3 py-1 rounded-full border border-emerald-500/30 text-[11px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/10 mb-2">
-            Request Logged & Dispatched
+            {submissionResult.notified ? "Request Logged & Dispatched" : "Request Saved"}
           </span>
 
           <h3 className="font-display text-2xl font-bold uppercase tracking-tight text-white mb-2">
@@ -162,8 +163,9 @@ export function HeroProjectForm({ regions, className = "" }: HeroProjectFormProp
               {routedTo.targetRole} · <span className="text-primary">{ENQUIRY_EMAIL}</span>
             </div>
             <div className="text-[11px] text-zinc-400 pt-1 border-t border-white/10">
-              Your enquiry has been routed to the team responsible for your project region. We will
-              review the information and contact you about the required scope.
+              {submissionResult.notified
+                ? "Your enquiry has been routed to the team responsible for your project region. We will review the information and contact you about the required scope."
+                : submissionResult.message}
             </div>
           </div>
 

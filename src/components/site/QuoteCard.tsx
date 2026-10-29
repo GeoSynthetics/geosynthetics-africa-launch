@@ -1,3 +1,4 @@
+import { checkEmailNotification, SAVED_ENQUIRY_MESSAGE } from "@/lib/email-notification";
 import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -176,8 +177,8 @@ export function QuoteCard({
       }
       if (lastError) throw new Error(lastError.message);
 
-      // Trigger transactional email notifications (non-blocking)
-      void sendQuoteEmailFn({
+      // Keep the form pending until the notification result is known.
+      const notified = await checkEmailNotification(sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
           contactEmail: resolved.email,
@@ -185,9 +186,10 @@ export function QuoteCard({
           productName: contextLabel || undefined,
           projectDescription: baseDescription,
         },
-      }).catch((err) => console.warn("[Email Trigger Error]:", err));
+      }));
 
-      toast.success("Quote request submitted. We'll be in touch shortly.");
+      if (notified) toast.success("Quote request submitted. We'll be in touch shortly.");
+      else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
       setName("");
       setEmail("");
       setPhone("");

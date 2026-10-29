@@ -117,6 +117,8 @@ describe("submitHeroProjectRequest", () => {
       contact: "a@b.co",
     });
     expect(result.success).toBe(true);
+    expect(result.notified).toBe(false);
+    expect(result.message).toContain("saved");
   });
 });
 

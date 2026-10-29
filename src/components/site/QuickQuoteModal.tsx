@@ -1,3 +1,4 @@
+import { checkEmailNotification, SAVED_ENQUIRY_MESSAGE } from "@/lib/email-notification";
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
 import { hasEmailOrPhone, resolveContact } from "@/lib/contact-input";
@@ -185,8 +186,8 @@ export function QuickQuoteModal() {
       }
       if (lastError) throw new Error(lastError.message);
 
-      // Trigger transactional email notifications (non-blocking)
-      void sendQuoteEmailFn({
+      // Keep the form pending until the notification result is known.
+      const notified = await checkEmailNotification(sendQuoteEmailFn({
         data: {
           contactName: name.trim(),
           contactEmail: resolved.email,
@@ -195,9 +196,10 @@ export function QuickQuoteModal() {
           productName: productName || undefined,
           projectDescription: baseDescription,
         },
-      }).catch((err) => console.warn("[Email Trigger Error]:", err));
+      }));
 
-      toast.success("Quote request submitted. We'll be in touch shortly.");
+      if (notified) toast.success("Quote request submitted. We'll be in touch shortly.");
+      else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
       handleClose();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unable to submit quote request.";

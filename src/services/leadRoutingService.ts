@@ -1,3 +1,4 @@
+import { SAVED_ENQUIRY_MESSAGE } from "@/lib/email-notification";
 import { supabase } from "@/integrations/supabase/client";
 import { ENQUIRY_EMAIL } from "@/lib/business-info";
 import {
@@ -22,6 +23,7 @@ export interface HeroProjectSubmission {
 export interface HeroSubmissionResult {
   success: boolean;
   message: string;
+  notified: boolean;
   routedTo: {
     targetName: string;
     targetEmail: string;
@@ -189,7 +191,10 @@ export async function submitHeroProjectRequest(
 
   return {
     success: true,
-    message: "Request received! Our sales team will be in touch within 24 hours.",
+    notified,
+    message: notified
+      ? "Request received! Our sales team will be in touch within 24 hours."
+      : SAVED_ENQUIRY_MESSAGE,
     routedTo: routing,
     attachmentPath: uploadedFilePath,
     quoteId,
