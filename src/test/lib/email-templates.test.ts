@@ -13,7 +13,7 @@ describe("Email Templates Engine", () => {
   describe("Utility Helpers", () => {
     it("should generate reference fallback when none provided", () => {
       const ref = formatReference();
-      expect(ref).toMatch(/^GSA-\d{4}-\d{4}$/);
+      expect(ref).toMatch(/^GSA-[A-F0-9]{10}$/);
     });
 
     it("should preserve explicitly provided reference", () => {

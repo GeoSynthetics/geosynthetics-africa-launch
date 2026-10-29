@@ -41,15 +41,13 @@ export function getEmailImgHost(siteUrl: string = DEFAULT_SITE_URL): string {
 }
 
 /**
- * Formats a clean reference code if not provided (e.g. GSA-2026-8942)
+ * Formats a reference code shared by the subject and email body.
  */
 export function formatReference(providedRef?: string): string {
   if (providedRef && providedRef.trim()) {
     return providedRef.trim();
   }
-  const year = new Date().getFullYear();
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  return `GSA-${year}-${randomNum}`;
+  return `GSA-${crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase()}`;
 }
 
 /**

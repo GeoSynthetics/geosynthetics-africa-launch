@@ -42,6 +42,18 @@ export interface SendQuoteEmailParams {
   reference?: string;
 }
 
+/** Keep sales notifications and customer replies on the same clear subject. */
+function enquirySubject(reference: string, productName?: string): string {
+  const shortReference = /^GSA-/i.test(reference)
+    ? reference
+    : `GSA-${reference.replace(/[^a-z0-9]/gi, "").slice(0, 10).toUpperCase()}`;
+  const product = productName?.replace(/[\r\n|]/g, " ").replace(/\s+/g, " ").trim();
+  const topic = product && !/^(general quote|geosynthetics)$/i.test(product)
+    ? product.slice(0, 50).trim()
+    : "geosynthetics";
+  return `Your ${topic} enquiry | ${shortReference}`;
+}
+
 /** Formats a recipient as Resend expects: `Name <email>` or just `email`. */
 function formatAddress({ email, name }: EmailRecipient): string {
   const cleanName = (name || "").replace(/[<>"\r\n]/g, "").trim();
@@ -125,6 +137,7 @@ export async function dispatchQuoteEmails(
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
+  const subject = enquirySubject(reference, params.productName);
 
   const customerHtml = generateQuoteCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateQuoteAdminEmail({ ...params, reference, siteUrl });
@@ -133,7 +146,7 @@ export async function dispatchQuoteEmails(
   const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     ...(hasRealEmail ? { replyTo: { email: params.contactEmail, name: params.contactName } } : {}),
-    subject: `[New Quote] ${params.contactName} (${params.productName || "General Quote"}) — REF ${reference}`,
+    subject,
     htmlContent: adminHtml,
   });
 
@@ -142,7 +155,7 @@ export async function dispatchQuoteEmails(
   const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
-    subject: `Quote request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
+    subject,
     htmlContent: customerHtml,
   });
 
@@ -194,6 +207,7 @@ export async function dispatchContactEmails(
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
+  const subject = enquirySubject(reference);
 
   const customerHtml = generateContactCustomerEmail({ ...params, reference, siteUrl });
   const adminHtml = generateContactAdminEmail({ ...params, reference, siteUrl });
@@ -202,7 +216,7 @@ export async function dispatchContactEmails(
   const admin = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     ...(hasRealEmail ? { replyTo: { email: params.contactEmail, name: params.contactName } } : {}),
-    subject: `[Quick Contact] ${params.contactName} — REF ${reference}`,
+    subject,
     htmlContent: adminHtml,
   });
 
@@ -211,7 +225,7 @@ export async function dispatchContactEmails(
   const customer = await sendEmail({
     to: [{ email: params.contactEmail, name: params.contactName }],
     replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
-    subject: `We received your message — Geosynthetics Africa (REF ${reference})`,
+    subject,
     htmlContent: customerHtml,
   });
 
@@ -251,7 +265,7 @@ export interface SendHeroProjectEmailParams {
 }
 
 /**
- * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default info@geosyntheticsafrica.com)
+ * Notifies the sales mailbox (NOTIFICATION_TO_EMAIL, default sales@geosyntheticsafrica.com)
  * and, when the enquirer left an email address, sends them a confirmation.
  * Recipients are set here on the server so the client cannot choose them.
  */
@@ -262,6 +276,7 @@ export async function dispatchHeroProjectEmails(
 
   const reference = formatReference(params.reference);
   const siteUrl = SITE_URL;
+  const subject = enquirySubject(reference);
   const contactName = params.contact.split("@")[0].slice(0, 50) || params.contact;
   const projectDescription = params.attachmentName
     ? `${params.need}\n\nAttached BOQ / drawing: ${params.attachmentName}\nDownload it from ${siteUrl}/admin/quotes`
@@ -279,11 +294,11 @@ export async function dispatchHeroProjectEmails(
     siteUrl,
   };
 
-  // All enquiries go to the sales mailbox; the region is shown in the subject.
+  // All enquiries go to the sales mailbox; the region is included in the message body.
   const { success: notified } = await sendEmail({
     to: [{ email: adminEmail, name: "Geosynthetics Sales" }],
     replyTo: params.contactEmail ? { email: params.contactEmail, name: contactName } : undefined,
-    subject: `[New Project Request] ${params.region} — ${params.contact.slice(0, 40)} — REF ${reference}`,
+    subject,
     htmlContent: generateQuoteAdminEmail(templateParams),
   });
 
@@ -291,7 +306,7 @@ export async function dispatchHeroProjectEmails(
     await sendEmail({
       to: [{ email: params.contactEmail, name: contactName }],
       replyTo: { email: adminEmail, name: "Geosynthetics Sales Team" },
-      subject: `Project request received — we will respond within 24 hours | Geosynthetics Africa (REF ${reference})`,
+      subject,
       htmlContent: generateQuoteCustomerEmail(templateParams),
     });
   }
