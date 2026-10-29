@@ -103,7 +103,9 @@ export async function submitHeroProjectRequest(
     .catch(() => ({ data: { session: null } }));
   const userId = sessionData.session?.user.id ?? null;
 
+  const requestId = crypto.randomUUID();
   const basePayload: Record<string, unknown> = {
+    id: requestId,
     contact_name: (emailInput || contact).trim().split("@")[0].slice(0, 50),
     contact_email: email,
     contact_phone: phone,
@@ -134,15 +136,13 @@ export async function submitHeroProjectRequest(
   let quoteId: string | null = null;
 
   for (let attempt = 0; attempt <= optionalKeys.length; attempt += 1) {
-    const { data: insertData, error } = await supabase
-      .from("quote_requests")
-      .insert(payload)
-      .select("id")
-      .maybeSingle();
+    // Anonymous visitors may create enquiries but must not read private enquiries.
+    // A returning SELECT would require read permission and roll back the insert.
+    const { error } = await supabase.from("quote_requests").insert(payload);
 
     if (!error) {
       lastError = null;
-      quoteId = insertData?.id || null;
+      quoteId = requestId;
       break;
     }
 
