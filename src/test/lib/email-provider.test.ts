@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { sendEmail, dispatchQuoteEmails } from "@/lib/email";
+import { sendEmail, dispatchQuoteEmails, dispatchContactEmails, dispatchHeroProjectEmails } from "@/lib/email";
 
 const fetchMock = vi.fn();
 beforeEach(() => {
@@ -55,5 +55,37 @@ describe("configured email provider", () => {
       }),
     ).toEqual({ success: false });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+
+describe("enquiry email subjects", () => {
+  it("shares a product-specific subject and preserves reply routing", async () => {
+    await dispatchQuoteEmails({ contactName: "Client", contactEmail: "client@example.com", productName: "HDPE liner", reference: "3630cd1f-eaa0-42b3-8476-fb2b06d1213f" });
+    const [sales, customer] = fetchMock.mock.calls.map(([, request]) => JSON.parse(request.body));
+    expect(sales.subject).toBe("Your HDPE liner enquiry | GSA-3630CD1FEA");
+    expect(customer.subject).toBe(sales.subject);
+    expect(sales.replyTo.email).toBe("client@example.com");
+    expect(customer.replyTo.email).toBe("sales@example.com");
+    expect(sales.htmlContent).toContain("3630cd1f-eaa0-42b3-8476-fb2b06d1213f");
+  });
+
+  it("uses a new short reference shared across contact messages", async () => {
+    await dispatchContactEmails({ contactName: "Client", contactEmail: "client@example.com", message: "Please contact me" });
+    const [sales, customer] = fetchMock.mock.calls.map(([, request]) => JSON.parse(request.body));
+    expect(sales.subject).toMatch(/^Your geosynthetics enquiry \| GSA-[A-F0-9]{10}$/);
+    expect(customer.subject).toBe(sales.subject);
+    expect(sales.htmlContent).toContain(sales.subject.split(" | ")[1]);
+  });
+
+  it("keeps homepage subjects clear and distinct for each lead", async () => {
+    for (const reference of ["3630cd1f-eaa0-42b3-8476-fb2b06d1213f", "12345678-abcd-42b3-8476-fb2b06d1213f"]) {
+      await dispatchHeroProjectEmails({ need: "Project details", region: "Southern Africa", contact: "client@example.com", contactEmail: "client@example.com", reference });
+    }
+    const subjects = fetchMock.mock.calls.map(([, request]) => JSON.parse(request.body).subject);
+    expect(subjects[0]).toBe("Your geosynthetics enquiry | GSA-3630CD1FEA");
+    expect(subjects[1]).toBe(subjects[0]);
+    expect(subjects[2]).not.toBe(subjects[0]);
+    expect(subjects[3]).toBe(subjects[2]);
   });
 });
