@@ -12,10 +12,10 @@ export const Route = createFileRoute("/api/email-status")({
   server: {
     handlers: {
       GET: async () => {
-        const { apiKey, fromEmail, notifyEmail } = getEmailConfig();
+        const { provider, apiKey, fromEmail, notifyEmail } = getEmailConfig();
         const senderDomain = fromEmail.split("@")[1]?.toLowerCase() || "";
         const status: Record<string, unknown> = {
-          provider: "resend",
+          provider,
           apiKeySet: Boolean(apiKey),
           fromEmail,
           notifyEmail,
@@ -24,10 +24,31 @@ export const Route = createFileRoute("/api/email-status")({
           senderDomainVerified: null,
         };
 
-        if (apiKey) {
+        if (apiKey && provider === "brevo") {
+          try {
+            const res = await fetch("https://api.brevo.com/v3/senders", {
+              headers: { "api-key": apiKey },
+              signal: AbortSignal.timeout(10000),
+            });
+            status.apiKeyAccepted = res.ok;
+            if (res.ok) {
+              const body = (await res.json()) as { senders?: { email: string; active: boolean }[] };
+              const sender = body.senders?.find(
+                (s) => s.email.toLowerCase() === fromEmail.toLowerCase(),
+              );
+              status.senderVerified = sender?.active ?? false;
+              status.senderStatus = sender?.active ? "verified" : "not verified";
+            } else {
+              status.apiKeyError = `Brevo returned ${res.status}`;
+            }
+          } catch {
+            status.apiKeyError = "Could not reach Brevo.";
+          }
+        } else if (apiKey) {
           try {
             const res = await fetch("https://api.resend.com/domains", {
               headers: { Authorization: `Bearer ${apiKey}` },
+              signal: AbortSignal.timeout(10000),
             });
             const body = (await res.json().catch(() => ({}))) as {
               name?: string;
@@ -44,7 +65,8 @@ export const Route = createFileRoute("/api/email-status")({
             } else if (body.name === "restricted_api_key") {
               // A "sending access" key is valid but cannot list domains.
               status.apiKeyAccepted = true;
-              status.note = "Key has sending access only, so the domain status cannot be checked here.";
+              status.note =
+                "Key has sending access only, so the domain status cannot be checked here.";
             } else {
               status.apiKeyAccepted = false;
               status.apiKeyError = `Resend returned ${res.status}${body.message ? `: ${body.message}` : ""}`;
