@@ -290,8 +290,9 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
     ],
   },
   partners: {
-    subtitle: "GLOBAL BEST-IN-CLASS MATERIALS",
-    description: "Integrated into our engineered systems",
+    subtitle: "IN-HOUSE MANUFACTURING & CUSTOM FABRICATION",
+    description:
+      "Our manufacturing and fabrication capabilities serve projects across Africa: dewatering bags and tubes, woven, nonwoven and composite sand containers, silt curtains and fences, filter socks, prefabricated liners, floating covers, pipe boots and welded mesh gabion systems. Dimensions, materials, seams, handling provisions and inspection records are defined for the agreed production scope.",
     logos: [],
   },
   services: {
