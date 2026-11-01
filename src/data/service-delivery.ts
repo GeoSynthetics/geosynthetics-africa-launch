@@ -533,7 +533,7 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
   "manufacturing-fabrication": {
     title: "Geosynthetics Manufacturing & Custom Fabrication",
     summary:
-      "We manufacture and fabricate geosynthetic products in our own Johannesburg facility, from ISO 9001-mill roll goods, with factory QA/QC and test records on every article.",
+      "We manufacture and fabricate geosynthetic products for drainage, dewatering, containment and erosion control, matching product selection, documented factory QA/QC and delivery to projects across Africa.",
     sections: [
       {
         id: "products",
@@ -541,7 +541,19 @@ export const SERVICE_DELIVERY_PROFILES: Record<string, ServiceDeliveryProfile> =
         title: "Products We Manufacture",
         kind: "manufactured-products",
         intro:
-          "Every product below is made in our own facility. Open a product for its raw-material inputs, factory QA/QC and key specifications.",
+          "Explore what each product does, its materials and available configurations, how we manufacture and check it, and how we deliver it to projects across Africa.",
+      },
+      {
+        id: "delivery",
+        label: "Pan-African Delivery",
+        title: "From Production to Your Project Site",
+        kind: "text",
+        body: "We plan packing, transport and site receiving alongside production. Tell us the destination, quantities, access constraints and installation sequence so we can quote a coordinated manufacturing and delivery scope.",
+        bullets: [
+          "Packing and protection matched to the finished product and route",
+          "Road, sea or combined freight with cross-border documentation coordinated for the destination",
+          "Production lead times, dispatch sequencing, delivery terms and offloading responsibilities agreed before release",
+        ],
       },
       {
         id: "inputs",

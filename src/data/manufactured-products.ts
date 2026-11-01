@@ -14,6 +14,31 @@ export interface ManufacturedProduct {
   link?: string;
 }
 
+export function manufacturingDelivery(slug: string): string[] {
+  const packaging: Record<string, string> = {
+    "geobarrier-hd": "Panel dimensions, folding or rolling and protection agreed for the installation area and transport route.",
+    filterdrain: "Pipe lengths or coils and filter protection agreed before dispatch; loading arranged to avoid damage to the fitted geotextile.",
+    "sand-containers": "Containers labelled by size and fabric grade, with empty-unit packing and site filling arrangements agreed for the project.",
+    "dewatering-tubes": "Tubes folded and labelled to the deployment plan; transport and unloading requirements agreed from the finished tube dimensions.",
+    "dewatering-bags": "Bags packed by size and fabric grade, with inlet configuration identified for site receiving and pump setup.",
+    "silt-fence": "Roll heights, lengths, quantities and fixing accessories scheduled to suit phased earthworks and site installation.",
+    "filter-socks": "Socks packed and labelled by pipe outside diameter, geotextile grade and length for fitting at the receiving location.",
+    pvds: "Reel dimensions and handling requirements coordinated with the installation equipment and site delivery programme.",
+    "fin-drains": "Drain heights, roll lengths and protection of the core and filter coordinated for transport and installation.",
+    "drop-in-liners": "Liners folded to an agreed placement plan and labelled for the tank, pond or pit; unloading and lifting access confirmed before dispatch.",
+    "floating-covers": "Cover panels numbered to the assembly layout, with floats, ballast and accessories scheduled for coordinated site delivery.",
+    "pipe-boots": "Boots protected against distortion and labelled by pipe size and location reference for site receiving.",
+    "liner-details": "Panels and shaped details packed and labelled against the fabrication drawings and installation sequence.",
+    "drainage-pipes": "Pipe lengths, diameters and perforation patterns scheduled for loading, transport and the project unloading arrangements.",
+    gabions: "Baskets and mattresses supplied flat-packed, with the required connectors, stiffeners and diaphragms included in the packing schedule.",
+  };
+  return [
+    packaging[slug] ?? "Packing dimensions, handling protection and product identification agreed for the project and transport route.",
+    "Road, sea or combined freight planned for the destination, with cross-border documentation and responsibilities agreed in the quotation.",
+    "Production lead time, dispatch sequence, delivery terms and site offloading access confirmed against quantities and location before the order is released.",
+  ];
+}
+
 export const MANUFACTURING_INPUTS_STATEMENT =
   "We fabricate only from roll goods and wire made in ISO 9001-certified mills: the same globally recognised geomembranes, geotextiles and wire specified on major projects worldwide. Each grade is manufactured and tested to GRI, ASTM or EN ISO requirements, with ASQUAL-certified geotextile grades where the specification calls for them, and every roll arrives with its mill certificate.";
 
@@ -56,6 +81,37 @@ const WELD_QAQC = [
 ];
 
 export const MANUFACTURED_PRODUCTS: ManufacturedProduct[] = [
+  {
+    slug: "geobarrier-hd",
+    name: "GeoBarrier HD Mole Barrier Systems",
+    summary: "Impermeable HDPE mole barrier systems, made to the agreed project dimensions.",
+    inputs: ["Impermeable HDPE sheet; thickness and dimensions specified for the project"],
+    qaqc: [
+      "Material identification and thickness checked against the order",
+      "Dimensions and joining details checked against the agreed fabrication drawing",
+      "Finished panels inspected and labelled before dispatch",
+    ],
+    specs: [
+      { label: "Material", value: "Impermeable HDPE" },
+      { label: "Dimensions", value: "To the agreed project requirements" },
+    ],
+  },
+  {
+    slug: "filterdrain",
+    name: "FilterDrain Drainage Pipe Systems",
+    summary: "Drainage pipes with factory fitted MIRAFI® S filtration and separation geotextile.",
+    inputs: ["Specified drainage pipe", "MIRAFI® S filtration and separation geotextile"],
+    qaqc: [
+      "Pipe and geotextile grade checked against the order",
+      "Filter coverage, seams and condition inspected before dispatch",
+      "Finished pipe dimensions and material identification recorded",
+    ],
+    specs: [
+      { label: "Filter", value: "MIRAFI® S; grade selected for the soil and fill material" },
+      { label: "Assembly", value: "Factory fitted geotextile filtration layer" },
+    ],
+    link: "/catalogue/geopipe-fs-slotted-hdpe-drainage-pipe-with-integrated-filter-sock",
+  },
   {
     slug: "sand-containers",
     name: "Geosynthetic Sand Containers (FlowTex™)",
