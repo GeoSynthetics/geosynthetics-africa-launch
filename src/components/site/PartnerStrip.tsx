@@ -1,4 +1,4 @@
-import { PARTNER_LOGOS } from "./mega-menu-data";
+import { ManufacturingBrands } from "./ManufacturingBrands";
 
 export interface PartnerLogo {
   name: string;
@@ -16,8 +16,10 @@ export function PartnerStrip({
   description?: string;
   logos?: PartnerLogo[];
 }) {
+  if (!logos?.length) return <ManufacturingBrands />;
+
   const dark = variant === "dark";
-  const displayLogos = logos && logos.length > 0 ? logos : PARTNER_LOGOS;
+  const displayLogos = logos;
 
   // Dynamically assign grid column classes based on the number of logos to prevent excess white space
   const logoCount = displayLogos.length;

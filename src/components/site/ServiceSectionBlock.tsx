@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { CheckCircle2, ChevronDown } from "lucide-react";
 import type { ServiceSection } from "@/data/service-delivery";
-import { MANUFACTURED_PRODUCTS, MANUFACTURING_PROCESS } from "@/data/manufactured-products";
+import { MANUFACTURED_PRODUCTS, MANUFACTURING_PROCESS, manufacturingDelivery } from "@/data/manufactured-products";
+import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { SumpCoverDiagrams } from "./SumpCoverDiagrams";
 
 function SectionShell({
@@ -74,6 +75,7 @@ function SpecTable({ rows }: { rows: { label: string; value: string }[] }) {
 }
 
 function ManufacturedProducts() {
+  const { open } = useQuickQuote();
   useEffect(() => {
     const id = window.location.hash.slice(1);
     if (!id.startsWith("made-")) return;
@@ -106,20 +108,9 @@ function ManufacturedProducts() {
           <div className="grid gap-5 border-t border-border p-5 md:grid-cols-3">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                Raw-material inputs
+                The product
               </h3>
-              <CheckList items={product.inputs} />
-            </div>
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                Our factory QA/QC
-              </h3>
-              <CheckList items={product.qaqc} />
-            </div>
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
-                Key specifications
-              </h3>
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{product.summary}</p>
               <dl className="mt-5 space-y-3">
                 {product.specs.map((spec) => (
                   <div key={spec.label}>
@@ -128,12 +119,39 @@ function ManufacturedProducts() {
                   </div>
                 ))}
               </dl>
-              {product.link && (
-                <a href={product.link} className="mt-4 inline-block text-sm font-bold text-primary">
-                  View product and datasheet →
+              <h4 className="mt-5 text-xs font-bold uppercase tracking-wide">Material selection</h4>
+              <CheckList items={product.inputs} />
+              {product.link ? (
+                <a href={product.link} className="mt-4 inline-block text-sm font-bold text-primary hover:underline">
+                  Explore product & specifications →
                 </a>
-              )}
+              ) : null}
             </div>
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
+                Manufacturing & QA/QC
+              </h3>
+              <CheckList items={product.qaqc} />
+            </div>
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wide text-primary">
+                Pan-African delivery
+              </h3>
+              <CheckList items={manufacturingDelivery(product.slug)} />
+              <a href="/services/delivery-logistics-africa" className="mt-4 inline-block text-sm font-bold text-primary hover:underline">
+                Delivery & cross-border logistics →
+              </a>
+            </div>
+          </div>
+          <div className="border-t border-border p-5">
+            <button
+              type="button"
+              onClick={() => open(product.name)}
+              className="inline-flex min-h-11 items-center rounded bg-primary px-5 py-3 text-sm font-bold text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              aria-label={`Request a quote for ${product.name}`}
+            >
+              Request a Quote
+            </button>
           </div>
         </details>
       ))}

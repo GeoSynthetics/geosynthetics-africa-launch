@@ -51,18 +51,6 @@ export type MegaMenuConfig = {
   };
 };
 
-import logo1 from "@/assets/brand-logos/brand-1.webp";
-import logo2 from "@/assets/brand-logos/brand-2.webp";
-import logo3 from "@/assets/brand-logos/brand-3.webp";
-import logo4 from "@/assets/brand-logos/brand-4.webp";
-
-export const PARTNER_LOGOS = [
-  { name: "AmourRock", logo: logo1 },
-  { name: "SoilLock", logo: logo2 },
-  { name: "FlowTex", logo: logo3 },
-  { name: "PolyTape", logo: logo4 },
-];
-
 export const PRODUCT_CATEGORIES = [
   { slug: "geomembranes", label: "Geomembranes", icon: "Layers" },
   { slug: "geotextiles", label: "Geotextiles", icon: "Grid3x3" },
