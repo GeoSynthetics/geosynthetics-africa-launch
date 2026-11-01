@@ -11,7 +11,7 @@ import {
   Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PartnerStrip } from "@/components/site/PartnerStrip";
+import { ManufacturingBrands } from "@/components/site/ManufacturingBrands";
 import { BoqCtaBand } from "@/components/site/BoqCtaBand";
 import {
   MembraneFold,
@@ -232,12 +232,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Partner strip */}
-      <PartnerStrip
-        subtitle={partners.subtitle}
-        description={partners.description}
-        logos={partners.logos}
-      />
+      {/* In-house manufacturing product systems */}
+      <ManufacturingBrands heading={partners.subtitle} description={partners.description} />
 
       {/* Services + dark verification panel */}
       <section className="relative isolate overflow-hidden bg-background">
