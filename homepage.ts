@@ -1,0 +1,437 @@
+// ─── Homepage Site-Builder Content Types ──────────────────────────────────────
+// Stored in Supabase site_config under key: "homepage_content"
+
+export interface TrustBadge {
+  icon: string; // image URL
+  text: string; // e.g. "GAI MEMBER / One of only 5 in Africa"
+}
+
+export interface ApplicationCard {
+  id: string;
+  title: string; // e.g. "MINING SYSTEMS"
+  image: string; // background image URL
+  linkUrl: string; // e.g. "/applications/mining-systems"
+}
+
+export interface PartnerLogo {
+  name: string;
+  logo: string; // image URL
+}
+
+export interface ServiceCard {
+  id: string;
+  icon: string; // image/icon URL
+  title: string;
+  description: string;
+}
+
+export interface StatCounter {
+  id: string;
+  value: string; // e.g. "20+", "1000+"
+  label: string; // e.g. "Years Industry Experience"
+}
+
+export interface OfficeLocation {
+  id: string;
+  name: string; // e.g. "South Africa"
+  type: string; // e.g. "HQ", "REGIONAL OFFICE"
+  linkUrl?: string; // e.g. "/zambia-geosynthetics-supplier-installer"
+}
+
+export interface ProjectCard {
+  id: string;
+  image: string;
+  tag: string; // e.g. "RESERVOIR LINING"
+  title: string;
+  location: string; // e.g. "South Africa"
+  systemDetails: string; // e.g. "HDPE Lining System"
+}
+
+export interface HeroSlide {
+  image: string;
+  mediaType?: "image" | "video";
+  titlePrefix?: string;
+  titleAccent?: string;
+  titleSuffix?: string;
+  subtitle?: string;
+  description?: string;
+}
+
+export function isVideoUrl(url: string, explicitType?: "image" | "video"): boolean {
+  if (explicitType === "video") return true;
+  if (explicitType === "image") return false;
+  if (!url) return false;
+  const cleanUrl = url.toLowerCase().split("?")[0].split("#")[0];
+  return (
+    cleanUrl.endsWith(".mp4") ||
+    cleanUrl.endsWith(".webm") ||
+    cleanUrl.endsWith(".ogv") ||
+    cleanUrl.endsWith(".mov") ||
+    cleanUrl.includes("video/upload") ||
+    cleanUrl.includes("/video/")
+  );
+}
+
+export interface HeroSection {
+  headlinePrefix: string; // e.g. "Africa's Integrated"
+  headlineAccent: string; // e.g. "Geosynthetics"
+  headlineSuffix: string; // e.g. "Execution Platform"
+  tagline: string; // e.g. "Designed. Supplied. Installed. Tested. Certified."
+  subtext: string; // e.g. "Complete engineered systems for containment..."
+  bgImage: string; // image URL or blank
+  sliderImages?: (string | HeroSlide)[]; // multiple hero background images/configs for carousel
+  autoPlayInterval?: number; // Configurable slide auto-play interval duration in ms
+  btn1Text: string; // Primary button text
+  btn1Url: string; // Primary button url
+  btn2Text: string; // Secondary button text
+  btn2Url: string; // Secondary button url
+  btn3Text: string; // Third button text
+  btn3Url: string; // Third button url
+}
+
+export interface GsaStep {
+  num: number;
+  title: string;
+  desc: string;
+  img: string; // image URL
+}
+
+export interface GsaDifference {
+  subtitle: string;
+  title: string;
+  description: string;
+  ctaText: string;
+  ctaUrl: string;
+  steps: GsaStep[];
+}
+
+export interface HomepageContent {
+  // § 1 & 2 – Hero Section
+  hero: HeroSection;
+
+  // GSA Difference Section
+  gsaDifference: GsaDifference;
+
+  // § 3 – Trust Bar
+  trustBadges: TrustBadge[];
+
+  // § 4 – Engineered Systems / App Cards
+  engineeredSystems: {
+    sectionTitle: string;
+    ctaText: string;
+    ctaUrl: string;
+    cards: ApplicationCard[];
+  };
+
+  // § 5 – Partner Logos
+  partners: {
+    subtitle: string;
+    description: string;
+    logos: PartnerLogo[];
+  };
+
+  // § 6 – Services
+  services: {
+    sectionTitle: string;
+    ctaText: string;
+    ctaUrl: string;
+    cards: ServiceCard[];
+    qualityBoxTitle: string;
+    qualityChecklist: string[];
+    qualityCtaText: string;
+    qualityCtaUrl: string;
+    qualityBgImage: string;
+  };
+
+  // § 7 – Stats & Pan-African Presence
+  presence: {
+    stats: StatCounter[];
+    presenceTitle: string;
+    presenceSubtitle: string;
+    offices: OfficeLocation[];
+    mapAsset: string; // image URL
+  };
+
+  // § 8 – Case Studies / Projects Showcase (Dynamic from case_studies)
+  projects: {
+    sectionTitle: string;
+    ctaText: string;
+    ctaUrl: string;
+    featuredProjectIds?: string[];
+    catalogueBoxHeading: string;
+    catalogueBoxContent: string;
+    catalogueSearchPlaceholder: string;
+    catalogueCtaText: string;
+    catalogueCtaUrl: string;
+  };
+
+  // § 9 – BOQ CTA Banner
+  boqBanner: {
+    title: string;
+    subtitle: string;
+    paragraph: string;
+    btn1Text: string;
+    btn1Url: string;
+    btn2Text: string;
+    btn2Url: string;
+  };
+}
+
+export const DEFAULT_HOMEPAGE_CONTENT: HomepageContent = {
+  hero: {
+    headlinePrefix: "Geosynthetics",
+    headlineAccent: "Supply, Fabrication & Installation",
+    headlineSuffix: "Across Africa",
+    tagline: "Global Standards. African Execution.",
+    subtext:
+      "Geosynthetic material supply, manufacturing and fabrication, specialist installation and documented QA/QC for African projects. More than 15 million m² installed and materials supplied to over 30 countries across the Group's delivery footprint.",
+    bgImage: "",
+    sliderImages: [
+      "",
+      "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1600&q=80",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=80",
+      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&q=80",
+    ],
+    autoPlayInterval: 5000,
+    btn1Text: "Upload BOQ or Drawings",
+    btn1Url: "/contacts",
+    btn2Text: "Speak to an Engineer",
+    btn2Url: "/contacts",
+    btn3Text: "",
+    btn3Url: "",
+  },
+  gsaDifference: {
+    subtitle: "The GSA Difference",
+    title: "One System.\nOne Partner.\nOne Accountability.",
+    description:
+      "Unlike product suppliers or installation contractors, we take full responsibility for system performance — from design through to certification.",
+    ctaText: "Learn more about GSA",
+    ctaUrl: "/services",
+    steps: [
+      {
+        num: 1,
+        title: "Design",
+        desc: "We design the right system for your application.",
+        img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80",
+      },
+      {
+        num: 2,
+        title: "Supply",
+        desc: "We source the best materials — brand agnostic.",
+        img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80",
+      },
+      {
+        num: 3,
+        title: "Install",
+        desc: "Certified installation by experienced specialists.",
+        img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80",
+      },
+      {
+        num: 4,
+        title: "Test",
+        desc: "On-site testing to international standards.",
+        img: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
+      },
+      {
+        num: 5,
+        title: "Certify",
+        desc: "Documentation, traceability and certification.",
+        img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&q=80",
+      },
+    ],
+  },
+  trustBadges: [
+    { icon: "", text: "GROUP IAGI INSTALLER MEMBER / Specialist installation capability" },
+    { icon: "", text: "15M+ m² INSTALLED / Group project experience" },
+    { icon: "", text: "30+ COUNTRIES SUPPLIED / African delivery footprint" },
+    { icon: "", text: "DOCUMENTED QA/QC / Materials, installation & handover" },
+  ],
+  engineeredSystems: {
+    sectionTitle: "ENGINEERED SYSTEMS FOR EVERY APPLICATION",
+    ctaText: "VIEW ALL APPLICATIONS →",
+    ctaUrl: "/applications",
+    cards: [
+      {
+        id: "mining",
+        title: "MINING SYSTEMS",
+        image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=600&q=80",
+        linkUrl: "/applications/mining-systems",
+      },
+      {
+        id: "water",
+        title: "WATER CONTAINMENT",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
+        linkUrl: "/applications/water-containment",
+      },
+      {
+        id: "waste",
+        title: "WASTE & LANDFILLS",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+        linkUrl: "/applications/waste-landfills",
+      },
+      {
+        id: "roads",
+        title: "ROADS & INFRASTRUCTURE",
+        image: "https://images.unsplash.com/photo-1473445730015-841f29a9490b?w=600&q=80",
+        linkUrl: "/applications/roads-infrastructure",
+      },
+      {
+        id: "erosion",
+        title: "EROSION CONTROL",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
+        linkUrl: "/applications/erosion-control",
+      },
+      {
+        id: "drainage",
+        title: "DRAINAGE SYSTEMS",
+        image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80",
+        linkUrl: "/applications/drainage-systems",
+      },
+    ],
+  },
+  partners: {
+    subtitle: "IN-HOUSE MANUFACTURING & CUSTOM FABRICATION",
+    description:
+      "Our manufacturing and fabrication capabilities serve projects across Africa: dewatering bags and tubes, woven, nonwoven and composite sand containers, silt curtains and fences, filter socks, prefabricated liners, floating covers, pipe boots and welded mesh gabion systems. Dimensions, materials, seams, handling provisions and inspection records are defined for the agreed production scope.",
+    logos: [],
+  },
+  services: {
+    sectionTitle: "OUR SERVICES",
+    ctaText: "VIEW ALL SERVICES →",
+    ctaUrl: "/services",
+    cards: [
+      { id: "supply", icon: "", title: "SUPPLY", description: "Material supply across Africa" },
+      {
+        id: "installation",
+        icon: "",
+        title: "INSTALLATION",
+        description: "Certified field installation",
+      },
+      {
+        id: "qa-qc",
+        icon: "",
+        title: "QA / QC TESTING",
+        description: "International standards QA/QC",
+      },
+      {
+        id: "design",
+        icon: "",
+        title: "DESIGN SUPPORT",
+        description: "Engineered support, end-to-end",
+      },
+      {
+        id: "logistics",
+        icon: "",
+        title: "LOGISTICS & CUSTOMS",
+        description: "Pan-African logistics management",
+      },
+      {
+        id: "aftercare",
+        icon: "",
+        title: "AFTERCARE SUPPORT",
+        description: "Post-installation technical support",
+      },
+    ],
+    qualityBoxTitle: "NO SYSTEM LEAVES SITE UNVERIFIED.",
+    qualityChecklist: [
+      "Weld Integrity Testing (Vacuum & Air Pressure)",
+      "Material Compliance (GRI/ASTM Standards)",
+      "Material Testing (OIT, Peel, Shear)",
+      "Full Traceability & Documentation",
+    ],
+    qualityCtaText: "VIEW QA/QC PROCESS →",
+    qualityCtaUrl: "/quality-assurance",
+    qualityBgImage: "",
+  },
+  presence: {
+    stats: [
+      { id: "years", value: "20+", label: "Years Industry Experience" },
+      { id: "projects", value: "1000+", label: "Projects Completed Across Africa" },
+      { id: "countries", value: "50+", label: "Countries Materials Supplied" },
+      { id: "products", value: "200+", label: "Products In Our Catalogue" },
+    ],
+    presenceTitle: "PAN-AFRICAN PRESENCE",
+    presenceSubtitle: "One partner. Africa-wide execution.",
+    offices: [
+      {
+        id: "za",
+        name: "South Africa",
+        type: "HQ",
+        linkUrl: "/south-africa-geosynthetics-supplier-installer",
+      },
+      {
+        id: "gh",
+        name: "Ghana",
+        type: "WEST AFRICA MINING HUB",
+        linkUrl: "/ghana-geosynthetics-supplier-contact",
+      },
+      {
+        id: "tz",
+        name: "Tanzania",
+        type: "EAST AFRICA REGIONAL HUB",
+        linkUrl: "/tanzania-geosynthetics-supplier-installer",
+      },
+      {
+        id: "zw",
+        name: "Zimbabwe",
+        type: "REGIONAL OFFICE",
+        linkUrl: "/zimbabwe-geosynthetics-supplier-installer",
+      },
+      {
+        id: "zm",
+        name: "Zambia",
+        type: "",
+        linkUrl: "/zambia-geosynthetics-supplier-installer",
+      },
+      {
+        id: "cgo",
+        name: "Democratic Republic of Congo (DRC)",
+        type: "",
+        linkUrl: "/drc-geosynthetics-supplier-installer",
+      },
+      { id: "ke", name: "Kenya", type: "", linkUrl: "/kenya-geosynthetics-supplier-contact" },
+      {
+        id: "ci",
+        name: "Côte d'Ivoire",
+        type: "",
+        linkUrl: "/cote-divoire-geosynthetics-supplier-contact",
+      },
+      {
+        id: "mz",
+        name: "Mozambique",
+        type: "",
+        linkUrl: "/mozambique-geosynthetics-supplier-contact",
+      },
+      { id: "na", name: "Namibia", type: "", linkUrl: "/namibia-geosynthetics-supplier-contact" },
+      {
+        id: "bw",
+        name: "Botswana",
+        type: "",
+        linkUrl: "/botswana-geosynthetics-supplier-installer",
+      },
+    ],
+    mapAsset: "",
+  },
+  projects: {
+    sectionTitle: "PROVEN ON PROJECTS ACROSS AFRICA",
+    ctaText: "VIEW ALL CASE STUDIES",
+    ctaUrl: "/projects",
+    featuredProjectIds: [],
+    catalogueBoxHeading: "SPEC IT FROM THE CATALOGUE",
+    catalogueBoxContent:
+      "Search 200+ engineered materials by product, application or standard. Datasheets and GRI/ASTM specifications on every item.",
+    catalogueSearchPlaceholder: "HDPE 1.5mm, heap leach pad, GRI-GM13…",
+    catalogueCtaText: "VIEW FULL CATALOGUE →",
+    catalogueCtaUrl: "/catalogue",
+  },
+  boqBanner: {
+    title: "SUBMIT YOUR BOQ.",
+    subtitle: "GET A QUOTE – NOT JUST A PRICE.",
+    paragraph:
+      "Upload your BOQ or speak to our technical team for expert recommendations and support.",
+    btn1Text: "UPLOAD PROJECT BOQ",
+    btn1Url: "/contacts",
+    btn2Text: "QUICK CONTACT",
+    btn2Url: "/contacts",
+  },
+};
