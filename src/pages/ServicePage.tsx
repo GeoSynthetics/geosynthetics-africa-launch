@@ -1,3 +1,4 @@
+import { DeferredRelated } from "@/components/site/DeferredRelated";
 import { productImage } from "@/lib/product-imagery";
 import { prepareResourceLinks } from "@/lib/resource-links";
 import { Link } from "@tanstack/react-router";
@@ -116,28 +117,34 @@ export function ServicePage({ data }: { data: any }) {
             </h2>
             <p className="mt-5 text-muted-foreground leading-relaxed">{profile.why}</p>
           </section>
-          {linkedProducts.length > 0 && (
-            <section className="border-t border-border pt-10">
-              <h2 className="font-display text-2xl font-bold uppercase">
-                Relevant Catalogue Products
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-4 mt-6">
-                {linkedProducts.map((product: any) => (
-                  <Link
-                    key={product.id || product.slug}
-                    to="/catalogue/$slug"
-                    params={{ slug: product.slug }}
-                    className="border border-border rounded-lg p-5 hover:border-primary"
-                  >
-                    <h3 className="font-bold text-sm">{product.name}</h3>
-                    <span className="mt-3 inline-block text-xs font-bold text-primary">
-                      Review product & specification →
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
+          <DeferredRelated data={data}>
+            {({ linkedProducts = [] }) => (
+              <>
+                {linkedProducts.length > 0 && (
+                  <section className="border-t border-border pt-10">
+                    <h2 className="font-display text-2xl font-bold uppercase">
+                      Relevant Catalogue Products
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-4 mt-6">
+                      {linkedProducts.map((product: any) => (
+                        <Link
+                          key={product.id || product.slug}
+                          to="/catalogue/$slug"
+                          params={{ slug: product.slug }}
+                          className="border border-border rounded-lg p-5 hover:border-primary"
+                        >
+                          <h3 className="font-bold text-sm">{product.name}</h3>
+                          <span className="mt-3 inline-block text-xs font-bold text-primary">
+                            Review product & specification →
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </>
+            )}
+          </DeferredRelated>
           {related.length > 0 && (
             <section className="border-t border-border pt-10">
               <h2 className="font-display text-2xl font-bold uppercase">Related Applications</h2>

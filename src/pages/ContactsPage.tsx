@@ -1,3 +1,4 @@
+import { DeferredRelated } from "@/components/site/DeferredRelated";
 import { checkEmailNotification, SAVED_ENQUIRY_MESSAGE } from "@/lib/email-notification";
 import { Link, useLoaderData, useSearch, type LinkComponentProps } from "@tanstack/react-router";
 import { PROJECT_ZONES, formatEnquiryMeta } from "@/lib/project-zones";
@@ -828,30 +829,6 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
   const [quickSubmitting, setQuickSubmitting] = useState(false);
 
   const loaderData = useLoaderData({ strict: false }) as Record<string, unknown>;
-  const caseStudies = (loaderData?.caseStudies || []) as Array<{
-    title: string;
-    location?: string;
-    country?: string;
-    summary?: string;
-    hero_image_url?: string;
-    slug?: string;
-  }>;
-
-  // Map database projects if available, otherwise fall back to static CASE_STUDIES
-  const projectExperience =
-    caseStudies.length > 0
-      ? caseStudies.map((cs) => ({
-          name: cs.title,
-          location:
-            cs.location && cs.country
-              ? `${cs.location}, ${cs.country}`
-              : cs.location || cs.country || "",
-          description: cs.summary || "",
-          image: cs.hero_image_url || "",
-          slug: cs.slug,
-        }))
-      : CASE_STUDIES;
-
   // Zod forms initialization
   type BoqValues = z.infer<typeof boqSchema>;
   type QuickValues = z.infer<typeof quickSchema>;
@@ -948,17 +925,20 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       if (insertErr) throw insertErr;
 
       // Keep the form pending until the notification result is known.
-      const notified = await checkEmailNotification(sendQuoteEmailFn({
-        data: {
-          contactName: values.name,
-          contactEmail: boqContact.email,
-          contactPhone: boqContact.phone ?? undefined,
-          country: values.zone || undefined,
-          projectDescription: messageWithMeta,
-        },
-      }));
+      const notified = await checkEmailNotification(
+        sendQuoteEmailFn({
+          data: {
+            contactName: values.name,
+            contactEmail: boqContact.email,
+            contactPhone: boqContact.phone ?? undefined,
+            country: values.zone || undefined,
+            projectDescription: messageWithMeta,
+          },
+        }),
+      );
 
-      if (notified) toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
+      if (notified)
+        toast.success("Proposal request submitted — we'll be in touch within 1 business day.");
       else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
       boqForm.reset({
         name: "",
@@ -992,14 +972,16 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
       if (error) throw error;
 
       // Keep the form pending until the notification result is known.
-      const notified = await checkEmailNotification(sendContactEmailFn({
-        data: {
-          contactName: values.name,
-          contactEmail: quickContact.email,
-          contactPhone: quickContact.phone ?? undefined,
-          message: values.message,
-        },
-      }));
+      const notified = await checkEmailNotification(
+        sendContactEmailFn({
+          data: {
+            contactName: values.name,
+            contactEmail: quickContact.email,
+            contactPhone: quickContact.phone ?? undefined,
+            message: values.message,
+          },
+        }),
+      );
 
       if (notified) toast.success("Inquiry sent — thank you!");
       else toast.warning(SAVED_ENQUIRY_MESSAGE, { duration: 10000 });
@@ -1026,49 +1008,70 @@ export function FormsBlock({ headOffice }: { headOffice: ContactHeadOffice }) {
               Project Experience In The Region
             </h2>
             <div className="flex flex-col gap-3">
-              {projectExperience.slice(0, 3).map((c) => (
-                <article
-                  key={c.name}
-                  className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
-                >
-                  <div
-                    className="w-28 shrink-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${c.image})` }}
-                    role="img"
-                    aria-label={c.name}
-                  />
-                  <div className="p-3 flex flex-col justify-between min-w-0">
-                    <div>
-                      <div className="font-display text-sm font-bold uppercase leading-tight">
-                        {c.name}
-                      </div>
-                      <div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <MapPin className="h-2.5 w-2.5 text-primary shrink-0" />
-                        <span className="truncate">{c.location}</span>
-                      </div>
-                      <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">
-                        {c.description}
-                      </p>
-                    </div>
-                    {c.slug ? (
-                      <Link
-                        to="/projects/$slug"
-                        params={{ slug: c.slug }}
-                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
-                      >
-                        View Case Study <ChevronRight className="h-3 w-3" />
-                      </Link>
-                    ) : (
-                      <Link
-                        to="/resources"
-                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
-                      >
-                        View Case Study <ChevronRight className="h-3 w-3" />
-                      </Link>
-                    )}
-                  </div>
-                </article>
-              ))}
+              <DeferredRelated data={loaderData}>
+                {({ caseStudies = [] }) => {
+                  const projectExperience =
+                    caseStudies.length > 0
+                      ? caseStudies.map((cs: any) => ({
+                          name: cs.title,
+                          location:
+                            cs.location && cs.country
+                              ? `${cs.location}, ${cs.country}`
+                              : cs.location || cs.country || "",
+                          description: cs.summary || "",
+                          image: cs.hero_image_url || "",
+                          slug: cs.slug,
+                        }))
+                      : CASE_STUDIES;
+                  return (
+                    <>
+                      {projectExperience.slice(0, 3).map((c: any) => (
+                        <article
+                          key={c.name}
+                          className="flex gap-0 rounded border border-border bg-card overflow-hidden group hover:border-primary/40 transition-colors"
+                        >
+                          <div
+                            className="w-28 shrink-0 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${c.image})` }}
+                            role="img"
+                            aria-label={c.name}
+                          />
+                          <div className="p-3 flex flex-col justify-between min-w-0">
+                            <div>
+                              <div className="font-display text-sm font-bold uppercase leading-tight">
+                                {c.name}
+                              </div>
+                              <div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <MapPin className="h-2.5 w-2.5 text-primary shrink-0" />
+                                <span className="truncate">{c.location}</span>
+                              </div>
+                              <p className="mt-1 text-[11px] text-muted-foreground leading-snug line-clamp-2">
+                                {c.description}
+                              </p>
+                            </div>
+                            {c.slug ? (
+                              <Link
+                                to="/projects/$slug"
+                                params={{ slug: c.slug }}
+                                className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
+                              >
+                                View Case Study <ChevronRight className="h-3 w-3" />
+                              </Link>
+                            ) : (
+                              <Link
+                                to="/resources"
+                                className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary hover:underline"
+                              >
+                                View Case Study <ChevronRight className="h-3 w-3" />
+                              </Link>
+                            )}
+                          </div>
+                        </article>
+                      ))}
+                    </>
+                  );
+                }}
+              </DeferredRelated>
             </div>
           </div>
 

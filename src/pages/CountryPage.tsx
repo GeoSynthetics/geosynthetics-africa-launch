@@ -1,5 +1,6 @@
+import { DeferredRelated } from "@/components/site/DeferredRelated";
 import { productImage } from "@/lib/product-imagery";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { Link } from "@tanstack/react-router";
 import {
@@ -24,8 +25,7 @@ import { useQuickQuote } from "@/hooks/use-quick-quote";
 import { GeoGrid } from "@/components/site/shapes";
 import { FAQPageSchema } from "@/components/seo/FAQPageSchema";
 import type { CountryTemplate } from "@/types/country-template";
-import { useCountryTemplate } from "@/hooks/use-country-templates";
-import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
+
 import { countryProfileFor } from "@/data/country-profiles";
 import { PRODUCT_FAMILIES } from "@/lib/product-families";
 import { applicationPath } from "@/data/material-selection";
@@ -51,53 +51,12 @@ function applicationLabel(slug: string): string {
 }
 
 export function CountryPage({ data }: { data: any }) {
-  const {
-    countryTemplate: initialTemplate,
-    linkedProducts: initialLinkedProducts = [],
-    caseStudies = [],
-  } = data;
-  const rawTemplate = useCountryTemplate(initialTemplate, initialTemplate?.slug);
+  const { countryTemplate: initialTemplate } = data;
+  const rawTemplate = initialTemplate;
   const template: CountryTemplate | null = useMemo(
     () => publicBusinessCopy(rawTemplate),
     [rawTemplate],
   );
-  const [linkedProducts, setLinkedProducts] = useState<any[]>(initialLinkedProducts);
-  const hasLocalProject = Boolean(
-    template?.country &&
-    caseStudies.some((cs: any) =>
-      String(cs?.country || "")
-        .toLowerCase()
-        .includes(template.country.toLowerCase()),
-    ),
-  );
-
-  useEffect(() => {
-    let isMounted = true;
-    async function loadFeaturedProducts() {
-      if (!template?.featuredProductIds || template.featuredProductIds.length === 0) {
-        setLinkedProducts([]);
-        return;
-      }
-
-      try {
-        const matched = await fetchProductsByIdsOrSlugs(template.featuredProductIds);
-        if (isMounted) {
-          if (matched.length > 0) {
-            setLinkedProducts(matched);
-          } else if (initialLinkedProducts && initialLinkedProducts.length > 0) {
-            setLinkedProducts(initialLinkedProducts);
-          }
-        }
-      } catch (err) {
-        console.error("Error loading products for country template:", err);
-      }
-    }
-
-    if (template?.featuredProductIds) {
-      loadFeaturedProducts();
-    }
-  }, [template?.featuredProductIds, initialLinkedProducts]);
-
   const { open: openQuickQuote } = useQuickQuote();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
@@ -550,136 +509,160 @@ export function CountryPage({ data }: { data: any }) {
         </section>
 
         {/* ── 4. FEATURED PRODUCTS IN THIS COUNTRY ── */}
-        {linkedProducts && linkedProducts.length > 0 && (
-          <section className="space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                  Featured Products Offered in {template.country}
-                </h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Container-direct and warehouse inventory available for immediate dispatch.
-                </p>
-              </div>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
-              >
-                View Full Product Catalog <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {linkedProducts.map((prod: any) => (
-                <div
-                  key={prod.id || prod.slug}
-                  className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary transition-all duration-200 shadow-xs flex flex-col"
-                >
-                  <div className="h-44 overflow-hidden bg-muted relative">
-                    <img
-                      src={ownPhoto(
-                        prod.image_url || prod.image || prod.hero_image_url,
-                        OWN_PHOTOS.project,
-                      )}
-                      alt={prod.name || prod.label}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div>
-                      <h3 className="font-bold text-foreground text-lg group-hover:text-primary transition">
-                        {prod.name || prod.label}
-                      </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                        {prod.short_description ||
-                          prod.description ||
-                          "High-performance geosynthetic lining system."}
-                      </p>
+        <DeferredRelated data={data}>
+          {({ linkedProducts = [] }) => {
+            return (
+              <>
+                {linkedProducts && linkedProducts.length > 0 && (
+                  <section className="space-y-8">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                      <div>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                          Featured Products Offered in {template.country}
+                        </h2>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Container-direct and warehouse inventory available for immediate dispatch.
+                        </p>
+                      </div>
+                      <Link
+                        to="/products"
+                        className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+                      >
+                        View Full Product Catalog <ArrowRight className="h-4 w-4" />
+                      </Link>
                     </div>
-                    <Link
-                      to="/catalogue/$slug"
-                      params={{ slug: prod.slug }}
-                      className="inline-flex items-center justify-between text-xs font-bold text-primary pt-2 border-t border-border group-hover:underline"
-                    >
-                      <span>Explore Technical Specs</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {linkedProducts.map((prod: any) => (
+                        <div
+                          key={prod.id || prod.slug}
+                          className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary transition-all duration-200 shadow-xs flex flex-col"
+                        >
+                          <div className="h-44 overflow-hidden bg-muted relative">
+                            <img
+                              src={ownPhoto(
+                                prod.image_url || prod.image || prod.hero_image_url,
+                                OWN_PHOTOS.project,
+                              )}
+                              alt={prod.name || prod.label}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                              <h3 className="font-bold text-foreground text-lg group-hover:text-primary transition">
+                                {prod.name || prod.label}
+                              </h3>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                                {prod.short_description ||
+                                  prod.description ||
+                                  "High-performance geosynthetic lining system."}
+                              </p>
+                            </div>
+                            <Link
+                              to="/catalogue/$slug"
+                              params={{ slug: prod.slug }}
+                              className="inline-flex items-center justify-between text-xs font-bold text-primary pt-2 border-t border-border group-hover:underline"
+                            >
+                              <span>Explore Technical Specs</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </>
+            );
+          }}
+        </DeferredRelated>
 
         {/* ── 5. FEATURED PROJECTS IN THIS COUNTRY / SADC ── */}
-        {caseStudies && caseStudies.length > 0 && (
-          <section className="space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                  {hasLocalProject
-                    ? `Projects & Case Studies in ${template.country}`
-                    : `Related Projects Near ${template.country}`}
-                </h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {hasLocalProject
-                    ? `Supply, installation and QA/QC work delivered in ${template.country} and the wider region.`
-                    : `Comparable supply, installation and QA/QC work from the same region and industries.`}
-                </p>
-              </div>
-              <Link
-                to="/projects"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
-              >
-                View All Case Studies <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {caseStudies.map((study: any) => (
-                <Link
-                  key={study.id || study.slug}
-                  to="/projects/$slug"
-                  params={{ slug: study.slug }}
-                  className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary transition shadow-xs flex flex-col"
-                >
-                  <div className="h-48 overflow-hidden bg-muted relative">
-                    <img
-                      src={ownPhoto(study.hero_image_url, OWN_PHOTOS.project)}
-                      alt={study.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {study.country && (
-                      <span className="absolute top-3 right-3 bg-surface-dark/90 text-surface-dark-foreground text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-xs">
-                        {study.country}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                    <div>
-                      <h3 className="font-bold text-foreground text-base group-hover:text-primary transition line-clamp-2">
-                        {study.title}
-                      </h3>
-                      {study.location && (
-                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                          <MapPin className="h-3 w-3 text-primary shrink-0" />
-                          {study.location}
+        <DeferredRelated data={data}>
+          {({ caseStudies = [] }) => {
+            const hasLocalProject = Boolean(
+              template?.country &&
+              caseStudies.some((cs: any) =>
+                String(cs?.country || "")
+                  .toLowerCase()
+                  .includes(template.country.toLowerCase()),
+              ),
+            );
+            return (
+              <>
+                {caseStudies && caseStudies.length > 0 && (
+                  <section className="space-y-8">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                      <div>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                          {hasLocalProject
+                            ? `Projects & Case Studies in ${template.country}`
+                            : `Related Projects Near ${template.country}`}
+                        </h2>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {hasLocalProject
+                            ? `Supply, installation and QA/QC work delivered in ${template.country} and the wider region.`
+                            : `Comparable supply, installation and QA/QC work from the same region and industries.`}
                         </p>
-                      )}
-                      <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-2">
-                        {study.summary}
-                      </p>
+                      </div>
+                      <Link
+                        to="/projects"
+                        className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
+                      >
+                        View All Case Studies <ArrowRight className="h-4 w-4" />
+                      </Link>
                     </div>
-                    <div className="inline-flex items-center text-xs font-bold text-primary pt-2 border-t border-border gap-1">
-                      <span>Read Project Case Study</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
+
+                    <div className="grid md:grid-cols-3 gap-6">
+                      {caseStudies.map((study: any) => (
+                        <Link
+                          key={study.id || study.slug}
+                          to="/projects/$slug"
+                          params={{ slug: study.slug }}
+                          className="group bg-card border border-border rounded-xl overflow-hidden hover:border-primary transition shadow-xs flex flex-col"
+                        >
+                          <div className="h-48 overflow-hidden bg-muted relative">
+                            <img
+                              src={ownPhoto(study.hero_image_url, OWN_PHOTOS.project)}
+                              alt={study.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            {study.country && (
+                              <span className="absolute top-3 right-3 bg-surface-dark/90 text-surface-dark-foreground text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-xs">
+                                {study.country}
+                              </span>
+                            )}
+                          </div>
+                          <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                            <div>
+                              <h3 className="font-bold text-foreground text-base group-hover:text-primary transition line-clamp-2">
+                                {study.title}
+                              </h3>
+                              {study.location && (
+                                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                                  <MapPin className="h-3 w-3 text-primary shrink-0" />
+                                  {study.location}
+                                </p>
+                              )}
+                              <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-2">
+                                {study.summary}
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-xs font-bold text-primary pt-2 border-t border-border gap-1">
+                              <span>Read Project Case Study</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+                  </section>
+                )}
+              </>
+            );
+          }}
+        </DeferredRelated>
 
         {/* ── 6. ONE CONTRACT: MANUFACTURING, SUPPLY, QA/QC-CONTROLLED INSTALLATION ── */}
         <section className="bg-surface-dark text-surface-dark-foreground rounded-2xl p-8 lg:p-12 relative overflow-hidden">

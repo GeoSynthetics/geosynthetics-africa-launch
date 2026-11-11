@@ -7,6 +7,7 @@ import { collectSitemapEntries, SITEMAP_SECTIONS, type SitemapEntry } from "@/li
  * pages and gives search engines a crawlable link to every URL.
  */
 export const Route = createFileRoute("/site-map")({
+  staleTime: 60_000,
   loader: async () => {
     const entries = await collectSitemapEntries();
     // Images are only needed in the XML sitemap

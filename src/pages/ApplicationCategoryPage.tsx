@@ -1,3 +1,4 @@
+import { DeferredRelated } from "@/components/site/DeferredRelated";
 import { prepareResourceLinks, isPdfResource } from "@/lib/resource-links";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -323,6 +324,61 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
     }
   };
 
+  const renderTabs = ({
+    linkedProducts = [],
+    caseStudies = [],
+  }: {
+    linkedProducts?: any[];
+    caseStudies?: any[];
+  }) => (
+    <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
+      {[
+        { id: "overview", label: "Overview" },
+        { id: "system", label: "The System We Build", show: !!appSystem },
+        { id: "delivery", label: "How We Deliver" },
+        {
+          id: "components",
+          label: "System Components",
+          show: !!componentsImage || componentsCallouts.length > 0,
+        },
+        { id: "materials", label: "Materials", show: !!materialOptions },
+        {
+          id: "design",
+          label: "Design Considerations",
+          show: designParagraphs.length > 0,
+        },
+        {
+          id: "installation",
+          label: "Installation Guidelines",
+          show: installationParagraphs.length > 0,
+        },
+        { id: "qa", label: "QA & Testing", show: qaItems.length > 0 },
+        { id: "faqs", label: "FAQs", show: faqs.length > 0 },
+        { id: "products", label: "Products Used", show: linkedProducts.length > 0 },
+        { id: "projects", label: "Case Studies", show: caseStudies.length > 0 },
+        { id: "downloads", label: "Downloads", show: downloads.length > 0 },
+      ].map((link) => {
+        if (link.show === false) return null;
+        return (
+          <li key={link.id}>
+            <a
+              href={`#${link.id}`}
+              onClick={(e) => scrollToSection(e, link.id)}
+              className={cn(
+                "block py-4 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap",
+                activeSection === link.id
+                  ? "text-primary border-primary"
+                  : "text-muted-foreground border-transparent hover:text-primary hover:border-primary",
+              )}
+            >
+              {link.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
   return (
     <div className="bg-background relative">
       {/* ─── Hero Section ──────────────────────────────────────────────────────── */}
@@ -400,48 +456,9 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
       {/* ─── Sticky Tab Navigation ─────────────────────────────────────────────── */}
       <div className="sticky top-[70px] z-40 bg-surface border-b border-border shadow-sm">
         <div className="container-page">
-          <ul className="flex items-center overflow-x-auto no-scrollbar gap-8">
-            {[
-              { id: "overview", label: "Overview" },
-              { id: "system", label: "The System We Build", show: !!appSystem },
-              { id: "delivery", label: "How We Deliver" },
-              {
-                id: "components",
-                label: "System Components",
-                show: !!componentsImage || componentsCallouts.length > 0,
-              },
-              { id: "materials", label: "Materials", show: !!materialOptions },
-              { id: "design", label: "Design Considerations", show: designParagraphs.length > 0 },
-              {
-                id: "installation",
-                label: "Installation Guidelines",
-                show: installationParagraphs.length > 0,
-              },
-              { id: "qa", label: "QA & Testing", show: qaItems.length > 0 },
-              { id: "faqs", label: "FAQs", show: faqs.length > 0 },
-              { id: "products", label: "Products Used", show: linkedProducts.length > 0 },
-              { id: "projects", label: "Case Studies", show: caseStudies.length > 0 },
-              { id: "downloads", label: "Downloads", show: downloads.length > 0 },
-            ].map((link) => {
-              if (link.show === false) return null;
-              return (
-                <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
-                    onClick={(e) => scrollToSection(e, link.id)}
-                    className={cn(
-                      "block py-4 text-xs font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap",
-                      activeSection === link.id
-                        ? "text-primary border-primary"
-                        : "text-muted-foreground border-transparent hover:text-primary hover:border-primary",
-                    )}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          <DeferredRelated data={loaderData} fallback={renderTabs({})}>
+            {(related) => renderTabs(related)}
+          </DeferredRelated>
         </div>
       </div>
 
@@ -714,104 +731,116 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
           )}
 
           {/* Section: Products Used */}
-          {linkedProducts.length > 0 && (
-            <section id="products" className="border-t border-border pt-16 scroll-mt-32">
-              <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
-                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-                {productsTitle}
-              </h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {linkedProducts.map((prod: any, idx: number) => (
-                  <Link
-                    key={idx}
-                    to="/catalogue/$slug"
-                    params={{
-                      slug: prod.slug,
-                    }}
-                    className="group border border-border bg-card rounded-lg overflow-hidden flex flex-col hover:border-primary transition"
-                  >
-                    <div className="aspect-square bg-surface-dark overflow-hidden relative">
-                      <img
-                        src={
-                          prod.image_url ||
-                          "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
-                        }
-                        alt={prod.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
+          <DeferredRelated data={loaderData}>
+            {({ linkedProducts = [] }) => (
+              <>
+                {linkedProducts.length > 0 && (
+                  <section id="products" className="border-t border-border pt-16 scroll-mt-32">
+                    <h2 className="font-display text-2xl font-bold uppercase mb-6 flex items-center">
+                      <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                      {productsTitle}
+                    </h2>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {linkedProducts.map((prod: any, idx: number) => (
+                        <Link
+                          key={idx}
+                          to="/catalogue/$slug"
+                          params={{
+                            slug: prod.slug,
+                          }}
+                          className="group border border-border bg-card rounded-lg overflow-hidden flex flex-col hover:border-primary transition"
+                        >
+                          <div className="aspect-square bg-surface-dark overflow-hidden relative">
+                            <img
+                              src={
+                                prod.image_url ||
+                                "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&q=80"
+                              }
+                              alt={prod.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                            />
+                          </div>
+                          <div className="p-4 flex flex-col flex-1 justify-between">
+                            <div>
+                              <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">
+                                {prod.name}
+                              </h4>
+                              <span className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
+                                {prod.thickness_mm
+                                  ? `${prod.thickness_mm}mm thickness`
+                                  : prod.short_description || ""}
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition mt-4 inline-flex items-center gap-1">
+                              View Product <ArrowRightIcon className="h-3 w-3" />
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
-                    <div className="p-4 flex flex-col flex-1 justify-between">
-                      <div>
-                        <h4 className="font-bold text-xs uppercase tracking-wide text-foreground group-hover:text-primary transition line-clamp-2 mb-1">
-                          {prod.name}
-                        </h4>
-                        <span className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
-                          {prod.thickness_mm
-                            ? `${prod.thickness_mm}mm thickness`
-                            : prod.short_description || ""}
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground group-hover:text-primary transition mt-4 inline-flex items-center gap-1">
-                        View Product <ArrowRightIcon className="h-3 w-3" />
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
+                  </section>
+                )}
+              </>
+            )}
+          </DeferredRelated>
 
           {/* Section: Case Studies */}
-          {caseStudies.length > 0 && (
-            <section id="projects" className="border-t border-border pt-16 scroll-mt-32">
-              <h2 className="font-display text-2xl font-bold uppercase mb-8 flex items-center">
-                <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
-                Featured Case Studies
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-6">
-                {caseStudies.slice(0, 4).map((cs: any, idx: number) => (
-                  <Link
-                    key={idx}
-                    to="/projects/$slug"
-                    params={{ slug: cs.slug }}
-                    className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-foreground transition duration-200"
-                  >
-                    <div
-                      className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
-                      style={{ backgroundImage: `url(${cs.hero_image_url})` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                      <div className="absolute top-4 left-4 z-10">
-                        <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded border-0">
-                          {cs.service_type === "supply_install"
-                            ? "Supply & Install"
-                            : cs.service_type === "supply_only"
-                              ? "Supply Only"
-                              : "Services Only"}
-                        </span>
-                      </div>
+          <DeferredRelated data={loaderData}>
+            {({ caseStudies = [] }) => (
+              <>
+                {caseStudies.length > 0 && (
+                  <section id="projects" className="border-t border-border pt-16 scroll-mt-32">
+                    <h2 className="font-display text-2xl font-bold uppercase mb-8 flex items-center">
+                      <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
+                      Featured Case Studies
+                    </h2>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      {caseStudies.slice(0, 4).map((cs: any, idx: number) => (
+                        <Link
+                          key={idx}
+                          to="/projects/$slug"
+                          params={{ slug: cs.slug }}
+                          className="group flex flex-col rounded border border-border bg-card overflow-hidden hover:border-foreground transition duration-200"
+                        >
+                          <div
+                            className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: `url(${cs.hero_image_url})` }}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div className="absolute top-4 left-4 z-10">
+                              <span className="bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded border-0">
+                                {cs.service_type === "supply_install"
+                                  ? "Supply & Install"
+                                  : cs.service_type === "supply_only"
+                                    ? "Supply Only"
+                                    : "Services Only"}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="p-6 flex-1 flex flex-col justify-between font-sans">
+                            <div>
+                              <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary mb-2">
+                                {cs.project_year || "2024"}
+                              </div>
+                              <h3 className="font-display text-base font-bold uppercase tracking-tight text-foreground group-hover:text-primary transition-colors duration-150 leading-tight mb-2">
+                                {cs.title}
+                              </h3>
+                              <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                                {cs.summary}
+                              </p>
+                            </div>
+                            <span className="text-xs font-bold uppercase tracking-wider text-primary mt-4 flex items-center gap-1">
+                              View Case Study <ChevronRightIcon className="h-3 w-3" />
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
-                    <div className="p-6 flex-1 flex flex-col justify-between font-sans">
-                      <div>
-                        <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary mb-2">
-                          {cs.project_year || "2024"}
-                        </div>
-                        <h3 className="font-display text-base font-bold uppercase tracking-tight text-foreground group-hover:text-primary transition-colors duration-150 leading-tight mb-2">
-                          {cs.title}
-                        </h3>
-                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                          {cs.summary}
-                        </p>
-                      </div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-primary mt-4 flex items-center gap-1">
-                        View Case Study <ChevronRightIcon className="h-3 w-3" />
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
+                  </section>
+                )}
+              </>
+            )}
+          </DeferredRelated>
 
           {relatedApplications.length > 0 && (
             <section className="border-t border-border pt-16">
@@ -973,37 +1002,45 @@ export function ApplicationCategoryPage({ data }: { data: any }) {
             </div>
 
             {/* Sidebar element: Featured Case Study */}
-            {featuredCaseStudy && (
-              <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm flex flex-col">
-                <div
-                  className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${featuredCaseStudy.hero_image_url})` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                  <div className="absolute bottom-3 left-4 text-white">
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-primary">
-                      {featuredCaseStudy.project_year || "FEATURED CASE STUDY"}
-                    </span>
-                    <h4 className="text-xs font-bold uppercase tracking-tight text-white mt-0.5">
-                      {featuredCaseStudy.title}
-                      {featuredCaseStudy.project_year ? ` (${featuredCaseStudy.project_year})` : ""}
-                    </h4>
-                  </div>
-                </div>
-                <div className="p-4 flex flex-col flex-1 bg-card justify-between">
-                  <div className="text-[11px] text-muted-foreground leading-relaxed mb-3">
-                    {featuredCaseStudy.summary}
-                  </div>
-                  <Link
-                    to="/projects/$slug"
-                    params={{ slug: featuredCaseStudy.slug }}
-                    className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 cursor-pointer"
-                  >
-                    View Case Study <ChevronRightIcon className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            )}
+            <DeferredRelated data={loaderData}>
+              {({ featuredCaseStudy = null }) => (
+                <>
+                  {featuredCaseStudy && (
+                    <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm flex flex-col">
+                      <div
+                        className="aspect-[16/10] relative overflow-hidden bg-cover bg-center bg-no-repeat"
+                        style={{ backgroundImage: `url(${featuredCaseStudy.hero_image_url})` }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+                        <div className="absolute bottom-3 left-4 text-white">
+                          <span className="text-[9px] font-bold uppercase tracking-widest text-primary">
+                            {featuredCaseStudy.project_year || "FEATURED CASE STUDY"}
+                          </span>
+                          <h4 className="text-xs font-bold uppercase tracking-tight text-white mt-0.5">
+                            {featuredCaseStudy.title}
+                            {featuredCaseStudy.project_year
+                              ? ` (${featuredCaseStudy.project_year})`
+                              : ""}
+                          </h4>
+                        </div>
+                      </div>
+                      <div className="p-4 flex flex-col flex-1 bg-card justify-between">
+                        <div className="text-[11px] text-muted-foreground leading-relaxed mb-3">
+                          {featuredCaseStudy.summary}
+                        </div>
+                        <Link
+                          to="/projects/$slug"
+                          params={{ slug: featuredCaseStudy.slug }}
+                          className="text-xs font-bold uppercase tracking-wider text-primary hover:underline inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          View Case Study <ChevronRightIcon className="h-3 w-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </DeferredRelated>
 
             {/* Quote Form box */}
             <div className="scroll-mt-32">

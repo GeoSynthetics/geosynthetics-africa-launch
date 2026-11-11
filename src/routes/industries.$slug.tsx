@@ -1,6 +1,11 @@
+import {
+  fetchSectionPageConfig,
+  sectionConfigHierarchies,
+  type SectionPageConfig,
+} from "@/lib/section-page-data";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
+import { canonicalSectionRedirect, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { INDUSTRIES } from "@/components/site/mega-menu-data";
@@ -8,7 +13,7 @@ import { IndustryPage } from "@/pages/IndustryPage";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export async function loadIndustryData(slug: string) {
+export async function loadIndustryData(slug: string, config?: SectionPageConfig) {
   // Per-slug fallback hero images so every industry page looks great before James configures them
   const FALLBACK_HEROES: Record<string, string> = {
     "construction-infrastructure":
@@ -23,26 +28,7 @@ export async function loadIndustryData(slug: string) {
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-  // Load templates from Supabase first
-  const { data: templateRow } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "template_industries")
-    .maybeSingle();
-  const templates = (templateRow?.value as Record<string, any>) || {};
-
-  // Try loading from hierarchy
-  const { data: hierarchyRow, error: hierarchyError } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "hierarchy_industries")
-    .maybeSingle();
-
-  if (hierarchyError) {
-    console.error("Failed to load hierarchy_industries:", hierarchyError);
-  }
-
-  const hierarchy = (hierarchyRow?.value as any) || {};
+  const { templates, hierarchy } = config ?? (await fetchSectionPageConfig("industries"));
   const matchedItem =
     hierarchy.items?.find((item: any) => item.slug === slug) ||
     hierarchy.items?.find((item: any) => item.id === slug);
@@ -107,62 +93,70 @@ export async function loadIndustryData(slug: string) {
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
-  // Fetch dynamic Case Studies (prioritize nominated, fallback to sector matching)
-  let caseStudies: any[] = [];
-  if (templateData?.caseStudies && templateData.caseStudies.length > 0) {
-    try {
-      const { data: casesData } = await supabase
-        .from("case_studies")
-        .select(
-          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
-        )
-        .in("id", templateData.caseStudies)
-        .eq("status", "published");
+  const related = Promise.all([
+    (async () => {
+      // Fetch dynamic Case Studies (prioritize nominated, fallback to sector matching)
+      let caseStudies: any[] = [];
+      if (templateData?.caseStudies && templateData.caseStudies.length > 0) {
+        try {
+          const { data: casesData } = await supabase
+            .from("case_studies")
+            .select(
+              "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+            )
+            .in("id", templateData.caseStudies)
+            .eq("status", "published");
 
-      if (casesData) {
-        // Sort case studies in the order they were nominated
-        const ordered = templateData.caseStudies
-          .map((id: string) => casesData.find((c) => c.id === id))
-          .filter(Boolean);
-        caseStudies = ordered;
+          if (casesData) {
+            // Sort case studies in the order they were nominated
+            const ordered = templateData.caseStudies
+              .map((id: string) => casesData.find((c) => c.id === id))
+              .filter(Boolean);
+            caseStudies = ordered;
+          }
+        } catch (e) {
+          console.error("Failed to load nominated case studies:", e);
+        }
+      } else {
+        try {
+          const { data: casesData } = await supabase
+            .from("case_studies")
+            .select(
+              "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+            )
+            .eq("sector", label)
+            .eq("status", "published")
+            .order("project_year", { ascending: false });
+
+          if (casesData) {
+            caseStudies = casesData;
+          }
+        } catch (e) {
+          console.error("Failed to load industry case studies:", e);
+        }
       }
-    } catch (e) {
-      console.error("Failed to load nominated case studies:", e);
-    }
-  } else {
-    try {
-      const { data: casesData } = await supabase
-        .from("case_studies")
-        .select(
-          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
-        )
-        .eq("sector", label)
-        .eq("status", "published")
-        .order("project_year", { ascending: false });
 
-      if (casesData) {
-        caseStudies = casesData;
+      return caseStudies;
+    })(),
+    (async () => {
+      // Fetch nominated Key Products
+      let keyProducts: any[] = [];
+      if (templateData?.keyProducts && templateData.keyProducts.length > 0) {
+        try {
+          keyProducts = await fetchProductsByIdsOrSlugs(templateData.keyProducts);
+        } catch (e) {
+          console.error("Failed to load nominated key products:", e);
+        }
       }
-    } catch (e) {
-      console.error("Failed to load industry case studies:", e);
-    }
-  }
 
-  // Fetch nominated Key Products
-  let keyProducts: any[] = [];
-  if (templateData?.keyProducts && templateData.keyProducts.length > 0) {
-    try {
-      keyProducts = await fetchProductsByIdsOrSlugs(templateData.keyProducts);
-    } catch (e) {
-      console.error("Failed to load nominated key products:", e);
-    }
-  }
+      return keyProducts;
+    })(),
+  ]).then(([caseStudies, keyProducts]) => ({ caseStudies, keyProducts }));
 
   return {
     industry: { slug, label, icon: staticInd?.icon || "Factory" },
     templateData,
-    caseStudies,
-    keyProducts,
+    related,
   };
 }
 
@@ -245,17 +239,19 @@ export function IndustryDetailSkeleton() {
 export const Route = createFileRoute("/industries/$slug")({
   loader: async ({ params }) => {
     // Internal ids and old addresses redirect to the page's own slug
-    const hierarchies = await fetchSectionHierarchies();
+    const config = await fetchSectionPageConfig("industries");
+    const hierarchies = sectionConfigHierarchies("industries", config);
     const target = await canonicalSectionRedirect("industries", params.slug, hierarchies);
     if (target) throw redirect({ href: target, statusCode: 301 });
 
-    const data = await loadIndustryData(params.slug);
+    const data = await loadIndustryData(params.slug, config);
     const inHierarchy = !!findItem(hierarchies.industries, params.slug);
     if (!inHierarchy && !data?.templateData) throw notFound();
     return data;
   },
   pendingComponent: IndustryDetailSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const { industry, templateData } = loaderData || {
       industry: { slug: "", label: "", icon: "" },

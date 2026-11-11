@@ -4,6 +4,7 @@ import { AboutPage } from "@/pages/AboutPage";
 import { fetchAboutContent } from "@/hooks/use-about-content";
 
 export const Route = createFileRoute("/about")({
+  staleTime: 60_000,
   loader: async () => {
     const [seoResult, about] = await Promise.all([
       supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle(),

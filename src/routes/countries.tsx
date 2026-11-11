@@ -25,6 +25,7 @@ export function toCountryLinks(templates: Record<string, CountryTemplate>): Coun
 }
 
 export const Route = createFileRoute("/countries")({
+  staleTime: 60_000,
   loader: async () => {
     try {
       return { countries: toCountryLinks(await fetchCountryTemplates()) };

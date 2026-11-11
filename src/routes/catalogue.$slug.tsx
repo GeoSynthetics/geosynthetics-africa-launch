@@ -142,7 +142,8 @@ function ProductDetailSkeleton() {
 export const Route = createFileRoute("/catalogue/$slug")({
   loader: ({ params }) => getProductDetail({ data: { slug: params.slug } }),
   pendingComponent: ProductDetailSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const p = loaderData?.product;
     const title = p

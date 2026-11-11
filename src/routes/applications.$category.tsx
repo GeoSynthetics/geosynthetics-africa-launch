@@ -1,5 +1,10 @@
+import {
+  fetchSectionPageConfig,
+  sectionConfigHierarchies,
+  type SectionPageConfig,
+} from "@/lib/section-page-data";
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
+import { canonicalSectionRedirect, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_CATEGORIES } from "@/components/site/mega-menu-data";
@@ -13,7 +18,7 @@ import {
 } from "@/data/application-directory";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 
-export async function loadApplicationData(categorySlug: string) {
+export async function loadApplicationData(categorySlug: string, config?: SectionPageConfig) {
   // Per-slug fallback hero images so pages look great before James configures them
   const FALLBACK_HEROES: Record<string, string> = {
     "mining-systems": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
@@ -28,26 +33,7 @@ export async function loadApplicationData(categorySlug: string) {
   };
   const DEFAULT_HERO = "";
 
-  // Load templates from Supabase first
-  const { data: templateRow } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "template_applications")
-    .maybeSingle();
-  const templates = (templateRow?.value as Record<string, any>) || {};
-
-  // Try loading from hierarchy
-  const { data: hierarchyRow, error: hierarchyError } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "hierarchy_applications")
-    .maybeSingle();
-
-  if (hierarchyError) {
-    console.error("Failed to load hierarchy_applications:", hierarchyError);
-  }
-
-  const hierarchy = (hierarchyRow?.value as any) || {};
+  const { templates, hierarchy } = config ?? (await fetchSectionPageConfig("applications"));
   const matchedItem =
     hierarchy.items?.find((item: any) => item.slug === categorySlug) ||
     hierarchy.items?.find((item: any) => item.id === categorySlug);
@@ -126,72 +112,86 @@ export async function loadApplicationData(categorySlug: string) {
 
   if (templateData && directoryEntry && !matchedItem) templateData.title = directoryEntry.label;
 
-  // Fetch dynamic case studies that match this application category
-  let caseStudies: any[] = [];
-  try {
-    let queryTerm = label;
-    if (categorySlug === "mining-systems") queryTerm = "Mining";
-    else if (categorySlug === "water-containment") queryTerm = "Water";
-    else if (categorySlug === "waste-landfills") queryTerm = "Landfill";
-    else if (categorySlug === "roads-infrastructure") queryTerm = "Road";
+  const related = Promise.all([
+    (async () => {
+      // Fetch dynamic case studies that match this application category
+      let caseStudies: any[] = [];
+      try {
+        let queryTerm = label;
+        if (categorySlug === "mining-systems") queryTerm = "Mining";
+        else if (categorySlug === "water-containment") queryTerm = "Water";
+        else if (categorySlug === "waste-landfills") queryTerm = "Landfill";
+        else if (categorySlug === "roads-infrastructure") queryTerm = "Road";
 
-    const { data: casesData } = await supabase
-      .from("case_studies")
-      .select(
-        "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
-      )
-      .eq("status", "published");
+        const { data: casesData } = await supabase
+          .from("case_studies")
+          .select(
+            "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+          )
+          .eq("status", "published");
 
-    if (casesData) {
-      caseStudies = casesData.filter((cs: any) => {
-        const text = `${cs.title} ${cs.summary} ${cs.sector}`.toLowerCase();
-        return (
-          text.includes(queryTerm.toLowerCase()) ||
-          (categorySlug === "mining-systems" && text.includes("tsf")) ||
-          (categorySlug === "waste-landfills" && text.includes("waste"))
-        );
-      });
-    }
-  } catch (e) {
-    console.error("Failed to load application case studies:", e);
-  }
-
-  // Load selected products from Supabase
-  let linkedProducts: any[] = [];
-  if (templateData?.products && templateData.products.length > 0) {
-    try {
-      linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
-    } catch (e) {
-      console.error("Failed to load template products:", e);
-    }
-  }
-
-  // Load selected featured case study from Supabase
-  let featuredCaseStudy = null;
-  if (templateData?.featuredCaseStudySlug) {
-    try {
-      const { data: fcData, error: fcError } = await supabase
-        .from("case_studies")
-        .select(
-          "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
-        )
-        .eq("slug", templateData.featuredCaseStudySlug)
-        .eq("status", "published")
-        .maybeSingle();
-      if (!fcError && fcData) {
-        featuredCaseStudy = fcData;
+        if (casesData) {
+          caseStudies = casesData.filter((cs: any) => {
+            const text = `${cs.title} ${cs.summary} ${cs.sector}`.toLowerCase();
+            return (
+              text.includes(queryTerm.toLowerCase()) ||
+              (categorySlug === "mining-systems" && text.includes("tsf")) ||
+              (categorySlug === "waste-landfills" && text.includes("waste"))
+            );
+          });
+        }
+      } catch (e) {
+        console.error("Failed to load application case studies:", e);
       }
-    } catch (e) {
-      console.error("Failed to load featured case study:", e);
-    }
-  }
+
+      return caseStudies;
+    })(),
+    (async () => {
+      // Load selected products from Supabase
+      let linkedProducts: any[] = [];
+      if (templateData?.products && templateData.products.length > 0) {
+        try {
+          linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
+        } catch (e) {
+          console.error("Failed to load template products:", e);
+        }
+      }
+
+      return linkedProducts;
+    })(),
+    (async () => {
+      // Load selected featured case study from Supabase
+      let featuredCaseStudy = null;
+      if (templateData?.featuredCaseStudySlug) {
+        try {
+          const { data: fcData, error: fcError } = await supabase
+            .from("case_studies")
+            .select(
+              "id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year",
+            )
+            .eq("slug", templateData.featuredCaseStudySlug)
+            .eq("status", "published")
+            .maybeSingle();
+          if (!fcError && fcData) {
+            featuredCaseStudy = fcData;
+          }
+        } catch (e) {
+          console.error("Failed to load featured case study:", e);
+        }
+      }
+
+      return featuredCaseStudy;
+    })(),
+  ]).then(([caseStudies, linkedProducts, featuredCaseStudy]) => ({
+    caseStudies,
+    linkedProducts,
+    featuredCaseStudy,
+  }));
 
   return {
     category: { slug: categorySlug, label },
     templateData,
-    caseStudies,
-    linkedProducts,
-    featuredCaseStudy,
+    related,
   };
 }
 
@@ -316,17 +316,19 @@ export function ApplicationCategorySkeleton() {
 export const Route = createFileRoute("/applications/$category")({
   loader: async ({ params }) => {
     // Internal ids and old addresses redirect to the page's own slug
-    const hierarchies = await fetchSectionHierarchies();
+    const config = await fetchSectionPageConfig("applications");
+    const hierarchies = sectionConfigHierarchies("applications", config);
     const target = await canonicalSectionRedirect("applications", params.category, hierarchies);
     if (target) throw redirect({ href: target, statusCode: 301 });
 
-    const data = await loadApplicationData(params.category);
+    const data = await loadApplicationData(params.category, config);
     const inHierarchy = !!findItem(hierarchies.applications, params.category);
     if (!inHierarchy && !data?.templateData) throw notFound();
     return data;
   },
   pendingComponent: ApplicationCategorySkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const { category, templateData } = loaderData || {
       category: { slug: "", label: "" },

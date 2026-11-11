@@ -8,13 +8,10 @@ const contactsSearchSchema = z.object({
 });
 
 export const Route = createFileRoute("/contacts")({
+  staleTime: 60_000,
   validateSearch: (search) => contactsSearchSchema.parse(search),
   loader: async () => {
-    const [{ data: config }, { data: caseStudies, error }] = await Promise.all([
-      supabase
-        .from("site_config")
-        .select("key, value")
-        .in("key", ["seo_pages", "contacts_page_content", "regional_coverage"]),
+    const related = Promise.resolve(
       supabase
         .from("case_studies")
         .select("id, title, slug, summary, location, country, hero_image_url")
@@ -22,19 +19,25 @@ export const Route = createFileRoute("/contacts")({
         .order("project_year", { ascending: false })
         .order("created_at", { ascending: false })
         .limit(3),
-    ]);
+    ).then(
+      ({ data, error }) => {
+        if (error) console.error("Error loading contact project examples:", error);
+        return { caseStudies: data || [] };
+      },
+      () => ({ caseStudies: [] }),
+    );
+    const { data: config } = await supabase
+      .from("site_config")
+      .select("key, value")
+      .in("key", ["seo_pages", "contacts_page_content", "regional_coverage"]);
     const values = Object.fromEntries((config || []).map((row) => [row.key, row.value]));
     const seoMap = (values.seo_pages as Record<string, any>) || {};
-
-    if (error) {
-      console.error("Error loading case studies for contacts page:", error);
-    }
 
     return {
       seo: seoMap["/contacts"] || null,
       content: values.contacts_page_content || null,
       regionalCoverage: values.regional_coverage || null,
-      caseStudies: caseStudies || [],
+      related,
     };
   },
   head: ({ loaderData }) => {

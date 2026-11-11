@@ -74,7 +74,8 @@ export const Route = createFileRoute("/blog/")({
     };
   },
   pendingComponent: BlogLandingSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: () => {
     const title = "Geosynthetics Blog — Technical Insights & Industry News | Geosynthetics Africa";
     const description =

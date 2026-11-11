@@ -125,7 +125,8 @@ function BlogPostSkeleton() {
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => loadPost(params.slug),
   pendingComponent: BlogPostSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const post = loaderData?.post;
     const title =

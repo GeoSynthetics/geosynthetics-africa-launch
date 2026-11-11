@@ -12,6 +12,7 @@ import {
 } from "@/lib/public-resources";
 
 export const Route = createFileRoute("/resources/$category/$slug")({
+  staleTime: 60_000,
   beforeLoad: ({ params }) => {
     if (!getCategory(params.category)) throw notFound();
   },

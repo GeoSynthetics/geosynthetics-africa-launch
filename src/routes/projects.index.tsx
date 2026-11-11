@@ -49,22 +49,20 @@ function ProjectsLandingSkeleton() {
 
 export const Route = createFileRoute("/projects/")({
   loader: async () => {
-    const { data, error } = await supabase
-      .from("case_studies")
-      .select("*")
-      .eq("status", "published")
-      .order("project_year", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error loading case studies:", error);
-    }
-
-    const { data: landingRow } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "projects_landing_content")
-      .maybeSingle();
+    const [{ data, error }, { data: landingRow }] = await Promise.all([
+      supabase
+        .from("case_studies")
+        .select("*")
+        .eq("status", "published")
+        .order("project_year", { ascending: false })
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("site_config")
+        .select("value")
+        .eq("key", "projects_landing_content")
+        .maybeSingle(),
+    ]);
+    if (error) console.error("Error loading case studies:", error);
 
     return {
       caseStudies: data || [],
@@ -72,7 +70,8 @@ export const Route = createFileRoute("/projects/")({
     };
   },
   pendingComponent: ProjectsLandingSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const landing = (loaderData?.landingContent as any) || {};
     const title =

@@ -72,7 +72,8 @@ function QADetailSkeleton() {
 export const Route = createFileRoute("/quality-assurance/$slug")({
   loader: ({ params }) => loadQADocument(params.slug),
   pendingComponent: QADetailSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const doc = loaderData?.qaDocument;
     const title = doc

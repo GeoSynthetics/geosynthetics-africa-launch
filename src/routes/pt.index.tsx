@@ -3,6 +3,7 @@ import { LocalizedLandingPage } from "@/pages/LocalizedLandingPage";
 import { loadLocalizedPage, localizedHead } from "@/i18n/localized-route";
 
 export const Route = createFileRoute("/pt/")({
+  staleTime: 60_000,
   loader: () => loadLocalizedPage("pt", ""),
   head: ({ loaderData }) => localizedHead(loaderData?.page),
   component: () => <LocalizedLandingPage page={Route.useLoaderData().page} />,
