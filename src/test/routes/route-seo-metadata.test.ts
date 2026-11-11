@@ -79,7 +79,7 @@ describe("Route SEO Metadata generation", () => {
       const headResult = (FamilyRoute.options.head as any)({ loaderData: mockLoaderData });
       expect(headResult).toBeDefined();
       expect(headResult.meta).toContainEqual({
-        title: "Hdpe Geomembranes | Geomembranes — Geosynthetics Africa",
+        title: "HDPE Geomembranes | Geomembranes — Geosynthetics Africa",
       });
       expect(headResult.meta).not.toContainEqual(expect.objectContaining({ name: "keywords" }));
     });
