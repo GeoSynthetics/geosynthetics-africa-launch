@@ -1,6 +1,7 @@
 import { createRouter, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { getErrorMessage } from "./lib/error-message";
+import { PageLoading } from "./components/site/PageLoading";
 import { routeTree } from "./routeTree.gen";
 
 function DefaultErrorComponent({ error, reset }: ErrorComponentProps) {
@@ -83,6 +84,9 @@ export const getRouter = () => {
     defaultPreload: "intent",
     defaultPreloadStaleTime: 30000,
     defaultErrorComponent: DefaultErrorComponent,
+    defaultPendingComponent: PageLoading,
+    defaultPendingMs: 150,
+    defaultPendingMinMs: 0,
   });
 
   return router;
