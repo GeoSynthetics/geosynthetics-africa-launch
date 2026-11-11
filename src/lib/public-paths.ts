@@ -17,6 +17,8 @@ export const PUBLIC_PATH_REDIRECTS: Record<string, string> = {
   "/products/geomembranes/pp-geomembranes": "/products/geomembrane-liners/fpp-geomembrane-liners",
   "/products/geomembranes/textured-geomembranes": "/products/geomembrane-liners/hdpe-geomembranes",
   "/products/geomembranes/speciality-geomembranes": "/products/geomembrane-liners",
+  // EVA family page moved from its old, mislabelled address
+  "/products/geomembrane-liners/textured-geomembranes": "/products/geomembrane-liners/eva-geomembranes",
   "/products/geotextiles": "/products/geotextile-fabrics",
   "/products/geotextiles/non-woven-geotextiles": "/products/geotextile-fabrics/polypropylene-non-woven-geotextiles",
   "/products/geotextiles/woven-geotextiles": "/products/geotextile-fabrics/polypropylene-woven-geotextiles",

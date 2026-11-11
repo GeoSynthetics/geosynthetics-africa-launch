@@ -38,7 +38,7 @@ const P = {
   },
   pvc: { label: "PVC geomembranes", href: "/products/geomembrane-liners/pvc-geomembranes" },
   epdm: { label: "EPDM geomembranes", href: "/products/geomembrane-liners/epdm-geomembranes" },
-  eva: { label: "EVA geomembranes", href: "/products/geomembrane-liners/textured-geomembranes" },
+  eva: { label: "EVA geomembranes", href: "/products/geomembrane-liners/eva-geomembranes" },
   polylock: {
     label: "GSE® PolyLock-T termination profile",
     href: "/products/geomembrane-liners/gse-polylock-t",
