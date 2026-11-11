@@ -28,6 +28,8 @@ import { fetchDynamicMenus } from "@/hooks/use-dynamic-menus";
 import { fetchFooterContent } from "@/hooks/use-footer-content";
 import { SITE_URL, absoluteUrl } from "@/lib/site-url";
 
+import { NavigationFeedback } from "@/components/site/PageLoading";
+
 const OG_IMAGE_URL = `${SITE_URL}/og-image.jpg`;
 
 function NotFoundComponent() {
@@ -54,6 +56,8 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+  // Shared navigation content does not need another round trip on every click.
+  staleTime: 5 * 60_000,
   loader: async () => {
     const [megaMenu, footerContent] = await Promise.all([
       fetchDynamicMenus(),
@@ -88,7 +92,10 @@ export const Route = createRootRoute({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "robots", content: "index, follow" },
         // Google Search Console ownership verification
-        { name: "google-site-verification", content: "T7knp4FMktwKJG-JPgszp4-j5_1oqvIEQqng1cz-Pq4" },
+        {
+          name: "google-site-verification",
+          content: "T7knp4FMktwKJG-JPgszp4-j5_1oqvIEQqng1cz-Pq4",
+        },
         { title: "Geosynthetics Africa" },
         { name: "description", content: "Africa's Integrated Geosynthetics Execution Platform." },
         { property: "og:title", content: "Geosynthetics Africa" },
@@ -161,6 +168,7 @@ function RootComponent() {
         <WebSiteSchema />
         <div className="flex min-h-screen flex-col">
           <Header />
+          <NavigationFeedback />
           <main className="flex-1">
             <Outlet />
           </main>
