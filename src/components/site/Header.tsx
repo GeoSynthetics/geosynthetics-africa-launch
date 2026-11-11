@@ -101,6 +101,10 @@ function DesktopNav({ menus, isLoading }: { menus: typeof megaMenus; isLoading: 
     if (val !== "") {
       isInside.current = true;
       setValue(val);
+      // Opening a section prepares its shared content before a product is chosen,
+      // including on touch screens where there is no hover before the first tap.
+      const menu = menus.find((item) => item.key === val);
+      if (menu) router.preloadRoute({ to: menu.to }).catch(() => {});
     } else {
       // Schedule the close timeout but verify cursor position when it runs
       timeoutRef.current = window.setTimeout(() => {
