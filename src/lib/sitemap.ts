@@ -11,6 +11,8 @@
  *   xhtml:link hreflang alternates, matching the <link rel="alternate"> tags.
  * - Product, blog and project URLs carry their images (image sitemap).
  */
+import { RESOURCE_CATEGORIES } from "@/lib/resource-categories";
+import { fetchPublishedResources, resourceCategoryFor } from "@/lib/public-resources";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE_URL, absoluteUrl } from "@/lib/site-url";
 import { fetchCompanyPageTemplates } from "@/hooks/use-company-page-templates";
@@ -33,7 +35,7 @@ export const SITEMAP_SECTIONS: { key: SitemapSection; label: string }[] = [
   { key: "pages", label: "Company" },
   { key: "solutions", label: "Products, Applications, Services & Industries" },
   { key: "catalogue", label: "Product Catalogue" },
-  { key: "insights", label: "Projects & Blog" },
+  { key: "insights", label: "Projects, Blog & Technical Resources" },
   { key: "countries", label: "Countries We Serve" },
   { key: "fr", label: "Français" },
   { key: "pt", label: "Português" },
@@ -175,6 +177,31 @@ export async function collectSitemapEntries(): Promise<SitemapEntry[]> {
     }
   } catch {
     // skip
+  }
+
+  // Public technical resources, with stable HTML detail URLs (never signed file URLs).
+  for (const category of RESOURCE_CATEGORIES) {
+    add({
+      path: `/resources/${category.slug}`,
+      title: category.title,
+      section: "insights",
+      group: "Technical Resources",
+    });
+  }
+  try {
+    for (const resource of await fetchPublishedResources()) {
+      const category = resourceCategoryFor(resource);
+      if (!resource.is_public || !resource.slug || !category) continue;
+      add({
+        path: `/resources/${category.slug}/${resource.slug}`,
+        title: resource.title,
+        section: "insights",
+        group: category.title,
+        // No lastmod: created_at is not a reliable modification date.
+      });
+    }
+  } catch {
+    // Other sitemap sections remain available during a resource query failure.
   }
 
   // Projects
