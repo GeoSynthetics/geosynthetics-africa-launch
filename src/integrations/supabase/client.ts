@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { createPublicConfigCache, publicConfigRequest } from "@/lib/public-config-cache";
 import { SITE_URL } from "@/lib/site-url";
 
 const supabaseUrl =
@@ -47,8 +48,16 @@ function scheduleSiteCacheRefresh() {
 
 const WRITE_METHODS = new Set(["POST", "PATCH", "PUT", "DELETE"]);
 
+const publicConfigFetch = createPublicConfigCache((input, init) => fetch(input, init));
 const cdnImageFetch: typeof fetch = async (input, init) => {
-  const response = await fetch(input, init);
+  // SPA navigation otherwise bypasses the HTML CDN and re-downloads template
+  // collections from the database on each page. Public reads can use the CDN.
+  const cachedUrl =
+    typeof window !== "undefined" &&
+    !/^\/(admin|login|signup|profile)(\/|$)/.test(window.location.pathname)
+      ? publicConfigRequest(input, init, supabaseUrl!, supabasePublishableKey!)
+      : null;
+  const response = cachedUrl ? await publicConfigFetch(cachedUrl) : await fetch(input, init);
   const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
   const method = (init?.method || (input instanceof Request ? input.method : "GET")).toUpperCase();
   if (

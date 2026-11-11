@@ -31,14 +31,11 @@ export function NavigationFeedback() {
   if (!isLoading) return null;
   return (
     <div
-      role="status"
-      className="fixed bottom-5 left-1/2 z-[100] -translate-x-1/2 rounded bg-surface-dark px-5 py-3 text-sm font-medium text-white shadow-lg"
+      role="progressbar"
+      aria-label="Loading page"
+      className="fixed top-0 inset-x-0 z-[100] h-1 overflow-hidden bg-primary/15"
     >
-      <span
-        aria-hidden="true"
-        className="mr-3 inline-block h-3 w-3 rounded-full bg-primary motion-safe:animate-pulse"
-      />
-      Opening page…
+      <div className="h-full w-2/3 bg-primary motion-safe:animate-pulse" />
     </div>
   );
 }

@@ -24,7 +24,7 @@ export const Route = createFileRoute("/products/$category/")({
     };
   },
   pendingComponent: PageLoading,
-  pendingMs: 150,
+  pendingMs: 1500,
   staleTime: 60_000,
   head: ({ loaderData }) => {
     if (!loaderData) {

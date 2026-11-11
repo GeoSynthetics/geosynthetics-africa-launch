@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Await, Link } from "@tanstack/react-router";
 import { Route } from "@/routes/products.$category.$family";
 import { ChevronRight, Download, FileText, BookOpen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -132,7 +132,7 @@ export function ProductFamilyPage() {
     },
     category,
     family,
-    dynamicCaseStudies,
+    undefined,
   )!;
   const heroImage = (data as any).heroImage || "";
   const [activeSection, setActiveSection] = useState<string>("description");
@@ -513,57 +513,18 @@ export function ProductFamilyPage() {
             <span className="w-1.5 h-6 bg-primary mr-4 block"></span>
             Featured Projects Across Africa
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {(data.projects || []).map((project: any, idx: number) => {
-              const cardContent = (
-                <>
-                  {project.image && (
-                    <img
-                      src={project.image}
-                      alt={project.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">
-                      {project.name}
-                    </h4>
-                    <div className="text-primary text-xs uppercase font-medium mt-1">
-                      {project.location}
-                    </div>
-                  </div>
-                </>
-              );
-
-              if (project.slug) {
-                return (
-                  <Link
-                    key={idx}
-                    to="/projects/$slug"
-                    params={{
-                      slug: canonicalPublicPath("/projects/" + project.slug).replace(
-                        "/projects/",
-                        "",
-                      ),
-                    }}
-                    className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border block"
-                  >
-                    {cardContent}
-                  </Link>
-                );
-              }
-
-              return (
-                <div
-                  key={idx}
-                  className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border"
-                >
-                  {cardContent}
-                </div>
-              );
-            })}
-          </div>
+          <Await
+            promise={dynamicCaseStudies}
+            fallback={<ProjectCards projects={data.projects || []} />}
+          >
+            {(projects) => (
+              <ProjectCards
+                projects={
+                  mapFamilyData(familyData || {}, category, family, projects)?.projects || []
+                }
+              />
+            )}
+          </Await>
         </div>
       </section>
 
@@ -697,6 +658,59 @@ export function ProductFamilyPage() {
           </Button>
         </div>
       </section>
+    </div>
+  );
+}
+
+function ProjectCards({ projects }: { projects: any[] }) {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {projects.map((project: any, idx: number) => {
+        const cardContent = (
+          <>
+            {project.image && (
+              <img
+                src={project.image}
+                alt={project.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity group-hover:opacity-80"></div>
+            <div className="absolute bottom-4 left-4 right-4">
+              <h4 className="text-white font-bold text-sm uppercase tracking-wide line-clamp-1">
+                {project.name}
+              </h4>
+              <div className="text-primary text-xs uppercase font-medium mt-1">
+                {project.location}
+              </div>
+            </div>
+          </>
+        );
+
+        if (project.slug) {
+          return (
+            <Link
+              key={idx}
+              to="/projects/$slug"
+              params={{
+                slug: canonicalPublicPath("/projects/" + project.slug).replace("/projects/", ""),
+              }}
+              className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border block"
+            >
+              {cardContent}
+            </Link>
+          );
+        }
+
+        return (
+          <div
+            key={idx}
+            className="group relative aspect-[4/3] rounded overflow-hidden cursor-pointer border border-border"
+          >
+            {cardContent}
+          </div>
+        );
+      })}
     </div>
   );
 }

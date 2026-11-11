@@ -9,23 +9,39 @@ import { correctFamilyContent } from "@/lib/product-content-corrections";
 import { PageLoading } from "@/components/site/PageLoading";
 
 async function loadProductFamily(category: string, family: string) {
-  const [hierarchy, { data, error }, casesResult] = await Promise.all([
+  // Project examples sit below the product details and must not delay the hero,
+  // specification, or quote action. TanStack streams this promise separately.
+  const dynamicCaseStudies = Promise.resolve(
+    supabase
+      .from("case_study_products")
+      .select(
+        "case_studies(id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year), products!inner(family_slug)",
+      )
+      .eq("products.family_slug", family),
+  ).then(
+    ({ data, error }) => {
+      if (error) console.error("Failed to fetch family case studies:", error);
+      const seen = new Set();
+      return (data || [])
+        .map((item: any) => item.case_studies)
+        .filter((item: any) => {
+          if (!item || seen.has(item.id)) return false;
+          seen.add(item.id);
+          return true;
+        });
+    },
+    (error) => {
+      console.error("Failed to fetch family case studies:", error);
+      return [];
+    },
+  );
+  const [hierarchy, { data, error }] = await Promise.all([
     fetchProductHierarchy(),
     supabase
       .from("site_config")
       .select("value")
       .eq("key", "template_product_categories")
       .maybeSingle(),
-    supabase
-      .from("case_study_products")
-      .select(
-        "case_studies(id, title, slug, summary, location, country, hero_image_url, sector, service_type, project_year), products!inner(family_slug)",
-      )
-      .eq("products.family_slug", family)
-      .then(
-        (result) => result,
-        (error) => ({ data: null, error }),
-      ),
   ]);
   const resolved = canonicalProductPath(hierarchy, category, family);
   if (resolved && resolved.path !== `/products/${category}/${family}`) {
@@ -41,27 +57,6 @@ async function loadProductFamily(category: string, family: string) {
   // Templates are keyed by the family's slug or, for older entries, its id
   const familyData = templates[family] || (familyId ? templates[familyId] : null) || null;
 
-  // Fetch dynamic case studies that are linked to products belonging to this product family
-  let dynamicCaseStudies: any[] = [];
-  try {
-    const { data: casesData, error: casesError } = casesResult;
-    if (casesError) console.error("Failed to fetch family case studies:", casesError);
-
-    if (casesData) {
-      const seen = new Set();
-      dynamicCaseStudies = casesData
-        .map((item: any) => item.case_studies)
-        .filter((cs: any) => {
-          if (!cs) return false;
-          if (seen.has(cs.id)) return false;
-          seen.add(cs.id);
-          return true;
-        });
-    }
-  } catch (e) {
-    console.error("Failed to fetch dynamic case studies for family:", e);
-  }
-
   return {
     category,
     family,
@@ -75,7 +70,7 @@ export const Route = createFileRoute("/products/$category/$family")({
     return loadProductFamily(params.category, params.family);
   },
   pendingComponent: PageLoading,
-  pendingMs: 150,
+  pendingMs: 1500,
   staleTime: 60_000,
   head: ({ loaderData }) => {
     const { category, family, familyData } = loaderData || {
