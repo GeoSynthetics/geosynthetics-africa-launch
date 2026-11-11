@@ -10,31 +10,21 @@ const contactsSearchSchema = z.object({
 export const Route = createFileRoute("/contacts")({
   validateSearch: (search) => contactsSearchSchema.parse(search),
   loader: async () => {
-    const { data: seoData } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "seo_pages")
-      .maybeSingle();
-    const seoMap = (seoData?.value as Record<string, any>) || {};
-
-    const { data: contentData } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "contacts_page_content")
-      .maybeSingle();
-    const { data: regionalData } = await supabase
-      .from("site_config")
-      .select("value")
-      .eq("key", "regional_coverage")
-      .maybeSingle();
-
-    const { data: caseStudies, error } = await supabase
-      .from("case_studies")
-      .select("id, title, slug, summary, location, country, hero_image_url")
-      .eq("status", "published")
-      .order("project_year", { ascending: false })
-      .order("created_at", { ascending: false })
-      .limit(3);
+    const [{ data: config }, { data: caseStudies, error }] = await Promise.all([
+      supabase
+        .from("site_config")
+        .select("key, value")
+        .in("key", ["seo_pages", "contacts_page_content", "regional_coverage"]),
+      supabase
+        .from("case_studies")
+        .select("id, title, slug, summary, location, country, hero_image_url")
+        .eq("status", "published")
+        .order("project_year", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(3),
+    ]);
+    const values = Object.fromEntries((config || []).map((row) => [row.key, row.value]));
+    const seoMap = (values.seo_pages as Record<string, any>) || {};
 
     if (error) {
       console.error("Error loading case studies for contacts page:", error);
@@ -42,8 +32,8 @@ export const Route = createFileRoute("/contacts")({
 
     return {
       seo: seoMap["/contacts"] || null,
-      content: contentData?.value || null,
-      regionalCoverage: regionalData?.value || null,
+      content: values.contacts_page_content || null,
+      regionalCoverage: values.regional_coverage || null,
       caseStudies: caseStudies || [],
     };
   },

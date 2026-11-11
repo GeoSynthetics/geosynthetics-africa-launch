@@ -90,6 +90,11 @@ export async function loadCountryData(customSlug: string) {
       null;
   }
 
+  // Other site pages must not wait for unrelated country products and projects.
+  if (!countryTemplate) {
+    return { countryTemplate: null, linkedProducts: [], caseStudies: [] };
+  }
+
   // Fetch linked products safely without PostgreSQL UUID syntax errors
   let linkedProducts: any[] = [];
   if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
