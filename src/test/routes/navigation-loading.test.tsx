@@ -44,6 +44,7 @@ beforeEach(() => {
 describe("navigation loading", () => {
   it("starts family content and case studies before hierarchy lookup finishes, preserving older id-keyed templates", async () => {
     const hierarchy = deferred<any[]>();
+    const cases = deferred<any>();
     mocks.hierarchy.mockReturnValue(hierarchy.promise);
     mocks.canonical.mockReturnValue({ path: "/products/liners/epdm", family: { id: "old-id" } });
     mocks.from.mockImplementation((table) => {
@@ -53,23 +54,26 @@ describe("navigation loading", () => {
         .fn()
         .mockResolvedValue({ data: { value: { "old-id": { title: "EPDM" } } }, error: null });
       q.then = (ok: any, fail: any) =>
-        Promise.resolve({
-          data: [{ case_studies: { id: "case-1" } }, { case_studies: { id: "case-1" } }],
-          error: null,
-        }).then(ok, fail);
+        cases.promise
+          .then(() => ({
+            data: [{ case_studies: { id: "case-1" } }, { case_studies: { id: "case-1" } }],
+            error: null,
+          }))
+          .then(ok, fail);
       return q;
     });
     const pending = (FamilyRoute.options.loader as any)({
       params: { category: "liners", family: "epdm" },
     });
     expect(mocks.from.mock.calls.map(([table]) => table)).toEqual([
-      "site_config",
       "case_study_products",
+      "site_config",
     ]);
     hierarchy.resolve([]);
     const result = await pending;
     expect(result.familyData.title).toBe("EPDM");
-    expect(result.dynamicCaseStudies).toHaveLength(1);
+    cases.resolve(null);
+    expect(await result.dynamicCaseStudies).toHaveLength(1);
   });
 
   it("loads category content concurrently and keeps canonical redirects", async () => {
