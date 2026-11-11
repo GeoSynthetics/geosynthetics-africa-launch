@@ -75,10 +75,15 @@ export default defineConfig(({ mode }) => {
         // the cached pages straight away (src/lib/site-cache.functions.ts).
         routeRules: {
           "/**": { headers: { "cache-control": PUBLIC_CACHE } },
-          "/sitemap.xml": { headers: { "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" } },
+          "/sitemap.xml": {
+            headers: {
+              "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+            },
+          },
           "/admin": { headers: { "cache-control": NO_STORE } },
           "/admin/**": { headers: { "cache-control": NO_STORE } },
           "/api/**": { headers: { "cache-control": NO_STORE } },
+          "/api/public-config": { headers: { "cache-control": PUBLIC_CACHE } },
           "/api/storage/**": { headers: { "cache-control": IMMUTABLE } },
           "/_serverFn/**": { headers: { "cache-control": NO_STORE } },
           "/login": { headers: { "cache-control": NO_STORE } },
