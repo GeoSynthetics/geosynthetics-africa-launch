@@ -95,78 +95,87 @@ export async function loadCountryData(customSlug: string) {
     return { countryTemplate: null, linkedProducts: [], caseStudies: [] };
   }
 
-  // Fetch linked products safely without PostgreSQL UUID syntax errors
-  let linkedProducts: any[] = [];
-  if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
-    try {
-      linkedProducts = await fetchProductsByIdsOrSlugs(countryTemplate.featuredProductIds);
-    } catch (err) {
-      console.error("Error loading products for country template:", err);
-    }
-  }
-
-  if (linkedProducts.length === 0) {
-    try {
-      const { data: defaultProds } = await supabase
-        .from("products_public")
-        .select(
-          "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
-        )
-        .limit(3);
-      if (defaultProds && defaultProds.length > 0) {
-        linkedProducts = defaultProds;
+  const related = Promise.all([
+    (async () => {
+      // Fetch linked products safely without PostgreSQL UUID syntax errors
+      let linkedProducts: any[] = [];
+      if (countryTemplate?.featuredProductIds && countryTemplate.featuredProductIds.length > 0) {
+        try {
+          linkedProducts = await fetchProductsByIdsOrSlugs(countryTemplate.featuredProductIds);
+        } catch (err) {
+          console.error("Error loading products for country template:", err);
+        }
       }
-    } catch {
-      // ignore fallback error
-    }
-  }
 
-  if (linkedProducts.length === 0) {
-    linkedProducts = [
-      {
-        id: "hdpe-smooth",
-        name: "GSE Smooth HDPE Geomembrane",
-        slug: "gse-hdpe-liner-smooth-geomembrane",
-        short_description:
-          "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
-        image_url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
-      },
-      {
-        id: "bidim-geotextile",
-        name: "MIRAFI® Non-Woven Geotextile",
-        slug: "bidim-non-woven-continuous-filament-geotextile",
-        short_description:
-          "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
-        image_url: "/images/geotextile-product-supply.webp",
-      },
-    ];
-  }
+      if (linkedProducts.length === 0) {
+        try {
+          const { data: defaultProds } = await supabase
+            .from("products_public")
+            .select(
+              "id, name, slug, short_description, image_url, images, product_categories(slug, name)",
+            )
+            .limit(3);
+          if (defaultProds && defaultProds.length > 0) {
+            linkedProducts = defaultProds;
+          }
+        } catch {
+          // ignore fallback error
+        }
+      }
 
-  // Featured case studies: this country first, then the same zone, then other
-  // infrastructure projects (never unrelated residential jobs).
-  let caseStudies: any[] = [];
-  try {
-    const { data: cData } = await supabase
-      .from("case_studies")
-      .select("id, title, slug, summary, location, country, hero_image_url, sector, project_year")
-      .eq("status", "published")
-      .order("project_year", { ascending: false })
-      .limit(200);
-    const profile = countryProfileFor(countryTemplate?.slug, countryTemplate?.country);
-    caseStudies = rankCountryCaseStudies(
-      countryTemplate?.country || "",
-      cData || [],
-      3,
-      industryPattern(profile?.industries[0]?.industrySlug),
-    );
-  } catch (err) {
-    console.error("Error loading case studies for country:", err);
-  }
+      if (linkedProducts.length === 0) {
+        linkedProducts = [
+          {
+            id: "hdpe-smooth",
+            name: "GSE Smooth HDPE Geomembrane",
+            slug: "gse-hdpe-liner-smooth-geomembrane",
+            short_description:
+              "High-density polyethylene lining for TSF, water reservoirs, and landfill containment.",
+            image_url: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80",
+          },
+          {
+            id: "bidim-geotextile",
+            name: "MIRAFI® Non-Woven Geotextile",
+            slug: "bidim-non-woven-continuous-filament-geotextile",
+            short_description:
+              "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
+            image_url: "/images/geotextile-product-supply.webp",
+          },
+        ];
+      }
+
+      return linkedProducts;
+    })(),
+    (async () => {
+      // Featured case studies: this country first, then the same zone, then other
+      // infrastructure projects (never unrelated residential jobs).
+      let caseStudies: any[] = [];
+      try {
+        const { data: cData } = await supabase
+          .from("case_studies")
+          .select(
+            "id, title, slug, summary, location, country, hero_image_url, sector, project_year",
+          )
+          .eq("status", "published")
+          .order("project_year", { ascending: false })
+          .limit(200);
+        const profile = countryProfileFor(countryTemplate?.slug, countryTemplate?.country);
+        caseStudies = rankCountryCaseStudies(
+          countryTemplate?.country || "",
+          cData || [],
+          3,
+          industryPattern(profile?.industries[0]?.industrySlug),
+        );
+      } catch (err) {
+        console.error("Error loading case studies for country:", err);
+      }
+      return caseStudies;
+    })(),
+  ]).then(([linkedProducts, caseStudies]) => ({ linkedProducts, caseStudies }));
 
   return {
     countryTemplate,
-    linkedProducts,
-    caseStudies,
+    related,
   };
 }
 
@@ -269,6 +278,7 @@ const COUNTRY_SEO_MAP: Record<
  * Keep the custom SEO slugs visible in the browser URL bar.
  */
 export const Route = createFileRoute("/$slug")({
+  staleTime: 60_000,
   loader: async ({ params }) => {
     const customSlug = params.slug;
 

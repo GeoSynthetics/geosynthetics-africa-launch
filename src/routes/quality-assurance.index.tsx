@@ -66,7 +66,8 @@ export const Route = createFileRoute("/quality-assurance/")({
     };
   },
   pendingComponent: QALandingSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const landing = (loaderData?.landingContent as any) || {};
     const title = landing.seo?.title || "Quality Assurance — Geosynthetics Africa";

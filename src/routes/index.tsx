@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { HomePage } from "@/pages/HomePage";
 
 export const Route = createFileRoute("/")({
+  staleTime: 60_000,
   loader: async () => {
     const [seoRes, hpRes, regionalRes, caseStudiesRes] = await Promise.all([
       supabase.from("site_config").select("value").eq("key", "seo_pages").maybeSingle(),

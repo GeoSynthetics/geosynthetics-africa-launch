@@ -30,6 +30,7 @@ function parseList(v: unknown): string[] {
 }
 
 export const Route = createFileRoute("/catalogue/")({
+  staleTime: 60_000,
   // Default filters stay out of the URL, so /catalogue is served directly
   // instead of redirecting to /catalogue?q=&cats=[]&mans=[]&sort=relevant
   search: {

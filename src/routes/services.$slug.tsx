@@ -1,6 +1,11 @@
+import {
+  fetchSectionPageConfig,
+  sectionConfigHierarchies,
+  type SectionPageConfig,
+} from "@/lib/section-page-data";
 import { fetchProductsByIdsOrSlugs } from "@/lib/products-query";
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { canonicalSectionRedirect, fetchSectionHierarchies, findItem } from "@/lib/section-paths";
+import { canonicalSectionRedirect, findItem } from "@/lib/section-paths";
 import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/components/site/mega-menu-data";
@@ -9,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DEFAULT_SERVICES_TEMPLATES, type ServiceTemplate } from "@/types/service-template";
 
-export async function loadServiceData(slug: string) {
+export async function loadServiceData(slug: string, config?: SectionPageConfig) {
   // Per-slug fallback hero images — kept in sync with the static SERVICE_CONTENT map in ServicePage.tsx
   const FALLBACK_HEROES: Record<string, string> = {
     supply: "/images/geotextile-product-supply.webp",
@@ -21,26 +26,7 @@ export async function loadServiceData(slug: string) {
   };
   const DEFAULT_HERO = "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&q=80";
 
-  // Load templates from Supabase first
-  const { data: templateRow } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "template_services")
-    .maybeSingle();
-  const templates = (templateRow?.value as Record<string, any>) || {};
-
-  // Try loading from hierarchy
-  const { data: hierarchyRow, error: hierarchyError } = await supabase
-    .from("site_config")
-    .select("value")
-    .eq("key", "hierarchy_services")
-    .maybeSingle();
-
-  if (hierarchyError) {
-    console.error("Failed to load hierarchy_services:", hierarchyError);
-  }
-
-  const hierarchy = (hierarchyRow?.value as any) || {};
+  const { templates, hierarchy } = config ?? (await fetchSectionPageConfig("services"));
   const matchedItem =
     hierarchy.items?.find((item: any) => item.slug === slug) ||
     hierarchy.items?.find((item: any) => item.id === slug);
@@ -176,20 +162,26 @@ export async function loadServiceData(slug: string) {
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
-  // Load selected products from Supabase
-  let linkedProducts: any[] = [];
-  if (templateData?.products && templateData.products.length > 0) {
-    try {
-      linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
-    } catch (e) {
-      console.error("Failed to load template products:", e);
-    }
-  }
+  const related = Promise.all([
+    (async () => {
+      // Load selected products from Supabase
+      let linkedProducts: any[] = [];
+      if (templateData?.products && templateData.products.length > 0) {
+        try {
+          linkedProducts = await fetchProductsByIdsOrSlugs(templateData.products);
+        } catch (e) {
+          console.error("Failed to load template products:", e);
+        }
+      }
+
+      return linkedProducts;
+    })(),
+  ]).then(([linkedProducts]) => ({ linkedProducts }));
 
   return {
     service: { slug, label, icon: staticSvc?.icon || "CheckCircle" },
     templateData,
-    linkedProducts,
+    related,
   };
 }
 
@@ -272,17 +264,19 @@ export function ServiceDetailSkeleton() {
 export const Route = createFileRoute("/services/$slug")({
   loader: async ({ params }) => {
     // Internal ids and old addresses redirect to the page's own slug
-    const hierarchies = await fetchSectionHierarchies();
+    const config = await fetchSectionPageConfig("services");
+    const hierarchies = sectionConfigHierarchies("services", config);
     const target = await canonicalSectionRedirect("services", params.slug, hierarchies);
     if (target) throw redirect({ href: target, statusCode: 301 });
 
-    const data = await loadServiceData(params.slug);
+    const data = await loadServiceData(params.slug, config);
     const inHierarchy = !!findItem(hierarchies.services, params.slug);
     if (!inHierarchy && !data?.templateData) throw notFound();
     return data;
   },
   pendingComponent: ServiceDetailSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const { service, templateData } = loaderData || {
       service: { slug: "", label: "", icon: "" },

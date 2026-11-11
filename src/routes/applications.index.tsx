@@ -19,6 +19,7 @@ async function loadApplicationsLandingData() {
 }
 
 export const Route = createFileRoute("/applications/")({
+  staleTime: 60_000,
   loader: loadApplicationsLandingData,
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};

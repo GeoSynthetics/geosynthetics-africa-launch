@@ -81,7 +81,8 @@ function ProjectDetailSkeleton() {
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => loadProject(params.slug),
   pendingComponent: ProjectDetailSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const p = loaderData?.project;
     const title = p

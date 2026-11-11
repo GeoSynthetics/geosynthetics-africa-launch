@@ -54,7 +54,8 @@ function ServicesLandingSkeleton() {
 export const Route = createFileRoute("/services/")({
   loader: loadServicesLandingData,
   pendingComponent: ServicesLandingSkeleton,
-  pendingMs: 0,
+  pendingMs: 1500,
+  staleTime: 60_000,
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};
     const title = landing.seo?.title || "Services — Geosynthetics Africa";

@@ -6,6 +6,7 @@ import {
 import { DEFAULT_COMPANY_PAGE_TEMPLATES } from "@/types/company-page-template";
 
 export const Route = createFileRoute("/privacy-policy")({
+  staleTime: 60_000,
   loader: async () => {
     try {
       const templates = await fetchCompanyPageTemplates();

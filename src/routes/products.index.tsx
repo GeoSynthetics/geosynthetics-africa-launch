@@ -22,6 +22,7 @@ async function loadProductsLandingData() {
 }
 
 export const Route = createFileRoute("/products/")({
+  staleTime: 60_000,
   loader: loadProductsLandingData,
   head: ({ loaderData }) => {
     const landing = loaderData?.templates?.["__landing"] || {};
