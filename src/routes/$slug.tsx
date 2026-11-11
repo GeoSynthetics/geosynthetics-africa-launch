@@ -128,7 +128,7 @@ export async function loadCountryData(customSlug: string) {
       },
       {
         id: "bidim-geotextile",
-        name: "Bidim Non-Woven Geotextile",
+        name: "MIRAFI® Non-Woven Geotextile",
         slug: "bidim-non-woven-continuous-filament-geotextile",
         short_description:
           "Continuous filament non-woven geotextile for cushion protection, filtration, and drainage.",
@@ -204,17 +204,18 @@ const COUNTRY_SEO_MAP: Record<
   },
   "zambia-geosynthetics-supplier-installer": {
     country: "Zambia",
-    title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier | Geosynthetics Africa",
+    title: "Zambia HDPE Liners, MIRAFI® Geotextiles & Geogrids Supplier | Geosynthetics Africa",
     description:
-      "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
-    keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
+      "Premium HDPE liners, MIRAFI® geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
+    keywords:
+      "Zambia HDPE liners, MIRAFI® geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
   },
   "drc-geosynthetics-supplier-installer": {
     country: "Democratic Republic of Congo (DRC)",
-    title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier | Geosynthetics Africa",
+    title: "DRC Geosynthetics — HDPE Liners & MIRAFI® Geotextiles | Geosynthetics Africa",
     description:
-      "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
-    keywords: "DRC geosynthetics, Bidim Congo, HDPE geomembranes DRC, Kolwezi mining lining",
+      "MIRAFI® geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
+    keywords: "DRC geosynthetics, MIRAFI® Congo, HDPE geomembranes DRC, Kolwezi mining lining",
   },
   "kenya-geosynthetics-supplier-contact": {
     country: "Kenya",

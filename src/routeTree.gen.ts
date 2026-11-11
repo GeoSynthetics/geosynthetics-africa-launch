@@ -78,6 +78,7 @@ import { Route as ProductsCategoryIndexRouteImport } from './routes/products.$ca
 import { Route as ProductsCategoryFamilyRouteImport } from './routes/products.$category.$family'
 import { Route as ResourcesCategoryIndexRouteImport } from './routes/resources.$category.index'
 import { Route as ResourcesCategorySlugRouteImport } from './routes/resources.$category.$slug'
+import { Route as ApiResourcesSlugDownloadRouteImport } from './routes/api.resources.$slug.download'
 import { Route as ApiStorageBucketSplatRouteImport } from './routes/api.storage.$bucket.$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -425,6 +426,12 @@ const ResourcesCategorySlugRoute = ResourcesCategorySlugRouteImport.update({
   path: '/$category/$slug',
   getParentRoute: () => ResourcesRoute,
 } as any)
+const ApiResourcesSlugDownloadRoute =
+  ApiResourcesSlugDownloadRouteImport.update({
+    id: '/api/resources/$slug/download',
+    path: '/api/resources/$slug/download',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiStorageBucketSplatRoute = ApiStorageBucketSplatRouteImport.update({
   id: '/api/storage/$bucket/$',
   path: '/api/storage/$bucket/$',
@@ -501,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
+  '/api/resources/$slug/download': typeof ApiResourcesSlugDownloadRoute
   '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRoutesByTo {
@@ -565,6 +573,7 @@ export interface FileRoutesByTo {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category': typeof ProductsCategoryIndexRoute
   '/resources/$category': typeof ResourcesCategoryIndexRoute
+  '/api/resources/$slug/download': typeof ApiResourcesSlugDownloadRoute
   '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRoutesById {
@@ -638,6 +647,7 @@ export interface FileRoutesById {
   '/resources/$category/$slug': typeof ResourcesCategorySlugRoute
   '/products/$category/': typeof ProductsCategoryIndexRoute
   '/resources/$category/': typeof ResourcesCategoryIndexRoute
+  '/api/resources/$slug/download': typeof ApiResourcesSlugDownloadRoute
   '/api/storage/$bucket/$': typeof ApiStorageBucketSplatRoute
 }
 export interface FileRouteTypes {
@@ -712,6 +722,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category/'
     | '/resources/$category/'
+    | '/api/resources/$slug/download'
     | '/api/storage/$bucket/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -776,6 +787,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category'
     | '/resources/$category'
+    | '/api/resources/$slug/download'
     | '/api/storage/$bucket/$'
   id:
     | '__root__'
@@ -848,6 +860,7 @@ export interface FileRouteTypes {
     | '/resources/$category/$slug'
     | '/products/$category/'
     | '/resources/$category/'
+    | '/api/resources/$slug/download'
     | '/api/storage/$bucket/$'
   fileRoutesById: FileRoutesById
 }
@@ -895,6 +908,7 @@ export interface RootRouteChildren {
   PtIndexRoute: typeof PtIndexRoute
   ProductsCategoryFamilyRoute: typeof ProductsCategoryFamilyRoute
   ProductsCategoryIndexRoute: typeof ProductsCategoryIndexRoute
+  ApiResourcesSlugDownloadRoute: typeof ApiResourcesSlugDownloadRoute
   ApiStorageBucketSplatRoute: typeof ApiStorageBucketSplatRoute
 }
 
@@ -1383,6 +1397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesCategorySlugRouteImport
       parentRoute: typeof ResourcesRoute
     }
+    '/api/resources/$slug/download': {
+      id: '/api/resources/$slug/download'
+      path: '/api/resources/$slug/download'
+      fullPath: '/api/resources/$slug/download'
+      preLoaderRoute: typeof ApiResourcesSlugDownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/storage/$bucket/$': {
       id: '/api/storage/$bucket/$'
       path: '/api/storage/$bucket/$'
@@ -1564,6 +1585,7 @@ const rootRouteChildren: RootRouteChildren = {
   PtIndexRoute: PtIndexRoute,
   ProductsCategoryFamilyRoute: ProductsCategoryFamilyRoute,
   ProductsCategoryIndexRoute: ProductsCategoryIndexRoute,
+  ApiResourcesSlugDownloadRoute: ApiResourcesSlugDownloadRoute,
   ApiStorageBucketSplatRoute: ApiStorageBucketSplatRoute,
 }
 export const routeTree = rootRouteImport

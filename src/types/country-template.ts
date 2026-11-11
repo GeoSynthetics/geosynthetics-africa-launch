@@ -95,35 +95,42 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
     supplyTitle: "Manufacturing, Warehousing & Rapid Dispatch across RSA",
     supplyDescription:
-      "Our main distribution and fabrication center in Johannesburg maintains extensive stockpiles of high-density polyethylene (HDPE) liners, Bidim non-woven geotextiles, and drainage geocomposites. We ensure container-direct delivery to all nine provinces.",
+      "Our main distribution and fabrication center in Johannesburg maintains extensive stockpiles of high-density polyethylene (HDPE) liners, MIRAFI® non-woven geotextiles, and drainage geocomposites. We ensure container-direct delivery to all nine provinces.",
     supplyHighlights: [
       {
         title: "Same-Day & Next-Day Dispatch",
-        description: "Direct inventory access for quick turnaround on mining, municipal, and agricultural containment projects.",
+        description:
+          "Direct inventory access for quick turnaround on mining, municipal, and agricultural containment projects.",
       },
       {
         title: "Resin-to-Roll Quality Assurance",
-        description: "Full Manufacturer Quality Control (MQC) documentation against SANS 1526 and ASTM standards.",
+        description:
+          "Full Manufacturer Quality Control (MQC) documentation against SANS 1526 and ASTM standards.",
       },
       {
         title: "Custom Roll Cutting & Fabrication",
-        description: "Tailored roll sizes and pre-fabricated panels to reduce on-site waste and speed up deployment.",
+        description:
+          "Tailored roll sizes and pre-fabricated panels to reduce on-site waste and speed up deployment.",
       },
     ],
     transitTime: "Same Day / Next Day Dispatch",
-    logisticsRoutes: "Direct distribution across Gauteng, Mpumalanga, Limpopo, North West, Free State, and Coastal Ports.",
-    customsInfo: "Local South African SANS compliance clearance with seamless export clearance into SADC corridors.",
+    logisticsRoutes:
+      "Direct distribution across Gauteng, Mpumalanga, Limpopo, North West, Free State, and Coastal Ports.",
+    customsInfo:
+      "Local South African SANS compliance clearance with seamless export clearance into SADC corridors.",
     installationTitle: "IAGI-Certified Field Lining & Welding Crews",
     installationDescription:
       "Our accredited installation teams utilize state-of-the-art dual-track hot wedge welders and extrusion guns. We execute rigorous seam testing on every square meter installed.",
     installationHighlights: [
       {
         title: "Certified Master Seamers",
-        description: "Qualified technicians with extensive field experience on TSF, heap leach, and municipal landfill projects.",
+        description:
+          "Qualified technicians with extensive field experience on TSF, heap leach, and municipal landfill projects.",
       },
       {
         title: "Comprehensive Seam Layout Plans",
-        description: "Pre-installation design and post-handover as-built layout drawings for full engineering verification.",
+        description:
+          "Pre-installation design and post-handover as-built layout drawings for full engineering verification.",
       },
     ],
     masterSeamersCount: "12 Certified Crews",
@@ -134,11 +141,13 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     qaqcHighlights: [
       {
         title: "100% Non-Destructive Seam Inspection",
-        description: "Every dual-wedge track seam is pressure-tested at 200–250 kPa in strict accordance with GRI-GM19.",
+        description:
+          "Every dual-wedge track seam is pressure-tested at 200–250 kPa in strict accordance with GRI-GM19.",
       },
       {
         title: "Destructive Tensiometer Testing",
-        description: "Field tensiometer tests verify seam strength exceeds parent sheet tensile properties before final sign-off.",
+        description:
+          "Field tensiometer tests verify seam strength exceeds parent sheet tensile properties before final sign-off.",
       },
     ],
     complianceStandards: ["SANS 1526", "GRI-GM13", "GRI-GM19", "ASTM D6392", "IAGI CQC"],
@@ -157,18 +166,21 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "What roll widths are available for South African supply?",
-        answer: "We supply standard 5.8m and 7.0m roll widths to optimize freight logistics and minimize field seaming.",
+        answer:
+          "We supply standard 5.8m and 7.0m roll widths to optimize freight logistics and minimize field seaming.",
       },
       {
         question: "Do you supply both Smooth and Textured HDPE geomembranes?",
-        answer: "Yes, we stock both single-sided and double-sided textured HDPE geomembranes for steep slope stability applications.",
+        answer:
+          "Yes, we stock both single-sided and double-sided textured HDPE geomembranes for steep slope stability applications.",
       },
     ],
     seo: {
       title: "GSE HDPE Liner & Smooth Geomembrane Supplier South Africa | Geosynthetics Africa",
       description:
         "Geosynthetics Africa is a leading supplier and IAGI-certified installer of GSE HDPE liners and smooth geomembranes in South Africa. Contact our Johannesburg head office.",
-      keywords: "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
+      keywords:
+        "GSE HDPE Liner, smooth geomembrane supplier, South Africa geomembrane, geosynthetics installation South Africa",
     },
   },
   "botswana-geosynthetics-supplier-installer": {
@@ -178,7 +190,7 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     code: "BWA",
     title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier",
     description:
-      "Leading supplier of HDPE geomembranes, Bidim geotextiles, and geogrids for mining, water conservation, and infrastructure projects across Botswana.",
+      "Leading supplier of HDPE geomembranes, MIRAFI® geotextiles, and geogrids for mining, water conservation, and infrastructure projects across Botswana.",
     badge: "Botswana Logistics & Mining Supply Corridor",
     heroImage: "/images/geotextile-product-supply.webp",
     supplyTitle: "Dedicated Freight & Customs Clearance to Gaborone, Jwaneng & Orapa",
@@ -191,7 +203,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
       },
       {
         title: "SADC Duty Exemptions",
-        description: "SADC Certificate of Origin processing to minimize import tariffs for local contractors.",
+        description:
+          "SADC Certificate of Origin processing to minimize import tariffs for local contractors.",
       },
     ],
     transitTime: "2 - 3 Days (Road Freight)",
@@ -203,7 +216,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     installationHighlights: [
       {
         title: "Tailings & Leach Pad Specialist Crews",
-        description: "Experienced in high-UV, high-temperature environmental conditions common in the Kalahari.",
+        description:
+          "Experienced in high-UV, high-temperature environmental conditions common in the Kalahari.",
       },
     ],
     masterSeamersCount: "6 Mobile Field Teams",
@@ -232,14 +246,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "How are border clearances handled for Botswana mining sites?",
-        answer: "Our logistics team manages all SAD500 entries, SADC certificates, and BURS clearances prior to dispatch.",
+        answer:
+          "Our logistics team manages all SAD500 entries, SADC certificates, and BURS clearances prior to dispatch.",
       },
     ],
     seo: {
       title: "Botswana Geomembranes, HDPE, Geotextiles & Geogrids Supplier | Geosynthetics Africa",
       description:
         "Leading supplier of HDPE geomembranes, geotextiles, and geogrids for mining and infrastructure projects in Botswana. Reliable cross-border logistics to Gaborone.",
-      keywords: "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
+      keywords:
+        "Botswana geomembranes, HDPE supplier Botswana, geotextiles Gaborone, geogrids Botswana",
     },
   },
   "tanzania-geosynthetics-supplier-installer": {
@@ -258,7 +274,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Port Clearance & Escort Logistics",
-        description: "Handling TRA (Tanzania Revenue Authority) customs clearing and container trucking.",
+        description:
+          "Handling TRA (Tanzania Revenue Authority) customs clearing and container trucking.",
       },
     ],
     transitTime: "5 - 7 Days (Port/Road Freight)",
@@ -270,7 +287,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     installationHighlights: [
       {
         title: "East Africa Mobile Installation Units",
-        description: "Rapid deployment across Lake Victoria gold belt and agricultural irrigation sites.",
+        description:
+          "Rapid deployment across Lake Victoria gold belt and agricultural irrigation sites.",
       },
     ],
     masterSeamersCount: "8 Field Crews",
@@ -299,14 +317,17 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "Do you supply geosynthetics to mining sites in Mwanza and Geita?",
-        answer: "Yes, we regularly deliver containerized materials directly to mine laydowns across the Lake Victoria region.",
+        answer:
+          "Yes, we regularly deliver containerized materials directly to mine laydowns across the Lake Victoria region.",
       },
     ],
     seo: {
-      title: "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
+      title:
+        "Tanzania Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
       description:
         "High-quality HDPE liners, geotextiles, and geogrids for mining TSF and water containment projects in Tanzania. East Africa operations hub.",
-      keywords: "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
+      keywords:
+        "Tanzania geosynthetics, HDPE liners Tanzania, geotextiles Dar es Salaam, geogrids Tanzania",
     },
   },
   "zimbabwe-geosynthetics-supplier-installer": {
@@ -337,7 +358,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     installationHighlights: [
       {
         title: "Certified Master Seamers",
-        description: "Specialized crews equipped for high-spec mining and water containment projects.",
+        description:
+          "Specialized crews equipped for high-spec mining and water containment projects.",
       },
     ],
     masterSeamersCount: "4 Specialized Crews",
@@ -348,7 +370,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     qaqcHighlights: [
       {
         title: "Site Anchor Trench & Seam Inspections",
-        description: "Strict quality control for river channels, tailings dams, and heap leach pads.",
+        description:
+          "Strict quality control for river channels, tailings dams, and heap leach pads.",
       },
     ],
     complianceStandards: ["ZIMRA Clearance", "ASTM D4595", "GRI-GM13", "SANS 1526"],
@@ -366,14 +389,17 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "What geosynthetics do you supply in Zimbabwe?",
-        answer: "We supply HDPE geomembranes, Bidim geotextiles, GCL bentonite liners, biaxial/uniaxial geogrids, and biodegradable erosion control blankets with direct customs clearance into Zimbabwe.",
+        answer:
+          "We supply HDPE geomembranes, MIRAFI® geotextiles, GCL bentonite liners, biaxial/uniaxial geogrids, and biodegradable erosion control blankets with direct customs clearance into Zimbabwe.",
       },
     ],
     seo: {
-      title: "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
+      title:
+        "Zimbabwe Geosynthetics Supplier — HDPE Liners, Geotextiles, Geogrids | Geosynthetics Africa",
       description:
         "High-quality HDPE liners, geotextiles, and geogrids for mining TSF, agriculture, and infrastructure projects in Zimbabwe. Direct Beitbridge logistics.",
-      keywords: "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
+      keywords:
+        "Zimbabwe geosynthetics, HDPE liners Zimbabwe, geotextiles Harare, geogrids Zimbabwe",
     },
   },
   "zambia-geosynthetics-supplier-installer": {
@@ -381,9 +407,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     slug: "zambia-geosynthetics-supplier-installer",
     flag: "🇿🇲",
     code: "ZMB",
-    title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier",
+    title: "Zambia HDPE Liners, MIRAFI® Geotextiles & Geogrids Supplier",
     description:
-      "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in Copperbelt mining TSF lining and agricultural reservoirs.",
+      "Premium HDPE liners, MIRAFI® geotextiles, and geogrids supplier in Zambia. Specializing in Copperbelt mining TSF lining and agricultural reservoirs.",
     badge: "Copperbelt Mining & Agricultural Supply Hub",
     heroImage: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80",
     supplyTitle: "Chirundu & Kazungula Corridor Freight to Copperbelt",
@@ -392,7 +418,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Copperbelt Mine Direct Delivery",
-        description: "Scheduled container and flatbed truck deliveries to major copper and cobalt mines.",
+        description:
+          "Scheduled container and flatbed truck deliveries to major copper and cobalt mines.",
       },
     ],
     transitTime: "3 - 5 Days (Road Freight)",
@@ -404,7 +431,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     installationHighlights: [
       {
         title: "Copper Mining Containment Crews",
-        description: "Specialized in acidic solution containment and large-area tailings dam lining.",
+        description:
+          "Specialized in acidic solution containment and large-area tailings dam lining.",
       },
     ],
     masterSeamersCount: "6 Field Installation Crews",
@@ -433,14 +461,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "How long does road transport take from Johannesburg to Solwezi?",
-        answer: "Typical transit times range between 4 to 6 days including border clearances at Kazungula.",
+        answer:
+          "Typical transit times range between 4 to 6 days including border clearances at Kazungula.",
       },
     ],
     seo: {
-      title: "Zambia HDPE Liners, Bidim Geotextiles & Geogrids Supplier | Geosynthetics Africa",
+      title: "Zambia HDPE Liners, MIRAFI® Geotextiles & Geogrids Supplier | Geosynthetics Africa",
       description:
-        "Premium HDPE liners, Bidim geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
-      keywords: "Zambia HDPE liners, Bidim geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
+        "Premium HDPE liners, MIRAFI® geotextiles, and geogrids supplier in Zambia. Specializing in mining TSF lining and agricultural reservoirs.",
+      keywords:
+        "Zambia HDPE liners, MIRAFI® geotextiles Zambia, geogrids Lusaka, mining lining Zambia",
     },
   },
   "drc-geosynthetics-supplier-installer": {
@@ -448,9 +478,9 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     slug: "drc-geosynthetics-supplier-installer",
     flag: "🇨🇩",
     code: "COD",
-    title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier",
+    title: "DRC Geosynthetics — HDPE Liners & MIRAFI® Geotextiles",
     description:
-      "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects in Lualaba and Haut-Katanga.",
+      "MIRAFI® geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects in Lualaba and Haut-Katanga.",
     badge: "DRC Mining Corridor Hub — Kolwezi & Lubumbashi",
     heroImage: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920&q=80",
     supplyTitle: "Kasumbalesa Border Corridor to Lubumbashi & Kolwezi",
@@ -459,12 +489,14 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Heavy Confinement Materials Stocking",
-        description: "Thick 1.5mm and 2.0mm HDPE geomembranes engineered for heavy copper/cobalt mining.",
+        description:
+          "Thick 1.5mm and 2.0mm HDPE geomembranes engineered for heavy copper/cobalt mining.",
       },
     ],
     transitTime: "5 - 8 Days (Road Freight)",
     logisticsRoutes: "Johannesburg → Kasumbalesa → Lubumbashi → Likasi → Kolwezi",
-    customsInfo: "DGDA customs clearance, OCC inspection certificates, and transit bond management.",
+    customsInfo:
+      "DGDA customs clearance, OCC inspection certificates, and transit bond management.",
     installationTitle: "High-Confinement Geomembrane Installation in DRC",
     installationDescription:
       "Trained technicians operating under strict mining safety standards in remote Congo mining sites.",
@@ -482,7 +514,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     qaqcHighlights: [
       {
         title: "Complete Quality Assurance Dossier",
-        description: "Handover reports detailing seam numbers, weather conditions, and test results.",
+        description:
+          "Handover reports detailing seam numbers, weather conditions, and test results.",
       },
     ],
     complianceStandards: ["DGDA / OCC Compliant", "GRI-GM13", "ASTM D6392"],
@@ -500,14 +533,15 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "Do you supply 2.0mm HDPE geomembrane for DRC copper mines?",
-        answer: "Yes, 1.5mm and 2.0mm heavy HDPE geomembranes are standard stock items for DRC mining projects.",
+        answer:
+          "Yes, 1.5mm and 2.0mm heavy HDPE geomembranes are standard stock items for DRC mining projects.",
       },
     ],
     seo: {
-      title: "DRC Congo Geosynthetics — Bidim HDPE Geomembranes Supplier | Geosynthetics Africa",
+      title: "DRC Geosynthetics — HDPE Liners & MIRAFI® Geotextiles | Geosynthetics Africa",
       description:
-        "Bidim geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
-      keywords: "DRC geosynthetics, Bidim Congo, HDPE geomembranes DRC, Kolwezi mining lining",
+        "MIRAFI® geotextiles and HDPE geomembranes supplier in the Democratic Republic of Congo (DRC) for mining and heavy confinement projects.",
+      keywords: "DRC geosynthetics, MIRAFI® Congo, HDPE geomembranes DRC, Kolwezi mining lining",
     },
   },
   "kenya-geosynthetics-supplier-contact": {
@@ -531,7 +565,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     ],
     transitTime: "5 - 7 Days (Port/Road Freight)",
     logisticsRoutes: "Mombasa Port → SGR / Freight Corridor → Nairobi → Naivasha / Eldoret",
-    customsInfo: "KRA customs clearing, KEBS quality compliance certification, and EAC tariff processing.",
+    customsInfo:
+      "KRA customs clearing, KEBS quality compliance certification, and EAC tariff processing.",
     installationTitle: "Water Containment & Infrastructure Lining in Kenya",
     installationDescription:
       "IAGI-certified field installation for flower farm dams, municipal landfills, and road stabilization.",
@@ -567,14 +602,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "Which geomembranes are best suited for Naivasha agricultural dams?",
-        answer: "Our 1.0mm and 1.5mm high-density polyethylene (HDPE) liners provide excellent UV resistance and zero seepage for irrigation reservoirs.",
+        answer:
+          "Our 1.0mm and 1.5mm high-density polyethylene (HDPE) liners provide excellent UV resistance and zero seepage for irrigation reservoirs.",
       },
     ],
     seo: {
       title: "Kenya Geosynthetics Supplier — Contact & Technical Support | Geosynthetics Africa",
       description:
         "Contact Geosynthetics Africa for premium agricultural and municipal water containment supply and lining installations in Kenya.",
-      keywords: "Kenya geosynthetics, geomembrane supplier Kenya, Nairobi lining installations, water containment Kenya",
+      keywords:
+        "Kenya geosynthetics, geomembrane supplier Kenya, Nairobi lining installations, water containment Kenya",
     },
   },
   "cote-divoire-geosynthetics-supplier-contact": {
@@ -593,19 +630,22 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Coastal Erosion & Port Infrastructure Supply",
-        description: "Heavy geotextile containers and geogrids engineered for marine and port applications.",
+        description:
+          "Heavy geotextile containers and geogrids engineered for marine and port applications.",
       },
     ],
     transitTime: "Lead time confirmed at quote",
     logisticsRoutes: "Port of Abidjan or San-Pédro → road → Yamoussoukro / Korhogo / site",
-    customsInfo: "Douanes Ivoiriennes clearing, CODINORM certification, and ECOWAS trade documentation.",
+    customsInfo:
+      "Douanes Ivoiriennes clearing, CODINORM certification, and ECOWAS trade documentation.",
     installationTitle: "Gold Mining TSF & Coastal Protection Installation",
     installationDescription:
       "Mobile installation crews for geomembrane welding, GCL placement and coastal geotextile works, mobilised to sites across Côte d'Ivoire.",
     installationHighlights: [
       {
         title: "Bilingual Technical Field Teams",
-        description: "Fluent in French and English for seamless coordination on international engineering projects.",
+        description:
+          "Fluent in French and English for seamless coordination on international engineering projects.",
       },
     ],
     masterSeamersCount: "Mobile installation crews",
@@ -633,14 +673,17 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "Do your technical teams speak French?",
-        answer: "Oui, our West African field installation engineers and project managers are fully bilingual.",
+        answer:
+          "Oui, our West African field installation engineers and project managers are fully bilingual.",
       },
     ],
     seo: {
-      title: "Geosynthetics Côte d'Ivoire | HDPE Liners, Geotextiles & Geogrids — Geosynthetics Africa",
+      title:
+        "Geosynthetics Côte d'Ivoire | HDPE Liners, Geotextiles & Geogrids — Geosynthetics Africa",
       description:
         "Geosynthetics supply, installation and QA/QC in Côte d'Ivoire: HDPE liners, GCLs, geotextiles and geogrids for gold mines, roads, ports and coastal protection, delivered through the Ports of Abidjan and San-Pédro.",
-      keywords: "Côte d'Ivoire geosynthetics, geomembrane supplier Côte d'Ivoire, HDPE liner Abidjan, coastal erosion Côte d'Ivoire",
+      keywords:
+        "Côte d'Ivoire geosynthetics, geomembrane supplier Côte d'Ivoire, HDPE liner Abidjan, coastal erosion Côte d'Ivoire",
     },
   },
   "mozambique-geosynthetics-supplier-contact": {
@@ -659,12 +702,14 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "2-3 Day Fast Transport to Maputo",
-        description: "Direct highway transport from our main distribution warehouse to Southern Mozambique.",
+        description:
+          "Direct highway transport from our main distribution warehouse to Southern Mozambique.",
       },
     ],
     transitTime: "2 - 4 Days (Road/Port Logistics)",
     logisticsRoutes: "Johannesburg → Ressano Garcia → Maputo / Beira / Tete / Pemba",
-    customsInfo: "Alfândegas de Moçambique customs clearing, DU document processing, and SADC certificates.",
+    customsInfo:
+      "Alfândegas de Moçambique customs clearing, DU document processing, and SADC certificates.",
     installationTitle: "LNG, Mining & Coastal Lining Installation in Mozambique",
     installationDescription:
       "Extensive experience installing GCLs, geomembranes, and geogrids for marine protection, coal tailings, and LNG projects.",
@@ -700,14 +745,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "How fast can material be delivered to Maputo?",
-        answer: "Standard road freight from our Johannesburg hub arrives in Maputo within 2 to 3 days post border clearance.",
+        answer:
+          "Standard road freight from our Johannesburg hub arrives in Maputo within 2 to 3 days post border clearance.",
       },
     ],
     seo: {
       title: "Mozambique Geosynthetics Supplier — Maputo Regional Office | Geosynthetics Africa",
       description:
         "Contact our Maputo regional hub for coastal works supply, geosynthetic clay liners (GCL), and geomembrane installation QA/QC in Mozambique.",
-      keywords: "Mozambique geosynthetics, Maputo geomembrane, GCL Mozambique, coastal works Mozambique",
+      keywords:
+        "Mozambique geosynthetics, Maputo geomembrane, GCL Mozambique, coastal works Mozambique",
     },
   },
   "ghana-geosynthetics-supplier-contact": {
@@ -726,19 +773,22 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Gold Mine Heap Leach & TSF Liners",
-        description: "High chemical-resistance HDPE geomembranes designed for cyanide leach containment.",
+        description:
+          "High chemical-resistance HDPE geomembranes designed for cyanide leach containment.",
       },
     ],
     transitTime: "7 - 10 Days (Sea Freight / Local Trucking)",
     logisticsRoutes: "Tema Port → Accra / Kumasi Highway → Tarkwa / Obuasi / Ahafo",
-    customsInfo: "GRA customs clearance, GSA (Ghana Standards Authority) inspection, and ICUMS processing.",
+    customsInfo:
+      "GRA customs clearance, GSA (Ghana Standards Authority) inspection, and ICUMS processing.",
     installationTitle: "Gold Mining TSF & Tailings Lining in Ghana",
     installationDescription:
       "Master seamer teams experienced in large-scale gold mining tailings facility lining and capping.",
     installationHighlights: [
       {
         title: "Tarkwa & Obuasi Field Installation",
-        description: "IAGI-certified wedge welding crews for gold mining tailings storage facilities.",
+        description:
+          "IAGI-certified wedge welding crews for gold mining tailings storage facilities.",
       },
     ],
     masterSeamersCount: "6 Field Installation Crews",
@@ -767,14 +817,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "Do you supply cyanide-resistant HDPE liners for gold leaching in Ghana?",
-        answer: "Yes, our high-density polyethylene geomembranes are formulated for extreme chemical resistance against cyanide and acid solutions.",
+        answer:
+          "Yes, our high-density polyethylene geomembranes are formulated for extreme chemical resistance against cyanide and acid solutions.",
       },
     ],
     seo: {
       title: "Ghana Geosynthetics Supplier — West Africa Mining Hub | Geosynthetics Africa",
       description:
         "Contact Geosynthetics Africa in Accra for West African gold mining TSF lining projects, geosynthetics supply, and IAGI-certified installations.",
-      keywords: "Ghana geosynthetics, Accra geomembrane supplier, gold mining TSF Ghana, geosynthetics West Africa",
+      keywords:
+        "Ghana geosynthetics, Accra geomembrane supplier, gold mining TSF Ghana, geosynthetics West Africa",
     },
   },
   "namibia-geosynthetics-supplier-contact": {
@@ -793,7 +845,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     supplyHighlights: [
       {
         title: "Express 3-4 Day Corridor Freight",
-        description: "Direct transport to Windhoek, Swakopmund, Walvis Bay, and southern mining hubs.",
+        description:
+          "Direct transport to Windhoek, Swakopmund, Walvis Bay, and southern mining hubs.",
       },
     ],
     transitTime: "3 - 4 Days (Road Freight)",
@@ -805,7 +858,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     installationHighlights: [
       {
         title: "High-UV Desert Installation Specialist Crews",
-        description: "Equipped to handle extreme thermal expansion/contraction in desert environments.",
+        description:
+          "Equipped to handle extreme thermal expansion/contraction in desert environments.",
       },
     ],
     masterSeamersCount: "5 Field Installation Crews",
@@ -816,7 +870,8 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     qaqcHighlights: [
       {
         title: "Thermal Expansion Seaming Verification",
-        description: "Custom layout planning to prevent thermal stress wrinkling under Namibian sun.",
+        description:
+          "Custom layout planning to prevent thermal stress wrinkling under Namibian sun.",
       },
     ],
     complianceStandards: ["NamRA Compliant", "SACU Duty-Free", "GRI-GM13"],
@@ -834,14 +889,16 @@ export const DEFAULT_COUNTRY_TEMPLATES: Record<string, CountryTemplate> = {
     faqs: [
       {
         question: "How do you manage extreme Namibian desert heat during geomembrane installation?",
-        answer: "We adjust welding speeds, pre-heat temperatures, and perform panel laydown in early morning hours to manage thermal contraction.",
+        answer:
+          "We adjust welding speeds, pre-heat temperatures, and perform panel laydown in early morning hours to manage thermal contraction.",
       },
     ],
     seo: {
       title: "Namibia Geosynthetics Supplier — Windhoek Logistics Hub | Geosynthetics Africa",
       description:
         "Contact our Windhoek office for uranium mining lining, water conservation reservoirs, and geosynthetics supply across Namibia.",
-      keywords: "Namibia geosynthetics, Windhoek geomembrane supplier, uranium mining lining Namibia",
+      keywords:
+        "Namibia geosynthetics, Windhoek geomembrane supplier, uranium mining lining Namibia",
     },
   },
   // Priority markets added in src/data/country-expansion.ts

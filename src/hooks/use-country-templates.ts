@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { countryBrandCopy } from "@/lib/country-brand-copy";
 import { publicBusinessCopy } from "@/lib/public-business-copy";
 import { DEFAULT_COUNTRY_TEMPLATES, type CountryTemplate } from "@/types/country-template";
 
@@ -45,7 +46,7 @@ export function mergeCountryTemplatesWithDefaults(
     if (country && savedCountries.has(country)) delete merged[key];
   }
 
-  return publicBusinessCopy(merged);
+  return countryBrandCopy(publicBusinessCopy(merged));
 }
 
 export async function fetchCountryTemplates(): Promise<Record<string, CountryTemplate>> {
@@ -64,7 +65,7 @@ export async function fetchCountryTemplates(): Promise<Record<string, CountryTem
       if (error) {
         console.error("Failed to load country templates:", error.message);
         if (!isServer) _cache = DEFAULT_COUNTRY_TEMPLATES;
-        return DEFAULT_COUNTRY_TEMPLATES;
+        return countryBrandCopy(DEFAULT_COUNTRY_TEMPLATES);
       }
 
       let parsed: Record<string, any> = {};
@@ -84,7 +85,7 @@ export async function fetchCountryTemplates(): Promise<Record<string, CountryTem
     } catch (err) {
       console.error("Error fetching country templates:", err);
       if (!isServer) _cache = DEFAULT_COUNTRY_TEMPLATES;
-      return DEFAULT_COUNTRY_TEMPLATES;
+      return countryBrandCopy(DEFAULT_COUNTRY_TEMPLATES);
     }
   })();
 
