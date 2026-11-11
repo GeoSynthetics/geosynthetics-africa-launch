@@ -61,7 +61,7 @@ export const RENAMED_SECTION_SLUGS: Record<string, string> = {
 };
 
 type HierarchyItem = { id: string; slug?: string; label?: string };
-type Hierarchies = Record<SectionKey, HierarchyItem[]> & {
+export type Hierarchies = Record<SectionKey, HierarchyItem[]> & {
   /** Keys of page templates saved in Site Builder, per section */
   templates: Record<SectionKey, Set<string>>;
 };
