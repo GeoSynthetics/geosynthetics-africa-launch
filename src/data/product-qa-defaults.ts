@@ -1122,6 +1122,7 @@ const PROFILES: Record<string, QaContent> = {
 /** Product family slug (or id) → QA profile */
 export const FAMILY_QA_PROFILE: Record<string, string> = {
   "hdpe-geomembranes": "thermo_gm",
+  "eva-geomembranes": "thermo_gm",
   "textured-geomembranes": "thermo_gm",
   "lldpe-geomembrane-liners": "thermo_gm",
   "floating-cover-geomembranes": "floating_cover",

@@ -5,6 +5,16 @@
   "framework": null,
   "redirects": [
     {
+      "source": "/products/geomembrane-liners/textured-geomembranes",
+      "destination": "/products/geomembrane-liners/eva-geomembranes",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/geomembrane-liners/textured-geomembranes/",
+      "destination": "/products/geomembrane-liners/eva-geomembranes",
+      "statusCode": 301
+    },
+    {
       "source": "/products/concrete-mats-gccm",
       "destination": "/products/waterproofing-concrete-protection",
       "statusCode": 301

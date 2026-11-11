@@ -273,7 +273,7 @@ export const FAMILY_SYSTEMS: Record<string, ProductSystem> = {
     ],
     doList: ["We supply EPDM in wide panels", "We join and detail on site"],
   }),
-  "textured-geomembranes": family({
+  "eva-geomembranes": family({
     intro:
       "We supply EVA geomembrane liners for concrete drinking-water reservoirs, firewater tanks, process tanks and tunnels, and install them with termination profiles.",
     industries: [IND.water, IND.mining],
