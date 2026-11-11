@@ -54,6 +54,7 @@ import { Route as AdminTrackingRouteImport } from './routes/admin.tracking'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as ApiEmailStatusRouteImport } from './routes/api.email-status'
 import { Route as ApiImportImageRouteImport } from './routes/api.import-image'
+import { Route as ApiPublicConfigRouteImport } from './routes/api.public-config'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications.index'
 import { Route as ApplicationsCategoryRouteImport } from './routes/applications.$category'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -306,6 +307,11 @@ const ApiImportImageRoute = ApiImportImageRouteImport.update({
   path: '/api/import-image',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicConfigRoute = ApiPublicConfigRouteImport.update({
+  id: '/api/public-config',
+  path: '/api/public-config',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -483,6 +489,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
+  '/api/public-config': typeof ApiPublicConfigRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -548,6 +555,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
+  '/api/public-config': typeof ApiPublicConfigRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -622,6 +630,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/api/email-status': typeof ApiEmailStatusRoute
   '/api/import-image': typeof ApiImportImageRoute
+  '/api/public-config': typeof ApiPublicConfigRoute
   '/applications/$category': typeof ApplicationsCategoryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catalogue/$slug': typeof CatalogueSlugRoute
@@ -697,6 +706,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/email-status'
     | '/api/import-image'
+    | '/api/public-config'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
@@ -762,6 +772,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/email-status'
     | '/api/import-image'
+    | '/api/public-config'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
@@ -835,6 +846,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/api/email-status'
     | '/api/import-image'
+    | '/api/public-config'
     | '/applications/$category'
     | '/blog/$slug'
     | '/catalogue/$slug'
@@ -899,6 +911,7 @@ export interface RootRouteChildren {
   TermsAndConditionsRoute: typeof TermsAndConditionsRoute
   ApiEmailStatusRoute: typeof ApiEmailStatusRoute
   ApiImportImageRoute: typeof ApiImportImageRoute
+  ApiPublicConfigRoute: typeof ApiPublicConfigRoute
   CatalogueSlugRoute: typeof CatalogueSlugRoute
   FrSlugRoute: typeof FrSlugRoute
   PtSlugRoute: typeof PtSlugRoute
@@ -1227,6 +1240,13 @@ declare module '@tanstack/react-router' {
       path: '/api/import-image'
       fullPath: '/api/import-image'
       preLoaderRoute: typeof ApiImportImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public-config': {
+      id: '/api/public-config'
+      path: '/api/public-config'
+      fullPath: '/api/public-config'
+      preLoaderRoute: typeof ApiPublicConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/applications/': {
@@ -1576,6 +1596,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsAndConditionsRoute: TermsAndConditionsRoute,
   ApiEmailStatusRoute: ApiEmailStatusRoute,
   ApiImportImageRoute: ApiImportImageRoute,
+  ApiPublicConfigRoute: ApiPublicConfigRoute,
   CatalogueSlugRoute: CatalogueSlugRoute,
   FrSlugRoute: FrSlugRoute,
   PtSlugRoute: PtSlugRoute,
