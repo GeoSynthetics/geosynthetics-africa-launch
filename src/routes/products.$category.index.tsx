@@ -4,6 +4,7 @@ import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { ProductCategoryPage } from "@/pages/ProductCategoryPage";
 import { getProductPageContent } from "@/data/product-pages";
+import { correctDrainageOverview } from "@/lib/product-content-corrections";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function ProductCategorySkeleton() {
@@ -102,7 +103,10 @@ export const Route = createFileRoute("/products/$category/")({
     }
     const content = await getProductPageContent(params.category);
     if (!content) throw notFound();
-    return { category: { slug: params.category, label: content.label }, content };
+    return {
+      category: { slug: params.category, label: content.label },
+      content: correctDrainageOverview(params.category, content),
+    };
   },
   pendingComponent: ProductCategorySkeleton,
   pendingMs: 0,

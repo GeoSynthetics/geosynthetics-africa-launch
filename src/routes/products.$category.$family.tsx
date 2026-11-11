@@ -4,6 +4,8 @@ import { getErrorMessage } from "@/lib/error-message";
 import { Button } from "@/components/ui/button";
 import { ProductFamilyPage } from "@/pages/ProductFamilyPage";
 import { supabase } from "@/integrations/supabase/client";
+import { productFamilySeo } from "@/lib/product-family-seo";
+import { correctFamilyContent } from "@/lib/product-content-corrections";
 import { Skeleton } from "@/components/ui/skeleton";
 
 async function loadProductFamily(category: string, family: string, familyId?: string) {
@@ -50,7 +52,7 @@ async function loadProductFamily(category: string, family: string, familyId?: st
   return {
     category,
     family,
-    familyData,
+    familyData: correctFamilyContent(family, familyData),
     dynamicCaseStudies,
   };
 }
@@ -185,10 +187,13 @@ export const Route = createFileRoute("/products/$category/$family")({
       family: "",
       familyData: null,
     };
-    const familyLabel = family
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
+    const familyLabel =
+      familyData?.label ||
+      familyData?.title ||
+      family
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
     const categoryLabel = category
       .split("-")
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
@@ -199,13 +204,9 @@ export const Route = createFileRoute("/products/$category/$family")({
       "bera-grass-fix": "BERA Grass Paving Systems Africa | Selection & Supply",
       "studded-hdpe-concrete-liners-cpl": "Concrete Protection Liner Systems Africa | Studded HDPE",
     };
-    const title =
-      rangeTitles[family] ||
-      familyData?.seo?.title ||
-      `${familyLabel} | ${categoryLabel} — Geosynthetics Africa`;
-    const description =
-      familyData?.seo?.description ||
-      `Explore our premium ${familyLabel}, fully specified for African projects.`;
+    const metadata = productFamilySeo(family, familyLabel, categoryLabel, familyData);
+    const title = rangeTitles[family] || metadata.title;
+    const description = metadata.description;
     const keywords = familyData?.seo?.keywords;
 
     return {
