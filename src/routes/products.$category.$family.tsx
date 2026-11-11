@@ -75,7 +75,7 @@ export const Route = createFileRoute("/products/$category/$family")({
     return loadProductFamily(params.category, params.family);
   },
   pendingComponent: PageLoading,
-  pendingMs: 150,
+  pendingMs: 1500,
   staleTime: 60_000,
   head: ({ loaderData }) => {
     const { category, family, familyData } = loaderData || {
