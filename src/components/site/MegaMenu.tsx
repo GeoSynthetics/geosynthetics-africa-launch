@@ -328,9 +328,21 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
 
         {/* Secondary list or Most Specified Product */}
         <div className="col-span-3">
-          {/* <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            {isServiceOrAppOrIndustry ? "Most Specified" : displayData.secondaryTitle}
-          </h4> */}
+          {!isServiceOrAppOrIndustry && activeItem && (
+            <div className="mb-4 flex items-baseline justify-between gap-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+                {activeItem.label}
+              </h4>
+              <RLink
+                to={activeItem.to}
+                params={activeItem.params}
+                onClick={closeMenus}
+                className="whitespace-nowrap text-xs font-semibold text-foreground/70 hover:text-primary transition-colors duration-300"
+              >
+                View all
+              </RLink>
+            </div>
+          )}
           {isServiceOrAppOrIndustry ? (
             <TopSellingProductsSlider
               products={
@@ -355,7 +367,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                     to={item.to}
                     params={item.params}
                     onClick={closeMenus}
-                    className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-all duration-300 hover:translate-x-1.5"
+                    className="block rounded-md px-3 py-2 text-sm text-foreground/85 hover:text-primary hover:bg-accent transition-all duration-300 hover:translate-x-1.5"
                   >
                     {item.label}
                   </RLink>
@@ -520,7 +532,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
                           closeMenus();
                           open();
                         }}
-                        className="w-full flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent bg-transparent transition-all duration-300 group cursor-pointer border-0 hover:translate-x-1.5"
+                        className="w-full flex items-center gap-3 rounded-md border border-border p-3 hover:border-primary hover:bg-accent bg-transparent transition-all duration-300 group cursor-pointer hover:translate-x-1.5"
                       >
                         {actionContent}
                       </button>
@@ -569,7 +581,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
                 <Package className="h-4 w-4 transition-colors duration-300" />
               </div>
-              <span>Supply</span>
+              <span>Manufacture &amp; supply</span>
             </RLink>
 
             <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
@@ -584,7 +596,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
                 <Globe className="h-4 w-4 transition-colors duration-300" />
               </div>
-              <span>30+ country delivery</span>
+              <span>Delivery to 30+ countries</span>
             </RLink>
 
             <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
@@ -599,7 +611,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
                 <Wrench className="h-4 w-4 transition-colors duration-300" />
               </div>
-              <span>IAGI-aligned installation</span>
+              <span>IAGI-member installation</span>
             </RLink>
 
             <ChevronRight className="h-4 w-4 text-muted-foreground/30" />
@@ -613,7 +625,7 @@ function MegaPanel({ config, isLoading }: { config: MegaMenuConfig; isLoading?: 
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm group-hover/step:bg-primary-hover group-hover/step:scale-105 transition-all duration-300">
                 <ShieldCheck className="h-4 w-4 transition-colors duration-300" />
               </div>
-              <span>Quality assurance</span>
+              <span>Documented QA/QC</span>
             </RLink>
           </div>
         </div>
